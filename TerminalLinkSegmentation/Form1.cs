@@ -14,6 +14,16 @@ namespace TerminalLinkSegmentation
 
         private void button1_Click(object sender, EventArgs e)
         {
+            if (this._picChanged)
+            {
+                DialogResult dlg = MessageBox.Show("Save image?", "Unsaved data", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Exclamation);
+
+                if (dlg == DialogResult.Yes)
+                    button3.PerformClick();
+                else if (dlg == DialogResult.No || dlg == DialogResult.Cancel)
+                    return;
+            }
+
             Bitmap? bmp = null;
             if (this.OpenFileDialog1.ShowDialog() == DialogResult.OK)
             {
