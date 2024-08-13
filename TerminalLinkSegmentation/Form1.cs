@@ -20,7 +20,7 @@ namespace TerminalLinkSegmentation
 
                 if (dlg == DialogResult.Yes)
                     button3.PerformClick();
-                else if (dlg == DialogResult.No || dlg == DialogResult.Cancel)
+                else if (dlg == DialogResult.Cancel)
                     return;
             }
 
