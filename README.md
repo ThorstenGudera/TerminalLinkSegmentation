@@ -28,7 +28,7 @@ Note: Writes cached files to: LocalApplicationData\Thorsten_Gudera...
 
 Usage:
 
-    Start the app (WinForms, fw 4.8) and open an Image, click the go-button to open the GrabCut form.
+    Start the app (WinForms, .net 8.0) and open an Image, click the go-button to open the GrabCut form.
     Draw a rectangle with the mouse, set the parameters like the threshold-value and click onto the Go-button. Sometimes its good to lower the number of components to return, try a value of 1. [Optional]
     On the right pane, check the draw on result checkbox and draw with the mouse onto regions that should be the type you selected from the combobox (eg. Background, Foregound etc)
     Click onto the Go-button again
