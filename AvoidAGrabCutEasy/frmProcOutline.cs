@@ -5284,10 +5284,13 @@ namespace AvoidAGrabCutEasy
                 double d = CheckWidthHeight(this.helplineRulerCtrl1.Bmp, true, (double)this.numMaxSize.Value);
                 this.numBoundInner.Value = 5;
                 this.numBoundOuter.Value = 5;
+                this.cbHalfSize.Checked = false;
                 if (d > 1)
                 {
                     this.numBoundInner.Value = (int)(5 * d);
                     this.numBoundOuter.Value = (int)(5 * d);
+
+                    this.cbHalfSize.Checked = true;
                 }
             }
         }
