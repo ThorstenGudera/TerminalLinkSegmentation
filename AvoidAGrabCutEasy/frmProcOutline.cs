@@ -761,7 +761,7 @@ namespace AvoidAGrabCutEasy
                         }
 
                         using (Bitmap bForeground = RemoveOutlineEx(bW, innerW, true))
-                        using (Bitmap bBackground = ExtendOutlineEx(bW, outerW, true, false))
+                        using (Bitmap bBackground = ExtendOutlineEx(bW, outerW, true, true))
                         {
                             using (Graphics gx = Graphics.FromImage(bTrimap))
                             {
@@ -5275,6 +5275,12 @@ namespace AvoidAGrabCutEasy
             this.backgroundWorker7.DoWork += backgroundWorker7_DoWork;
             //this.backgroundWorker7.ProgressChanged += backgroundWorker7_ProgressChanged;
             this.backgroundWorker7.RunWorkerCompleted += backgroundWorker7_RunWorkerCompleted;
+        }
+
+        private void btnResVals_Click(object sender, EventArgs e)
+        {
+            this.numBoundInner.Value = 5;
+            this.numBoundOuter.Value = 5;
         }
     }
 }
