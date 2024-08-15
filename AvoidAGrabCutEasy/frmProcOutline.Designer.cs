@@ -67,7 +67,9 @@
             label2 = new Label();
             numSleep = new NumericUpDown();
             cbHalfSize = new CheckBox();
+            numMaxRestarts = new NumericUpDown();
             numError = new NumericUpDown();
+            label13 = new Label();
             cbExpOutlProc = new CheckBox();
             label54 = new Label();
             label5 = new Label();
@@ -159,6 +161,7 @@
             ((System.ComponentModel.ISupportInitialize)numTh).BeginInit();
             groupBox5.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numSleep).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)numMaxRestarts).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numError).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numFactorOuterPx).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numAlphaStart).BeginInit();
@@ -366,7 +369,7 @@
             cbBGColor.AutoSize = true;
             cbBGColor.Checked = true;
             cbBGColor.CheckState = CheckState.Checked;
-            cbBGColor.Location = new Point(197, 764);
+            cbBGColor.Location = new Point(193, 764);
             cbBGColor.Margin = new Padding(4, 3, 4, 3);
             cbBGColor.Name = "cbBGColor";
             cbBGColor.Size = new Size(67, 19);
@@ -379,7 +382,7 @@
             // 
             button10.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             button10.ForeColor = SystemColors.ControlText;
-            button10.Location = new Point(390, 802);
+            button10.Location = new Point(386, 802);
             button10.Margin = new Padding(4, 3, 4, 3);
             button10.Name = "button10";
             button10.Size = new Size(88, 27);
@@ -392,7 +395,7 @@
             // 
             button8.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             button8.ForeColor = SystemColors.ControlText;
-            button8.Location = new Point(295, 802);
+            button8.Location = new Point(291, 802);
             button8.Margin = new Padding(4, 3, 4, 3);
             button8.Name = "button8";
             button8.Size = new Size(88, 27);
@@ -406,7 +409,7 @@
             button2.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             button2.FlatStyle = FlatStyle.System;
             button2.ForeColor = SystemColors.ControlText;
-            button2.Location = new Point(390, 762);
+            button2.Location = new Point(386, 762);
             button2.Margin = new Padding(4, 3, 4, 3);
             button2.Name = "button2";
             button2.Size = new Size(88, 27);
@@ -419,7 +422,7 @@
             btnCancel.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             btnCancel.DialogResult = DialogResult.Cancel;
             btnCancel.ForeColor = SystemColors.ControlText;
-            btnCancel.Location = new Point(399, 845);
+            btnCancel.Location = new Point(395, 845);
             btnCancel.Margin = new Padding(4, 3, 4, 3);
             btnCancel.Name = "btnCancel";
             btnCancel.Size = new Size(88, 27);
@@ -432,7 +435,7 @@
             btnOK.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             btnOK.DialogResult = DialogResult.OK;
             btnOK.ForeColor = SystemColors.ControlText;
-            btnOK.Location = new Point(306, 845);
+            btnOK.Location = new Point(302, 845);
             btnOK.Margin = new Padding(4, 3, 4, 3);
             btnOK.Name = "btnOK";
             btnOK.Size = new Size(88, 27);
@@ -658,14 +661,16 @@
             groupBox5.Controls.Add(label2);
             groupBox5.Controls.Add(numSleep);
             groupBox5.Controls.Add(cbHalfSize);
+            groupBox5.Controls.Add(numMaxRestarts);
             groupBox5.Controls.Add(numError);
+            groupBox5.Controls.Add(label13);
             groupBox5.Controls.Add(cbExpOutlProc);
             groupBox5.Controls.Add(label54);
-            groupBox5.Location = new Point(222, 57);
+            groupBox5.Location = new Point(222, 50);
             groupBox5.Margin = new Padding(4, 3, 4, 3);
             groupBox5.Name = "groupBox5";
             groupBox5.Padding = new Padding(4, 3, 4, 3);
-            groupBox5.Size = new Size(247, 110);
+            groupBox5.Size = new Size(247, 120);
             groupBox5.TabIndex = 551;
             groupBox5.TabStop = false;
             groupBox5.Text = "ClosedFormMatte";
@@ -673,7 +678,7 @@
             // cbEditTrimap
             // 
             cbEditTrimap.AutoSize = true;
-            cbEditTrimap.Location = new Point(158, 75);
+            cbEditTrimap.Location = new Point(158, 66);
             cbEditTrimap.Margin = new Padding(4, 3, 4, 3);
             cbEditTrimap.Name = "cbEditTrimap";
             cbEditTrimap.Size = new Size(84, 19);
@@ -684,7 +689,7 @@
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(120, 44);
+            label2.Location = new Point(120, 41);
             label2.Margin = new Padding(4, 0, 4, 0);
             label2.Name = "label2";
             label2.Size = new Size(34, 15);
@@ -693,7 +698,7 @@
             // 
             // numSleep
             // 
-            numSleep.Location = new Point(168, 42);
+            numSleep.Location = new Point(168, 39);
             numSleep.Margin = new Padding(4, 3, 4, 3);
             numSleep.Maximum = new decimal(new int[] { 10000, 0, 0, 0 });
             numSleep.Name = "numSleep";
@@ -707,7 +712,7 @@
             cbHalfSize.AutoSize = true;
             cbHalfSize.Checked = true;
             cbHalfSize.CheckState = CheckState.Checked;
-            cbHalfSize.Location = new Point(21, 43);
+            cbHalfSize.Location = new Point(21, 40);
             cbHalfSize.Margin = new Padding(4, 3, 4, 3);
             cbHalfSize.Name = "cbHalfSize";
             cbHalfSize.Size = new Size(84, 19);
@@ -715,11 +720,22 @@
             cbHalfSize.Text = "reduce size";
             cbHalfSize.UseVisualStyleBackColor = true;
             // 
+            // numMaxRestarts
+            // 
+            numMaxRestarts.Location = new Point(100, 92);
+            numMaxRestarts.Margin = new Padding(4, 3, 4, 3);
+            numMaxRestarts.Maximum = new decimal(new int[] { 150, 0, 0, 0 });
+            numMaxRestarts.Minimum = new decimal(new int[] { 5, 0, 0, 0 });
+            numMaxRestarts.Name = "numMaxRestarts";
+            numMaxRestarts.Size = new Size(70, 23);
+            numMaxRestarts.TabIndex = 511;
+            numMaxRestarts.Value = new decimal(new int[] { 35, 0, 0, 0 });
+            // 
             // numError
             // 
             numError.DecimalPlaces = 4;
             numError.Increment = new decimal(new int[] { 1, 0, 0, 65536 });
-            numError.Location = new Point(68, 73);
+            numError.Location = new Point(68, 64);
             numError.Margin = new Padding(4, 3, 4, 3);
             numError.Maximum = new decimal(new int[] { 1, 0, 0, 0 });
             numError.Minimum = new decimal(new int[] { 1, 0, 0, 262144 });
@@ -728,10 +744,20 @@
             numError.TabIndex = 511;
             numError.Value = new decimal(new int[] { 1, 0, 0, 131072 });
             // 
+            // label13
+            // 
+            label13.AutoSize = true;
+            label13.Location = new Point(21, 94);
+            label13.Margin = new Padding(4, 0, 4, 0);
+            label13.Name = "label13";
+            label13.Size = new Size(71, 15);
+            label13.TabIndex = 540;
+            label13.Text = "MaxRestarts";
+            // 
             // cbExpOutlProc
             // 
             cbExpOutlProc.AutoSize = true;
-            cbExpOutlProc.Location = new Point(12, 16);
+            cbExpOutlProc.Location = new Point(12, 17);
             cbExpOutlProc.Margin = new Padding(4, 3, 4, 3);
             cbExpOutlProc.Name = "cbExpOutlProc";
             cbExpOutlProc.Size = new Size(138, 19);
@@ -743,7 +769,7 @@
             // label54
             // 
             label54.AutoSize = true;
-            label54.Location = new Point(14, 75);
+            label54.Location = new Point(21, 66);
             label54.Margin = new Padding(4, 0, 4, 0);
             label54.Name = "label54";
             label54.Size = new Size(32, 15);
@@ -1583,6 +1609,7 @@
             groupBox5.ResumeLayout(false);
             groupBox5.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)numSleep).EndInit();
+            ((System.ComponentModel.ISupportInitialize)numMaxRestarts).EndInit();
             ((System.ComponentModel.ISupportInitialize)numError).EndInit();
             ((System.ComponentModel.ISupportInitialize)numFactorOuterPx).EndInit();
             ((System.ComponentModel.ISupportInitialize)numAlphaStart).EndInit();
@@ -1740,5 +1767,7 @@
         private System.Windows.Forms.CheckBox cbOnlyRestore;
         internal System.ComponentModel.BackgroundWorker backgroundWorker7;
         private System.Windows.Forms.CheckBox cbDesaturate;
+        private NumericUpDown numMaxRestarts;
+        private Label label13;
     }
 }

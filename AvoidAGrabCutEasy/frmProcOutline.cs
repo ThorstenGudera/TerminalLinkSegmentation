@@ -801,8 +801,8 @@ namespace AvoidAGrabCutEasy
 
                         ClosedFormMatteOp cfop = new ClosedFormMatteOp(bWork, trWork);
                         BlendParameters bParam = new BlendParameters();
-                        bParam.MaxIterations = 10000;
-                        bParam.InnerIterations = 25;
+                        bParam.MaxIterations = (int)this.numMaxRestarts.Value; //for GaussSeidel set this to 10000 or so
+                        bParam.InnerIterations = 35; //maybe 25 will do
                         bParam.DesiredMaxLinearError = (double)this.numError.Value;
                         bParam.Sleep = this.numSleep.Value > 0 ? true : false;
                         bParam.SleepAmount = (int)this.numSleep.Value;
@@ -4674,7 +4674,7 @@ namespace AvoidAGrabCutEasy
                     bDiff = null;
                 }
 
-                if(bInner != null)
+                if (bInner != null)
                     bInner.Dispose();
                 bInner = null;
                 bWork.Dispose();
