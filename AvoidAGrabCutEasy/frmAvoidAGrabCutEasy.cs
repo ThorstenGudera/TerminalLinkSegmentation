@@ -409,11 +409,14 @@ namespace AvoidAGrabCutEasy
 
             if (ix >= 0 && ix < this.helplineRulerCtrl1.Bmp.Width && iy >= 0 && iy < this.helplineRulerCtrl1.Bmp.Height)
             {
-                this._rX = ix;
-                this._rY = iy;
+                if (!this.cbAllowRS.Checked)
+                {
+                    this._rX = ix;
+                    this._rY = iy;
 
-                this._eX = eX;
-                this._eY = eY;
+                    this._eX = eX;
+                    this._eY = eY;
+                }
 
                 if (this.cbScribbleMode.Checked)
                 {
@@ -440,7 +443,7 @@ namespace AvoidAGrabCutEasy
 
             if (ix >= 0 && ix < this.helplineRulerCtrl1.Bmp.Width && iy >= 0 && iy < this.helplineRulerCtrl1.Bmp.Height)
             {
-                if (this._tracking)
+                if (this._tracking && !this.cbAllowRS.Checked)
                 {
                     this._rW = Math.Abs(ix - this._rX);
                     this._rH = Math.Abs(iy - this._rY);
@@ -475,10 +478,13 @@ namespace AvoidAGrabCutEasy
 
             if (ix >= 0 && ix < this.helplineRulerCtrl1.Bmp.Width && iy >= 0 && iy < this.helplineRulerCtrl1.Bmp.Height)
             {
-                this._rW = Math.Abs(ix - this._rX);
-                this._rH = Math.Abs(iy - this._rY);
+                if (!this.cbAllowRS.Checked)
+                {
+                    this._rW = Math.Abs(ix - this._rX);
+                    this._rH = Math.Abs(iy - this._rY);
 
-                this._rect = new Rectangle(this._rX, this._rY, this._rW, this._rH);
+                    this._rect = new Rectangle(this._rX, this._rY, this._rW, this._rH);
+                }
 
                 if (this._tracking4)
                 {
@@ -2299,7 +2305,7 @@ namespace AvoidAGrabCutEasy
 
         private void cbRectMode_CheckedChanged(object sender, EventArgs e)
         {
-            if (this.cbRectMode.Checked)
+            if (this.cbRectMode.Checked && !this.cbAllowRS.Checked)
                 this.cbScribbleMode.Checked = false;
 
             SetRectOrScribblesValues(this.helplineRulerCtrl1.Zoom);
@@ -2328,7 +2334,7 @@ namespace AvoidAGrabCutEasy
         {
             SetRectOrScribblesValues(this.helplineRulerCtrl1.Zoom);
 
-            if (this.cbScribbleMode.Checked)
+            if (this.cbScribbleMode.Checked && !this.cbAllowRS.Checked)
                 this.cbRectMode.Checked = false;
 
             this.btnLoadScribbles.Enabled = this.btnSaveScribbles.Enabled = this.cbScribbleMode.Checked;

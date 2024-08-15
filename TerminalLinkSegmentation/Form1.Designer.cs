@@ -31,12 +31,15 @@
             components = new System.ComponentModel.Container();
             pictureBox1 = new PictureBox();
             splitContainer1 = new SplitContainer();
+            button4 = new Button();
             button3 = new Button();
             button2 = new Button();
             button1 = new Button();
             OpenFileDialog1 = new OpenFileDialog();
             saveFileDialog1 = new SaveFileDialog();
             ToolTip1 = new ToolTip(components);
+            timer1 = new System.Windows.Forms.Timer(components);
+            button5 = new Button();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
@@ -54,6 +57,11 @@
             pictureBox1.SizeMode = PictureBoxSizeMode.Zoom;
             pictureBox1.TabIndex = 0;
             pictureBox1.TabStop = false;
+            pictureBox1.Paint += pictureBox1_Paint;
+            pictureBox1.DoubleClick += pictureBox1_DoubleClick;
+            pictureBox1.MouseDown += pictureBox1_MouseDown;
+            pictureBox1.MouseMove += pictureBox1_MouseMove;
+            pictureBox1.MouseUp += pictureBox1_MouseUp;
             // 
             // splitContainer1
             // 
@@ -66,18 +74,31 @@
             // 
             // splitContainer1.Panel1
             // 
+            splitContainer1.Panel1.Controls.Add(button5);
+            splitContainer1.Panel1.Controls.Add(button4);
             splitContainer1.Panel1.Controls.Add(button3);
             splitContainer1.Panel1.Controls.Add(button2);
             splitContainer1.Panel1.Controls.Add(button1);
             // 
             // splitContainer1.Panel2
             // 
+            splitContainer1.Panel2.AutoScroll = true;
             splitContainer1.Panel2.BackColor = SystemColors.ControlDarkDark;
             splitContainer1.Panel2.Controls.Add(pictureBox1);
             splitContainer1.Size = new Size(933, 519);
             splitContainer1.SplitterDistance = 62;
             splitContainer1.SplitterWidth = 5;
             splitContainer1.TabIndex = 5;
+            // 
+            // button4
+            // 
+            button4.Location = new Point(641, 14);
+            button4.Name = "button4";
+            button4.Size = new Size(88, 27);
+            button4.TabIndex = 3;
+            button4.Text = "reset rect";
+            button4.UseVisualStyleBackColor = true;
+            button4.Click += button4_Click;
             // 
             // button3
             // 
@@ -121,6 +142,20 @@
             saveFileDialog1.FileName = "Bild1.png";
             saveFileDialog1.Filter = "Png-Images (*.png)|*.png";
             // 
+            // timer1
+            // 
+            timer1.Tick += timer1_Tick;
+            // 
+            // button5
+            // 
+            button5.Location = new Point(537, 14);
+            button5.Name = "button5";
+            button5.Size = new Size(88, 27);
+            button5.TabIndex = 3;
+            button5.Text = "switch zoom";
+            button5.UseVisualStyleBackColor = true;
+            button5.Click += button5_Click;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -150,5 +185,8 @@
         private System.Windows.Forms.SaveFileDialog saveFileDialog1;
         internal System.Windows.Forms.ToolTip ToolTip1;
         private Button button3;
+        private System.Windows.Forms.Timer timer1;
+        private Button button4;
+        private Button button5;
     }
 }

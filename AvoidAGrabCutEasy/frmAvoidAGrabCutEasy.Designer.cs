@@ -28,1271 +28,1189 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
-            this.panel1 = new System.Windows.Forms.Panel();
-            this.btnInitSettings = new System.Windows.Forms.Button();
-            this.panel2 = new System.Windows.Forms.Panel();
-            this.label13 = new System.Windows.Forms.Label();
-            this.cbAutoThreshold = new System.Windows.Forms.CheckBox();
-            this.btnCache = new System.Windows.Forms.Button();
-            this.cbSetPFGToFG = new System.Windows.Forms.CheckBox();
-            this.label11 = new System.Windows.Forms.Label();
-            this.label10 = new System.Windows.Forms.Label();
-            this.label9 = new System.Windows.Forms.Label();
-            this.label8 = new System.Windows.Forms.Label();
-            this.label7 = new System.Windows.Forms.Label();
-            this.label12 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
-            this.btnCompose = new System.Windows.Forms.Button();
-            this.btnOutline = new System.Windows.Forms.Button();
-            this.cbLSBmp = new System.Windows.Forms.CheckBox();
-            this.btnLoadScribbles = new System.Windows.Forms.Button();
-            this.btnSaveScribbles = new System.Windows.Forms.Button();
-            this.cbSkipLearn = new System.Windows.Forms.CheckBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.btnMinCut = new System.Windows.Forms.Button();
-            this.btnResQATH = new System.Windows.Forms.Button();
-            this.btnResMaxIter = new System.Windows.Forms.Button();
-            this.cbEightAdj = new System.Windows.Forms.CheckBox();
-            this.btnRecut = new System.Windows.Forms.Button();
-            this.btnRemStroke = new System.Windows.Forms.Button();
-            this.label6 = new System.Windows.Forms.Label();
-            this.cmbCurrentColor = new System.Windows.Forms.ComboBox();
-            this.cbDraw = new System.Windows.Forms.CheckBox();
-            this.numWH = new System.Windows.Forms.NumericUpDown();
-            this.label40 = new System.Windows.Forms.Label();
-            this.label39 = new System.Windows.Forms.Label();
-            this.numQATH = new System.Windows.Forms.NumericUpDown();
-            this.numAlgMaxIter = new System.Windows.Forms.NumericUpDown();
-            this.Label20 = new System.Windows.Forms.Label();
-            this.cmbZoom = new System.Windows.Forms.ComboBox();
-            this.cbBGColor = new System.Windows.Forms.CheckBox();
-            this.button10 = new System.Windows.Forms.Button();
-            this.button8 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
-            this.btnCancel = new System.Windows.Forms.Button();
-            this.btnOK = new System.Windows.Forms.Button();
-            this.btnGo = new System.Windows.Forms.Button();
-            this.btnReset2 = new System.Windows.Forms.Button();
-            this.cbCastTLInt = new System.Windows.Forms.CheckBox();
-            this.cbMultTLCap = new System.Windows.Forms.CheckBox();
-            this.numMultTLCap = new System.Windows.Forms.NumericUpDown();
-            this.label4 = new System.Windows.Forms.Label();
-            this.numMaxSize = new System.Windows.Forms.NumericUpDown();
-            this.numProbMult1 = new System.Windows.Forms.NumericUpDown();
-            this.cbUseTh = new System.Windows.Forms.CheckBox();
-            this.label5 = new System.Windows.Forms.Label();
-            this.numDblMult = new System.Windows.Forms.NumericUpDown();
-            this.cbQuickEst = new System.Windows.Forms.CheckBox();
-            this.btnRect = new System.Windows.Forms.Button();
-            this.numShiftY = new System.Windows.Forms.NumericUpDown();
-            this.label19 = new System.Windows.Forms.Label();
-            this.numShiftX = new System.Windows.Forms.NumericUpDown();
-            this.numGmmComp = new System.Windows.Forms.NumericUpDown();
-            this.numMaxComponents = new System.Windows.Forms.NumericUpDown();
-            this.numWHScribbles = new System.Windows.Forms.NumericUpDown();
-            this.cbScribbleMode = new System.Windows.Forms.CheckBox();
-            this.rbFG = new System.Windows.Forms.RadioButton();
-            this.rbBG = new System.Windows.Forms.RadioButton();
-            this.btnClearScribbles = new System.Windows.Forms.Button();
-            this.btnRemLastScribbles = new System.Windows.Forms.Button();
-            this.cbRectMode = new System.Windows.Forms.CheckBox();
-            this.numGamma = new System.Windows.Forms.NumericUpDown();
-            this.label2 = new System.Windows.Forms.Label();
-            this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.helplineRulerCtrl1 = new HelplineRulerControl.HelplineRulerCtrl();
-            this.helplineRulerCtrl2 = new HelplineRulerControl.HelplineRulerCtrl();
-            this.panel3 = new System.Windows.Forms.Panel();
-            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
-            this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
-            this.ToolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
-            this.toolStripProgressBar1 = new System.Windows.Forms.ToolStripProgressBar();
-            this.toolStripStatusLabel4 = new System.Windows.Forms.ToolStripStatusLabel();
-            this.toolStripStatusLabel3 = new System.Windows.Forms.ToolStripStatusLabel();
-            this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
-            this.Timer3 = new System.Windows.Forms.Timer(this.components);
-            this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
-            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.backgroundWorker2 = new System.ComponentModel.BackgroundWorker();
-            this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
-            this.panel1.SuspendLayout();
-            this.panel2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numWH)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numQATH)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numAlgMaxIter)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numMultTLCap)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numMaxSize)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numProbMult1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numDblMult)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numShiftY)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numShiftX)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numGmmComp)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numMaxComponents)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numWHScribbles)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numGamma)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
-            this.splitContainer1.Panel1.SuspendLayout();
-            this.splitContainer1.Panel2.SuspendLayout();
-            this.splitContainer1.SuspendLayout();
-            this.statusStrip1.SuspendLayout();
-            this.SuspendLayout();
+            components = new System.ComponentModel.Container();
+            panel1 = new Panel();
+            cbAllowRS = new CheckBox();
+            btnInitSettings = new Button();
+            panel2 = new Panel();
+            label13 = new Label();
+            cbAutoThreshold = new CheckBox();
+            btnCache = new Button();
+            cbSetPFGToFG = new CheckBox();
+            label11 = new Label();
+            label10 = new Label();
+            label9 = new Label();
+            label8 = new Label();
+            label7 = new Label();
+            label12 = new Label();
+            label3 = new Label();
+            btnCompose = new Button();
+            btnOutline = new Button();
+            cbLSBmp = new CheckBox();
+            btnLoadScribbles = new Button();
+            btnSaveScribbles = new Button();
+            cbSkipLearn = new CheckBox();
+            label1 = new Label();
+            btnMinCut = new Button();
+            btnResQATH = new Button();
+            btnResMaxIter = new Button();
+            cbEightAdj = new CheckBox();
+            btnRecut = new Button();
+            btnRemStroke = new Button();
+            label6 = new Label();
+            cmbCurrentColor = new ComboBox();
+            cbDraw = new CheckBox();
+            numWH = new NumericUpDown();
+            label40 = new Label();
+            label39 = new Label();
+            numQATH = new NumericUpDown();
+            numAlgMaxIter = new NumericUpDown();
+            Label20 = new Label();
+            cmbZoom = new ComboBox();
+            cbBGColor = new CheckBox();
+            button10 = new Button();
+            button8 = new Button();
+            button2 = new Button();
+            btnCancel = new Button();
+            btnOK = new Button();
+            btnGo = new Button();
+            btnReset2 = new Button();
+            cbCastTLInt = new CheckBox();
+            cbMultTLCap = new CheckBox();
+            numMultTLCap = new NumericUpDown();
+            label4 = new Label();
+            numMaxSize = new NumericUpDown();
+            numProbMult1 = new NumericUpDown();
+            cbUseTh = new CheckBox();
+            label5 = new Label();
+            numDblMult = new NumericUpDown();
+            cbQuickEst = new CheckBox();
+            btnRect = new Button();
+            numShiftY = new NumericUpDown();
+            label19 = new Label();
+            numShiftX = new NumericUpDown();
+            numGmmComp = new NumericUpDown();
+            numMaxComponents = new NumericUpDown();
+            numWHScribbles = new NumericUpDown();
+            cbScribbleMode = new CheckBox();
+            rbFG = new RadioButton();
+            rbBG = new RadioButton();
+            btnClearScribbles = new Button();
+            btnRemLastScribbles = new Button();
+            cbRectMode = new CheckBox();
+            numGamma = new NumericUpDown();
+            label2 = new Label();
+            splitContainer1 = new SplitContainer();
+            helplineRulerCtrl1 = new HelplineRulerControl.HelplineRulerCtrl();
+            helplineRulerCtrl2 = new HelplineRulerControl.HelplineRulerCtrl();
+            panel3 = new Panel();
+            statusStrip1 = new StatusStrip();
+            toolStripStatusLabel1 = new ToolStripStatusLabel();
+            ToolStripStatusLabel2 = new ToolStripStatusLabel();
+            toolStripProgressBar1 = new ToolStripProgressBar();
+            toolStripStatusLabel4 = new ToolStripStatusLabel();
+            toolStripStatusLabel3 = new ToolStripStatusLabel();
+            backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
+            Timer3 = new System.Windows.Forms.Timer(components);
+            saveFileDialog1 = new SaveFileDialog();
+            toolTip1 = new ToolTip(components);
+            backgroundWorker2 = new System.ComponentModel.BackgroundWorker();
+            openFileDialog1 = new OpenFileDialog();
+            panel1.SuspendLayout();
+            panel2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)numWH).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)numQATH).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)numAlgMaxIter).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)numMultTLCap).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)numMaxSize).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)numProbMult1).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)numDblMult).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)numShiftY).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)numShiftX).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)numGmmComp).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)numMaxComponents).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)numWHScribbles).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)numGamma).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
+            splitContainer1.Panel1.SuspendLayout();
+            splitContainer1.Panel2.SuspendLayout();
+            splitContainer1.SuspendLayout();
+            statusStrip1.SuspendLayout();
+            SuspendLayout();
             // 
             // panel1
             // 
-            this.panel1.Controls.Add(this.btnInitSettings);
-            this.panel1.Controls.Add(this.panel2);
-            this.panel1.Controls.Add(this.btnCache);
-            this.panel1.Controls.Add(this.cbSetPFGToFG);
-            this.panel1.Controls.Add(this.label11);
-            this.panel1.Controls.Add(this.label10);
-            this.panel1.Controls.Add(this.label9);
-            this.panel1.Controls.Add(this.label8);
-            this.panel1.Controls.Add(this.label7);
-            this.panel1.Controls.Add(this.label12);
-            this.panel1.Controls.Add(this.label3);
-            this.panel1.Controls.Add(this.btnCompose);
-            this.panel1.Controls.Add(this.btnOutline);
-            this.panel1.Controls.Add(this.cbLSBmp);
-            this.panel1.Controls.Add(this.btnLoadScribbles);
-            this.panel1.Controls.Add(this.btnSaveScribbles);
-            this.panel1.Controls.Add(this.cbSkipLearn);
-            this.panel1.Controls.Add(this.label1);
-            this.panel1.Controls.Add(this.btnMinCut);
-            this.panel1.Controls.Add(this.btnResQATH);
-            this.panel1.Controls.Add(this.btnResMaxIter);
-            this.panel1.Controls.Add(this.cbEightAdj);
-            this.panel1.Controls.Add(this.btnRecut);
-            this.panel1.Controls.Add(this.btnRemStroke);
-            this.panel1.Controls.Add(this.label6);
-            this.panel1.Controls.Add(this.cmbCurrentColor);
-            this.panel1.Controls.Add(this.cbDraw);
-            this.panel1.Controls.Add(this.numWH);
-            this.panel1.Controls.Add(this.label40);
-            this.panel1.Controls.Add(this.label39);
-            this.panel1.Controls.Add(this.numQATH);
-            this.panel1.Controls.Add(this.numAlgMaxIter);
-            this.panel1.Controls.Add(this.Label20);
-            this.panel1.Controls.Add(this.cmbZoom);
-            this.panel1.Controls.Add(this.cbBGColor);
-            this.panel1.Controls.Add(this.button10);
-            this.panel1.Controls.Add(this.button8);
-            this.panel1.Controls.Add(this.button2);
-            this.panel1.Controls.Add(this.btnCancel);
-            this.panel1.Controls.Add(this.btnOK);
-            this.panel1.Controls.Add(this.btnGo);
-            this.panel1.Controls.Add(this.btnReset2);
-            this.panel1.Controls.Add(this.cbCastTLInt);
-            this.panel1.Controls.Add(this.cbMultTLCap);
-            this.panel1.Controls.Add(this.numMultTLCap);
-            this.panel1.Controls.Add(this.label4);
-            this.panel1.Controls.Add(this.numMaxSize);
-            this.panel1.Controls.Add(this.numProbMult1);
-            this.panel1.Controls.Add(this.cbUseTh);
-            this.panel1.Controls.Add(this.label5);
-            this.panel1.Controls.Add(this.numDblMult);
-            this.panel1.Controls.Add(this.cbQuickEst);
-            this.panel1.Controls.Add(this.btnRect);
-            this.panel1.Controls.Add(this.numShiftY);
-            this.panel1.Controls.Add(this.label19);
-            this.panel1.Controls.Add(this.numShiftX);
-            this.panel1.Controls.Add(this.numGmmComp);
-            this.panel1.Controls.Add(this.numMaxComponents);
-            this.panel1.Controls.Add(this.numWHScribbles);
-            this.panel1.Controls.Add(this.cbScribbleMode);
-            this.panel1.Controls.Add(this.rbFG);
-            this.panel1.Controls.Add(this.rbBG);
-            this.panel1.Controls.Add(this.btnClearScribbles);
-            this.panel1.Controls.Add(this.btnRemLastScribbles);
-            this.panel1.Controls.Add(this.cbRectMode);
-            this.panel1.Controls.Add(this.numGamma);
-            this.panel1.Controls.Add(this.label2);
-            this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel1.Location = new System.Drawing.Point(0, 0);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1268, 170);
-            this.panel1.TabIndex = 0;
-            this.panel1.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.panel1_MouseDoubleClick);
-            this.panel1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panel1_MouseDown);
+            panel1.Controls.Add(cbAllowRS);
+            panel1.Controls.Add(btnInitSettings);
+            panel1.Controls.Add(panel2);
+            panel1.Controls.Add(btnCache);
+            panel1.Controls.Add(cbSetPFGToFG);
+            panel1.Controls.Add(label11);
+            panel1.Controls.Add(label10);
+            panel1.Controls.Add(label9);
+            panel1.Controls.Add(label8);
+            panel1.Controls.Add(label7);
+            panel1.Controls.Add(label12);
+            panel1.Controls.Add(label3);
+            panel1.Controls.Add(btnCompose);
+            panel1.Controls.Add(btnOutline);
+            panel1.Controls.Add(cbLSBmp);
+            panel1.Controls.Add(btnLoadScribbles);
+            panel1.Controls.Add(btnSaveScribbles);
+            panel1.Controls.Add(cbSkipLearn);
+            panel1.Controls.Add(label1);
+            panel1.Controls.Add(btnMinCut);
+            panel1.Controls.Add(btnResQATH);
+            panel1.Controls.Add(btnResMaxIter);
+            panel1.Controls.Add(cbEightAdj);
+            panel1.Controls.Add(btnRecut);
+            panel1.Controls.Add(btnRemStroke);
+            panel1.Controls.Add(label6);
+            panel1.Controls.Add(cmbCurrentColor);
+            panel1.Controls.Add(cbDraw);
+            panel1.Controls.Add(numWH);
+            panel1.Controls.Add(label40);
+            panel1.Controls.Add(label39);
+            panel1.Controls.Add(numQATH);
+            panel1.Controls.Add(numAlgMaxIter);
+            panel1.Controls.Add(Label20);
+            panel1.Controls.Add(cmbZoom);
+            panel1.Controls.Add(cbBGColor);
+            panel1.Controls.Add(button10);
+            panel1.Controls.Add(button8);
+            panel1.Controls.Add(button2);
+            panel1.Controls.Add(btnCancel);
+            panel1.Controls.Add(btnOK);
+            panel1.Controls.Add(btnGo);
+            panel1.Controls.Add(btnReset2);
+            panel1.Controls.Add(cbCastTLInt);
+            panel1.Controls.Add(cbMultTLCap);
+            panel1.Controls.Add(numMultTLCap);
+            panel1.Controls.Add(label4);
+            panel1.Controls.Add(numMaxSize);
+            panel1.Controls.Add(numProbMult1);
+            panel1.Controls.Add(cbUseTh);
+            panel1.Controls.Add(label5);
+            panel1.Controls.Add(numDblMult);
+            panel1.Controls.Add(cbQuickEst);
+            panel1.Controls.Add(btnRect);
+            panel1.Controls.Add(numShiftY);
+            panel1.Controls.Add(label19);
+            panel1.Controls.Add(numShiftX);
+            panel1.Controls.Add(numGmmComp);
+            panel1.Controls.Add(numMaxComponents);
+            panel1.Controls.Add(numWHScribbles);
+            panel1.Controls.Add(cbScribbleMode);
+            panel1.Controls.Add(rbFG);
+            panel1.Controls.Add(rbBG);
+            panel1.Controls.Add(btnClearScribbles);
+            panel1.Controls.Add(btnRemLastScribbles);
+            panel1.Controls.Add(cbRectMode);
+            panel1.Controls.Add(numGamma);
+            panel1.Controls.Add(label2);
+            panel1.Dock = DockStyle.Top;
+            panel1.Location = new Point(0, 0);
+            panel1.Margin = new Padding(4, 3, 4, 3);
+            panel1.Name = "panel1";
+            panel1.Size = new Size(1479, 196);
+            panel1.TabIndex = 0;
+            panel1.MouseDoubleClick += panel1_MouseDoubleClick;
+            panel1.MouseDown += panel1_MouseDown;
+            // 
+            // cbAllowRS
+            // 
+            cbAllowRS.AutoSize = true;
+            cbAllowRS.Location = new Point(221, 37);
+            cbAllowRS.Name = "cbAllowRS";
+            cbAllowRS.Size = new Size(70, 19);
+            cbAllowRS.TabIndex = 679;
+            cbAllowRS.Text = "allow RS";
+            toolTip1.SetToolTip(cbAllowRS, "allow rect_and_scribble mode");
+            cbAllowRS.UseVisualStyleBackColor = true;
             // 
             // btnInitSettings
             // 
-            this.btnInitSettings.Location = new System.Drawing.Point(511, 6);
-            this.btnInitSettings.Name = "btnInitSettings";
-            this.btnInitSettings.Size = new System.Drawing.Size(75, 23);
-            this.btnInitSettings.TabIndex = 678;
-            this.btnInitSettings.Text = "KM-settings";
-            this.btnInitSettings.UseVisualStyleBackColor = true;
-            this.btnInitSettings.Click += new System.EventHandler(this.btnInitSettings_Click);
+            btnInitSettings.Location = new Point(596, 7);
+            btnInitSettings.Margin = new Padding(4, 3, 4, 3);
+            btnInitSettings.Name = "btnInitSettings";
+            btnInitSettings.Size = new Size(88, 27);
+            btnInitSettings.TabIndex = 678;
+            btnInitSettings.Text = "KM-settings";
+            btnInitSettings.UseVisualStyleBackColor = true;
+            btnInitSettings.Click += btnInitSettings_Click;
             // 
             // panel2
             // 
-            this.panel2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel2.Controls.Add(this.label13);
-            this.panel2.Controls.Add(this.cbAutoThreshold);
-            this.panel2.Location = new System.Drawing.Point(621, 4);
-            this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(200, 26);
-            this.panel2.TabIndex = 677;
+            panel2.BorderStyle = BorderStyle.FixedSingle;
+            panel2.Controls.Add(label13);
+            panel2.Controls.Add(cbAutoThreshold);
+            panel2.Location = new Point(724, 5);
+            panel2.Margin = new Padding(4, 3, 4, 3);
+            panel2.Name = "panel2";
+            panel2.Size = new Size(233, 30);
+            panel2.TabIndex = 677;
             // 
             // label13
             // 
-            this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(9, 6);
-            this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(87, 13);
-            this.label13.TabIndex = 677;
-            this.label13.Text = "currently testing: ";
+            label13.AutoSize = true;
+            label13.Location = new Point(10, 7);
+            label13.Margin = new Padding(4, 0, 4, 0);
+            label13.Name = "label13";
+            label13.Size = new Size(99, 15);
+            label13.TabIndex = 677;
+            label13.Text = "currently testing: ";
             // 
             // cbAutoThreshold
             // 
-            this.cbAutoThreshold.AutoSize = true;
-            this.cbAutoThreshold.Checked = true;
-            this.cbAutoThreshold.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbAutoThreshold.Location = new System.Drawing.Point(102, 5);
-            this.cbAutoThreshold.Name = "cbAutoThreshold";
-            this.cbAutoThreshold.Size = new System.Drawing.Size(93, 17);
-            this.cbAutoThreshold.TabIndex = 676;
-            this.cbAutoThreshold.Text = "auto threshold";
-            this.cbAutoThreshold.UseVisualStyleBackColor = true;
+            cbAutoThreshold.AutoSize = true;
+            cbAutoThreshold.Checked = true;
+            cbAutoThreshold.CheckState = CheckState.Checked;
+            cbAutoThreshold.Location = new Point(119, 6);
+            cbAutoThreshold.Margin = new Padding(4, 3, 4, 3);
+            cbAutoThreshold.Name = "cbAutoThreshold";
+            cbAutoThreshold.Size = new Size(103, 19);
+            cbAutoThreshold.TabIndex = 676;
+            cbAutoThreshold.Text = "auto threshold";
+            cbAutoThreshold.UseVisualStyleBackColor = true;
             // 
             // btnCache
             // 
-            this.btnCache.Enabled = false;
-            this.btnCache.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.btnCache.Location = new System.Drawing.Point(985, 29);
-            this.btnCache.Name = "btnCache";
-            this.btnCache.Size = new System.Drawing.Size(75, 23);
-            this.btnCache.TabIndex = 675;
-            this.btnCache.Text = "CachedPics";
-            this.btnCache.UseVisualStyleBackColor = true;
-            this.btnCache.Click += new System.EventHandler(this.btnCache_Click);
+            btnCache.Enabled = false;
+            btnCache.ForeColor = SystemColors.ControlText;
+            btnCache.Location = new Point(1149, 33);
+            btnCache.Margin = new Padding(4, 3, 4, 3);
+            btnCache.Name = "btnCache";
+            btnCache.Size = new Size(88, 27);
+            btnCache.TabIndex = 675;
+            btnCache.Text = "CachedPics";
+            btnCache.UseVisualStyleBackColor = true;
+            btnCache.Click += btnCache_Click;
             // 
             // cbSetPFGToFG
             // 
-            this.cbSetPFGToFG.AutoSize = true;
-            this.cbSetPFGToFG.Enabled = false;
-            this.cbSetPFGToFG.Location = new System.Drawing.Point(1073, 110);
-            this.cbSetPFGToFG.Name = "cbSetPFGToFG";
-            this.cbSetPFGToFG.Size = new System.Drawing.Size(74, 17);
-            this.cbSetPFGToFG.TabIndex = 674;
-            this.cbSetPFGToFG.Text = "PFGToFG";
-            this.toolTip1.SetToolTip(this.cbSetPFGToFG, "set all \"probably foreground\" values to \"foreground\" in mask");
-            this.cbSetPFGToFG.UseVisualStyleBackColor = true;
+            cbSetPFGToFG.AutoSize = true;
+            cbSetPFGToFG.Enabled = false;
+            cbSetPFGToFG.Location = new Point(1252, 127);
+            cbSetPFGToFG.Margin = new Padding(4, 3, 4, 3);
+            cbSetPFGToFG.Name = "cbSetPFGToFG";
+            cbSetPFGToFG.Size = new Size(73, 19);
+            cbSetPFGToFG.TabIndex = 674;
+            cbSetPFGToFG.Text = "PFGToFG";
+            toolTip1.SetToolTip(cbSetPFGToFG, "set all \"probably foreground\" values to \"foreground\" in mask");
+            cbSetPFGToFG.UseVisualStyleBackColor = true;
             // 
             // label11
             // 
-            this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(695, 56);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(17, 13);
-            this.label11.TabIndex = 673;
-            this.label11.Text = "Y:";
+            label11.AutoSize = true;
+            label11.Location = new Point(811, 65);
+            label11.Margin = new Padding(4, 0, 4, 0);
+            label11.Name = "label11";
+            label11.Size = new Size(17, 15);
+            label11.TabIndex = 673;
+            label11.Text = "Y:";
             // 
             // label10
             // 
-            this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(568, 56);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(70, 13);
-            this.label10.TabIndex = 673;
-            this.label10.Text = "shiftShape X:";
+            label10.AutoSize = true;
+            label10.Location = new Point(663, 65);
+            label10.Margin = new Padding(4, 0, 4, 0);
+            label10.Name = "label10";
+            label10.Size = new Size(75, 15);
+            label10.TabIndex = 673;
+            label10.Text = "shiftShape X:";
             // 
             // label9
             // 
-            this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(12, 56);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(50, 13);
-            this.label9.TabIndex = 672;
-            this.label9.Text = "Max Size";
-            this.toolTip1.SetToolTip(this.label9, "Maximum size of the long picture-side.\r\nBigger pictures will be resampled down - " +
-        "then processed -\r\nand re-resampled up again.\r\nRealMinCut MaxSize is fix at 300, " +
-        "due to processing time.");
+            label9.AutoSize = true;
+            label9.Location = new Point(14, 65);
+            label9.Margin = new Padding(4, 0, 4, 0);
+            label9.Name = "label9";
+            label9.Size = new Size(53, 15);
+            label9.TabIndex = 672;
+            label9.Text = "Max Size";
+            toolTip1.SetToolTip(label9, "Maximum size of the long picture-side.\r\nBigger pictures will be resampled down - then processed -\r\nand re-resampled up again.\r\nRealMinCut MaxSize is fix at 300, due to processing time.");
             // 
             // label8
             // 
-            this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(12, 35);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(71, 13);
-            this.label8.TabIndex = 671;
-            this.label8.Text = "Gmm Clusters";
+            label8.AutoSize = true;
+            label8.Location = new Point(14, 40);
+            label8.Margin = new Padding(4, 0, 4, 0);
+            label8.Name = "label8";
+            label8.Size = new Size(82, 15);
+            label8.TabIndex = 671;
+            label8.Text = "Gmm Clusters";
             // 
             // label7
             // 
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(376, 107);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(97, 13);
-            this.label7.TabIndex = 670;
-            this.label7.Text = "max # components";
-            this.toolTip1.SetToolTip(this.label7, "maximum output number of connected components,\r\nouter- and inner-paths (component" +
-        "s which are drawn transparent).");
+            label7.AutoSize = true;
+            label7.Location = new Point(439, 123);
+            label7.Margin = new Padding(4, 0, 4, 0);
+            label7.Name = "label7";
+            label7.Size = new Size(110, 15);
+            label7.TabIndex = 670;
+            label7.Text = "max # components";
+            toolTip1.SetToolTip(label7, "maximum output number of connected components,\r\nouter- and inner-paths (components which are drawn transparent).");
             // 
             // label12
             // 
-            this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(946, 79);
-            this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(50, 13);
-            this.label12.TabIndex = 669;
-            this.label12.Text = "compose";
+            label12.AutoSize = true;
+            label12.Location = new Point(1104, 91);
+            label12.Margin = new Padding(4, 0, 4, 0);
+            label12.Name = "label12";
+            label12.Size = new Size(56, 15);
+            label12.TabIndex = 669;
+            label12.Text = "compose";
             // 
             // label3
             // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(776, 79);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(80, 13);
-            this.label3.TabIndex = 669;
-            this.label3.Text = "process Outline";
+            label3.AutoSize = true;
+            label3.Location = new Point(905, 91);
+            label3.Margin = new Padding(4, 0, 4, 0);
+            label3.Name = "label3";
+            label3.Size = new Size(89, 15);
+            label3.TabIndex = 669;
+            label3.Text = "process Outline";
             // 
             // btnCompose
             // 
-            this.btnCompose.Location = new System.Drawing.Point(1002, 74);
-            this.btnCompose.Name = "btnCompose";
-            this.btnCompose.Size = new System.Drawing.Size(75, 23);
-            this.btnCompose.TabIndex = 668;
-            this.btnCompose.Text = "Go";
-            this.btnCompose.UseVisualStyleBackColor = true;
-            this.btnCompose.Click += new System.EventHandler(this.btnCompose_Click);
+            btnCompose.Location = new Point(1169, 85);
+            btnCompose.Margin = new Padding(4, 3, 4, 3);
+            btnCompose.Name = "btnCompose";
+            btnCompose.Size = new Size(88, 27);
+            btnCompose.TabIndex = 668;
+            btnCompose.Text = "Go";
+            btnCompose.UseVisualStyleBackColor = true;
+            btnCompose.Click += btnCompose_Click;
             // 
             // btnOutline
             // 
-            this.btnOutline.Location = new System.Drawing.Point(862, 74);
-            this.btnOutline.Name = "btnOutline";
-            this.btnOutline.Size = new System.Drawing.Size(75, 23);
-            this.btnOutline.TabIndex = 668;
-            this.btnOutline.Text = "Go";
-            this.btnOutline.UseVisualStyleBackColor = true;
-            this.btnOutline.Click += new System.EventHandler(this.btnOutline_Click);
+            btnOutline.Location = new Point(1006, 85);
+            btnOutline.Margin = new Padding(4, 3, 4, 3);
+            btnOutline.Name = "btnOutline";
+            btnOutline.Size = new Size(88, 27);
+            btnOutline.TabIndex = 668;
+            btnOutline.Text = "Go";
+            btnOutline.UseVisualStyleBackColor = true;
+            btnOutline.Click += btnOutline_Click;
             // 
             // cbLSBmp
             // 
-            this.cbLSBmp.AutoSize = true;
-            this.cbLSBmp.Location = new System.Drawing.Point(826, 55);
-            this.cbLSBmp.Name = "cbLSBmp";
-            this.cbLSBmp.Size = new System.Drawing.Size(80, 17);
-            this.cbLSBmp.TabIndex = 579;
-            this.cbLSBmp.Text = "with Bitmap";
-            this.cbLSBmp.UseVisualStyleBackColor = true;
+            cbLSBmp.AutoSize = true;
+            cbLSBmp.Location = new Point(964, 63);
+            cbLSBmp.Margin = new Padding(4, 3, 4, 3);
+            cbLSBmp.Name = "cbLSBmp";
+            cbLSBmp.Size = new Size(90, 19);
+            cbLSBmp.TabIndex = 579;
+            cbLSBmp.Text = "with Bitmap";
+            cbLSBmp.UseVisualStyleBackColor = true;
             // 
             // btnLoadScribbles
             // 
-            this.btnLoadScribbles.Enabled = false;
-            this.btnLoadScribbles.Location = new System.Drawing.Point(714, 29);
-            this.btnLoadScribbles.Name = "btnLoadScribbles";
-            this.btnLoadScribbles.Size = new System.Drawing.Size(85, 23);
-            this.btnLoadScribbles.TabIndex = 666;
-            this.btnLoadScribbles.Text = "loadScribbles";
-            this.btnLoadScribbles.UseVisualStyleBackColor = true;
-            this.btnLoadScribbles.Click += new System.EventHandler(this.btnLoadScribbles_Click);
+            btnLoadScribbles.Enabled = false;
+            btnLoadScribbles.Location = new Point(833, 33);
+            btnLoadScribbles.Margin = new Padding(4, 3, 4, 3);
+            btnLoadScribbles.Name = "btnLoadScribbles";
+            btnLoadScribbles.Size = new Size(99, 27);
+            btnLoadScribbles.TabIndex = 666;
+            btnLoadScribbles.Text = "loadScribbles";
+            btnLoadScribbles.UseVisualStyleBackColor = true;
+            btnLoadScribbles.Click += btnLoadScribbles_Click;
             // 
             // btnSaveScribbles
             // 
-            this.btnSaveScribbles.Enabled = false;
-            this.btnSaveScribbles.Location = new System.Drawing.Point(811, 29);
-            this.btnSaveScribbles.Name = "btnSaveScribbles";
-            this.btnSaveScribbles.Size = new System.Drawing.Size(85, 23);
-            this.btnSaveScribbles.TabIndex = 667;
-            this.btnSaveScribbles.Text = "saveScribbles";
-            this.btnSaveScribbles.UseVisualStyleBackColor = true;
-            this.btnSaveScribbles.Click += new System.EventHandler(this.btnSaveScribbles_Click);
+            btnSaveScribbles.Enabled = false;
+            btnSaveScribbles.Location = new Point(946, 33);
+            btnSaveScribbles.Margin = new Padding(4, 3, 4, 3);
+            btnSaveScribbles.Name = "btnSaveScribbles";
+            btnSaveScribbles.Size = new Size(99, 27);
+            btnSaveScribbles.TabIndex = 667;
+            btnSaveScribbles.Text = "saveScribbles";
+            btnSaveScribbles.UseVisualStyleBackColor = true;
+            btnSaveScribbles.Click += btnSaveScribbles_Click;
             // 
             // cbSkipLearn
             // 
-            this.cbSkipLearn.AutoSize = true;
-            this.cbSkipLearn.Enabled = false;
-            this.cbSkipLearn.Location = new System.Drawing.Point(1001, 110);
-            this.cbSkipLearn.Name = "cbSkipLearn";
-            this.cbSkipLearn.Size = new System.Drawing.Size(72, 17);
-            this.cbSkipLearn.TabIndex = 665;
-            this.cbSkipLearn.Text = "skipLearn";
-            this.cbSkipLearn.UseVisualStyleBackColor = true;
+            cbSkipLearn.AutoSize = true;
+            cbSkipLearn.Enabled = false;
+            cbSkipLearn.Location = new Point(1168, 127);
+            cbSkipLearn.Margin = new Padding(4, 3, 4, 3);
+            cbSkipLearn.Name = "cbSkipLearn";
+            cbSkipLearn.Size = new Size(76, 19);
+            cbSkipLearn.TabIndex = 665;
+            cbSkipLearn.Text = "skipLearn";
+            cbSkipLearn.UseVisualStyleBackColor = true;
             // 
             // label1
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 106);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(97, 13);
-            this.label1.TabIndex = 664;
-            this.label1.Text = "Run a Real MinCut";
+            label1.AutoSize = true;
+            label1.Location = new Point(14, 122);
+            label1.Margin = new Padding(4, 0, 4, 0);
+            label1.Name = "label1";
+            label1.Size = new Size(105, 15);
+            label1.TabIndex = 664;
+            label1.Text = "Run a Real MinCut";
             // 
             // btnMinCut
             // 
-            this.btnMinCut.Location = new System.Drawing.Point(15, 131);
-            this.btnMinCut.Name = "btnMinCut";
-            this.btnMinCut.Size = new System.Drawing.Size(75, 23);
-            this.btnMinCut.TabIndex = 663;
-            this.btnMinCut.Text = "Go";
-            this.btnMinCut.UseVisualStyleBackColor = true;
-            this.btnMinCut.Click += new System.EventHandler(this.btnMinCut_Click);
+            btnMinCut.Location = new Point(18, 151);
+            btnMinCut.Margin = new Padding(4, 3, 4, 3);
+            btnMinCut.Name = "btnMinCut";
+            btnMinCut.Size = new Size(88, 27);
+            btnMinCut.TabIndex = 663;
+            btnMinCut.Text = "Go";
+            btnMinCut.UseVisualStyleBackColor = true;
+            btnMinCut.Click += btnMinCut_Click;
             // 
             // btnResQATH
             // 
-            this.btnResQATH.Location = new System.Drawing.Point(712, 104);
-            this.btnResQATH.Name = "btnResQATH";
-            this.btnResQATH.Size = new System.Drawing.Size(42, 23);
-            this.btnResQATH.TabIndex = 662;
-            this.btnResQATH.Text = "res";
-            this.btnResQATH.UseVisualStyleBackColor = true;
-            this.btnResQATH.Click += new System.EventHandler(this.btnResQATH_Click);
+            btnResQATH.Location = new Point(831, 120);
+            btnResQATH.Margin = new Padding(4, 3, 4, 3);
+            btnResQATH.Name = "btnResQATH";
+            btnResQATH.Size = new Size(49, 27);
+            btnResQATH.TabIndex = 662;
+            btnResQATH.Text = "res";
+            btnResQATH.UseVisualStyleBackColor = true;
+            btnResQATH.Click += btnResQATH_Click;
             // 
             // btnResMaxIter
             // 
-            this.btnResMaxIter.Location = new System.Drawing.Point(712, 76);
-            this.btnResMaxIter.Name = "btnResMaxIter";
-            this.btnResMaxIter.Size = new System.Drawing.Size(42, 23);
-            this.btnResMaxIter.TabIndex = 662;
-            this.btnResMaxIter.Text = "res";
-            this.btnResMaxIter.UseVisualStyleBackColor = true;
-            this.btnResMaxIter.Click += new System.EventHandler(this.btnResMaxIter_Click);
+            btnResMaxIter.Location = new Point(831, 88);
+            btnResMaxIter.Margin = new Padding(4, 3, 4, 3);
+            btnResMaxIter.Name = "btnResMaxIter";
+            btnResMaxIter.Size = new Size(49, 27);
+            btnResMaxIter.TabIndex = 662;
+            btnResMaxIter.Text = "res";
+            btnResMaxIter.UseVisualStyleBackColor = true;
+            btnResMaxIter.Click += btnResMaxIter_Click;
             // 
             // cbEightAdj
             // 
-            this.cbEightAdj.AutoSize = true;
-            this.cbEightAdj.Location = new System.Drawing.Point(388, 10);
-            this.cbEightAdj.Name = "cbEightAdj";
-            this.cbEightAdj.Size = new System.Drawing.Size(106, 17);
-            this.cbEightAdj.TabIndex = 661;
-            this.cbEightAdj.Text = "Eight_Adjacency";
-            this.cbEightAdj.UseVisualStyleBackColor = true;
+            cbEightAdj.AutoSize = true;
+            cbEightAdj.Location = new Point(453, 12);
+            cbEightAdj.Margin = new Padding(4, 3, 4, 3);
+            cbEightAdj.Name = "cbEightAdj";
+            cbEightAdj.Size = new Size(113, 19);
+            cbEightAdj.TabIndex = 661;
+            cbEightAdj.Text = "Eight_Adjacency";
+            cbEightAdj.UseVisualStyleBackColor = true;
             // 
             // btnRecut
             // 
-            this.btnRecut.Location = new System.Drawing.Point(997, 132);
-            this.btnRecut.Name = "btnRecut";
-            this.btnRecut.Size = new System.Drawing.Size(38, 23);
-            this.btnRecut.TabIndex = 660;
-            this.btnRecut.Text = "Go";
-            this.btnRecut.UseVisualStyleBackColor = true;
-            this.btnRecut.Click += new System.EventHandler(this.btnRecut_Click);
+            btnRecut.Location = new Point(1163, 152);
+            btnRecut.Margin = new Padding(4, 3, 4, 3);
+            btnRecut.Name = "btnRecut";
+            btnRecut.Size = new Size(44, 27);
+            btnRecut.TabIndex = 660;
+            btnRecut.Text = "Go";
+            btnRecut.UseVisualStyleBackColor = true;
+            btnRecut.Click += btnRecut_Click;
             // 
             // btnRemStroke
             // 
-            this.btnRemStroke.Location = new System.Drawing.Point(903, 132);
-            this.btnRemStroke.Name = "btnRemStroke";
-            this.btnRemStroke.Size = new System.Drawing.Size(75, 23);
-            this.btnRemStroke.TabIndex = 659;
-            this.btnRemStroke.Text = "rem last";
-            this.btnRemStroke.UseVisualStyleBackColor = true;
-            this.btnRemStroke.Click += new System.EventHandler(this.btnRemStroke_Click);
+            btnRemStroke.Location = new Point(1054, 152);
+            btnRemStroke.Margin = new Padding(4, 3, 4, 3);
+            btnRemStroke.Name = "btnRemStroke";
+            btnRemStroke.Size = new Size(88, 27);
+            btnRemStroke.TabIndex = 659;
+            btnRemStroke.Text = "rem last";
+            btnRemStroke.UseVisualStyleBackColor = true;
+            btnRemStroke.Click += btnRemStroke_Click;
             // 
             // label6
             // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(808, 137);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(32, 13);
-            this.label6.TabIndex = 658;
-            this.label6.Text = "width";
+            label6.AutoSize = true;
+            label6.Location = new Point(943, 158);
+            label6.Margin = new Padding(4, 0, 4, 0);
+            label6.Name = "label6";
+            label6.Size = new Size(37, 15);
+            label6.TabIndex = 658;
+            label6.Text = "width";
             // 
             // cmbCurrentColor
             // 
-            this.cmbCurrentColor.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbCurrentColor.FormattingEnabled = true;
-            this.cmbCurrentColor.Items.AddRange(new object[] {
-            "Background",
-            "Foreground",
-            "Probably Background",
-            "Probably Foreground"});
-            this.cmbCurrentColor.Location = new System.Drawing.Point(894, 108);
-            this.cmbCurrentColor.Name = "cmbCurrentColor";
-            this.cmbCurrentColor.Size = new System.Drawing.Size(101, 21);
-            this.cmbCurrentColor.TabIndex = 657;
-            this.cmbCurrentColor.SelectedIndexChanged += new System.EventHandler(this.cmbCurrentColor_SelectedIndexChanged);
+            cmbCurrentColor.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbCurrentColor.FormattingEnabled = true;
+            cmbCurrentColor.Items.AddRange(new object[] { "Background", "Foreground", "Probably Background", "Probably Foreground" });
+            cmbCurrentColor.Location = new Point(1043, 125);
+            cmbCurrentColor.Margin = new Padding(4, 3, 4, 3);
+            cmbCurrentColor.Name = "cmbCurrentColor";
+            cmbCurrentColor.Size = new Size(117, 23);
+            cmbCurrentColor.TabIndex = 657;
+            cmbCurrentColor.SelectedIndexChanged += cmbCurrentColor_SelectedIndexChanged;
             // 
             // cbDraw
             // 
-            this.cbDraw.AutoSize = true;
-            this.cbDraw.Location = new System.Drawing.Point(800, 110);
-            this.cbDraw.Name = "cbDraw";
-            this.cbDraw.Size = new System.Drawing.Size(92, 17);
-            this.cbDraw.TabIndex = 656;
-            this.cbDraw.Text = "draw on result";
-            this.cbDraw.UseVisualStyleBackColor = true;
-            this.cbDraw.CheckedChanged += new System.EventHandler(this.cbDraw_CheckedChanged);
+            cbDraw.AutoSize = true;
+            cbDraw.Location = new Point(933, 127);
+            cbDraw.Margin = new Padding(4, 3, 4, 3);
+            cbDraw.Name = "cbDraw";
+            cbDraw.Size = new Size(101, 19);
+            cbDraw.TabIndex = 656;
+            cbDraw.Text = "draw on result";
+            cbDraw.UseVisualStyleBackColor = true;
+            cbDraw.CheckedChanged += cbDraw_CheckedChanged;
             // 
             // numWH
             // 
-            this.numWH.Location = new System.Drawing.Point(846, 135);
-            this.numWH.Maximum = new decimal(new int[] {
-            127,
-            0,
-            0,
-            0});
-            this.numWH.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.numWH.Name = "numWH";
-            this.numWH.Size = new System.Drawing.Size(45, 20);
-            this.numWH.TabIndex = 655;
-            this.numWH.Value = new decimal(new int[] {
-            25,
-            0,
-            0,
-            0});
+            numWH.Location = new Point(987, 156);
+            numWH.Margin = new Padding(4, 3, 4, 3);
+            numWH.Maximum = new decimal(new int[] { 127, 0, 0, 0 });
+            numWH.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
+            numWH.Name = "numWH";
+            numWH.Size = new Size(52, 23);
+            numWH.TabIndex = 655;
+            numWH.Value = new decimal(new int[] { 25, 0, 0, 0 });
             // 
             // label40
             // 
-            this.label40.AutoSize = true;
-            this.label40.Location = new System.Drawing.Point(567, 109);
-            this.label40.Name = "label40";
-            this.label40.Size = new System.Drawing.Size(37, 13);
-            this.label40.TabIndex = 653;
-            this.label40.Text = "QATH";
-            this.toolTip1.SetToolTip(this.label40, "maximum number of re-inserting a node to the queue\r\nwhen using a mincut algorithm" +
-        "\r\n(CGwQE checked, or QuickEstimation unchecked)\r\n");
+            label40.AutoSize = true;
+            label40.Location = new Point(662, 126);
+            label40.Margin = new Padding(4, 0, 4, 0);
+            label40.Name = "label40";
+            label40.Size = new Size(38, 15);
+            label40.TabIndex = 653;
+            label40.Text = "QATH";
+            toolTip1.SetToolTip(label40, "maximum number of re-inserting a node to the queue\r\nwhen using a mincut algorithm\r\n(CGwQE checked, or QuickEstimation unchecked)\r\n");
             // 
             // label39
             // 
-            this.label39.AutoSize = true;
-            this.label39.Location = new System.Drawing.Point(568, 81);
-            this.label39.Name = "label39";
-            this.label39.Size = new System.Drawing.Size(41, 13);
-            this.label39.TabIndex = 654;
-            this.label39.Text = "maxIter";
-            this.toolTip1.SetToolTip(this.label39, "maximum number of iterations\r\nwhen using a mincut algorithm\r\n(CGwQE checked, or Q" +
-        "uickEstimation unchecked)");
+            label39.AutoSize = true;
+            label39.Location = new Point(663, 93);
+            label39.Margin = new Padding(4, 0, 4, 0);
+            label39.Name = "label39";
+            label39.Size = new Size(47, 15);
+            label39.TabIndex = 654;
+            label39.Text = "maxIter";
+            toolTip1.SetToolTip(label39, "maximum number of iterations\r\nwhen using a mincut algorithm\r\n(CGwQE checked, or QuickEstimation unchecked)");
             // 
             // numQATH
             // 
-            this.numQATH.Location = new System.Drawing.Point(614, 107);
-            this.numQATH.Maximum = new decimal(new int[] {
-            1410065407,
-            2,
-            0,
-            0});
-            this.numQATH.Name = "numQATH";
-            this.numQATH.Size = new System.Drawing.Size(89, 20);
-            this.numQATH.TabIndex = 651;
-            this.numQATH.Value = new decimal(new int[] {
-            1000000,
-            0,
-            0,
-            0});
-            this.numQATH.ValueChanged += new System.EventHandler(this.numQATH_ValueChanged);
+            numQATH.Location = new Point(716, 123);
+            numQATH.Margin = new Padding(4, 3, 4, 3);
+            numQATH.Maximum = new decimal(new int[] { 1410065407, 2, 0, 0 });
+            numQATH.Name = "numQATH";
+            numQATH.Size = new Size(104, 23);
+            numQATH.TabIndex = 651;
+            numQATH.Value = new decimal(new int[] { 1000000, 0, 0, 0 });
+            numQATH.ValueChanged += numQATH_ValueChanged;
             // 
             // numAlgMaxIter
             // 
-            this.numAlgMaxIter.Location = new System.Drawing.Point(615, 79);
-            this.numAlgMaxIter.Maximum = new decimal(new int[] {
-            1410065407,
-            2,
-            0,
-            0});
-            this.numAlgMaxIter.Name = "numAlgMaxIter";
-            this.numAlgMaxIter.Size = new System.Drawing.Size(89, 20);
-            this.numAlgMaxIter.TabIndex = 652;
-            this.numAlgMaxIter.Value = new decimal(new int[] {
-            1000000,
-            0,
-            0,
-            0});
-            this.numAlgMaxIter.ValueChanged += new System.EventHandler(this.numAlgMaxIter_ValueChanged);
+            numAlgMaxIter.Location = new Point(718, 91);
+            numAlgMaxIter.Margin = new Padding(4, 3, 4, 3);
+            numAlgMaxIter.Maximum = new decimal(new int[] { 1410065407, 2, 0, 0 });
+            numAlgMaxIter.Name = "numAlgMaxIter";
+            numAlgMaxIter.Size = new Size(104, 23);
+            numAlgMaxIter.TabIndex = 652;
+            numAlgMaxIter.Value = new decimal(new int[] { 1000000, 0, 0, 0 });
+            numAlgMaxIter.ValueChanged += numAlgMaxIter_ValueChanged;
             // 
             // Label20
             // 
-            this.Label20.AutoSize = true;
-            this.Label20.Location = new System.Drawing.Point(1098, 85);
-            this.Label20.Name = "Label20";
-            this.Label20.Size = new System.Drawing.Size(53, 13);
-            this.Label20.TabIndex = 650;
-            this.Label20.Text = "Set Zoom";
+            Label20.AutoSize = true;
+            Label20.Location = new Point(1281, 98);
+            Label20.Margin = new Padding(4, 0, 4, 0);
+            Label20.Name = "Label20";
+            Label20.Size = new Size(58, 15);
+            Label20.TabIndex = 650;
+            Label20.Text = "Set Zoom";
             // 
             // cmbZoom
             // 
-            this.cmbZoom.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbZoom.FormattingEnabled = true;
-            this.cmbZoom.Items.AddRange(new object[] {
-            "4",
-            "2",
-            "1",
-            "Fit_Width",
-            "Fit"});
-            this.cmbZoom.Location = new System.Drawing.Point(1157, 82);
-            this.cmbZoom.Name = "cmbZoom";
-            this.cmbZoom.Size = new System.Drawing.Size(75, 21);
-            this.cmbZoom.TabIndex = 649;
-            this.cmbZoom.SelectedIndexChanged += new System.EventHandler(this.cmbZoom_SelectedIndexChanged);
+            cmbZoom.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbZoom.FormattingEnabled = true;
+            cmbZoom.Items.AddRange(new object[] { "4", "2", "1", "Fit_Width", "Fit" });
+            cmbZoom.Location = new Point(1350, 95);
+            cmbZoom.Margin = new Padding(4, 3, 4, 3);
+            cmbZoom.Name = "cmbZoom";
+            cmbZoom.Size = new Size(87, 23);
+            cmbZoom.TabIndex = 649;
+            cmbZoom.SelectedIndexChanged += cmbZoom_SelectedIndexChanged;
             // 
             // cbBGColor
             // 
-            this.cbBGColor.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.cbBGColor.AutoSize = true;
-            this.cbBGColor.Checked = true;
-            this.cbBGColor.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbBGColor.Location = new System.Drawing.Point(1100, 13);
-            this.cbBGColor.Name = "cbBGColor";
-            this.cbBGColor.Size = new System.Drawing.Size(65, 17);
-            this.cbBGColor.TabIndex = 648;
-            this.cbBGColor.Text = "BG dark";
-            this.cbBGColor.UseVisualStyleBackColor = true;
-            this.cbBGColor.CheckedChanged += new System.EventHandler(this.cbBGColor_CheckedChanged);
+            cbBGColor.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            cbBGColor.AutoSize = true;
+            cbBGColor.Checked = true;
+            cbBGColor.CheckState = CheckState.Checked;
+            cbBGColor.Location = new Point(1292, 15);
+            cbBGColor.Margin = new Padding(4, 3, 4, 3);
+            cbBGColor.Name = "cbBGColor";
+            cbBGColor.Size = new Size(67, 19);
+            cbBGColor.TabIndex = 648;
+            cbBGColor.Text = "BG dark";
+            cbBGColor.UseVisualStyleBackColor = true;
+            cbBGColor.CheckedChanged += cbBGColor_CheckedChanged;
             // 
             // button10
             // 
-            this.button10.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button10.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.button10.Location = new System.Drawing.Point(1181, 44);
-            this.button10.Name = "button10";
-            this.button10.Size = new System.Drawing.Size(75, 23);
-            this.button10.TabIndex = 647;
-            this.button10.Text = "HowTo";
-            this.button10.UseVisualStyleBackColor = true;
-            this.button10.Click += new System.EventHandler(this.button10_Click);
+            button10.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            button10.ForeColor = SystemColors.ControlText;
+            button10.Location = new Point(1378, 51);
+            button10.Margin = new Padding(4, 3, 4, 3);
+            button10.Name = "button10";
+            button10.Size = new Size(88, 27);
+            button10.TabIndex = 647;
+            button10.Text = "HowTo";
+            button10.UseVisualStyleBackColor = true;
+            button10.Click += button10_Click;
             // 
             // button8
             // 
-            this.button8.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button8.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.button8.Location = new System.Drawing.Point(1100, 44);
-            this.button8.Name = "button8";
-            this.button8.Size = new System.Drawing.Size(75, 23);
-            this.button8.TabIndex = 646;
-            this.button8.Text = "Reload";
-            this.button8.UseVisualStyleBackColor = true;
-            this.button8.Click += new System.EventHandler(this.button8_Click);
+            button8.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            button8.ForeColor = SystemColors.ControlText;
+            button8.Location = new Point(1283, 51);
+            button8.Margin = new Padding(4, 3, 4, 3);
+            button8.Name = "button8";
+            button8.Size = new Size(88, 27);
+            button8.TabIndex = 646;
+            button8.Text = "Reload";
+            button8.UseVisualStyleBackColor = true;
+            button8.Click += button8_Click;
             // 
             // button2
             // 
-            this.button2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button2.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.button2.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.button2.Location = new System.Drawing.Point(1181, 9);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(75, 23);
-            this.button2.TabIndex = 645;
-            this.button2.Text = "Save";
-            this.button2.Click += new System.EventHandler(this.button2_Click);
+            button2.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            button2.FlatStyle = FlatStyle.System;
+            button2.ForeColor = SystemColors.ControlText;
+            button2.Location = new Point(1378, 10);
+            button2.Margin = new Padding(4, 3, 4, 3);
+            button2.Name = "button2";
+            button2.Size = new Size(88, 27);
+            button2.TabIndex = 645;
+            button2.Text = "Save";
+            button2.Click += button2_Click;
             // 
             // btnCancel
             // 
-            this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancel.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.btnCancel.Location = new System.Drawing.Point(1181, 135);
-            this.btnCancel.Name = "btnCancel";
-            this.btnCancel.Size = new System.Drawing.Size(75, 23);
-            this.btnCancel.TabIndex = 643;
-            this.btnCancel.Text = "Cancel";
-            this.btnCancel.UseVisualStyleBackColor = true;
+            btnCancel.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            btnCancel.DialogResult = DialogResult.Cancel;
+            btnCancel.ForeColor = SystemColors.ControlText;
+            btnCancel.Location = new Point(1378, 156);
+            btnCancel.Margin = new Padding(4, 3, 4, 3);
+            btnCancel.Name = "btnCancel";
+            btnCancel.Size = new Size(88, 27);
+            btnCancel.TabIndex = 643;
+            btnCancel.Text = "Cancel";
+            btnCancel.UseVisualStyleBackColor = true;
             // 
             // btnOK
             // 
-            this.btnOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnOK.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.btnOK.Enabled = false;
-            this.btnOK.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.btnOK.Location = new System.Drawing.Point(1101, 135);
-            this.btnOK.Name = "btnOK";
-            this.btnOK.Size = new System.Drawing.Size(75, 23);
-            this.btnOK.TabIndex = 644;
-            this.btnOK.Text = "OK";
-            this.btnOK.UseVisualStyleBackColor = true;
-            this.btnOK.Click += new System.EventHandler(this.Button28_Click);
+            btnOK.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            btnOK.DialogResult = DialogResult.OK;
+            btnOK.Enabled = false;
+            btnOK.ForeColor = SystemColors.ControlText;
+            btnOK.Location = new Point(1284, 156);
+            btnOK.Margin = new Padding(4, 3, 4, 3);
+            btnOK.Name = "btnOK";
+            btnOK.Size = new Size(88, 27);
+            btnOK.TabIndex = 644;
+            btnOK.Text = "OK";
+            btnOK.UseVisualStyleBackColor = true;
+            btnOK.Click += Button28_Click;
             // 
             // btnGo
             // 
-            this.btnGo.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnGo.Location = new System.Drawing.Point(565, 135);
-            this.btnGo.Name = "btnGo";
-            this.btnGo.Size = new System.Drawing.Size(75, 23);
-            this.btnGo.TabIndex = 642;
-            this.btnGo.Text = "Go";
-            this.btnGo.UseVisualStyleBackColor = true;
-            this.btnGo.Click += new System.EventHandler(this.btnGo_Click);
+            btnGo.Font = new Font("Microsoft Sans Serif", 8.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnGo.Location = new Point(659, 156);
+            btnGo.Margin = new Padding(4, 3, 4, 3);
+            btnGo.Name = "btnGo";
+            btnGo.Size = new Size(88, 27);
+            btnGo.TabIndex = 642;
+            btnGo.Text = "Go";
+            btnGo.UseVisualStyleBackColor = true;
+            btnGo.Click += btnGo_Click;
             // 
             // btnReset2
             // 
-            this.btnReset2.Enabled = false;
-            this.btnReset2.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.btnReset2.Location = new System.Drawing.Point(646, 135);
-            this.btnReset2.Name = "btnReset2";
-            this.btnReset2.Size = new System.Drawing.Size(75, 23);
-            this.btnReset2.TabIndex = 641;
-            this.btnReset2.Text = "Reset";
-            this.btnReset2.UseVisualStyleBackColor = true;
-            this.btnReset2.Click += new System.EventHandler(this.button4_Click);
+            btnReset2.Enabled = false;
+            btnReset2.ForeColor = SystemColors.ControlText;
+            btnReset2.Location = new Point(754, 156);
+            btnReset2.Margin = new Padding(4, 3, 4, 3);
+            btnReset2.Name = "btnReset2";
+            btnReset2.Size = new Size(88, 27);
+            btnReset2.TabIndex = 641;
+            btnReset2.Text = "Reset";
+            btnReset2.UseVisualStyleBackColor = true;
+            btnReset2.Click += button4_Click;
             // 
             // cbCastTLInt
             // 
-            this.cbCastTLInt.AutoSize = true;
-            this.cbCastTLInt.Checked = true;
-            this.cbCastTLInt.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbCastTLInt.Location = new System.Drawing.Point(346, 138);
-            this.cbCastTLInt.Name = "cbCastTLInt";
-            this.cbCastTLInt.Size = new System.Drawing.Size(80, 17);
-            this.cbCastTLInt.TabIndex = 640;
-            this.cbCastTLInt.Text = "and CastInt";
-            this.cbCastTLInt.UseVisualStyleBackColor = true;
+            cbCastTLInt.AutoSize = true;
+            cbCastTLInt.Checked = true;
+            cbCastTLInt.CheckState = CheckState.Checked;
+            cbCastTLInt.Location = new Point(404, 159);
+            cbCastTLInt.Margin = new Padding(4, 3, 4, 3);
+            cbCastTLInt.Name = "cbCastTLInt";
+            cbCastTLInt.Size = new Size(86, 19);
+            cbCastTLInt.TabIndex = 640;
+            cbCastTLInt.Text = "and CastInt";
+            cbCastTLInt.UseVisualStyleBackColor = true;
             // 
             // cbMultTLCap
             // 
-            this.cbMultTLCap.AutoSize = true;
-            this.cbMultTLCap.Checked = true;
-            this.cbMultTLCap.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbMultTLCap.Location = new System.Drawing.Point(229, 138);
-            this.cbMultTLCap.Name = "cbMultTLCap";
-            this.cbMultTLCap.Size = new System.Drawing.Size(113, 17);
-            this.cbMultTLCap.TabIndex = 639;
-            this.cbMultTLCap.Text = "multTLinkCapacity";
-            this.cbMultTLCap.UseVisualStyleBackColor = true;
-            this.cbMultTLCap.CheckedChanged += new System.EventHandler(this.cbMultTLCap_CheckedChanged);
+            cbMultTLCap.AutoSize = true;
+            cbMultTLCap.Checked = true;
+            cbMultTLCap.CheckState = CheckState.Checked;
+            cbMultTLCap.Location = new Point(267, 159);
+            cbMultTLCap.Margin = new Padding(4, 3, 4, 3);
+            cbMultTLCap.Name = "cbMultTLCap";
+            cbMultTLCap.Size = new Size(125, 19);
+            cbMultTLCap.TabIndex = 639;
+            cbMultTLCap.Text = "multTLinkCapacity";
+            cbMultTLCap.UseVisualStyleBackColor = true;
+            cbMultTLCap.CheckedChanged += cbMultTLCap_CheckedChanged;
             // 
             // numMultTLCap
             // 
-            this.numMultTLCap.DecimalPlaces = 2;
-            this.numMultTLCap.Increment = new decimal(new int[] {
-            1,
-            0,
-            0,
-            65536});
-            this.numMultTLCap.Location = new System.Drawing.Point(431, 137);
-            this.numMultTLCap.Maximum = new decimal(new int[] {
-            1410065407,
-            2,
-            0,
-            0});
-            this.numMultTLCap.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            131072});
-            this.numMultTLCap.Name = "numMultTLCap";
-            this.numMultTLCap.Size = new System.Drawing.Size(88, 20);
-            this.numMultTLCap.TabIndex = 638;
-            this.numMultTLCap.Value = new decimal(new int[] {
-            2,
-            0,
-            0,
-            0});
+            numMultTLCap.DecimalPlaces = 2;
+            numMultTLCap.Increment = new decimal(new int[] { 1, 0, 0, 65536 });
+            numMultTLCap.Location = new Point(503, 158);
+            numMultTLCap.Margin = new Padding(4, 3, 4, 3);
+            numMultTLCap.Maximum = new decimal(new int[] { 1410065407, 2, 0, 0 });
+            numMultTLCap.Minimum = new decimal(new int[] { 1, 0, 0, 131072 });
+            numMultTLCap.Name = "numMultTLCap";
+            numMultTLCap.Size = new Size(103, 23);
+            numMultTLCap.TabIndex = 638;
+            numMultTLCap.Value = new decimal(new int[] { 2, 0, 0, 0 });
             // 
             // label4
             // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(226, 107);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(54, 13);
-            this.label4.TabIndex = 637;
-            this.label4.Text = "probMult1";
+            label4.AutoSize = true;
+            label4.Location = new Point(264, 123);
+            label4.Margin = new Padding(4, 0, 4, 0);
+            label4.Name = "label4";
+            label4.Size = new Size(63, 15);
+            label4.TabIndex = 637;
+            label4.Text = "probMult1";
             // 
             // numMaxSize
             // 
-            this.numMaxSize.Increment = new decimal(new int[] {
-            1,
-            0,
-            0,
-            65536});
-            this.numMaxSize.Location = new System.Drawing.Point(95, 54);
-            this.numMaxSize.Maximum = new decimal(new int[] {
-            9999,
-            0,
-            0,
-            0});
-            this.numMaxSize.Minimum = new decimal(new int[] {
-            200,
-            0,
-            0,
-            0});
-            this.numMaxSize.Name = "numMaxSize";
-            this.numMaxSize.Size = new System.Drawing.Size(61, 20);
-            this.numMaxSize.TabIndex = 636;
-            this.numMaxSize.Value = new decimal(new int[] {
-            1200,
-            0,
-            0,
-            0});
+            numMaxSize.Increment = new decimal(new int[] { 1, 0, 0, 65536 });
+            numMaxSize.Location = new Point(111, 62);
+            numMaxSize.Margin = new Padding(4, 3, 4, 3);
+            numMaxSize.Maximum = new decimal(new int[] { 9999, 0, 0, 0 });
+            numMaxSize.Minimum = new decimal(new int[] { 200, 0, 0, 0 });
+            numMaxSize.Name = "numMaxSize";
+            numMaxSize.Size = new Size(71, 23);
+            numMaxSize.TabIndex = 636;
+            numMaxSize.Value = new decimal(new int[] { 1200, 0, 0, 0 });
             // 
             // numProbMult1
             // 
-            this.numProbMult1.DecimalPlaces = 4;
-            this.numProbMult1.Increment = new decimal(new int[] {
-            1,
-            0,
-            0,
-            65536});
-            this.numProbMult1.Location = new System.Drawing.Point(283, 105);
-            this.numProbMult1.Maximum = new decimal(new int[] {
-            1000,
-            0,
-            0,
-            0});
-            this.numProbMult1.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            262144});
-            this.numProbMult1.Name = "numProbMult1";
-            this.numProbMult1.Size = new System.Drawing.Size(61, 20);
-            this.numProbMult1.TabIndex = 636;
-            this.numProbMult1.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
+            numProbMult1.DecimalPlaces = 4;
+            numProbMult1.Increment = new decimal(new int[] { 1, 0, 0, 65536 });
+            numProbMult1.Location = new Point(330, 121);
+            numProbMult1.Margin = new Padding(4, 3, 4, 3);
+            numProbMult1.Maximum = new decimal(new int[] { 1000, 0, 0, 0 });
+            numProbMult1.Minimum = new decimal(new int[] { 1, 0, 0, 262144 });
+            numProbMult1.Name = "numProbMult1";
+            numProbMult1.Size = new Size(71, 23);
+            numProbMult1.TabIndex = 636;
+            numProbMult1.Value = new decimal(new int[] { 1, 0, 0, 0 });
             // 
             // cbUseTh
             // 
-            this.cbUseTh.AutoSize = true;
-            this.cbUseTh.Checked = true;
-            this.cbUseTh.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbUseTh.Location = new System.Drawing.Point(450, 78);
-            this.cbUseTh.Name = "cbUseTh";
-            this.cbUseTh.Size = new System.Drawing.Size(93, 17);
-            this.cbUseTh.TabIndex = 633;
-            this.cbUseTh.Text = "use Threshold";
-            this.cbUseTh.UseVisualStyleBackColor = true;
+            cbUseTh.AutoSize = true;
+            cbUseTh.Checked = true;
+            cbUseTh.CheckState = CheckState.Checked;
+            cbUseTh.Location = new Point(525, 90);
+            cbUseTh.Margin = new Padding(4, 3, 4, 3);
+            cbUseTh.Name = "cbUseTh";
+            cbUseTh.Size = new Size(99, 19);
+            cbUseTh.TabIndex = 633;
+            cbUseTh.Text = "use Threshold";
+            cbUseTh.UseVisualStyleBackColor = true;
             // 
             // label5
             // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(247, 80);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(80, 13);
-            this.label5.TabIndex = 632;
-            this.label5.Text = "d to 0 threshold";
+            label5.AutoSize = true;
+            label5.Location = new Point(288, 92);
+            label5.Margin = new Padding(4, 0, 4, 0);
+            label5.Name = "label5";
+            label5.Size = new Size(90, 15);
+            label5.TabIndex = 632;
+            label5.Text = "d to 0 threshold";
             // 
             // numDblMult
             // 
-            this.numDblMult.DecimalPlaces = 6;
-            this.numDblMult.Location = new System.Drawing.Point(335, 77);
-            this.numDblMult.Maximum = new decimal(new int[] {
-            1000000000,
-            0,
-            0,
-            0});
-            this.numDblMult.Name = "numDblMult";
-            this.numDblMult.Size = new System.Drawing.Size(104, 20);
-            this.numDblMult.TabIndex = 631;
-            this.numDblMult.Value = new decimal(new int[] {
-            105,
-            0,
-            0,
-            65536});
+            numDblMult.DecimalPlaces = 6;
+            numDblMult.Location = new Point(391, 89);
+            numDblMult.Margin = new Padding(4, 3, 4, 3);
+            numDblMult.Maximum = new decimal(new int[] { 1000000000, 0, 0, 0 });
+            numDblMult.Name = "numDblMult";
+            numDblMult.Size = new Size(121, 23);
+            numDblMult.TabIndex = 631;
+            numDblMult.Value = new decimal(new int[] { 105, 0, 0, 65536 });
             // 
             // cbQuickEst
             // 
-            this.cbQuickEst.AutoSize = true;
-            this.cbQuickEst.Checked = true;
-            this.cbQuickEst.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbQuickEst.Location = new System.Drawing.Point(229, 55);
-            this.cbQuickEst.Name = "cbQuickEst";
-            this.cbQuickEst.Size = new System.Drawing.Size(102, 17);
-            this.cbQuickEst.TabIndex = 630;
-            this.cbQuickEst.Text = "QuickExtimation";
-            this.cbQuickEst.UseVisualStyleBackColor = true;
-            this.cbQuickEst.CheckedChanged += new System.EventHandler(this.cbQuickEst_CheckedChanged);
+            cbQuickEst.AutoSize = true;
+            cbQuickEst.Checked = true;
+            cbQuickEst.CheckState = CheckState.Checked;
+            cbQuickEst.Location = new Point(267, 63);
+            cbQuickEst.Margin = new Padding(4, 3, 4, 3);
+            cbQuickEst.Name = "cbQuickEst";
+            cbQuickEst.Size = new Size(114, 19);
+            cbQuickEst.TabIndex = 630;
+            cbQuickEst.Text = "QuickExtimation";
+            cbQuickEst.UseVisualStyleBackColor = true;
+            cbQuickEst.CheckedChanged += cbQuickEst_CheckedChanged;
             // 
             // btnRect
             // 
-            this.btnRect.Location = new System.Drawing.Point(309, 6);
-            this.btnRect.Name = "btnRect";
-            this.btnRect.Size = new System.Drawing.Size(48, 23);
-            this.btnRect.TabIndex = 629;
-            this.btnRect.Text = "rect";
-            this.btnRect.UseVisualStyleBackColor = true;
-            this.btnRect.Click += new System.EventHandler(this.btnRect_Click);
+            btnRect.Location = new Point(360, 7);
+            btnRect.Margin = new Padding(4, 3, 4, 3);
+            btnRect.Name = "btnRect";
+            btnRect.Size = new Size(56, 27);
+            btnRect.TabIndex = 629;
+            btnRect.Text = "rect";
+            btnRect.UseVisualStyleBackColor = true;
+            btnRect.Click += btnRect_Click;
             // 
             // numShiftY
             // 
-            this.numShiftY.Location = new System.Drawing.Point(718, 54);
-            this.numShiftY.Maximum = new decimal(new int[] {
-            9999,
-            0,
-            0,
-            0});
-            this.numShiftY.Minimum = new decimal(new int[] {
-            9999,
-            0,
-            0,
-            -2147483648});
-            this.numShiftY.Name = "numShiftY";
-            this.numShiftY.Size = new System.Drawing.Size(45, 20);
-            this.numShiftY.TabIndex = 625;
-            this.numShiftY.ValueChanged += new System.EventHandler(this.numShiftY_ValueChanged);
+            numShiftY.Location = new Point(838, 62);
+            numShiftY.Margin = new Padding(4, 3, 4, 3);
+            numShiftY.Maximum = new decimal(new int[] { 9999, 0, 0, 0 });
+            numShiftY.Minimum = new decimal(new int[] { 9999, 0, 0, int.MinValue });
+            numShiftY.Name = "numShiftY";
+            numShiftY.Size = new Size(52, 23);
+            numShiftY.TabIndex = 625;
+            numShiftY.ValueChanged += numShiftY_ValueChanged;
             // 
             // label19
             // 
-            this.label19.AutoSize = true;
-            this.label19.Location = new System.Drawing.Point(350, 32);
-            this.label19.Name = "label19";
-            this.label19.Size = new System.Drawing.Size(32, 13);
-            this.label19.TabIndex = 626;
-            this.label19.Text = "width";
+            label19.AutoSize = true;
+            label19.Location = new Point(408, 37);
+            label19.Margin = new Padding(4, 0, 4, 0);
+            label19.Name = "label19";
+            label19.Size = new Size(37, 15);
+            label19.TabIndex = 626;
+            label19.Text = "width";
             // 
             // numShiftX
             // 
-            this.numShiftX.Location = new System.Drawing.Point(644, 54);
-            this.numShiftX.Maximum = new decimal(new int[] {
-            9999,
-            0,
-            0,
-            0});
-            this.numShiftX.Minimum = new decimal(new int[] {
-            9999,
-            0,
-            0,
-            -2147483648});
-            this.numShiftX.Name = "numShiftX";
-            this.numShiftX.Size = new System.Drawing.Size(45, 20);
-            this.numShiftX.TabIndex = 625;
-            this.numShiftX.ValueChanged += new System.EventHandler(this.numShiftX_ValueChanged);
+            numShiftX.Location = new Point(751, 62);
+            numShiftX.Margin = new Padding(4, 3, 4, 3);
+            numShiftX.Maximum = new decimal(new int[] { 9999, 0, 0, 0 });
+            numShiftX.Minimum = new decimal(new int[] { 9999, 0, 0, int.MinValue });
+            numShiftX.Name = "numShiftX";
+            numShiftX.Size = new Size(52, 23);
+            numShiftX.TabIndex = 625;
+            numShiftX.ValueChanged += numShiftX_ValueChanged;
             // 
             // numGmmComp
             // 
-            this.numGmmComp.Location = new System.Drawing.Point(111, 32);
-            this.numGmmComp.Maximum = new decimal(new int[] {
-            25,
-            0,
-            0,
-            0});
-            this.numGmmComp.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.numGmmComp.Name = "numGmmComp";
-            this.numGmmComp.Size = new System.Drawing.Size(45, 20);
-            this.numGmmComp.TabIndex = 625;
-            this.toolTip1.SetToolTip(this.numGmmComp, "The amount of clusters for each Gmm.");
-            this.numGmmComp.Value = new decimal(new int[] {
-            2,
-            0,
-            0,
-            0});
+            numGmmComp.Location = new Point(130, 37);
+            numGmmComp.Margin = new Padding(4, 3, 4, 3);
+            numGmmComp.Maximum = new decimal(new int[] { 25, 0, 0, 0 });
+            numGmmComp.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
+            numGmmComp.Name = "numGmmComp";
+            numGmmComp.Size = new Size(52, 23);
+            numGmmComp.TabIndex = 625;
+            toolTip1.SetToolTip(numGmmComp, "The amount of clusters for each Gmm.");
+            numGmmComp.Value = new decimal(new int[] { 2, 0, 0, 0 });
             // 
             // numMaxComponents
             // 
-            this.numMaxComponents.Location = new System.Drawing.Point(479, 105);
-            this.numMaxComponents.Maximum = new decimal(new int[] {
-            9999,
-            0,
-            0,
-            0});
-            this.numMaxComponents.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.numMaxComponents.Name = "numMaxComponents";
-            this.numMaxComponents.Size = new System.Drawing.Size(45, 20);
-            this.numMaxComponents.TabIndex = 625;
-            this.numMaxComponents.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
+            numMaxComponents.Location = new Point(559, 121);
+            numMaxComponents.Margin = new Padding(4, 3, 4, 3);
+            numMaxComponents.Maximum = new decimal(new int[] { 9999, 0, 0, 0 });
+            numMaxComponents.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
+            numMaxComponents.Name = "numMaxComponents";
+            numMaxComponents.Size = new Size(52, 23);
+            numMaxComponents.TabIndex = 625;
+            numMaxComponents.Value = new decimal(new int[] { 1, 0, 0, 0 });
             // 
             // numWHScribbles
             // 
-            this.numWHScribbles.Location = new System.Drawing.Point(388, 30);
-            this.numWHScribbles.Maximum = new decimal(new int[] {
-            255,
-            0,
-            0,
-            0});
-            this.numWHScribbles.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.numWHScribbles.Name = "numWHScribbles";
-            this.numWHScribbles.Size = new System.Drawing.Size(45, 20);
-            this.numWHScribbles.TabIndex = 625;
-            this.numWHScribbles.Value = new decimal(new int[] {
-            25,
-            0,
-            0,
-            0});
+            numWHScribbles.Location = new Point(453, 35);
+            numWHScribbles.Margin = new Padding(4, 3, 4, 3);
+            numWHScribbles.Maximum = new decimal(new int[] { 255, 0, 0, 0 });
+            numWHScribbles.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
+            numWHScribbles.Name = "numWHScribbles";
+            numWHScribbles.Size = new Size(52, 23);
+            numWHScribbles.TabIndex = 625;
+            numWHScribbles.Value = new decimal(new int[] { 25, 0, 0, 0 });
             // 
             // cbScribbleMode
             // 
-            this.cbScribbleMode.AutoSize = true;
-            this.cbScribbleMode.Location = new System.Drawing.Point(255, 32);
-            this.cbScribbleMode.Name = "cbScribbleMode";
-            this.cbScribbleMode.Size = new System.Drawing.Size(89, 17);
-            this.cbScribbleMode.TabIndex = 624;
-            this.cbScribbleMode.Text = "scribbleMode";
-            this.cbScribbleMode.UseVisualStyleBackColor = true;
-            this.cbScribbleMode.CheckedChanged += new System.EventHandler(this.cbScribbleMode_CheckedChanged);
+            cbScribbleMode.AutoSize = true;
+            cbScribbleMode.Location = new Point(298, 37);
+            cbScribbleMode.Margin = new Padding(4, 3, 4, 3);
+            cbScribbleMode.Name = "cbScribbleMode";
+            cbScribbleMode.Size = new Size(98, 19);
+            cbScribbleMode.TabIndex = 624;
+            cbScribbleMode.Text = "scribbleMode";
+            cbScribbleMode.UseVisualStyleBackColor = true;
+            cbScribbleMode.CheckedChanged += cbScribbleMode_CheckedChanged;
             // 
             // rbFG
             // 
-            this.rbFG.AutoSize = true;
-            this.rbFG.Location = new System.Drawing.Point(494, 32);
-            this.rbFG.Name = "rbFG";
-            this.rbFG.Size = new System.Drawing.Size(39, 17);
-            this.rbFG.TabIndex = 621;
-            this.rbFG.Text = "FG";
-            this.rbFG.UseVisualStyleBackColor = true;
+            rbFG.AutoSize = true;
+            rbFG.Location = new Point(576, 37);
+            rbFG.Margin = new Padding(4, 3, 4, 3);
+            rbFG.Name = "rbFG";
+            rbFG.Size = new Size(39, 19);
+            rbFG.TabIndex = 621;
+            rbFG.Text = "FG";
+            rbFG.UseVisualStyleBackColor = true;
             // 
             // rbBG
             // 
-            this.rbBG.AutoSize = true;
-            this.rbBG.Checked = true;
-            this.rbBG.Location = new System.Drawing.Point(448, 32);
-            this.rbBG.Name = "rbBG";
-            this.rbBG.Size = new System.Drawing.Size(40, 17);
-            this.rbBG.TabIndex = 622;
-            this.rbBG.TabStop = true;
-            this.rbBG.Text = "BG";
-            this.rbBG.UseVisualStyleBackColor = true;
+            rbBG.AutoSize = true;
+            rbBG.Checked = true;
+            rbBG.Location = new Point(523, 37);
+            rbBG.Margin = new Padding(4, 3, 4, 3);
+            rbBG.Name = "rbBG";
+            rbBG.Size = new Size(40, 19);
+            rbBG.TabIndex = 622;
+            rbBG.TabStop = true;
+            rbBG.Text = "BG";
+            rbBG.UseVisualStyleBackColor = true;
             // 
             // btnClearScribbles
             // 
-            this.btnClearScribbles.Location = new System.Drawing.Point(614, 30);
-            this.btnClearScribbles.Name = "btnClearScribbles";
-            this.btnClearScribbles.Size = new System.Drawing.Size(54, 23);
-            this.btnClearScribbles.TabIndex = 627;
-            this.btnClearScribbles.Text = "clear";
-            this.btnClearScribbles.UseVisualStyleBackColor = true;
-            this.btnClearScribbles.Click += new System.EventHandler(this.btnClearScribbles_Click);
+            btnClearScribbles.Location = new Point(716, 35);
+            btnClearScribbles.Margin = new Padding(4, 3, 4, 3);
+            btnClearScribbles.Name = "btnClearScribbles";
+            btnClearScribbles.Size = new Size(63, 27);
+            btnClearScribbles.TabIndex = 627;
+            btnClearScribbles.Text = "clear";
+            btnClearScribbles.UseVisualStyleBackColor = true;
+            btnClearScribbles.Click += btnClearScribbles_Click;
             // 
             // btnRemLastScribbles
             // 
-            this.btnRemLastScribbles.Location = new System.Drawing.Point(554, 30);
-            this.btnRemLastScribbles.Name = "btnRemLastScribbles";
-            this.btnRemLastScribbles.Size = new System.Drawing.Size(54, 23);
-            this.btnRemLastScribbles.TabIndex = 628;
-            this.btnRemLastScribbles.Text = "rem last";
-            this.btnRemLastScribbles.UseVisualStyleBackColor = true;
-            this.btnRemLastScribbles.Click += new System.EventHandler(this.btnRemLastScribbles_Click);
+            btnRemLastScribbles.Location = new Point(646, 35);
+            btnRemLastScribbles.Margin = new Padding(4, 3, 4, 3);
+            btnRemLastScribbles.Name = "btnRemLastScribbles";
+            btnRemLastScribbles.Size = new Size(63, 27);
+            btnRemLastScribbles.TabIndex = 628;
+            btnRemLastScribbles.Text = "rem last";
+            btnRemLastScribbles.UseVisualStyleBackColor = true;
+            btnRemLastScribbles.Click += btnRemLastScribbles_Click;
             // 
             // cbRectMode
             // 
-            this.cbRectMode.AutoSize = true;
-            this.cbRectMode.Checked = true;
-            this.cbRectMode.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbRectMode.Location = new System.Drawing.Point(229, 10);
-            this.cbRectMode.Name = "cbRectMode";
-            this.cbRectMode.Size = new System.Drawing.Size(74, 17);
-            this.cbRectMode.TabIndex = 623;
-            this.cbRectMode.Text = "rect Mode";
-            this.cbRectMode.UseVisualStyleBackColor = true;
-            this.cbRectMode.CheckedChanged += new System.EventHandler(this.cbRectMode_CheckedChanged);
+            cbRectMode.AutoSize = true;
+            cbRectMode.Checked = true;
+            cbRectMode.CheckState = CheckState.Checked;
+            cbRectMode.Location = new Point(267, 12);
+            cbRectMode.Margin = new Padding(4, 3, 4, 3);
+            cbRectMode.Name = "cbRectMode";
+            cbRectMode.Size = new Size(80, 19);
+            cbRectMode.TabIndex = 623;
+            cbRectMode.Text = "rect Mode";
+            cbRectMode.UseVisualStyleBackColor = true;
+            cbRectMode.CheckedChanged += cbRectMode_CheckedChanged;
             // 
             // numGamma
             // 
-            this.numGamma.DecimalPlaces = 4;
-            this.numGamma.Location = new System.Drawing.Point(81, 9);
-            this.numGamma.Maximum = new decimal(new int[] {
-            705032704,
-            1,
-            0,
-            0});
-            this.numGamma.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            262144});
-            this.numGamma.Name = "numGamma";
-            this.numGamma.Size = new System.Drawing.Size(75, 20);
-            this.numGamma.TabIndex = 513;
-            this.numGamma.Value = new decimal(new int[] {
-            50,
-            0,
-            0,
-            0});
+            numGamma.DecimalPlaces = 4;
+            numGamma.Location = new Point(94, 10);
+            numGamma.Margin = new Padding(4, 3, 4, 3);
+            numGamma.Maximum = new decimal(new int[] { 705032704, 1, 0, 0 });
+            numGamma.Minimum = new decimal(new int[] { 1, 0, 0, 262144 });
+            numGamma.Name = "numGamma";
+            numGamma.Size = new Size(88, 23);
+            numGamma.TabIndex = 513;
+            numGamma.Value = new decimal(new int[] { 50, 0, 0, 0 });
             // 
             // label2
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(12, 11);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(41, 13);
-            this.label2.TabIndex = 512;
-            this.label2.Text = "gamma";
+            label2.AutoSize = true;
+            label2.Location = new Point(14, 13);
+            label2.Margin = new Padding(4, 0, 4, 0);
+            label2.Name = "label2";
+            label2.Size = new Size(48, 15);
+            label2.TabIndex = 512;
+            label2.Text = "gamma";
             // 
             // splitContainer1
             // 
-            this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainer1.Location = new System.Drawing.Point(0, 170);
-            this.splitContainer1.Name = "splitContainer1";
+            splitContainer1.Dock = DockStyle.Fill;
+            splitContainer1.Location = new Point(0, 196);
+            splitContainer1.Margin = new Padding(4, 3, 4, 3);
+            splitContainer1.Name = "splitContainer1";
             // 
             // splitContainer1.Panel1
             // 
-            this.splitContainer1.Panel1.Controls.Add(this.helplineRulerCtrl1);
+            splitContainer1.Panel1.Controls.Add(helplineRulerCtrl1);
             // 
             // splitContainer1.Panel2
             // 
-            this.splitContainer1.Panel2.Controls.Add(this.helplineRulerCtrl2);
-            this.splitContainer1.Size = new System.Drawing.Size(1268, 556);
-            this.splitContainer1.SplitterDistance = 649;
-            this.splitContainer1.TabIndex = 1;
+            splitContainer1.Panel2.Controls.Add(helplineRulerCtrl2);
+            splitContainer1.Size = new Size(1479, 643);
+            splitContainer1.SplitterDistance = 756;
+            splitContainer1.SplitterWidth = 5;
+            splitContainer1.TabIndex = 1;
             // 
             // helplineRulerCtrl1
             // 
-            this.helplineRulerCtrl1.Bmp = null;
-            this.helplineRulerCtrl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.helplineRulerCtrl1.DontDoLayout = false;
-            this.helplineRulerCtrl1.DontHandleDoubleClick = false;
-            this.helplineRulerCtrl1.DontPaintBaseImg = false;
-            this.helplineRulerCtrl1.DontProcDoubleClick = false;
-            this.helplineRulerCtrl1.IgnoreZoom = false;
-            this.helplineRulerCtrl1.Location = new System.Drawing.Point(0, 0);
-            this.helplineRulerCtrl1.MoveHelpLinesOnResize = false;
-            this.helplineRulerCtrl1.Name = "helplineRulerCtrl1";
-            this.helplineRulerCtrl1.SetZoomOnlyByMethodCall = false;
-            this.helplineRulerCtrl1.Size = new System.Drawing.Size(649, 556);
-            this.helplineRulerCtrl1.TabIndex = 0;
-            this.helplineRulerCtrl1.Zoom = 1F;
-            this.helplineRulerCtrl1.ZoomSetManually = false;
-            this.helplineRulerCtrl1.DBPanelDblClicked += new HelplineRulerControl.HelplineRulerCtrl.DblClickedEventHandler(this.helplineRulerCtrl1_DBPanelDblClicked);
+            helplineRulerCtrl1.Bmp = null;
+            helplineRulerCtrl1.Dock = DockStyle.Fill;
+            helplineRulerCtrl1.DontDoLayout = false;
+            helplineRulerCtrl1.DontHandleDoubleClick = false;
+            helplineRulerCtrl1.DontPaintBaseImg = false;
+            helplineRulerCtrl1.DontProcDoubleClick = false;
+            helplineRulerCtrl1.IgnoreZoom = false;
+            helplineRulerCtrl1.Location = new Point(0, 0);
+            helplineRulerCtrl1.Margin = new Padding(5, 3, 5, 3);
+            helplineRulerCtrl1.MoveHelpLinesOnResize = false;
+            helplineRulerCtrl1.Name = "helplineRulerCtrl1";
+            helplineRulerCtrl1.SetZoomOnlyByMethodCall = false;
+            helplineRulerCtrl1.Size = new Size(756, 643);
+            helplineRulerCtrl1.TabIndex = 0;
+            helplineRulerCtrl1.Zoom = 1F;
+            helplineRulerCtrl1.ZoomSetManually = false;
+            helplineRulerCtrl1.DBPanelDblClicked += helplineRulerCtrl1_DBPanelDblClicked;
             // 
             // helplineRulerCtrl2
             // 
-            this.helplineRulerCtrl2.Bmp = null;
-            this.helplineRulerCtrl2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.helplineRulerCtrl2.DontDoLayout = false;
-            this.helplineRulerCtrl2.DontHandleDoubleClick = false;
-            this.helplineRulerCtrl2.DontPaintBaseImg = false;
-            this.helplineRulerCtrl2.DontProcDoubleClick = false;
-            this.helplineRulerCtrl2.IgnoreZoom = false;
-            this.helplineRulerCtrl2.Location = new System.Drawing.Point(0, 0);
-            this.helplineRulerCtrl2.MoveHelpLinesOnResize = false;
-            this.helplineRulerCtrl2.Name = "helplineRulerCtrl2";
-            this.helplineRulerCtrl2.SetZoomOnlyByMethodCall = false;
-            this.helplineRulerCtrl2.Size = new System.Drawing.Size(615, 556);
-            this.helplineRulerCtrl2.TabIndex = 0;
-            this.helplineRulerCtrl2.Zoom = 1F;
-            this.helplineRulerCtrl2.ZoomSetManually = false;
+            helplineRulerCtrl2.Bmp = null;
+            helplineRulerCtrl2.Dock = DockStyle.Fill;
+            helplineRulerCtrl2.DontDoLayout = false;
+            helplineRulerCtrl2.DontHandleDoubleClick = false;
+            helplineRulerCtrl2.DontPaintBaseImg = false;
+            helplineRulerCtrl2.DontProcDoubleClick = false;
+            helplineRulerCtrl2.IgnoreZoom = false;
+            helplineRulerCtrl2.Location = new Point(0, 0);
+            helplineRulerCtrl2.Margin = new Padding(5, 3, 5, 3);
+            helplineRulerCtrl2.MoveHelpLinesOnResize = false;
+            helplineRulerCtrl2.Name = "helplineRulerCtrl2";
+            helplineRulerCtrl2.SetZoomOnlyByMethodCall = false;
+            helplineRulerCtrl2.Size = new Size(718, 643);
+            helplineRulerCtrl2.TabIndex = 0;
+            helplineRulerCtrl2.Zoom = 1F;
+            helplineRulerCtrl2.ZoomSetManually = false;
             // 
             // panel3
             // 
-            this.panel3.Location = new System.Drawing.Point(0, 0);
-            this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(200, 24);
-            this.panel3.TabIndex = 225;
+            panel3.Location = new Point(0, 0);
+            panel3.Margin = new Padding(4, 3, 4, 3);
+            panel3.Name = "panel3";
+            panel3.Size = new Size(233, 28);
+            panel3.TabIndex = 225;
             // 
             // statusStrip1
             // 
-            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripStatusLabel1,
-            this.ToolStripStatusLabel2,
-            this.toolStripProgressBar1,
-            this.toolStripStatusLabel4,
-            this.toolStripStatusLabel3});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 726);
-            this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(1268, 35);
-            this.statusStrip1.TabIndex = 222;
-            this.statusStrip1.Text = "statusStrip1";
+            statusStrip1.Items.AddRange(new ToolStripItem[] { toolStripStatusLabel1, ToolStripStatusLabel2, toolStripProgressBar1, toolStripStatusLabel4, toolStripStatusLabel3 });
+            statusStrip1.Location = new Point(0, 839);
+            statusStrip1.Name = "statusStrip1";
+            statusStrip1.Padding = new Padding(1, 0, 16, 0);
+            statusStrip1.Size = new Size(1479, 39);
+            statusStrip1.TabIndex = 222;
+            statusStrip1.Text = "statusStrip1";
             // 
             // toolStripStatusLabel1
             // 
-            this.toolStripStatusLabel1.Font = new System.Drawing.Font("Segoe UI", 16F);
-            this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            this.toolStripStatusLabel1.Size = new System.Drawing.Size(63, 30);
-            this.toolStripStatusLabel1.Text = "Hallo";
+            toolStripStatusLabel1.Font = new Font("Segoe UI", 16F);
+            toolStripStatusLabel1.Name = "toolStripStatusLabel1";
+            toolStripStatusLabel1.Size = new Size(63, 34);
+            toolStripStatusLabel1.Text = "Hallo";
             // 
             // ToolStripStatusLabel2
             // 
-            this.ToolStripStatusLabel2.AutoSize = false;
-            this.ToolStripStatusLabel2.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top) 
-            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Right) 
-            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
-            this.ToolStripStatusLabel2.Name = "ToolStripStatusLabel2";
-            this.ToolStripStatusLabel2.Size = new System.Drawing.Size(100, 30);
-            this.ToolStripStatusLabel2.Text = "    ";
+            ToolStripStatusLabel2.AutoSize = false;
+            ToolStripStatusLabel2.BorderSides = ToolStripStatusLabelBorderSides.Left | ToolStripStatusLabelBorderSides.Top | ToolStripStatusLabelBorderSides.Right | ToolStripStatusLabelBorderSides.Bottom;
+            ToolStripStatusLabel2.Name = "ToolStripStatusLabel2";
+            ToolStripStatusLabel2.Size = new Size(100, 34);
+            ToolStripStatusLabel2.Text = "    ";
             // 
             // toolStripProgressBar1
             // 
-            this.toolStripProgressBar1.Name = "toolStripProgressBar1";
-            this.toolStripProgressBar1.Size = new System.Drawing.Size(400, 29);
-            this.toolStripProgressBar1.Visible = false;
+            toolStripProgressBar1.Name = "toolStripProgressBar1";
+            toolStripProgressBar1.Size = new Size(467, 33);
+            toolStripProgressBar1.Visible = false;
             // 
             // toolStripStatusLabel4
             // 
-            this.toolStripStatusLabel4.Font = new System.Drawing.Font("Segoe UI", 16F);
-            this.toolStripStatusLabel4.Name = "toolStripStatusLabel4";
-            this.toolStripStatusLabel4.Size = new System.Drawing.Size(63, 30);
-            this.toolStripStatusLabel4.Text = "Hallo";
+            toolStripStatusLabel4.Font = new Font("Segoe UI", 16F);
+            toolStripStatusLabel4.Name = "toolStripStatusLabel4";
+            toolStripStatusLabel4.Size = new Size(63, 34);
+            toolStripStatusLabel4.Text = "Hallo";
             // 
             // toolStripStatusLabel3
             // 
-            this.toolStripStatusLabel3.AutoSize = false;
-            this.toolStripStatusLabel3.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top) 
-            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Right) 
-            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
-            this.toolStripStatusLabel3.Name = "toolStripStatusLabel3";
-            this.toolStripStatusLabel3.Size = new System.Drawing.Size(100, 30);
-            this.toolStripStatusLabel3.Text = "    ";
+            toolStripStatusLabel3.AutoSize = false;
+            toolStripStatusLabel3.BorderSides = ToolStripStatusLabelBorderSides.Left | ToolStripStatusLabelBorderSides.Top | ToolStripStatusLabelBorderSides.Right | ToolStripStatusLabelBorderSides.Bottom;
+            toolStripStatusLabel3.Name = "toolStripStatusLabel3";
+            toolStripStatusLabel3.Size = new Size(100, 34);
+            toolStripStatusLabel3.Text = "    ";
             // 
             // backgroundWorker1
             // 
-            this.backgroundWorker1.WorkerReportsProgress = true;
-            this.backgroundWorker1.WorkerSupportsCancellation = true;
-            this.backgroundWorker1.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker1_DoWork);
-            this.backgroundWorker1.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.backgroundWorker1_ProgressChanged);
-            this.backgroundWorker1.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorker1_RunWorkerCompleted);
+            backgroundWorker1.WorkerReportsProgress = true;
+            backgroundWorker1.WorkerSupportsCancellation = true;
+            backgroundWorker1.DoWork += backgroundWorker1_DoWork;
+            backgroundWorker1.ProgressChanged += backgroundWorker1_ProgressChanged;
+            backgroundWorker1.RunWorkerCompleted += backgroundWorker1_RunWorkerCompleted;
             // 
             // Timer3
             // 
-            this.Timer3.Interval = 500;
-            this.Timer3.Tick += new System.EventHandler(this.Timer3_Tick);
+            Timer3.Interval = 500;
+            Timer3.Tick += Timer3_Tick;
             // 
             // saveFileDialog1
             // 
-            this.saveFileDialog1.FileName = "Bild1.png";
-            this.saveFileDialog1.Filter = "Png-Images (*.png)|*.png";
+            saveFileDialog1.FileName = "Bild1.png";
+            saveFileDialog1.Filter = "Png-Images (*.png)|*.png";
             // 
             // backgroundWorker2
             // 
-            this.backgroundWorker2.WorkerReportsProgress = true;
-            this.backgroundWorker2.WorkerSupportsCancellation = true;
-            this.backgroundWorker2.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker2_DoWork);
-            this.backgroundWorker2.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.backgroundWorker2_ProgressChanged);
-            this.backgroundWorker2.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorker2_RunWorkerCompleted);
+            backgroundWorker2.WorkerReportsProgress = true;
+            backgroundWorker2.WorkerSupportsCancellation = true;
+            backgroundWorker2.DoWork += backgroundWorker2_DoWork;
+            backgroundWorker2.ProgressChanged += backgroundWorker2_ProgressChanged;
+            backgroundWorker2.RunWorkerCompleted += backgroundWorker2_RunWorkerCompleted;
             // 
             // openFileDialog1
             // 
-            this.openFileDialog1.FileName = "openFileDialog1";
-            this.openFileDialog1.Filter = "Images - (*.bmp;*.jpg;*.jpeg;*.jfif;*.png)|*.bmp;*.jpg;*.jpeg;*.jfif;*.png";
+            openFileDialog1.FileName = "openFileDialog1";
+            openFileDialog1.Filter = "Images - (*.bmp;*.jpg;*.jpeg;*.jfif;*.png)|*.bmp;*.jpg;*.jpeg;*.jfif;*.png";
             // 
             // frmAvoidAGrabCutEasy
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1268, 761);
-            this.Controls.Add(this.splitContainer1);
-            this.Controls.Add(this.panel1);
-            this.Controls.Add(this.panel3);
-            this.Controls.Add(this.statusStrip1);
-            this.Name = "frmAvoidAGrabCutEasy";
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "frmAvoidAGrabCutEasy";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
-            this.Load += new System.EventHandler(this.frmGrabCut_Load);
-            this.panel1.ResumeLayout(false);
-            this.panel1.PerformLayout();
-            this.panel2.ResumeLayout(false);
-            this.panel2.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numWH)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numQATH)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numAlgMaxIter)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numMultTLCap)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numMaxSize)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numProbMult1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numDblMult)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numShiftY)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numShiftX)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numGmmComp)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numMaxComponents)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numWHScribbles)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numGamma)).EndInit();
-            this.splitContainer1.Panel1.ResumeLayout(false);
-            this.splitContainer1.Panel2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
-            this.splitContainer1.ResumeLayout(false);
-            this.statusStrip1.ResumeLayout(false);
-            this.statusStrip1.PerformLayout();
-            this.ResumeLayout(false);
-            this.PerformLayout();
-
+            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleMode = AutoScaleMode.Font;
+            ClientSize = new Size(1479, 878);
+            Controls.Add(splitContainer1);
+            Controls.Add(panel1);
+            Controls.Add(panel3);
+            Controls.Add(statusStrip1);
+            Margin = new Padding(4, 3, 4, 3);
+            Name = "frmAvoidAGrabCutEasy";
+            StartPosition = FormStartPosition.CenterScreen;
+            Text = "frmAvoidAGrabCutEasy";
+            FormClosing += Form1_FormClosing;
+            Load += frmGrabCut_Load;
+            panel1.ResumeLayout(false);
+            panel1.PerformLayout();
+            panel2.ResumeLayout(false);
+            panel2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)numWH).EndInit();
+            ((System.ComponentModel.ISupportInitialize)numQATH).EndInit();
+            ((System.ComponentModel.ISupportInitialize)numAlgMaxIter).EndInit();
+            ((System.ComponentModel.ISupportInitialize)numMultTLCap).EndInit();
+            ((System.ComponentModel.ISupportInitialize)numMaxSize).EndInit();
+            ((System.ComponentModel.ISupportInitialize)numProbMult1).EndInit();
+            ((System.ComponentModel.ISupportInitialize)numDblMult).EndInit();
+            ((System.ComponentModel.ISupportInitialize)numShiftY).EndInit();
+            ((System.ComponentModel.ISupportInitialize)numShiftX).EndInit();
+            ((System.ComponentModel.ISupportInitialize)numGmmComp).EndInit();
+            ((System.ComponentModel.ISupportInitialize)numMaxComponents).EndInit();
+            ((System.ComponentModel.ISupportInitialize)numWHScribbles).EndInit();
+            ((System.ComponentModel.ISupportInitialize)numGamma).EndInit();
+            splitContainer1.Panel1.ResumeLayout(false);
+            splitContainer1.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)splitContainer1).EndInit();
+            splitContainer1.ResumeLayout(false);
+            statusStrip1.ResumeLayout(false);
+            statusStrip1.PerformLayout();
+            ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
@@ -1383,5 +1301,6 @@
         private System.Windows.Forms.Label label13;
         private System.Windows.Forms.CheckBox cbAutoThreshold;
         private System.Windows.Forms.Button btnInitSettings;
+        private CheckBox cbAllowRS;
     }
 }
