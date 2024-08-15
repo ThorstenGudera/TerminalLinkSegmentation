@@ -63,6 +63,7 @@
             label4 = new Label();
             numTh = new NumericUpDown();
             groupBox5 = new GroupBox();
+            btnResVals = new Button();
             cbEditTrimap = new CheckBox();
             label2 = new Label();
             numSleep = new NumericUpDown();
@@ -149,7 +150,6 @@
             backgroundWorker5 = new System.ComponentModel.BackgroundWorker();
             backgroundWorker6 = new System.ComponentModel.BackgroundWorker();
             backgroundWorker7 = new System.ComponentModel.BackgroundWorker();
-            btnResVals = new Button();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
             splitContainer1.Panel2.SuspendLayout();
@@ -370,7 +370,7 @@
             cbBGColor.AutoSize = true;
             cbBGColor.Checked = true;
             cbBGColor.CheckState = CheckState.Checked;
-            cbBGColor.Location = new Point(192, 764);
+            cbBGColor.Location = new Point(191, 764);
             cbBGColor.Margin = new Padding(4, 3, 4, 3);
             cbBGColor.Name = "cbBGColor";
             cbBGColor.Size = new Size(67, 19);
@@ -383,7 +383,7 @@
             // 
             button10.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             button10.ForeColor = SystemColors.ControlText;
-            button10.Location = new Point(385, 802);
+            button10.Location = new Point(384, 802);
             button10.Margin = new Padding(4, 3, 4, 3);
             button10.Name = "button10";
             button10.Size = new Size(88, 27);
@@ -396,7 +396,7 @@
             // 
             button8.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             button8.ForeColor = SystemColors.ControlText;
-            button8.Location = new Point(290, 802);
+            button8.Location = new Point(289, 802);
             button8.Margin = new Padding(4, 3, 4, 3);
             button8.Name = "button8";
             button8.Size = new Size(88, 27);
@@ -410,7 +410,7 @@
             button2.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             button2.FlatStyle = FlatStyle.System;
             button2.ForeColor = SystemColors.ControlText;
-            button2.Location = new Point(385, 762);
+            button2.Location = new Point(384, 762);
             button2.Margin = new Padding(4, 3, 4, 3);
             button2.Name = "button2";
             button2.Size = new Size(88, 27);
@@ -423,7 +423,7 @@
             btnCancel.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             btnCancel.DialogResult = DialogResult.Cancel;
             btnCancel.ForeColor = SystemColors.ControlText;
-            btnCancel.Location = new Point(394, 845);
+            btnCancel.Location = new Point(393, 845);
             btnCancel.Margin = new Padding(4, 3, 4, 3);
             btnCancel.Name = "btnCancel";
             btnCancel.Size = new Size(88, 27);
@@ -436,7 +436,7 @@
             btnOK.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             btnOK.DialogResult = DialogResult.OK;
             btnOK.ForeColor = SystemColors.ControlText;
-            btnOK.Location = new Point(301, 845);
+            btnOK.Location = new Point(300, 845);
             btnOK.Margin = new Padding(4, 3, 4, 3);
             btnOK.Name = "btnOK";
             btnOK.Size = new Size(88, 27);
@@ -676,6 +676,18 @@
             groupBox5.TabIndex = 551;
             groupBox5.TabStop = false;
             groupBox5.Text = "ClosedFormMatte";
+            // 
+            // btnResVals
+            // 
+            btnResVals.Enabled = false;
+            btnResVals.Location = new Point(179, 91);
+            btnResVals.Name = "btnResVals";
+            btnResVals.Size = new Size(59, 23);
+            btnResVals.TabIndex = 570;
+            btnResVals.Text = "res vals";
+            toolTip1.SetToolTip(btnResVals, "reasonable values inner and outer width");
+            btnResVals.UseVisualStyleBackColor = true;
+            btnResVals.Click += btnResVals_Click;
             // 
             // cbEditTrimap
             // 
@@ -1581,17 +1593,6 @@
             backgroundWorker7.WorkerSupportsCancellation = true;
             backgroundWorker7.DoWork += backgroundWorker7_DoWork;
             backgroundWorker7.RunWorkerCompleted += backgroundWorker7_RunWorkerCompleted;
-            // 
-            // btnResVals
-            // 
-            btnResVals.Location = new Point(179, 91);
-            btnResVals.Name = "btnResVals";
-            btnResVals.Size = new Size(59, 23);
-            btnResVals.TabIndex = 570;
-            btnResVals.Text = "res vals";
-            toolTip1.SetToolTip(btnResVals, "reasonable values inner and outer width");
-            btnResVals.UseVisualStyleBackColor = true;
-            btnResVals.Click += btnResVals_Click;
             // 
             // frmProcOutline
             // 

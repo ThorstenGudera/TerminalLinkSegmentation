@@ -1824,7 +1824,7 @@ namespace AvoidAGrabCutEasy
             this.label52.Enabled = this.cbBlur.Enabled = this.numBlur.Enabled = !ch; //maybe this changes
             this.label54.Enabled = ch;
             this.cbHalfSize.Enabled = this.numError.Enabled = ch;
-            this.label9.Enabled = this.numMaxSize.Enabled = ch;
+            this.label9.Enabled = this.numMaxSize.Enabled = this.btnResVals.Enabled = ch;
             this.label4.Enabled = this.numTh.Enabled = !ch;
 
             cmbMethodMode_SelectedIndexChanged(this.cmbMethodMode, new EventArgs());
@@ -5279,8 +5279,17 @@ namespace AvoidAGrabCutEasy
 
         private void btnResVals_Click(object sender, EventArgs e)
         {
-            this.numBoundInner.Value = 5;
-            this.numBoundOuter.Value = 5;
+            if (this.helplineRulerCtrl1.Bmp != null)
+            {
+                double d = CheckWidthHeight(this.helplineRulerCtrl1.Bmp, true, (double)this.numMaxSize.Value);
+                this.numBoundInner.Value = 5;
+                this.numBoundOuter.Value = 5;
+                if (d > 1)
+                {
+                    this.numBoundInner.Value = (int)(5 * d);
+                    this.numBoundOuter.Value = (int)(5 * d);
+                }
+            }
         }
     }
 }

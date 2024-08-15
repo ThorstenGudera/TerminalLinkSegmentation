@@ -18,8 +18,4 @@
     <ProjectReference Include="..\LUBitmapDesigner\LUBitmapDesigner.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="ProcOutline\" />
-  </ItemGroup>
-
 </Project>
