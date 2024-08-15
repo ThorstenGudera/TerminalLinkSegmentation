@@ -96,7 +96,7 @@ namespace TerminalLinkSegmentation
                 if (this._endX - this._ix <= 0)
                     this._endX = this.pictureBox1.Image.Width;   
                 if (this._endY - this._iy <= 0)
-                    this._endY = this.pictureBox1.Image.Width;
+                    this._endY = this.pictureBox1.Image.Height;
 
                 int x = Math.Max(this._ix, 0);
                 int y = Math.Max(this._iy, 0);
