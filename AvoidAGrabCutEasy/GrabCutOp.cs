@@ -1045,6 +1045,15 @@ namespace AvoidAGrabCutEasy
                                     }
                                 }
 
+                                //maybe we can use the mean as an indicator like indx (in the next code block),
+                                //if we assume the data to be exponentially distributed
+                                //I'll do some tests with it and maybe change this part of the method 
+                                //double xq = d.Average();
+                                //double x2q = d2.Average();
+
+                                //int dlq = (int)(Math.Log(xq) - dMin);
+                                //int d2lq = (int)(Math.Log(x2q) - d2Min);
+
                                 //get kind of a derivative
                                 double dm = dH.Sum();
                                 double[] fsl = new double[dH.Length];
@@ -1338,6 +1347,15 @@ namespace AvoidAGrabCutEasy
                                             d2H[d2l]++;
                                     }
                                 }
+
+                                //maybe we can use the mean as an indicator like indx (in the next code block),
+                                //if we assume the data to be exponentially distributed
+                                //I'll do some tests with it and maybe change this part of the method 
+                                //double xq = d.Average();
+                                //double x2q = d2.Average();
+
+                                //int dlq = (int)(Math.Log(xq) - dMin);
+                                //int d2lq = (int)(Math.Log(x2q) - d2Min);
 
                                 //get kind of a derivative
                                 double dm = dH.Sum();
