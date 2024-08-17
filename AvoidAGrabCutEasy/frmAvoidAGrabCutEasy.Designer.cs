@@ -116,6 +116,7 @@
             toolTip1 = new ToolTip(components);
             backgroundWorker2 = new System.ComponentModel.BackgroundWorker();
             openFileDialog1 = new OpenFileDialog();
+            cbAssumeExpDist = new CheckBox();
             panel1.SuspendLayout();
             panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numWH).BeginInit();
@@ -242,18 +243,19 @@
             // panel2
             // 
             panel2.BorderStyle = BorderStyle.FixedSingle;
+            panel2.Controls.Add(cbAssumeExpDist);
             panel2.Controls.Add(label13);
             panel2.Controls.Add(cbAutoThreshold);
             panel2.Location = new Point(724, 5);
             panel2.Margin = new Padding(4, 3, 4, 3);
             panel2.Name = "panel2";
-            panel2.Size = new Size(233, 30);
+            panel2.Size = new Size(436, 27);
             panel2.TabIndex = 677;
             // 
             // label13
             // 
             label13.AutoSize = true;
-            label13.Location = new Point(10, 7);
+            label13.Location = new Point(10, 4);
             label13.Margin = new Padding(4, 0, 4, 0);
             label13.Name = "label13";
             label13.Size = new Size(99, 15);
@@ -265,7 +267,7 @@
             cbAutoThreshold.AutoSize = true;
             cbAutoThreshold.Checked = true;
             cbAutoThreshold.CheckState = CheckState.Checked;
-            cbAutoThreshold.Location = new Point(119, 6);
+            cbAutoThreshold.Location = new Point(119, 3);
             cbAutoThreshold.Margin = new Padding(4, 3, 4, 3);
             cbAutoThreshold.Name = "cbAutoThreshold";
             cbAutoThreshold.Size = new Size(103, 19);
@@ -1171,6 +1173,18 @@
             openFileDialog1.FileName = "openFileDialog1";
             openFileDialog1.Filter = "Images - (*.bmp;*.jpg;*.jpeg;*.jfif;*.png)|*.bmp;*.jpg;*.jpeg;*.jfif;*.png";
             // 
+            // cbAssumeExpDist
+            // 
+            cbAssumeExpDist.AutoSize = true;
+            cbAssumeExpDist.Checked = true;
+            cbAssumeExpDist.CheckState = CheckState.Checked;
+            cbAssumeExpDist.Location = new Point(229, 3);
+            cbAssumeExpDist.Name = "cbAssumeExpDist";
+            cbAssumeExpDist.Size = new Size(195, 19);
+            cbAssumeExpDist.TabIndex = 679;
+            cbAssumeExpDist.Text = "assume exponential distribution";
+            cbAssumeExpDist.UseVisualStyleBackColor = true;
+            // 
             // frmAvoidAGrabCutEasy
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -1302,5 +1316,6 @@
         private System.Windows.Forms.CheckBox cbAutoThreshold;
         private System.Windows.Forms.Button btnInitSettings;
         private CheckBox cbAllowRS;
+        private CheckBox cbAssumeExpDist;
     }
 }

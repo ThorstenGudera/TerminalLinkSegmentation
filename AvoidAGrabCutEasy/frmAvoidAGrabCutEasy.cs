@@ -1433,6 +1433,9 @@ namespace AvoidAGrabCutEasy
                     int comp = (int)this.numMaxComponents.Value;
                     bool autoThreshold = this.cbAutoThreshold.Checked;
 
+                    //testmode2
+                    bool assumeExpDist = this.cbAssumeExpDist.Checked;
+
                     //now start the work
                     this.backgroundWorker1.RunWorkerAsync(new object[] { bWork, gmm_comp, gamma, num_Iters,
                         rectMode, r, autoBias, skipInit, workOnPaths,
@@ -1440,7 +1443,7 @@ namespace AvoidAGrabCutEasy
                         multCapacitiesForTLinks, multTLinkCapacity, castTLInt, getSourcePart, selMode,
                         scribbleMode, probMult1, kmInitW, kmInitH, setPFGToFG,
                         numItems, numCorrect, numItems2, numCorrect2, skipLearn, comp, autoThreshold,
-                        KMeansInitIters, kMInitRnd, KMeansIters});
+                        KMeansInitIters, kMInitRnd, KMeansIters, assumeExpDist});
                 }
             }
         }
@@ -1499,6 +1502,8 @@ namespace AvoidAGrabCutEasy
                 int KMeansInitIters = (int)o[35];
                 bool kMInitRnd = (bool)o[36];
                 int KMeansIters = (int)o[37];
+
+                bool assumeExpDist = (bool)o[38];
 
                 //if we have a large pic that will be resized during these OPs
                 //we need to resize also the scribbles, if present
@@ -1574,7 +1579,8 @@ namespace AvoidAGrabCutEasy
                         AutoThreshold = autoThreshold,
                         KMeansInitIters = KMeansInitIters,
                         kMInitRnd = kMInitRnd,
-                        KMeansIters = KMeansIters
+                        KMeansIters = KMeansIters,
+                        AssumeExpDist = assumeExpDist
                     };
 
                     this._gc.ShowInfo += _gc_ShowInfo;
@@ -1644,6 +1650,7 @@ namespace AvoidAGrabCutEasy
                     this._gc.KMeansInitIters = KMeansInitIters;
                     this._gc.kMInitRnd = kMInitRnd;
                     this._gc.KMeansIters = KMeansIters;
+                    this._gc.AssumeExpDist = assumeExpDist;
 
                     if (!workOnPaths && this._gc.ScribbleMode && this._gc.Scribbles != null && this._gc.Scribbles.Count > 0)
                     {
@@ -2678,8 +2685,6 @@ namespace AvoidAGrabCutEasy
 
                     double probMult1 = (double)this.numProbMult1.Value;
 
-
-
                     double numItems = this._items;
                     double numCorrect = this._correctItems;
                     double numItems2 = this._items2;
@@ -2695,13 +2700,16 @@ namespace AvoidAGrabCutEasy
                     int comp = (int)this.numMaxComponents.Value;
                     bool autoThreshold = this.cbAutoThreshold.Checked;
 
+                    //testmode2
+                    bool assumeExpDist = this.cbAssumeExpDist.Checked;
+
                     this.backgroundWorker2.RunWorkerAsync(new object[] { bWork, gmm_comp, gamma, num_Iters,
                         rectMode, r, autoBias, skipInit, workOnPaths,
                         wh, gammaChanged, intMult, useEightAdj, useTh, th, xi, res, initWKpp,
                         multCapacitiesForTLinks, multTLinkCapacity, castTLInt, getSourcePart, selMode,
                         scribbleMode, probMult1, kmInitW, kmInitH, setPFGToFG,
                         numItems, numCorrect, numItems2, numCorrect2, skipLearn, comp, autoThreshold,
-                        KMeansInitIters, kMInitRnd, KMeansIters});
+                        KMeansInitIters, kMInitRnd, KMeansIters, assumeExpDist});
                 }
             }
         }
@@ -2752,6 +2760,8 @@ namespace AvoidAGrabCutEasy
                 int KMeansInitIters = (int)o[35];
                 bool kMInitRnd = (bool)o[36];
                 int KMeansIters = (int)o[37];
+
+                bool assumeExpDist = (bool)o[38];
 
                 if (scribbleMode && !rectMode)
                     r = new Rectangle(0, 0, this.helplineRulerCtrl1.Bmp.Width, this.helplineRulerCtrl1.Bmp.Height);
@@ -2828,7 +2838,8 @@ namespace AvoidAGrabCutEasy
                         AutoThreshold = autoThreshold,
                         KMeansInitIters = KMeansInitIters,
                         kMInitRnd = kMInitRnd,
-                        KMeansIters = KMeansIters
+                        KMeansIters = KMeansIters,
+                        AssumeExpDist = assumeExpDist
                     };
 
                     this._gc.ShowInfo += _gc_ShowInfo;
@@ -2896,6 +2907,7 @@ namespace AvoidAGrabCutEasy
                     this._gc.KMeansInitIters = KMeansInitIters;
                     this._gc.kMInitRnd = kMInitRnd;
                     this._gc.KMeansIters = KMeansIters;
+                    this._gc.AssumeExpDist = assumeExpDist;
 
                     if (!workOnPaths && this._gc.ScribbleMode && this._gc.Scribbles != null && this._gc.Scribbles.Count > 0)
                     {

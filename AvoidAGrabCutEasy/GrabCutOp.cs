@@ -80,6 +80,7 @@ namespace AvoidAGrabCutEasy
         public int KMeansInitIters { get; internal set; } = 10;
         public int KMeansIters { get; internal set; } = 0;
         public bool kMInitRnd { get; internal set; } = false;
+        public bool AssumeExpDist { get; internal set; }
 
         public event EventHandler<string>? ShowInfo;
 
@@ -1048,11 +1049,11 @@ namespace AvoidAGrabCutEasy
                                 //maybe we can use the mean as an indicator like indx (in the next code block),
                                 //if we assume the data to be exponentially distributed
                                 //I'll do some tests with it and maybe change this part of the method 
-                                //double xq = d.Average();
+                                double xq = d.Average();
                                 //double x2q = d2.Average();
-
-                                //int dlq = (int)(Math.Log(xq) - dMin);
+                                int dlq = (int)(Math.Log(xq) - dMin);
                                 //int d2lq = (int)(Math.Log(x2q) - d2Min);
+                                int indxQ = dH.Length - dlq;
 
                                 //get kind of a derivative
                                 double dm = dH.Sum();
@@ -1108,7 +1109,7 @@ namespace AvoidAGrabCutEasy
                                     subOne = 0;
                                     if (f1.Count() > 1 && indx < dli.Count() - 1 && dli[indx + 1] < 0.004) //this will probably be changed to a test for ">"
                                         subOne++;
-                                    th = (indx - dli.IndexOf(f2.First())) + this.AutoThresholdAddition + addOne - subOne; // addATh;
+                                    th = ((this.AssumeExpDist ? indxQ : indx) - dli.IndexOf(f2.First())) + this.AutoThresholdAddition + addOne - subOne; // addATh;
                                 }
 
                                 if (th <= this.MaxAllowedAutoThreshold)
@@ -1351,11 +1352,11 @@ namespace AvoidAGrabCutEasy
                                 //maybe we can use the mean as an indicator like indx (in the next code block),
                                 //if we assume the data to be exponentially distributed
                                 //I'll do some tests with it and maybe change this part of the method 
-                                //double xq = d.Average();
+                                double xq = d.Average();
                                 //double x2q = d2.Average();
-
-                                //int dlq = (int)(Math.Log(xq) - dMin);
+                                int dlq = (int)(Math.Log(xq) - dMin);
                                 //int d2lq = (int)(Math.Log(x2q) - d2Min);
+                                int indxQ = dH.Length - dlq;
 
                                 //get kind of a derivative
                                 double dm = dH.Sum();
@@ -1411,7 +1412,7 @@ namespace AvoidAGrabCutEasy
                                     subOne = 0;
                                     if (f1.Count() > 1 && indx < dli.Count() - 1 && dli[indx + 1] < 0.004) //this will probably be changed to a test for ">"
                                         subOne++;
-                                    th = (indx - dli.IndexOf(f2.First())) + this.AutoThresholdAddition + addOne - subOne; // addATh;
+                                    th = ((this.AssumeExpDist ? indxQ : indx) - dli.IndexOf(f2.First())) + this.AutoThresholdAddition + addOne - subOne; // addATh;
                                 }
 
                                 if (th <= this.MaxAllowedAutoThreshold)
