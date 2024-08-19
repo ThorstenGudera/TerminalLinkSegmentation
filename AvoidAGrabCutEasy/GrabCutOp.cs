@@ -1046,14 +1046,20 @@ namespace AvoidAGrabCutEasy
                                     }
                                 }
 
-                                //maybe we can use the mean as an indicator like indx (in the next code block),
-                                //if we assume the data to be exponentially distributed
-                                //I'll do some tests with it and maybe change this part of the method 
-                                double xq = d.Average();
-                                //double x2q = d2.Average();
-                                int dlq = (int)(Math.Log(xq) - dMin);
-                                //int d2lq = (int)(Math.Log(x2q) - d2Min);
-                                int indxQ = dH.Length - dlq;
+                                int indxQ = dH.Length - 1;
+
+                                if (this.AssumeExpDist)
+                                {
+                                    //maybe we can use the mean as an indicator like indx (in the next code block),
+                                    //if we assume the data to be exponentially distributed
+                                    //I'll do some tests with it and maybe change this part of the method 
+                                    double xq = d.Average();
+                                    //double x2q = d2.Average();
+                                    int dlq = (int)(Math.Log(xq) - dMin);
+                                    //int d2lq = (int)(Math.Log(x2q) - d2Min);
+                                    if (dH.Length > dlq)
+                                        indxQ = dH.Length - dlq;
+                                }
 
                                 //get kind of a derivative
                                 double dm = dH.Sum();
@@ -1076,7 +1082,7 @@ namespace AvoidAGrabCutEasy
 
                                 //you could use such a construct to return quite good values,
                                 //but its made simply of testing some combination of values without a model behind
-                                double addATh = Math.Abs((dMax - dMin) / Math.Sqrt(dH.Length * dH.Length)) * Math.E * Math.E;
+                                //double addATh = Math.Abs((dMax - dMin) / Math.Sqrt(dH.Length * dH.Length)) * Math.E * Math.E;
 
                                 double cGC = 0;
                                 double ga = 0;
@@ -1349,14 +1355,20 @@ namespace AvoidAGrabCutEasy
                                     }
                                 }
 
-                                //maybe we can use the mean as an indicator like indx (in the next code block),
-                                //if we assume the data to be exponentially distributed
-                                //I'll do some tests with it and maybe change this part of the method 
-                                double xq = d.Average();
-                                //double x2q = d2.Average();
-                                int dlq = (int)(Math.Log(xq) - dMin);
-                                //int d2lq = (int)(Math.Log(x2q) - d2Min);
-                                int indxQ = dH.Length - dlq;
+                                int indxQ = dH.Length - 1;
+
+                                if (this.AssumeExpDist)
+                                {
+                                    //maybe we can use the mean as an indicator like indx (in the next code block),
+                                    //if we assume the data to be exponentially distributed
+                                    //I'll do some tests with it and maybe change this part of the method 
+                                    double xq = d.Average();
+                                    //double x2q = d2.Average();
+                                    int dlq = (int)(Math.Log(xq) - dMin);
+                                    //int d2lq = (int)(Math.Log(x2q) - d2Min);
+                                    if (dH.Length > dlq)
+                                        indxQ = dH.Length - dlq;
+                                }
 
                                 //get kind of a derivative
                                 double dm = dH.Sum();
@@ -1379,7 +1391,7 @@ namespace AvoidAGrabCutEasy
 
                                 //you could use such a construct to return quite good values,
                                 //but its made simply of testing some combination of values without a model behind
-                                double addATh = Math.Abs((dMax - dMin) / Math.Sqrt(dH.Length * dH.Length)) * Math.E * Math.E;
+                                //double addATh = Math.Abs((dMax - dMin) / Math.Sqrt(dH.Length * dH.Length)) * Math.E * Math.E;
 
                                 double cGC = 0;
                                 double ga = 0;
