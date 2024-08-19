@@ -1017,7 +1017,6 @@ namespace AvoidAGrabCutEasy
                                 double fv = Math.Max(Math.Abs(dMin), Math.Abs(dMax));
 
                                 int[] dH = new int[(int)Math.Ceiling(Math.Abs(fv))];
-                                int[] d2H = new int[dH.Length];
 
                                 double af = -this.Threshold - dMin;
 
@@ -1026,7 +1025,8 @@ namespace AvoidAGrabCutEasy
                                     if (d[i] != 0)
                                     {
                                         int dl = (int)(Math.Log(d[i]) - dMin);
-                                        dH[dl]++;
+                                        if (dH.Length > dl)
+                                            dH[dl]++;
                                     }
                                 }
 
@@ -1303,7 +1303,6 @@ namespace AvoidAGrabCutEasy
                                 double fv = Math.Max(Math.Abs(dMin), Math.Abs(dMax));
 
                                 int[] dH = new int[(int)Math.Ceiling(Math.Abs(fv))];
-                                int[] d2H = new int[dH.Length];
 
                                 double af = -this.Threshold - dMin;
 
@@ -1312,7 +1311,8 @@ namespace AvoidAGrabCutEasy
                                     if (d[i] != 0)
                                     {
                                         int dl = (int)(Math.Log(d[i]) - dMin);
-                                        dH[dl]++;
+                                        if (dH.Length > dl)
+                                            dH[dl]++;
                                     }
                                 }
 
