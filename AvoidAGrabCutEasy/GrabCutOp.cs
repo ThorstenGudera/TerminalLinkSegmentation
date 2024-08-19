@@ -1048,10 +1048,10 @@ namespace AvoidAGrabCutEasy
 
                                 int indxQ = dH.Length - 1;
 
-                                if (this.AssumeExpDist)
+                                if (this.AssumeExpDist) // assume data in dH to be exponentially distributed
                                 {
-                                    //maybe we can use the mean as an indicator like indx (in the next code block),
-                                    //if we assume the data to be exponentially distributed
+                                    //maybe we can use the mean as an indicator like indx,
+                                    //if we assume the data in the histogram to be exponentially distributed
                                     //I'll do some tests with it and maybe change this part of the method 
                                     double xq = d.Average();
                                     //double x2q = d2.Average();
@@ -1357,10 +1357,10 @@ namespace AvoidAGrabCutEasy
 
                                 int indxQ = dH.Length - 1;
 
-                                if (this.AssumeExpDist)
+                                if (this.AssumeExpDist) // assume data in dH to be exponentially distributed
                                 {
-                                    //maybe we can use the mean as an indicator like indx (in the next code block),
-                                    //if we assume the data to be exponentially distributed
+                                    //maybe we can use the mean as an indicator like indx,
+                                    //if we assume the data in the histogram to be exponentially distributed
                                     //I'll do some tests with it and maybe change this part of the method 
                                     double xq = d.Average();
                                     //double x2q = d2.Average();

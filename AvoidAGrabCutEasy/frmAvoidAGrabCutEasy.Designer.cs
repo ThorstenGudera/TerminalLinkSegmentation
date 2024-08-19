@@ -33,6 +33,7 @@
             cbAllowRS = new CheckBox();
             btnInitSettings = new Button();
             panel2 = new Panel();
+            cbAssumeExpDist = new CheckBox();
             label13 = new Label();
             cbAutoThreshold = new CheckBox();
             btnCache = new Button();
@@ -116,7 +117,6 @@
             toolTip1 = new ToolTip(components);
             backgroundWorker2 = new System.ComponentModel.BackgroundWorker();
             openFileDialog1 = new OpenFileDialog();
-            cbAssumeExpDist = new CheckBox();
             panel1.SuspendLayout();
             panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numWH).BeginInit();
@@ -249,8 +249,21 @@
             panel2.Location = new Point(724, 5);
             panel2.Margin = new Padding(4, 3, 4, 3);
             panel2.Name = "panel2";
-            panel2.Size = new Size(436, 27);
+            panel2.Size = new Size(380, 27);
             panel2.TabIndex = 677;
+            // 
+            // cbAssumeExpDist
+            // 
+            cbAssumeExpDist.AutoSize = true;
+            cbAssumeExpDist.Checked = true;
+            cbAssumeExpDist.CheckState = CheckState.Checked;
+            cbAssumeExpDist.Location = new Point(229, 3);
+            cbAssumeExpDist.Name = "cbAssumeExpDist";
+            cbAssumeExpDist.Size = new Size(142, 19);
+            cbAssumeExpDist.TabIndex = 679;
+            cbAssumeExpDist.Text = "assume exp dist in dH";
+            toolTip1.SetToolTip(cbAssumeExpDist, "assume an exponential distribution in the histogram for the auto-threshold");
+            cbAssumeExpDist.UseVisualStyleBackColor = true;
             // 
             // label13
             // 
@@ -1172,18 +1185,6 @@
             // 
             openFileDialog1.FileName = "openFileDialog1";
             openFileDialog1.Filter = "Images - (*.bmp;*.jpg;*.jpeg;*.jfif;*.png)|*.bmp;*.jpg;*.jpeg;*.jfif;*.png";
-            // 
-            // cbAssumeExpDist
-            // 
-            cbAssumeExpDist.AutoSize = true;
-            cbAssumeExpDist.Checked = true;
-            cbAssumeExpDist.CheckState = CheckState.Checked;
-            cbAssumeExpDist.Location = new Point(229, 3);
-            cbAssumeExpDist.Name = "cbAssumeExpDist";
-            cbAssumeExpDist.Size = new Size(195, 19);
-            cbAssumeExpDist.TabIndex = 679;
-            cbAssumeExpDist.Text = "assume exponential distribution";
-            cbAssumeExpDist.UseVisualStyleBackColor = true;
             // 
             // frmAvoidAGrabCutEasy
             // 
