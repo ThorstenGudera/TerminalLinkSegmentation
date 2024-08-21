@@ -789,7 +789,7 @@
             btnCancel.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             btnCancel.DialogResult = DialogResult.Cancel;
             btnCancel.ForeColor = SystemColors.ControlText;
-            btnCancel.Location = new Point(1378, 156);
+            btnCancel.Location = new Point(1378, 191);
             btnCancel.Margin = new Padding(4, 3, 4, 3);
             btnCancel.Name = "btnCancel";
             btnCancel.Size = new Size(88, 27);
@@ -803,7 +803,7 @@
             btnOK.DialogResult = DialogResult.OK;
             btnOK.Enabled = false;
             btnOK.ForeColor = SystemColors.ControlText;
-            btnOK.Location = new Point(1284, 156);
+            btnOK.Location = new Point(1284, 191);
             btnOK.Margin = new Padding(4, 3, 4, 3);
             btnOK.Name = "btnOK";
             btnOK.Size = new Size(88, 27);
