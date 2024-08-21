@@ -30,6 +30,13 @@
         {
             components = new System.ComponentModel.Container();
             panel1 = new Panel();
+            rbUnknown = new RadioButton();
+            cbRefPtFG = new CheckBox();
+            cbRefPtBG = new CheckBox();
+            cbNewPic = new CheckBox();
+            label14 = new Label();
+            btnFloodFG = new Button();
+            btnFloodBG = new Button();
             cbAllowRS = new CheckBox();
             btnInitSettings = new Button();
             panel2 = new Panel();
@@ -141,6 +148,13 @@
             // 
             // panel1
             // 
+            panel1.Controls.Add(rbUnknown);
+            panel1.Controls.Add(cbRefPtFG);
+            panel1.Controls.Add(cbRefPtBG);
+            panel1.Controls.Add(cbNewPic);
+            panel1.Controls.Add(label14);
+            panel1.Controls.Add(btnFloodFG);
+            panel1.Controls.Add(btnFloodBG);
             panel1.Controls.Add(cbAllowRS);
             panel1.Controls.Add(btnInitSettings);
             panel1.Controls.Add(panel2);
@@ -213,10 +227,84 @@
             panel1.Location = new Point(0, 0);
             panel1.Margin = new Padding(4, 3, 4, 3);
             panel1.Name = "panel1";
-            panel1.Size = new Size(1479, 196);
+            panel1.Size = new Size(1479, 224);
             panel1.TabIndex = 0;
             panel1.MouseDoubleClick += panel1_MouseDoubleClick;
             panel1.MouseDown += panel1_MouseDown;
+            // 
+            // rbUnknown
+            // 
+            rbUnknown.AutoSize = true;
+            rbUnknown.Location = new Point(599, 37);
+            rbUnknown.Margin = new Padding(4, 3, 4, 3);
+            rbUnknown.Name = "rbUnknown";
+            rbUnknown.Size = new Size(76, 19);
+            rbUnknown.TabIndex = 691;
+            rbUnknown.Text = "Unknown";
+            rbUnknown.UseVisualStyleBackColor = true;
+            // 
+            // cbRefPtFG
+            // 
+            cbRefPtFG.AutoSize = true;
+            cbRefPtFG.Location = new Point(361, 65);
+            cbRefPtFG.Name = "cbRefPtFG";
+            cbRefPtFG.Size = new Size(86, 19);
+            cbRefPtFG.TabIndex = 689;
+            cbRefPtFG.Text = "set ref pt fg";
+            cbRefPtFG.UseVisualStyleBackColor = true;
+            cbRefPtFG.CheckedChanged += cbRefPtFG_CheckedChanged;
+            // 
+            // cbRefPtBG
+            // 
+            cbRefPtBG.AutoSize = true;
+            cbRefPtBG.Location = new Point(267, 65);
+            cbRefPtBG.Name = "cbRefPtBG";
+            cbRefPtBG.Size = new Size(89, 19);
+            cbRefPtBG.TabIndex = 690;
+            cbRefPtBG.Text = "set ref pt bg";
+            cbRefPtBG.UseVisualStyleBackColor = true;
+            cbRefPtBG.CheckedChanged += cbRefPtBG_CheckedChanged;
+            // 
+            // cbNewPic
+            // 
+            cbNewPic.AutoSize = true;
+            cbNewPic.Location = new Point(574, 66);
+            cbNewPic.Name = "cbNewPic";
+            cbNewPic.Size = new Size(64, 19);
+            cbNewPic.TabIndex = 688;
+            cbNewPic.Text = "newPic";
+            cbNewPic.UseVisualStyleBackColor = true;
+            // 
+            // label14
+            // 
+            label14.AutoSize = true;
+            label14.Location = new Point(451, 67);
+            label14.Name = "label14";
+            label14.Size = new Size(37, 15);
+            label14.TabIndex = 687;
+            label14.Text = "Flood";
+            // 
+            // btnFloodFG
+            // 
+            btnFloodFG.Enabled = false;
+            btnFloodFG.Location = new Point(532, 62);
+            btnFloodFG.Name = "btnFloodFG";
+            btnFloodFG.Size = new Size(32, 23);
+            btnFloodFG.TabIndex = 685;
+            btnFloodFG.Text = "FG";
+            btnFloodFG.UseVisualStyleBackColor = true;
+            btnFloodFG.Click += btnFloodFG_Click;
+            // 
+            // btnFloodBG
+            // 
+            btnFloodBG.Enabled = false;
+            btnFloodBG.Location = new Point(494, 62);
+            btnFloodBG.Name = "btnFloodBG";
+            btnFloodBG.Size = new Size(32, 23);
+            btnFloodBG.TabIndex = 686;
+            btnFloodBG.Text = "BG";
+            btnFloodBG.UseVisualStyleBackColor = true;
+            btnFloodBG.Click += btnFloodBG_Click;
             // 
             // cbAllowRS
             // 
@@ -305,7 +393,7 @@
             // 
             cbSetPFGToFG.AutoSize = true;
             cbSetPFGToFG.Enabled = false;
-            cbSetPFGToFG.Location = new Point(1252, 127);
+            cbSetPFGToFG.Location = new Point(1252, 157);
             cbSetPFGToFG.Margin = new Padding(4, 3, 4, 3);
             cbSetPFGToFG.Name = "cbSetPFGToFG";
             cbSetPFGToFG.Size = new Size(73, 19);
@@ -317,7 +405,7 @@
             // label11
             // 
             label11.AutoSize = true;
-            label11.Location = new Point(811, 65);
+            label11.Location = new Point(811, 95);
             label11.Margin = new Padding(4, 0, 4, 0);
             label11.Name = "label11";
             label11.Size = new Size(17, 15);
@@ -327,7 +415,7 @@
             // label10
             // 
             label10.AutoSize = true;
-            label10.Location = new Point(663, 65);
+            label10.Location = new Point(663, 95);
             label10.Margin = new Padding(4, 0, 4, 0);
             label10.Name = "label10";
             label10.Size = new Size(75, 15);
@@ -358,7 +446,7 @@
             // label7
             // 
             label7.AutoSize = true;
-            label7.Location = new Point(439, 123);
+            label7.Location = new Point(439, 153);
             label7.Margin = new Padding(4, 0, 4, 0);
             label7.Name = "label7";
             label7.Size = new Size(110, 15);
@@ -369,7 +457,7 @@
             // label12
             // 
             label12.AutoSize = true;
-            label12.Location = new Point(1104, 91);
+            label12.Location = new Point(1104, 121);
             label12.Margin = new Padding(4, 0, 4, 0);
             label12.Name = "label12";
             label12.Size = new Size(56, 15);
@@ -379,7 +467,7 @@
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(905, 91);
+            label3.Location = new Point(905, 121);
             label3.Margin = new Padding(4, 0, 4, 0);
             label3.Name = "label3";
             label3.Size = new Size(89, 15);
@@ -388,7 +476,7 @@
             // 
             // btnCompose
             // 
-            btnCompose.Location = new Point(1169, 85);
+            btnCompose.Location = new Point(1169, 115);
             btnCompose.Margin = new Padding(4, 3, 4, 3);
             btnCompose.Name = "btnCompose";
             btnCompose.Size = new Size(88, 27);
@@ -399,7 +487,7 @@
             // 
             // btnOutline
             // 
-            btnOutline.Location = new Point(1006, 85);
+            btnOutline.Location = new Point(1006, 115);
             btnOutline.Margin = new Padding(4, 3, 4, 3);
             btnOutline.Name = "btnOutline";
             btnOutline.Size = new Size(88, 27);
@@ -411,7 +499,7 @@
             // cbLSBmp
             // 
             cbLSBmp.AutoSize = true;
-            cbLSBmp.Location = new Point(964, 63);
+            cbLSBmp.Location = new Point(964, 93);
             cbLSBmp.Margin = new Padding(4, 3, 4, 3);
             cbLSBmp.Name = "cbLSBmp";
             cbLSBmp.Size = new Size(90, 19);
@@ -447,7 +535,7 @@
             // 
             cbSkipLearn.AutoSize = true;
             cbSkipLearn.Enabled = false;
-            cbSkipLearn.Location = new Point(1168, 127);
+            cbSkipLearn.Location = new Point(1168, 157);
             cbSkipLearn.Margin = new Padding(4, 3, 4, 3);
             cbSkipLearn.Name = "cbSkipLearn";
             cbSkipLearn.Size = new Size(76, 19);
@@ -478,7 +566,7 @@
             // 
             // btnResQATH
             // 
-            btnResQATH.Location = new Point(831, 120);
+            btnResQATH.Location = new Point(831, 150);
             btnResQATH.Margin = new Padding(4, 3, 4, 3);
             btnResQATH.Name = "btnResQATH";
             btnResQATH.Size = new Size(49, 27);
@@ -489,7 +577,7 @@
             // 
             // btnResMaxIter
             // 
-            btnResMaxIter.Location = new Point(831, 88);
+            btnResMaxIter.Location = new Point(831, 118);
             btnResMaxIter.Margin = new Padding(4, 3, 4, 3);
             btnResMaxIter.Name = "btnResMaxIter";
             btnResMaxIter.Size = new Size(49, 27);
@@ -511,7 +599,7 @@
             // 
             // btnRecut
             // 
-            btnRecut.Location = new Point(1163, 152);
+            btnRecut.Location = new Point(1163, 182);
             btnRecut.Margin = new Padding(4, 3, 4, 3);
             btnRecut.Name = "btnRecut";
             btnRecut.Size = new Size(44, 27);
@@ -522,7 +610,7 @@
             // 
             // btnRemStroke
             // 
-            btnRemStroke.Location = new Point(1054, 152);
+            btnRemStroke.Location = new Point(1054, 182);
             btnRemStroke.Margin = new Padding(4, 3, 4, 3);
             btnRemStroke.Name = "btnRemStroke";
             btnRemStroke.Size = new Size(88, 27);
@@ -534,7 +622,7 @@
             // label6
             // 
             label6.AutoSize = true;
-            label6.Location = new Point(943, 158);
+            label6.Location = new Point(943, 188);
             label6.Margin = new Padding(4, 0, 4, 0);
             label6.Name = "label6";
             label6.Size = new Size(37, 15);
@@ -546,7 +634,7 @@
             cmbCurrentColor.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbCurrentColor.FormattingEnabled = true;
             cmbCurrentColor.Items.AddRange(new object[] { "Background", "Foreground", "Probably Background", "Probably Foreground" });
-            cmbCurrentColor.Location = new Point(1043, 125);
+            cmbCurrentColor.Location = new Point(1043, 155);
             cmbCurrentColor.Margin = new Padding(4, 3, 4, 3);
             cmbCurrentColor.Name = "cmbCurrentColor";
             cmbCurrentColor.Size = new Size(117, 23);
@@ -556,7 +644,7 @@
             // cbDraw
             // 
             cbDraw.AutoSize = true;
-            cbDraw.Location = new Point(933, 127);
+            cbDraw.Location = new Point(933, 157);
             cbDraw.Margin = new Padding(4, 3, 4, 3);
             cbDraw.Name = "cbDraw";
             cbDraw.Size = new Size(101, 19);
@@ -567,7 +655,7 @@
             // 
             // numWH
             // 
-            numWH.Location = new Point(987, 156);
+            numWH.Location = new Point(987, 186);
             numWH.Margin = new Padding(4, 3, 4, 3);
             numWH.Maximum = new decimal(new int[] { 127, 0, 0, 0 });
             numWH.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
@@ -579,7 +667,7 @@
             // label40
             // 
             label40.AutoSize = true;
-            label40.Location = new Point(662, 126);
+            label40.Location = new Point(662, 156);
             label40.Margin = new Padding(4, 0, 4, 0);
             label40.Name = "label40";
             label40.Size = new Size(38, 15);
@@ -590,7 +678,7 @@
             // label39
             // 
             label39.AutoSize = true;
-            label39.Location = new Point(663, 93);
+            label39.Location = new Point(663, 123);
             label39.Margin = new Padding(4, 0, 4, 0);
             label39.Name = "label39";
             label39.Size = new Size(47, 15);
@@ -600,7 +688,7 @@
             // 
             // numQATH
             // 
-            numQATH.Location = new Point(716, 123);
+            numQATH.Location = new Point(716, 153);
             numQATH.Margin = new Padding(4, 3, 4, 3);
             numQATH.Maximum = new decimal(new int[] { 1410065407, 2, 0, 0 });
             numQATH.Name = "numQATH";
@@ -611,7 +699,7 @@
             // 
             // numAlgMaxIter
             // 
-            numAlgMaxIter.Location = new Point(718, 91);
+            numAlgMaxIter.Location = new Point(718, 121);
             numAlgMaxIter.Margin = new Padding(4, 3, 4, 3);
             numAlgMaxIter.Maximum = new decimal(new int[] { 1410065407, 2, 0, 0 });
             numAlgMaxIter.Name = "numAlgMaxIter";
@@ -727,7 +815,7 @@
             // btnGo
             // 
             btnGo.Font = new Font("Microsoft Sans Serif", 8.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            btnGo.Location = new Point(659, 156);
+            btnGo.Location = new Point(659, 186);
             btnGo.Margin = new Padding(4, 3, 4, 3);
             btnGo.Name = "btnGo";
             btnGo.Size = new Size(88, 27);
@@ -740,7 +828,7 @@
             // 
             btnReset2.Enabled = false;
             btnReset2.ForeColor = SystemColors.ControlText;
-            btnReset2.Location = new Point(754, 156);
+            btnReset2.Location = new Point(754, 186);
             btnReset2.Margin = new Padding(4, 3, 4, 3);
             btnReset2.Name = "btnReset2";
             btnReset2.Size = new Size(88, 27);
@@ -754,7 +842,7 @@
             cbCastTLInt.AutoSize = true;
             cbCastTLInt.Checked = true;
             cbCastTLInt.CheckState = CheckState.Checked;
-            cbCastTLInt.Location = new Point(404, 159);
+            cbCastTLInt.Location = new Point(404, 189);
             cbCastTLInt.Margin = new Padding(4, 3, 4, 3);
             cbCastTLInt.Name = "cbCastTLInt";
             cbCastTLInt.Size = new Size(86, 19);
@@ -767,7 +855,7 @@
             cbMultTLCap.AutoSize = true;
             cbMultTLCap.Checked = true;
             cbMultTLCap.CheckState = CheckState.Checked;
-            cbMultTLCap.Location = new Point(267, 159);
+            cbMultTLCap.Location = new Point(267, 189);
             cbMultTLCap.Margin = new Padding(4, 3, 4, 3);
             cbMultTLCap.Name = "cbMultTLCap";
             cbMultTLCap.Size = new Size(125, 19);
@@ -780,7 +868,7 @@
             // 
             numMultTLCap.DecimalPlaces = 2;
             numMultTLCap.Increment = new decimal(new int[] { 1, 0, 0, 65536 });
-            numMultTLCap.Location = new Point(503, 158);
+            numMultTLCap.Location = new Point(503, 188);
             numMultTLCap.Margin = new Padding(4, 3, 4, 3);
             numMultTLCap.Maximum = new decimal(new int[] { 1410065407, 2, 0, 0 });
             numMultTLCap.Minimum = new decimal(new int[] { 1, 0, 0, 131072 });
@@ -792,7 +880,7 @@
             // label4
             // 
             label4.AutoSize = true;
-            label4.Location = new Point(264, 123);
+            label4.Location = new Point(264, 153);
             label4.Margin = new Padding(4, 0, 4, 0);
             label4.Name = "label4";
             label4.Size = new Size(63, 15);
@@ -815,7 +903,7 @@
             // 
             numProbMult1.DecimalPlaces = 4;
             numProbMult1.Increment = new decimal(new int[] { 1, 0, 0, 65536 });
-            numProbMult1.Location = new Point(330, 121);
+            numProbMult1.Location = new Point(330, 151);
             numProbMult1.Margin = new Padding(4, 3, 4, 3);
             numProbMult1.Maximum = new decimal(new int[] { 1000, 0, 0, 0 });
             numProbMult1.Minimum = new decimal(new int[] { 1, 0, 0, 262144 });
@@ -829,7 +917,7 @@
             cbUseTh.AutoSize = true;
             cbUseTh.Checked = true;
             cbUseTh.CheckState = CheckState.Checked;
-            cbUseTh.Location = new Point(525, 90);
+            cbUseTh.Location = new Point(525, 120);
             cbUseTh.Margin = new Padding(4, 3, 4, 3);
             cbUseTh.Name = "cbUseTh";
             cbUseTh.Size = new Size(99, 19);
@@ -840,7 +928,7 @@
             // label5
             // 
             label5.AutoSize = true;
-            label5.Location = new Point(288, 92);
+            label5.Location = new Point(288, 122);
             label5.Margin = new Padding(4, 0, 4, 0);
             label5.Name = "label5";
             label5.Size = new Size(90, 15);
@@ -850,7 +938,7 @@
             // numDblMult
             // 
             numDblMult.DecimalPlaces = 6;
-            numDblMult.Location = new Point(391, 89);
+            numDblMult.Location = new Point(391, 119);
             numDblMult.Margin = new Padding(4, 3, 4, 3);
             numDblMult.Maximum = new decimal(new int[] { 1000000000, 0, 0, 0 });
             numDblMult.Name = "numDblMult";
@@ -863,7 +951,7 @@
             cbQuickEst.AutoSize = true;
             cbQuickEst.Checked = true;
             cbQuickEst.CheckState = CheckState.Checked;
-            cbQuickEst.Location = new Point(267, 63);
+            cbQuickEst.Location = new Point(267, 93);
             cbQuickEst.Margin = new Padding(4, 3, 4, 3);
             cbQuickEst.Name = "cbQuickEst";
             cbQuickEst.Size = new Size(114, 19);
@@ -885,7 +973,7 @@
             // 
             // numShiftY
             // 
-            numShiftY.Location = new Point(838, 62);
+            numShiftY.Location = new Point(838, 92);
             numShiftY.Margin = new Padding(4, 3, 4, 3);
             numShiftY.Maximum = new decimal(new int[] { 9999, 0, 0, 0 });
             numShiftY.Minimum = new decimal(new int[] { 9999, 0, 0, int.MinValue });
@@ -897,7 +985,7 @@
             // label19
             // 
             label19.AutoSize = true;
-            label19.Location = new Point(408, 37);
+            label19.Location = new Point(404, 38);
             label19.Margin = new Padding(4, 0, 4, 0);
             label19.Name = "label19";
             label19.Size = new Size(37, 15);
@@ -906,7 +994,7 @@
             // 
             // numShiftX
             // 
-            numShiftX.Location = new Point(751, 62);
+            numShiftX.Location = new Point(751, 92);
             numShiftX.Margin = new Padding(4, 3, 4, 3);
             numShiftX.Maximum = new decimal(new int[] { 9999, 0, 0, 0 });
             numShiftX.Minimum = new decimal(new int[] { 9999, 0, 0, int.MinValue });
@@ -929,7 +1017,7 @@
             // 
             // numMaxComponents
             // 
-            numMaxComponents.Location = new Point(559, 121);
+            numMaxComponents.Location = new Point(559, 151);
             numMaxComponents.Margin = new Padding(4, 3, 4, 3);
             numMaxComponents.Maximum = new decimal(new int[] { 9999, 0, 0, 0 });
             numMaxComponents.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
@@ -940,7 +1028,7 @@
             // 
             // numWHScribbles
             // 
-            numWHScribbles.Location = new Point(453, 35);
+            numWHScribbles.Location = new Point(449, 35);
             numWHScribbles.Margin = new Padding(4, 3, 4, 3);
             numWHScribbles.Maximum = new decimal(new int[] { 255, 0, 0, 0 });
             numWHScribbles.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
@@ -964,7 +1052,7 @@
             // rbFG
             // 
             rbFG.AutoSize = true;
-            rbFG.Location = new Point(576, 37);
+            rbFG.Location = new Point(555, 37);
             rbFG.Margin = new Padding(4, 3, 4, 3);
             rbFG.Name = "rbFG";
             rbFG.Size = new Size(39, 19);
@@ -976,7 +1064,7 @@
             // 
             rbBG.AutoSize = true;
             rbBG.Checked = true;
-            rbBG.Location = new Point(523, 37);
+            rbBG.Location = new Point(510, 37);
             rbBG.Margin = new Padding(4, 3, 4, 3);
             rbBG.Name = "rbBG";
             rbBG.Size = new Size(40, 19);
@@ -987,7 +1075,7 @@
             // 
             // btnClearScribbles
             // 
-            btnClearScribbles.Location = new Point(716, 35);
+            btnClearScribbles.Location = new Point(749, 35);
             btnClearScribbles.Margin = new Padding(4, 3, 4, 3);
             btnClearScribbles.Name = "btnClearScribbles";
             btnClearScribbles.Size = new Size(63, 27);
@@ -998,7 +1086,7 @@
             // 
             // btnRemLastScribbles
             // 
-            btnRemLastScribbles.Location = new Point(646, 35);
+            btnRemLastScribbles.Location = new Point(679, 35);
             btnRemLastScribbles.Margin = new Padding(4, 3, 4, 3);
             btnRemLastScribbles.Name = "btnRemLastScribbles";
             btnRemLastScribbles.Size = new Size(63, 27);
@@ -1046,7 +1134,7 @@
             // splitContainer1
             // 
             splitContainer1.Dock = DockStyle.Fill;
-            splitContainer1.Location = new Point(0, 196);
+            splitContainer1.Location = new Point(0, 224);
             splitContainer1.Margin = new Padding(4, 3, 4, 3);
             splitContainer1.Name = "splitContainer1";
             // 
@@ -1057,7 +1145,7 @@
             // splitContainer1.Panel2
             // 
             splitContainer1.Panel2.Controls.Add(helplineRulerCtrl2);
-            splitContainer1.Size = new Size(1479, 643);
+            splitContainer1.Size = new Size(1479, 648);
             splitContainer1.SplitterDistance = 756;
             splitContainer1.SplitterWidth = 5;
             splitContainer1.TabIndex = 1;
@@ -1076,7 +1164,7 @@
             helplineRulerCtrl1.MoveHelpLinesOnResize = false;
             helplineRulerCtrl1.Name = "helplineRulerCtrl1";
             helplineRulerCtrl1.SetZoomOnlyByMethodCall = false;
-            helplineRulerCtrl1.Size = new Size(756, 643);
+            helplineRulerCtrl1.Size = new Size(756, 648);
             helplineRulerCtrl1.TabIndex = 0;
             helplineRulerCtrl1.Zoom = 1F;
             helplineRulerCtrl1.ZoomSetManually = false;
@@ -1096,7 +1184,7 @@
             helplineRulerCtrl2.MoveHelpLinesOnResize = false;
             helplineRulerCtrl2.Name = "helplineRulerCtrl2";
             helplineRulerCtrl2.SetZoomOnlyByMethodCall = false;
-            helplineRulerCtrl2.Size = new Size(718, 643);
+            helplineRulerCtrl2.Size = new Size(718, 648);
             helplineRulerCtrl2.TabIndex = 0;
             helplineRulerCtrl2.Zoom = 1F;
             helplineRulerCtrl2.ZoomSetManually = false;
@@ -1112,7 +1200,7 @@
             // statusStrip1
             // 
             statusStrip1.Items.AddRange(new ToolStripItem[] { toolStripStatusLabel1, ToolStripStatusLabel2, toolStripProgressBar1, toolStripStatusLabel4, toolStripStatusLabel3 });
-            statusStrip1.Location = new Point(0, 839);
+            statusStrip1.Location = new Point(0, 872);
             statusStrip1.Name = "statusStrip1";
             statusStrip1.Padding = new Padding(1, 0, 16, 0);
             statusStrip1.Size = new Size(1479, 39);
@@ -1190,7 +1278,7 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1479, 878);
+            ClientSize = new Size(1479, 911);
             Controls.Add(splitContainer1);
             Controls.Add(panel1);
             Controls.Add(panel3);
@@ -1318,5 +1406,12 @@
         private System.Windows.Forms.Button btnInitSettings;
         private CheckBox cbAllowRS;
         private CheckBox cbAssumeExpDist;
+        private RadioButton rbUnknown;
+        private CheckBox cbRefPtFG;
+        private CheckBox cbRefPtBG;
+        private CheckBox cbNewPic;
+        private Label label14;
+        private Button btnFloodFG;
+        private Button btnFloodBG;
     }
 }
