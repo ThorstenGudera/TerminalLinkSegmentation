@@ -16,6 +16,8 @@ namespace AvoidAGrabCutEasy
         public Point[][][]? FGPoints { get; set; }
 
         public Bitmap? Bmp { get; set; }
+        public int[]? UknwnSizes { get; set; }
+        public Point[][][]? UknwnPoints { get; set; }
 
         public SavedScribbles()
         {
@@ -28,6 +30,8 @@ namespace AvoidAGrabCutEasy
             info.AddValue("_BGPoints", this.BGPoints);
             info.AddValue("_FGSizes", this.FGSizes);
             info.AddValue("_FGPoints", this.FGPoints);
+            info.AddValue("_UnknwnSizes", this.UknwnSizes);
+            info.AddValue("_UnknwnPoints", this.UknwnPoints);
             if (this.Bmp != null)
                 info.AddValue("_Bmp", this.Bmp);
         }
@@ -60,6 +64,18 @@ namespace AvoidAGrabCutEasy
                 }
             }
 
+            if (this.UknwnSizes != null && this.UknwnPoints != null)
+            {
+                res.Add(3, new Dictionary<int, List<List<Point>>>());
+                for (int i = 0; i < this.UknwnPoints.Length; i++)
+                {
+                    res[3].Add(this.UknwnSizes[i], new List<List<Point>>());
+
+                    for (int j = 0; j < this.UknwnPoints[i].Length; j++)
+                        res[3][this.UknwnSizes[i]].Add(this.UknwnPoints[i][j].ToList());
+                }
+            }
+
             return res;
         }
 
@@ -75,6 +91,8 @@ namespace AvoidAGrabCutEasy
             this.FGSizes = null;
             this.BGPoints = null;
             this.FGPoints = null;
+            this.UknwnSizes = null;
+            this.UknwnPoints = null;
         }
     }
 }

@@ -16,6 +16,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Collections;
 
 namespace AvoidAGrabCutEasy
 {
@@ -113,6 +114,8 @@ namespace AvoidAGrabCutEasy
         private Point _ptHLC1BG = new Point(-1, -1);
         private Bitmap? _scribblesBitmap;
         private Point _ptHLC1FG = new Point(-1, -1);
+        private BitArray? _bitsBG;
+        private BitArray? _bitsFG;
 
         public event EventHandler<string>? ShowInfo;
         //public event EventHandler<string> BoundaryError;
@@ -546,134 +549,131 @@ namespace AvoidAGrabCutEasy
 
             if (this.cbScribbleMode.Checked)
             {
-                if (!this.cbRefPtBG.Checked && !this.cbRefPtFG.Checked)
+                if (this._scribbles == null)
+                    this._scribbles = new Dictionary<int, Dictionary<int, List<List<Point>>>>();
+
+                if (this._scribbles.ContainsKey(0)) //BG
                 {
-                    if (this._scribbles == null)
-                        this._scribbles = new Dictionary<int, Dictionary<int, List<List<Point>>>>();
-
-                    if (this._scribbles.ContainsKey(0)) //BG
+                    if (this._scribbles[0] != null)
                     {
-                        if (this._scribbles[0] != null)
+                        foreach (int wh in this._scribbles[0].Keys)
                         {
-                            foreach (int wh in this._scribbles[0].Keys)
+                            List<List<Point>> whPts = this._scribbles[0][wh];
+
+                            foreach (List<Point> pts in whPts)
                             {
-                                List<List<Point>> whPts = this._scribbles[0][wh];
+                                bool doRect = pts.Count > 1;
+                                Color c = Color.Black;
 
-                                foreach (List<Point> pts in whPts)
+                                if (doRect)
                                 {
-                                    bool doRect = pts.Count > 1;
-                                    Color c = Color.Black;
-
-                                    if (doRect)
+                                    foreach (Point pt in pts)
                                     {
-                                        foreach (Point pt in pts)
-                                        {
-                                            using (SolidBrush sb = new SolidBrush(c))
-                                                e.Graphics.FillRectangle(sb, new Rectangle(
-                                                    (int)((int)(pt.X - wh / 2) * this.helplineRulerCtrl1.Zoom) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X,
-                                                    (int)((int)(pt.Y - wh / 2) * this.helplineRulerCtrl1.Zoom) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y,
-                                                    (int)(wh * this.helplineRulerCtrl1.Zoom),
-                                                    (int)(wh * this.helplineRulerCtrl1.Zoom)));
-                                        }
+                                        using (SolidBrush sb = new SolidBrush(c))
+                                            e.Graphics.FillRectangle(sb, new Rectangle(
+                                                (int)((int)(pt.X - wh / 2) * this.helplineRulerCtrl1.Zoom) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X,
+                                                (int)((int)(pt.Y - wh / 2) * this.helplineRulerCtrl1.Zoom) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y,
+                                                (int)(wh * this.helplineRulerCtrl1.Zoom),
+                                                (int)(wh * this.helplineRulerCtrl1.Zoom)));
                                     }
-                                    else
+                                }
+                                else
+                                {
+                                    if (pts.Count > 0)
                                     {
-                                        if (pts.Count > 0)
-                                        {
-                                            Point pt = pts[0];
-                                            using (SolidBrush sb = new SolidBrush(c))
-                                                e.Graphics.FillRectangle(sb, new Rectangle(
-                                                    (int)((int)(pt.X - wh / 2) * this.helplineRulerCtrl1.Zoom) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X,
-                                                    (int)((int)(pt.Y - wh / 2) * this.helplineRulerCtrl1.Zoom) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y,
-                                                    (int)(wh * this.helplineRulerCtrl1.Zoom),
-                                                    (int)(wh * this.helplineRulerCtrl1.Zoom)));
-                                        }
+                                        Point pt = pts[0];
+                                        using (SolidBrush sb = new SolidBrush(c))
+                                            e.Graphics.FillRectangle(sb, new Rectangle(
+                                                (int)((int)(pt.X - wh / 2) * this.helplineRulerCtrl1.Zoom) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X,
+                                                (int)((int)(pt.Y - wh / 2) * this.helplineRulerCtrl1.Zoom) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y,
+                                                (int)(wh * this.helplineRulerCtrl1.Zoom),
+                                                (int)(wh * this.helplineRulerCtrl1.Zoom)));
                                     }
                                 }
                             }
                         }
                     }
+                }
 
-                    if (this._scribbles.ContainsKey(1)) //FG
+                if (this._scribbles.ContainsKey(1)) //FG
+                {
+                    if (this._scribbles[1] != null)
                     {
-                        if (this._scribbles[1] != null)
+                        foreach (int wh in this._scribbles[1].Keys)
                         {
-                            foreach (int wh in this._scribbles[1].Keys)
+                            List<List<Point>> whPts = this._scribbles[1][wh];
+
+                            foreach (List<Point> pts in whPts)
                             {
-                                List<List<Point>> whPts = this._scribbles[1][wh];
+                                bool doRect = pts.Count > 1;
+                                Color c = Color.White;
 
-                                foreach (List<Point> pts in whPts)
+                                if (doRect)
                                 {
-                                    bool doRect = pts.Count > 1;
-                                    Color c = Color.White;
-
-                                    if (doRect)
+                                    foreach (Point pt in pts)
                                     {
-                                        foreach (Point pt in pts)
-                                        {
-                                            using (SolidBrush sb = new SolidBrush(c))
-                                                e.Graphics.FillRectangle(sb, new Rectangle(
-                                                    (int)((int)(pt.X - wh / 2) * this.helplineRulerCtrl1.Zoom) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X,
-                                                    (int)((int)(pt.Y - wh / 2) * this.helplineRulerCtrl1.Zoom) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y,
-                                                    (int)(wh * this.helplineRulerCtrl1.Zoom),
-                                                    (int)(wh * this.helplineRulerCtrl1.Zoom)));
-                                        }
+                                        using (SolidBrush sb = new SolidBrush(c))
+                                            e.Graphics.FillRectangle(sb, new Rectangle(
+                                                (int)((int)(pt.X - wh / 2) * this.helplineRulerCtrl1.Zoom) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X,
+                                                (int)((int)(pt.Y - wh / 2) * this.helplineRulerCtrl1.Zoom) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y,
+                                                (int)(wh * this.helplineRulerCtrl1.Zoom),
+                                                (int)(wh * this.helplineRulerCtrl1.Zoom)));
                                     }
-                                    else
+                                }
+                                else
+                                {
+                                    if (pts.Count > 0)
                                     {
-                                        if (pts.Count > 0)
-                                        {
-                                            Point pt = pts[0];
-                                            using (SolidBrush sb = new SolidBrush(c))
-                                                e.Graphics.FillRectangle(sb, new Rectangle(
-                                                    (int)((int)(pt.X - wh / 2) * this.helplineRulerCtrl1.Zoom) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X,
-                                                    (int)((int)(pt.Y - wh / 2) * this.helplineRulerCtrl1.Zoom) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y,
-                                                    (int)(wh * this.helplineRulerCtrl1.Zoom),
-                                                    (int)(wh * this.helplineRulerCtrl1.Zoom)));
-                                        }
+                                        Point pt = pts[0];
+                                        using (SolidBrush sb = new SolidBrush(c))
+                                            e.Graphics.FillRectangle(sb, new Rectangle(
+                                                (int)((int)(pt.X - wh / 2) * this.helplineRulerCtrl1.Zoom) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X,
+                                                (int)((int)(pt.Y - wh / 2) * this.helplineRulerCtrl1.Zoom) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y,
+                                                (int)(wh * this.helplineRulerCtrl1.Zoom),
+                                                (int)(wh * this.helplineRulerCtrl1.Zoom)));
                                     }
                                 }
                             }
                         }
                     }
+                }
 
-                    if (this._scribbles.ContainsKey(3)) //Unknown
+                if (this._scribbles.ContainsKey(3)) //Unknown
+                {
+                    if (this._scribbles[3] != null)
                     {
-                        if (this._scribbles[3] != null)
+                        foreach (int wh in this._scribbles[3].Keys)
                         {
-                            foreach (int wh in this._scribbles[3].Keys)
+                            List<List<Point>> whPts = this._scribbles[3][wh];
+
+                            foreach (List<Point> pts in whPts)
                             {
-                                List<List<Point>> whPts = this._scribbles[3][wh];
+                                bool doRect = pts.Count > 1;
+                                Color c = Color.Gray;
 
-                                foreach (List<Point> pts in whPts)
+                                if (doRect)
                                 {
-                                    bool doRect = pts.Count > 1;
-                                    Color c = Color.Gray;
-
-                                    if (doRect)
+                                    foreach (Point pt in pts)
                                     {
-                                        foreach (Point pt in pts)
-                                        {
-                                            using (SolidBrush sb = new SolidBrush(c))
-                                                e.Graphics.FillRectangle(sb, new Rectangle(
-                                                    (int)((int)(pt.X - wh / 2) * this.helplineRulerCtrl1.Zoom) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X,
-                                                    (int)((int)(pt.Y - wh / 2) * this.helplineRulerCtrl1.Zoom) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y,
-                                                    (int)(wh * this.helplineRulerCtrl1.Zoom),
-                                                    (int)(wh * this.helplineRulerCtrl1.Zoom)));
-                                        }
+                                        using (SolidBrush sb = new SolidBrush(c))
+                                            e.Graphics.FillRectangle(sb, new Rectangle(
+                                                (int)((int)(pt.X - wh / 2) * this.helplineRulerCtrl1.Zoom) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X,
+                                                (int)((int)(pt.Y - wh / 2) * this.helplineRulerCtrl1.Zoom) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y,
+                                                (int)(wh * this.helplineRulerCtrl1.Zoom),
+                                                (int)(wh * this.helplineRulerCtrl1.Zoom)));
                                     }
-                                    else
+                                }
+                                else
+                                {
+                                    if (pts.Count > 0)
                                     {
-                                        if (pts.Count > 0)
-                                        {
-                                            Point pt = pts[0];
-                                            using (SolidBrush sb = new SolidBrush(c))
-                                                e.Graphics.FillRectangle(sb, new Rectangle(
-                                                    (int)((int)(pt.X - wh / 2) * this.helplineRulerCtrl1.Zoom) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X,
-                                                    (int)((int)(pt.Y - wh / 2) * this.helplineRulerCtrl1.Zoom) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y,
-                                                    (int)(wh * this.helplineRulerCtrl1.Zoom),
-                                                    (int)(wh * this.helplineRulerCtrl1.Zoom)));
-                                        }
+                                        Point pt = pts[0];
+                                        using (SolidBrush sb = new SolidBrush(c))
+                                            e.Graphics.FillRectangle(sb, new Rectangle(
+                                                (int)((int)(pt.X - wh / 2) * this.helplineRulerCtrl1.Zoom) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X,
+                                                (int)((int)(pt.Y - wh / 2) * this.helplineRulerCtrl1.Zoom) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y,
+                                                (int)(wh * this.helplineRulerCtrl1.Zoom),
+                                                (int)(wh * this.helplineRulerCtrl1.Zoom)));
                                     }
                                 }
                             }
@@ -713,26 +713,26 @@ namespace AvoidAGrabCutEasy
 
                 if (this._ptHLC1BG.X > -1 && this._ptHLC1BG.Y > -1)
                 {
-                    e.Graphics.DrawLine(Pens.Cyan, ((this._ptHLC1BG.X - 5) * this.helplineRulerCtrl1.Zoom) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X,
-                        ((this._ptHLC1BG.Y - 5) * this.helplineRulerCtrl1.Zoom) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y,
-                        ((this._ptHLC1BG.X + 5) * this.helplineRulerCtrl1.Zoom) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X,
-                        ((this._ptHLC1BG.Y + 5) * this.helplineRulerCtrl1.Zoom) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y);
-                    e.Graphics.DrawLine(Pens.Cyan, ((this._ptHLC1BG.X + 5) * this.helplineRulerCtrl1.Zoom) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X,
-                        ((this._ptHLC1BG.Y - 5) * this.helplineRulerCtrl1.Zoom) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y,
-                        ((this._ptHLC1BG.X - 5) * this.helplineRulerCtrl1.Zoom) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X,
-                        ((this._ptHLC1BG.Y + 5) * this.helplineRulerCtrl1.Zoom) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y);
+                    e.Graphics.DrawLine(Pens.Cyan, ((this._ptHLC1BG.X * this.helplineRulerCtrl1.Zoom - 5)) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X,
+                        ((this._ptHLC1BG.Y * this.helplineRulerCtrl1.Zoom - 5)) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y,
+                        ((this._ptHLC1BG.X * this.helplineRulerCtrl1.Zoom + 5)) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X,
+                        ((this._ptHLC1BG.Y * this.helplineRulerCtrl1.Zoom + 5)) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y);
+                    e.Graphics.DrawLine(Pens.Cyan, ((this._ptHLC1BG.X * this.helplineRulerCtrl1.Zoom + 5)) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X,
+                        ((this._ptHLC1BG.Y * this.helplineRulerCtrl1.Zoom - 5)) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y,
+                        ((this._ptHLC1BG.X * this.helplineRulerCtrl1.Zoom - 5)) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X,
+                        ((this._ptHLC1BG.Y * this.helplineRulerCtrl1.Zoom + 5)) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y);
                 }
 
                 if (this._ptHLC1FG.X > -1 && this._ptHLC1FG.Y > -1)
                 {
-                    e.Graphics.DrawLine(Pens.Red, ((this._ptHLC1FG.X - 5) * this.helplineRulerCtrl1.Zoom) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X,
-                        ((this._ptHLC1FG.Y - 5) * this.helplineRulerCtrl1.Zoom) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y,
-                        ((this._ptHLC1FG.X + 5) * this.helplineRulerCtrl1.Zoom) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X,
-                        ((this._ptHLC1FG.Y + 5) * this.helplineRulerCtrl1.Zoom) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y);
-                    e.Graphics.DrawLine(Pens.Red, ((this._ptHLC1FG.X + 5) * this.helplineRulerCtrl1.Zoom) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X,
-                        ((this._ptHLC1FG.Y - 5) * this.helplineRulerCtrl1.Zoom) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y,
-                        ((this._ptHLC1FG.X - 5) * this.helplineRulerCtrl1.Zoom) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X,
-                        ((this._ptHLC1FG.Y + 5) * this.helplineRulerCtrl1.Zoom) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y);
+                    e.Graphics.DrawLine(Pens.Red, ((this._ptHLC1FG.X * this.helplineRulerCtrl1.Zoom - 5)) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X,
+                        ((this._ptHLC1FG.Y * this.helplineRulerCtrl1.Zoom - 5)) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y,
+                        ((this._ptHLC1FG.X * this.helplineRulerCtrl1.Zoom + 5)) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X,
+                        ((this._ptHLC1FG.Y * this.helplineRulerCtrl1.Zoom + 5)) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y);
+                    e.Graphics.DrawLine(Pens.Red, ((this._ptHLC1FG.X * this.helplineRulerCtrl1.Zoom + 5)) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X,
+                        ((this._ptHLC1FG.Y * this.helplineRulerCtrl1.Zoom - 5)) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y,
+                        ((this._ptHLC1FG.X * this.helplineRulerCtrl1.Zoom - 5)) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X,
+                        ((this._ptHLC1FG.Y * this.helplineRulerCtrl1.Zoom + 5)) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y);
                 }
             }
         }
@@ -3488,6 +3488,32 @@ namespace AvoidAGrabCutEasy
                     }
                 }
 
+                if (this._scribbles.ContainsKey(3)) //Unknown
+                {
+                    if (this._scribbles[3] != null)
+                    {
+                        f.UknwnSizes = this._scribbles[3].Keys.ToArray();
+                        f.UknwnPoints = new Point[f.UknwnSizes.Length][][];
+                        int i = 0;
+
+                        foreach (int wh in this._scribbles[3].Keys)
+                        {
+                            f.UknwnPoints[i] = new Point[this._scribbles[3][wh].Count][];
+
+                            List<List<Point>> whPts = this._scribbles[3][wh];
+                            int j = 0;
+
+                            foreach (List<Point> pts in whPts)
+                            {
+                                f.UknwnPoints[i][j] = pts.ToArray();
+                                j++;
+                            }
+
+                            i++;
+                        }
+                    }
+                }
+
                 if (this.helplineRulerCtrl1.Bmp != null && this.cbLSBmp.Checked)
                     f.Bmp = new Bitmap(this.helplineRulerCtrl1.Bmp);
 
@@ -3818,6 +3844,9 @@ namespace AvoidAGrabCutEasy
                 if (this._scribblesBitmap == null)
                     this._scribblesBitmap = new Bitmap(this.helplineRulerCtrl1.Bmp.Width, this.helplineRulerCtrl1.Bmp.Height);
 
+                if (this._bitsBG == null)
+                    this._bitsBG = new BitArray(this.helplineRulerCtrl1.Bmp.Width * this.helplineRulerCtrl1.Bmp.Height, false);
+
                 if (this.cbNewPic.Checked)
                 {
                     Bitmap? bOld = this._scribblesBitmap;
@@ -3827,7 +3856,9 @@ namespace AvoidAGrabCutEasy
                     bOld = null;
 
                     if (this._scribbles != null && this._scribbles.ContainsKey(0) && this._scribbles[0].ContainsKey(2))
-                        this._scribbles[0].Remove(2);
+                        this._scribbles[0].Remove(3);
+
+                    this._bitsBG.SetAll(false);
                 }
 
                 Bitmap? b = this._scribblesBitmap;
@@ -3852,9 +3883,11 @@ namespace AvoidAGrabCutEasy
                                         bool doRect = pts.Count > 1;
                                         Color c = Color.Gray;
 
+                                        List<Point> pts2 = pts.Distinct().ToList();
+
                                         if (doRect)
                                         {
-                                            foreach (Point pt in pts)
+                                            foreach (Point pt in pts2)
                                             {
                                                 using (SolidBrush sb = new SolidBrush(c))
                                                     gx.FillRectangle(sb, new Rectangle(
@@ -3866,7 +3899,7 @@ namespace AvoidAGrabCutEasy
                                         }
                                         else
                                         {
-                                            Point pt = pts[0];
+                                            Point pt = pts2[0];
                                             using (SolidBrush sb = new SolidBrush(c))
                                                 gx.FillRectangle(sb, new Rectangle(
                                                     (int)(pt.X - wh / 2) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X,
@@ -3880,8 +3913,13 @@ namespace AvoidAGrabCutEasy
                         }
                 }
 
-                FloodFillMethods.floodfill(b, ptSt.X, ptSt.Y, 116, startColor, replaceColor,
+                FloodFillMethods.floodfill(b, ptSt.X, ptSt.Y, 7, startColor, replaceColor,
                     Int32.MaxValue, false, false, 1.0, false, false);
+
+                Form fff = new Form();
+                fff.BackgroundImage = b;
+                fff.BackgroundImageLayout = ImageLayout.Zoom;
+                fff.ShowDialog();
 
                 List<Point> ll = new List<Point>();
 
@@ -3897,8 +3935,11 @@ namespace AvoidAGrabCutEasy
                 {
                     for (int x = 0; x < w; x++)
                     {
-                        if (p[3] == 255 && p[0] == 0)
+                        if (p[3] == 255 && p[0] == 0 && !this._bitsBG.Get(y * w + x))
+                        {
                             ll.Add(new Point(x, y));
+                            this._bitsBG.Set(y * w + x, true);
+                        }
 
                         p += 4;
                     }
@@ -3913,29 +3954,29 @@ namespace AvoidAGrabCutEasy
                 if (!this._scribbles.ContainsKey(0))
                     this._scribbles.Add(0, new Dictionary<int, List<List<Point>>>());
 
-                if (!this._scribbles[0].ContainsKey(2))
-                    this._scribbles[0].Add(2, new List<List<Point>>());
+                if (!this._scribbles[0].ContainsKey(3))
+                    this._scribbles[0].Add(3, new List<List<Point>>());
 
-                List<List<Point>> z = this._scribbles[0][2];
+                //List<List<Point>> z = this._scribbles[0][3];
 
-                for (int l = 0; l < z.Count; l++)
-                {
-                    List<Point> zz = z[l];
+                //for (int l = 0; l < z.Count; l++)
+                //{
+                //    List<Point> zz = z[l];
 
-                    for (int lp = 0; lp < zz.Count; lp++)
-                    {
-                        for (int j = 0; j < ll.Count; j++)
-                        {
-                            if (zz[lp].X == ll[j].X && zz[lp].Y == ll[j].Y)
-                            {
-                                ll.RemoveAt(j);
-                                break;
-                            }
-                        }
-                    }
-                }
+                //    for (int lp = 0; lp < zz.Count; lp++)
+                //    {
+                //        for (int j = 0; j < ll.Count; j++)
+                //        {
+                //            if (zz[lp].X == ll[j].X && zz[lp].Y == ll[j].Y)
+                //            {
+                //                ll.RemoveAt(j);
+                //                break;
+                //            }
+                //        }
+                //    }
+                //}
 
-                this._scribbles[0][2].Add(ll);
+                this._scribbles[0][3].Add(ll.Distinct().ToList());
 
                 this.helplineRulerCtrl1.dbPanel1.Invalidate();
             }
@@ -3948,6 +3989,9 @@ namespace AvoidAGrabCutEasy
                 if (this._scribblesBitmap == null)
                     this._scribblesBitmap = new Bitmap(this.helplineRulerCtrl1.Bmp.Width, this.helplineRulerCtrl1.Bmp.Height);
 
+                if (this._bitsFG == null)
+                    this._bitsFG = new BitArray(this.helplineRulerCtrl1.Bmp.Width * this.helplineRulerCtrl1.Bmp.Height, false);
+
                 if (this.cbNewPic.Checked)
                 {
                     Bitmap? bOld = this._scribblesBitmap;
@@ -3957,7 +4001,9 @@ namespace AvoidAGrabCutEasy
                     bOld = null;
 
                     if (this._scribbles != null && this._scribbles.ContainsKey(1) && this._scribbles[1].ContainsKey(2))
-                        this._scribbles[1].Remove(2);
+                        this._scribbles[1].Remove(3);
+
+                    this._bitsFG.SetAll(false);
                 }
 
                 Bitmap? b = this._scribblesBitmap;
@@ -3982,9 +4028,11 @@ namespace AvoidAGrabCutEasy
                                         bool doRect = pts.Count > 1;
                                         Color c = Color.Gray;
 
+                                        List<Point> pts2 = pts.Distinct().ToList();
+
                                         if (doRect)
                                         {
-                                            foreach (Point pt in pts)
+                                            foreach (Point pt in pts2)
                                             {
                                                 using (SolidBrush sb = new SolidBrush(c))
                                                     gx.FillRectangle(sb, new Rectangle(
@@ -3996,7 +4044,7 @@ namespace AvoidAGrabCutEasy
                                         }
                                         else
                                         {
-                                            Point pt = pts[0];
+                                            Point pt = pts2[0];
                                             using (SolidBrush sb = new SolidBrush(c))
                                                 gx.FillRectangle(sb, new Rectangle(
                                                     (int)(pt.X - wh / 2) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X,
@@ -4010,8 +4058,13 @@ namespace AvoidAGrabCutEasy
                         }
                 }
 
-                FloodFillMethods.floodfill(b, ptSt.X, ptSt.Y, 116, startColor, replaceColor,
+                FloodFillMethods.floodfill(b, ptSt.X, ptSt.Y, 7, startColor, replaceColor,
                     Int32.MaxValue, false, false, 1.0, false, false);
+
+                Form fff = new Form();
+                fff.BackgroundImage = b;
+                fff.BackgroundImageLayout = ImageLayout.Zoom;
+                fff.ShowDialog();
 
                 List<Point> ll = new List<Point>();
 
@@ -4027,8 +4080,11 @@ namespace AvoidAGrabCutEasy
                 {
                     for (int x = 0; x < w; x++)
                     {
-                        if (p[3] == 255 && p[0] == 255)
+                        if (p[3] == 255 && p[0] == 255 && !this._bitsFG.Get(y * w + x))
+                        {
                             ll.Add(new Point(x, y));
+                            this._bitsFG.Set(y * w + x, true);
+                        }
 
                         p += 4;
                     }
@@ -4043,29 +4099,29 @@ namespace AvoidAGrabCutEasy
                 if (!this._scribbles.ContainsKey(1))
                     this._scribbles.Add(1, new Dictionary<int, List<List<Point>>>());
 
-                if (!this._scribbles[1].ContainsKey(2))
-                    this._scribbles[1].Add(2, new List<List<Point>>());
+                if (!this._scribbles[1].ContainsKey(3))
+                    this._scribbles[1].Add(3, new List<List<Point>>());
 
-                List<List<Point>> z = this._scribbles[1][2];
+                //List<List<Point>> z = this._scribbles[1][3];
 
-                for (int l = 0; l < z.Count; l++)
-                {
-                    List<Point> zz = z[l];
+                //for (int l = 0; l < z.Count; l++)
+                //{
+                //    List<Point> zz = z[l];
 
-                    for (int lp = 0; lp < zz.Count; lp++)
-                    {
-                        for (int j = 0; j < ll.Count; j++)
-                        {
-                            if (zz[lp].X == ll[j].X && zz[lp].Y == ll[j].Y)
-                            {
-                                ll.RemoveAt(j);
-                                break;
-                            }
-                        }
-                    }
-                }
+                //    for (int lp = 0; lp < zz.Count; lp++)
+                //    {
+                //        for (int j = 0; j < ll.Count; j++)
+                //        {
+                //            if (zz[lp].X == ll[j].X && zz[lp].Y == ll[j].Y)
+                //            {
+                //                ll.RemoveAt(j);
+                //                break;
+                //            }
+                //        }
+                //    }
+                //}
 
-                this._scribbles[1][2].Add(ll);
+                this._scribbles[1][3].Add(ll.Distinct().ToList());
 
                 this.helplineRulerCtrl1.dbPanel1.Invalidate();
             }
