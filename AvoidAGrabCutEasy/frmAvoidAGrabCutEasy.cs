@@ -2451,16 +2451,19 @@ namespace AvoidAGrabCutEasy
         {
             this._points2.Clear();
 
-            int fg = this.rbFG.Checked ? 1 : this.rbBG.Checked ? 0 : 3;
-            int wh = (int)this.numWHScribbles.Value;
+            using (frmLastScribbles frm = new frmLastScribbles(this._scribbles))
+                frm.ShowDialog();
 
-            if (this._scribbles != null && this._scribbles.ContainsKey(fg) && this._scribbles[fg].ContainsKey(wh))
-            {
-                List<List<Point>> j = this._scribbles[fg][wh];
+            //int fg = this.rbFG.Checked ? 1 : this.rbBG.Checked ? 0 : 3;
+            //int wh = (int)this.numWHScribbles.Value;
 
-                if (j != null && j.Count > 0)
-                    j.RemoveAt(j.Count - 1);
-            }
+            //if (this._scribbles != null && this._scribbles.ContainsKey(fg) && this._scribbles[fg].ContainsKey(wh))
+            //{
+            //    List<List<Point>> j = this._scribbles[fg][wh];
+
+            //    if (j != null && j.Count > 0)
+            //        j.RemoveAt(j.Count - 1);
+            //}
 
             this.helplineRulerCtrl1.dbPanel1.Invalidate();
         }
