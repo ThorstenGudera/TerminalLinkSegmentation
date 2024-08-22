@@ -34,13 +34,18 @@
             listBox2 = new ListBox();
             btnDelete = new Button();
             btnOK = new Button();
+            panel1 = new Panel();
+            pictureBox1 = new PictureBox();
+            panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             SuspendLayout();
             // 
             // cmbScribblesType
             // 
+            cmbScribblesType.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             cmbScribblesType.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbScribblesType.FormattingEnabled = true;
-            cmbScribblesType.Location = new Point(88, 12);
+            cmbScribblesType.Location = new Point(422, 12);
             cmbScribblesType.Name = "cmbScribblesType";
             cmbScribblesType.Size = new Size(121, 23);
             cmbScribblesType.TabIndex = 0;
@@ -48,8 +53,9 @@
             // 
             // label1
             // 
+            label1.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             label1.AutoSize = true;
-            label1.Location = new Point(12, 15);
+            label1.Location = new Point(375, 15);
             label1.Name = "label1";
             label1.Size = new Size(31, 15);
             label1.TabIndex = 1;
@@ -57,9 +63,10 @@
             // 
             // listBox1
             // 
+            listBox1.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             listBox1.FormattingEnabled = true;
             listBox1.ItemHeight = 15;
-            listBox1.Location = new Point(88, 41);
+            listBox1.Location = new Point(422, 41);
             listBox1.Name = "listBox1";
             listBox1.Size = new Size(120, 94);
             listBox1.TabIndex = 2;
@@ -67,9 +74,10 @@
             // 
             // listBox2
             // 
+            listBox2.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             listBox2.FormattingEnabled = true;
             listBox2.ItemHeight = 15;
-            listBox2.Location = new Point(235, 41);
+            listBox2.Location = new Point(569, 41);
             listBox2.Name = "listBox2";
             listBox2.Size = new Size(120, 94);
             listBox2.TabIndex = 2;
@@ -77,7 +85,8 @@
             // 
             // btnDelete
             // 
-            btnDelete.Location = new Point(269, 141);
+            btnDelete.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            btnDelete.Location = new Point(603, 141);
             btnDelete.Name = "btnDelete";
             btnDelete.Size = new Size(86, 27);
             btnDelete.TabIndex = 3;
@@ -87,10 +96,10 @@
             // 
             // btnOK
             // 
-            btnOK.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            btnOK.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             btnOK.DialogResult = DialogResult.OK;
             btnOK.ForeColor = SystemColors.ControlText;
-            btnOK.Location = new Point(282, 190);
+            btnOK.Location = new Point(611, 290);
             btnOK.Margin = new Padding(4, 3, 4, 3);
             btnOK.Name = "btnOK";
             btnOK.Size = new Size(88, 27);
@@ -98,11 +107,34 @@
             btnOK.Text = "Close";
             btnOK.UseVisualStyleBackColor = true;
             // 
+            // panel1
+            // 
+            panel1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            panel1.AutoScroll = true;
+            panel1.Controls.Add(pictureBox1);
+            panel1.Location = new Point(12, 15);
+            panel1.Name = "panel1";
+            panel1.Size = new Size(344, 302);
+            panel1.TabIndex = 651;
+            // 
+            // pictureBox1
+            // 
+            pictureBox1.Dock = DockStyle.Fill;
+            pictureBox1.Location = new Point(0, 0);
+            pictureBox1.Name = "pictureBox1";
+            pictureBox1.Size = new Size(344, 302);
+            pictureBox1.SizeMode = PictureBoxSizeMode.Zoom;
+            pictureBox1.TabIndex = 0;
+            pictureBox1.TabStop = false;
+            pictureBox1.Paint += pictureBox1_Paint;
+            pictureBox1.DoubleClick += pictureBox1_DoubleClick;
+            // 
             // frmLastScribbles
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(383, 228);
+            ClientSize = new Size(712, 329);
+            Controls.Add(panel1);
             Controls.Add(btnOK);
             Controls.Add(btnDelete);
             Controls.Add(listBox2);
@@ -113,6 +145,9 @@
             StartPosition = FormStartPosition.CenterParent;
             Text = "frmLastScribbles";
             Load += frmLastScribbles_Load;
+            Layout += frmLastScribbles_Layout;
+            panel1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -125,5 +160,7 @@
         private ListBox listBox2;
         private Button btnDelete;
         private Button btnOK;
+        private Panel panel1;
+        private PictureBox pictureBox1;
     }
 }

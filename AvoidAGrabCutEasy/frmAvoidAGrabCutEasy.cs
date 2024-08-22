@@ -2449,23 +2449,26 @@ namespace AvoidAGrabCutEasy
 
         private void btnRemLastScribbles_Click(object sender, EventArgs e)
         {
-            this._points2.Clear();
+            if (this.helplineRulerCtrl1.Bmp != null)
+            {
+                this._points2.Clear();
 
-            using (frmLastScribbles frm = new frmLastScribbles(this._scribbles))
-                frm.ShowDialog();
+                using (frmLastScribbles frm = new frmLastScribbles(this.helplineRulerCtrl1.Bmp, this._scribbles))
+                    frm.ShowDialog();
 
-            //int fg = this.rbFG.Checked ? 1 : this.rbBG.Checked ? 0 : 3;
-            //int wh = (int)this.numWHScribbles.Value;
+                //int fg = this.rbFG.Checked ? 1 : this.rbBG.Checked ? 0 : 3;
+                //int wh = (int)this.numWHScribbles.Value;
 
-            //if (this._scribbles != null && this._scribbles.ContainsKey(fg) && this._scribbles[fg].ContainsKey(wh))
-            //{
-            //    List<List<Point>> j = this._scribbles[fg][wh];
+                //if (this._scribbles != null && this._scribbles.ContainsKey(fg) && this._scribbles[fg].ContainsKey(wh))
+                //{
+                //    List<List<Point>> j = this._scribbles[fg][wh];
 
-            //    if (j != null && j.Count > 0)
-            //        j.RemoveAt(j.Count - 1);
-            //}
+                //    if (j != null && j.Count > 0)
+                //        j.RemoveAt(j.Count - 1);
+                //}
 
-            this.helplineRulerCtrl1.dbPanel1.Invalidate();
+                this.helplineRulerCtrl1.dbPanel1.Invalidate();
+            }
         }
 
         private void btnClearScribbles_Click(object sender, EventArgs e)
