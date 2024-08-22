@@ -499,7 +499,7 @@
             // cbLSBmp
             // 
             cbLSBmp.AutoSize = true;
-            cbLSBmp.Location = new Point(964, 93);
+            cbLSBmp.Location = new Point(967, 65);
             cbLSBmp.Margin = new Padding(4, 3, 4, 3);
             cbLSBmp.Name = "cbLSBmp";
             cbLSBmp.Size = new Size(90, 19);
