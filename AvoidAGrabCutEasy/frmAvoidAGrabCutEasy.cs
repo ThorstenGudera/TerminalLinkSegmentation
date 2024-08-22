@@ -445,6 +445,8 @@ namespace AvoidAGrabCutEasy
                 }
 
                 this._tracking = true;
+
+                this.helplineRulerCtrl1.dbPanel1.Invalidate();
             }
         }
 
@@ -479,7 +481,8 @@ namespace AvoidAGrabCutEasy
                 this.toolStripStatusLabel1.Text = ix.ToString() + "; " + iy.ToString();
                 this.ToolStripStatusLabel2.BackColor = c;
 
-                this.helplineRulerCtrl1.dbPanel1.Invalidate();
+                if(_tracking4 || _tracking)
+                    this.helplineRulerCtrl1.dbPanel1.Invalidate();
             }
         }
 
