@@ -689,37 +689,37 @@ namespace AvoidAGrabCutEasy
                             }
                         }
                     }
+                }
 
-                    if (this._points2.Count > 0)
+                if (this._points2.Count > 0)
+                {
+                    Color c = this.rbFG.Checked ? Color.White : this.rbBG.Checked ? Color.Black : Color.Gray;
+
+                    using (GraphicsPath gp = new GraphicsPath())
                     {
-                        Color c = this.rbFG.Checked ? Color.White : this.rbBG.Checked ? Color.Black : Color.Gray;
-
-                        using (GraphicsPath gp = new GraphicsPath())
+                        if (this._points2.Count > 1)
                         {
-                            if (this._points2.Count > 1)
+                            foreach (Point pt in this._points2)
                             {
-                                foreach (Point pt in this._points2)
-                                {
-                                    using (SolidBrush sb = new SolidBrush(c))
-                                        e.Graphics.FillRectangle(sb, new Rectangle(
-                                            (int)((int)(pt.X - (int)this.numWHScribbles.Value / 2) * this.helplineRulerCtrl1.Zoom) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X,
-                                            (int)((int)(pt.Y - (int)this.numWHScribbles.Value / 2) * this.helplineRulerCtrl1.Zoom) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y,
-                                            (int)((int)this.numWHScribbles.Value * this.helplineRulerCtrl1.Zoom),
-                                            (int)((int)this.numWHScribbles.Value * this.helplineRulerCtrl1.Zoom)));
-                                }
+                                using (SolidBrush sb = new SolidBrush(c))
+                                    e.Graphics.FillRectangle(sb, new Rectangle(
+                                        (int)((int)(pt.X - (int)this.numWHScribbles.Value / 2) * this.helplineRulerCtrl1.Zoom) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X,
+                                        (int)((int)(pt.Y - (int)this.numWHScribbles.Value / 2) * this.helplineRulerCtrl1.Zoom) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y,
+                                        (int)((int)this.numWHScribbles.Value * this.helplineRulerCtrl1.Zoom),
+                                        (int)((int)this.numWHScribbles.Value * this.helplineRulerCtrl1.Zoom)));
                             }
                         }
                     }
-
-                    int wh2 = (int)this.numWHScribbles.Value;
-
-                    using (SolidBrush sb = new SolidBrush(Color.FromArgb(95, 255, 0, 0)))
-                        e.Graphics.FillRectangle(sb, new RectangleF(
-                            this._eX2 - (float)(wh2 / 2f * this.helplineRulerCtrl1.Zoom) - 1f,
-                            this._eY2 - (float)(wh2 / 2f * this.helplineRulerCtrl1.Zoom) - 1f,
-                            (float)(wh2 * this.helplineRulerCtrl1.Zoom),
-                            (float)(wh2 * this.helplineRulerCtrl1.Zoom)));
                 }
+
+                int wh2 = (int)this.numWHScribbles.Value;
+
+                using (SolidBrush sb = new SolidBrush(Color.FromArgb(95, 255, 0, 0)))
+                    e.Graphics.FillRectangle(sb, new RectangleF(
+                        this._eX2 - (float)(wh2 / 2f * this.helplineRulerCtrl1.Zoom) - 1f,
+                        this._eY2 - (float)(wh2 / 2f * this.helplineRulerCtrl1.Zoom) - 1f,
+                        (float)(wh2 * this.helplineRulerCtrl1.Zoom),
+                        (float)(wh2 * this.helplineRulerCtrl1.Zoom)));
 
                 if (this._ptHLC1BG.X > -1 && this._ptHLC1BG.Y > -1)
                 {
