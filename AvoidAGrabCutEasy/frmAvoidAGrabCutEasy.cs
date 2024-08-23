@@ -3967,11 +3967,6 @@ namespace AvoidAGrabCutEasy
                 FloodFillMethods.floodfill(b, ptSt.X, ptSt.Y, 7, startColor, replaceColor,
                     Int32.MaxValue, false, false, 1.0, false, false);
 
-                Form fff = new Form();
-                fff.BackgroundImage = b;
-                fff.BackgroundImageLayout = ImageLayout.Zoom;
-                fff.ShowDialog();
-
                 List<Point> ll = new List<Point>();
 
                 int w = b.Width;
@@ -4111,11 +4106,6 @@ namespace AvoidAGrabCutEasy
 
                 FloodFillMethods.floodfill(b, ptSt.X, ptSt.Y, 7, startColor, replaceColor,
                     Int32.MaxValue, false, false, 1.0, false, false);
-
-                Form fff = new Form();
-                fff.BackgroundImage = b;
-                fff.BackgroundImageLayout = ImageLayout.Zoom;
-                fff.ShowDialog();
 
                 List<Point> ll = new List<Point>();
 
