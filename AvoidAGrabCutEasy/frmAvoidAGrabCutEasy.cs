@@ -116,6 +116,7 @@ namespace AvoidAGrabCutEasy
         private Point _ptHLC1FG = new Point(-1, -1);
         private BitArray? _bitsBG;
         private BitArray? _bitsFG;
+        private Point _ptHLC1FGBG;
 
         public event EventHandler<string>? ShowInfo;
         //public event EventHandler<string> BoundaryError;
@@ -424,7 +425,7 @@ namespace AvoidAGrabCutEasy
                     this._eY = eY;
                 }
 
-                if (this.cbScribbleMode.Checked && !this.cbRefPtBG.Checked && !this.cbRefPtFG.Checked)
+                if (this.cbScribbleMode.Checked && !this.cbRefPtBG.Checked && !this.cbRefPtFG.Checked && e.Button == MouseButtons.Left)
                 {
                     this._points2.Add(new Point(ix, iy));
                     this._tracking4 = true;
@@ -442,6 +443,12 @@ namespace AvoidAGrabCutEasy
                     this._ptHLC1FG = new Point(ix, iy);
                     this.btnFloodFG.Enabled = true;
                     this.cbRefPtFG.Checked = false;
+                }
+
+                if (e.Button == MouseButtons.Right)
+                {
+                    this._ptHLC1FGBG = new Point(ix, iy);
+                    this.contextMenuStrip1.Show(this.helplineRulerCtrl1.dbPanel1, e.X, e.Y);
                 }
 
                 this._tracking = true;
@@ -481,7 +488,7 @@ namespace AvoidAGrabCutEasy
                 this.toolStripStatusLabel1.Text = ix.ToString() + "; " + iy.ToString();
                 this.ToolStripStatusLabel2.BackColor = c;
 
-                if(_tracking4 || _tracking)
+                if (_tracking4 || _tracking)
                     this.helplineRulerCtrl1.dbPanel1.Invalidate();
             }
         }
@@ -2456,19 +2463,23 @@ namespace AvoidAGrabCutEasy
             {
                 this._points2.Clear();
 
-                using (frmLastScribbles frm = new frmLastScribbles(this.helplineRulerCtrl1.Bmp, this._scribbles))
-                    frm.ShowDialog();
+                if (this.cbLastDrawn.Checked)
+                {
+                    int fg = this.rbFG.Checked ? 1 : this.rbBG.Checked ? 0 : 3;
+                    int wh = (int)this.numWHScribbles.Value;
 
-                //int fg = this.rbFG.Checked ? 1 : this.rbBG.Checked ? 0 : 3;
-                //int wh = (int)this.numWHScribbles.Value;
+                    if (this._scribbles != null && this._scribbles.ContainsKey(fg) && this._scribbles[fg].ContainsKey(wh))
+                    {
+                        List<List<Point>> j = this._scribbles[fg][wh];
 
-                //if (this._scribbles != null && this._scribbles.ContainsKey(fg) && this._scribbles[fg].ContainsKey(wh))
-                //{
-                //    List<List<Point>> j = this._scribbles[fg][wh];
+                        if (j != null && j.Count > 0)
+                            j.RemoveAt(j.Count - 1);
+                    }
+                }
+                else
+                    using (frmLastScribbles frm = new frmLastScribbles(this.helplineRulerCtrl1.Bmp, this._scribbles))
+                        frm.ShowDialog();
 
-                //    if (j != null && j.Count > 0)
-                //        j.RemoveAt(j.Count - 1);
-                //}
 
                 this.helplineRulerCtrl1.dbPanel1.Invalidate();
             }
@@ -4175,6 +4186,24 @@ namespace AvoidAGrabCutEasy
         private void cbRefPtFG_CheckedChanged(object sender, EventArgs e)
         {
             this.cbRefPtBG.Checked = false;
+        }
+
+        private void floodBGToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Point pt = this._ptHLC1BG;
+            this._ptHLC1BG = this._ptHLC1FGBG;
+            this.btnFloodBG.Enabled = true;
+            this.btnFloodBG.PerformClick();
+            this._ptHLC1BG = pt;
+        }
+
+        private void floodFGToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Point pt = this._ptHLC1FG;
+            this._ptHLC1FG = this._ptHLC1FGBG;
+            this.btnFloodFG.Enabled = true;
+            this.btnFloodFG.PerformClick();
+            this._ptHLC1FG = pt;
         }
     }
 }

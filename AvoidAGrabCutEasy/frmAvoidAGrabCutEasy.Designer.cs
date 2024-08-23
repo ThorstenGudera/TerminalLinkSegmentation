@@ -30,6 +30,7 @@
         {
             components = new System.ComponentModel.Container();
             panel1 = new Panel();
+            cbLastDrawn = new CheckBox();
             rbUnknown = new RadioButton();
             cbRefPtFG = new CheckBox();
             cbRefPtBG = new CheckBox();
@@ -124,6 +125,9 @@
             toolTip1 = new ToolTip(components);
             backgroundWorker2 = new System.ComponentModel.BackgroundWorker();
             openFileDialog1 = new OpenFileDialog();
+            contextMenuStrip1 = new ContextMenuStrip(components);
+            floodBGToolStripMenuItem = new ToolStripMenuItem();
+            floodFGToolStripMenuItem = new ToolStripMenuItem();
             panel1.SuspendLayout();
             panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numWH).BeginInit();
@@ -144,10 +148,12 @@
             splitContainer1.Panel2.SuspendLayout();
             splitContainer1.SuspendLayout();
             statusStrip1.SuspendLayout();
+            contextMenuStrip1.SuspendLayout();
             SuspendLayout();
             // 
             // panel1
             // 
+            panel1.Controls.Add(cbLastDrawn);
             panel1.Controls.Add(rbUnknown);
             panel1.Controls.Add(cbRefPtFG);
             panel1.Controls.Add(cbRefPtBG);
@@ -231,6 +237,18 @@
             panel1.TabIndex = 0;
             panel1.MouseDoubleClick += panel1_MouseDoubleClick;
             panel1.MouseDown += panel1_MouseDown;
+            // 
+            // cbLastDrawn
+            // 
+            cbLastDrawn.AutoSize = true;
+            cbLastDrawn.Checked = true;
+            cbLastDrawn.CheckState = CheckState.Checked;
+            cbLastDrawn.Location = new Point(699, 64);
+            cbLastDrawn.Name = "cbLastDrawn";
+            cbLastDrawn.Size = new Size(80, 19);
+            cbLastDrawn.TabIndex = 692;
+            cbLastDrawn.Text = "last drawn";
+            cbLastDrawn.UseVisualStyleBackColor = true;
             // 
             // rbUnknown
             // 
@@ -1274,6 +1292,26 @@
             openFileDialog1.FileName = "openFileDialog1";
             openFileDialog1.Filter = "Images - (*.bmp;*.jpg;*.jpeg;*.jfif;*.png)|*.bmp;*.jpg;*.jpeg;*.jfif;*.png";
             // 
+            // contextMenuStrip1
+            // 
+            contextMenuStrip1.Items.AddRange(new ToolStripItem[] { floodBGToolStripMenuItem, floodFGToolStripMenuItem });
+            contextMenuStrip1.Name = "contextMenuStrip1";
+            contextMenuStrip1.Size = new Size(181, 70);
+            // 
+            // floodBGToolStripMenuItem
+            // 
+            floodBGToolStripMenuItem.Name = "floodBGToolStripMenuItem";
+            floodBGToolStripMenuItem.Size = new Size(180, 22);
+            floodBGToolStripMenuItem.Text = "Flood BG";
+            floodBGToolStripMenuItem.Click += floodBGToolStripMenuItem_Click;
+            // 
+            // floodFGToolStripMenuItem
+            // 
+            floodFGToolStripMenuItem.Name = "floodFGToolStripMenuItem";
+            floodFGToolStripMenuItem.Size = new Size(180, 22);
+            floodFGToolStripMenuItem.Text = "Flood FG";
+            floodFGToolStripMenuItem.Click += floodFGToolStripMenuItem_Click;
+            // 
             // frmAvoidAGrabCutEasy
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -1312,6 +1350,7 @@
             splitContainer1.ResumeLayout(false);
             statusStrip1.ResumeLayout(false);
             statusStrip1.PerformLayout();
+            contextMenuStrip1.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
         }
@@ -1413,5 +1452,9 @@
         private Label label14;
         private Button btnFloodFG;
         private Button btnFloodBG;
+        private CheckBox cbLastDrawn;
+        private ContextMenuStrip contextMenuStrip1;
+        private ToolStripMenuItem floodBGToolStripMenuItem;
+        private ToolStripMenuItem floodFGToolStripMenuItem;
     }
 }
