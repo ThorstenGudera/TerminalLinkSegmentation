@@ -117,6 +117,7 @@ namespace AvoidAGrabCutEasy
         private BitArray? _bitsBG;
         private BitArray? _bitsFG;
         private Point _ptHLC1FGBG;
+        private List<Tuple<int, int, int>> _scribbleSeq = new List<Tuple<int, int, int>>();
 
         public event EventHandler<string>? ShowInfo;
         //public event EventHandler<string> BoundaryError;
@@ -542,9 +543,13 @@ namespace AvoidAGrabCutEasy
                 if (!this._scribbles[fgbg].ContainsKey(wh))
                     this._scribbles[fgbg].Add(wh, new List<List<Point>>());
 
+                if (this._scribbleSeq == null)
+                    this._scribbleSeq = new List<Tuple<int, int, int>>();
+
                 List<List<Point>> whPts = this._scribbles[fgbg][wh];
                 whPts.Add(new List<Point>());
                 whPts[whPts.Count - 1].AddRange(this._points2.ToArray());
+                this._scribbleSeq.Add(Tuple.Create(fgbg, wh, this._scribbles[fgbg][wh].Count - 1));
             }
         }
 
@@ -562,128 +567,175 @@ namespace AvoidAGrabCutEasy
                 if (this._scribbles == null)
                     this._scribbles = new Dictionary<int, Dictionary<int, List<List<Point>>>>();
 
-                if (this._scribbles.ContainsKey(0)) //BG
+                if (this._scribbleSeq != null && this._scribbleSeq.Count > 0)
                 {
-                    if (this._scribbles[0] != null)
+                    foreach (Tuple<int, int, int> f in this._scribbleSeq)
                     {
-                        foreach (int wh in this._scribbles[0].Keys)
+                        int l = f.Item1;
+                        int wh = f.Item2;
+                        int listNo = f.Item3;
+
+                        List<List<Point>> ptsList = this._scribbles[l][wh];
+
+                        if (ptsList != null && ptsList.Count > 0)
                         {
-                            List<List<Point>> whPts = this._scribbles[0][wh];
+                            bool doRect = ptsList[listNo].Count > 1;
 
-                            foreach (List<Point> pts in whPts)
+                            Color c = l == 0 ? Color.Black : l == 1 ? Color.White : Color.Gray;
+
+                            if (doRect)
                             {
-                                bool doRect = pts.Count > 1;
-                                Color c = Color.Black;
-
-                                if (doRect)
+                                foreach (Point pt in ptsList[listNo])
                                 {
-                                    foreach (Point pt in pts)
-                                    {
-                                        using (SolidBrush sb = new SolidBrush(c))
-                                            e.Graphics.FillRectangle(sb, new Rectangle(
-                                                (int)((int)(pt.X - wh / 2) * this.helplineRulerCtrl1.Zoom) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X,
-                                                (int)((int)(pt.Y - wh / 2) * this.helplineRulerCtrl1.Zoom) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y,
-                                                (int)(wh * this.helplineRulerCtrl1.Zoom),
-                                                (int)(wh * this.helplineRulerCtrl1.Zoom)));
-                                    }
+                                    using (SolidBrush sb = new SolidBrush(c))
+                                        e.Graphics.FillRectangle(sb, new Rectangle(
+                                            (int)((int)(pt.X - wh / 2) * this.helplineRulerCtrl1.Zoom) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X,
+                                            (int)((int)(pt.Y - wh / 2) * this.helplineRulerCtrl1.Zoom) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y,
+                                            (int)(wh * this.helplineRulerCtrl1.Zoom),
+                                            (int)(wh * this.helplineRulerCtrl1.Zoom)));
                                 }
-                                else
+                            }
+                            else
+                            {
+                                if (ptsList[listNo].Count > 0)
                                 {
-                                    if (pts.Count > 0)
-                                    {
-                                        Point pt = pts[0];
-                                        using (SolidBrush sb = new SolidBrush(c))
-                                            e.Graphics.FillRectangle(sb, new Rectangle(
-                                                (int)((int)(pt.X - wh / 2) * this.helplineRulerCtrl1.Zoom) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X,
-                                                (int)((int)(pt.Y - wh / 2) * this.helplineRulerCtrl1.Zoom) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y,
-                                                (int)(wh * this.helplineRulerCtrl1.Zoom),
-                                                (int)(wh * this.helplineRulerCtrl1.Zoom)));
-                                    }
+                                    Point pt = ptsList[listNo][0];
+                                    using (SolidBrush sb = new SolidBrush(c))
+                                        e.Graphics.FillRectangle(sb, new Rectangle(
+                                            (int)((int)(pt.X - wh / 2) * this.helplineRulerCtrl1.Zoom) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X,
+                                            (int)((int)(pt.Y - wh / 2) * this.helplineRulerCtrl1.Zoom) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y,
+                                            (int)(wh * this.helplineRulerCtrl1.Zoom),
+                                            (int)(wh * this.helplineRulerCtrl1.Zoom)));
                                 }
                             }
                         }
                     }
                 }
-
-                if (this._scribbles.ContainsKey(1)) //FG
+                else
                 {
-                    if (this._scribbles[1] != null)
+                    if (this._scribbles.ContainsKey(0)) //BG
                     {
-                        foreach (int wh in this._scribbles[1].Keys)
+                        if (this._scribbles[0] != null)
                         {
-                            List<List<Point>> whPts = this._scribbles[1][wh];
-
-                            foreach (List<Point> pts in whPts)
+                            foreach (int wh in this._scribbles[0].Keys)
                             {
-                                bool doRect = pts.Count > 1;
-                                Color c = Color.White;
+                                List<List<Point>> whPts = this._scribbles[0][wh];
 
-                                if (doRect)
+                                foreach (List<Point> pts in whPts)
                                 {
-                                    foreach (Point pt in pts)
+                                    bool doRect = pts.Count > 1;
+                                    Color c = Color.Black;
+
+                                    if (doRect)
                                     {
-                                        using (SolidBrush sb = new SolidBrush(c))
-                                            e.Graphics.FillRectangle(sb, new Rectangle(
-                                                (int)((int)(pt.X - wh / 2) * this.helplineRulerCtrl1.Zoom) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X,
-                                                (int)((int)(pt.Y - wh / 2) * this.helplineRulerCtrl1.Zoom) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y,
-                                                (int)(wh * this.helplineRulerCtrl1.Zoom),
-                                                (int)(wh * this.helplineRulerCtrl1.Zoom)));
+                                        foreach (Point pt in pts)
+                                        {
+                                            using (SolidBrush sb = new SolidBrush(c))
+                                                e.Graphics.FillRectangle(sb, new Rectangle(
+                                                    (int)((int)(pt.X - wh / 2) * this.helplineRulerCtrl1.Zoom) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X,
+                                                    (int)((int)(pt.Y - wh / 2) * this.helplineRulerCtrl1.Zoom) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y,
+                                                    (int)(wh * this.helplineRulerCtrl1.Zoom),
+                                                    (int)(wh * this.helplineRulerCtrl1.Zoom)));
+                                        }
                                     }
-                                }
-                                else
-                                {
-                                    if (pts.Count > 0)
+                                    else
                                     {
-                                        Point pt = pts[0];
-                                        using (SolidBrush sb = new SolidBrush(c))
-                                            e.Graphics.FillRectangle(sb, new Rectangle(
-                                                (int)((int)(pt.X - wh / 2) * this.helplineRulerCtrl1.Zoom) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X,
-                                                (int)((int)(pt.Y - wh / 2) * this.helplineRulerCtrl1.Zoom) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y,
-                                                (int)(wh * this.helplineRulerCtrl1.Zoom),
-                                                (int)(wh * this.helplineRulerCtrl1.Zoom)));
+                                        if (pts.Count > 0)
+                                        {
+                                            Point pt = pts[0];
+                                            using (SolidBrush sb = new SolidBrush(c))
+                                                e.Graphics.FillRectangle(sb, new Rectangle(
+                                                    (int)((int)(pt.X - wh / 2) * this.helplineRulerCtrl1.Zoom) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X,
+                                                    (int)((int)(pt.Y - wh / 2) * this.helplineRulerCtrl1.Zoom) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y,
+                                                    (int)(wh * this.helplineRulerCtrl1.Zoom),
+                                                    (int)(wh * this.helplineRulerCtrl1.Zoom)));
+                                        }
                                     }
                                 }
                             }
                         }
                     }
-                }
 
-                if (this._scribbles.ContainsKey(3)) //Unknown
-                {
-                    if (this._scribbles[3] != null)
+                    if (this._scribbles.ContainsKey(1)) //FG
                     {
-                        foreach (int wh in this._scribbles[3].Keys)
+                        if (this._scribbles[1] != null)
                         {
-                            List<List<Point>> whPts = this._scribbles[3][wh];
-
-                            foreach (List<Point> pts in whPts)
+                            foreach (int wh in this._scribbles[1].Keys)
                             {
-                                bool doRect = pts.Count > 1;
-                                Color c = Color.Gray;
+                                List<List<Point>> whPts = this._scribbles[1][wh];
 
-                                if (doRect)
+                                foreach (List<Point> pts in whPts)
                                 {
-                                    foreach (Point pt in pts)
+                                    bool doRect = pts.Count > 1;
+                                    Color c = Color.White;
+
+                                    if (doRect)
                                     {
-                                        using (SolidBrush sb = new SolidBrush(c))
-                                            e.Graphics.FillRectangle(sb, new Rectangle(
-                                                (int)((int)(pt.X - wh / 2) * this.helplineRulerCtrl1.Zoom) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X,
-                                                (int)((int)(pt.Y - wh / 2) * this.helplineRulerCtrl1.Zoom) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y,
-                                                (int)(wh * this.helplineRulerCtrl1.Zoom),
-                                                (int)(wh * this.helplineRulerCtrl1.Zoom)));
+                                        foreach (Point pt in pts)
+                                        {
+                                            using (SolidBrush sb = new SolidBrush(c))
+                                                e.Graphics.FillRectangle(sb, new Rectangle(
+                                                    (int)((int)(pt.X - wh / 2) * this.helplineRulerCtrl1.Zoom) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X,
+                                                    (int)((int)(pt.Y - wh / 2) * this.helplineRulerCtrl1.Zoom) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y,
+                                                    (int)(wh * this.helplineRulerCtrl1.Zoom),
+                                                    (int)(wh * this.helplineRulerCtrl1.Zoom)));
+                                        }
+                                    }
+                                    else
+                                    {
+                                        if (pts.Count > 0)
+                                        {
+                                            Point pt = pts[0];
+                                            using (SolidBrush sb = new SolidBrush(c))
+                                                e.Graphics.FillRectangle(sb, new Rectangle(
+                                                    (int)((int)(pt.X - wh / 2) * this.helplineRulerCtrl1.Zoom) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X,
+                                                    (int)((int)(pt.Y - wh / 2) * this.helplineRulerCtrl1.Zoom) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y,
+                                                    (int)(wh * this.helplineRulerCtrl1.Zoom),
+                                                    (int)(wh * this.helplineRulerCtrl1.Zoom)));
+                                        }
                                     }
                                 }
-                                else
+                            }
+                        }
+                    }
+
+                    if (this._scribbles.ContainsKey(3)) //Unknown
+                    {
+                        if (this._scribbles[3] != null)
+                        {
+                            foreach (int wh in this._scribbles[3].Keys)
+                            {
+                                List<List<Point>> whPts = this._scribbles[3][wh];
+
+                                foreach (List<Point> pts in whPts)
                                 {
-                                    if (pts.Count > 0)
+                                    bool doRect = pts.Count > 1;
+                                    Color c = Color.Gray;
+
+                                    if (doRect)
                                     {
-                                        Point pt = pts[0];
-                                        using (SolidBrush sb = new SolidBrush(c))
-                                            e.Graphics.FillRectangle(sb, new Rectangle(
-                                                (int)((int)(pt.X - wh / 2) * this.helplineRulerCtrl1.Zoom) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X,
-                                                (int)((int)(pt.Y - wh / 2) * this.helplineRulerCtrl1.Zoom) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y,
-                                                (int)(wh * this.helplineRulerCtrl1.Zoom),
-                                                (int)(wh * this.helplineRulerCtrl1.Zoom)));
+                                        foreach (Point pt in pts)
+                                        {
+                                            using (SolidBrush sb = new SolidBrush(c))
+                                                e.Graphics.FillRectangle(sb, new Rectangle(
+                                                    (int)((int)(pt.X - wh / 2) * this.helplineRulerCtrl1.Zoom) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X,
+                                                    (int)((int)(pt.Y - wh / 2) * this.helplineRulerCtrl1.Zoom) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y,
+                                                    (int)(wh * this.helplineRulerCtrl1.Zoom),
+                                                    (int)(wh * this.helplineRulerCtrl1.Zoom)));
+                                        }
+                                    }
+                                    else
+                                    {
+                                        if (pts.Count > 0)
+                                        {
+                                            Point pt = pts[0];
+                                            using (SolidBrush sb = new SolidBrush(c))
+                                                e.Graphics.FillRectangle(sb, new Rectangle(
+                                                    (int)((int)(pt.X - wh / 2) * this.helplineRulerCtrl1.Zoom) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X,
+                                                    (int)((int)(pt.Y - wh / 2) * this.helplineRulerCtrl1.Zoom) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y,
+                                                    (int)(wh * this.helplineRulerCtrl1.Zoom),
+                                                    (int)(wh * this.helplineRulerCtrl1.Zoom)));
+                                        }
                                     }
                                 }
                             }
@@ -1585,6 +1637,7 @@ namespace AvoidAGrabCutEasy
                 ListSelectionMode selMode = (ListSelectionMode)o[22];
                 bool scribbleMode = (bool)o[23];
                 Dictionary<int, Dictionary<int, List<List<Point>>>>? scribbles = this._scribbles;
+                List<Tuple<int, int, int>> scribbleSeq = this._scribbleSeq;
                 double probMult1 = (double)o[24];
                 double kmInitW = (double)o[25];
                 double kmInitH = (double)o[26];
@@ -1685,7 +1738,8 @@ namespace AvoidAGrabCutEasy
                         KMeansInitIters = KMeansInitIters,
                         kMInitRnd = kMInitRnd,
                         KMeansIters = KMeansIters,
-                        AssumeExpDist = assumeExpDist
+                        AssumeExpDist = assumeExpDist,
+                        ScribbleSeq = scribbleSeq
                     };
 
                     this._gc.ShowInfo += _gc_ShowInfo;
@@ -1756,6 +1810,7 @@ namespace AvoidAGrabCutEasy
                     this._gc.kMInitRnd = kMInitRnd;
                     this._gc.KMeansIters = KMeansIters;
                     this._gc.AssumeExpDist = assumeExpDist;
+                    this._gc.ScribbleSeq = scribbleSeq;
 
                     if (!workOnPaths && this._gc.ScribbleMode && this._gc.Scribbles != null && this._gc.Scribbles.Count > 0)
                     {
@@ -2474,12 +2529,41 @@ namespace AvoidAGrabCutEasy
 
                         if (j != null && j.Count > 0)
                             j.RemoveAt(j.Count - 1);
+
+                        if (this._scribbleSeq != null && j != null)
+                        {
+                            IEnumerable<Tuple<int, int, int>> l = this._scribbleSeq.Where(a => a.Item1 == fg);
+                            if (l != null && l.Count() > 0)
+                            {
+                                IEnumerable<Tuple<int, int, int>> whL = l.Where(a => a.Item2 == wh);
+
+                                if (whL != null && whL.Count() > 0)
+                                {
+                                    IEnumerable<Tuple<int, int, int>> listL = whL.Where(a => a.Item3 == j.Count - 1);
+
+                                    if (listL != null && listL.Count() > 0)
+                                    {
+                                        int indxt = this._scribbleSeq.IndexOf(listL.First());
+
+                                        for (int j4 = indxt + 1; j4 < this._scribbleSeq.Count; j4++)
+                                        {
+                                            if (this._scribbleSeq[j4].Item1 == fg && this._scribbleSeq[j4].Item2 == wh)
+                                                this._scribbleSeq[j4] = Tuple.Create(fg, wh, this._scribbleSeq[j4].Item3 - 1);
+                                        }
+
+                                        this._scribbleSeq.Remove(listL.First());
+                                    }
+                                }
+                            }
+                        }
+
+                        //if (this._scribbleSeq != null)
+                        //    this._scribbleSeq.RemoveAt(this._scribbleSeq.Count - 1);
                     }
                 }
                 else
-                    using (frmLastScribbles frm = new frmLastScribbles(this.helplineRulerCtrl1.Bmp, this._scribbles))
+                    using (frmLastScribbles frm = new frmLastScribbles(this.helplineRulerCtrl1.Bmp, this._scribbles, this._scribbleSeq))
                         frm.ShowDialog();
-
 
                 this.helplineRulerCtrl1.dbPanel1.Invalidate();
             }
@@ -2490,6 +2574,8 @@ namespace AvoidAGrabCutEasy
             this._points2.Clear();
             if (this._scribbles != null)
                 this._scribbles.Clear();
+            if (this._scribbleSeq != null)
+                this._scribbleSeq.Clear();
             this.helplineRulerCtrl1.dbPanel1.Invalidate();
         }
 
@@ -2861,6 +2947,7 @@ namespace AvoidAGrabCutEasy
                 ListSelectionMode selMode = (ListSelectionMode)o[22];
                 bool scribbleMode = (bool)o[23];
                 Dictionary<int, Dictionary<int, List<List<Point>>>>? scribbles = this._scribbles;
+                List<Tuple<int, int, int>> scribbleSeq = this._scribbleSeq;
                 double probMult1 = (double)o[24];
                 double kmInitW = (double)o[25];
                 double kmInitH = (double)o[26];
@@ -2954,7 +3041,8 @@ namespace AvoidAGrabCutEasy
                         KMeansInitIters = KMeansInitIters,
                         kMInitRnd = kMInitRnd,
                         KMeansIters = KMeansIters,
-                        AssumeExpDist = assumeExpDist
+                        AssumeExpDist = assumeExpDist,
+                        ScribbleSeq = scribbleSeq
                     };
 
                     this._gc.ShowInfo += _gc_ShowInfo;
@@ -3023,6 +3111,7 @@ namespace AvoidAGrabCutEasy
                     this._gc.kMInitRnd = kMInitRnd;
                     this._gc.KMeansIters = KMeansIters;
                     this._gc.AssumeExpDist = assumeExpDist;
+                    this._gc.ScribbleSeq = scribbleSeq;
 
                     if (!workOnPaths && this._gc.ScribbleMode && this._gc.Scribbles != null && this._gc.Scribbles.Count > 0)
                     {
@@ -3413,6 +3502,7 @@ namespace AvoidAGrabCutEasy
             if (this.openFileDialog1.ShowDialog() == DialogResult.OK)
             {
                 SavedScribbles? f = DeserializeF(this.openFileDialog1.FileName);
+                btnClearScribbles.PerformClick();
 
                 if (f != null)
                 {
@@ -3445,6 +3535,9 @@ namespace AvoidAGrabCutEasy
                             this.cmbZoom_SelectedIndexChanged(this.cmbZoom, new EventArgs());
                         }
                     }
+
+                    if (f.ScribbleSequence != null)
+                        this._scribbleSeq = f.ScribbleSequence;
 
                     this.helplineRulerCtrl1.dbPanel1.Invalidate();
 
@@ -3543,6 +3636,9 @@ namespace AvoidAGrabCutEasy
                     if (b64 != null)
                         f.Bmp = b64;
                 }
+
+                if (this._scribbleSeq != null)
+                    f.ScribbleSequence = this._scribbleSeq;
 
                 WriteToFile(f);
 
@@ -4003,26 +4099,11 @@ namespace AvoidAGrabCutEasy
                 if (!this._scribbles[0].ContainsKey(3))
                     this._scribbles[0].Add(3, new List<List<Point>>());
 
-                //List<List<Point>> z = this._scribbles[0][3];
-
-                //for (int l = 0; l < z.Count; l++)
-                //{
-                //    List<Point> zz = z[l];
-
-                //    for (int lp = 0; lp < zz.Count; lp++)
-                //    {
-                //        for (int j = 0; j < ll.Count; j++)
-                //        {
-                //            if (zz[lp].X == ll[j].X && zz[lp].Y == ll[j].Y)
-                //            {
-                //                ll.RemoveAt(j);
-                //                break;
-                //            }
-                //        }
-                //    }
-                //}
+                if (this._scribbleSeq == null)
+                    this._scribbleSeq = new List<Tuple<int, int, int>>();
 
                 this._scribbles[0][3].Add(ll.Distinct().ToList());
+                this._scribbleSeq.Add(Tuple.Create(0, 3, this._scribbles[0][3].Count - 1));
 
                 this.helplineRulerCtrl1.dbPanel1.Invalidate();
             }
@@ -4143,26 +4224,11 @@ namespace AvoidAGrabCutEasy
                 if (!this._scribbles[1].ContainsKey(3))
                     this._scribbles[1].Add(3, new List<List<Point>>());
 
-                //List<List<Point>> z = this._scribbles[1][3];
-
-                //for (int l = 0; l < z.Count; l++)
-                //{
-                //    List<Point> zz = z[l];
-
-                //    for (int lp = 0; lp < zz.Count; lp++)
-                //    {
-                //        for (int j = 0; j < ll.Count; j++)
-                //        {
-                //            if (zz[lp].X == ll[j].X && zz[lp].Y == ll[j].Y)
-                //            {
-                //                ll.RemoveAt(j);
-                //                break;
-                //            }
-                //        }
-                //    }
-                //}
+                if (this._scribbleSeq == null)
+                    this._scribbleSeq = new List<Tuple<int, int, int>>();
 
                 this._scribbles[1][3].Add(ll.Distinct().ToList());
+                this._scribbleSeq.Add(Tuple.Create(1, 3, this._scribbles[1][3].Count - 1));
 
                 this.helplineRulerCtrl1.dbPanel1.Invalidate();
             }
@@ -4194,6 +4260,78 @@ namespace AvoidAGrabCutEasy
             this.btnFloodFG.Enabled = true;
             this.btnFloodFG.PerformClick();
             this._ptHLC1FG = pt;
+        }
+
+        private void btnChaincode_Click(object sender, EventArgs e)
+        {
+            if (this.helplineRulerCtrl1.Bmp != null && this.CachePathAddition != null)
+            {
+                //the idea is to get a rich derivative pic of hlc1.Bmp
+                //replace all black by transp and get the chains
+                using (Bitmap? b = new Bitmap(this.helplineRulerCtrl1.Bmp))
+                {
+                    using (frmChainCode frm = new frmChainCode(b, this.CachePathAddition))
+                    {
+                        frm.SetupCache();
+                        frm.numWHScribbles.Value = this.numWHScribbles.Value;
+
+                        if (frm.ShowDialog() == DialogResult.OK)
+                        {
+                            int wh = (int)frm.numWHScribbles.Value;
+
+                            //GraphicsPath? gP = null;
+
+                            //if(frm.SelectedPath != null)
+                            //    gP = (GraphicsPath?)frm.SelectedPath.Clone();
+
+                            //if(gP != null && gP.PointCount > 1)
+                            //{
+
+                            //}
+
+                            List<ChainCode>? c = frm.SelectedChains;
+                            List<ChainDetails>? cd = frm.ChainDetails;
+
+                            if (cd != null)
+                            {
+                                for (int j = 0; j < cd.Count; j++)
+                                    MessageBox.Show(cd[j].ID.ToString() + " -> " + cd[j].Cnt.ToString());
+                            }
+
+                            if (c != null)
+                            {
+                                if (this._scribbles == null)
+                                    this._scribbles = new Dictionary<int, Dictionary<int, List<List<Point>>>>();
+
+                                if (!this._scribbles.ContainsKey(3))
+                                    this._scribbles.Add(3, new Dictionary<int, List<List<Point>>>());
+
+                                if (this._scribbleSeq == null)
+                                    this._scribbleSeq = new List<Tuple<int, int, int>>();
+
+                                foreach (ChainCode cc in c)
+                                {
+                                    List<Point> pts = cc.Coord;
+
+                                    if (pts.Count > 0)
+                                    {
+                                        if (!this._scribbles[3].ContainsKey(wh))
+                                            this._scribbles[3].Add(wh, new List<List<Point>>());
+
+                                        List<Point> points = new List<Point>();
+                                        points.AddRange(pts.Distinct().ToArray());
+                                        this._scribbles[3][wh].Add(points);
+                                        this._scribbleSeq.Add(Tuple.Create(3, wh, this._scribbles[3][wh].Count - 1));
+                                    }
+                                }
+                            }
+
+                            this.cbScribbleMode.Checked = true;
+                            this.helplineRulerCtrl1.dbPanel1.Invalidate();
+                        }
+                    }
+                }
+            }
         }
     }
 }

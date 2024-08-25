@@ -13,15 +13,17 @@ namespace AvoidAGrabCutEasy
     public partial class frmLastScribbles : Form
     {
         private Dictionary<int, Dictionary<int, List<List<Point>>>>? _scribbles;
+        private List<Tuple<int, int, int>>? _scribbleSeq;
         private float _zoom;
         private Rectangle? _rc;
         private List<PointF>? _displayPoints;
         private List<Point>? _currentList;
 
-        public frmLastScribbles(Bitmap bmp, Dictionary<int, Dictionary<int, List<List<Point>>>>? scribbles)
+        public frmLastScribbles(Bitmap bmp, Dictionary<int, Dictionary<int, List<List<Point>>>>? scribbles, List<Tuple<int, int, int>>? scribbleSeq)
         {
             InitializeComponent();
             this._scribbles = scribbles;
+            this._scribbleSeq = scribbleSeq;
             this.pictureBox1.Image = bmp;
 
             this._rc = this.GetImageRectangle();
@@ -142,6 +144,33 @@ namespace AvoidAGrabCutEasy
                             {
                                 this.listBox2.SuspendLayout();
                                 this._scribbles[fg][wh].RemoveAt(this.listBox2.SelectedIndex);
+                                if (this._scribbleSeq != null)
+                                {
+                                    IEnumerable<Tuple<int, int, int>> l = this._scribbleSeq.Where(a => a.Item1 == fg);
+                                    if (l != null && l.Count() > 0)
+                                    {
+                                        IEnumerable<Tuple<int, int, int>> whL = l.Where(a => a.Item2 == wh);
+
+                                        if (whL != null && whL.Count() > 0)
+                                        {
+                                            IEnumerable<Tuple<int, int, int>> listL = whL.Where(a => a.Item3 == this.listBox2.SelectedIndex);
+
+                                            if (listL != null && listL.Count() > 0)
+                                            {
+                                                int indxt = this._scribbleSeq.IndexOf(listL.First());
+
+                                                for (int j4 = indxt + 1; j4 < this._scribbleSeq.Count; j4++)
+                                                {
+                                                    if (this._scribbleSeq[j4].Item1 == fg && this._scribbleSeq[j4].Item2 == wh)
+                                                        this._scribbleSeq[j4] = Tuple.Create(fg, wh, this._scribbleSeq[j4].Item3 - 1);
+                                                }
+
+                                                this._scribbleSeq.Remove(listL.First());
+                                            }
+                                        }
+                                    }
+                                }
+
                                 listBox1_SelectedIndexChanged(listBox1, new EventArgs());
                                 this.listBox2.ResumeLayout();
                             }

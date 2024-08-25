@@ -81,6 +81,7 @@ namespace AvoidAGrabCutEasy
         public int KMeansIters { get; internal set; } = 0;
         public bool kMInitRnd { get; internal set; } = false;
         public bool AssumeExpDist { get; internal set; }
+        public List<Tuple<int, int, int>>? ScribbleSeq { get; internal set; }
 
         public event EventHandler<string>? ShowInfo;
 
@@ -105,81 +106,167 @@ namespace AvoidAGrabCutEasy
                 if (this.RectMode || this.ScribbleMode)
                     this.Mask = new int[this._w, this._h];
 
-                if (this.RectMode && this.ScribbleMode)
+                if (this.ScribbleSeq != null && this.ScribbleSeq.Count > 0)
                 {
-                    //rect part
-                    Parallel.For(0, this._h, y =>
+                    if (this.RectMode && this.ScribbleMode)
                     {
-                        if (this.Mask != null)
-                            for (int x = 0; x < this._w; x++)
-                            {
-                                if (this.Rc.Contains(x, y))
-                                    this.Mask[x, y] = 3;
-                                else
-                                    this.Mask[x, y] = 0;
-                            }
-                    });
-                    //scribble part
-                    if (this.Scribbles != null)
-                        foreach (int i in this.Scribbles.Keys)
+                        //rect part
+                        Parallel.For(0, this._h, y =>
                         {
-                            Dictionary<int, List<List<Point>>> allPts = this.Scribbles[i]; //dict = <BG/FG, <wh, pts>>
-
-                            foreach (int wh in allPts.Keys)
+                            if (this.Mask != null)
+                                for (int x = 0; x < this._w; x++)
+                                {
+                                    if (this.Rc.Contains(x, y))
+                                        this.Mask[x, y] = 3;
+                                    else
+                                        this.Mask[x, y] = 0;
+                                }
+                        });
+                        //scribble part
+                        if (this.Scribbles != null)
+                        {
+                            foreach (Tuple<int, int, int> f in this.ScribbleSeq)
                             {
+                                int l = f.Item1;
+                                int wh = f.Item2;
+                                int listNo = f.Item3;
                                 int wh2 = wh / 2;
 
-                                for (int j = 0; j < allPts[wh].Count; j++)
-                                {
-                                    List<Point> pts = allPts[wh][j];
+                                List<List<Point>> ptsList = this.Scribbles[l][wh];
 
-                                    foreach (Point pt in pts)
-                                        Rect(pt, i, wh2);
+                                if (ptsList != null && ptsList.Count > 0)
+                                {
+                                    foreach (Point pt in ptsList[listNo])
+                                    {
+                                        Rect(pt, l, wh2);
+                                    }
                                 }
                             }
                         }
+                    }
+                    //BG = 0, FG = 1, PrBG = 2, PrFG = 3
+                    else if (this.RectMode)
+                        //for (int y = 0; y < this._h; y++)
+                        Parallel.For(0, this._h, y =>
+                        {
+                            if (this.Mask != null)
+                                for (int x = 0; x < this._w; x++)
+                                {
+                                    if (this.Rc.Contains(x, y))
+                                        this.Mask[x, y] = 3;
+                                    else
+                                        this.Mask[x, y] = 0;
+                                }
+                        });
+                    else if (this.ScribbleMode)
+                    {
+                        Parallel.For(0, this._h, y =>
+                        {
+                            if (this.Mask != null)
+                                for (int x = 0; x < this._w; x++)
+                                    this.Mask[x, y] = 3;
+                        });
+
+                        if (this.Scribbles != null)
+                        {
+                            foreach (Tuple<int, int, int> f in this.ScribbleSeq)
+                            {
+                                int l = f.Item1;
+                                int wh = f.Item2;
+                                int listNo = f.Item3;
+                                int wh2 = wh / 2;
+
+                                List<List<Point>> ptsList = this.Scribbles[l][wh];
+
+                                if (ptsList != null && ptsList.Count > 0)
+                                {
+                                    foreach (Point pt in ptsList[listNo])
+                                    {
+                                        Rect(pt, l, wh2);
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
-                //BG = 0, FG = 1, PrBG = 2, PrFG = 3
-                else if (this.RectMode)
-                    //for (int y = 0; y < this._h; y++)
-                    Parallel.For(0, this._h, y =>
-                    {
-                        if (this.Mask != null)
-                            for (int x = 0; x < this._w; x++)
-                            {
-                                if (this.Rc.Contains(x, y))
-                                    this.Mask[x, y] = 3;
-                                else
-                                    this.Mask[x, y] = 0;
-                            }
-                    });
-                else if (this.ScribbleMode)
+                else
                 {
-                    Parallel.For(0, this._h, y =>
+                    if (this.RectMode && this.ScribbleMode)
                     {
-                        if (this.Mask != null)
-                            for (int x = 0; x < this._w; x++)
-                                this.Mask[x, y] = 3;
-                    });
-
-                    if (this.Scribbles != null)
-                        foreach (int i in this.Scribbles.Keys)
+                        //rect part
+                        Parallel.For(0, this._h, y =>
                         {
-                            Dictionary<int, List<List<Point>>> allPts = this.Scribbles[i]; //dict = <BG/FG, <wh, pts>>
-
-                            foreach (int wh in allPts.Keys)
-                            {
-                                int wh2 = wh / 2;
-
-                                for (int j = 0; j < allPts[wh].Count; j++)
+                            if (this.Mask != null)
+                                for (int x = 0; x < this._w; x++)
                                 {
-                                    List<Point> pts = allPts[wh][j];
+                                    if (this.Rc.Contains(x, y))
+                                        this.Mask[x, y] = 3;
+                                    else
+                                        this.Mask[x, y] = 0;
+                                }
+                        });
+                        //scribble part
+                        if (this.Scribbles != null)
+                            foreach (int i in this.Scribbles.Keys)
+                            {
+                                Dictionary<int, List<List<Point>>> allPts = this.Scribbles[i]; //dict = <BG/FG, <wh, pts>>
 
-                                    foreach (Point pt in pts)
-                                        Rect(pt, i, wh2);
+                                foreach (int wh in allPts.Keys)
+                                {
+                                    int wh2 = wh / 2;
+
+                                    for (int j = 0; j < allPts[wh].Count; j++)
+                                    {
+                                        List<Point> pts = allPts[wh][j];
+
+                                        foreach (Point pt in pts)
+                                            Rect(pt, i, wh2);
+                                    }
                                 }
                             }
-                        }
+                    }
+                    //BG = 0, FG = 1, PrBG = 2, PrFG = 3
+                    else if (this.RectMode)
+                        //for (int y = 0; y < this._h; y++)
+                        Parallel.For(0, this._h, y =>
+                        {
+                            if (this.Mask != null)
+                                for (int x = 0; x < this._w; x++)
+                                {
+                                    if (this.Rc.Contains(x, y))
+                                        this.Mask[x, y] = 3;
+                                    else
+                                        this.Mask[x, y] = 0;
+                                }
+                        });
+                    else if (this.ScribbleMode)
+                    {
+                        Parallel.For(0, this._h, y =>
+                        {
+                            if (this.Mask != null)
+                                for (int x = 0; x < this._w; x++)
+                                    this.Mask[x, y] = 3;
+                        });
+
+                        if (this.Scribbles != null)
+                            foreach (int i in this.Scribbles.Keys)
+                            {
+                                Dictionary<int, List<List<Point>>> allPts = this.Scribbles[i]; //dict = <BG/FG, <wh, pts>>
+
+                                foreach (int wh in allPts.Keys)
+                                {
+                                    int wh2 = wh / 2;
+
+                                    for (int j = 0; j < allPts[wh].Count; j++)
+                                    {
+                                        List<Point> pts = allPts[wh][j];
+
+                                        foreach (Point pt in pts)
+                                            Rect(pt, i, wh2);
+                                    }
+                                }
+                            }
+                    }
                 }
 
                 if (this.BGW != null && this.BGW.WorkerReportsProgress)
@@ -1967,85 +2054,175 @@ namespace AvoidAGrabCutEasy
         {
             if (this.Mask != null)
             {
-                if (this.RectMode && this.ScribbleMode)
+                if (this.ScribbleSeq != null && this.ScribbleSeq.Count > 0)
                 {
-                    //rect part
-                    Parallel.For(0, this._h, y =>
+                    if (this.RectMode && this.ScribbleMode)
                     {
-                        for (int x = 0; x < this._w; x++)
+                        //rect part
+                        Parallel.For(0, this._h, y =>
                         {
-                            if (this.Rc.Contains(x, y))
+                            for (int x = 0; x < this._w; x++)
                             {
-                                if (this.Mask[x, y] != 1)
-                                    this.Mask[x, y] = 3;
+                                if (this.Rc.Contains(x, y))
+                                {
+                                    if (this.Mask[x, y] != 1)
+                                        this.Mask[x, y] = 3;
+                                }
+                                else
+                                    this.Mask[x, y] = 0;
                             }
-                            else
-                                this.Mask[x, y] = 0;
-                        }
-                    });
-                    //scribble part
-                    if (this.Scribbles != null)
-                        foreach (int i in this.Scribbles.Keys)
+                        });
+                        //scribble part
+                        if (this.Scribbles != null)
                         {
-                            Dictionary<int, List<List<Point>>> allPts = this.Scribbles[i]; //dict = <BG/FG, <wh, pts>>
-
-                            foreach (int wh in allPts.Keys)
+                            foreach (Tuple<int, int, int> f in this.ScribbleSeq)
                             {
+                                int l = f.Item1;
+                                int wh = f.Item2;
+                                int listNo = f.Item3;
                                 int wh2 = wh / 2;
 
-                                for (int j = 0; j < allPts[wh].Count; j++)
-                                {
-                                    List<Point> pts = allPts[wh][j];
+                                List<List<Point>> ptsList = this.Scribbles[l][wh];
 
-                                    foreach (Point pt in pts)
-                                        RectReInit(pt, i, wh2);
+                                if (ptsList != null && ptsList.Count > 0)
+                                {
+                                    foreach (Point pt in ptsList[listNo])
+                                    {
+                                        RectReInit(pt, l, wh2);
+                                    }
                                 }
                             }
                         }
+                    }
+                    //BG = 0, FG = 1, PrBG = 2, PrFG = 3
+                    else if (this.RectMode)
+                        //for (int y = 0; y < this._h; y++)
+                        Parallel.For(0, this._h, y =>
+                        {
+                            for (int x = 0; x < this._w; x++)
+                            {
+                                if (this.Rc.Contains(x, y))
+                                {
+                                    if (this.Mask[x, y] != 1)
+                                        this.Mask[x, y] = 3;
+                                }
+                                else
+                                    this.Mask[x, y] = 0;
+                            }
+                        });
+                    else if (this.ScribbleMode)
+                    {
+                        Parallel.For(0, this._h, y =>
+                        {
+                            for (int x = 0; x < this._w; x++)
+                                if (this.Mask[x, y] != 1)
+                                    this.Mask[x, y] = 3;
+                        });
+
+                        if (this.Scribbles != null)
+                        {
+                            foreach (Tuple<int, int, int> f in this.ScribbleSeq)
+                            {
+                                int l = f.Item1;
+                                int wh = f.Item2;
+                                int listNo = f.Item3;
+                                int wh2 = wh / 2;
+
+                                List<List<Point>> ptsList = this.Scribbles[l][wh];
+
+                                if (ptsList != null && ptsList.Count > 0)
+                                {
+                                    foreach (Point pt in ptsList[listNo])
+                                    {
+                                        RectReInit(pt, l, wh2);
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
-                //BG = 0, FG = 1, PrBG = 2, PrFG = 3
-                else if (this.RectMode)
-                    //for (int y = 0; y < this._h; y++)
-                    Parallel.For(0, this._h, y =>
-                    {
-                        for (int x = 0; x < this._w; x++)
-                        {
-                            if (this.Rc.Contains(x, y))
-                            {
-                                if (this.Mask[x, y] != 1)
-                                    this.Mask[x, y] = 3;
-                            }
-                            else
-                                this.Mask[x, y] = 0;
-                        }
-                    });
-                else if (this.ScribbleMode)
+                else
                 {
-                    Parallel.For(0, this._h, y =>
+                    if (this.RectMode && this.ScribbleMode)
                     {
-                        for (int x = 0; x < this._w; x++)
-                            if (this.Mask[x, y] != 1)
-                                this.Mask[x, y] = 3;
-                    });
-
-                    if (this.Scribbles != null)
-                        foreach (int i in this.Scribbles.Keys)
+                        //rect part
+                        Parallel.For(0, this._h, y =>
                         {
-                            Dictionary<int, List<List<Point>>> allPts = this.Scribbles[i]; //dict = <BG/FG, <wh, pts>>
-
-                            foreach (int wh in allPts.Keys)
+                            for (int x = 0; x < this._w; x++)
                             {
-                                int wh2 = wh / 2;
-
-                                for (int j = 0; j < allPts[wh].Count; j++)
+                                if (this.Rc.Contains(x, y))
                                 {
-                                    List<Point> pts = allPts[wh][j];
+                                    if (this.Mask[x, y] != 1)
+                                        this.Mask[x, y] = 3;
+                                }
+                                else
+                                    this.Mask[x, y] = 0;
+                            }
+                        });
+                        //scribble part
+                        if (this.Scribbles != null)
+                            foreach (int i in this.Scribbles.Keys)
+                            {
+                                Dictionary<int, List<List<Point>>> allPts = this.Scribbles[i]; //dict = <BG/FG, <wh, pts>>
 
-                                    foreach (Point pt in pts)
-                                        RectReInit(pt, i, wh2);
+                                foreach (int wh in allPts.Keys)
+                                {
+                                    int wh2 = wh / 2;
+
+                                    for (int j = 0; j < allPts[wh].Count; j++)
+                                    {
+                                        List<Point> pts = allPts[wh][j];
+
+                                        foreach (Point pt in pts)
+                                            RectReInit(pt, i, wh2);
+                                    }
                                 }
                             }
-                        }
+                    }
+                    //BG = 0, FG = 1, PrBG = 2, PrFG = 3
+                    else if (this.RectMode)
+                        //for (int y = 0; y < this._h; y++)
+                        Parallel.For(0, this._h, y =>
+                        {
+                            for (int x = 0; x < this._w; x++)
+                            {
+                                if (this.Rc.Contains(x, y))
+                                {
+                                    if (this.Mask[x, y] != 1)
+                                        this.Mask[x, y] = 3;
+                                }
+                                else
+                                    this.Mask[x, y] = 0;
+                            }
+                        });
+                    else if (this.ScribbleMode)
+                    {
+                        Parallel.For(0, this._h, y =>
+                        {
+                            for (int x = 0; x < this._w; x++)
+                                if (this.Mask[x, y] != 1)
+                                    this.Mask[x, y] = 3;
+                        });
+
+                        if (this.Scribbles != null)
+                            foreach (int i in this.Scribbles.Keys)
+                            {
+                                Dictionary<int, List<List<Point>>> allPts = this.Scribbles[i]; //dict = <BG/FG, <wh, pts>>
+
+                                foreach (int wh in allPts.Keys)
+                                {
+                                    int wh2 = wh / 2;
+
+                                    for (int j = 0; j < allPts[wh].Count; j++)
+                                    {
+                                        List<Point> pts = allPts[wh][j];
+
+                                        foreach (Point pt in pts)
+                                            RectReInit(pt, i, wh2);
+                                    }
+                                }
+                            }
+                    }
                 }
             }
         }

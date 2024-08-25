@@ -8,6 +8,8 @@ Imports ChainCodeFinder
 Public Class ChainCode
     'Implements ISerializable
 
+    Public Shared Property F As Integer
+
     Public Property start() As Point
         Get
             Return m_start
@@ -47,11 +49,32 @@ Public Class ChainCode
         End Set
     End Property
     Private m_Area As Integer
+    Private _id As Integer
+
     Public ReadOnly Property Perimeter() As Integer
         Get
             Return _chain.Count
         End Get
     End Property
+
+    Public ReadOnly Property ID As Integer
+        Get
+            Return Me._id
+        End Get
+    End Property
+
+    Public Sub SetId()
+        If ChainCode.F < Int32.MaxValue Then
+            ChainCode.F += 1
+            Me._id = ChainCode.F
+        Else
+            Throw New OverflowException("The type of the field for storing the ID reports an overflow error.")
+        End If
+    End Sub
+
+    Public Sub ResetID()
+        ChainCode.F = 0
+    End Sub
 
     Public Sub New()
 
@@ -96,3 +119,4 @@ Public Class ChainCode
         Return cOut
     End Function
 End Class
+

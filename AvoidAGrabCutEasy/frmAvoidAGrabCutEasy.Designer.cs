@@ -128,6 +128,8 @@
             contextMenuStrip1 = new ContextMenuStrip(components);
             floodBGToolStripMenuItem = new ToolStripMenuItem();
             floodFGToolStripMenuItem = new ToolStripMenuItem();
+            label15 = new Label();
+            btnChaincode = new Button();
             panel1.SuspendLayout();
             panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numWH).BeginInit();
@@ -153,6 +155,8 @@
             // 
             // panel1
             // 
+            panel1.Controls.Add(label15);
+            panel1.Controls.Add(btnChaincode);
             panel1.Controls.Add(cbLastDrawn);
             panel1.Controls.Add(rbUnknown);
             panel1.Controls.Add(cbRefPtFG);
@@ -1296,21 +1300,40 @@
             // 
             contextMenuStrip1.Items.AddRange(new ToolStripItem[] { floodBGToolStripMenuItem, floodFGToolStripMenuItem });
             contextMenuStrip1.Name = "contextMenuStrip1";
-            contextMenuStrip1.Size = new Size(181, 70);
+            contextMenuStrip1.Size = new Size(123, 48);
             // 
             // floodBGToolStripMenuItem
             // 
             floodBGToolStripMenuItem.Name = "floodBGToolStripMenuItem";
-            floodBGToolStripMenuItem.Size = new Size(180, 22);
+            floodBGToolStripMenuItem.Size = new Size(122, 22);
             floodBGToolStripMenuItem.Text = "Flood BG";
             floodBGToolStripMenuItem.Click += floodBGToolStripMenuItem_Click;
             // 
             // floodFGToolStripMenuItem
             // 
             floodFGToolStripMenuItem.Name = "floodFGToolStripMenuItem";
-            floodFGToolStripMenuItem.Size = new Size(180, 22);
+            floodFGToolStripMenuItem.Size = new Size(122, 22);
             floodFGToolStripMenuItem.Text = "Flood FG";
             floodFGToolStripMenuItem.Click += floodFGToolStripMenuItem_Click;
+            // 
+            // label15
+            // 
+            label15.AutoSize = true;
+            label15.Location = new Point(802, 66);
+            label15.Name = "label15";
+            label15.Size = new Size(64, 15);
+            label15.TabIndex = 694;
+            label15.Text = "Chaincode";
+            // 
+            // btnChaincode
+            // 
+            btnChaincode.Location = new Point(872, 62);
+            btnChaincode.Name = "btnChaincode";
+            btnChaincode.Size = new Size(75, 23);
+            btnChaincode.TabIndex = 693;
+            btnChaincode.Text = "Chaincode";
+            btnChaincode.UseVisualStyleBackColor = true;
+            btnChaincode.Click += btnChaincode_Click;
             // 
             // frmAvoidAGrabCutEasy
             // 
@@ -1456,5 +1479,7 @@
         private ContextMenuStrip contextMenuStrip1;
         private ToolStripMenuItem floodBGToolStripMenuItem;
         private ToolStripMenuItem floodFGToolStripMenuItem;
+        private Label label15;
+        private Button btnChaincode;
     }
 }
