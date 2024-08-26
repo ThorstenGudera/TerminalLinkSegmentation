@@ -117,7 +117,9 @@ namespace AvoidAGrabCutEasy
         private BitArray? _bitsBG;
         private BitArray? _bitsFG;
         private Point _ptHLC1FGBG;
+        private List<Tuple<int, int, int>>? _scribbleSeqBU;
         private List<Tuple<int, int, int>> _scribbleSeq = new List<Tuple<int, int, int>>();
+        private List<ChainCode>? _chainsFromFrm;
 
         public event EventHandler<string>? ShowInfo;
         //public event EventHandler<string> BoundaryError;
@@ -1673,6 +1675,10 @@ namespace AvoidAGrabCutEasy
                         this._scribblesBU = this._scribbles;
                         this._scribbles = scribbles2;
                         scribbles = this._scribbles;
+                        List<Tuple<int, int, int>> scribbleSeq2 = ResizeScribbleSeq(this._scribbleSeq, resPic, true);
+                        this._scribbleSeqBU = this._scribbleSeq;
+                        this._scribbleSeq = scribbleSeq2;
+                        scribbleSeq = this._scribbleSeq;
                     }
                 }
 
@@ -2099,8 +2105,12 @@ namespace AvoidAGrabCutEasy
 
                     //reset the scribbles, if resized
                     if (scribbleMode && resPic > 1)
+                    {
                         if (this._scribblesBU != null)
                             this._scribbles = this._scribblesBU;
+                        if (this._scribbleSeqBU != null)
+                            this._scribbleSeq = this._scribbleSeqBU;
+                    }
 
                     //our result pic
                     e.Result = bRes;
@@ -2272,6 +2282,22 @@ namespace AvoidAGrabCutEasy
 
             return res;
         }
+
+        private List<Tuple<int, int, int>> ResizeScribbleSeq(List<Tuple<int, int, int>> scribbleSeq, double resWC, bool verify)
+        {
+            List<Tuple<int, int, int>> res = new List<Tuple<int, int, int>>();
+
+            for (int i = 0; i < scribbleSeq.Count; i++)
+                res.Add(Tuple.Create(scribbleSeq[i].Item1, (int)(scribbleSeq[i].Item2 / resWC), scribbleSeq[i].Item3));
+
+            if (verify)
+            {
+
+            }
+
+            return res;
+        }
+
 
         private Bitmap ResampleDown(Bitmap bWork, double resPic)
         {
@@ -2980,6 +3006,10 @@ namespace AvoidAGrabCutEasy
                         this._scribblesBU = this._scribbles;
                         this._scribbles = scribbles2;
                         scribbles = this._scribbles;
+                        List<Tuple<int, int, int>> scribbleSeq2 = ResizeScribbleSeq(this._scribbleSeq, resPic, true);
+                        this._scribbleSeqBU = this._scribbleSeq;
+                        this._scribbleSeq = scribbleSeq2;
+                        scribbleSeq = this._scribbleSeq;
                     }
                 }
 
@@ -3377,8 +3407,12 @@ namespace AvoidAGrabCutEasy
                     }
 
                     if (scribbleMode && resPic > 1)
+                    {
                         if (this._scribblesBU != null)
                             this._scribbles = this._scribblesBU;
+                        if (this._scribbleSeqBU != null)
+                            this._scribbleSeq = this._scribbleSeqBU;
+                    }
 
                     e.Result = bRes;
                 }
@@ -4318,6 +4352,8 @@ namespace AvoidAGrabCutEasy
                                     }
                                 }
                             }
+
+                            this._chainsFromFrm = c;
 
                             this.cbScribbleMode.Checked = true;
                             this.helplineRulerCtrl1.dbPanel1.Invalidate();
