@@ -130,6 +130,7 @@
             contextMenuStrip1 = new ContextMenuStrip(components);
             floodBGToolStripMenuItem = new ToolStripMenuItem();
             floodFGToolStripMenuItem = new ToolStripMenuItem();
+            cbRedrawOnMD = new CheckBox();
             panel1.SuspendLayout();
             panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numWH).BeginInit();
@@ -155,6 +156,7 @@
             // 
             // panel1
             // 
+            panel1.Controls.Add(cbRedrawOnMD);
             panel1.Controls.Add(label15);
             panel1.Controls.Add(btnChaincode);
             panel1.Controls.Add(cbLastDrawn);
@@ -1335,6 +1337,16 @@
             floodFGToolStripMenuItem.Text = "Flood FG";
             floodFGToolStripMenuItem.Click += floodFGToolStripMenuItem_Click;
             // 
+            // cbRedrawOnMD
+            // 
+            cbRedrawOnMD.AutoSize = true;
+            cbRedrawOnMD.Location = new Point(463, 86);
+            cbRedrawOnMD.Name = "cbRedrawOnMD";
+            cbRedrawOnMD.Size = new Size(175, 19);
+            cbRedrawOnMD.TabIndex = 695;
+            cbRedrawOnMD.Text = "redraw only on MouseDown";
+            cbRedrawOnMD.UseVisualStyleBackColor = true;
+            // 
             // frmAvoidAGrabCutEasy
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -1481,5 +1493,6 @@
         private ToolStripMenuItem floodFGToolStripMenuItem;
         private Label label15;
         private Button btnChaincode;
+        private CheckBox cbRedrawOnMD;
     }
 }
