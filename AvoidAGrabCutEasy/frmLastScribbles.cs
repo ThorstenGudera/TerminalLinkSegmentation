@@ -42,12 +42,14 @@ namespace AvoidAGrabCutEasy
             if (this._scribbles != null && this.cmbScribblesType.SelectedIndex > -1)
             {
                 int fg = this.cmbScribblesType.SelectedIndex == 0 ? 0 : this.cmbScribblesType.SelectedIndex == 1 ? 1 : 3;
+                this.listBox1.Items.Clear();
+                this.listBox2.Items.Clear();
+
                 if (this._scribbles.ContainsKey(fg))
                 {
                     Dictionary<int, List<List<Point>>> z = this._scribbles[fg];
                     if (z.Keys.Count > 0)
                     {
-                        this.listBox1.Items.Clear();
                         foreach (int i in z.Keys)
                         {
                             this.listBox1.Items.Add(i.ToString());
