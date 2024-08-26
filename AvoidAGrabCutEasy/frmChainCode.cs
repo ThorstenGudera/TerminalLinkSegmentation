@@ -756,7 +756,7 @@ namespace AvoidAGrabCutEasy
 
         public void SetupCache()
         {
-            _undoOPCache = new Cache.UndoOPCache(this.GetType(), CachePathAddition, "testApp");
+            _undoOPCache = new Cache.UndoOPCache(this.GetType(), CachePathAddition, "frmChainCode");
             if (this.helplineRulerCtrl1.Bmp != null)
                 _undoOPCache.Add(this.helplineRulerCtrl1.Bmp);
         }

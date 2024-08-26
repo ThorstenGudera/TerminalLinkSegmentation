@@ -489,7 +489,7 @@ namespace AvoidAGrabCutEasy
                 this.toolStripStatusLabel1.Text = ix.ToString() + "; " + iy.ToString();
                 this.ToolStripStatusLabel2.BackColor = c;
 
-                if (_tracking4 || _tracking)
+                //if (_tracking4 || _tracking)
                     this.helplineRulerCtrl1.dbPanel1.Invalidate();
             }
         }
