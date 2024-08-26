@@ -4290,13 +4290,6 @@ namespace AvoidAGrabCutEasy
                             //}
 
                             List<ChainCode>? c = frm.SelectedChains;
-                            List<ChainDetails>? cd = frm.ChainDetails;
-
-                            if (cd != null)
-                            {
-                                for (int j = 0; j < cd.Count; j++)
-                                    MessageBox.Show(cd[j].ID.ToString() + " -> " + cd[j].Cnt.ToString());
-                            }
 
                             if (c != null)
                             {

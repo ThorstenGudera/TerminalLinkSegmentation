@@ -30,6 +30,8 @@
         {
             components = new System.ComponentModel.Container();
             panel1 = new Panel();
+            label15 = new Label();
+            btnChaincode = new Button();
             cbLastDrawn = new CheckBox();
             rbUnknown = new RadioButton();
             cbRefPtFG = new CheckBox();
@@ -128,8 +130,6 @@
             contextMenuStrip1 = new ContextMenuStrip(components);
             floodBGToolStripMenuItem = new ToolStripMenuItem();
             floodFGToolStripMenuItem = new ToolStripMenuItem();
-            label15 = new Label();
-            btnChaincode = new Button();
             panel1.SuspendLayout();
             panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numWH).BeginInit();
@@ -241,6 +241,25 @@
             panel1.TabIndex = 0;
             panel1.MouseDoubleClick += panel1_MouseDoubleClick;
             panel1.MouseDown += panel1_MouseDown;
+            // 
+            // label15
+            // 
+            label15.AutoSize = true;
+            label15.Location = new Point(802, 66);
+            label15.Name = "label15";
+            label15.Size = new Size(64, 15);
+            label15.TabIndex = 694;
+            label15.Text = "Chaincode";
+            // 
+            // btnChaincode
+            // 
+            btnChaincode.Location = new Point(872, 62);
+            btnChaincode.Name = "btnChaincode";
+            btnChaincode.Size = new Size(75, 23);
+            btnChaincode.TabIndex = 693;
+            btnChaincode.Text = "Chaincode";
+            btnChaincode.UseVisualStyleBackColor = true;
+            btnChaincode.Click += btnChaincode_Click;
             // 
             // cbLastDrawn
             // 
@@ -402,7 +421,7 @@
             // 
             btnCache.Enabled = false;
             btnCache.ForeColor = SystemColors.ControlText;
-            btnCache.Location = new Point(1149, 33);
+            btnCache.Location = new Point(1163, 10);
             btnCache.Margin = new Padding(4, 3, 4, 3);
             btnCache.Name = "btnCache";
             btnCache.Size = new Size(88, 27);
@@ -521,7 +540,7 @@
             // cbLSBmp
             // 
             cbLSBmp.AutoSize = true;
-            cbLSBmp.Location = new Point(967, 65);
+            cbLSBmp.Location = new Point(1051, 37);
             cbLSBmp.Margin = new Padding(4, 3, 4, 3);
             cbLSBmp.Name = "cbLSBmp";
             cbLSBmp.Size = new Size(90, 19);
@@ -1315,25 +1334,6 @@
             floodFGToolStripMenuItem.Size = new Size(122, 22);
             floodFGToolStripMenuItem.Text = "Flood FG";
             floodFGToolStripMenuItem.Click += floodFGToolStripMenuItem_Click;
-            // 
-            // label15
-            // 
-            label15.AutoSize = true;
-            label15.Location = new Point(802, 66);
-            label15.Name = "label15";
-            label15.Size = new Size(64, 15);
-            label15.TabIndex = 694;
-            label15.Text = "Chaincode";
-            // 
-            // btnChaincode
-            // 
-            btnChaincode.Location = new Point(872, 62);
-            btnChaincode.Name = "btnChaincode";
-            btnChaincode.Size = new Size(75, 23);
-            btnChaincode.TabIndex = 693;
-            btnChaincode.Text = "Chaincode";
-            btnChaincode.UseVisualStyleBackColor = true;
-            btnChaincode.Click += btnChaincode_Click;
             // 
             // frmAvoidAGrabCutEasy
             // 

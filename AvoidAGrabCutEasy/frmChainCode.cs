@@ -62,7 +62,6 @@ namespace AvoidAGrabCutEasy
         private int _eY2;
 
         public List<ChainCode>? SelectedChains { get; private set; }
-        public List<ChainDetails>? ChainDetails { get; private set; }
 
         public event EventHandler<string>? BoundaryError;
 
@@ -555,7 +554,7 @@ namespace AvoidAGrabCutEasy
             foreach (string z in System.Enum.GetNames(typeof(GradientMode)))
                 this.cmbGradMode.Items.Add(z.ToString());
 
-            this.cmbGradMode.SelectedIndex = 1;
+            this.cmbGradMode.SelectedIndex = 2;
 
             this.cbBGColor_CheckedChanged(this.cbBGColor, new EventArgs());
         }
@@ -1289,33 +1288,6 @@ namespace AvoidAGrabCutEasy
             {
                 if (this._allPoints[-1] != null && this._allPoints[-1].Count > 0)
                     this._allPoints[-1].RemoveAt(this._allPoints[-1].Count - 1);
-            }
-        }
-
-        private void button3_Click(object sender, EventArgs e)
-        {
-            if (this.helplineRulerCtrl1.Bmp != null && this.checkedListBox1.SelectedItems.Count > 0)
-            {
-                List<ChainCode>? c = GetCC();
-                List<ChainDetails> cd = new List<ChainDetails>();
-
-                if (c != null)
-                {
-                    foreach (ChainCode cc in c)
-                    {
-                        ChainDetails curCD = new()
-                        {
-                            ID = cc.ID,
-                            Strt = 0,
-                            Ed = cc.Coord.Count,
-                            Cnt = cc.Coord.Count,
-                        };
-
-                        cd.Add(curCD);
-                    }
-                }
-
-                this.ChainDetails = cd;
             }
         }
     }

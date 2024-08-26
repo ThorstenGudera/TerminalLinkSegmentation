@@ -81,7 +81,6 @@
             Timer3 = new System.Windows.Forms.Timer(components);
             backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             backgroundWorker2 = new System.ComponentModel.BackgroundWorker();
-            button3 = new Button();
             statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
@@ -149,7 +148,6 @@
             splitContainer1.Panel1.Controls.Add(button8);
             splitContainer1.Panel1.Controls.Add(button2);
             splitContainer1.Panel1.Controls.Add(btnRedo);
-            splitContainer1.Panel1.Controls.Add(button3);
             splitContainer1.Panel1.Controls.Add(btnUndo);
             splitContainer1.Panel1.Controls.Add(panel4);
             splitContainer1.Panel1.Controls.Add(panel1);
@@ -677,19 +675,6 @@
             backgroundWorker2.DoWork += backgroundWorker2_DoWork;
             backgroundWorker2.RunWorkerCompleted += backgroundWorker2_RunWorkerCompleted;
             // 
-            // button3
-            // 
-            button3.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            button3.ForeColor = SystemColors.ControlText;
-            button3.Location = new Point(688, 137);
-            button3.Margin = new Padding(4, 3, 4, 3);
-            button3.Name = "button3";
-            button3.Size = new Size(88, 27);
-            button3.TabIndex = 650;
-            button3.Text = "Details";
-            button3.UseVisualStyleBackColor = true;
-            button3.Click += button3_Click;
-            // 
             // frmChainCode
             // 
             AcceptButton = btnOK;
@@ -787,6 +772,5 @@
         private Label label19;
         internal NumericUpDown numWHScribbles;
         private Button btnRemLastScribbles;
-        private Button button3;
     }
 }
