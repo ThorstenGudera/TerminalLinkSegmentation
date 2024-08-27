@@ -216,6 +216,7 @@
             // 
             // label8
             // 
+            label8.BackColor = Color.Black;
             label8.BorderStyle = BorderStyle.FixedSingle;
             label8.Location = new Point(122, 39);
             label8.Name = "label8";
