@@ -36,6 +36,12 @@
             splitContainer1 = new SplitContainer();
             label19 = new Label();
             numWHScribbles = new NumericUpDown();
+            panel5 = new Panel();
+            btnColor = new Button();
+            label8 = new Label();
+            btnRemLastScribbles2 = new Button();
+            cbDraw = new CheckBox();
+            numDraw = new NumericUpDown();
             panel3 = new Panel();
             btnRemLastScribbles = new Button();
             cbErase = new CheckBox();
@@ -81,12 +87,15 @@
             Timer3 = new System.Windows.Forms.Timer(components);
             backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             backgroundWorker2 = new System.ComponentModel.BackgroundWorker();
+            colorDialog1 = new ColorDialog();
             statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
             splitContainer1.Panel2.SuspendLayout();
             splitContainer1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numWHScribbles).BeginInit();
+            panel5.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)numDraw).BeginInit();
             panel3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numErase).BeginInit();
             panel2.SuspendLayout();
@@ -139,6 +148,7 @@
             // 
             splitContainer1.Panel1.Controls.Add(label19);
             splitContainer1.Panel1.Controls.Add(numWHScribbles);
+            splitContainer1.Panel1.Controls.Add(panel5);
             splitContainer1.Panel1.Controls.Add(panel3);
             splitContainer1.Panel1.Controls.Add(panel2);
             splitContainer1.Panel1.Controls.Add(Label20);
@@ -182,6 +192,69 @@
             numWHScribbles.TabIndex = 683;
             numWHScribbles.Value = new decimal(new int[] { 25, 0, 0, 0 });
             // 
+            // panel5
+            // 
+            panel5.Controls.Add(btnColor);
+            panel5.Controls.Add(label8);
+            panel5.Controls.Add(btnRemLastScribbles2);
+            panel5.Controls.Add(cbDraw);
+            panel5.Controls.Add(numDraw);
+            panel5.Location = new Point(342, 90);
+            panel5.Name = "panel5";
+            panel5.Size = new Size(314, 77);
+            panel5.TabIndex = 682;
+            // 
+            // btnColor
+            // 
+            btnColor.Location = new Point(6, 36);
+            btnColor.Name = "btnColor";
+            btnColor.Size = new Size(75, 23);
+            btnColor.TabIndex = 654;
+            btnColor.Text = "Color";
+            btnColor.UseVisualStyleBackColor = true;
+            btnColor.Click += btnColor_Click;
+            // 
+            // label8
+            // 
+            label8.BorderStyle = BorderStyle.FixedSingle;
+            label8.Location = new Point(122, 39);
+            label8.Name = "label8";
+            label8.Size = new Size(88, 23);
+            label8.TabIndex = 653;
+            label8.Text = "    ";
+            // 
+            // btnRemLastScribbles2
+            // 
+            btnRemLastScribbles2.Location = new Point(244, 4);
+            btnRemLastScribbles2.Margin = new Padding(4, 3, 4, 3);
+            btnRemLastScribbles2.Name = "btnRemLastScribbles2";
+            btnRemLastScribbles2.Size = new Size(63, 27);
+            btnRemLastScribbles2.TabIndex = 652;
+            btnRemLastScribbles2.Text = "rem last";
+            btnRemLastScribbles2.UseVisualStyleBackColor = true;
+            btnRemLastScribbles2.Click += btnRemLastScribbles2_Click;
+            // 
+            // cbDraw
+            // 
+            cbDraw.AutoSize = true;
+            cbDraw.Location = new Point(6, 8);
+            cbDraw.Name = "cbDraw";
+            cbDraw.Size = new Size(107, 19);
+            cbDraw.TabIndex = 651;
+            cbDraw.Text = "Draw w. Mouse";
+            cbDraw.UseVisualStyleBackColor = true;
+            cbDraw.CheckedChanged += cbDraw_CheckedChanged;
+            // 
+            // numDraw
+            // 
+            numDraw.Location = new Point(122, 7);
+            numDraw.Maximum = new decimal(new int[] { 255, 0, 0, 0 });
+            numDraw.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
+            numDraw.Name = "numDraw";
+            numDraw.Size = new Size(88, 23);
+            numDraw.TabIndex = 650;
+            numDraw.Value = new decimal(new int[] { 5, 0, 0, 0 });
+            // 
             // panel3
             // 
             panel3.Controls.Add(btnRemLastScribbles);
@@ -206,16 +279,17 @@
             // cbErase
             // 
             cbErase.AutoSize = true;
-            cbErase.Location = new Point(5, 8);
+            cbErase.Location = new Point(6, 8);
             cbErase.Name = "cbErase";
             cbErase.Size = new Size(107, 19);
             cbErase.TabIndex = 651;
             cbErase.Text = "Erase w. Mouse";
             cbErase.UseVisualStyleBackColor = true;
+            cbErase.CheckedChanged += cbErase_CheckedChanged;
             // 
             // numErase
             // 
-            numErase.Location = new Point(119, 7);
+            numErase.Location = new Point(119, 6);
             numErase.Maximum = new decimal(new int[] { 255, 0, 0, 0 });
             numErase.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
             numErase.Name = "numErase";
@@ -542,6 +616,7 @@
             helplineRulerCtrl1.DontHandleDoubleClick = false;
             helplineRulerCtrl1.DontPaintBaseImg = false;
             helplineRulerCtrl1.DontProcDoubleClick = false;
+            helplineRulerCtrl1.DrawModeClipped = false;
             helplineRulerCtrl1.IgnoreZoom = false;
             helplineRulerCtrl1.Location = new Point(0, 0);
             helplineRulerCtrl1.Margin = new Padding(4, 3, 4, 3);
@@ -675,6 +750,11 @@
             backgroundWorker2.DoWork += backgroundWorker2_DoWork;
             backgroundWorker2.RunWorkerCompleted += backgroundWorker2_RunWorkerCompleted;
             // 
+            // colorDialog1
+            // 
+            colorDialog1.AnyColor = true;
+            colorDialog1.FullOpen = true;
+            // 
             // frmChainCode
             // 
             AcceptButton = btnOK;
@@ -696,6 +776,9 @@
             ((System.ComponentModel.ISupportInitialize)splitContainer1).EndInit();
             splitContainer1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)numWHScribbles).EndInit();
+            panel5.ResumeLayout(false);
+            panel5.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)numDraw).EndInit();
             panel3.ResumeLayout(false);
             panel3.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)numErase).EndInit();
@@ -772,5 +855,12 @@
         private Label label19;
         internal NumericUpDown numWHScribbles;
         private Button btnRemLastScribbles;
+        private Panel panel5;
+        private Button btnColor;
+        private Label label8;
+        private Button btnRemLastScribbles2;
+        private CheckBox cbDraw;
+        private NumericUpDown numDraw;
+        internal ColorDialog colorDialog1;
     }
 }

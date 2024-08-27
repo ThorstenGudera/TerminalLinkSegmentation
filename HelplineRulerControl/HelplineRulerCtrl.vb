@@ -89,6 +89,8 @@ Partial Public Class HelplineRulerCtrl
     End Property
     Private m_DontProcDoubleClick As Boolean
 
+    Public Property DrawModeClipped As Boolean = False
+
     Public Property DontHandleDoubleClick As Boolean
     Public Shared Property MaxBmpLength As Integer = Int32.MaxValue
     Private _autoScrollPoint As Point
@@ -823,7 +825,7 @@ Partial Public Class HelplineRulerCtrl
     End Sub
 
     Public Sub MakeBitmap(bmp As Bitmap)
-        If Zoom <> 0.0 AndAlso Not Me.DontHandleDoubleClick AndAlso bmp IsNot Nothing Then
+        If Not DrawModeClipped AndAlso Zoom <> 0.0 AndAlso Not Me.DontHandleDoubleClick AndAlso bmp IsNot Nothing Then
             Dim bOLd As Bitmap = _bmpTmp
             Dim w2 As Integer = CInt(Math.Ceiling(bmp.Width * Me.Zoom))
             Dim h2 As Integer = CInt(Math.Ceiling(bmp.Height * Me.Zoom))
@@ -843,6 +845,11 @@ Partial Public Class HelplineRulerCtrl
             End If
 
             SetHRControlVars()
+        ElseIf DrawModeClipped AndAlso Zoom <> 0.0 AndAlso Not Me.DontHandleDoubleClick AndAlso bmp IsNot Nothing Then
+            If Me._bmpTmp IsNot Nothing Then
+                Me._bmpTmp.Dispose()
+                Me._bmpTmp = Nothing
+            End If
         End If
     End Sub
 
@@ -868,6 +875,7 @@ Partial Public Class HelplineRulerCtrl
                 g.InterpolationMode = InterpolationMode.HighQualityBicubic
                 g.PixelOffsetMode = PixelOffsetMode.Half
                 g.DrawImage(_bmp, New RectangleF(0, 0, pz.ClientRectangle.Width, pz.ClientRectangle.Height), New RectangleF(-pz.AutoScrollPosition.X / Me.Zoom, -pz.AutoScrollPosition.Y / Me.Zoom, pz.ClientRectangle.Width / Me.Zoom, pz.ClientRectangle.Height / Me.Zoom), GraphicsUnit.Pixel)
+                SetHRControlVars()
             End If
         End If
 
