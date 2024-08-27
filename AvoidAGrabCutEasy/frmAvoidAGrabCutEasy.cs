@@ -2565,7 +2565,7 @@ namespace AvoidAGrabCutEasy
 
                                 if (whL != null && whL.Count() > 0)
                                 {
-                                    IEnumerable<Tuple<int, int, int>> listL = whL.Where(a => a.Item3 == j.Count - 1);
+                                    IEnumerable<Tuple<int, int, int>> listL = whL.Where(a => a.Item3 == j.Count);
 
                                     if (listL != null && listL.Count() > 0)
                                     {
@@ -4028,19 +4028,16 @@ namespace AvoidAGrabCutEasy
                 if (this._bitsBG == null)
                     this._bitsBG = new BitArray(this.helplineRulerCtrl1.Bmp.Width * this.helplineRulerCtrl1.Bmp.Height, false);
 
-                if (this.cbNewPic.Checked)
-                {
-                    Bitmap? bOld = this._scribblesBitmap;
-                    this._scribblesBitmap = new Bitmap(this.helplineRulerCtrl1.Bmp.Width, this.helplineRulerCtrl1.Bmp.Height);
-                    if (bOld != null)
-                        bOld.Dispose();
-                    bOld = null;
+                Bitmap? bOld = this._scribblesBitmap;
+                this._scribblesBitmap = new Bitmap(this.helplineRulerCtrl1.Bmp.Width, this.helplineRulerCtrl1.Bmp.Height);
+                if (bOld != null)
+                    bOld.Dispose();
+                bOld = null;
 
-                    if (this._scribbles != null && this._scribbles.ContainsKey(0) && this._scribbles[0].ContainsKey(2))
-                        this._scribbles[0].Remove(3);
+                if (this._scribbles != null && this._scribbles.ContainsKey(0) && this._scribbles[0].ContainsKey(2))
+                    this._scribbles[0].Remove(3);
 
-                    this._bitsBG.SetAll(false);
-                }
+                this._bitsBG.SetAll(false);
 
                 Bitmap? b = this._scribblesBitmap;
 
@@ -4153,19 +4150,16 @@ namespace AvoidAGrabCutEasy
                 if (this._bitsFG == null)
                     this._bitsFG = new BitArray(this.helplineRulerCtrl1.Bmp.Width * this.helplineRulerCtrl1.Bmp.Height, false);
 
-                if (this.cbNewPic.Checked)
-                {
-                    Bitmap? bOld = this._scribblesBitmap;
-                    this._scribblesBitmap = new Bitmap(this.helplineRulerCtrl1.Bmp.Width, this.helplineRulerCtrl1.Bmp.Height);
-                    if (bOld != null)
-                        bOld.Dispose();
-                    bOld = null;
+                Bitmap? bOld = this._scribblesBitmap;
+                this._scribblesBitmap = new Bitmap(this.helplineRulerCtrl1.Bmp.Width, this.helplineRulerCtrl1.Bmp.Height);
+                if (bOld != null)
+                    bOld.Dispose();
+                bOld = null;
 
-                    if (this._scribbles != null && this._scribbles.ContainsKey(1) && this._scribbles[1].ContainsKey(2))
-                        this._scribbles[1].Remove(3);
+                if (this._scribbles != null && this._scribbles.ContainsKey(1) && this._scribbles[1].ContainsKey(2))
+                    this._scribbles[1].Remove(3);
 
-                    this._bitsFG.SetAll(false);
-                }
+                this._bitsFG.SetAll(false);
 
                 Bitmap? b = this._scribblesBitmap;
 

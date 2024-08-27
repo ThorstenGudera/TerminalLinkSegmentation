@@ -30,13 +30,13 @@
         {
             components = new System.ComponentModel.Container();
             panel1 = new Panel();
+            cbRedrawOnMD = new CheckBox();
             label15 = new Label();
             btnChaincode = new Button();
             cbLastDrawn = new CheckBox();
             rbUnknown = new RadioButton();
             cbRefPtFG = new CheckBox();
             cbRefPtBG = new CheckBox();
-            cbNewPic = new CheckBox();
             label14 = new Label();
             btnFloodFG = new Button();
             btnFloodBG = new Button();
@@ -130,7 +130,6 @@
             contextMenuStrip1 = new ContextMenuStrip(components);
             floodBGToolStripMenuItem = new ToolStripMenuItem();
             floodFGToolStripMenuItem = new ToolStripMenuItem();
-            cbRedrawOnMD = new CheckBox();
             panel1.SuspendLayout();
             panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numWH).BeginInit();
@@ -163,7 +162,6 @@
             panel1.Controls.Add(rbUnknown);
             panel1.Controls.Add(cbRefPtFG);
             panel1.Controls.Add(cbRefPtBG);
-            panel1.Controls.Add(cbNewPic);
             panel1.Controls.Add(label14);
             panel1.Controls.Add(btnFloodFG);
             panel1.Controls.Add(btnFloodBG);
@@ -244,6 +242,16 @@
             panel1.MouseDoubleClick += panel1_MouseDoubleClick;
             panel1.MouseDown += panel1_MouseDown;
             // 
+            // cbRedrawOnMD
+            // 
+            cbRedrawOnMD.AutoSize = true;
+            cbRedrawOnMD.Location = new Point(463, 86);
+            cbRedrawOnMD.Name = "cbRedrawOnMD";
+            cbRedrawOnMD.Size = new Size(175, 19);
+            cbRedrawOnMD.TabIndex = 695;
+            cbRedrawOnMD.Text = "redraw only on MouseDown";
+            cbRedrawOnMD.UseVisualStyleBackColor = true;
+            // 
             // label15
             // 
             label15.AutoSize = true;
@@ -307,16 +315,6 @@
             cbRefPtBG.Text = "set ref pt bg";
             cbRefPtBG.UseVisualStyleBackColor = true;
             cbRefPtBG.CheckedChanged += cbRefPtBG_CheckedChanged;
-            // 
-            // cbNewPic
-            // 
-            cbNewPic.AutoSize = true;
-            cbNewPic.Location = new Point(574, 66);
-            cbNewPic.Name = "cbNewPic";
-            cbNewPic.Size = new Size(64, 19);
-            cbNewPic.TabIndex = 688;
-            cbNewPic.Text = "newPic";
-            cbNewPic.UseVisualStyleBackColor = true;
             // 
             // label14
             // 
@@ -1201,6 +1199,7 @@
             helplineRulerCtrl1.DontHandleDoubleClick = false;
             helplineRulerCtrl1.DontPaintBaseImg = false;
             helplineRulerCtrl1.DontProcDoubleClick = false;
+            helplineRulerCtrl1.DrawModeClipped = false;
             helplineRulerCtrl1.IgnoreZoom = false;
             helplineRulerCtrl1.Location = new Point(0, 0);
             helplineRulerCtrl1.Margin = new Padding(5, 3, 5, 3);
@@ -1221,6 +1220,7 @@
             helplineRulerCtrl2.DontHandleDoubleClick = false;
             helplineRulerCtrl2.DontPaintBaseImg = false;
             helplineRulerCtrl2.DontProcDoubleClick = false;
+            helplineRulerCtrl2.DrawModeClipped = false;
             helplineRulerCtrl2.IgnoreZoom = false;
             helplineRulerCtrl2.Location = new Point(0, 0);
             helplineRulerCtrl2.Margin = new Padding(5, 3, 5, 3);
@@ -1336,16 +1336,6 @@
             floodFGToolStripMenuItem.Size = new Size(122, 22);
             floodFGToolStripMenuItem.Text = "Flood FG";
             floodFGToolStripMenuItem.Click += floodFGToolStripMenuItem_Click;
-            // 
-            // cbRedrawOnMD
-            // 
-            cbRedrawOnMD.AutoSize = true;
-            cbRedrawOnMD.Location = new Point(463, 86);
-            cbRedrawOnMD.Name = "cbRedrawOnMD";
-            cbRedrawOnMD.Size = new Size(175, 19);
-            cbRedrawOnMD.TabIndex = 695;
-            cbRedrawOnMD.Text = "redraw only on MouseDown";
-            cbRedrawOnMD.UseVisualStyleBackColor = true;
             // 
             // frmAvoidAGrabCutEasy
             // 
@@ -1483,7 +1473,6 @@
         private RadioButton rbUnknown;
         private CheckBox cbRefPtFG;
         private CheckBox cbRefPtBG;
-        private CheckBox cbNewPic;
         private Label label14;
         private Button btnFloodFG;
         private Button btnFloodBG;
