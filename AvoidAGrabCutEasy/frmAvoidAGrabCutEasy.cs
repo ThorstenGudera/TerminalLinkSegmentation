@@ -766,6 +766,25 @@ namespace AvoidAGrabCutEasy
                     }
                 }
 
+                if (this.cbOverlay.Checked && this._scribbles.Count > 0)
+                {
+                    HelplineRulerControl.DBPanel pz = this.helplineRulerCtrl1.dbPanel1;
+
+                    ColorMatrix cm = new ColorMatrix();
+                    cm.Matrix33 = 0.25F;
+
+                    using (ImageAttributes ia = new ImageAttributes())
+                    {
+                        ia.SetColorMatrix(cm);
+                        e.Graphics.DrawImage(this.helplineRulerCtrl1.Bmp,
+                            new Rectangle(0, 0, pz.ClientRectangle.Width, pz.ClientRectangle.Height),
+                            -pz.AutoScrollPosition.X / this.helplineRulerCtrl1.Zoom,
+                                -pz.AutoScrollPosition.Y / this.helplineRulerCtrl1.Zoom,
+                                pz.ClientRectangle.Width / this.helplineRulerCtrl1.Zoom,
+                                pz.ClientRectangle.Height / this.helplineRulerCtrl1.Zoom, GraphicsUnit.Pixel, ia);
+                    }
+                }
+
                 int wh2 = (int)this.numWHScribbles.Value;
 
                 using (SolidBrush sb = new SolidBrush(Color.FromArgb(95, 255, 0, 0)))
@@ -4355,6 +4374,12 @@ namespace AvoidAGrabCutEasy
                     }
                 }
             }
+        }
+
+        private void cbOverlay_CheckedChanged(object sender, EventArgs e)
+        {
+            if (this.helplineRulerCtrl1.Bmp != null && this._scribbles != null && this._scribbles.Count > 0)
+                this.helplineRulerCtrl1.dbPanel1.Invalidate();
         }
     }
 }
