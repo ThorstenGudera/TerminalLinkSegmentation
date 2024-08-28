@@ -5286,13 +5286,12 @@ namespace AvoidAGrabCutEasy
                 this.numBoundInner.Value = 5;
                 this.numBoundOuter.Value = 5;
                 int f2 = this.cbHalfSize.Checked ? 2 : 1;
-                this.cbHalfSize.Checked = false;
+                this.cbHalfSize.Checked = true;
+
                 if (d > 1)
                 {
                     this.numBoundInner.Value = (int)(5 * d * f2);
                     this.numBoundOuter.Value = (int)(5 * d * f2);
-
-                    this.cbHalfSize.Checked = true;
                 }
             }
         }
