@@ -117,6 +117,8 @@ namespace AvoidAGrabCutEasy
         private BitArray? _bitsBG;
         private BitArray? _bitsFG;
         private Point _ptHLC1FGBG;
+        //It would be much easier to use a List of objects which hold all information about drawing instead of using a seperate sequence file...
+        //Maybe I'll change it (as far as it is also easy to serialize in json)
         private List<Tuple<int, int, int>>? _scribbleSeqBU;
         private List<Tuple<int, int, int>> _scribbleSeq = new List<Tuple<int, int, int>>();
         private List<ChainCode>? _chainsFromFrm;
