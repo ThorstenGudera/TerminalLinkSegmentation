@@ -2165,7 +2165,7 @@ namespace AvoidAGrabCutEasy
                         if (bOld != null)
                             bOld.Dispose();
                     }
-                    else if (resPic == 1)
+                    else //if (resPic == 1)
                     {
                         //set the list of all found paths [chains] to re_use later
                         List<ChainCode>? allChains = GetBoundary(this._bResCopyTransp);
@@ -2181,7 +2181,7 @@ namespace AvoidAGrabCutEasy
                             //if we have almost no output, maybe the initialization of the Gmms hasn't been good enough to receive a reasonable result
                             //so restart with some different KMeans initialization, if wanted
                             if (fc > 1000)
-                                if (MessageBox.Show("Amount pixels to segmented area ratio is " + fc.ToString() + "." +
+                                if (MessageBox.Show("Amount pixels to segmented area ratio is " + fc.ToString() + ". " +
                                     "Rerun with different Initialization of the Gmms?", "", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) == DialogResult.Yes)
                                 {
                                     this._restartDiffInit = true;
@@ -3489,7 +3489,7 @@ namespace AvoidAGrabCutEasy
                         if (bOld != null)
                             bOld.Dispose();
                     }
-                    else if (resPic == 1)
+                    else //if (resPic == 1)
                     {
                         List<ChainCode>? allChains = GetBoundary(this._bResCopyTransp);
                         this._allChains = allChains;
@@ -3502,7 +3502,7 @@ namespace AvoidAGrabCutEasy
                             int fc = pxls / area;
 
                             if (fc > 1000)
-                                if (MessageBox.Show("Amount pixels to segmented area ratio is " + fc.ToString() + "." +
+                                if (MessageBox.Show("Amount pixels to segmented area ratio is " + fc.ToString() + ". " +
                                     "Rerun with different Initialization of the Gmms?", "", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) == DialogResult.Yes)
                                 {
                                     this._restartDiffInit = true;

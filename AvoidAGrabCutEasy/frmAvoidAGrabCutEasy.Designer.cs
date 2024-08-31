@@ -659,6 +659,7 @@
             btnRecut.Size = new Size(44, 27);
             btnRecut.TabIndex = 660;
             btnRecut.Text = "Go";
+            toolTip1.SetToolTip(btnRecut, "Draw all components");
             btnRecut.UseVisualStyleBackColor = true;
             btnRecut.Click += btnRecut_Click;
             // 
@@ -1078,7 +1079,7 @@
             numMaxComponents.Name = "numMaxComponents";
             numMaxComponents.Size = new Size(52, 23);
             numMaxComponents.TabIndex = 625;
-            numMaxComponents.Value = new decimal(new int[] { 3, 0, 0, 0 });
+            numMaxComponents.Value = new decimal(new int[] { 1, 0, 0, 0 });
             // 
             // numWHScribbles
             // 
