@@ -30,6 +30,7 @@
         {
             components = new System.ComponentModel.Container();
             panel1 = new Panel();
+            cbOverlay = new CheckBox();
             cbRedrawOnMD = new CheckBox();
             label15 = new Label();
             btnChaincode = new Button();
@@ -130,7 +131,6 @@
             contextMenuStrip1 = new ContextMenuStrip(components);
             floodBGToolStripMenuItem = new ToolStripMenuItem();
             floodFGToolStripMenuItem = new ToolStripMenuItem();
-            cbOverlay = new CheckBox();
             panel1.SuspendLayout();
             panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numWH).BeginInit();
@@ -243,6 +243,17 @@
             panel1.TabIndex = 0;
             panel1.MouseDoubleClick += panel1_MouseDoubleClick;
             panel1.MouseDown += panel1_MouseDown;
+            // 
+            // cbOverlay
+            // 
+            cbOverlay.AutoSize = true;
+            cbOverlay.Location = new Point(570, 63);
+            cbOverlay.Name = "cbOverlay";
+            cbOverlay.Size = new Size(88, 19);
+            cbOverlay.TabIndex = 696;
+            cbOverlay.Text = "overlay img";
+            cbOverlay.UseVisualStyleBackColor = true;
+            cbOverlay.CheckedChanged += cbOverlay_CheckedChanged;
             // 
             // cbRedrawOnMD
             // 
@@ -1067,7 +1078,7 @@
             numMaxComponents.Name = "numMaxComponents";
             numMaxComponents.Size = new Size(52, 23);
             numMaxComponents.TabIndex = 625;
-            numMaxComponents.Value = new decimal(new int[] { 1, 0, 0, 0 });
+            numMaxComponents.Value = new decimal(new int[] { 3, 0, 0, 0 });
             // 
             // numWHScribbles
             // 
@@ -1338,17 +1349,6 @@
             floodFGToolStripMenuItem.Size = new Size(122, 22);
             floodFGToolStripMenuItem.Text = "Flood FG";
             floodFGToolStripMenuItem.Click += floodFGToolStripMenuItem_Click;
-            // 
-            // cbOverlay
-            // 
-            cbOverlay.AutoSize = true;
-            cbOverlay.Location = new Point(570, 63);
-            cbOverlay.Name = "cbOverlay";
-            cbOverlay.Size = new Size(88, 19);
-            cbOverlay.TabIndex = 696;
-            cbOverlay.Text = "overlay img";
-            cbOverlay.UseVisualStyleBackColor = true;
-            cbOverlay.CheckedChanged += cbOverlay_CheckedChanged;
             // 
             // frmAvoidAGrabCutEasy
             // 
