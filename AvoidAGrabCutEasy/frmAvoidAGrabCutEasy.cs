@@ -124,6 +124,7 @@ namespace AvoidAGrabCutEasy
         private List<ChainCode>? _chainsFromFrm;
         private List<Tuple<int, int, int>>? _pointsListSeq;
         private int _currentDrawOperation;
+        private bool _dontUpdateNumComp;
 
         public event EventHandler<string>? ShowInfo;
         //public event EventHandler<string> BoundaryError;
@@ -1019,6 +1020,11 @@ namespace AvoidAGrabCutEasy
 
             this.cbQuickEst_CheckedChanged(this.cbQuickEst, new EventArgs());
             this.cbDraw_CheckedChanged(this.cbDraw, new EventArgs());
+
+            if (this.numComponents2.Value > this.numMaxComponents.Value)
+                this.numMaxComponents.Value = this.numComponents2.Value;
+
+            this.btnGo.Enabled = true;
         }
 
         private void button5_Click(object sender, EventArgs e)
@@ -2319,6 +2325,7 @@ namespace AvoidAGrabCutEasy
             this.cbRectMode.Enabled = false;
             this.cbScribbleMode.Checked = false;
             this.cbScribbleMode.Enabled = false;
+            this.label17.Enabled = this.numComponents2.Enabled = false;
 
             this.numMaxSize.Enabled = this.numGmmComp.Enabled = false;
 
@@ -2764,93 +2771,107 @@ namespace AvoidAGrabCutEasy
                 Bitmap bC = new Bitmap(bOut);
                 Bitmap bCT = new Bitmap(bOut);
 
-                List<ChainCode> allChains = this._allChains;
+                this.SetControls(false);
+                this.Refresh();
+
+                this._dontUpdateNumComp = true;
+
+                List<ChainCode>? allChains = this._allChains;
+                allChains = allChains?.OrderByDescending(x => x.Coord.Count).ToList();
+
+                if (allChains != null && allChains.Count > 1000)
+                    allChains = allChains.Take(1000).ToList();
+
+                if (allChains != null)
+                    this.numComponents2.Value = this.numComponents2.Maximum = allChains.Count;
+
                 float wFactor = 1.0f; // ((float)bOut.Width + (float)this.numRCX.Value) / (float)bOut.Width;
                 float hFactor = 1.0f; // ((float)bOut.Height + (float)this.numRCY.Value) / (float)bOut.Height;
 
-                using (TextureBrush tb = new TextureBrush(this.helplineRulerCtrl1.Bmp))
-                {
-                    foreach (ChainCode c in allChains)
+                if (allChains != null)
+                    using (TextureBrush tb = new TextureBrush(this.helplineRulerCtrl1.Bmp))
                     {
-                        using (GraphicsPath gP = new GraphicsPath())
+                        foreach (ChainCode c in allChains)
                         {
-                            try
+                            using (GraphicsPath gP = new GraphicsPath())
                             {
-                                gP.StartFigure();
-                                PointF[] pts = c.Coord.Select(a => new PointF(a.X, a.Y)).ToArray();
-                                gP.AddLines(pts);
-
-                                using (Matrix mx = new Matrix(wFactor, 0, 0, hFactor, 0, 0))
-                                    gP.Transform(mx);
-
-                                using (Graphics gx = Graphics.FromImage(bOut), gx2 = Graphics.FromImage(bC), gx4 = Graphics.FromImage(bCT))
+                                try
                                 {
-                                    gx.FillPath(tb, gP);
-                                    gx2.FillPath(tb, gP);
-                                    gx4.FillPath(tb, gP);
+                                    gP.StartFigure();
+                                    PointF[] pts = c.Coord.Select(a => new PointF(a.X, a.Y)).ToArray();
+                                    gP.AddLines(pts);
+
+                                    using (Matrix mx = new Matrix(wFactor, 0, 0, hFactor, 0, 0))
+                                        gP.Transform(mx);
+
+                                    using (Graphics gx = Graphics.FromImage(bOut), gx2 = Graphics.FromImage(bC), gx4 = Graphics.FromImage(bCT))
+                                    {
+                                        gx.FillPath(tb, gP);
+                                        gx2.FillPath(tb, gP);
+                                        gx4.FillPath(tb, gP);
+                                    }
                                 }
-                            }
-                            catch (Exception exc)
-                            {
-                                Console.WriteLine(exc.ToString());
+                                catch (Exception exc)
+                                {
+                                    Console.WriteLine(exc.ToString());
+                                }
                             }
                         }
-                    }
 
-                    foreach (ChainCode c in allChains)
-                    {
-                        if (ChainFinder.IsInnerOutline(c))
-                            using (GraphicsPath gP = new GraphicsPath())
-                            {
-                                try
+                        foreach (ChainCode c in allChains)
+                        {
+                            if (ChainFinder.IsInnerOutline(c))
+                                using (GraphicsPath gP = new GraphicsPath())
                                 {
-                                    gP.StartFigure();
-                                    PointF[] pts = c.Coord.Select(a => new PointF(a.X, a.Y)).ToArray();
-                                    gP.AddLines(pts);
-
-                                    using (Matrix mx = new Matrix(wFactor, 0, 0, hFactor, 0, 0))
-                                        gP.Transform(mx);
-
-                                    using (Graphics gx = Graphics.FromImage(bOut))
+                                    try
                                     {
-                                        gx.CompositingMode = CompositingMode.SourceCopy;
-                                        gx.FillPath(Brushes.Transparent, gP);
+                                        gP.StartFigure();
+                                        PointF[] pts = c.Coord.Select(a => new PointF(a.X, a.Y)).ToArray();
+                                        gP.AddLines(pts);
+
+                                        using (Matrix mx = new Matrix(wFactor, 0, 0, hFactor, 0, 0))
+                                            gP.Transform(mx);
+
+                                        using (Graphics gx = Graphics.FromImage(bOut))
+                                        {
+                                            gx.CompositingMode = CompositingMode.SourceCopy;
+                                            gx.FillPath(Brushes.Transparent, gP);
+                                        }
+                                    }
+                                    catch (Exception exc)
+                                    {
+                                        Console.WriteLine(exc.ToString());
                                     }
                                 }
-                                catch (Exception exc)
+                        }
+
+                        foreach (ChainCode c in allChains)
+                        {
+                            if (ChainFinder.IsInnerOutline(c))
+                                using (GraphicsPath gP = new GraphicsPath())
                                 {
-                                    Console.WriteLine(exc.ToString());
-                                }
-                            }
-                    }
-
-                    foreach (ChainCode c in allChains)
-                    {
-                        if (ChainFinder.IsInnerOutline(c))
-                            using (GraphicsPath gP = new GraphicsPath())
-                            {
-                                try
-                                {
-                                    gP.StartFigure();
-                                    PointF[] pts = c.Coord.Select(a => new PointF(a.X, a.Y)).ToArray();
-                                    gP.AddLines(pts);
-
-                                    using (Matrix mx = new Matrix(wFactor, 0, 0, hFactor, 0, 0))
-                                        gP.Transform(mx);
-
-                                    using (Graphics gx = Graphics.FromImage(bCT))
+                                    try
                                     {
-                                        gx.CompositingMode = CompositingMode.SourceCopy;
-                                        gx.FillPath(Brushes.Transparent, gP);
+                                        gP.StartFigure();
+                                        PointF[] pts = c.Coord.Select(a => new PointF(a.X, a.Y)).ToArray();
+                                        gP.AddLines(pts);
+
+                                        using (Matrix mx = new Matrix(wFactor, 0, 0, hFactor, 0, 0))
+                                            gP.Transform(mx);
+
+                                        using (Graphics gx = Graphics.FromImage(bCT))
+                                        {
+                                            gx.CompositingMode = CompositingMode.SourceCopy;
+                                            gx.FillPath(Brushes.Transparent, gP);
+                                        }
+                                    }
+                                    catch (Exception exc)
+                                    {
+                                        Console.WriteLine(exc.ToString());
                                     }
                                 }
-                                catch (Exception exc)
-                                {
-                                    Console.WriteLine(exc.ToString());
-                                }
-                            }
+                        }
                     }
-                }
 
                 OnShowInfo("done");
 
@@ -2868,6 +2889,12 @@ namespace AvoidAGrabCutEasy
                     (int)(this.helplineRulerCtrl2.Bmp.Width * this.helplineRulerCtrl2.Zoom),
                     (int)(this.helplineRulerCtrl2.Bmp.Height * this.helplineRulerCtrl2.Zoom));
                 this.helplineRulerCtrl2.dbPanel1.Invalidate();
+
+                this._dontUpdateNumComp = false;
+
+                this.SetControls(true);
+
+                this.btnGo.Enabled = false;
             }
         }
 
@@ -3631,6 +3658,7 @@ namespace AvoidAGrabCutEasy
             this.cbRectMode.Enabled = false;
             this.cbScribbleMode.Checked = false;
             this.cbScribbleMode.Enabled = false;
+            this.label17.Enabled = this.numComponents2.Enabled = false;
 
             this.toolStripStatusLabel4.Text = "done";
         }
@@ -4468,6 +4496,129 @@ namespace AvoidAGrabCutEasy
         {
             if (this.helplineRulerCtrl1.Bmp != null && this._scribbles != null && this._scribbles.Count > 0)
                 this.helplineRulerCtrl1.dbPanel1.Invalidate();
+        }
+
+        private async void numComponents2_ValueChanged(object sender, EventArgs e)
+        {
+            if (this.helplineRulerCtrl1.Bmp != null && this._allChains != null && !_dontUpdateNumComp)
+            {
+                _dontUpdateNumComp = true; //the simple, but effective way of not getting an object_in_use_elsewhere error (I dont know, if this is good practice or not...)
+
+                this.btnRecut.Enabled = false;
+
+                Bitmap? bOut = await Task.Run(() =>
+                {
+                    Bitmap? bOut = new Bitmap(this.helplineRulerCtrl1.Bmp.Width, this.helplineRulerCtrl1.Bmp.Height);
+
+                    if (bOut != null)
+                    {
+                        List<ChainCode>? allChains = this._allChains;
+                        int comp = (int)this.numComponents2.Value;
+
+                        allChains = allChains?.OrderByDescending(x => x.Coord.Count).ToList();
+
+                        if (allChains != null && allChains.Count > 1000)
+                            allChains = allChains.Take(1000).ToList();
+
+                        if (allChains != null && allChains.Count > 0)
+                        {
+                            //begin to redraw each component
+                            using (Graphics gx = Graphics.FromImage(bOut))
+                            {
+                                gx.Clear(Color.Transparent);
+
+                                int amnt = Math.Min(comp, allChains.Count);
+
+                                for (int i = 0; i < amnt; i++)
+                                {
+                                    using (GraphicsPath gp = new GraphicsPath())
+                                    {
+                                        PointF[] pts = allChains[i].Coord.Select(pt => new PointF(pt.X, pt.Y)).ToArray();
+                                        //make sure, each path is treated as an "outer-outline"
+                                        gp.FillMode = FillMode.Winding;
+                                        gp.AddLines(pts);
+                                        gp.CloseAllFigures();
+
+                                        //tmp try...catch
+                                        try
+                                        {
+                                            using (TextureBrush tb = new TextureBrush(this.helplineRulerCtrl1.Bmp))
+                                                gx.FillPath(tb, gp);
+
+                                            //using (Pen pen = new Pen(Color.Red, 2))
+                                            //    gx.DrawPath(pen, gp);
+                                        }
+                                        catch (Exception exc)
+                                        {
+                                            Console.WriteLine(exc.ToString());
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        //now redraw the inner outlines and "transparent" components
+                        //we can do this in the easy way with setting graphics.CompositionMode to sourceCopy
+                        //because the whole operations are full_pixel_wise (at least for the standard 4-connectivity)
+                        if (allChains != null && allChains.Count > 0)
+                        {
+                            int amnt = Math.Min(comp, allChains.Count);
+
+                            for (int i = 0; i < amnt; i++)
+                            {
+                                ChainCode cc = allChains[i];
+                                if (ChainFinder.IsInnerOutline(cc))
+                                    using (GraphicsPath gP = new GraphicsPath())
+                                    {
+                                        try
+                                        {
+                                            gP.StartFigure();
+                                            PointF[] pts = cc.Coord.Select(a => new PointF(a.X, a.Y)).ToArray();
+                                            gP.AddLines(pts);
+
+                                            using (Graphics gx = Graphics.FromImage(bOut))
+                                            {
+                                                gx.CompositingMode = CompositingMode.SourceCopy;
+                                                gx.FillPath(Brushes.Transparent, gP);
+                                            }
+                                        }
+                                        catch (Exception exc)
+                                        {
+                                            Console.WriteLine(exc.ToString());
+                                        }
+                                    }
+                            }
+                        }
+
+                        OnShowInfo("done");
+
+                    }
+
+                    return bOut;
+                });
+
+                if (bOut != null)
+                {
+                    this.SetBitmap(this.helplineRulerCtrl2.Bmp, bOut, this.helplineRulerCtrl2, "Bmp");
+
+                    _undoOPCache?.Add(bOut);
+
+                    this._pic_changed = true;
+
+                    this.helplineRulerCtrl2.SetZoom(this.helplineRulerCtrl1.Zoom.ToString());
+                    this.helplineRulerCtrl2.MakeBitmap(this.helplineRulerCtrl2.Bmp);
+                    this.helplineRulerCtrl2.dbPanel1.AutoScrollMinSize = new Size(
+                        (int)(this.helplineRulerCtrl2.Bmp.Width * this.helplineRulerCtrl2.Zoom),
+                        (int)(this.helplineRulerCtrl2.Bmp.Height * this.helplineRulerCtrl2.Zoom));
+                    this.helplineRulerCtrl2.dbPanel1.Invalidate();
+
+                    _dontUpdateNumComp = false;
+                }
+
+                this.SetControls(true);
+
+                this.btnGo.Enabled = false;
+            }
         }
     }
 }
