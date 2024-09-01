@@ -2893,8 +2893,6 @@ namespace AvoidAGrabCutEasy
                 this._dontUpdateNumComp = false;
 
                 this.SetControls(true);
-
-                this.btnGo.Enabled = false;
             }
         }
 
@@ -4010,6 +4008,8 @@ namespace AvoidAGrabCutEasy
                     }
                 }
             }
+
+            this.btnRecut.Enabled = this.numComponents2.Enabled = false;
         }
 
         private void numShiftX_ValueChanged(object sender, EventArgs e)
@@ -4120,6 +4120,8 @@ namespace AvoidAGrabCutEasy
                     }
                 }
             }
+
+            this.btnRecut.Enabled = this.numComponents2.Enabled = false;
         }
 
         private void btnInitSettings_Click(object sender, EventArgs e)
@@ -4616,8 +4618,6 @@ namespace AvoidAGrabCutEasy
                 }
 
                 this.SetControls(true);
-
-                this.btnGo.Enabled = false;
             }
         }
     }
