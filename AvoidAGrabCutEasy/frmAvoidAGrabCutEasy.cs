@@ -2893,6 +2893,8 @@ namespace AvoidAGrabCutEasy
                 this._dontUpdateNumComp = false;
 
                 this.SetControls(true);
+
+                this.cbRectMode.Enabled = false;
             }
         }
 
@@ -4619,7 +4621,14 @@ namespace AvoidAGrabCutEasy
                 }
 
                 this.SetControls(true);
+
+                this.cbRectMode.Enabled = false;
             }
+        }
+
+        private void numComponents2_DoubleClick(object sender, EventArgs e)
+        {
+            this.numMaxComponents.Value = this.numComponents2.Value;
         }
     }
 }

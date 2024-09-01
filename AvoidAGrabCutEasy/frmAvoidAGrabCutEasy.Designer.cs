@@ -272,6 +272,7 @@
             numComponents2.TabIndex = 697;
             numComponents2.Value = new decimal(new int[] { 1, 0, 0, 0 });
             numComponents2.ValueChanged += numComponents2_ValueChanged;
+            numComponents2.DoubleClick += numComponents2_DoubleClick;
             // 
             // cbOverlay
             // 
@@ -688,7 +689,7 @@
             btnRecut.Size = new Size(57, 27);
             btnRecut.TabIndex = 660;
             btnRecut.Text = "Recut";
-            toolTip1.SetToolTip(btnRecut, "Draw up to 1000 components\r\nThis should be done not before *all* \"Go\" clicks have finished\r\n");
+            toolTip1.SetToolTip(btnRecut, "Draw up to 1000 components\r\n");
             btnRecut.UseVisualStyleBackColor = true;
             btnRecut.Click += btnRecut_Click;
             // 
