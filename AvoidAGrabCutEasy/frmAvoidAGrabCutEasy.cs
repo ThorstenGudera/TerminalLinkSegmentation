@@ -4507,7 +4507,7 @@ namespace AvoidAGrabCutEasy
         {
             if (this.helplineRulerCtrl1.Bmp != null && this._allChains != null && !_dontUpdateNumComp)
             {
-                _dontUpdateNumComp = true; //the simple, but effective way of not getting an object_in_use_elsewhere error (I dont know, if this is good practice or not...)
+                _dontUpdateNumComp = true; //the simple, but effective way of not getting an object_in_use_elsewhere error (I dont know, if this is good practice or not... (you could also create a new bitmap before starting the thread and pass it over))
 
                 this.btnRecut.Enabled = false;
 
