@@ -213,6 +213,7 @@ namespace AvoidAGrabCutEasy
                 {
                     this._points.Add(new Point(ix, iy));
                     this._tracking2 = true;
+                    this.helplineRulerCtrl2.dbPanel1.Capture = true;
                 }
             }
         }
@@ -224,17 +225,17 @@ namespace AvoidAGrabCutEasy
                 int ix = (int)((e.X - this.helplineRulerCtrl2.dbPanel1.AutoScrollPosition.X) / (double)this.helplineRulerCtrl2.Zoom);
                 int iy = (int)((e.Y - this.helplineRulerCtrl2.dbPanel1.AutoScrollPosition.Y) / (double)this.helplineRulerCtrl2.Zoom);
 
-                if (ix >= 0 && ix < this.helplineRulerCtrl2.Bmp.Width && iy >= 0 && iy < this.helplineRulerCtrl2.Bmp.Height)
+                if (ix >= 0 && iy >= 0)
                 {
                     if (this._tracking2)
-                    {
                         this._points.Add(new Point(ix, iy));
-                        this.helplineRulerCtrl2.dbPanel1.Invalidate();
-                    }
 
-                    Color c = this.helplineRulerCtrl2.Bmp.GetPixel(ix, iy);
-                    this.toolStripStatusLabel4.Text = ix.ToString() + "; " + iy.ToString();
-                    this.toolStripStatusLabel3.BackColor = c;
+                    if (ix < this.helplineRulerCtrl2.Bmp.Width && iy < this.helplineRulerCtrl2.Bmp.Height)
+                    {
+                        Color c = this.helplineRulerCtrl2.Bmp.GetPixel(ix, iy);
+                        this.toolStripStatusLabel4.Text = ix.ToString() + "; " + iy.ToString();
+                        this.toolStripStatusLabel3.BackColor = c;
+                    }
 
                     this.helplineRulerCtrl2.dbPanel1.Invalidate();
                 }
@@ -254,7 +255,8 @@ namespace AvoidAGrabCutEasy
                 int ix = (int)((e.X - this.helplineRulerCtrl2.dbPanel1.AutoScrollPosition.X) / (double)this.helplineRulerCtrl2.Zoom);
                 int iy = (int)((e.Y - this.helplineRulerCtrl2.dbPanel1.AutoScrollPosition.Y) / (double)this.helplineRulerCtrl2.Zoom);
 
-                if (ix >= 0 && ix < this.helplineRulerCtrl2.Bmp.Width && iy >= 0 && iy < this.helplineRulerCtrl2.Bmp.Height)
+                //if (ix >= 0 && ix < this.helplineRulerCtrl2.Bmp.Width && iy >= 0 && iy < this.helplineRulerCtrl2.Bmp.Height)
+                if (ix >= 0 && iy >= 0)
                 {
                     if (this._tracking2)
                     {
@@ -269,6 +271,7 @@ namespace AvoidAGrabCutEasy
             }
 
             this._tracking2 = false;
+            this.helplineRulerCtrl2.dbPanel1.Capture = false;
         }
 
         private void AddPointsToPath()
@@ -356,7 +359,7 @@ namespace AvoidAGrabCutEasy
 
                                     bool doRect = pts.Count > 1;
 
-                                    Color c = jj.First().Item1 == 0 ? Color.Black : jj.First().Item1 == 1 ? Color.White : Color.Gray;
+                                    Color c = this._colors[jj.First().Item1];
 
                                     if (doRect)
                                     {
