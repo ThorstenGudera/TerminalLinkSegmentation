@@ -1217,15 +1217,18 @@ namespace AvoidAGrabCutEasy
                     if (d2[i] == 0)
                         d2[i] = 0.0000000001;
 
-                    if (this.UseThreshold)
-                    {
-                        d[i] = Math.Log(d[i]) < -this.Threshold ? d[i] : 0;
-                    }
+                    //if (this.UseThreshold)
+                    //{
+                    //    d[i] = Math.Log(d[i]) < -this.Threshold ? d[i] : 0;
+                    //}
 
                     //double vv = Math.Log(d[i] / d2[i]);
 
                     //if (double.IsInfinity(vv))
                     //    vv = 0.0000001;
+
+                    if (this.UseThreshold && Math.Log(d[i]) >= -this.Threshold)
+                        d[i] = 0;
 
                     double vv = 0.0000001;
 
@@ -1528,13 +1531,16 @@ namespace AvoidAGrabCutEasy
                     if (d2[i] == 0)
                         d2[i] = 0.0000000001;
 
-                    if (this.UseThreshold)
-                        d[i] = Math.Log(d[i]) < -this.Threshold ? d[i] : 0;
+                    //if (this.UseThreshold)
+                    //    d[i] = Math.Log(d[i]) < -this.Threshold ? d[i] : 0;
 
                     //double vv = Math.Log(d[i] / d2[i]);
 
                     //if (double.IsInfinity(vv))
                     //    vv = 0.0000001;
+
+                    if (this.UseThreshold && Math.Log(d[i]) >= -this.Threshold)
+                        d[i] = 0;
 
                     double vv = 0.0000001;
 
@@ -2824,15 +2830,18 @@ namespace AvoidAGrabCutEasy
                     if (d2[i] == 0)
                         d2[i] = 0.0000000001;
 
-                    if (this.UseThreshold)
-                    {
-                        d[i] = Math.Log(d[i]) < -this.Threshold ? d[i] : 0;
-                    }
+                    //if (this.UseThreshold)
+                    //{
+                    //    d[i] = Math.Log(d[i]) < -this.Threshold ? d[i] : 0;
+                    //}
 
                     //double vv = Math.Log(d[i] / d2[i]);
 
                     //if (double.IsInfinity(vv))
                     //    vv = 0.0000001;
+
+                    if (this.UseThreshold && Math.Log(d[i]) >= -this.Threshold)
+                        d[i] = 0;
 
                     double vv = 0.0000001;
 
