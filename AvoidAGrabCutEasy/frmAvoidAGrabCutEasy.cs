@@ -4627,5 +4627,43 @@ namespace AvoidAGrabCutEasy
         {
             this.numMaxComponents.Value = this.numComponents2.Value;
         }
+
+        private void btnCFM_Click(object sender, EventArgs e)
+        {
+            if (this.helplineRulerCtrl1.Bmp != null && this.CachePathAddition != null)
+            {
+                using (frmAlphaMatte frm = new frmAlphaMatte(this.helplineRulerCtrl1.Bmp, this.CachePathAddition))
+                {
+                    frm.SetupCache();
+                    if (this._scribbles != null)
+                        frm.SetScribbles(this._scribbles);
+
+                    if (frm.ShowDialog() == DialogResult.OK)
+                    {
+                        if (frm.FBitmap != null)
+                        {
+                            Bitmap b = new Bitmap(frm.FBitmap);
+
+                            this.SetBitmap(this.helplineRulerCtrl2.Bmp, b, this.helplineRulerCtrl2, "Bmp");
+
+                            Bitmap bC = new Bitmap(this.helplineRulerCtrl2.Bmp);
+                            this.SetBitmap(ref this._b4Copy, ref bC);
+
+                            this.helplineRulerCtrl2.SetZoom(this.helplineRulerCtrl1.Zoom.ToString());
+                            this.helplineRulerCtrl2.MakeBitmap(this.helplineRulerCtrl2.Bmp);
+                            this.helplineRulerCtrl2.dbPanel1.AutoScrollMinSize = new Size(
+                                (int)(this.helplineRulerCtrl2.Bmp.Width * this.helplineRulerCtrl2.Zoom),
+                                (int)(this.helplineRulerCtrl2.Bmp.Height * this.helplineRulerCtrl2.Zoom));
+
+                            _undoOPCache?.Add(b);
+
+                            this.btnOK.Enabled = true;
+                        }
+                    }
+                }
+            }
+
+            this.btnRecut.Enabled = this.numComponents2.Enabled = false;
+        }
     }
 }

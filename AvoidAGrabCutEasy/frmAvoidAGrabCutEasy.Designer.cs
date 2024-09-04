@@ -133,6 +133,8 @@
             contextMenuStrip1 = new ContextMenuStrip(components);
             floodBGToolStripMenuItem = new ToolStripMenuItem();
             floodFGToolStripMenuItem = new ToolStripMenuItem();
+            btnCFM = new Button();
+            label16 = new Label();
             panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numComponents2).BeginInit();
             panel2.SuspendLayout();
@@ -159,6 +161,8 @@
             // 
             // panel1
             // 
+            panel1.Controls.Add(btnCFM);
+            panel1.Controls.Add(label16);
             panel1.Controls.Add(label17);
             panel1.Controls.Add(numComponents2);
             panel1.Controls.Add(cbOverlay);
@@ -1381,6 +1385,25 @@
             floodFGToolStripMenuItem.Text = "Flood FG";
             floodFGToolStripMenuItem.Click += floodFGToolStripMenuItem_Click;
             // 
+            // btnCFM
+            // 
+            btnCFM.Location = new Point(1006, 82);
+            btnCFM.Name = "btnCFM";
+            btnCFM.Size = new Size(88, 27);
+            btnCFM.TabIndex = 700;
+            btnCFM.Text = "Go";
+            btnCFM.UseVisualStyleBackColor = true;
+            btnCFM.Click += btnCFM_Click;
+            // 
+            // label16
+            // 
+            label16.AutoSize = true;
+            label16.Location = new Point(905, 88);
+            label16.Name = "label16";
+            label16.Size = new Size(98, 15);
+            label16.TabIndex = 699;
+            label16.Text = "compute a Matte";
+            // 
             // frmAvoidAGrabCutEasy
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -1531,5 +1554,7 @@
         private CheckBox cbOverlay;
         private Label label17;
         private NumericUpDown numComponents2;
+        private Button btnCFM;
+        private Label label16;
     }
 }
