@@ -4177,9 +4177,6 @@ namespace AvoidAGrabCutEasy
                     bOld.Dispose();
                 bOld = null;
 
-                if (this._scribbles != null && this._scribbles.ContainsKey(0) && this._scribbles[0].ContainsKey(2))
-                    this._scribbles[0].Remove(3);
-
                 this._bitsBG.SetAll(false);
 
                 Bitmap? b = this._scribblesBitmap;
@@ -4298,9 +4295,6 @@ namespace AvoidAGrabCutEasy
                 if (bOld != null)
                     bOld.Dispose();
                 bOld = null;
-
-                if (this._scribbles != null && this._scribbles.ContainsKey(1) && this._scribbles[1].ContainsKey(2))
-                    this._scribbles[1].Remove(3);
 
                 this._bitsFG.SetAll(false);
 
