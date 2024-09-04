@@ -24,6 +24,9 @@ closed form matting: https://github.com/MarcoForte/closed-form-matting
 
 I maybe havent implemented the BoykovKolmogorov Algorithm correctly. I did it from the PseudoCode in the paper, but mine sometimes doesnt stop. The queue doesnt get empty, so I aded a Check-Method that compares the current path to the last checked path and breaks when similarity exceeds a given amount.
 
+It's IMHO better to use Bayes-Matting here, since a relatively thin (slim) unknown part in a closed curve (= our setup), is kind of ideal for Bayesian Matting. Bayesian Matting also does not use the big graph-like sparse matrix (the matting laplacian), because its done by solving small(er) eq-systems and so, we dont need so much memory while processing.
+But I dont know, if it is allowed to post code for Bayesian Matting. It's some code out there for that, but on the other hand, the people from https://alphamatting.com/code.php say that they do not post Bayesian Matting example code due to licensing issues.
+
 Note: Writes cached files to: LocalApplicationData\Thorsten_Gudera...
 
 Usage:
