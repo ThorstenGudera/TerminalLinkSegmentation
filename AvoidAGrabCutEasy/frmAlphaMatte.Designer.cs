@@ -60,6 +60,9 @@
             cbLSBmp = new CheckBox();
             Label20 = new Label();
             panel1 = new Panel();
+            btnSetGamma = new Button();
+            label4 = new Label();
+            numGamma = new NumericUpDown();
             panel5 = new Panel();
             rbClosedForm = new RadioButton();
             panel2 = new Panel();
@@ -95,12 +98,14 @@
             contextMenuStrip1 = new ContextMenuStrip(components);
             floodBGToolStripMenuItem = new ToolStripMenuItem();
             floodFGToolStripMenuItem = new ToolStripMenuItem();
+            backgroundWorker5 = new System.ComponentModel.BackgroundWorker();
             statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
             splitContainer1.Panel2.SuspendLayout();
             splitContainer1.SuspendLayout();
             panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)numGamma).BeginInit();
             panel5.SuspendLayout();
             panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numError).BeginInit();
@@ -415,6 +420,9 @@
             // 
             // panel1
             // 
+            panel1.Controls.Add(btnSetGamma);
+            panel1.Controls.Add(label4);
+            panel1.Controls.Add(numGamma);
             panel1.Controls.Add(panel5);
             panel1.Controls.Add(panel2);
             panel1.Controls.Add(cbOverlay);
@@ -457,6 +465,39 @@
             panel1.Name = "panel1";
             panel1.Size = new Size(1479, 224);
             panel1.TabIndex = 226;
+            // 
+            // btnSetGamma
+            // 
+            btnSetGamma.Location = new Point(1349, 142);
+            btnSetGamma.Margin = new Padding(4, 3, 4, 3);
+            btnSetGamma.Name = "btnSetGamma";
+            btnSetGamma.Size = new Size(88, 27);
+            btnSetGamma.TabIndex = 709;
+            btnSetGamma.Text = "Go";
+            btnSetGamma.UseVisualStyleBackColor = true;
+            btnSetGamma.Click += btnSetGamma_Click;
+            // 
+            // label4
+            // 
+            label4.AutoSize = true;
+            label4.Location = new Point(1164, 148);
+            label4.Margin = new Padding(4, 0, 4, 0);
+            label4.Name = "label4";
+            label4.Size = new Size(98, 15);
+            label4.TabIndex = 707;
+            label4.Text = "set AlphaGamma";
+            // 
+            // numGamma
+            // 
+            numGamma.DecimalPlaces = 2;
+            numGamma.Increment = new decimal(new int[] { 1, 0, 0, 65536 });
+            numGamma.Location = new Point(1272, 146);
+            numGamma.Margin = new Padding(4, 3, 4, 3);
+            numGamma.Minimum = new decimal(new int[] { 1, 0, 0, 131072 });
+            numGamma.Name = "numGamma";
+            numGamma.Size = new Size(70, 23);
+            numGamma.TabIndex = 708;
+            numGamma.Value = new decimal(new int[] { 2, 0, 0, 0 });
             // 
             // panel5
             // 
@@ -844,6 +885,13 @@
             floodFGToolStripMenuItem.Text = "Flood FG";
             floodFGToolStripMenuItem.Click += floodFGToolStripMenuItem_Click;
             // 
+            // backgroundWorker5
+            // 
+            backgroundWorker5.WorkerReportsProgress = true;
+            backgroundWorker5.WorkerSupportsCancellation = true;
+            backgroundWorker5.DoWork += backgroundWorker5_DoWork;
+            backgroundWorker5.RunWorkerCompleted += backgroundWorker5_RunWorkerCompleted;
+            // 
             // frmAlphaMatte
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -865,6 +913,7 @@
             splitContainer1.ResumeLayout(false);
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)numGamma).EndInit();
             panel5.ResumeLayout(false);
             panel5.PerformLayout();
             panel2.ResumeLayout(false);
@@ -949,5 +998,9 @@
         private Panel panel5;
         private ContextMenuStrip contextMenuStrip2;
         private ToolStripMenuItem saveTrimapToolStripMenuItem;
+        private Button btnSetGamma;
+        private Label label4;
+        private NumericUpDown numGamma;
+        internal System.ComponentModel.BackgroundWorker backgroundWorker5;
     }
 }

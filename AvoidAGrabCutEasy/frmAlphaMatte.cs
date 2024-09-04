@@ -3873,5 +3873,133 @@ namespace AvoidAGrabCutEasy
             if (this.pictureBox1.Image != null && this.saveFileDialog1.ShowDialog() == DialogResult.OK)
                 this.pictureBox1.Image.Save(this.saveFileDialog1.FileName, ImageFormat.Png);
         }
+
+        private void btnSetGamma_Click(object sender, EventArgs e)
+        {
+            if (this.backgroundWorker5.IsBusy)
+            {
+                this.backgroundWorker5.CancelAsync();
+                return;
+            }
+
+            if (this.helplineRulerCtrl1.Bmp != null)
+            {
+                this.Cursor = Cursors.WaitCursor;
+                this.SetControls(false);
+
+                this.btnSetGamma.Enabled = true;
+                this.btnSetGamma.Text = "Cancel";
+
+                double gamma = (double)this.numGamma.Value;
+
+                this.backgroundWorker5.RunWorkerAsync(new object[] { this.helplineRulerCtrl2.Bmp, gamma });
+            }
+        }
+
+        private void backgroundWorker5_DoWork(object? sender, DoWorkEventArgs e)
+        {
+            if (e.Argument != null)
+            {
+                object[] o = (object[])e.Argument;
+                Bitmap bmp = new Bitmap((Bitmap)o[0]);
+                double gamma = (double)o[1];
+
+                e.Result = GetAlphaPic(bmp, gamma);
+            }
+        }
+
+        private unsafe Bitmap? GetAlphaPic(Bitmap bmp, double gamma)
+        {
+            Bitmap? bOut = null;
+
+            if (AvailMem.AvailMem.checkAvailRam(bmp.Width * bmp.Height * 16L))
+            {
+                int w = bmp.Width;
+                int h = bmp.Height;
+
+                bOut = new Bitmap(w, h);
+
+                BitmapData bmD = bmp.LockBits(new Rectangle(0, 0, w, h), ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
+                BitmapData bmA = bOut.LockBits(new Rectangle(0, 0, w, h), ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
+                int stride = bmD.Stride;
+
+                Parallel.For(0, h, y =>
+                {
+                    byte* p = (byte*)bmD.Scan0;
+                    p += y * stride;
+
+                    byte* pA = (byte*)bmA.Scan0;
+                    pA += y * stride;
+
+                    for (int x = 0; x < w; x++)
+                    {
+                        if (p[3] != 0)
+                        {
+                            pA[0] = p[0];
+                            pA[1] = p[1];
+                            pA[2] = p[2];
+
+                            pA[3] = (byte)Math.Max(Math.Min(255.0 * Math.Pow((double)p[3] / 255.0, gamma), 255), 0);
+                        }
+
+                        p += 4;
+                        pA += 4;
+                    }
+                });
+
+                bmp.UnlockBits(bmD);
+                bOut.UnlockBits(bmA);
+            }
+
+            return bOut;
+        }
+
+        private void backgroundWorker5_RunWorkerCompleted(object? sender, RunWorkerCompletedEventArgs e)
+        {
+            if (!this.IsDisposed)
+            {
+                Bitmap? bmp = null;
+
+                if (e.Result != null)
+                    bmp = (Bitmap)e.Result;
+
+                if (bmp != null)
+                {
+                    this.SetBitmap(this.helplineRulerCtrl2.Bmp, bmp, this.helplineRulerCtrl2, "Bmp");
+
+                    this.helplineRulerCtrl2.SetZoom(this.helplineRulerCtrl1.Zoom.ToString());
+                    this.helplineRulerCtrl2.MakeBitmap(this.helplineRulerCtrl2.Bmp);
+                    this.helplineRulerCtrl2.dbPanel1.AutoScrollMinSize = new Size(
+                        (int)(this.helplineRulerCtrl2.Bmp.Width * this.helplineRulerCtrl2.Zoom),
+                        (int)(this.helplineRulerCtrl2.Bmp.Height * this.helplineRulerCtrl2.Zoom));
+
+                    _undoOPCache?.Add(bmp);
+                }
+
+                this.btnSetGamma.Text = "Go";
+
+                this.SetControls(true);
+                this.Cursor = Cursors.Default;
+
+                this.btnOK.Enabled = this.btnCancel.Enabled = true;
+
+                this._pic_changed = true;
+
+                this.helplineRulerCtrl2.dbPanel1.Invalidate();
+
+                if (this.Timer3.Enabled)
+                    this.Timer3.Stop();
+
+                this.Timer3.Start();
+
+                this.backgroundWorker5.Dispose();
+                this.backgroundWorker5 = new BackgroundWorker();
+                this.backgroundWorker5.WorkerReportsProgress = true;
+                this.backgroundWorker5.WorkerSupportsCancellation = true;
+                this.backgroundWorker5.DoWork += backgroundWorker5_DoWork;
+                //this.backgroundWorker5.ProgressChanged += backgroundWorker5_ProgressChanged;
+                this.backgroundWorker5.RunWorkerCompleted += backgroundWorker5_RunWorkerCompleted;
+            }
+        }
     }
 }
