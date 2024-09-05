@@ -4636,7 +4636,10 @@ namespace AvoidAGrabCutEasy
                 {
                     frm.SetupCache();
                     if (this._scribbles != null)
-                        frm.SetScribbles(this._scribbles);
+                    {
+                        Tuple<Dictionary<int, Dictionary<int, List<List<Point>>>>, List<Tuple<int, int, int>>> scr = this.CloneScribbles(this._scribbles, this._scribbleSeq);
+                        frm.SetScribbles(scr.Item1, scr.Item2);
+                    }
 
                     if (frm.ShowDialog() == DialogResult.OK)
                     {
@@ -4664,6 +4667,124 @@ namespace AvoidAGrabCutEasy
             }
 
             this.btnRecut.Enabled = this.numComponents2.Enabled = false;
+        }
+
+        private Tuple<Dictionary<int, Dictionary<int, List<List<Point>>>>, List<Tuple<int, int, int>>> CloneScribbles(
+                                Dictionary<int, Dictionary<int, List<List<Point>>>>? scribbles, List<Tuple<int, int, int>> scribbleSeq)
+        {
+            Dictionary<int, Dictionary<int, List<List<Point>>>> dOut = new Dictionary<int, Dictionary<int, List<List<Point>>>>();
+            List<Tuple<int, int, int>> scribbleSequence = new List<Tuple<int, int, int>>();
+
+            if (scribbles != null)
+            {
+                SavedScribbles f = new SavedScribbles();
+
+                if (scribbles.ContainsKey(0)) //BG
+                {
+                    if (scribbles[0] != null)
+                    {
+                        f.BGSizes = scribbles[0].Keys.ToArray();
+                        f.BGPoints = new Point[f.BGSizes.Length][][];
+                        int i = 0;
+
+                        foreach (int wh in scribbles[0].Keys)
+                        {
+                            f.BGPoints[i] = new Point[scribbles[0][wh].Count][];
+
+                            List<List<Point>> whPts = scribbles[0][wh];
+                            int j = 0;
+
+                            foreach (List<Point> pts in whPts)
+                            {
+                                f.BGPoints[i][j] = pts.ToArray();
+                                j++;
+                            }
+
+                            i++;
+                        }
+                    }
+                }
+
+                if (scribbles.ContainsKey(1)) //FG
+                {
+                    if (scribbles[1] != null)
+                    {
+                        f.FGSizes = scribbles[1].Keys.ToArray();
+                        f.FGPoints = new Point[f.FGSizes.Length][][];
+                        int i = 0;
+
+                        foreach (int wh in scribbles[1].Keys)
+                        {
+                            f.FGPoints[i] = new Point[scribbles[1][wh].Count][];
+
+                            List<List<Point>> whPts = scribbles[1][wh];
+                            int j = 0;
+
+                            foreach (List<Point> pts in whPts)
+                            {
+                                f.FGPoints[i][j] = pts.ToArray();
+                                j++;
+                            }
+
+                            i++;
+                        }
+                    }
+                }
+
+                if (scribbles.ContainsKey(3)) //Unknown
+                {
+                    if (scribbles[3] != null)
+                    {
+                        f.UknwnSizes = scribbles[3].Keys.ToArray();
+                        f.UknwnPoints = new Point[f.UknwnSizes.Length][][];
+                        int i = 0;
+
+                        foreach (int wh in scribbles[3].Keys)
+                        {
+                            f.UknwnPoints[i] = new Point[scribbles[3][wh].Count][];
+
+                            List<List<Point>> whPts = scribbles[3][wh];
+                            int j = 0;
+
+                            foreach (List<Point> pts in whPts)
+                            {
+                                f.UknwnPoints[i][j] = pts.ToArray();
+                                j++;
+                            }
+
+                            i++;
+                        }
+                    }
+                }
+
+                if (this.helplineRulerCtrl1.Bmp != null && this.cbLSBmp.Checked)
+                {
+                    string? b64 = ConvertToBase64(this.helplineRulerCtrl1.Bmp);
+                    if (b64 != null)
+                        f.Bmp = b64;
+                }
+
+                if (scribbleSeq != null)
+                    f.ScribbleSequence = scribbleSeq;
+
+                if (f != null)
+                {
+                    dOut = f.ToDictionary();
+
+                    if (this.cbScribbleMode.Enabled)
+                    {
+                        this.cbRectMode.Checked = false;
+                        this.cbScribbleMode.Checked = true;
+                    }
+
+                    if (f.ScribbleSequence != null)
+                        scribbleSequence = f.ScribbleSequence;
+
+                    f.Dispose();
+                }
+            }
+
+            return Tuple.Create(dOut, scribbleSequence);
         }
     }
 }

@@ -170,9 +170,10 @@ namespace AvoidAGrabCutEasy
             AvailMem.AvailMem.NoMemCheck = true;
         }
 
-        public void SetScribbles(Dictionary<int, Dictionary<int, List<List<Point>>>>? scribbles)
+        public void SetScribbles(Dictionary<int, Dictionary<int, List<List<Point>>>>? scribbles, List<Tuple<int, int, int>> scribbleSeq)
         {
             this._scribbles = scribbles;
+            this._scribbleSeq = scribbleSeq;
         }
 
         private void helplineRulerCtrl1_MouseDown(object? sender, MouseEventArgs e)
