@@ -49,6 +49,7 @@
             btnOK = new Button();
             groupBox4 = new GroupBox();
             cbRedrawInner = new CheckBox();
+            cbEditTrimap = new CheckBox();
             cbDesaturate = new CheckBox();
             btnOnlyRestore = new Button();
             cbOnlyRestore = new CheckBox();
@@ -64,8 +65,11 @@
             label4 = new Label();
             numTh = new NumericUpDown();
             groupBox5 = new GroupBox();
+            rb16 = new RadioButton();
+            rb4 = new RadioButton();
+            cbSlices = new CheckBox();
+            cbInterpolated = new CheckBox();
             btnResVals = new Button();
-            cbEditTrimap = new CheckBox();
             label2 = new Label();
             numSleep = new NumericUpDown();
             cbHalfSize = new CheckBox();
@@ -372,7 +376,7 @@
             cbBGColor.AutoSize = true;
             cbBGColor.Checked = true;
             cbBGColor.CheckState = CheckState.Checked;
-            cbBGColor.Location = new Point(189, 772);
+            cbBGColor.Location = new Point(187, 772);
             cbBGColor.Margin = new Padding(4, 3, 4, 3);
             cbBGColor.Name = "cbBGColor";
             cbBGColor.Size = new Size(67, 19);
@@ -385,7 +389,7 @@
             // 
             button10.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             button10.ForeColor = SystemColors.ControlText;
-            button10.Location = new Point(382, 810);
+            button10.Location = new Point(380, 810);
             button10.Margin = new Padding(4, 3, 4, 3);
             button10.Name = "button10";
             button10.Size = new Size(88, 27);
@@ -398,7 +402,7 @@
             // 
             button8.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             button8.ForeColor = SystemColors.ControlText;
-            button8.Location = new Point(287, 810);
+            button8.Location = new Point(285, 810);
             button8.Margin = new Padding(4, 3, 4, 3);
             button8.Name = "button8";
             button8.Size = new Size(88, 27);
@@ -412,7 +416,7 @@
             button2.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             button2.FlatStyle = FlatStyle.System;
             button2.ForeColor = SystemColors.ControlText;
-            button2.Location = new Point(382, 770);
+            button2.Location = new Point(380, 770);
             button2.Margin = new Padding(4, 3, 4, 3);
             button2.Name = "button2";
             button2.Size = new Size(88, 27);
@@ -425,7 +429,7 @@
             btnCancel.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             btnCancel.DialogResult = DialogResult.Cancel;
             btnCancel.ForeColor = SystemColors.ControlText;
-            btnCancel.Location = new Point(391, 845);
+            btnCancel.Location = new Point(389, 845);
             btnCancel.Margin = new Padding(4, 3, 4, 3);
             btnCancel.Name = "btnCancel";
             btnCancel.Size = new Size(88, 27);
@@ -438,7 +442,7 @@
             btnOK.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             btnOK.DialogResult = DialogResult.OK;
             btnOK.ForeColor = SystemColors.ControlText;
-            btnOK.Location = new Point(298, 845);
+            btnOK.Location = new Point(296, 845);
             btnOK.Margin = new Padding(4, 3, 4, 3);
             btnOK.Name = "btnOK";
             btnOK.Size = new Size(88, 27);
@@ -495,11 +499,11 @@
             groupBox4.Controls.Add(numBoundInner);
             groupBox4.Controls.Add(label46);
             groupBox4.ForeColor = SystemColors.ControlText;
-            groupBox4.Location = new Point(10, 322);
+            groupBox4.Location = new Point(10, 297);
             groupBox4.Margin = new Padding(4, 3, 4, 3);
             groupBox4.Name = "groupBox4";
             groupBox4.Padding = new Padding(4, 3, 4, 3);
-            groupBox4.Size = new Size(476, 380);
+            groupBox4.Size = new Size(476, 405);
             groupBox4.TabIndex = 5;
             groupBox4.TabStop = false;
             groupBox4.Text = "boundary alpha";
@@ -510,17 +514,28 @@
             cbRedrawInner.Checked = true;
             cbRedrawInner.CheckState = CheckState.Checked;
             cbRedrawInner.Enabled = false;
-            cbRedrawInner.Location = new Point(243, 173);
+            cbRedrawInner.Location = new Point(243, 200);
             cbRedrawInner.Name = "cbRedrawInner";
             cbRedrawInner.Size = new Size(137, 19);
             cbRedrawInner.TabIndex = 686;
             cbRedrawInner.Text = "redraw inner outlines";
             cbRedrawInner.UseVisualStyleBackColor = true;
             // 
+            // cbEditTrimap
+            // 
+            cbEditTrimap.AutoSize = true;
+            cbEditTrimap.Location = new Point(387, 200);
+            cbEditTrimap.Margin = new Padding(4, 3, 4, 3);
+            cbEditTrimap.Name = "cbEditTrimap";
+            cbEditTrimap.Size = new Size(84, 19);
+            cbEditTrimap.TabIndex = 569;
+            cbEditTrimap.Text = "edit trimap";
+            cbEditTrimap.UseVisualStyleBackColor = true;
+            // 
             // cbDesaturate
             // 
             cbDesaturate.AutoSize = true;
-            cbDesaturate.Location = new Point(83, 345);
+            cbDesaturate.Location = new Point(83, 372);
             cbDesaturate.Margin = new Padding(4, 3, 4, 3);
             cbDesaturate.Name = "cbDesaturate";
             cbDesaturate.Size = new Size(105, 19);
@@ -530,7 +545,7 @@
             // 
             // btnOnlyRestore
             // 
-            btnOnlyRestore.Location = new Point(334, 311);
+            btnOnlyRestore.Location = new Point(334, 338);
             btnOnlyRestore.Margin = new Padding(4, 3, 4, 3);
             btnOnlyRestore.Name = "btnOnlyRestore";
             btnOnlyRestore.Size = new Size(88, 27);
@@ -542,7 +557,7 @@
             // cbOnlyRestore
             // 
             cbOnlyRestore.AutoSize = true;
-            cbOnlyRestore.Location = new Point(233, 316);
+            cbOnlyRestore.Location = new Point(233, 343);
             cbOnlyRestore.Margin = new Padding(4, 3, 4, 3);
             cbOnlyRestore.Name = "cbOnlyRestore";
             cbOnlyRestore.Size = new Size(88, 19);
@@ -554,7 +569,7 @@
             // btnPrecompAngles
             // 
             btnPrecompAngles.Enabled = false;
-            btnPrecompAngles.Location = new Point(119, 312);
+            btnPrecompAngles.Location = new Point(119, 339);
             btnPrecompAngles.Margin = new Padding(4, 3, 4, 3);
             btnPrecompAngles.Name = "btnPrecompAngles";
             btnPrecompAngles.Size = new Size(98, 27);
@@ -566,7 +581,7 @@
             // cbShowAngles
             // 
             cbShowAngles.AutoSize = true;
-            cbShowAngles.Location = new Point(15, 316);
+            cbShowAngles.Location = new Point(15, 343);
             cbShowAngles.Margin = new Padding(4, 3, 4, 3);
             cbShowAngles.Name = "cbShowAngles";
             cbShowAngles.Size = new Size(90, 19);
@@ -579,7 +594,7 @@
             // label10
             // 
             label10.AutoSize = true;
-            label10.Location = new Point(302, 285);
+            label10.Location = new Point(302, 312);
             label10.Margin = new Padding(4, 0, 4, 0);
             label10.Name = "label10";
             label10.Size = new Size(66, 15);
@@ -590,7 +605,7 @@
             // label8
             // 
             label8.AutoSize = true;
-            label8.Location = new Point(44, 285);
+            label8.Location = new Point(44, 312);
             label8.Margin = new Padding(4, 0, 4, 0);
             label8.Name = "label8";
             label8.Size = new Size(46, 15);
@@ -600,7 +615,7 @@
             // label7
             // 
             label7.AutoSize = true;
-            label7.Location = new Point(302, 258);
+            label7.Location = new Point(302, 285);
             label7.Margin = new Padding(4, 0, 4, 0);
             label7.Name = "label7";
             label7.Size = new Size(48, 15);
@@ -610,7 +625,7 @@
             // label12
             // 
             label12.AutoSize = true;
-            label12.Location = new Point(176, 259);
+            label12.Location = new Point(176, 286);
             label12.Margin = new Padding(4, 0, 4, 0);
             label12.Name = "label12";
             label12.Size = new Size(37, 15);
@@ -620,7 +635,7 @@
             // label6
             // 
             label6.AutoSize = true;
-            label6.Location = new Point(176, 286);
+            label6.Location = new Point(176, 313);
             label6.Margin = new Padding(4, 0, 4, 0);
             label6.Name = "label6";
             label6.Size = new Size(39, 15);
@@ -632,7 +647,7 @@
             // 
             numGamma2.DecimalPlaces = 2;
             numGamma2.Increment = new decimal(new int[] { 1, 0, 0, 65536 });
-            numGamma2.Location = new Point(363, 255);
+            numGamma2.Location = new Point(363, 282);
             numGamma2.Margin = new Padding(4, 3, 4, 3);
             numGamma2.Minimum = new decimal(new int[] { 1, 0, 0, 131072 });
             numGamma2.Name = "numGamma2";
@@ -643,7 +658,7 @@
             // cbRestoreDefects
             // 
             cbRestoreDefects.AutoSize = true;
-            cbRestoreDefects.Location = new Point(15, 258);
+            cbRestoreDefects.Location = new Point(15, 285);
             cbRestoreDefects.Margin = new Padding(4, 3, 4, 3);
             cbRestoreDefects.Name = "cbRestoreDefects";
             cbRestoreDefects.Size = new Size(101, 19);
@@ -655,7 +670,7 @@
             // label4
             // 
             label4.AutoSize = true;
-            label4.Location = new Point(248, 219);
+            label4.Location = new Point(248, 246);
             label4.Margin = new Padding(4, 0, 4, 0);
             label4.Name = "label4";
             label4.Size = new Size(57, 15);
@@ -665,7 +680,7 @@
             // numTh
             // 
             numTh.DecimalPlaces = 6;
-            numTh.Location = new Point(314, 221);
+            numTh.Location = new Point(314, 248);
             numTh.Margin = new Padding(4, 3, 4, 3);
             numTh.Maximum = new decimal(new int[] { 1000000000, 0, 0, 0 });
             numTh.Name = "numTh";
@@ -675,6 +690,10 @@
             // 
             // groupBox5
             // 
+            groupBox5.Controls.Add(rb16);
+            groupBox5.Controls.Add(rb4);
+            groupBox5.Controls.Add(cbSlices);
+            groupBox5.Controls.Add(cbInterpolated);
             groupBox5.Controls.Add(btnResVals);
             groupBox5.Controls.Add(label2);
             groupBox5.Controls.Add(numSleep);
@@ -688,10 +707,52 @@
             groupBox5.Margin = new Padding(4, 3, 4, 3);
             groupBox5.Name = "groupBox5";
             groupBox5.Padding = new Padding(4, 3, 4, 3);
-            groupBox5.Size = new Size(247, 120);
+            groupBox5.Size = new Size(247, 144);
             groupBox5.TabIndex = 551;
             groupBox5.TabStop = false;
             groupBox5.Text = "ClosedFormMatte";
+            // 
+            // rb16
+            // 
+            rb16.AutoSize = true;
+            rb16.Location = new Point(144, 121);
+            rb16.Name = "rb16";
+            rb16.Size = new Size(37, 19);
+            rb16.TabIndex = 572;
+            rb16.Text = "16";
+            rb16.UseVisualStyleBackColor = true;
+            // 
+            // rb4
+            // 
+            rb4.AutoSize = true;
+            rb4.Checked = true;
+            rb4.Location = new Point(104, 121);
+            rb4.Name = "rb4";
+            rb4.Size = new Size(31, 19);
+            rb4.TabIndex = 572;
+            rb4.TabStop = true;
+            rb4.Text = "4";
+            rb4.UseVisualStyleBackColor = true;
+            // 
+            // cbSlices
+            // 
+            cbSlices.AutoSize = true;
+            cbSlices.Location = new Point(22, 121);
+            cbSlices.Name = "cbSlices";
+            cbSlices.Size = new Size(69, 19);
+            cbSlices.TabIndex = 571;
+            cbSlices.Text = "doSlices";
+            cbSlices.UseVisualStyleBackColor = true;
+            // 
+            // cbInterpolated
+            // 
+            cbInterpolated.AutoSize = true;
+            cbInterpolated.Location = new Point(149, 69);
+            cbInterpolated.Name = "cbInterpolated";
+            cbInterpolated.Size = new Size(90, 19);
+            cbInterpolated.TabIndex = 571;
+            cbInterpolated.Text = "interpolated";
+            cbInterpolated.UseVisualStyleBackColor = true;
             // 
             // btnResVals
             // 
@@ -704,17 +765,6 @@
             toolTip1.SetToolTip(btnResVals, "reasonable values inner and outer width");
             btnResVals.UseVisualStyleBackColor = true;
             btnResVals.Click += btnResVals_Click;
-            // 
-            // cbEditTrimap
-            // 
-            cbEditTrimap.AutoSize = true;
-            cbEditTrimap.Location = new Point(387, 173);
-            cbEditTrimap.Margin = new Padding(4, 3, 4, 3);
-            cbEditTrimap.Name = "cbEditTrimap";
-            cbEditTrimap.Size = new Size(84, 19);
-            cbEditTrimap.TabIndex = 569;
-            cbEditTrimap.Text = "edit trimap";
-            cbEditTrimap.UseVisualStyleBackColor = true;
             // 
             // label2
             // 
@@ -809,7 +859,7 @@
             // label5
             // 
             label5.AutoSize = true;
-            label5.Location = new Point(214, 347);
+            label5.Location = new Point(214, 374);
             label5.Margin = new Padding(4, 0, 4, 0);
             label5.Name = "label5";
             label5.Size = new Size(38, 15);
@@ -821,7 +871,7 @@
             cmbMethodMode.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbMethodMode.DropDownWidth = 95;
             cmbMethodMode.FormattingEnabled = true;
-            cmbMethodMode.Location = new Point(259, 342);
+            cmbMethodMode.Location = new Point(259, 369);
             cmbMethodMode.Margin = new Padding(4, 3, 4, 3);
             cmbMethodMode.Name = "cmbMethodMode";
             cmbMethodMode.Size = new Size(103, 23);
@@ -851,7 +901,7 @@
             // label52
             // 
             label52.AutoSize = true;
-            label52.Location = new Point(94, 222);
+            label52.Location = new Point(94, 249);
             label52.Margin = new Padding(4, 0, 4, 0);
             label52.Name = "label52";
             label52.Size = new Size(39, 15);
@@ -863,7 +913,7 @@
             cbBlur.AutoSize = true;
             cbBlur.Checked = true;
             cbBlur.CheckState = CheckState.Checked;
-            cbBlur.Location = new Point(37, 221);
+            cbBlur.Location = new Point(37, 248);
             cbBlur.Margin = new Padding(4, 3, 4, 3);
             cbBlur.Name = "cbBlur";
             cbBlur.Size = new Size(47, 19);
@@ -875,7 +925,7 @@
             // 
             label51.AutoSize = true;
             label51.Enabled = false;
-            label51.Location = new Point(257, 195);
+            label51.Location = new Point(257, 222);
             label51.Margin = new Padding(4, 0, 4, 0);
             label51.Name = "label51";
             label51.Size = new Size(99, 15);
@@ -885,7 +935,7 @@
             // rbBoth
             // 
             rbBoth.AutoSize = true;
-            rbBoth.Location = new Point(192, 193);
+            rbBoth.Location = new Point(192, 220);
             rbBoth.Margin = new Padding(4, 3, 4, 3);
             rbBoth.Name = "rbBoth";
             rbBoth.Size = new Size(50, 19);
@@ -896,7 +946,7 @@
             // rbBoundary
             // 
             rbBoundary.AutoSize = true;
-            rbBoundary.Location = new Point(108, 192);
+            rbBoundary.Location = new Point(108, 219);
             rbBoundary.Margin = new Padding(4, 3, 4, 3);
             rbBoundary.Name = "rbBoundary";
             rbBoundary.Size = new Size(76, 19);
@@ -908,7 +958,7 @@
             // 
             rbOuterPx.AutoSize = true;
             rbOuterPx.Checked = true;
-            rbOuterPx.Location = new Point(18, 192);
+            rbOuterPx.Location = new Point(18, 219);
             rbOuterPx.Margin = new Padding(4, 3, 4, 3);
             rbOuterPx.Name = "rbOuterPx";
             rbOuterPx.Size = new Size(83, 19);
@@ -920,7 +970,7 @@
             // label50
             // 
             label50.AutoSize = true;
-            label50.Location = new Point(14, 168);
+            label50.Location = new Point(14, 195);
             label50.Margin = new Padding(4, 0, 4, 0);
             label50.Name = "label50";
             label50.Size = new Size(94, 15);
@@ -962,7 +1012,7 @@
             numFactorOuterPx.DecimalPlaces = 2;
             numFactorOuterPx.Enabled = false;
             numFactorOuterPx.Increment = new decimal(new int[] { 1, 0, 0, 65536 });
-            numFactorOuterPx.Location = new Point(379, 192);
+            numFactorOuterPx.Location = new Point(379, 219);
             numFactorOuterPx.Margin = new Padding(4, 3, 4, 3);
             numFactorOuterPx.Maximum = new decimal(new int[] { 10, 0, 0, 65536 });
             numFactorOuterPx.Name = "numFactorOuterPx";
@@ -994,7 +1044,7 @@
             // numOpacity
             // 
             numOpacity.DecimalPlaces = 2;
-            numOpacity.Location = new Point(97, 281);
+            numOpacity.Location = new Point(97, 308);
             numOpacity.Margin = new Padding(4, 3, 4, 3);
             numOpacity.Maximum = new decimal(new int[] { 2, 0, 0, 0 });
             numOpacity.Name = "numOpacity";
@@ -1005,7 +1055,7 @@
             // numWMin
             // 
             numWMin.DecimalPlaces = 2;
-            numWMin.Location = new Point(224, 255);
+            numWMin.Location = new Point(224, 282);
             numWMin.Margin = new Padding(4, 3, 4, 3);
             numWMin.Maximum = new decimal(new int[] { 360, 0, 0, 0 });
             numWMin.Name = "numWMin";
@@ -1015,7 +1065,7 @@
             // numWMax
             // 
             numWMax.DecimalPlaces = 2;
-            numWMax.Location = new Point(224, 283);
+            numWMax.Location = new Point(224, 310);
             numWMax.Margin = new Padding(4, 3, 4, 3);
             numWMax.Maximum = new decimal(new int[] { 360, 0, 0, 0 });
             numWMax.Name = "numWMax";
@@ -1026,7 +1076,7 @@
             // numBlur
             // 
             numBlur.Increment = new decimal(new int[] { 2, 0, 0, 0 });
-            numBlur.Location = new Point(150, 220);
+            numBlur.Location = new Point(150, 247);
             numBlur.Margin = new Padding(4, 3, 4, 3);
             numBlur.Maximum = new decimal(new int[] { 99, 0, 0, 0 });
             numBlur.Minimum = new decimal(new int[] { 3, 0, 0, 0 });
@@ -1049,7 +1099,7 @@
             // btnAlphaV
             // 
             btnAlphaV.ForeColor = SystemColors.ControlText;
-            btnAlphaV.Location = new Point(372, 345);
+            btnAlphaV.Location = new Point(372, 372);
             btnAlphaV.Margin = new Padding(4, 3, 4, 3);
             btnAlphaV.Name = "btnAlphaV";
             btnAlphaV.Size = new Size(88, 27);
@@ -1071,7 +1121,7 @@
             // 
             // numWHFactor
             // 
-            numWHFactor.Location = new Point(377, 283);
+            numWHFactor.Location = new Point(377, 310);
             numWHFactor.Margin = new Padding(4, 3, 4, 3);
             numWHFactor.Maximum = new decimal(new int[] { 24, 0, 0, 0 });
             numWHFactor.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
@@ -1143,11 +1193,11 @@
             groupBox3.Controls.Add(numPPEpsilon2);
             groupBox3.Controls.Add(numPPEpsilon);
             groupBox3.ForeColor = SystemColors.ControlText;
-            groupBox3.Location = new Point(52, 67);
+            groupBox3.Location = new Point(52, 55);
             groupBox3.Margin = new Padding(4, 3, 4, 3);
             groupBox3.Name = "groupBox3";
             groupBox3.Padding = new Padding(4, 3, 4, 3);
-            groupBox3.Size = new Size(425, 247);
+            groupBox3.Size = new Size(425, 236);
             groupBox3.TabIndex = 4;
             groupBox3.TabStop = false;
             groupBox3.Text = "outline shape";
@@ -1155,7 +1205,7 @@
             // cbReShift
             // 
             cbReShift.AutoSize = true;
-            cbReShift.Location = new Point(13, 215);
+            cbReShift.Location = new Point(13, 207);
             cbReShift.Margin = new Padding(4, 3, 4, 3);
             cbReShift.Name = "cbReShift";
             cbReShift.Size = new Size(112, 19);
@@ -1166,7 +1216,7 @@
             // label11
             // 
             label11.AutoSize = true;
-            label11.Location = new Point(211, 216);
+            label11.Location = new Point(211, 208);
             label11.Margin = new Padding(4, 0, 4, 0);
             label11.Name = "label11";
             label11.Size = new Size(17, 15);
@@ -1175,7 +1225,7 @@
             // 
             // numShiftY
             // 
-            numShiftY.Location = new Point(238, 213);
+            numShiftY.Location = new Point(238, 205);
             numShiftY.Margin = new Padding(4, 3, 4, 3);
             numShiftY.Maximum = new decimal(new int[] { 9999, 0, 0, 0 });
             numShiftY.Minimum = new decimal(new int[] { 9999, 0, 0, int.MinValue });
@@ -1185,7 +1235,7 @@
             // 
             // numShiftX
             // 
-            numShiftX.Location = new Point(152, 213);
+            numShiftX.Location = new Point(152, 205);
             numShiftX.Margin = new Padding(4, 3, 4, 3);
             numShiftX.Maximum = new decimal(new int[] { 9999, 0, 0, 0 });
             numShiftX.Minimum = new decimal(new int[] { 9999, 0, 0, int.MinValue });
@@ -1196,7 +1246,7 @@
             // cbRemArea
             // 
             cbRemArea.AutoSize = true;
-            cbRemArea.Location = new Point(13, 181);
+            cbRemArea.Location = new Point(13, 173);
             cbRemArea.Margin = new Padding(4, 3, 4, 3);
             cbRemArea.Name = "cbRemArea";
             cbRemArea.Size = new Size(198, 19);
@@ -1209,7 +1259,7 @@
             cbApproxLines.AutoSize = true;
             cbApproxLines.Checked = true;
             cbApproxLines.CheckState = CheckState.Checked;
-            cbApproxLines.Location = new Point(13, 54);
+            cbApproxLines.Location = new Point(13, 46);
             cbApproxLines.Margin = new Padding(4, 3, 4, 3);
             cbApproxLines.Name = "cbApproxLines";
             cbApproxLines.Size = new Size(111, 19);
@@ -1219,7 +1269,7 @@
             // 
             // numPPThresholdInner
             // 
-            numPPThresholdInner.Location = new Point(324, 149);
+            numPPThresholdInner.Location = new Point(324, 139);
             numPPThresholdInner.Margin = new Padding(4, 3, 4, 3);
             numPPThresholdInner.Maximum = new decimal(new int[] { 441, 0, 0, 0 });
             numPPThresholdInner.Name = "numPPThresholdInner";
@@ -1229,7 +1279,7 @@
             // 
             // numPPPixelDepthInner
             // 
-            numPPPixelDepthInner.Location = new Point(324, 119);
+            numPPPixelDepthInner.Location = new Point(324, 109);
             numPPPixelDepthInner.Margin = new Padding(4, 3, 4, 3);
             numPPPixelDepthInner.Maximum = new decimal(new int[] { 441, 0, 0, 0 });
             numPPPixelDepthInner.Name = "numPPPixelDepthInner";
@@ -1240,7 +1290,7 @@
             // label34
             // 
             label34.AutoSize = true;
-            label34.Location = new Point(98, 151);
+            label34.Location = new Point(98, 141);
             label34.Margin = new Padding(4, 0, 4, 0);
             label34.Name = "label34";
             label34.Size = new Size(36, 15);
@@ -1250,7 +1300,7 @@
             // label36
             // 
             label36.AutoSize = true;
-            label36.Location = new Point(150, 151);
+            label36.Location = new Point(150, 141);
             label36.Margin = new Padding(4, 0, 4, 0);
             label36.Name = "label36";
             label36.Size = new Size(75, 15);
@@ -1260,7 +1310,7 @@
             // label37
             // 
             label37.AutoSize = true;
-            label37.Location = new Point(150, 121);
+            label37.Location = new Point(150, 111);
             label37.Margin = new Padding(4, 0, 4, 0);
             label37.Name = "label37";
             label37.Size = new Size(56, 15);
@@ -1270,7 +1320,7 @@
             // cbPPCleanOutline
             // 
             cbPPCleanOutline.AutoSize = true;
-            cbPPCleanOutline.Location = new Point(13, 120);
+            cbPPCleanOutline.Location = new Point(13, 110);
             cbPPCleanOutline.Margin = new Padding(4, 3, 4, 3);
             cbPPCleanOutline.Name = "cbPPCleanOutline";
             cbPPCleanOutline.Size = new Size(125, 19);
@@ -1280,7 +1330,7 @@
             // 
             // numPPMinAllowedArea
             // 
-            numPPMinAllowedArea.Location = new Point(238, 180);
+            numPPMinAllowedArea.Location = new Point(238, 172);
             numPPMinAllowedArea.Margin = new Padding(4, 3, 4, 3);
             numPPMinAllowedArea.Maximum = new decimal(new int[] { 441000000, 0, 0, 0 });
             numPPMinAllowedArea.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
@@ -1291,7 +1341,7 @@
             // 
             // numPPThresholdOuter
             // 
-            numPPThresholdOuter.Location = new Point(238, 149);
+            numPPThresholdOuter.Location = new Point(238, 139);
             numPPThresholdOuter.Margin = new Padding(4, 3, 4, 3);
             numPPThresholdOuter.Maximum = new decimal(new int[] { 441, 0, 0, 0 });
             numPPThresholdOuter.Name = "numPPThresholdOuter";
@@ -1301,7 +1351,7 @@
             // 
             // numPPCleanAmount
             // 
-            numPPCleanAmount.Location = new Point(31, 149);
+            numPPCleanAmount.Location = new Point(31, 139);
             numPPCleanAmount.Margin = new Padding(4, 3, 4, 3);
             numPPCleanAmount.Maximum = new decimal(new int[] { 999, 0, 0, 0 });
             numPPCleanAmount.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
@@ -1312,7 +1362,7 @@
             // 
             // numPPPixelDepthOuter
             // 
-            numPPPixelDepthOuter.Location = new Point(238, 119);
+            numPPPixelDepthOuter.Location = new Point(238, 109);
             numPPPixelDepthOuter.Margin = new Padding(4, 3, 4, 3);
             numPPPixelDepthOuter.Maximum = new decimal(new int[] { 441, 0, 0, 0 });
             numPPPixelDepthOuter.Name = "numPPPixelDepthOuter";
@@ -1323,7 +1373,7 @@
             // label33
             // 
             label33.AutoSize = true;
-            label33.Location = new Point(119, 89);
+            label33.Location = new Point(119, 81);
             label33.Margin = new Padding(4, 0, 4, 0);
             label33.Name = "label33";
             label33.Size = new Size(46, 15);
@@ -1333,7 +1383,7 @@
             // cbOutlinesAsCurves
             // 
             cbOutlinesAsCurves.AutoSize = true;
-            cbOutlinesAsCurves.Location = new Point(13, 88);
+            cbOutlinesAsCurves.Location = new Point(13, 80);
             cbOutlinesAsCurves.Margin = new Padding(4, 3, 4, 3);
             cbOutlinesAsCurves.Name = "cbOutlinesAsCurves";
             cbOutlinesAsCurves.Size = new Size(89, 19);
@@ -1345,7 +1395,7 @@
             // 
             numTension.DecimalPlaces = 4;
             numTension.Increment = new decimal(new int[] { 1, 0, 0, 65536 });
-            numTension.Location = new Point(223, 84);
+            numTension.Location = new Point(223, 76);
             numTension.Margin = new Padding(4, 3, 4, 3);
             numTension.Maximum = new decimal(new int[] { 10, 0, 0, 65536 });
             numTension.Name = "numTension";
@@ -1377,7 +1427,7 @@
             // 
             btnPPGo.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             btnPPGo.ForeColor = SystemColors.ControlText;
-            btnPPGo.Location = new Point(330, 210);
+            btnPPGo.Location = new Point(329, 201);
             btnPPGo.Margin = new Padding(4, 3, 4, 3);
             btnPPGo.Name = "btnPPGo";
             btnPPGo.Size = new Size(88, 27);
@@ -1420,7 +1470,7 @@
             // 
             numPPEpsilon2.DecimalPlaces = 4;
             numPPEpsilon2.Increment = new decimal(new int[] { 1, 0, 0, 65536 });
-            numPPEpsilon2.Location = new Point(223, 54);
+            numPPEpsilon2.Location = new Point(223, 46);
             numPPEpsilon2.Margin = new Padding(4, 3, 4, 3);
             numPPEpsilon2.Maximum = new decimal(new int[] { 255, 0, 0, 0 });
             numPPEpsilon2.Name = "numPPEpsilon2";
@@ -1432,7 +1482,7 @@
             // 
             numPPEpsilon.DecimalPlaces = 4;
             numPPEpsilon.Increment = new decimal(new int[] { 1, 0, 0, 65536 });
-            numPPEpsilon.Location = new Point(134, 54);
+            numPPEpsilon.Location = new Point(134, 46);
             numPPEpsilon.Margin = new Padding(4, 3, 4, 3);
             numPPEpsilon.Maximum = new decimal(new int[] { 255, 0, 0, 0 });
             numPPEpsilon.Name = "numPPEpsilon";
@@ -1448,7 +1498,7 @@
             groupBox1.Controls.Add(label44);
             groupBox1.Controls.Add(btnJRem);
             groupBox1.ForeColor = SystemColors.ControlText;
-            groupBox1.Location = new Point(10, 14);
+            groupBox1.Location = new Point(10, 6);
             groupBox1.Margin = new Padding(4, 3, 4, 3);
             groupBox1.Name = "groupBox1";
             groupBox1.Padding = new Padding(4, 3, 4, 3);
@@ -1801,5 +1851,9 @@
         private Label label13;
         private Button btnResVals;
         private CheckBox cbRedrawInner;
+        private RadioButton rb16;
+        private RadioButton rb4;
+        private CheckBox cbSlices;
+        private CheckBox cbInterpolated;
     }
 }
