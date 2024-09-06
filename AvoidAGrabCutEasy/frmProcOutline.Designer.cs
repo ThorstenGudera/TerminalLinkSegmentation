@@ -155,6 +155,7 @@
             backgroundWorker5 = new System.ComponentModel.BackgroundWorker();
             backgroundWorker6 = new System.ComponentModel.BackgroundWorker();
             backgroundWorker7 = new System.ComponentModel.BackgroundWorker();
+            cbForceSerial = new CheckBox();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
             splitContainer1.Panel2.SuspendLayout();
@@ -376,7 +377,7 @@
             cbBGColor.AutoSize = true;
             cbBGColor.Checked = true;
             cbBGColor.CheckState = CheckState.Checked;
-            cbBGColor.Location = new Point(187, 772);
+            cbBGColor.Location = new Point(186, 772);
             cbBGColor.Margin = new Padding(4, 3, 4, 3);
             cbBGColor.Name = "cbBGColor";
             cbBGColor.Size = new Size(67, 19);
@@ -389,7 +390,7 @@
             // 
             button10.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             button10.ForeColor = SystemColors.ControlText;
-            button10.Location = new Point(380, 810);
+            button10.Location = new Point(379, 810);
             button10.Margin = new Padding(4, 3, 4, 3);
             button10.Name = "button10";
             button10.Size = new Size(88, 27);
@@ -402,7 +403,7 @@
             // 
             button8.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             button8.ForeColor = SystemColors.ControlText;
-            button8.Location = new Point(285, 810);
+            button8.Location = new Point(284, 810);
             button8.Margin = new Padding(4, 3, 4, 3);
             button8.Name = "button8";
             button8.Size = new Size(88, 27);
@@ -416,7 +417,7 @@
             button2.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             button2.FlatStyle = FlatStyle.System;
             button2.ForeColor = SystemColors.ControlText;
-            button2.Location = new Point(380, 770);
+            button2.Location = new Point(379, 770);
             button2.Margin = new Padding(4, 3, 4, 3);
             button2.Name = "button2";
             button2.Size = new Size(88, 27);
@@ -429,7 +430,7 @@
             btnCancel.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             btnCancel.DialogResult = DialogResult.Cancel;
             btnCancel.ForeColor = SystemColors.ControlText;
-            btnCancel.Location = new Point(389, 845);
+            btnCancel.Location = new Point(388, 845);
             btnCancel.Margin = new Padding(4, 3, 4, 3);
             btnCancel.Name = "btnCancel";
             btnCancel.Size = new Size(88, 27);
@@ -442,7 +443,7 @@
             btnOK.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             btnOK.DialogResult = DialogResult.OK;
             btnOK.ForeColor = SystemColors.ControlText;
-            btnOK.Location = new Point(296, 845);
+            btnOK.Location = new Point(295, 845);
             btnOK.Margin = new Padding(4, 3, 4, 3);
             btnOK.Name = "btnOK";
             btnOK.Size = new Size(88, 27);
@@ -690,6 +691,7 @@
             // 
             // groupBox5
             // 
+            groupBox5.Controls.Add(cbForceSerial);
             groupBox5.Controls.Add(rb16);
             groupBox5.Controls.Add(rb4);
             groupBox5.Controls.Add(cbSlices);
@@ -715,7 +717,7 @@
             // rb16
             // 
             rb16.AutoSize = true;
-            rb16.Location = new Point(144, 121);
+            rb16.Location = new Point(138, 121);
             rb16.Name = "rb16";
             rb16.Size = new Size(37, 19);
             rb16.TabIndex = 572;
@@ -726,7 +728,7 @@
             // 
             rb4.AutoSize = true;
             rb4.Checked = true;
-            rb4.Location = new Point(104, 121);
+            rb4.Location = new Point(100, 121);
             rb4.Name = "rb4";
             rb4.Size = new Size(31, 19);
             rb4.TabIndex = 572;
@@ -742,6 +744,7 @@
             cbSlices.Size = new Size(69, 19);
             cbSlices.TabIndex = 571;
             cbSlices.Text = "doSlices";
+            toolTip1.SetToolTip(cbSlices, "Take n lower res pictures.\r\nExample for 4 pics:\r\n 1st Pic take pixels x/y mod 4 = 0\r\n 2nd Pic take pixels x/y mod 4 = 1 etc.\r\n");
             cbSlices.UseVisualStyleBackColor = true;
             // 
             // cbInterpolated
@@ -752,6 +755,7 @@
             cbInterpolated.Size = new Size(90, 19);
             cbInterpolated.TabIndex = 571;
             cbInterpolated.Text = "interpolated";
+            toolTip1.SetToolTip(cbInterpolated, "Use a Sqrt_2 enlarged pic");
             cbInterpolated.UseVisualStyleBackColor = true;
             // 
             // btnResVals
@@ -1660,6 +1664,19 @@
             backgroundWorker7.DoWork += backgroundWorker7_DoWork;
             backgroundWorker7.RunWorkerCompleted += backgroundWorker7_RunWorkerCompleted;
             // 
+            // cbForceSerial
+            // 
+            cbForceSerial.AutoSize = true;
+            cbForceSerial.Checked = true;
+            cbForceSerial.CheckState = CheckState.Checked;
+            cbForceSerial.Location = new Point(183, 121);
+            cbForceSerial.Name = "cbForceSerial";
+            cbForceSerial.Size = new Size(53, 19);
+            cbForceSerial.TabIndex = 573;
+            cbForceSerial.Text = "serial";
+            toolTip1.SetToolTip(cbForceSerial, "run threads serially to lower memory consumption");
+            cbForceSerial.UseVisualStyleBackColor = true;
+            // 
             // frmProcOutline
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -1855,5 +1872,6 @@
         private RadioButton rb4;
         private CheckBox cbSlices;
         private CheckBox cbInterpolated;
+        private CheckBox cbForceSerial;
     }
 }

@@ -66,6 +66,11 @@
             panel5 = new Panel();
             rbClosedForm = new RadioButton();
             panel2 = new Panel();
+            cbForceSerial = new CheckBox();
+            rb16 = new RadioButton();
+            rb4 = new RadioButton();
+            cbSlices = new CheckBox();
+            cbInterpolated = new CheckBox();
             cbHalfSize = new CheckBox();
             label54 = new Label();
             label1 = new Label();
@@ -99,10 +104,6 @@
             floodBGToolStripMenuItem = new ToolStripMenuItem();
             floodFGToolStripMenuItem = new ToolStripMenuItem();
             backgroundWorker5 = new System.ComponentModel.BackgroundWorker();
-            rb16 = new RadioButton();
-            rb4 = new RadioButton();
-            cbSlices = new CheckBox();
-            cbInterpolated = new CheckBox();
             statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
@@ -171,7 +172,7 @@
             // label15
             // 
             label15.AutoSize = true;
-            label15.Location = new Point(208, 159);
+            label15.Location = new Point(121, 162);
             label15.Name = "label15";
             label15.Size = new Size(64, 15);
             label15.TabIndex = 686;
@@ -179,7 +180,7 @@
             // 
             // btnChaincode
             // 
-            btnChaincode.Location = new Point(278, 156);
+            btnChaincode.Location = new Point(191, 159);
             btnChaincode.Name = "btnChaincode";
             btnChaincode.Size = new Size(75, 23);
             btnChaincode.TabIndex = 685;
@@ -190,7 +191,7 @@
             // cbRefPtFG
             // 
             cbRefPtFG.AutoSize = true;
-            cbRefPtFG.Location = new Point(194, 129);
+            cbRefPtFG.Location = new Point(107, 132);
             cbRefPtFG.Name = "cbRefPtFG";
             cbRefPtFG.Size = new Size(86, 19);
             cbRefPtFG.TabIndex = 684;
@@ -201,7 +202,7 @@
             // cbRefPtBG
             // 
             cbRefPtBG.AutoSize = true;
-            cbRefPtBG.Location = new Point(100, 129);
+            cbRefPtBG.Location = new Point(13, 132);
             cbRefPtBG.Name = "cbRefPtBG";
             cbRefPtBG.Size = new Size(89, 19);
             cbRefPtBG.TabIndex = 684;
@@ -212,7 +213,7 @@
             // label14
             // 
             label14.AutoSize = true;
-            label14.Location = new Point(284, 131);
+            label14.Location = new Point(197, 134);
             label14.Name = "label14";
             label14.Size = new Size(37, 15);
             label14.TabIndex = 682;
@@ -221,7 +222,7 @@
             // btnFloodFG
             // 
             btnFloodFG.Enabled = false;
-            btnFloodFG.Location = new Point(365, 126);
+            btnFloodFG.Location = new Point(278, 129);
             btnFloodFG.Name = "btnFloodFG";
             btnFloodFG.Size = new Size(32, 23);
             btnFloodFG.TabIndex = 681;
@@ -232,7 +233,7 @@
             // btnFloodBG
             // 
             btnFloodBG.Enabled = false;
-            btnFloodBG.Location = new Point(327, 126);
+            btnFloodBG.Location = new Point(240, 129);
             btnFloodBG.Name = "btnFloodBG";
             btnFloodBG.Size = new Size(32, 23);
             btnFloodBG.TabIndex = 681;
@@ -255,7 +256,7 @@
             // 
             // btnSaveScribbles
             // 
-            btnSaveScribbles.Location = new Point(578, 9);
+            btnSaveScribbles.Location = new Point(294, 10);
             btnSaveScribbles.Margin = new Padding(4, 3, 4, 3);
             btnSaveScribbles.Name = "btnSaveScribbles";
             btnSaveScribbles.Size = new Size(99, 27);
@@ -266,7 +267,7 @@
             // 
             // btnLoadScribbles
             // 
-            btnLoadScribbles.Location = new Point(465, 9);
+            btnLoadScribbles.Location = new Point(181, 10);
             btnLoadScribbles.Margin = new Padding(4, 3, 4, 3);
             btnLoadScribbles.Name = "btnLoadScribbles";
             btnLoadScribbles.Size = new Size(99, 27);
@@ -404,7 +405,7 @@
             // cbLSBmp
             // 
             cbLSBmp.AutoSize = true;
-            cbLSBmp.Location = new Point(685, 14);
+            cbLSBmp.Location = new Point(401, 15);
             cbLSBmp.Margin = new Padding(4, 3, 4, 3);
             cbLSBmp.Name = "cbLSBmp";
             cbLSBmp.Size = new Size(90, 19);
@@ -507,7 +508,7 @@
             // 
             panel5.BorderStyle = BorderStyle.FixedSingle;
             panel5.Controls.Add(rbClosedForm);
-            panel5.Location = new Point(578, 169);
+            panel5.Location = new Point(390, 50);
             panel5.Name = "panel5";
             panel5.Size = new Size(164, 41);
             panel5.TabIndex = 703;
@@ -528,6 +529,7 @@
             // panel2
             // 
             panel2.BorderStyle = BorderStyle.FixedSingle;
+            panel2.Controls.Add(cbForceSerial);
             panel2.Controls.Add(rb16);
             panel2.Controls.Add(rb4);
             panel2.Controls.Add(cbSlices);
@@ -544,6 +546,63 @@
             panel2.Name = "panel2";
             panel2.Size = new Size(232, 113);
             panel2.TabIndex = 701;
+            // 
+            // cbForceSerial
+            // 
+            cbForceSerial.AutoSize = true;
+            cbForceSerial.Checked = true;
+            cbForceSerial.CheckState = CheckState.Checked;
+            cbForceSerial.Location = new Point(170, 80);
+            cbForceSerial.Name = "cbForceSerial";
+            cbForceSerial.Size = new Size(53, 19);
+            cbForceSerial.TabIndex = 702;
+            cbForceSerial.Text = "serial";
+            toolTip1.SetToolTip(cbForceSerial, "run threads serially to lower memory consumption");
+            cbForceSerial.UseVisualStyleBackColor = true;
+            // 
+            // rb16
+            // 
+            rb16.AutoSize = true;
+            rb16.Location = new Point(125, 80);
+            rb16.Name = "rb16";
+            rb16.Size = new Size(37, 19);
+            rb16.TabIndex = 700;
+            rb16.Text = "16";
+            rb16.UseVisualStyleBackColor = true;
+            // 
+            // rb4
+            // 
+            rb4.AutoSize = true;
+            rb4.Checked = true;
+            rb4.Location = new Point(89, 80);
+            rb4.Name = "rb4";
+            rb4.Size = new Size(31, 19);
+            rb4.TabIndex = 701;
+            rb4.TabStop = true;
+            rb4.Text = "4";
+            rb4.UseVisualStyleBackColor = true;
+            // 
+            // cbSlices
+            // 
+            cbSlices.AutoSize = true;
+            cbSlices.Location = new Point(7, 80);
+            cbSlices.Name = "cbSlices";
+            cbSlices.Size = new Size(69, 19);
+            cbSlices.TabIndex = 698;
+            cbSlices.Text = "doSlices";
+            toolTip1.SetToolTip(cbSlices, "Take n lower res pictures.\r\nExample for 4 pics:\r\n 1st Pic take pixels x/y mod 4 = 0\r\n 2nd Pic take pixels x/y mod 4 = 1 etc.\r\n");
+            cbSlices.UseVisualStyleBackColor = true;
+            // 
+            // cbInterpolated
+            // 
+            cbInterpolated.AutoSize = true;
+            cbInterpolated.Location = new Point(134, 28);
+            cbInterpolated.Name = "cbInterpolated";
+            cbInterpolated.Size = new Size(90, 19);
+            cbInterpolated.TabIndex = 699;
+            cbInterpolated.Text = "interpolated";
+            toolTip1.SetToolTip(cbInterpolated, "Use a Sqrt_2 enlarged pic");
+            cbInterpolated.UseVisualStyleBackColor = true;
             // 
             // cbHalfSize
             // 
@@ -626,7 +685,7 @@
             // cbOverlay
             // 
             cbOverlay.AutoSize = true;
-            cbOverlay.Location = new Point(101, 194);
+            cbOverlay.Location = new Point(14, 197);
             cbOverlay.Name = "cbOverlay";
             cbOverlay.Size = new Size(88, 19);
             cbOverlay.TabIndex = 700;
@@ -637,7 +696,7 @@
             // cbRedrawOnMD
             // 
             cbRedrawOnMD.AutoSize = true;
-            cbRedrawOnMD.Location = new Point(211, 194);
+            cbRedrawOnMD.Location = new Point(124, 197);
             cbRedrawOnMD.Name = "cbRedrawOnMD";
             cbRedrawOnMD.Size = new Size(175, 19);
             cbRedrawOnMD.TabIndex = 699;
@@ -682,7 +741,7 @@
             // 
             // btnGenerateTrimap
             // 
-            btnGenerateTrimap.Location = new Point(465, 175);
+            btnGenerateTrimap.Location = new Point(599, 175);
             btnGenerateTrimap.Margin = new Padding(4, 3, 4, 3);
             btnGenerateTrimap.Name = "btnGenerateTrimap";
             btnGenerateTrimap.Size = new Size(99, 27);
@@ -787,7 +846,7 @@
             // btnGo
             // 
             btnGo.Font = new Font("Microsoft Sans Serif", 8.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            btnGo.Location = new Point(761, 175);
+            btnGo.Location = new Point(713, 175);
             btnGo.Margin = new Padding(4, 3, 4, 3);
             btnGo.Name = "btnGo";
             btnGo.Size = new Size(88, 27);
@@ -899,48 +958,6 @@
             backgroundWorker5.WorkerSupportsCancellation = true;
             backgroundWorker5.DoWork += backgroundWorker5_DoWork;
             backgroundWorker5.RunWorkerCompleted += backgroundWorker5_RunWorkerCompleted;
-            // 
-            // rb16
-            // 
-            rb16.AutoSize = true;
-            rb16.Location = new Point(129, 80);
-            rb16.Name = "rb16";
-            rb16.Size = new Size(37, 19);
-            rb16.TabIndex = 700;
-            rb16.Text = "16";
-            rb16.UseVisualStyleBackColor = true;
-            // 
-            // rb4
-            // 
-            rb4.AutoSize = true;
-            rb4.Checked = true;
-            rb4.Location = new Point(89, 80);
-            rb4.Name = "rb4";
-            rb4.Size = new Size(31, 19);
-            rb4.TabIndex = 701;
-            rb4.TabStop = true;
-            rb4.Text = "4";
-            rb4.UseVisualStyleBackColor = true;
-            // 
-            // cbSlices
-            // 
-            cbSlices.AutoSize = true;
-            cbSlices.Location = new Point(7, 80);
-            cbSlices.Name = "cbSlices";
-            cbSlices.Size = new Size(69, 19);
-            cbSlices.TabIndex = 698;
-            cbSlices.Text = "doSlices";
-            cbSlices.UseVisualStyleBackColor = true;
-            // 
-            // cbInterpolated
-            // 
-            cbInterpolated.AutoSize = true;
-            cbInterpolated.Location = new Point(134, 28);
-            cbInterpolated.Name = "cbInterpolated";
-            cbInterpolated.Size = new Size(90, 19);
-            cbInterpolated.TabIndex = 699;
-            cbInterpolated.Text = "interpolated";
-            cbInterpolated.UseVisualStyleBackColor = true;
             // 
             // frmAlphaMatte
             // 
@@ -1056,5 +1073,6 @@
         private RadioButton rb4;
         private CheckBox cbSlices;
         private CheckBox cbInterpolated;
+        private CheckBox cbForceSerial;
     }
 }
