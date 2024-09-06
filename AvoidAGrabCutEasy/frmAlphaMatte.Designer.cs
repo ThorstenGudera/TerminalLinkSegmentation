@@ -54,23 +54,28 @@
             openFileDialog1 = new OpenFileDialog();
             toolTip1 = new ToolTip(components);
             btnResVals = new Button();
+            cbForceSerial = new CheckBox();
+            cbSlices = new CheckBox();
+            cbInterpolated = new CheckBox();
             saveFileDialog1 = new SaveFileDialog();
             Timer3 = new System.Windows.Forms.Timer(components);
             backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             cbLSBmp = new CheckBox();
             Label20 = new Label();
             panel1 = new Panel();
+            label5 = new Label();
+            label3 = new Label();
+            btnRedo = new Button();
+            btnUndo = new Button();
+            btnAlphaZAndGain = new Button();
             btnSetGamma = new Button();
             label4 = new Label();
             numGamma = new NumericUpDown();
             panel5 = new Panel();
             rbClosedForm = new RadioButton();
             panel2 = new Panel();
-            cbForceSerial = new CheckBox();
             rb16 = new RadioButton();
             rb4 = new RadioButton();
-            cbSlices = new CheckBox();
-            cbInterpolated = new CheckBox();
             cbHalfSize = new CheckBox();
             label54 = new Label();
             label1 = new Label();
@@ -80,6 +85,7 @@
             label2 = new Label();
             cbOverlay = new CheckBox();
             cbRedrawOnMD = new CheckBox();
+            numAlphaZAndGain = new NumericUpDown();
             cbLastDrawn = new CheckBox();
             pictureBox1 = new PictureBox();
             contextMenuStrip2 = new ContextMenuStrip(components);
@@ -104,6 +110,7 @@
             floodBGToolStripMenuItem = new ToolStripMenuItem();
             floodFGToolStripMenuItem = new ToolStripMenuItem();
             backgroundWorker5 = new System.ComponentModel.BackgroundWorker();
+            backgroundWorker3 = new System.ComponentModel.BackgroundWorker();
             statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
@@ -116,6 +123,7 @@
             ((System.ComponentModel.ISupportInitialize)numError).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numMaxRestarts).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numSleep).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)numAlphaZAndGain).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             contextMenuStrip2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numMaxSize).BeginInit();
@@ -280,7 +288,7 @@
             // 
             btnCache.Enabled = false;
             btnCache.ForeColor = SystemColors.ControlText;
-            btnCache.Location = new Point(1149, 33);
+            btnCache.Location = new Point(1109, 79);
             btnCache.Margin = new Padding(4, 3, 4, 3);
             btnCache.Name = "btnCache";
             btnCache.Size = new Size(88, 27);
@@ -384,6 +392,41 @@
             btnResVals.UseVisualStyleBackColor = true;
             btnResVals.Click += btnResVals_Click;
             // 
+            // cbForceSerial
+            // 
+            cbForceSerial.AutoSize = true;
+            cbForceSerial.Checked = true;
+            cbForceSerial.CheckState = CheckState.Checked;
+            cbForceSerial.Location = new Point(170, 80);
+            cbForceSerial.Name = "cbForceSerial";
+            cbForceSerial.Size = new Size(53, 19);
+            cbForceSerial.TabIndex = 702;
+            cbForceSerial.Text = "serial";
+            toolTip1.SetToolTip(cbForceSerial, "run threads serially to lower memory consumption");
+            cbForceSerial.UseVisualStyleBackColor = true;
+            // 
+            // cbSlices
+            // 
+            cbSlices.AutoSize = true;
+            cbSlices.Location = new Point(7, 80);
+            cbSlices.Name = "cbSlices";
+            cbSlices.Size = new Size(69, 19);
+            cbSlices.TabIndex = 698;
+            cbSlices.Text = "doSlices";
+            toolTip1.SetToolTip(cbSlices, "Take n lower res pictures.\r\nExample for 4 pics:\r\n 1st Pic take pixels x/y mod 4 = 0\r\n 2nd Pic take pixels x/y mod 4 = 1 etc.\r\n");
+            cbSlices.UseVisualStyleBackColor = true;
+            // 
+            // cbInterpolated
+            // 
+            cbInterpolated.AutoSize = true;
+            cbInterpolated.Location = new Point(134, 28);
+            cbInterpolated.Name = "cbInterpolated";
+            cbInterpolated.Size = new Size(90, 19);
+            cbInterpolated.TabIndex = 699;
+            cbInterpolated.Text = "interpolated";
+            toolTip1.SetToolTip(cbInterpolated, "Use a Sqrt_2 enlarged pic");
+            cbInterpolated.UseVisualStyleBackColor = true;
+            // 
             // saveFileDialog1
             // 
             saveFileDialog1.FileName = "Bild1.png";
@@ -416,7 +459,7 @@
             // Label20
             // 
             Label20.AutoSize = true;
-            Label20.Location = new Point(1281, 98);
+            Label20.Location = new Point(1109, 20);
             Label20.Margin = new Padding(4, 0, 4, 0);
             Label20.Name = "Label20";
             Label20.Size = new Size(58, 15);
@@ -425,6 +468,11 @@
             // 
             // panel1
             // 
+            panel1.Controls.Add(label5);
+            panel1.Controls.Add(label3);
+            panel1.Controls.Add(btnRedo);
+            panel1.Controls.Add(btnUndo);
+            panel1.Controls.Add(btnAlphaZAndGain);
             panel1.Controls.Add(btnSetGamma);
             panel1.Controls.Add(label4);
             panel1.Controls.Add(numGamma);
@@ -432,6 +480,7 @@
             panel1.Controls.Add(panel2);
             panel1.Controls.Add(cbOverlay);
             panel1.Controls.Add(cbRedrawOnMD);
+            panel1.Controls.Add(numAlphaZAndGain);
             panel1.Controls.Add(cbLastDrawn);
             panel1.Controls.Add(pictureBox1);
             panel1.Controls.Add(label15);
@@ -471,9 +520,66 @@
             panel1.Size = new Size(1479, 224);
             panel1.TabIndex = 226;
             // 
+            // label5
+            // 
+            label5.AutoSize = true;
+            label5.Location = new Point(1297, 129);
+            label5.Name = "label5";
+            label5.Size = new Size(27, 15);
+            label5.TabIndex = 712;
+            label5.Text = "to 0";
+            // 
+            // label3
+            // 
+            label3.AutoSize = true;
+            label3.Location = new Point(1109, 129);
+            label3.Name = "label3";
+            label3.Size = new Size(85, 15);
+            label3.TabIndex = 712;
+            label3.Text = "set alpha up to";
+            // 
+            // btnRedo
+            // 
+            btnRedo.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            btnRedo.Enabled = false;
+            btnRedo.ForeColor = SystemColors.ControlText;
+            btnRedo.Location = new Point(1378, 79);
+            btnRedo.Margin = new Padding(4, 3, 4, 3);
+            btnRedo.Name = "btnRedo";
+            btnRedo.Size = new Size(88, 27);
+            btnRedo.TabIndex = 711;
+            btnRedo.Text = "Redo";
+            btnRedo.UseVisualStyleBackColor = true;
+            btnRedo.Click += btnRedo_Click;
+            // 
+            // btnUndo
+            // 
+            btnUndo.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            btnUndo.Enabled = false;
+            btnUndo.ForeColor = SystemColors.ControlText;
+            btnUndo.Location = new Point(1282, 79);
+            btnUndo.Margin = new Padding(4, 3, 4, 3);
+            btnUndo.Name = "btnUndo";
+            btnUndo.Size = new Size(88, 27);
+            btnUndo.TabIndex = 710;
+            btnUndo.Text = "Undo";
+            btnUndo.UseVisualStyleBackColor = true;
+            btnUndo.Click += btnUndo_Click;
+            // 
+            // btnAlphaZAndGain
+            // 
+            btnAlphaZAndGain.Location = new Point(1331, 123);
+            btnAlphaZAndGain.Margin = new Padding(4, 3, 4, 3);
+            btnAlphaZAndGain.Name = "btnAlphaZAndGain";
+            btnAlphaZAndGain.Size = new Size(88, 27);
+            btnAlphaZAndGain.TabIndex = 709;
+            btnAlphaZAndGain.Text = "Go";
+            btnAlphaZAndGain.UseVisualStyleBackColor = true;
+            btnAlphaZAndGain.Click += btnAlphaZAndGain_Click;
+            // 
             // btnSetGamma
             // 
-            btnSetGamma.Location = new Point(1349, 142);
+            btnSetGamma.Location = new Point(1294, 156);
             btnSetGamma.Margin = new Padding(4, 3, 4, 3);
             btnSetGamma.Name = "btnSetGamma";
             btnSetGamma.Size = new Size(88, 27);
@@ -485,7 +591,7 @@
             // label4
             // 
             label4.AutoSize = true;
-            label4.Location = new Point(1164, 148);
+            label4.Location = new Point(1109, 162);
             label4.Margin = new Padding(4, 0, 4, 0);
             label4.Name = "label4";
             label4.Size = new Size(98, 15);
@@ -496,7 +602,7 @@
             // 
             numGamma.DecimalPlaces = 2;
             numGamma.Increment = new decimal(new int[] { 1, 0, 0, 65536 });
-            numGamma.Location = new Point(1272, 146);
+            numGamma.Location = new Point(1217, 160);
             numGamma.Margin = new Padding(4, 3, 4, 3);
             numGamma.Minimum = new decimal(new int[] { 1, 0, 0, 131072 });
             numGamma.Name = "numGamma";
@@ -547,19 +653,6 @@
             panel2.Size = new Size(232, 113);
             panel2.TabIndex = 701;
             // 
-            // cbForceSerial
-            // 
-            cbForceSerial.AutoSize = true;
-            cbForceSerial.Checked = true;
-            cbForceSerial.CheckState = CheckState.Checked;
-            cbForceSerial.Location = new Point(170, 80);
-            cbForceSerial.Name = "cbForceSerial";
-            cbForceSerial.Size = new Size(53, 19);
-            cbForceSerial.TabIndex = 702;
-            cbForceSerial.Text = "serial";
-            toolTip1.SetToolTip(cbForceSerial, "run threads serially to lower memory consumption");
-            cbForceSerial.UseVisualStyleBackColor = true;
-            // 
             // rb16
             // 
             rb16.AutoSize = true;
@@ -581,28 +674,6 @@
             rb4.TabStop = true;
             rb4.Text = "4";
             rb4.UseVisualStyleBackColor = true;
-            // 
-            // cbSlices
-            // 
-            cbSlices.AutoSize = true;
-            cbSlices.Location = new Point(7, 80);
-            cbSlices.Name = "cbSlices";
-            cbSlices.Size = new Size(69, 19);
-            cbSlices.TabIndex = 698;
-            cbSlices.Text = "doSlices";
-            toolTip1.SetToolTip(cbSlices, "Take n lower res pictures.\r\nExample for 4 pics:\r\n 1st Pic take pixels x/y mod 4 = 0\r\n 2nd Pic take pixels x/y mod 4 = 1 etc.\r\n");
-            cbSlices.UseVisualStyleBackColor = true;
-            // 
-            // cbInterpolated
-            // 
-            cbInterpolated.AutoSize = true;
-            cbInterpolated.Location = new Point(134, 28);
-            cbInterpolated.Name = "cbInterpolated";
-            cbInterpolated.Size = new Size(90, 19);
-            cbInterpolated.TabIndex = 699;
-            cbInterpolated.Text = "interpolated";
-            toolTip1.SetToolTip(cbInterpolated, "Use a Sqrt_2 enlarged pic");
-            cbInterpolated.UseVisualStyleBackColor = true;
             // 
             // cbHalfSize
             // 
@@ -703,6 +774,16 @@
             cbRedrawOnMD.Text = "redraw only on MouseDown";
             cbRedrawOnMD.UseVisualStyleBackColor = true;
             // 
+            // numAlphaZAndGain
+            // 
+            numAlphaZAndGain.Location = new Point(1217, 126);
+            numAlphaZAndGain.Margin = new Padding(4, 3, 4, 3);
+            numAlphaZAndGain.Maximum = new decimal(new int[] { 255, 0, 0, 0 });
+            numAlphaZAndGain.Name = "numAlphaZAndGain";
+            numAlphaZAndGain.Size = new Size(70, 23);
+            numAlphaZAndGain.TabIndex = 689;
+            numAlphaZAndGain.Value = new decimal(new int[] { 50, 0, 0, 0 });
+            // 
             // cbLastDrawn
             // 
             cbLastDrawn.AutoSize = true;
@@ -719,7 +800,7 @@
             // 
             pictureBox1.BorderStyle = BorderStyle.FixedSingle;
             pictureBox1.ContextMenuStrip = contextMenuStrip2;
-            pictureBox1.Location = new Point(892, 10);
+            pictureBox1.Location = new Point(851, 10);
             pictureBox1.Name = "pictureBox1";
             pictureBox1.Size = new Size(237, 198);
             pictureBox1.SizeMode = PictureBoxSizeMode.Zoom;
@@ -755,7 +836,7 @@
             cmbZoom.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbZoom.FormattingEnabled = true;
             cmbZoom.Items.AddRange(new object[] { "4", "2", "1", "Fit_Width", "Fit" });
-            cmbZoom.Location = new Point(1350, 95);
+            cmbZoom.Location = new Point(1178, 17);
             cmbZoom.Margin = new Padding(4, 3, 4, 3);
             cmbZoom.Name = "cmbZoom";
             cmbZoom.Size = new Size(87, 23);
@@ -845,6 +926,7 @@
             // 
             // btnGo
             // 
+            btnGo.Enabled = false;
             btnGo.Font = new Font("Microsoft Sans Serif", 8.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
             btnGo.Location = new Point(713, 175);
             btnGo.Margin = new Padding(4, 3, 4, 3);
@@ -959,6 +1041,13 @@
             backgroundWorker5.DoWork += backgroundWorker5_DoWork;
             backgroundWorker5.RunWorkerCompleted += backgroundWorker5_RunWorkerCompleted;
             // 
+            // backgroundWorker3
+            // 
+            backgroundWorker3.WorkerReportsProgress = true;
+            backgroundWorker3.WorkerSupportsCancellation = true;
+            backgroundWorker3.DoWork += backgroundWorker3_DoWork;
+            backgroundWorker3.RunWorkerCompleted += backgroundWorker3_RunWorkerCompleted;
+            // 
             // frmAlphaMatte
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -988,6 +1077,7 @@
             ((System.ComponentModel.ISupportInitialize)numError).EndInit();
             ((System.ComponentModel.ISupportInitialize)numMaxRestarts).EndInit();
             ((System.ComponentModel.ISupportInitialize)numSleep).EndInit();
+            ((System.ComponentModel.ISupportInitialize)numAlphaZAndGain).EndInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             contextMenuStrip2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)numMaxSize).EndInit();
@@ -1074,5 +1164,12 @@
         private CheckBox cbSlices;
         private CheckBox cbInterpolated;
         private CheckBox cbForceSerial;
+        private Label label5;
+        private Label label3;
+        private Button btnRedo;
+        private Button btnUndo;
+        private Button btnAlphaZAndGain;
+        private NumericUpDown numAlphaZAndGain;
+        internal System.ComponentModel.BackgroundWorker backgroundWorker3;
     }
 }

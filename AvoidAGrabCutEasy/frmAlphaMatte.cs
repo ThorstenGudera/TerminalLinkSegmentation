@@ -662,7 +662,7 @@ namespace AvoidAGrabCutEasy
 
         private void CheckRedoButton()
         {
-            //_undoOPCache?.CheckRedoButton(this.btnRedo);
+            _undoOPCache?.CheckRedoButton(this.btnRedo);
         }
 
         private void button10_Click(object sender, EventArgs e)
@@ -2038,6 +2038,8 @@ namespace AvoidAGrabCutEasy
                     if (iOld != null)
                         iOld.Dispose();
                     iOld = null;
+
+                    this.btnGo.Enabled = true;
                 }
             }
 
@@ -3603,6 +3605,9 @@ namespace AvoidAGrabCutEasy
                         (int)(this.helplineRulerCtrl2.Bmp.Height * this.helplineRulerCtrl2.Zoom));
 
                     _undoOPCache?.Add(bmp);
+
+                    this.btnUndo.Enabled = true;
+                    this.CheckRedoButton();
                 }
 
                 if (this._cfop != null)
@@ -3883,7 +3888,7 @@ namespace AvoidAGrabCutEasy
                 return;
             }
 
-            if (this.helplineRulerCtrl1.Bmp != null)
+            if (this.helplineRulerCtrl2.Bmp != null)
             {
                 this.Cursor = Cursors.WaitCursor;
                 this.SetControls(false);
@@ -3975,6 +3980,9 @@ namespace AvoidAGrabCutEasy
                         (int)(this.helplineRulerCtrl2.Bmp.Height * this.helplineRulerCtrl2.Zoom));
 
                     _undoOPCache?.Add(bmp);
+
+                    this.btnUndo.Enabled = true;
+                    this.CheckRedoButton();
                 }
 
                 this.btnSetGamma.Text = "Go";
@@ -4000,6 +4008,191 @@ namespace AvoidAGrabCutEasy
                 this.backgroundWorker5.DoWork += backgroundWorker5_DoWork;
                 //this.backgroundWorker5.ProgressChanged += backgroundWorker5_ProgressChanged;
                 this.backgroundWorker5.RunWorkerCompleted += backgroundWorker5_RunWorkerCompleted;
+            }
+        }
+
+        private void btnUndo_Click(object sender, EventArgs e)
+        {
+            if (_undoOPCache != null && _undoOPCache.Processing == false)
+            {
+                Bitmap bOut = _undoOPCache.DoUndo();
+
+                if (bOut != null)
+                {
+                    this.SetBitmap(this.helplineRulerCtrl2.Bmp, bOut, this.helplineRulerCtrl2, "Bmp");
+                    if (_undoOPCache.CurrentPosition < 1)
+                    {
+                        this.btnUndo.Enabled = false;
+                        this._pic_changed = false;
+                    }
+
+                    this.helplineRulerCtrl2.MakeBitmap(this.helplineRulerCtrl2.Bmp);
+
+                    this.helplineRulerCtrl2.dbPanel1.AutoScrollMinSize = new Size(System.Convert.ToInt32(this.helplineRulerCtrl2.Bmp.Width * this.helplineRulerCtrl2.Zoom), System.Convert.ToInt32(this.helplineRulerCtrl2.Bmp.Height * this.helplineRulerCtrl2.Zoom));
+                    this.helplineRulerCtrl2.dbPanel1.Invalidate();
+
+                    this.CheckRedoButton();
+                }
+                else
+                    MessageBox.Show("Error while undoing.");
+            }
+        }
+
+        private void btnRedo_Click(object sender, EventArgs e)
+        {
+            if (_undoOPCache != null && _undoOPCache.Processing == false)
+            {
+                Bitmap bOut = _undoOPCache.DoRedo();
+
+                if (bOut != null)
+                {
+                    this.SetBitmap(this.helplineRulerCtrl2.Bmp, bOut, this.helplineRulerCtrl2, "Bmp");
+                    this._pic_changed = true;
+
+                    this.helplineRulerCtrl2.MakeBitmap(this.helplineRulerCtrl2.Bmp);
+
+                    this.helplineRulerCtrl2.dbPanel1.AutoScrollMinSize = new Size(System.Convert.ToInt32(this.helplineRulerCtrl2.Bmp.Width * this.helplineRulerCtrl2.Zoom), System.Convert.ToInt32(this.helplineRulerCtrl2.Bmp.Height * this.helplineRulerCtrl2.Zoom));
+                    this.helplineRulerCtrl2.dbPanel1.Invalidate();
+
+                    this.CheckRedoButton();
+
+                    this.btnUndo.Enabled = true;
+                }
+                else
+                    MessageBox.Show("Error while redoing.");
+            }
+        }
+
+        private void backgroundWorker3_DoWork(object? sender, DoWorkEventArgs e)
+        {
+            if (e.Argument != null)
+            {
+                object[] o = (object[])e.Argument;
+                Bitmap bmp = new Bitmap((Bitmap)o[0]);
+                double alphaTh = (int)o[1];
+
+                e.Result = GetAlphaZAndGainPic(bmp, alphaTh);
+            }
+        }
+
+        private unsafe Bitmap? GetAlphaZAndGainPic(Bitmap bmp, double alphaTh)
+        {
+            Bitmap? bOut = null;
+
+            if (AvailMem.AvailMem.checkAvailRam(bmp.Width * bmp.Height * 16L))
+            {
+                int w = bmp.Width;
+                int h = bmp.Height;
+
+                bOut = new Bitmap(w, h);
+
+                BitmapData bmD = bmp.LockBits(new Rectangle(0, 0, w, h), ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
+                BitmapData bmA = bOut.LockBits(new Rectangle(0, 0, w, h), ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
+                int stride = bmD.Stride;
+
+                double slope = 255.0 / (255.0 - alphaTh);
+
+                Parallel.For(0, h, y =>
+                {
+                    byte* p = (byte*)bmD.Scan0;
+                    p += y * stride;
+
+                    byte* pA = (byte*)bmA.Scan0;
+                    pA += y * stride;
+
+                    for (int x = 0; x < w; x++)
+                    {
+                        if (p[3] != 0)
+                        {
+                            pA[0] = p[0];
+                            pA[1] = p[1];
+                            pA[2] = p[2];
+
+                            pA[3] = (byte)Math.Max(Math.Min(slope * ((double)p[3] - alphaTh), 255), 0);
+                        }
+
+                        p += 4;
+                        pA += 4;
+                    }
+                });
+
+                bmp.UnlockBits(bmD);
+                bOut.UnlockBits(bmA);
+            }
+
+            return bOut;
+        }
+
+        private void backgroundWorker3_RunWorkerCompleted(object? sender, RunWorkerCompletedEventArgs e)
+        {
+            if (!this.IsDisposed)
+            {
+                Bitmap? bmp = null;
+
+                if (e.Result != null)
+                    bmp = (Bitmap)e.Result;
+
+                if (bmp != null)
+                {
+                    this.SetBitmap(this.helplineRulerCtrl2.Bmp, bmp, this.helplineRulerCtrl2, "Bmp");
+
+                    this.helplineRulerCtrl2.SetZoom(this.helplineRulerCtrl1.Zoom.ToString());
+                    this.helplineRulerCtrl2.MakeBitmap(this.helplineRulerCtrl2.Bmp);
+                    this.helplineRulerCtrl2.dbPanel1.AutoScrollMinSize = new Size(
+                        (int)(this.helplineRulerCtrl2.Bmp.Width * this.helplineRulerCtrl2.Zoom),
+                        (int)(this.helplineRulerCtrl2.Bmp.Height * this.helplineRulerCtrl2.Zoom));
+
+                    _undoOPCache?.Add(bmp);
+
+                    this.btnUndo.Enabled = true;
+                    this.CheckRedoButton();
+                }
+
+                this.btnAlphaZAndGain.Text = "Go";
+
+                this.SetControls(true);
+                this.Cursor = Cursors.Default;
+
+                this.btnOK.Enabled = this.btnCancel.Enabled = true;
+
+                this._pic_changed = true;
+
+                this.helplineRulerCtrl2.dbPanel1.Invalidate();
+
+                if (this.Timer3.Enabled)
+                    this.Timer3.Stop();
+
+                this.Timer3.Start();
+
+                this.backgroundWorker3.Dispose();
+                this.backgroundWorker3 = new BackgroundWorker();
+                this.backgroundWorker3.WorkerReportsProgress = true;
+                this.backgroundWorker3.WorkerSupportsCancellation = true;
+                this.backgroundWorker3.DoWork += backgroundWorker3_DoWork;
+                //this.backgroundWorker3.ProgressChanged += backgroundWorker3_ProgressChanged;
+                this.backgroundWorker3.RunWorkerCompleted += backgroundWorker3_RunWorkerCompleted;
+            }
+        }
+
+        private void btnAlphaZAndGain_Click(object sender, EventArgs e)
+        {
+            if (this.backgroundWorker3.IsBusy)
+            {
+                this.backgroundWorker3.CancelAsync();
+                return;
+            }
+
+            if (this.helplineRulerCtrl2.Bmp != null)
+            {
+                this.Cursor = Cursors.WaitCursor;
+                this.SetControls(false);
+
+                this.btnAlphaZAndGain.Enabled = true;
+                this.btnAlphaZAndGain.Text = "Cancel";
+
+                int alphaTh = (int)this.numAlphaZAndGain.Value;
+
+                this.backgroundWorker3.RunWorkerAsync(new object[] { this.helplineRulerCtrl2.Bmp, alphaTh });
             }
         }
     }
