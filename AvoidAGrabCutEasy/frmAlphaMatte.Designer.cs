@@ -111,6 +111,10 @@
             floodFGToolStripMenuItem = new ToolStripMenuItem();
             backgroundWorker5 = new System.ComponentModel.BackgroundWorker();
             backgroundWorker3 = new System.ComponentModel.BackgroundWorker();
+            panel6 = new Panel();
+            rbSparseScribble = new RadioButton();
+            rbFullScribble = new RadioButton();
+            backgroundWorker4 = new System.ComponentModel.BackgroundWorker();
             statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
@@ -129,6 +133,7 @@
             ((System.ComponentModel.ISupportInitialize)numMaxSize).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numWHScribbles).BeginInit();
             contextMenuStrip1.SuspendLayout();
+            panel6.SuspendLayout();
             SuspendLayout();
             // 
             // statusStrip1
@@ -264,7 +269,7 @@
             // 
             // btnSaveScribbles
             // 
-            btnSaveScribbles.Location = new Point(505, 10);
+            btnSaveScribbles.Location = new Point(425, 175);
             btnSaveScribbles.Margin = new Padding(4, 3, 4, 3);
             btnSaveScribbles.Name = "btnSaveScribbles";
             btnSaveScribbles.Size = new Size(99, 27);
@@ -275,7 +280,7 @@
             // 
             // btnLoadScribbles
             // 
-            btnLoadScribbles.Location = new Point(392, 10);
+            btnLoadScribbles.Location = new Point(316, 175);
             btnLoadScribbles.Margin = new Padding(4, 3, 4, 3);
             btnLoadScribbles.Name = "btnLoadScribbles";
             btnLoadScribbles.Size = new Size(99, 27);
@@ -452,7 +457,7 @@
             // cbLSBmp
             // 
             cbLSBmp.AutoSize = true;
-            cbLSBmp.Location = new Point(612, 15);
+            cbLSBmp.Location = new Point(532, 180);
             cbLSBmp.Margin = new Padding(4, 3, 4, 3);
             cbLSBmp.Name = "cbLSBmp";
             cbLSBmp.Size = new Size(90, 19);
@@ -472,6 +477,7 @@
             // 
             // panel1
             // 
+            panel1.Controls.Add(panel6);
             panel1.Controls.Add(label5);
             panel1.Controls.Add(label3);
             panel1.Controls.Add(btnRedo);
@@ -618,7 +624,7 @@
             // 
             panel5.BorderStyle = BorderStyle.FixedSingle;
             panel5.Controls.Add(rbClosedForm);
-            panel5.Location = new Point(390, 50);
+            panel5.Location = new Point(356, 50);
             panel5.Name = "panel5";
             panel5.Size = new Size(164, 41);
             panel5.TabIndex = 703;
@@ -652,7 +658,7 @@
             panel2.Controls.Add(numMaxRestarts);
             panel2.Controls.Add(numSleep);
             panel2.Controls.Add(label2);
-            panel2.Location = new Point(569, 50);
+            panel2.Location = new Point(604, 50);
             panel2.Name = "panel2";
             panel2.Size = new Size(232, 113);
             panel2.TabIndex = 701;
@@ -827,7 +833,7 @@
             // 
             // btnGenerateTrimap
             // 
-            btnGenerateTrimap.Location = new Point(599, 175);
+            btnGenerateTrimap.Location = new Point(638, 175);
             btnGenerateTrimap.Margin = new Padding(4, 3, 4, 3);
             btnGenerateTrimap.Name = "btnGenerateTrimap";
             btnGenerateTrimap.Size = new Size(99, 27);
@@ -933,7 +939,7 @@
             // 
             btnGo.Enabled = false;
             btnGo.Font = new Font("Microsoft Sans Serif", 8.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            btnGo.Location = new Point(713, 175);
+            btnGo.Location = new Point(748, 175);
             btnGo.Margin = new Padding(4, 3, 4, 3);
             btnGo.Name = "btnGo";
             btnGo.Size = new Size(88, 27);
@@ -1053,6 +1059,45 @@
             backgroundWorker3.DoWork += backgroundWorker3_DoWork;
             backgroundWorker3.RunWorkerCompleted += backgroundWorker3_RunWorkerCompleted;
             // 
+            // panel6
+            // 
+            panel6.BorderStyle = BorderStyle.FixedSingle;
+            panel6.Controls.Add(rbSparseScribble);
+            panel6.Controls.Add(rbFullScribble);
+            panel6.Location = new Point(356, 97);
+            panel6.Name = "panel6";
+            panel6.Size = new Size(233, 41);
+            panel6.TabIndex = 713;
+            // 
+            // rbSparseScribble
+            // 
+            rbSparseScribble.AutoSize = true;
+            rbSparseScribble.Location = new Point(118, 12);
+            rbSparseScribble.Name = "rbSparseScribble";
+            rbSparseScribble.Size = new Size(106, 19);
+            rbSparseScribble.TabIndex = 0;
+            rbSparseScribble.Text = "SparseScribbles";
+            rbSparseScribble.UseVisualStyleBackColor = true;
+            // 
+            // rbFullScribble
+            // 
+            rbFullScribble.AutoSize = true;
+            rbFullScribble.Checked = true;
+            rbFullScribble.Location = new Point(11, 12);
+            rbFullScribble.Name = "rbFullScribble";
+            rbFullScribble.Size = new Size(100, 19);
+            rbFullScribble.TabIndex = 0;
+            rbFullScribble.TabStop = true;
+            rbFullScribble.Text = "FilledScribbles";
+            rbFullScribble.UseVisualStyleBackColor = true;
+            // 
+            // backgroundWorker4
+            // 
+            backgroundWorker4.WorkerReportsProgress = true;
+            backgroundWorker4.WorkerSupportsCancellation = true;
+            backgroundWorker4.DoWork += backgroundWorker4_DoWork;
+            backgroundWorker4.RunWorkerCompleted += backgroundWorker4_RunWorkerCompleted;
+            // 
             // frmAlphaMatte
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -1088,6 +1133,8 @@
             ((System.ComponentModel.ISupportInitialize)numMaxSize).EndInit();
             ((System.ComponentModel.ISupportInitialize)numWHScribbles).EndInit();
             contextMenuStrip1.ResumeLayout(false);
+            panel6.ResumeLayout(false);
+            panel6.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -1176,5 +1223,9 @@
         private Button btnAlphaZAndGain;
         private NumericUpDown numAlphaZAndGain;
         internal System.ComponentModel.BackgroundWorker backgroundWorker3;
+        private Panel panel6;
+        private RadioButton rbSparseScribble;
+        private RadioButton rbFullScribble;
+        internal System.ComponentModel.BackgroundWorker backgroundWorker4;
     }
 }

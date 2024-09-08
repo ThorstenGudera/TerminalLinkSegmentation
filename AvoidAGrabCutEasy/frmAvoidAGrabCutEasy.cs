@@ -346,7 +346,7 @@ namespace AvoidAGrabCutEasy
                         {
                             IEnumerable<Tuple<int, int, int>> jj = this._pointsListSeq.Where(a => a.Item2 == curOp);
 
-                            if (jj != null && jj.Count() > 0)
+                            if (jj != null && jj.Count() > 0 && this._allPoints.Count > jj.First().Item1)
                             {
                                 List<Tuple<List<Point>, int>> lpts = this._allPoints[jj.First().Item1].ToList();
 
@@ -650,7 +650,7 @@ namespace AvoidAGrabCutEasy
 
                         List<List<Point>> ptsList = this._scribbles[l][wh];
 
-                        if (ptsList != null && ptsList.Count > 0)
+                        if (ptsList != null && ptsList.Count > 0 && ptsList.Count > listNo)
                         {
                             bool doRect = ptsList[listNo].Count > 1;
 

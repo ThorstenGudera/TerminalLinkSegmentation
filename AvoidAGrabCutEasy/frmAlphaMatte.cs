@@ -1929,131 +1929,8 @@ namespace AvoidAGrabCutEasy
                 Bitmap bTrimap = new Bitmap(bWork.Width, bWork.Height);
                 this.SetBitmap(ref _bWork, ref bWork);
 
-                using (Graphics gx = Graphics.FromImage(bTrimap))
-                {
-                    gx.SmoothingMode = SmoothingMode.None;
-                    gx.InterpolationMode = InterpolationMode.NearestNeighbor;
-                    gx.Clear(Color.Black);
-
-                    if (this._scribbles != null)
-                    {
-                        if (this._scribbleSeq != null && this._scribbleSeq.Count > 0)
-                        {
-                            foreach (Tuple<int, int, int> f in this._scribbleSeq)
-                            {
-                                int l = f.Item1;
-                                int wh = f.Item2;
-                                int listNo = f.Item3;
-
-                                List<List<Point>> ptsList = this._scribbles[l][wh];
-
-                                if (ptsList != null && ptsList.Count > 0)
-                                {
-                                    bool doRect = ptsList[listNo].Count > 1;
-
-                                    Color c = l == 0 ? Color.Black : l == 1 ? Color.White : Color.Gray;
-
-                                    if (doRect)
-                                    {
-                                        foreach (Point pt in ptsList[listNo])
-                                        {
-                                            using (SolidBrush sb = new SolidBrush(c))
-                                                gx.FillRectangle(sb, new Rectangle(
-                                                    (int)((int)(pt.X - wh / 2) / factor),
-                                                    (int)((int)(pt.Y - wh / 2) / factor),
-                                                    (int)(wh / factor),
-                                                    (int)(wh / factor)));
-                                        }
-                                    }
-                                    else
-                                    {
-                                        if (ptsList[listNo].Count > 0)
-                                        {
-                                            Point pt = ptsList[listNo][0];
-                                            using (SolidBrush sb = new SolidBrush(c))
-                                                gx.FillRectangle(sb, new Rectangle(
-                                                    (int)((int)(pt.X - wh / 2) / factor),
-                                                    (int)((int)(pt.Y - wh / 2) / factor),
-                                                    (int)(wh / factor),
-                                                    (int)(wh / factor)));
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                        else
-                        {
-                            if (this._scribbles.ContainsKey(1))
-                            {
-                                Dictionary<int, List<List<Point>>> z = this._scribbles[1];
-
-                                if (z != null)
-                                {
-                                    foreach (int i in z.Keys)
-                                    {
-                                        List<List<Point>> list = z[i];
-
-                                        int wh = (int)Math.Max((i / (factor == 0 ? 1 : factor)), 3);
-
-                                        for (int j = 0; j < list.Count; j++)
-                                        {
-                                            List<Point> pts = list[j].Select(a => new Point((int)(a.X / factor), (int)(a.Y / factor))).ToList();
-
-                                            foreach (Point pt in pts)
-                                                gx.FillRectangle(Brushes.White, new Rectangle(pt.X - wh / 2, pt.Y - wh / 2, wh, wh));
-                                        }
-
-                                    }
-                                }
-                            }
-
-                            if (this._scribbles.ContainsKey(3))
-                            {
-                                Dictionary<int, List<List<Point>>> z = this._scribbles[3];
-
-                                if (z != null)
-                                {
-                                    foreach (int i in z.Keys)
-                                    {
-                                        List<List<Point>> list = z[i];
-
-                                        int wh = (int)Math.Max((i / (factor == 0 ? 1 : factor)), 3);
-
-                                        for (int j = 0; j < list.Count; j++)
-                                        {
-                                            List<Point> pts = list[j].Select(a => new Point((int)(a.X / factor), (int)(a.Y / factor))).ToList();
-
-                                            foreach (Point pt in pts)
-                                                gx.FillRectangle(Brushes.Gray, new Rectangle(pt.X - wh / 2, pt.Y - wh / 2, wh, wh));
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-
-                if (bTrimap != null)
-                {
-                    Image? iOld = this.pictureBox1.Image;
-                    this.pictureBox1.Image = bTrimap;
-                    if (iOld != null)
-                        iOld.Dispose();
-                    iOld = null;
-
-                    this.btnGo.Enabled = true;
-                }
+                this.backgroundWorker4.RunWorkerAsync(new object[] { factor, bTrimap });
             }
-
-            this.Cursor = Cursors.Default;
-            this.SetControls(true);
-
-            this._hs = this.cbHalfSize.Checked;
-            rbClosedForm_CheckedChanged(this.rbClosedForm, new EventArgs());
-
-            this.btnGenerateTrimap.Text = "gen trimap";
-
-            this.btnOK.Enabled = this.btnCancel.Enabled = true;
         }
 
         private Bitmap ResampleBmp(Bitmap bmp, int n)
@@ -4205,6 +4082,210 @@ namespace AvoidAGrabCutEasy
         {
             CheckBox c = (CheckBox)sender;
             this.btnGo.Enabled = c.Checked == this._hs && this.pictureBox1.Image != null;
+        }
+
+        private void backgroundWorker4_DoWork(object? sender, DoWorkEventArgs e)
+        {
+            if (e.Argument != null)
+            {
+                object[] o = (object[])e.Argument;
+
+                double factor = (double)o[0];
+                Bitmap bTrimap = (Bitmap)o[1];
+
+                using (Graphics gx = Graphics.FromImage(bTrimap))
+                {
+                    gx.SmoothingMode = SmoothingMode.None;
+                    gx.InterpolationMode = InterpolationMode.NearestNeighbor;
+                    gx.Clear(Color.Black);
+
+                    if (this._scribbles != null)
+                    {
+                        if (this.rbFullScribble.Checked)
+                        {
+                            if (this._scribbleSeq != null && this._scribbleSeq.Count > 0)
+                            {
+                                foreach (Tuple<int, int, int> f in this._scribbleSeq)
+                                {
+                                    int l = f.Item1;
+                                    int wh = f.Item2;
+                                    int listNo = f.Item3;
+
+                                    List<List<Point>> ptsList = this._scribbles[l][wh];
+
+                                    if (ptsList != null && ptsList.Count > 0)
+                                    {
+                                        bool doRect = ptsList[listNo].Count > 1;
+
+                                        Color c = l == 0 ? Color.Black : l == 1 ? Color.White : Color.Gray;
+
+                                        if (doRect)
+                                        {
+                                            foreach (Point pt in ptsList[listNo])
+                                            {
+                                                using (SolidBrush sb = new SolidBrush(c))
+                                                    gx.FillRectangle(sb, new Rectangle(
+                                                        (int)((int)(pt.X - wh / 2) / factor),
+                                                        (int)((int)(pt.Y - wh / 2) / factor),
+                                                    (int)(wh / factor),
+                                                        (int)(wh / factor)));
+                                            }
+                                        }
+                                        else
+                                        {
+                                            if (ptsList[listNo].Count > 0)
+                                            {
+                                                Point pt = ptsList[listNo][0];
+                                                using (SolidBrush sb = new SolidBrush(c))
+                                                    gx.FillRectangle(sb, new Rectangle(
+                                                        (int)((int)(pt.X - wh / 2) / factor),
+                                                        (int)((int)(pt.Y - wh / 2) / factor),
+                                                        (int)(wh / factor),
+                                                        (int)(wh / factor)));
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                if (this._scribbles.ContainsKey(1))
+                                {
+                                    Dictionary<int, List<List<Point>>> z = this._scribbles[1];
+
+                                    if (z != null)
+                                    {
+                                        foreach (int i in z.Keys)
+                                        {
+                                            List<List<Point>> list = z[i];
+                                            int wh = (int)Math.Max((i / (factor == 0 ? 1 : factor)), 3);
+
+                                            for (int j = 0; j < list.Count; j++)
+                                            {
+                                                List<Point> pts = list[j].Select(a => new Point((int)(a.X / factor), (int)(a.Y / factor))).ToList();
+
+                                                foreach (Point pt in pts)
+                                                    gx.FillRectangle(Brushes.White, new Rectangle(pt.X - wh / 2, pt.Y - wh / 2, wh, wh));
+                                            }
+
+                                        }
+                                    }
+                                }
+
+                                if (this._scribbles.ContainsKey(3))
+                                {
+                                    Dictionary<int, List<List<Point>>> z = this._scribbles[3];
+
+                                    if (z != null)
+                                    {
+                                        foreach (int i in z.Keys)
+                                        {
+                                            List<List<Point>> list = z[i];
+                                            int wh = (int)Math.Max((i / (factor == 0 ? 1 : factor)), 3);
+
+                                            for (int j = 0; j < list.Count; j++)
+                                            {
+                                                List<Point> pts = list[j].Select(a => new Point((int)(a.X / factor), (int)(a.Y / factor))).ToList();
+
+                                                foreach (Point pt in pts)
+                                                    gx.FillRectangle(Brushes.Gray, new Rectangle(pt.X - wh / 2, pt.Y - wh / 2, wh, wh));
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        else if (this.rbSparseScribble.Checked)
+                        {
+                            gx.Clear(Color.Gray);
+
+                            if (this._scribbles.ContainsKey(0))
+                            {
+                                Dictionary<int, List<List<Point>>> z = this._scribbles[0];
+
+                                if (z != null)
+                                {
+                                    foreach (int i in z.Keys)
+                                    {
+                                        List<List<Point>> list = z[i];
+                                        int wh = (int)Math.Max((i / (factor == 0 ? 1 : factor)), 3);
+
+                                        for (int j = 0; j < list.Count; j++)
+                                        {
+                                            List<Point> pts = list[j].Select(a => new Point((int)(a.X / factor), (int)(a.Y / factor))).ToList();
+
+                                            foreach (Point pt in pts)
+                                                gx.FillRectangle(Brushes.Black, new Rectangle(pt.X - wh / 2, pt.Y - wh / 2, wh, wh));
+                                        }
+
+                                    }
+                                }
+                            }
+
+                            if (this._scribbles.ContainsKey(1))
+                            {
+                                Dictionary<int, List<List<Point>>> z = this._scribbles[1];
+
+                                if (z != null)
+                                {
+                                    foreach (int i in z.Keys)
+                                    {
+                                        List<List<Point>> list = z[i];
+                                        int wh = (int)Math.Max((i / (factor == 0 ? 1 : factor)), 3);
+
+                                        for (int j = 0; j < list.Count; j++)
+                                        {
+                                            List<Point> pts = list[j].Select(a => new Point((int)(a.X / factor), (int)(a.Y / factor))).ToList();
+
+                                            foreach (Point pt in pts)
+                                                gx.FillRectangle(Brushes.White, new Rectangle(pt.X - wh / 2, pt.Y - wh / 2, wh, wh));
+                                        }
+
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                e.Result = bTrimap;
+            }
+        }
+
+        private void backgroundWorker4_RunWorkerCompleted(object? sender, RunWorkerCompletedEventArgs e)
+        {
+            if (e.Result != null)
+            {
+                Bitmap bTrimap = (Bitmap)e.Result;
+                if (bTrimap != null)
+                {
+                    Image? iOld = this.pictureBox1.Image;
+                    this.pictureBox1.Image = bTrimap;
+                    if (iOld != null)
+                        iOld.Dispose();
+                    iOld = null;
+
+                    this.btnGo.Enabled = true;
+                }
+            }
+
+            this.Cursor = Cursors.Default;
+            this.SetControls(true);
+
+            this._hs = this.cbHalfSize.Checked;
+            rbClosedForm_CheckedChanged(this.rbClosedForm, new EventArgs());
+
+            this.btnGenerateTrimap.Text = "gen trimap";
+
+            this.btnOK.Enabled = this.btnCancel.Enabled = true;
+
+            this.backgroundWorker4.Dispose();
+            this.backgroundWorker4 = new BackgroundWorker();
+            this.backgroundWorker4.WorkerReportsProgress = true;
+            this.backgroundWorker4.WorkerSupportsCancellation = true;
+            this.backgroundWorker4.DoWork += backgroundWorker4_DoWork;
+            //this.backgroundWorker4.ProgressChanged += backgroundWorker4_ProgressChanged;
+            this.backgroundWorker4.RunWorkerCompleted += backgroundWorker4_RunWorkerCompleted;
         }
     }
 }
