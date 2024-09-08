@@ -264,7 +264,7 @@
             // 
             // btnSaveScribbles
             // 
-            btnSaveScribbles.Location = new Point(294, 10);
+            btnSaveScribbles.Location = new Point(505, 10);
             btnSaveScribbles.Margin = new Padding(4, 3, 4, 3);
             btnSaveScribbles.Name = "btnSaveScribbles";
             btnSaveScribbles.Size = new Size(99, 27);
@@ -275,7 +275,7 @@
             // 
             // btnLoadScribbles
             // 
-            btnLoadScribbles.Location = new Point(181, 10);
+            btnLoadScribbles.Location = new Point(392, 10);
             btnLoadScribbles.Margin = new Padding(4, 3, 4, 3);
             btnLoadScribbles.Name = "btnLoadScribbles";
             btnLoadScribbles.Size = new Size(99, 27);
@@ -408,6 +408,8 @@
             // cbSlices
             // 
             cbSlices.AutoSize = true;
+            cbSlices.Checked = true;
+            cbSlices.CheckState = CheckState.Checked;
             cbSlices.Location = new Point(7, 80);
             cbSlices.Name = "cbSlices";
             cbSlices.Size = new Size(69, 19);
@@ -419,6 +421,8 @@
             // cbInterpolated
             // 
             cbInterpolated.AutoSize = true;
+            cbInterpolated.Checked = true;
+            cbInterpolated.CheckState = CheckState.Checked;
             cbInterpolated.Location = new Point(134, 28);
             cbInterpolated.Name = "cbInterpolated";
             cbInterpolated.Size = new Size(90, 19);
@@ -448,7 +452,7 @@
             // cbLSBmp
             // 
             cbLSBmp.AutoSize = true;
-            cbLSBmp.Location = new Point(401, 15);
+            cbLSBmp.Location = new Point(612, 15);
             cbLSBmp.Margin = new Padding(4, 3, 4, 3);
             cbLSBmp.Name = "cbLSBmp";
             cbLSBmp.Size = new Size(90, 19);
@@ -687,6 +691,7 @@
             cbHalfSize.TabIndex = 693;
             cbHalfSize.Text = "reduce size";
             cbHalfSize.UseVisualStyleBackColor = true;
+            cbHalfSize.CheckedChanged += cbHalfSize_CheckedChanged;
             // 
             // label54
             // 

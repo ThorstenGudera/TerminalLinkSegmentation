@@ -96,6 +96,7 @@ namespace AvoidAGrabCutEasy
         private Bitmap? _bWork;
         private List<Tuple<int, int, int>> _scribbleSeq = new List<Tuple<int, int, int>>();
         private Point _ptHLC1FGBG;
+        private bool _hs;
 
         public frmAlphaMatte()
         {
@@ -1713,6 +1714,7 @@ namespace AvoidAGrabCutEasy
                 _sw.Start();
 
                 this.btnOK.Enabled = this.btnCancel.Enabled = false;
+                this._hs = this.cbHalfSize.Checked;
 
                 Bitmap bWork = new Bitmap(this._bWork);
                 Image img = this.pictureBox1.Image;
@@ -3827,6 +3829,7 @@ namespace AvoidAGrabCutEasy
         {
             this.cbBGColor_CheckedChanged(this.cbBGColor, new EventArgs());
             rbClosedForm_CheckedChanged(this.rbClosedForm, new EventArgs());
+            this._hs = this.cbHalfSize.Checked;
         }
 
         private void floodBGToolStripMenuItem_Click(object sender, EventArgs e)
@@ -3856,6 +3859,7 @@ namespace AvoidAGrabCutEasy
         private void rbClosedForm_CheckedChanged(object sender, EventArgs e)
         {
             this.panel2.Enabled = this.rbClosedForm.Checked;
+            this.cbHalfSize_CheckedChanged(this.cbHalfSize, new EventArgs());
         }
 
         private void Timer3_Tick(object sender, EventArgs e)
@@ -4194,6 +4198,12 @@ namespace AvoidAGrabCutEasy
 
                 this.backgroundWorker3.RunWorkerAsync(new object[] { this.helplineRulerCtrl2.Bmp, alphaTh });
             }
+        }
+
+        private void cbHalfSize_CheckedChanged(object sender, EventArgs e)
+        {
+            CheckBox c = (CheckBox)sender;
+            this.btnGo.Enabled = c.Checked == this._hs && this.pictureBox1.Image != null;
         }
     }
 }
