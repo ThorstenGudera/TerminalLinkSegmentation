@@ -2048,6 +2048,7 @@ namespace AvoidAGrabCutEasy
             this.Cursor = Cursors.Default;
             this.SetControls(true);
 
+            this._hs = this.cbHalfSize.Checked;
             rbClosedForm_CheckedChanged(this.rbClosedForm, new EventArgs());
 
             this.btnGenerateTrimap.Text = "gen trimap";
