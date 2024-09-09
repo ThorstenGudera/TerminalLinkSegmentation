@@ -119,10 +119,10 @@ namespace AvoidAGrabCutEasy
         private Point _ptHLC1FGBG;
         //It would be much easier to use a List of objects which hold all information about drawing instead of using a seperate sequence file...
         //Maybe I'll change it (as far as it is also easy to serialize in json)
-        private List<Tuple<int, int, int, bool>>? _scribbleSeqBU;
-        private List<Tuple<int, int, int, bool>> _scribbleSeq = new List<Tuple<int, int, int, bool>>();
+        private List<Tuple<int, int, int, bool, List<List<Point>>>>? _scribbleSeqBU;
+        private List<Tuple<int, int, int, bool, List<List<Point>>>> _scribbleSeq = new List<Tuple<int, int, int, bool, List<List<Point>>>>();
         private List<ChainCode>? _chainsFromFrm;
-        private List<Tuple<int, int, int, bool>>? _pointsListSeq;
+        private List<Tuple<int, int, int, bool, List<List<Point>>>>? _pointsListSeq;
         private int _currentDrawOperation;
         private bool _dontUpdateNumComp;
 
@@ -289,7 +289,7 @@ namespace AvoidAGrabCutEasy
                 this._allPoints.Add(this._currentDraw, new List<Tuple<List<Point>, int>>());
 
             if (this._pointsListSeq == null)
-                this._pointsListSeq = new List<Tuple<int, int, int, bool>>();
+                this._pointsListSeq = new List<Tuple<int, int, int, bool, List<List<Point>>>>();
 
             GraphicsPath gp = this._pathList[this._currentDraw];
             using (GraphicsPath gpTmp = new GraphicsPath())
@@ -322,7 +322,7 @@ namespace AvoidAGrabCutEasy
                 }
             }
 
-            this._pointsListSeq.Add(Tuple.Create(this._currentDraw, this._currentDrawOperation, this._allPoints[this._currentDraw].Count - 1, false));
+            this._pointsListSeq.Add(Tuple.Create(this._currentDraw, this._currentDrawOperation, this._allPoints[this._currentDraw].Count - 1, false, new List<List<Point>>()));
 
             this._currentDrawOperation++;
 
@@ -342,9 +342,9 @@ namespace AvoidAGrabCutEasy
                     {
                         int curOp = 0;
 
-                        foreach (Tuple<int, int, int, bool> f in this._pointsListSeq)
+                        foreach (Tuple<int, int, int, bool, List<List<Point>>> f in this._pointsListSeq)
                         {
-                            IEnumerable<Tuple<int, int, int, bool>> jj = this._pointsListSeq.Where(a => a.Item2 == curOp);
+                            IEnumerable<Tuple<int, int, int, bool, List<List<Point>>>> jj = this._pointsListSeq.Where(a => a.Item2 == curOp);
 
                             if (jj != null && jj.Count() > 0)
                             {
@@ -617,12 +617,12 @@ namespace AvoidAGrabCutEasy
                     this._scribbles[fgbg].Add(wh, new List<List<Point>>());
 
                 if (this._scribbleSeq == null)
-                    this._scribbleSeq = new List<Tuple<int, int, int, bool>>();
+                    this._scribbleSeq = new List<Tuple<int, int, int, bool, List<List<Point>>>>();
 
                 List<List<Point>> whPts = this._scribbles[fgbg][wh];
                 whPts.Add(new List<Point>());
                 whPts[whPts.Count - 1].AddRange(this._points2.ToArray());
-                this._scribbleSeq.Add(Tuple.Create(fgbg, wh, this._scribbles[fgbg][wh].Count - 1, false));
+                this._scribbleSeq.Add(Tuple.Create(fgbg, wh, this._scribbles[fgbg][wh].Count - 1, false, new List<List<Point>>()));
             }
         }
 
@@ -642,7 +642,7 @@ namespace AvoidAGrabCutEasy
 
                 if (this._scribbleSeq != null && this._scribbleSeq.Count > 0)
                 {
-                    foreach (Tuple<int, int, int, bool> f in this._scribbleSeq)
+                    foreach (Tuple<int, int, int, bool, List<List<Point>>> f in this._scribbleSeq)
                     {
                         int l = f.Item1;
                         int wh = f.Item2;
@@ -658,15 +658,35 @@ namespace AvoidAGrabCutEasy
 
                             if (doRect)
                             {
-                                foreach (Point pt in ptsList[listNo])
+                                if (f.Item4 && f.Item5 != null && f.Item5.Count > 0)
                                 {
-                                    using (SolidBrush sb = new SolidBrush(c))
-                                        e.Graphics.FillRectangle(sb, new Rectangle(
-                                            (int)((int)(pt.X - wh / 2) * this.helplineRulerCtrl1.Zoom) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X,
-                                            (int)((int)(pt.Y - wh / 2) * this.helplineRulerCtrl1.Zoom) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y,
-                                            (int)(wh * this.helplineRulerCtrl1.Zoom),
-                                            (int)(wh * this.helplineRulerCtrl1.Zoom)));
+                                    List<List<Point>> pts = f.Item5;
+                                    using GraphicsPath gP = new GraphicsPath();
+                                    foreach (List<Point> lPt in pts)
+                                    {
+                                        gP.StartFigure();
+                                        gP.AddLines(lPt.Select(a => new PointF(a.X, a.Y)).ToArray());
+                                        gP.CloseFigure();
+                                    }
+
+                                    using Matrix mx = new Matrix(this.helplineRulerCtrl1.Zoom, 0, 0, this.helplineRulerCtrl1.Zoom,
+                                        this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X,
+                                        this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y);
+                                    gP.Transform(mx);
+
+                                    using SolidBrush sb = new SolidBrush(c);
+                                    e.Graphics.FillPath(sb, gP);
                                 }
+                                else
+                                    foreach (Point pt in ptsList[listNo])
+                                    {
+                                        using (SolidBrush sb = new SolidBrush(c))
+                                            e.Graphics.FillRectangle(sb, new Rectangle(
+                                                (int)((int)(pt.X - wh / 2) * this.helplineRulerCtrl1.Zoom) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X,
+                                                (int)((int)(pt.Y - wh / 2) * this.helplineRulerCtrl1.Zoom) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y,
+                                                (int)(wh * this.helplineRulerCtrl1.Zoom),
+                                                (int)(wh * this.helplineRulerCtrl1.Zoom)));
+                                    }
                             }
                             else
                             {
@@ -1734,7 +1754,7 @@ namespace AvoidAGrabCutEasy
                 ListSelectionMode selMode = (ListSelectionMode)o[22];
                 bool scribbleMode = (bool)o[23];
                 Dictionary<int, Dictionary<int, List<List<Point>>>>? scribbles = this._scribbles;
-                List<Tuple<int, int, int, bool>> scribbleSeq = this._scribbleSeq;
+                List<Tuple<int, int, int, bool, List<List<Point>>>> scribbleSeq = this._scribbleSeq;
                 double probMult1 = (double)o[24];
                 double kmInitW = (double)o[25];
                 double kmInitH = (double)o[26];
@@ -1770,7 +1790,7 @@ namespace AvoidAGrabCutEasy
                         this._scribblesBU = this._scribbles;
                         this._scribbles = scribbles2;
                         scribbles = this._scribbles;
-                        List<Tuple<int, int, int, bool>> scribbleSeq2 = ResizeScribbleSeq(this._scribbleSeq, resPic, true);
+                        List<Tuple<int, int, int, bool, List<List<Point>>>> scribbleSeq2 = ResizeScribbleSeq(this._scribbleSeq, resPic, true);
                         this._scribbleSeqBU = this._scribbleSeq;
                         this._scribbleSeq = scribbleSeq2;
                         scribbleSeq = this._scribbleSeq;
@@ -2382,12 +2402,12 @@ namespace AvoidAGrabCutEasy
             return res;
         }
 
-        private List<Tuple<int, int, int, bool>> ResizeScribbleSeq(List<Tuple<int, int, int, bool>> scribbleSeq, double resWC, bool verify)
+        private List<Tuple<int, int, int, bool, List<List<Point>>>> ResizeScribbleSeq(List<Tuple<int, int, int, bool, List<List<Point>>>> scribbleSeq, double resWC, bool verify)
         {
-            List<Tuple<int, int, int, bool>> res = new List<Tuple<int, int, int, bool>>();
+            List<Tuple<int, int, int, bool, List<List<Point>>>> res = new List<Tuple<int, int, int, bool, List<List<Point>>>>();
 
             for (int i = 0; i < scribbleSeq.Count; i++)
-                res.Add(Tuple.Create(scribbleSeq[i].Item1, (int)(scribbleSeq[i].Item2 / resWC), scribbleSeq[i].Item3, false));
+                res.Add(Tuple.Create(scribbleSeq[i].Item1, (int)(scribbleSeq[i].Item2 / resWC), scribbleSeq[i].Item3, false, new List<List<Point>>()));
 
             if (verify)
             {
@@ -2657,14 +2677,14 @@ namespace AvoidAGrabCutEasy
 
                         if (this._scribbleSeq != null && j != null)
                         {
-                            IEnumerable<Tuple<int, int, int, bool>> l = this._scribbleSeq.Where(a => a.Item1 == fg);
+                            IEnumerable<Tuple<int, int, int, bool, List<List<Point>>>> l = this._scribbleSeq.Where(a => a.Item1 == fg);
                             if (l != null && l.Count() > 0)
                             {
-                                IEnumerable<Tuple<int, int, int, bool>> whL = l.Where(a => a.Item2 == wh);
+                                IEnumerable<Tuple<int, int, int, bool, List<List<Point>>>> whL = l.Where(a => a.Item2 == wh);
 
                                 if (whL != null && whL.Count() > 0)
                                 {
-                                    IEnumerable<Tuple<int, int, int, bool>> listL = whL.Where(a => a.Item3 == j.Count);
+                                    IEnumerable<Tuple<int, int, int, bool, List<List<Point>>>> listL = whL.Where(a => a.Item3 == j.Count);
 
                                     if (listL != null && listL.Count() > 0)
                                     {
@@ -2673,7 +2693,7 @@ namespace AvoidAGrabCutEasy
                                         for (int j4 = indxt + 1; j4 < this._scribbleSeq.Count; j4++)
                                         {
                                             if (this._scribbleSeq[j4].Item1 == fg && this._scribbleSeq[j4].Item2 == wh)
-                                                this._scribbleSeq[j4] = Tuple.Create(fg, wh, this._scribbleSeq[j4].Item3 - 1, false);
+                                                this._scribbleSeq[j4] = Tuple.Create(fg, wh, this._scribbleSeq[j4].Item3 - 1, false, new List<List<Point>>());
                                         }
 
                                         this._scribbleSeq.Remove(listL.First());
@@ -2753,10 +2773,10 @@ namespace AvoidAGrabCutEasy
 
                 if (this._pointsListSeq != null && this._pointsListSeq.Count > 0)
                 {
-                    IEnumerable<Tuple<int, int, int, bool>> jj = this._pointsListSeq.Where(a => a.Item1 == j);
+                    IEnumerable<Tuple<int, int, int, bool, List<List<Point>>>> jj = this._pointsListSeq.Where(a => a.Item1 == j);
                     if (jj != null && jj.Count() > 0)
                     {
-                        IEnumerable<Tuple<int, int, int, bool>> jjj = jj.Where(a => a.Item2 == this._currentDrawOperation);
+                        IEnumerable<Tuple<int, int, int, bool, List<List<Point>>>> jjj = jj.Where(a => a.Item2 == this._currentDrawOperation);
                         if (jjj != null && jjj.Count() > 0)
                             this._pointsListSeq.Remove(jjj.First());
                     }
@@ -3107,7 +3127,7 @@ namespace AvoidAGrabCutEasy
                 ListSelectionMode selMode = (ListSelectionMode)o[22];
                 bool scribbleMode = (bool)o[23];
                 Dictionary<int, Dictionary<int, List<List<Point>>>>? scribbles = this._scribbles;
-                List<Tuple<int, int, int, bool>> scribbleSeq = this._scribbleSeq;
+                List<Tuple<int, int, int, bool, List<List<Point>>>> scribbleSeq = this._scribbleSeq;
                 double probMult1 = (double)o[24];
                 double kmInitW = (double)o[25];
                 double kmInitH = (double)o[26];
@@ -3140,7 +3160,7 @@ namespace AvoidAGrabCutEasy
                         this._scribblesBU = this._scribbles;
                         this._scribbles = scribbles2;
                         scribbles = this._scribbles;
-                        List<Tuple<int, int, int, bool>> scribbleSeq2 = ResizeScribbleSeq(this._scribbleSeq, resPic, true);
+                        List<Tuple<int, int, int, bool, List<List<Point>>>> scribbleSeq2 = ResizeScribbleSeq(this._scribbleSeq, resPic, true);
                         this._scribbleSeqBU = this._scribbleSeq;
                         this._scribbleSeq = scribbleSeq2;
                         scribbleSeq = this._scribbleSeq;
@@ -4271,13 +4291,41 @@ namespace AvoidAGrabCutEasy
                     this._scribbles[0].Add(3, new List<List<Point>>());
 
                 if (this._scribbleSeq == null)
-                    this._scribbleSeq = new List<Tuple<int, int, int, bool>>();
+                    this._scribbleSeq = new List<Tuple<int, int, int, bool, List<List<Point>>>>();
 
                 this._scribbles[0][3].Add(ll.Distinct().ToList());
-                this._scribbleSeq.Add(Tuple.Create(0, 3, this._scribbles[0][3].Count - 1, false));
+                this._scribbleSeq.Add(Tuple.Create(0, 3, this._scribbles[0][3].Count - 1, true, GetBoundariesForScribbleFill(this._scribbles[0][3][this._scribbles[0][3].Count - 1], w, h)));
 
                 this.helplineRulerCtrl1.dbPanel1.Invalidate();
             }
+        }
+
+        private List<List<Point>> GetBoundariesForScribbleFill(List<Point> points, int w, int h)
+        {
+            List<List<Point>> res = new List<List<Point>>();
+
+            using Bitmap bmp = new Bitmap(w, h);
+            using Graphics gx = Graphics.FromImage(bmp);
+            int wh = 3;
+            foreach (Point pt in points)
+                gx.FillRectangle(Brushes.Black, new Rectangle(
+                                            (int)(int)(pt.X - wh / 2),
+                                            (int)(int)(pt.Y - wh / 2),
+                                            (int)wh,
+                                            (int)wh));
+
+            List<ChainCode>? c = this.GetBoundary(bmp);
+            if (c != null)
+            {
+                foreach (ChainCode cc in c)
+                {
+                    List<Point> l = new List<Point>();
+                    l.AddRange(cc.Coord.ToArray());
+                    res.Add(l);
+                }
+            }
+
+            return res;
         }
 
         private unsafe void btnFloodFG_Click(object sender, EventArgs e)
@@ -4390,10 +4438,10 @@ namespace AvoidAGrabCutEasy
                     this._scribbles[1].Add(3, new List<List<Point>>());
 
                 if (this._scribbleSeq == null)
-                    this._scribbleSeq = new List<Tuple<int, int, int, bool>>();
+                    this._scribbleSeq = new List<Tuple<int, int, int, bool, List<List<Point>>>>();
 
                 this._scribbles[1][3].Add(ll.Distinct().ToList());
-                this._scribbleSeq.Add(Tuple.Create(1, 3, this._scribbles[1][3].Count - 1, false));
+                this._scribbleSeq.Add(Tuple.Create(1, 3, this._scribbles[1][3].Count - 1, true, GetBoundariesForScribbleFill(this._scribbles[1][3][this._scribbles[1][3].Count - 1], w, h)));
 
                 this.helplineRulerCtrl1.dbPanel1.Invalidate();
             }
@@ -4465,7 +4513,7 @@ namespace AvoidAGrabCutEasy
                                     this._scribbles.Add(3, new Dictionary<int, List<List<Point>>>());
 
                                 if (this._scribbleSeq == null)
-                                    this._scribbleSeq = new List<Tuple<int, int, int, bool>>();
+                                    this._scribbleSeq = new List<Tuple<int, int, int, bool, List<List<Point>>>>();
 
                                 foreach (ChainCode cc in c)
                                 {
@@ -4479,7 +4527,7 @@ namespace AvoidAGrabCutEasy
                                         List<Point> points = new List<Point>();
                                         points.AddRange(pts.Distinct().ToArray());
                                         this._scribbles[3][wh].Add(points);
-                                        this._scribbleSeq.Add(Tuple.Create(3, wh, this._scribbles[3][wh].Count - 1, false));
+                                        this._scribbleSeq.Add(Tuple.Create(3, wh, this._scribbles[3][wh].Count - 1, false, new List<List<Point>>()));
                                     }
                                 }
                             }
@@ -4637,7 +4685,7 @@ namespace AvoidAGrabCutEasy
                     frm.SetupCache();
                     if (this._scribbles != null)
                     {
-                        Tuple<Dictionary<int, Dictionary<int, List<List<Point>>>>, List<Tuple<int, int, int, bool>>> scr = this.CloneScribbles(this._scribbles, this._scribbleSeq);
+                        Tuple<Dictionary<int, Dictionary<int, List<List<Point>>>>, List<Tuple<int, int, int, bool, List<List<Point>>>>> scr = this.CloneScribbles(this._scribbles, this._scribbleSeq);
                         frm.SetScribbles(scr.Item1, scr.Item2);
                     }
 
@@ -4669,11 +4717,11 @@ namespace AvoidAGrabCutEasy
             this.btnRecut.Enabled = this.numComponents2.Enabled = false;
         }
 
-        private Tuple<Dictionary<int, Dictionary<int, List<List<Point>>>>, List<Tuple<int, int, int, bool>>> CloneScribbles(
-                                Dictionary<int, Dictionary<int, List<List<Point>>>>? scribbles, List<Tuple<int, int, int, bool>> scribbleSeq)
+        private Tuple<Dictionary<int, Dictionary<int, List<List<Point>>>>, List<Tuple<int, int, int, bool, List<List<Point>>>>> CloneScribbles(
+                                Dictionary<int, Dictionary<int, List<List<Point>>>>? scribbles, List<Tuple<int, int, int, bool, List<List<Point>>>> scribbleSeq)
         {
             Dictionary<int, Dictionary<int, List<List<Point>>>> dOut = new Dictionary<int, Dictionary<int, List<List<Point>>>>();
-            List<Tuple<int, int, int, bool>> scribbleSequence = new List<Tuple<int, int, int, bool>>();
+            List<Tuple<int, int, int, bool, List<List<Point>>>> scribbleSequence = new List<Tuple<int, int, int, bool, List<List<Point>>>>();
 
             if (scribbles != null)
             {

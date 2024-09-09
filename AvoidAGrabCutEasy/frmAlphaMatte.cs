@@ -94,7 +94,7 @@ namespace AvoidAGrabCutEasy
         private frmInfo? _frmInfo;
         private ClosedFormMatteOp[]? _cfopArray;
         private Bitmap? _bWork;
-        private List<Tuple<int, int, int, bool>> _scribbleSeq = new List<Tuple<int, int, int, bool>>();
+        private List<Tuple<int, int, int, bool, List<List<Point>>>> _scribbleSeq = new List<Tuple<int, int, int, bool, List<List<Point>>>>();
         private Point _ptHLC1FGBG;
         private bool _hs;
 
@@ -171,7 +171,7 @@ namespace AvoidAGrabCutEasy
             AvailMem.AvailMem.NoMemCheck = true;
         }
 
-        public void SetScribbles(Dictionary<int, Dictionary<int, List<List<Point>>>>? scribbles, List<Tuple<int, int, int, bool>> scribbleSeq)
+        public void SetScribbles(Dictionary<int, Dictionary<int, List<List<Point>>>>? scribbles, List<Tuple<int, int, int, bool, List<List<Point>>>> scribbleSeq)
         {
             this._scribbles = scribbles;
             this._scribbleSeq = scribbleSeq;
@@ -308,12 +308,12 @@ namespace AvoidAGrabCutEasy
                     this._scribbles[fgbg].Add(wh, new List<List<Point>>());
 
                 if (this._scribbleSeq == null)
-                    this._scribbleSeq = new List<Tuple<int, int, int, bool>>();
+                    this._scribbleSeq = new List<Tuple<int, int, int, bool, List<List<Point>>>>();
 
                 List<List<Point>> whPts = this._scribbles[fgbg][wh];
                 whPts.Add(new List<Point>());
                 whPts[whPts.Count - 1].AddRange(this._points2.ToArray());
-                this._scribbleSeq.Add(Tuple.Create(fgbg, wh, this._scribbles[fgbg][wh].Count - 1, false));
+                this._scribbleSeq.Add(Tuple.Create(fgbg, wh, this._scribbles[fgbg][wh].Count - 1, false, new List<List<Point>>()));
             }
         }
 
@@ -324,7 +324,7 @@ namespace AvoidAGrabCutEasy
 
             if (this._scribbleSeq != null && this._scribbleSeq.Count > 0)
             {
-                foreach (Tuple<int, int, int, bool> f in this._scribbleSeq)
+                foreach (Tuple<int, int, int, bool, List<List<Point>>> f in this._scribbleSeq)
                 {
                     int l = f.Item1;
                     int wh = f.Item2;
@@ -340,15 +340,35 @@ namespace AvoidAGrabCutEasy
 
                         if (doRect)
                         {
-                            foreach (Point pt in ptsList[listNo])
+                            if (f.Item4 && f.Item5 != null && f.Item5.Count > 0)
                             {
-                                using (SolidBrush sb = new SolidBrush(c))
-                                    e.Graphics.FillRectangle(sb, new Rectangle(
-                                        (int)((int)(pt.X - wh / 2) * this.helplineRulerCtrl1.Zoom) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X,
-                                        (int)((int)(pt.Y - wh / 2) * this.helplineRulerCtrl1.Zoom) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y,
-                                        (int)(wh * this.helplineRulerCtrl1.Zoom),
-                                        (int)(wh * this.helplineRulerCtrl1.Zoom)));
+                                List<List<Point>> pts = f.Item5;
+                                using GraphicsPath gP = new GraphicsPath();
+                                foreach (List<Point> lPt in pts)
+                                {
+                                    gP.StartFigure();
+                                    gP.AddLines(lPt.Select(a => new PointF(a.X, a.Y)).ToArray());
+                                    gP.CloseFigure();
+                                }
+
+                                using Matrix mx = new Matrix(this.helplineRulerCtrl1.Zoom, 0, 0, this.helplineRulerCtrl1.Zoom,
+                                    this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X,
+                                    this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y);
+                                gP.Transform(mx);
+
+                                using SolidBrush sb = new SolidBrush(c);
+                                e.Graphics.FillPath(sb, gP);
                             }
+                            else
+                                foreach (Point pt in ptsList[listNo])
+                                {
+                                    using (SolidBrush sb = new SolidBrush(c))
+                                        e.Graphics.FillRectangle(sb, new Rectangle(
+                                            (int)((int)(pt.X - wh / 2) * this.helplineRulerCtrl1.Zoom) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X,
+                                            (int)((int)(pt.Y - wh / 2) * this.helplineRulerCtrl1.Zoom) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y,
+                                            (int)(wh * this.helplineRulerCtrl1.Zoom),
+                                            (int)(wh * this.helplineRulerCtrl1.Zoom)));
+                                }
                         }
                         else
                         {
@@ -1086,14 +1106,14 @@ namespace AvoidAGrabCutEasy
 
                         if (this._scribbleSeq != null && j != null)
                         {
-                            IEnumerable<Tuple<int, int, int, bool>> l = this._scribbleSeq.Where(a => a.Item1 == fg);
+                            IEnumerable<Tuple<int, int, int, bool, List<List<Point>>>> l = this._scribbleSeq.Where(a => a.Item1 == fg);
                             if (l != null && l.Count() > 0)
                             {
-                                IEnumerable<Tuple<int, int, int, bool>> whL = l.Where(a => a.Item2 == wh);
+                                IEnumerable<Tuple<int, int, int, bool, List<List<Point>>>> whL = l.Where(a => a.Item2 == wh);
 
                                 if (whL != null && whL.Count() > 0)
                                 {
-                                    IEnumerable<Tuple<int, int, int, bool>> listL = whL.Where(a => a.Item3 == j.Count);
+                                    IEnumerable<Tuple<int, int, int, bool, List<List<Point>>>> listL = whL.Where(a => a.Item3 == j.Count);
 
                                     if (listL != null && listL.Count() > 0)
                                     {
@@ -1102,7 +1122,7 @@ namespace AvoidAGrabCutEasy
                                         for (int j4 = indxt + 1; j4 < this._scribbleSeq.Count; j4++)
                                         {
                                             if (this._scribbleSeq[j4].Item1 == fg && this._scribbleSeq[j4].Item2 == wh)
-                                                this._scribbleSeq[j4] = Tuple.Create(fg, wh, this._scribbleSeq[j4].Item3 - 1, false);
+                                                this._scribbleSeq[j4] = Tuple.Create(fg, wh, this._scribbleSeq[j4].Item3 - 1, false, new List<List<Point>>());
                                         }
 
                                         this._scribbleSeq.Remove(listL.First());
@@ -1486,13 +1506,49 @@ namespace AvoidAGrabCutEasy
                     this._scribbles[0].Add(3, new List<List<Point>>());
 
                 if (this._scribbleSeq == null)
-                    this._scribbleSeq = new List<Tuple<int, int, int, bool>>();
+                    this._scribbleSeq = new List<Tuple<int, int, int, bool, List<List<Point>>>>();
 
                 this._scribbles[0][3].Add(ll.Distinct().ToList());
-                this._scribbleSeq.Add(Tuple.Create(0, 3, this._scribbles[0][3].Count - 1, false));
+                this._scribbleSeq.Add(Tuple.Create(0, 3, this._scribbles[0][3].Count - 1, true, GetBoundariesForScribbleFill(this._scribbles[0][3][this._scribbles[0][3].Count - 1], w, h)));
 
                 this.helplineRulerCtrl1.dbPanel1.Invalidate();
             }
+        }
+
+        private List<List<Point>> GetBoundariesForScribbleFill(List<Point> points, int w, int h)
+        {
+            List<List<Point>> res = new List<List<Point>>();
+
+            using Bitmap bmp = new Bitmap(w, h);
+            using Graphics gx = Graphics.FromImage(bmp);
+            int wh = 3;
+            foreach (Point pt in points)
+                gx.FillRectangle(Brushes.Black, new Rectangle(
+                                            (int)(int)(pt.X - wh / 2),
+                                            (int)(int)(pt.Y - wh / 2),
+                                            (int)wh,
+                                            (int)wh));
+
+            List<ChainCode>? c = this.GetBoundary(bmp);
+            if (c != null)
+            {
+                foreach (ChainCode cc in c)
+                {
+                    List<Point> l = new List<Point>();
+                    l.AddRange(cc.Coord.ToArray());
+                    res.Add(l);
+                }
+            }
+
+            return res;
+        }
+
+        private List<ChainCode>? GetBoundary(Bitmap? bmp)
+        {
+            ChainFinder cf = new ChainFinder();
+            cf.AllowNullCells = true;
+            List<ChainCode> l = cf.GetOutline(bmp, 0, false, 0, false, 0, false);
+            return l;
         }
 
         private unsafe void btnFloodFG_Click(object sender, EventArgs e)
@@ -1605,10 +1661,10 @@ namespace AvoidAGrabCutEasy
                     this._scribbles[1].Add(3, new List<List<Point>>());
 
                 if (this._scribbleSeq == null)
-                    this._scribbleSeq = new List<Tuple<int, int, int, bool>>();
+                    this._scribbleSeq = new List<Tuple<int, int, int, bool, List<List<Point>>>>();
 
                 this._scribbles[1][3].Add(ll.Distinct().ToList());
-                this._scribbleSeq.Add(Tuple.Create(1, 3, this._scribbles[1][3].Count - 1, false));
+                this._scribbleSeq.Add(Tuple.Create(1, 3, this._scribbles[1][3].Count - 1, true, GetBoundariesForScribbleFill(this._scribbles[1][3][this._scribbles[1][3].Count - 1], w, h)));
 
                 this.helplineRulerCtrl1.dbPanel1.Invalidate();
             }
@@ -1661,7 +1717,7 @@ namespace AvoidAGrabCutEasy
                                     this._scribbles.Add(3, new Dictionary<int, List<List<Point>>>());
 
                                 if (this._scribbleSeq == null)
-                                    this._scribbleSeq = new List<Tuple<int, int, int, bool>>();
+                                    this._scribbleSeq = new List<Tuple<int, int, int, bool, List<List<Point>>>>();
 
                                 foreach (ChainCode cc in c)
                                 {
@@ -1675,7 +1731,7 @@ namespace AvoidAGrabCutEasy
                                         List<Point> points = new List<Point>();
                                         points.AddRange(pts.Distinct().ToArray());
                                         this._scribbles[3][wh].Add(points);
-                                        this._scribbleSeq.Add(Tuple.Create(3, wh, this._scribbles[3][wh].Count - 1, false));
+                                        this._scribbleSeq.Add(Tuple.Create(3, wh, this._scribbles[3][wh].Count - 1, false, new List<List<Point>>()));
                                     }
                                 }
                             }
@@ -4106,7 +4162,7 @@ namespace AvoidAGrabCutEasy
 
                             if (this._scribbleSeq != null && this._scribbleSeq.Count > 0)
                             {
-                                foreach (Tuple<int, int, int, bool> f in this._scribbleSeq)
+                                foreach (Tuple<int, int, int, bool, List<List<Point>>> f in this._scribbleSeq)
                                 {
                                     int l = f.Item1;
                                     int wh = f.Item2;
@@ -4202,7 +4258,7 @@ namespace AvoidAGrabCutEasy
 
                             if (this._scribbleSeq != null && this._scribbleSeq.Count > 0)
                             {
-                                foreach (Tuple<int, int, int, bool> f in this._scribbleSeq)
+                                foreach (Tuple<int, int, int, bool, List<List<Point>>> f in this._scribbleSeq)
                                 {
                                     int l = f.Item1;
                                     int wh = f.Item2;
