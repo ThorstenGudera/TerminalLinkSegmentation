@@ -4097,12 +4097,13 @@ namespace AvoidAGrabCutEasy
                 {
                     gx.SmoothingMode = SmoothingMode.None;
                     gx.InterpolationMode = InterpolationMode.NearestNeighbor;
-                    gx.Clear(Color.Black);
 
                     if (this._scribbles != null)
                     {
                         if (this.rbFullScribble.Checked)
                         {
+                            gx.Clear(Color.Black);
+
                             if (this._scribbleSeq != null && this._scribbleSeq.Count > 0)
                             {
                                 foreach (Tuple<int, int, int> f in this._scribbleSeq)
@@ -4199,48 +4200,95 @@ namespace AvoidAGrabCutEasy
                         {
                             gx.Clear(Color.Gray);
 
-                            if (this._scribbles.ContainsKey(0))
+                            if (this._scribbleSeq != null && this._scribbleSeq.Count > 0)
                             {
-                                Dictionary<int, List<List<Point>>> z = this._scribbles[0];
-
-                                if (z != null)
+                                foreach (Tuple<int, int, int> f in this._scribbleSeq)
                                 {
-                                    foreach (int i in z.Keys)
+                                    int l = f.Item1;
+                                    int wh = f.Item2;
+                                    int listNo = f.Item3;
+
+                                    List<List<Point>> ptsList = this._scribbles[l][wh];
+
+                                    if (ptsList != null && ptsList.Count > 0)
                                     {
-                                        List<List<Point>> list = z[i];
-                                        int wh = (int)Math.Max((i / (factor == 0 ? 1 : factor)), 3);
+                                        bool doRect = ptsList[listNo].Count > 1;
 
-                                        for (int j = 0; j < list.Count; j++)
+                                        Color c = l == 0 ? Color.Black : l == 1 ? Color.White : Color.Gray;
+
+                                        if (doRect)
                                         {
-                                            List<Point> pts = list[j].Select(a => new Point((int)(a.X / factor), (int)(a.Y / factor))).ToList();
-
-                                            foreach (Point pt in pts)
-                                                gx.FillRectangle(Brushes.Black, new Rectangle(pt.X - wh / 2, pt.Y - wh / 2, wh, wh));
+                                            foreach (Point pt in ptsList[listNo])
+                                            {
+                                                using (SolidBrush sb = new SolidBrush(c))
+                                                    gx.FillRectangle(sb, new Rectangle(
+                                                        (int)((int)(pt.X - wh / 2) / factor),
+                                                        (int)((int)(pt.Y - wh / 2) / factor),
+                                                    (int)(wh / factor),
+                                                        (int)(wh / factor)));
+                                            }
                                         }
-
+                                        else
+                                        {
+                                            if (ptsList[listNo].Count > 0)
+                                            {
+                                                Point pt = ptsList[listNo][0];
+                                                using (SolidBrush sb = new SolidBrush(c))
+                                                    gx.FillRectangle(sb, new Rectangle(
+                                                        (int)((int)(pt.X - wh / 2) / factor),
+                                                        (int)((int)(pt.Y - wh / 2) / factor),
+                                                        (int)(wh / factor),
+                                                        (int)(wh / factor)));
+                                            }
+                                        }
                                     }
                                 }
                             }
-
-                            if (this._scribbles.ContainsKey(1))
+                            else
                             {
-                                Dictionary<int, List<List<Point>>> z = this._scribbles[1];
-
-                                if (z != null)
+                                if (this._scribbles.ContainsKey(0))
                                 {
-                                    foreach (int i in z.Keys)
+                                    Dictionary<int, List<List<Point>>> z = this._scribbles[0];
+
+                                    if (z != null)
                                     {
-                                        List<List<Point>> list = z[i];
-                                        int wh = (int)Math.Max((i / (factor == 0 ? 1 : factor)), 3);
-
-                                        for (int j = 0; j < list.Count; j++)
+                                        foreach (int i in z.Keys)
                                         {
-                                            List<Point> pts = list[j].Select(a => new Point((int)(a.X / factor), (int)(a.Y / factor))).ToList();
+                                            List<List<Point>> list = z[i];
+                                            int wh = (int)Math.Max((i / (factor == 0 ? 1 : factor)), 3);
 
-                                            foreach (Point pt in pts)
-                                                gx.FillRectangle(Brushes.White, new Rectangle(pt.X - wh / 2, pt.Y - wh / 2, wh, wh));
+                                            for (int j = 0; j < list.Count; j++)
+                                            {
+                                                List<Point> pts = list[j].Select(a => new Point((int)(a.X / factor), (int)(a.Y / factor))).ToList();
+
+                                                foreach (Point pt in pts)
+                                                    gx.FillRectangle(Brushes.Black, new Rectangle(pt.X - wh / 2, pt.Y - wh / 2, wh, wh));
+                                            }
+
                                         }
+                                    }
+                                }
 
+                                if (this._scribbles.ContainsKey(1))
+                                {
+                                    Dictionary<int, List<List<Point>>> z = this._scribbles[1];
+
+                                    if (z != null)
+                                    {
+                                        foreach (int i in z.Keys)
+                                        {
+                                            List<List<Point>> list = z[i];
+                                            int wh = (int)Math.Max((i / (factor == 0 ? 1 : factor)), 3);
+
+                                            for (int j = 0; j < list.Count; j++)
+                                            {
+                                                List<Point> pts = list[j].Select(a => new Point((int)(a.X / factor), (int)(a.Y / factor))).ToList();
+
+                                                foreach (Point pt in pts)
+                                                    gx.FillRectangle(Brushes.White, new Rectangle(pt.X - wh / 2, pt.Y - wh / 2, wh, wh));
+                                            }
+
+                                        }
                                     }
                                 }
                             }

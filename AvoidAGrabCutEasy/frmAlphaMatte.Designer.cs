@@ -63,6 +63,9 @@
             cbLSBmp = new CheckBox();
             Label20 = new Label();
             panel1 = new Panel();
+            panel6 = new Panel();
+            rbSparseScribble = new RadioButton();
+            rbFullScribble = new RadioButton();
             label5 = new Label();
             label3 = new Label();
             btnRedo = new Button();
@@ -111,9 +114,6 @@
             floodFGToolStripMenuItem = new ToolStripMenuItem();
             backgroundWorker5 = new System.ComponentModel.BackgroundWorker();
             backgroundWorker3 = new System.ComponentModel.BackgroundWorker();
-            panel6 = new Panel();
-            rbSparseScribble = new RadioButton();
-            rbFullScribble = new RadioButton();
             backgroundWorker4 = new System.ComponentModel.BackgroundWorker();
             statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
@@ -121,6 +121,7 @@
             splitContainer1.Panel2.SuspendLayout();
             splitContainer1.SuspendLayout();
             panel1.SuspendLayout();
+            panel6.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numGamma).BeginInit();
             panel5.SuspendLayout();
             panel2.SuspendLayout();
@@ -133,7 +134,6 @@
             ((System.ComponentModel.ISupportInitialize)numMaxSize).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numWHScribbles).BeginInit();
             contextMenuStrip1.SuspendLayout();
-            panel6.SuspendLayout();
             SuspendLayout();
             // 
             // statusStrip1
@@ -529,6 +529,40 @@
             panel1.Name = "panel1";
             panel1.Size = new Size(1479, 224);
             panel1.TabIndex = 226;
+            // 
+            // panel6
+            // 
+            panel6.BorderStyle = BorderStyle.FixedSingle;
+            panel6.Controls.Add(rbSparseScribble);
+            panel6.Controls.Add(rbFullScribble);
+            panel6.Location = new Point(356, 97);
+            panel6.Name = "panel6";
+            panel6.Size = new Size(233, 41);
+            panel6.TabIndex = 713;
+            // 
+            // rbSparseScribble
+            // 
+            rbSparseScribble.AutoSize = true;
+            rbSparseScribble.Location = new Point(118, 12);
+            rbSparseScribble.Name = "rbSparseScribble";
+            rbSparseScribble.Size = new Size(106, 19);
+            rbSparseScribble.TabIndex = 0;
+            rbSparseScribble.Text = "SparseScribbles";
+            toolTip1.SetToolTip(rbSparseScribble, "Staart with a Gray (Unknown) Image.\r\nDraw scriblles for BG and FG to it.\r\n");
+            rbSparseScribble.UseVisualStyleBackColor = true;
+            // 
+            // rbFullScribble
+            // 
+            rbFullScribble.AutoSize = true;
+            rbFullScribble.Checked = true;
+            rbFullScribble.Location = new Point(11, 12);
+            rbFullScribble.Name = "rbFullScribble";
+            rbFullScribble.Size = new Size(100, 19);
+            rbFullScribble.TabIndex = 0;
+            rbFullScribble.TabStop = true;
+            rbFullScribble.Text = "FilledScribbles";
+            toolTip1.SetToolTip(rbFullScribble, "Start with a Black (BG) Image.\r\nDraw scribbles for Unknown and FG to it,\r\nor draw Unknown (closed curve or from pic-bounds to pic-bounds,\r\n then fill in BG and FG scribbles.\r\n");
+            rbFullScribble.UseVisualStyleBackColor = true;
             // 
             // label5
             // 
@@ -1059,38 +1093,6 @@
             backgroundWorker3.DoWork += backgroundWorker3_DoWork;
             backgroundWorker3.RunWorkerCompleted += backgroundWorker3_RunWorkerCompleted;
             // 
-            // panel6
-            // 
-            panel6.BorderStyle = BorderStyle.FixedSingle;
-            panel6.Controls.Add(rbSparseScribble);
-            panel6.Controls.Add(rbFullScribble);
-            panel6.Location = new Point(356, 97);
-            panel6.Name = "panel6";
-            panel6.Size = new Size(233, 41);
-            panel6.TabIndex = 713;
-            // 
-            // rbSparseScribble
-            // 
-            rbSparseScribble.AutoSize = true;
-            rbSparseScribble.Location = new Point(118, 12);
-            rbSparseScribble.Name = "rbSparseScribble";
-            rbSparseScribble.Size = new Size(106, 19);
-            rbSparseScribble.TabIndex = 0;
-            rbSparseScribble.Text = "SparseScribbles";
-            rbSparseScribble.UseVisualStyleBackColor = true;
-            // 
-            // rbFullScribble
-            // 
-            rbFullScribble.AutoSize = true;
-            rbFullScribble.Checked = true;
-            rbFullScribble.Location = new Point(11, 12);
-            rbFullScribble.Name = "rbFullScribble";
-            rbFullScribble.Size = new Size(100, 19);
-            rbFullScribble.TabIndex = 0;
-            rbFullScribble.TabStop = true;
-            rbFullScribble.Text = "FilledScribbles";
-            rbFullScribble.UseVisualStyleBackColor = true;
-            // 
             // backgroundWorker4
             // 
             backgroundWorker4.WorkerReportsProgress = true;
@@ -1119,6 +1121,8 @@
             splitContainer1.ResumeLayout(false);
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
+            panel6.ResumeLayout(false);
+            panel6.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)numGamma).EndInit();
             panel5.ResumeLayout(false);
             panel5.PerformLayout();
@@ -1133,8 +1137,6 @@
             ((System.ComponentModel.ISupportInitialize)numMaxSize).EndInit();
             ((System.ComponentModel.ISupportInitialize)numWHScribbles).EndInit();
             contextMenuStrip1.ResumeLayout(false);
-            panel6.ResumeLayout(false);
-            panel6.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
