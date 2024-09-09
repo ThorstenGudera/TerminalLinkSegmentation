@@ -81,7 +81,7 @@ namespace AvoidAGrabCutEasy
         public int KMeansIters { get; internal set; } = 0;
         public bool kMInitRnd { get; internal set; } = false;
         public bool AssumeExpDist { get; internal set; }
-        public List<Tuple<int, int, int>>? ScribbleSeq { get; internal set; }
+        public List<Tuple<int, int, int, bool>>? ScribbleSeq { get; internal set; }
 
         public event EventHandler<string>? ShowInfo;
 
@@ -125,7 +125,7 @@ namespace AvoidAGrabCutEasy
                         //scribble part
                         if (this.Scribbles != null)
                         {
-                            foreach (Tuple<int, int, int> f in this.ScribbleSeq)
+                            foreach (Tuple<int, int, int, bool> f in this.ScribbleSeq)
                             {
                                 int l = f.Item1;
                                 int wh = f.Item2;
@@ -169,7 +169,7 @@ namespace AvoidAGrabCutEasy
 
                         if (this.Scribbles != null)
                         {
-                            foreach (Tuple<int, int, int> f in this.ScribbleSeq)
+                            foreach (Tuple<int, int, int, bool> f in this.ScribbleSeq)
                             {
                                 int l = f.Item1;
                                 int wh = f.Item2;
@@ -2316,7 +2316,7 @@ namespace AvoidAGrabCutEasy
             OnShowInfo(e);
         }
 
-        internal unsafe void SetAllPointsInMask(Dictionary<int, List<Tuple<List<Point>, int>>> allPoints, List<Tuple<int, int, int>> pointsListSeq, bool setPFGToFG)
+        internal unsafe void SetAllPointsInMask(Dictionary<int, List<Tuple<List<Point>, int>>> allPoints, List<Tuple<int, int, int, bool>> pointsListSeq, bool setPFGToFG)
         {
             if (setPFGToFG)
             {
@@ -2335,9 +2335,9 @@ namespace AvoidAGrabCutEasy
                 {
                     int curOp = 0;
 
-                    foreach (Tuple<int, int, int> f in pointsListSeq)
+                    foreach (Tuple<int, int, int, bool> f in pointsListSeq)
                     {
-                        IEnumerable<Tuple<int, int, int>> jj = pointsListSeq.Where(a => a.Item2 == curOp);
+                        IEnumerable<Tuple<int, int, int, bool>> jj = pointsListSeq.Where(a => a.Item2 == curOp);
 
                         if (jj != null && jj.Count() > 0)
                         {
@@ -2408,7 +2408,7 @@ namespace AvoidAGrabCutEasy
                         //scribble part
                         if (this.Scribbles != null)
                         {
-                            foreach (Tuple<int, int, int> f in this.ScribbleSeq)
+                            foreach (Tuple<int, int, int, bool> f in this.ScribbleSeq)
                             {
                                 int l = f.Item1;
                                 int wh = f.Item2;
@@ -2454,7 +2454,7 @@ namespace AvoidAGrabCutEasy
 
                         if (this.Scribbles != null)
                         {
-                            foreach (Tuple<int, int, int> f in this.ScribbleSeq)
+                            foreach (Tuple<int, int, int, bool> f in this.ScribbleSeq)
                             {
                                 int l = f.Item1;
                                 int wh = f.Item2;

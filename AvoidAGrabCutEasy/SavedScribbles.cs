@@ -18,7 +18,7 @@ namespace AvoidAGrabCutEasy
         public string? Bmp { get; set; }
         public int[]? UknwnSizes { get; set; }
         public Point[][][]? UknwnPoints { get; set; }
-        public List<Tuple<int, int, int>>? ScribbleSequence { get; set; }
+        public List<Tuple<int, int, int, bool>>? ScribbleSequence { get; set; }
 
         public SavedScribbles()
         {
