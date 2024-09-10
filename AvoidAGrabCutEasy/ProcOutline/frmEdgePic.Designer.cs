@@ -28,98 +28,104 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmEdgePic));
-            this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.helplineRulerCtrl1 = new HelplineRulerControl.HelplineRulerCtrl();
-            this.btnSave = new System.Windows.Forms.Button();
-            this.btnClose = new System.Windows.Forms.Button();
-            this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
-            this.splitContainer1.Panel1.SuspendLayout();
-            this.splitContainer1.Panel2.SuspendLayout();
-            this.splitContainer1.SuspendLayout();
-            this.SuspendLayout();
+            splitContainer1 = new SplitContainer();
+            helplineRulerCtrl1 = new HelplineRulerControl.HelplineRulerCtrl();
+            btnSave = new Button();
+            btnClose = new Button();
+            saveFileDialog1 = new SaveFileDialog();
+            ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
+            splitContainer1.Panel1.SuspendLayout();
+            splitContainer1.Panel2.SuspendLayout();
+            splitContainer1.SuspendLayout();
+            SuspendLayout();
             // 
             // splitContainer1
             // 
-            this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainer1.Location = new System.Drawing.Point(0, 0);
-            this.splitContainer1.Name = "splitContainer1";
-            this.splitContainer1.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            splitContainer1.Dock = DockStyle.Fill;
+            splitContainer1.Location = new Point(0, 0);
+            splitContainer1.Margin = new Padding(4, 3, 4, 3);
+            splitContainer1.Name = "splitContainer1";
+            splitContainer1.Orientation = Orientation.Horizontal;
             // 
             // splitContainer1.Panel1
             // 
-            this.splitContainer1.Panel1.Controls.Add(this.helplineRulerCtrl1);
+            splitContainer1.Panel1.Controls.Add(helplineRulerCtrl1);
             // 
             // splitContainer1.Panel2
             // 
-            this.splitContainer1.Panel2.Controls.Add(this.btnSave);
-            this.splitContainer1.Panel2.Controls.Add(this.btnClose);
-            this.splitContainer1.Size = new System.Drawing.Size(800, 669);
-            this.splitContainer1.SplitterDistance = 624;
-            this.splitContainer1.TabIndex = 0;
+            splitContainer1.Panel2.Controls.Add(btnSave);
+            splitContainer1.Panel2.Controls.Add(btnClose);
+            splitContainer1.Size = new Size(933, 772);
+            splitContainer1.SplitterDistance = 720;
+            splitContainer1.SplitterWidth = 5;
+            splitContainer1.TabIndex = 0;
             // 
             // helplineRulerCtrl1
             // 
-            this.helplineRulerCtrl1.BackColor = System.Drawing.SystemColors.ControlDarkDark;
-            this.helplineRulerCtrl1.Bmp = null;
-            this.helplineRulerCtrl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.helplineRulerCtrl1.DontDoLayout = false;
-            this.helplineRulerCtrl1.DontHandleDoubleClick = false;
-            this.helplineRulerCtrl1.DontPaintBaseImg = false;
-            this.helplineRulerCtrl1.DontProcDoubleClick = false;
-            this.helplineRulerCtrl1.IgnoreZoom = false;
-            this.helplineRulerCtrl1.Location = new System.Drawing.Point(0, 0);
-            this.helplineRulerCtrl1.MoveHelpLinesOnResize = false;
-            this.helplineRulerCtrl1.Name = "helplineRulerCtrl1";
-            this.helplineRulerCtrl1.SetZoomOnlyByMethodCall = false;
-            this.helplineRulerCtrl1.Size = new System.Drawing.Size(800, 624);
-            this.helplineRulerCtrl1.TabIndex = 0;
-            this.helplineRulerCtrl1.Zoom = 1F;
-            this.helplineRulerCtrl1.ZoomSetManually = false;
+            helplineRulerCtrl1.BackColor = SystemColors.ControlDarkDark;
+            helplineRulerCtrl1.Bmp = null;
+            helplineRulerCtrl1.Dock = DockStyle.Fill;
+            helplineRulerCtrl1.DontDoLayout = false;
+            helplineRulerCtrl1.DontHandleDoubleClick = false;
+            helplineRulerCtrl1.DontPaintBaseImg = false;
+            helplineRulerCtrl1.DontProcDoubleClick = false;
+            helplineRulerCtrl1.DrawModeClipped = false;
+            helplineRulerCtrl1.IgnoreZoom = false;
+            helplineRulerCtrl1.Location = new Point(0, 0);
+            helplineRulerCtrl1.Margin = new Padding(5, 3, 5, 3);
+            helplineRulerCtrl1.MoveHelpLinesOnResize = false;
+            helplineRulerCtrl1.Name = "helplineRulerCtrl1";
+            helplineRulerCtrl1.SetZoomOnlyByMethodCall = false;
+            helplineRulerCtrl1.Size = new Size(933, 720);
+            helplineRulerCtrl1.TabIndex = 0;
+            helplineRulerCtrl1.Zoom = 1F;
+            helplineRulerCtrl1.ZoomSetManually = false;
             // 
             // btnSave
             // 
-            this.btnSave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnSave.Location = new System.Drawing.Point(560, 6);
-            this.btnSave.Name = "btnSave";
-            this.btnSave.Size = new System.Drawing.Size(75, 23);
-            this.btnSave.TabIndex = 1;
-            this.btnSave.Text = "Save";
-            this.btnSave.UseVisualStyleBackColor = true;
-            this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
+            btnSave.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            btnSave.Location = new Point(653, 7);
+            btnSave.Margin = new Padding(4, 3, 4, 3);
+            btnSave.Name = "btnSave";
+            btnSave.Size = new Size(88, 27);
+            btnSave.TabIndex = 1;
+            btnSave.Text = "Save";
+            btnSave.UseVisualStyleBackColor = true;
+            btnSave.Click += btnSave_Click;
             // 
             // btnClose
             // 
-            this.btnClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnClose.Location = new System.Drawing.Point(713, 6);
-            this.btnClose.Name = "btnClose";
-            this.btnClose.Size = new System.Drawing.Size(75, 23);
-            this.btnClose.TabIndex = 0;
-            this.btnClose.Text = "Close";
-            this.btnClose.UseVisualStyleBackColor = true;
-            this.btnClose.Click += new System.EventHandler(this.btnClose_Click);
+            btnClose.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            btnClose.Location = new Point(832, 7);
+            btnClose.Margin = new Padding(4, 3, 4, 3);
+            btnClose.Name = "btnClose";
+            btnClose.Size = new Size(88, 27);
+            btnClose.TabIndex = 0;
+            btnClose.Text = "Close";
+            btnClose.UseVisualStyleBackColor = true;
+            btnClose.Click += btnClose_Click;
             // 
             // saveFileDialog1
             // 
-            this.saveFileDialog1.FileName = "Bild1.png";
-            this.saveFileDialog1.Filter = "Png-Images (*.png)|*.png";
+            saveFileDialog1.FileName = "Bild1.png";
+            saveFileDialog1.Filter = "Png-Images (*.png)|*.png";
             // 
             // frmEdgePic
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 669);
-            this.Controls.Add(this.splitContainer1);
-            this.Name = "frmEdgePic";
-            this.Text = "frmEdgePic";
-            this.Load += new System.EventHandler(this.frmEdgePic_Load);
-            this.splitContainer1.Panel1.ResumeLayout(false);
-            this.splitContainer1.Panel2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
-            this.splitContainer1.ResumeLayout(false);
-            this.ResumeLayout(false);
-
+            AcceptButton = btnClose;
+            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleMode = AutoScaleMode.Font;
+            ClientSize = new Size(933, 772);
+            Controls.Add(splitContainer1);
+            Margin = new Padding(4, 3, 4, 3);
+            Name = "frmEdgePic";
+            Text = "frmEdgePic";
+            Load += frmEdgePic_Load;
+            splitContainer1.Panel1.ResumeLayout(false);
+            splitContainer1.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)splitContainer1).EndInit();
+            splitContainer1.ResumeLayout(false);
+            ResumeLayout(false);
         }
 
         #endregion
