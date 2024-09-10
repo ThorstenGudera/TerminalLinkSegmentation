@@ -38,7 +38,20 @@ namespace LUBitmapDesigner
             this.helplineRulerCtrl1.Bmp = bLower;
         }
 
-        public void SetUpperImage(Bitmap bmp)
+        public Bitmap? GetUpperImage()
+        {
+            Bitmap? bOut = null;
+            if (this.ShapeList == null)
+                this.ShapeList = new ShapeList();
+            if (this.ShapeList.Count == 0)
+                SetBlankLowerImage();
+            if (this.ShapeList.Count > 1)
+                bOut = this.ShapeList[1].Bmp;
+
+            return bOut;
+        }
+
+        public void SetUpperImage(Bitmap bmp, float x, float y)
         {
             if (AvailMem.AvailMem.checkAvailRam(bmp.Width * bmp.Height * 16L))
             {
@@ -46,7 +59,31 @@ namespace LUBitmapDesigner
                     this.ShapeList = new ShapeList();
                 if (this.ShapeList.Count == 0)
                     SetBlankLowerImage();
-                this.ShapeList.Add(new BitmapShape() { Bmp = bmp, Bounds = new RectangleF(0, 0, bmp.Width, bmp.Height), Rotation = 0, Zoom = 1f });
+                if (bmp != null && this.ShapeList.Count > 0)
+                {
+                    for (int i = 2; i < this.ShapeList.Count; i++)
+                        this.ShapeList.RemoveAt(i);
+
+                    int cnt = this.ShapeList.Count;
+
+                    BitmapShape? b = null;
+                    if (this.ShapeList.Count > 1)
+                        b = this.ShapeList[1];
+
+                    RectangleF rc = new RectangleF(x, y, bmp.Width, bmp.Height);
+
+                    this.ShapeList.AllowAdding = true;
+                    this.ShapeList.Add(new BitmapShape() { Bmp = bmp, Bounds = rc, Rotation = 0, Zoom = 1f });
+                    if (cnt >= 2)
+                        this.ShapeList.RemoveAt(1);
+
+                    if (b != null)
+                    {
+                        b.Dispose();
+                        b = null;
+                    }
+                }
+
             }
             else
             {

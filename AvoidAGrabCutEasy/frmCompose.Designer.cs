@@ -13,12 +13,12 @@
         /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         protected override void Dispose(bool disposing)
         {
-            if(this.FBitmap != null)
+            if (this.FBitmap != null)
             {
                 this.FBitmap.Dispose();
                 this.FBitmap = null;
-            }    
-            if(this._bmpBU != null)
+            }
+            if (this._bmpBU != null)
             {
                 this._bmpBU.Dispose();
                 this._bmpBU = null;
@@ -54,17 +54,30 @@
             saveFileDialog1 = new SaveFileDialog();
             splitContainer2 = new SplitContainer();
             luBitmapDesignerCtrl1 = new LUBitmapDesigner.LUBitmapDesignerCtrl();
+            btnRedo = new Button();
+            btnUndo = new Button();
+            label6 = new Label();
+            label5 = new Label();
+            btnAlphaZAndGain = new Button();
+            btnSetGamma = new Button();
+            label4 = new Label();
+            numGamma = new NumericUpDown();
+            numAlphaZAndGain = new NumericUpDown();
             picInfoCtrl1 = new LUBitmapDesigner.PicInfoCtrl();
             btnLoad = new Button();
             label1 = new Label();
             btnCancel = new Button();
             splitContainer1 = new SplitContainer();
             openFileDialog1 = new OpenFileDialog();
+            backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
+            backgroundWorker2 = new System.ComponentModel.BackgroundWorker();
             statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer2).BeginInit();
             splitContainer2.Panel1.SuspendLayout();
             splitContainer2.Panel2.SuspendLayout();
             splitContainer2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)numGamma).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)numAlphaZAndGain).BeginInit();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
             splitContainer1.Panel2.SuspendLayout();
@@ -202,6 +215,15 @@
             // 
             // splitContainer2.Panel2
             // 
+            splitContainer2.Panel2.Controls.Add(btnRedo);
+            splitContainer2.Panel2.Controls.Add(btnUndo);
+            splitContainer2.Panel2.Controls.Add(label6);
+            splitContainer2.Panel2.Controls.Add(label5);
+            splitContainer2.Panel2.Controls.Add(btnAlphaZAndGain);
+            splitContainer2.Panel2.Controls.Add(btnSetGamma);
+            splitContainer2.Panel2.Controls.Add(label4);
+            splitContainer2.Panel2.Controls.Add(numGamma);
+            splitContainer2.Panel2.Controls.Add(numAlphaZAndGain);
             splitContainer2.Panel2.Controls.Add(picInfoCtrl1);
             splitContainer2.Panel2.Controls.Add(btnLoad);
             splitContainer2.Panel2.Controls.Add(label1);
@@ -211,7 +233,7 @@
             splitContainer2.Panel2.Controls.Add(button8);
             splitContainer2.Panel2.Controls.Add(button2);
             splitContainer2.Size = new Size(1386, 862);
-            splitContainer2.SplitterDistance = 1086;
+            splitContainer2.SplitterDistance = 1081;
             splitContainer2.SplitterWidth = 5;
             splitContainer2.TabIndex = 0;
             // 
@@ -222,8 +244,108 @@
             luBitmapDesignerCtrl1.Margin = new Padding(5, 3, 5, 3);
             luBitmapDesignerCtrl1.Name = "luBitmapDesignerCtrl1";
             luBitmapDesignerCtrl1.ShapeList = null;
-            luBitmapDesignerCtrl1.Size = new Size(1086, 862);
+            luBitmapDesignerCtrl1.Size = new Size(1081, 862);
             luBitmapDesignerCtrl1.TabIndex = 0;
+            // 
+            // btnRedo
+            // 
+            btnRedo.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            btnRedo.Enabled = false;
+            btnRedo.ForeColor = SystemColors.ControlText;
+            btnRedo.Location = new Point(120, 547);
+            btnRedo.Margin = new Padding(4, 3, 4, 3);
+            btnRedo.Name = "btnRedo";
+            btnRedo.Size = new Size(88, 27);
+            btnRedo.TabIndex = 718;
+            btnRedo.Text = "Redo";
+            btnRedo.UseVisualStyleBackColor = true;
+            btnRedo.Click += btnRedo_Click;
+            // 
+            // btnUndo
+            // 
+            btnUndo.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            btnUndo.Enabled = false;
+            btnUndo.ForeColor = SystemColors.ControlText;
+            btnUndo.Location = new Point(24, 547);
+            btnUndo.Margin = new Padding(4, 3, 4, 3);
+            btnUndo.Name = "btnUndo";
+            btnUndo.Size = new Size(88, 27);
+            btnUndo.TabIndex = 717;
+            btnUndo.Text = "Undo";
+            btnUndo.UseVisualStyleBackColor = true;
+            btnUndo.Click += btnUndo_Click;
+            // 
+            // label6
+            // 
+            label6.AutoSize = true;
+            label6.Location = new Point(209, 394);
+            label6.Name = "label6";
+            label6.Size = new Size(27, 15);
+            label6.TabIndex = 715;
+            label6.Text = "to 0";
+            // 
+            // label5
+            // 
+            label5.AutoSize = true;
+            label5.Location = new Point(24, 394);
+            label5.Name = "label5";
+            label5.Size = new Size(85, 15);
+            label5.TabIndex = 716;
+            label5.Text = "set alpha up to";
+            // 
+            // btnAlphaZAndGain
+            // 
+            btnAlphaZAndGain.Location = new Point(194, 422);
+            btnAlphaZAndGain.Margin = new Padding(4, 3, 4, 3);
+            btnAlphaZAndGain.Name = "btnAlphaZAndGain";
+            btnAlphaZAndGain.Size = new Size(88, 27);
+            btnAlphaZAndGain.TabIndex = 713;
+            btnAlphaZAndGain.Text = "Go";
+            btnAlphaZAndGain.UseVisualStyleBackColor = true;
+            btnAlphaZAndGain.Click += btnAlphaZAndGain_Click;
+            // 
+            // btnSetGamma
+            // 
+            btnSetGamma.Location = new Point(194, 497);
+            btnSetGamma.Margin = new Padding(4, 3, 4, 3);
+            btnSetGamma.Name = "btnSetGamma";
+            btnSetGamma.Size = new Size(88, 27);
+            btnSetGamma.TabIndex = 714;
+            btnSetGamma.Text = "Go";
+            btnSetGamma.UseVisualStyleBackColor = true;
+            btnSetGamma.Click += btnSetGamma_Click;
+            // 
+            // label4
+            // 
+            label4.AutoSize = true;
+            label4.Location = new Point(24, 470);
+            label4.Margin = new Padding(4, 0, 4, 0);
+            label4.Name = "label4";
+            label4.Size = new Size(98, 15);
+            label4.TabIndex = 711;
+            label4.Text = "set AlphaGamma";
+            // 
+            // numGamma
+            // 
+            numGamma.DecimalPlaces = 2;
+            numGamma.Increment = new decimal(new int[] { 1, 0, 0, 65536 });
+            numGamma.Location = new Point(132, 468);
+            numGamma.Margin = new Padding(4, 3, 4, 3);
+            numGamma.Minimum = new decimal(new int[] { 1, 0, 0, 131072 });
+            numGamma.Name = "numGamma";
+            numGamma.Size = new Size(70, 23);
+            numGamma.TabIndex = 712;
+            numGamma.Value = new decimal(new int[] { 2, 0, 0, 0 });
+            // 
+            // numAlphaZAndGain
+            // 
+            numAlphaZAndGain.Location = new Point(132, 392);
+            numAlphaZAndGain.Margin = new Padding(4, 3, 4, 3);
+            numAlphaZAndGain.Maximum = new decimal(new int[] { 255, 0, 0, 0 });
+            numAlphaZAndGain.Name = "numAlphaZAndGain";
+            numAlphaZAndGain.Size = new Size(70, 23);
+            numAlphaZAndGain.TabIndex = 710;
+            numAlphaZAndGain.Value = new decimal(new int[] { 50, 0, 0, 0 });
             // 
             // picInfoCtrl1
             // 
@@ -294,6 +416,20 @@
             openFileDialog1.FileName = "openFileDialog1";
             openFileDialog1.Filter = "Images - (*.bmp;*.jpg;*.jpeg;*.jfif;*.png)|*.bmp;*.jpg;*.jpeg;*.jfif;*.png";
             // 
+            // backgroundWorker1
+            // 
+            backgroundWorker1.WorkerReportsProgress = true;
+            backgroundWorker1.WorkerSupportsCancellation = true;
+            backgroundWorker1.DoWork += backgroundWorker1_DoWork;
+            backgroundWorker1.RunWorkerCompleted += backgroundWorker1_RunWorkerCompleted;
+            // 
+            // backgroundWorker2
+            // 
+            backgroundWorker2.WorkerReportsProgress = true;
+            backgroundWorker2.WorkerSupportsCancellation = true;
+            backgroundWorker2.DoWork += backgroundWorker2_DoWork;
+            backgroundWorker2.RunWorkerCompleted += backgroundWorker2_RunWorkerCompleted;
+            // 
             // frmCompose
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -313,6 +449,8 @@
             splitContainer2.Panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer2).EndInit();
             splitContainer2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)numGamma).EndInit();
+            ((System.ComponentModel.ISupportInitialize)numAlphaZAndGain).EndInit();
             splitContainer1.Panel1.ResumeLayout(false);
             splitContainer1.Panel2.ResumeLayout(false);
             splitContainer1.Panel2.PerformLayout();
@@ -344,5 +482,16 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
         private LUBitmapDesigner.PicInfoCtrl picInfoCtrl1;
+        private Label label6;
+        private Label label5;
+        private Button btnAlphaZAndGain;
+        private Button btnSetGamma;
+        private Label label4;
+        private NumericUpDown numGamma;
+        private NumericUpDown numAlphaZAndGain;
+        private Button btnRedo;
+        private Button btnUndo;
+        internal System.ComponentModel.BackgroundWorker backgroundWorker1;
+        internal System.ComponentModel.BackgroundWorker backgroundWorker2;
     }
 }
