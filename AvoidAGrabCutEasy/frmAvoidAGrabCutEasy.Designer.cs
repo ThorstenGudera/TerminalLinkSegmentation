@@ -30,6 +30,8 @@
         {
             components = new System.ComponentModel.Container();
             panel1 = new Panel();
+            btnCFM = new Button();
+            label16 = new Label();
             label17 = new Label();
             numComponents2 = new NumericUpDown();
             cbOverlay = new CheckBox();
@@ -133,8 +135,6 @@
             contextMenuStrip1 = new ContextMenuStrip(components);
             floodBGToolStripMenuItem = new ToolStripMenuItem();
             floodFGToolStripMenuItem = new ToolStripMenuItem();
-            btnCFM = new Button();
-            label16 = new Label();
             panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numComponents2).BeginInit();
             panel2.SuspendLayout();
@@ -252,6 +252,26 @@
             panel1.TabIndex = 0;
             panel1.MouseDoubleClick += panel1_MouseDoubleClick;
             panel1.MouseDown += panel1_MouseDown;
+            // 
+            // btnCFM
+            // 
+            btnCFM.Location = new Point(1006, 82);
+            btnCFM.Name = "btnCFM";
+            btnCFM.Size = new Size(88, 27);
+            btnCFM.TabIndex = 700;
+            btnCFM.Text = "Go";
+            toolTip1.SetToolTip(btnCFM, "Compute a Matte from the whole image.\r\nE.G.: By drawing the boundaries of the desired object(s) as \"unknown\" scribbles\r\nand filling the interior(s) as Foreground\r\n");
+            btnCFM.UseVisualStyleBackColor = true;
+            btnCFM.Click += btnCFM_Click;
+            // 
+            // label16
+            // 
+            label16.AutoSize = true;
+            label16.Location = new Point(905, 88);
+            label16.Name = "label16";
+            label16.Size = new Size(98, 15);
+            label16.TabIndex = 699;
+            label16.Text = "compute a Matte";
             // 
             // label17
             // 
@@ -581,6 +601,7 @@
             btnOutline.Size = new Size(88, 27);
             btnOutline.TabIndex = 668;
             btnOutline.Text = "Go";
+            toolTip1.SetToolTip(btnOutline, "Process the outline of the segmented image");
             btnOutline.UseVisualStyleBackColor = true;
             btnOutline.Click += btnOutline_Click;
             // 
@@ -1384,25 +1405,6 @@
             floodFGToolStripMenuItem.Size = new Size(122, 22);
             floodFGToolStripMenuItem.Text = "Flood FG";
             floodFGToolStripMenuItem.Click += floodFGToolStripMenuItem_Click;
-            // 
-            // btnCFM
-            // 
-            btnCFM.Location = new Point(1006, 82);
-            btnCFM.Name = "btnCFM";
-            btnCFM.Size = new Size(88, 27);
-            btnCFM.TabIndex = 700;
-            btnCFM.Text = "Go";
-            btnCFM.UseVisualStyleBackColor = true;
-            btnCFM.Click += btnCFM_Click;
-            // 
-            // label16
-            // 
-            label16.AutoSize = true;
-            label16.Location = new Point(905, 88);
-            label16.Name = "label16";
-            label16.Size = new Size(98, 15);
-            label16.TabIndex = 699;
-            label16.Text = "compute a Matte";
             // 
             // frmAvoidAGrabCutEasy
             // 
