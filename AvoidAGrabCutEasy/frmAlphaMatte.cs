@@ -333,41 +333,56 @@ namespace AvoidAGrabCutEasy
                     int wh = f.Item2;
                     int listNo = f.Item3;
 
-                    List<List<Point>> ptsList = this._scribbles[l][wh];
-
-                    if (ptsList != null && ptsList.Count > 0)
+                    if (this._scribbles.ContainsKey(l) && this._scribbles[l].ContainsKey(wh))
                     {
-                        bool doRect = ptsList[listNo].Count > 1;
+                        List<List<Point>> ptsList = this._scribbles[l][wh];
 
-                        Color c = l == 0 ? Color.Black : l == 1 ? Color.White : Color.Gray;
-
-                        if (l == 3 && this.cbHighlight.Checked)
-                            c = Color.Cyan;
-
-                        if (doRect)
+                        if (ptsList != null && ptsList.Count > 0)
                         {
-                            if (f.Item4 && f.Item5 != null && f.Item5.Count > 0)
+                            bool doRect = ptsList[listNo].Count > 1;
+
+                            Color c = l == 0 ? Color.Black : l == 1 ? Color.White : Color.Gray;
+
+                            if (l == 3 && this.cbHighlight.Checked)
+                                c = Color.Cyan;
+
+                            if (doRect)
                             {
-                                List<List<Point>> pts = f.Item5;
-                                using GraphicsPath gP = new GraphicsPath();
-                                foreach (List<Point> lPt in pts)
+                                if (f.Item4 && f.Item5 != null && f.Item5.Count > 0)
                                 {
-                                    gP.StartFigure();
-                                    gP.AddLines(lPt.Select(a => new PointF(a.X, a.Y)).ToArray());
-                                    gP.CloseFigure();
+                                    List<List<Point>> pts = f.Item5;
+                                    using GraphicsPath gP = new GraphicsPath();
+                                    foreach (List<Point> lPt in pts)
+                                    {
+                                        gP.StartFigure();
+                                        gP.AddLines(lPt.Select(a => new PointF(a.X, a.Y)).ToArray());
+                                        gP.CloseFigure();
+                                    }
+
+                                    using Matrix mx = new Matrix(this.helplineRulerCtrl1.Zoom, 0, 0, this.helplineRulerCtrl1.Zoom,
+                                        this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X,
+                                        this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y);
+                                    gP.Transform(mx);
+
+                                    using SolidBrush sb = new SolidBrush(c);
+                                    e.Graphics.FillPath(sb, gP);
                                 }
-
-                                using Matrix mx = new Matrix(this.helplineRulerCtrl1.Zoom, 0, 0, this.helplineRulerCtrl1.Zoom,
-                                    this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X,
-                                    this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y);
-                                gP.Transform(mx);
-
-                                using SolidBrush sb = new SolidBrush(c);
-                                e.Graphics.FillPath(sb, gP);
+                                else
+                                    foreach (Point pt in ptsList[listNo])
+                                    {
+                                        using (SolidBrush sb = new SolidBrush(c))
+                                            e.Graphics.FillRectangle(sb, new Rectangle(
+                                                (int)((int)(pt.X - wh / 2) * this.helplineRulerCtrl1.Zoom) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X,
+                                                (int)((int)(pt.Y - wh / 2) * this.helplineRulerCtrl1.Zoom) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y,
+                                                (int)(wh * this.helplineRulerCtrl1.Zoom),
+                                                (int)(wh * this.helplineRulerCtrl1.Zoom)));
+                                    }
                             }
                             else
-                                foreach (Point pt in ptsList[listNo])
+                            {
+                                if (ptsList[listNo].Count > 0)
                                 {
+                                    Point pt = ptsList[listNo][0];
                                     using (SolidBrush sb = new SolidBrush(c))
                                         e.Graphics.FillRectangle(sb, new Rectangle(
                                             (int)((int)(pt.X - wh / 2) * this.helplineRulerCtrl1.Zoom) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X,
@@ -375,18 +390,6 @@ namespace AvoidAGrabCutEasy
                                             (int)(wh * this.helplineRulerCtrl1.Zoom),
                                             (int)(wh * this.helplineRulerCtrl1.Zoom)));
                                 }
-                        }
-                        else
-                        {
-                            if (ptsList[listNo].Count > 0)
-                            {
-                                Point pt = ptsList[listNo][0];
-                                using (SolidBrush sb = new SolidBrush(c))
-                                    e.Graphics.FillRectangle(sb, new Rectangle(
-                                        (int)((int)(pt.X - wh / 2) * this.helplineRulerCtrl1.Zoom) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X,
-                                        (int)((int)(pt.Y - wh / 2) * this.helplineRulerCtrl1.Zoom) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y,
-                                        (int)(wh * this.helplineRulerCtrl1.Zoom),
-                                        (int)(wh * this.helplineRulerCtrl1.Zoom)));
                             }
                         }
                     }
@@ -4180,37 +4183,40 @@ namespace AvoidAGrabCutEasy
                                     int wh = f.Item2;
                                     int listNo = f.Item3;
 
-                                    List<List<Point>> ptsList = this._scribbles[l][wh];
-
-                                    if (ptsList != null && ptsList.Count > 0)
+                                    if (this._scribbles.ContainsKey(l) && this._scribbles[l].ContainsKey(wh))
                                     {
-                                        bool doRect = ptsList[listNo].Count > 1;
+                                        List<List<Point>> ptsList = this._scribbles[l][wh];
 
-                                        Color c = l == 0 ? Color.Black : l == 1 ? Color.White : Color.Gray;
+                                        if (ptsList != null && ptsList.Count > 0)
+                                        {
+                                            bool doRect = ptsList[listNo].Count > 1;
 
-                                        if (doRect)
-                                        {
-                                            foreach (Point pt in ptsList[listNo])
+                                            Color c = l == 0 ? Color.Black : l == 1 ? Color.White : Color.Gray;
+
+                                            if (doRect)
                                             {
-                                                using (SolidBrush sb = new SolidBrush(c))
-                                                    gx.FillRectangle(sb, new Rectangle(
-                                                        (int)((int)(pt.X - wh / 2) / factor),
-                                                        (int)((int)(pt.Y - wh / 2) / factor),
-                                                    (int)(wh / factor),
-                                                        (int)(wh / factor)));
-                                            }
-                                        }
-                                        else
-                                        {
-                                            if (ptsList[listNo].Count > 0)
-                                            {
-                                                Point pt = ptsList[listNo][0];
-                                                using (SolidBrush sb = new SolidBrush(c))
-                                                    gx.FillRectangle(sb, new Rectangle(
-                                                        (int)((int)(pt.X - wh / 2) / factor),
-                                                        (int)((int)(pt.Y - wh / 2) / factor),
+                                                foreach (Point pt in ptsList[listNo])
+                                                {
+                                                    using (SolidBrush sb = new SolidBrush(c))
+                                                        gx.FillRectangle(sb, new Rectangle(
+                                                            (int)((int)(pt.X - wh / 2) / factor),
+                                                            (int)((int)(pt.Y - wh / 2) / factor),
                                                         (int)(wh / factor),
-                                                        (int)(wh / factor)));
+                                                            (int)(wh / factor)));
+                                                }
+                                            }
+                                            else
+                                            {
+                                                if (ptsList[listNo].Count > 0)
+                                                {
+                                                    Point pt = ptsList[listNo][0];
+                                                    using (SolidBrush sb = new SolidBrush(c))
+                                                        gx.FillRectangle(sb, new Rectangle(
+                                                            (int)((int)(pt.X - wh / 2) / factor),
+                                                            (int)((int)(pt.Y - wh / 2) / factor),
+                                                            (int)(wh / factor),
+                                                            (int)(wh / factor)));
+                                                }
                                             }
                                         }
                                     }
@@ -4276,37 +4282,40 @@ namespace AvoidAGrabCutEasy
                                     int wh = f.Item2;
                                     int listNo = f.Item3;
 
-                                    List<List<Point>> ptsList = this._scribbles[l][wh];
-
-                                    if (ptsList != null && ptsList.Count > 0)
+                                    if (this._scribbles.ContainsKey(l) && this._scribbles[l].ContainsKey(wh))
                                     {
-                                        bool doRect = ptsList[listNo].Count > 1;
+                                        List<List<Point>> ptsList = this._scribbles[l][wh];
 
-                                        Color c = l == 0 ? Color.Black : l == 1 ? Color.White : Color.Gray;
+                                        if (ptsList != null && ptsList.Count > 0)
+                                        {
+                                            bool doRect = ptsList[listNo].Count > 1;
 
-                                        if (doRect)
-                                        {
-                                            foreach (Point pt in ptsList[listNo])
+                                            Color c = l == 0 ? Color.Black : l == 1 ? Color.White : Color.Gray;
+
+                                            if (doRect)
                                             {
-                                                using (SolidBrush sb = new SolidBrush(c))
-                                                    gx.FillRectangle(sb, new Rectangle(
-                                                        (int)((int)(pt.X - wh / 2) / factor),
-                                                        (int)((int)(pt.Y - wh / 2) / factor),
-                                                    (int)(wh / factor),
-                                                        (int)(wh / factor)));
-                                            }
-                                        }
-                                        else
-                                        {
-                                            if (ptsList[listNo].Count > 0)
-                                            {
-                                                Point pt = ptsList[listNo][0];
-                                                using (SolidBrush sb = new SolidBrush(c))
-                                                    gx.FillRectangle(sb, new Rectangle(
-                                                        (int)((int)(pt.X - wh / 2) / factor),
-                                                        (int)((int)(pt.Y - wh / 2) / factor),
+                                                foreach (Point pt in ptsList[listNo])
+                                                {
+                                                    using (SolidBrush sb = new SolidBrush(c))
+                                                        gx.FillRectangle(sb, new Rectangle(
+                                                            (int)((int)(pt.X - wh / 2) / factor),
+                                                            (int)((int)(pt.Y - wh / 2) / factor),
                                                         (int)(wh / factor),
-                                                        (int)(wh / factor)));
+                                                            (int)(wh / factor)));
+                                                }
+                                            }
+                                            else
+                                            {
+                                                if (ptsList[listNo].Count > 0)
+                                                {
+                                                    Point pt = ptsList[listNo][0];
+                                                    using (SolidBrush sb = new SolidBrush(c))
+                                                        gx.FillRectangle(sb, new Rectangle(
+                                                            (int)((int)(pt.X - wh / 2) / factor),
+                                                            (int)((int)(pt.Y - wh / 2) / factor),
+                                                            (int)(wh / factor),
+                                                            (int)(wh / factor)));
+                                                }
                                             }
                                         }
                                     }
@@ -4402,6 +4411,11 @@ namespace AvoidAGrabCutEasy
             this.backgroundWorker4.DoWork += backgroundWorker4_DoWork;
             //this.backgroundWorker4.ProgressChanged += backgroundWorker4_ProgressChanged;
             this.backgroundWorker4.RunWorkerCompleted += backgroundWorker4_RunWorkerCompleted;
+        }
+
+        private void cbHighlight_CheckedChanged(object sender, EventArgs e)
+        {
+            this.helplineRulerCtrl1.dbPanel1.Invalidate();
         }
     }
 }

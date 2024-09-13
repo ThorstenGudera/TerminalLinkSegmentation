@@ -30,6 +30,8 @@
         {
             components = new System.ComponentModel.Container();
             panel1 = new Panel();
+            cbHighlight = new CheckBox();
+            panel4 = new Panel();
             btnCFM = new Button();
             label16 = new Label();
             label17 = new Label();
@@ -135,8 +137,6 @@
             contextMenuStrip1 = new ContextMenuStrip(components);
             floodBGToolStripMenuItem = new ToolStripMenuItem();
             floodFGToolStripMenuItem = new ToolStripMenuItem();
-            panel4 = new Panel();
-            cbHighlight = new CheckBox();
             panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numComponents2).BeginInit();
             panel2.SuspendLayout();
@@ -256,6 +256,27 @@
             panel1.TabIndex = 0;
             panel1.MouseDoubleClick += panel1_MouseDoubleClick;
             panel1.MouseDown += panel1_MouseDown;
+            // 
+            // cbHighlight
+            // 
+            cbHighlight.AutoSize = true;
+            cbHighlight.Checked = true;
+            cbHighlight.CheckState = CheckState.Checked;
+            cbHighlight.Location = new Point(294, 86);
+            cbHighlight.Name = "cbHighlight";
+            cbHighlight.Size = new Size(127, 19);
+            cbHighlight.TabIndex = 702;
+            cbHighlight.Text = "highlight unknown";
+            cbHighlight.UseVisualStyleBackColor = true;
+            cbHighlight.CheckedChanged += cbHighlight_CheckedChanged;
+            // 
+            // panel4
+            // 
+            panel4.BackColor = SystemColors.ControlDarkDark;
+            panel4.Location = new Point(209, 107);
+            panel4.Name = "panel4";
+            panel4.Size = new Size(440, 2);
+            panel4.TabIndex = 701;
             // 
             // btnCFM
             // 
@@ -1409,24 +1430,6 @@
             floodFGToolStripMenuItem.Size = new Size(122, 22);
             floodFGToolStripMenuItem.Text = "Flood FG";
             floodFGToolStripMenuItem.Click += floodFGToolStripMenuItem_Click;
-            // 
-            // panel4
-            // 
-            panel4.BackColor = SystemColors.ControlDarkDark;
-            panel4.Location = new Point(209, 107);
-            panel4.Name = "panel4";
-            panel4.Size = new Size(440, 2);
-            panel4.TabIndex = 701;
-            // 
-            // cbHighlight
-            // 
-            cbHighlight.AutoSize = true;
-            cbHighlight.Location = new Point(294, 86);
-            cbHighlight.Name = "cbHighlight";
-            cbHighlight.Size = new Size(127, 19);
-            cbHighlight.TabIndex = 702;
-            cbHighlight.Text = "highlight unknown";
-            cbHighlight.UseVisualStyleBackColor = true;
             // 
             // frmAvoidAGrabCutEasy
             // 

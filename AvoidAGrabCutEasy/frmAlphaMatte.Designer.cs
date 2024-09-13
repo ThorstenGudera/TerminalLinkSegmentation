@@ -65,6 +65,7 @@
             cbLSBmp = new CheckBox();
             Label20 = new Label();
             panel1 = new Panel();
+            cbHighlight = new CheckBox();
             panel6 = new Panel();
             label5 = new Label();
             label3 = new Label();
@@ -115,7 +116,6 @@
             backgroundWorker5 = new System.ComponentModel.BackgroundWorker();
             backgroundWorker3 = new System.ComponentModel.BackgroundWorker();
             backgroundWorker4 = new System.ComponentModel.BackgroundWorker();
-            cbHighlight = new CheckBox();
             statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
@@ -555,6 +555,19 @@
             panel1.Name = "panel1";
             panel1.Size = new Size(1479, 224);
             panel1.TabIndex = 226;
+            // 
+            // cbHighlight
+            // 
+            cbHighlight.AutoSize = true;
+            cbHighlight.Checked = true;
+            cbHighlight.CheckState = CheckState.Checked;
+            cbHighlight.Location = new Point(162, 21);
+            cbHighlight.Name = "cbHighlight";
+            cbHighlight.Size = new Size(127, 19);
+            cbHighlight.TabIndex = 714;
+            cbHighlight.Text = "highlight unknown";
+            cbHighlight.UseVisualStyleBackColor = true;
+            cbHighlight.CheckedChanged += cbHighlight_CheckedChanged;
             // 
             // panel6
             // 
@@ -1101,16 +1114,6 @@
             backgroundWorker4.WorkerSupportsCancellation = true;
             backgroundWorker4.DoWork += backgroundWorker4_DoWork;
             backgroundWorker4.RunWorkerCompleted += backgroundWorker4_RunWorkerCompleted;
-            // 
-            // cbHighlight
-            // 
-            cbHighlight.AutoSize = true;
-            cbHighlight.Location = new Point(162, 21);
-            cbHighlight.Name = "cbHighlight";
-            cbHighlight.Size = new Size(127, 19);
-            cbHighlight.TabIndex = 714;
-            cbHighlight.Text = "highlight unknown";
-            cbHighlight.UseVisualStyleBackColor = true;
             // 
             // frmAlphaMatte
             // 
