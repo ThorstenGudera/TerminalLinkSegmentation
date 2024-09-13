@@ -861,7 +861,8 @@ namespace AvoidAGrabCutEasy
                         {
                             foreach (Point pt in this._points2)
                             {
-                                using (SolidBrush sb = new SolidBrush(c))
+                                //using (SolidBrush sb = new SolidBrush(c))
+                                using (HatchBrush sb = new HatchBrush(HatchStyle.Cross, c))
                                     e.Graphics.FillRectangle(sb, new Rectangle(
                                         (int)((int)(pt.X - (int)this.numWHScribbles.Value / 2) * this.helplineRulerCtrl1.Zoom) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X,
                                         (int)((int)(pt.Y - (int)this.numWHScribbles.Value / 2) * this.helplineRulerCtrl1.Zoom) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y,
