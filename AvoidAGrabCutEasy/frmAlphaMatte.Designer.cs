@@ -57,6 +57,8 @@
             cbForceSerial = new CheckBox();
             cbSlices = new CheckBox();
             cbInterpolated = new CheckBox();
+            rbSparseScribble = new RadioButton();
+            rbFullScribble = new RadioButton();
             saveFileDialog1 = new SaveFileDialog();
             Timer3 = new System.Windows.Forms.Timer(components);
             backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
@@ -64,8 +66,6 @@
             Label20 = new Label();
             panel1 = new Panel();
             panel6 = new Panel();
-            rbSparseScribble = new RadioButton();
-            rbFullScribble = new RadioButton();
             label5 = new Label();
             label3 = new Label();
             btnRedo = new Button();
@@ -115,6 +115,7 @@
             backgroundWorker5 = new System.ComponentModel.BackgroundWorker();
             backgroundWorker3 = new System.ComponentModel.BackgroundWorker();
             backgroundWorker4 = new System.ComponentModel.BackgroundWorker();
+            cbHighlight = new CheckBox();
             statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
@@ -436,6 +437,30 @@
             toolTip1.SetToolTip(cbInterpolated, "Use a Sqrt_2 enlarged pic");
             cbInterpolated.UseVisualStyleBackColor = true;
             // 
+            // rbSparseScribble
+            // 
+            rbSparseScribble.AutoSize = true;
+            rbSparseScribble.Location = new Point(118, 12);
+            rbSparseScribble.Name = "rbSparseScribble";
+            rbSparseScribble.Size = new Size(106, 19);
+            rbSparseScribble.TabIndex = 0;
+            rbSparseScribble.Text = "SparseScribbles";
+            toolTip1.SetToolTip(rbSparseScribble, "Staart with a Gray (Unknown) Image.\r\nDraw scriblles for BG and FG to it.\r\n");
+            rbSparseScribble.UseVisualStyleBackColor = true;
+            // 
+            // rbFullScribble
+            // 
+            rbFullScribble.AutoSize = true;
+            rbFullScribble.Checked = true;
+            rbFullScribble.Location = new Point(11, 12);
+            rbFullScribble.Name = "rbFullScribble";
+            rbFullScribble.Size = new Size(100, 19);
+            rbFullScribble.TabIndex = 0;
+            rbFullScribble.TabStop = true;
+            rbFullScribble.Text = "FilledScribbles";
+            toolTip1.SetToolTip(rbFullScribble, "Start with a Black (BG) Image.\r\nDraw scribbles for Unknown and FG to it,\r\nor draw Unknown (closed curve or from pic-bounds to pic-bounds,\r\n then fill in BG and FG scribbles.\r\n");
+            rbFullScribble.UseVisualStyleBackColor = true;
+            // 
             // saveFileDialog1
             // 
             saveFileDialog1.FileName = "Bild1.png";
@@ -477,6 +502,7 @@
             // 
             // panel1
             // 
+            panel1.Controls.Add(cbHighlight);
             panel1.Controls.Add(panel6);
             panel1.Controls.Add(label5);
             panel1.Controls.Add(label3);
@@ -539,30 +565,6 @@
             panel6.Name = "panel6";
             panel6.Size = new Size(233, 41);
             panel6.TabIndex = 713;
-            // 
-            // rbSparseScribble
-            // 
-            rbSparseScribble.AutoSize = true;
-            rbSparseScribble.Location = new Point(118, 12);
-            rbSparseScribble.Name = "rbSparseScribble";
-            rbSparseScribble.Size = new Size(106, 19);
-            rbSparseScribble.TabIndex = 0;
-            rbSparseScribble.Text = "SparseScribbles";
-            toolTip1.SetToolTip(rbSparseScribble, "Staart with a Gray (Unknown) Image.\r\nDraw scriblles for BG and FG to it.\r\n");
-            rbSparseScribble.UseVisualStyleBackColor = true;
-            // 
-            // rbFullScribble
-            // 
-            rbFullScribble.AutoSize = true;
-            rbFullScribble.Checked = true;
-            rbFullScribble.Location = new Point(11, 12);
-            rbFullScribble.Name = "rbFullScribble";
-            rbFullScribble.Size = new Size(100, 19);
-            rbFullScribble.TabIndex = 0;
-            rbFullScribble.TabStop = true;
-            rbFullScribble.Text = "FilledScribbles";
-            toolTip1.SetToolTip(rbFullScribble, "Start with a Black (BG) Image.\r\nDraw scribbles for Unknown and FG to it,\r\nor draw Unknown (closed curve or from pic-bounds to pic-bounds,\r\n then fill in BG and FG scribbles.\r\n");
-            rbFullScribble.UseVisualStyleBackColor = true;
             // 
             // label5
             // 
@@ -1100,6 +1102,16 @@
             backgroundWorker4.DoWork += backgroundWorker4_DoWork;
             backgroundWorker4.RunWorkerCompleted += backgroundWorker4_RunWorkerCompleted;
             // 
+            // cbHighlight
+            // 
+            cbHighlight.AutoSize = true;
+            cbHighlight.Location = new Point(162, 21);
+            cbHighlight.Name = "cbHighlight";
+            cbHighlight.Size = new Size(127, 19);
+            cbHighlight.TabIndex = 714;
+            cbHighlight.Text = "highlight unknown";
+            cbHighlight.UseVisualStyleBackColor = true;
+            // 
             // frmAlphaMatte
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -1229,5 +1241,6 @@
         private RadioButton rbSparseScribble;
         private RadioButton rbFullScribble;
         internal System.ComponentModel.BackgroundWorker backgroundWorker4;
+        private CheckBox cbHighlight;
     }
 }

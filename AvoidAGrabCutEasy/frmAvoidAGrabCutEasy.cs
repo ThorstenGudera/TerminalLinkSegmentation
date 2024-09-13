@@ -488,6 +488,8 @@ namespace AvoidAGrabCutEasy
             int eX = e.X - this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X;
             int eY = e.Y - this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y;
 
+            this.helplineRulerCtrl1.dbPanel1.Capture = true;
+
             if (ix >= 0 && ix < this.helplineRulerCtrl1.Bmp.Width && iy >= 0 && iy < this.helplineRulerCtrl1.Bmp.Height)
             {
                 if (!this.cbAllowRS.Checked)
@@ -601,6 +603,7 @@ namespace AvoidAGrabCutEasy
 
             this._tracking = false;
             this._tracking4 = false;
+            this.helplineRulerCtrl1.dbPanel1.Capture = false;
         }
 
         private void AddPointsToScribblePath()
@@ -655,6 +658,9 @@ namespace AvoidAGrabCutEasy
                             bool doRect = ptsList[listNo].Count > 1;
 
                             Color c = l == 0 ? Color.Black : l == 1 ? Color.White : Color.Gray;
+
+                            if (l == 3 && this.cbHighlight.Checked)
+                                c = Color.Cyan;
 
                             if (doRect)
                             {
@@ -805,6 +811,9 @@ namespace AvoidAGrabCutEasy
                                     bool doRect = pts.Count > 1;
                                     Color c = Color.Gray;
 
+                                    if (this.cbHighlight.Checked)
+                                        c = Color.Cyan;
+
                                     if (doRect)
                                     {
                                         foreach (Point pt in pts)
@@ -839,6 +848,9 @@ namespace AvoidAGrabCutEasy
                 if (this._points2.Count > 0)
                 {
                     Color c = this.rbFG.Checked ? Color.White : this.rbBG.Checked ? Color.Black : Color.Gray;
+
+                    if (this.cbHighlight.Checked && !this.rbFG.Checked && !this.rbBG.Checked)
+                        c = Color.Lime;
 
                     using (GraphicsPath gp = new GraphicsPath())
                     {

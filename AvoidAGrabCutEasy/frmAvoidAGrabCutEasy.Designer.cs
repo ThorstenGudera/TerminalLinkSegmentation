@@ -135,6 +135,8 @@
             contextMenuStrip1 = new ContextMenuStrip(components);
             floodBGToolStripMenuItem = new ToolStripMenuItem();
             floodFGToolStripMenuItem = new ToolStripMenuItem();
+            panel4 = new Panel();
+            cbHighlight = new CheckBox();
             panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numComponents2).BeginInit();
             panel2.SuspendLayout();
@@ -161,6 +163,8 @@
             // 
             // panel1
             // 
+            panel1.Controls.Add(cbHighlight);
+            panel1.Controls.Add(panel4);
             panel1.Controls.Add(btnCFM);
             panel1.Controls.Add(label16);
             panel1.Controls.Add(label17);
@@ -554,7 +558,7 @@
             // label7
             // 
             label7.AutoSize = true;
-            label7.Location = new Point(413, 153);
+            label7.Location = new Point(413, 162);
             label7.Margin = new Padding(4, 0, 4, 0);
             label7.Name = "label7";
             label7.Size = new Size(110, 15);
@@ -990,7 +994,7 @@
             // label4
             // 
             label4.AutoSize = true;
-            label4.Location = new Point(238, 153);
+            label4.Location = new Point(238, 162);
             label4.Margin = new Padding(4, 0, 4, 0);
             label4.Name = "label4";
             label4.Size = new Size(63, 15);
@@ -1013,7 +1017,7 @@
             // 
             numProbMult1.DecimalPlaces = 4;
             numProbMult1.Increment = new decimal(new int[] { 1, 0, 0, 65536 });
-            numProbMult1.Location = new Point(304, 151);
+            numProbMult1.Location = new Point(304, 160);
             numProbMult1.Margin = new Padding(4, 3, 4, 3);
             numProbMult1.Maximum = new decimal(new int[] { 1000, 0, 0, 0 });
             numProbMult1.Minimum = new decimal(new int[] { 1, 0, 0, 262144 });
@@ -1027,7 +1031,7 @@
             cbUseTh.AutoSize = true;
             cbUseTh.Checked = true;
             cbUseTh.CheckState = CheckState.Checked;
-            cbUseTh.Location = new Point(499, 120);
+            cbUseTh.Location = new Point(499, 134);
             cbUseTh.Margin = new Padding(4, 3, 4, 3);
             cbUseTh.Name = "cbUseTh";
             cbUseTh.Size = new Size(99, 19);
@@ -1038,7 +1042,7 @@
             // label5
             // 
             label5.AutoSize = true;
-            label5.Location = new Point(262, 122);
+            label5.Location = new Point(262, 136);
             label5.Margin = new Padding(4, 0, 4, 0);
             label5.Name = "label5";
             label5.Size = new Size(90, 15);
@@ -1048,7 +1052,7 @@
             // numDblMult
             // 
             numDblMult.DecimalPlaces = 6;
-            numDblMult.Location = new Point(365, 119);
+            numDblMult.Location = new Point(365, 133);
             numDblMult.Margin = new Padding(4, 3, 4, 3);
             numDblMult.Maximum = new decimal(new int[] { 1000000000, 0, 0, 0 });
             numDblMult.Name = "numDblMult";
@@ -1061,7 +1065,7 @@
             cbQuickEst.AutoSize = true;
             cbQuickEst.Checked = true;
             cbQuickEst.CheckState = CheckState.Checked;
-            cbQuickEst.Location = new Point(241, 93);
+            cbQuickEst.Location = new Point(241, 113);
             cbQuickEst.Margin = new Padding(4, 3, 4, 3);
             cbQuickEst.Name = "cbQuickEst";
             cbQuickEst.Size = new Size(114, 19);
@@ -1127,7 +1131,7 @@
             // 
             // numMaxComponents
             // 
-            numMaxComponents.Location = new Point(533, 151);
+            numMaxComponents.Location = new Point(533, 160);
             numMaxComponents.Margin = new Padding(4, 3, 4, 3);
             numMaxComponents.Maximum = new decimal(new int[] { 9999, 0, 0, 0 });
             numMaxComponents.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
@@ -1406,6 +1410,24 @@
             floodFGToolStripMenuItem.Text = "Flood FG";
             floodFGToolStripMenuItem.Click += floodFGToolStripMenuItem_Click;
             // 
+            // panel4
+            // 
+            panel4.BackColor = SystemColors.ControlDarkDark;
+            panel4.Location = new Point(209, 107);
+            panel4.Name = "panel4";
+            panel4.Size = new Size(440, 2);
+            panel4.TabIndex = 701;
+            // 
+            // cbHighlight
+            // 
+            cbHighlight.AutoSize = true;
+            cbHighlight.Location = new Point(294, 86);
+            cbHighlight.Name = "cbHighlight";
+            cbHighlight.Size = new Size(127, 19);
+            cbHighlight.TabIndex = 702;
+            cbHighlight.Text = "highlight unknown";
+            cbHighlight.UseVisualStyleBackColor = true;
+            // 
             // frmAvoidAGrabCutEasy
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -1558,5 +1580,7 @@
         private NumericUpDown numComponents2;
         private Button btnCFM;
         private Label label16;
+        private CheckBox cbHighlight;
+        private Panel panel4;
     }
 }
