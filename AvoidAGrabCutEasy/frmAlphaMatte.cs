@@ -374,8 +374,8 @@ namespace AvoidAGrabCutEasy
                                             e.Graphics.FillRectangle(sb, new Rectangle(
                                                 (int)((int)(pt.X - wh / 2) * this.helplineRulerCtrl1.Zoom) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X,
                                                 (int)((int)(pt.Y - wh / 2) * this.helplineRulerCtrl1.Zoom) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y,
-                                                (int)(wh * this.helplineRulerCtrl1.Zoom),
-                                                (int)(wh * this.helplineRulerCtrl1.Zoom)));
+                                                Math.Max((int)(wh * this.helplineRulerCtrl1.Zoom), 1),
+                                                Math.Max((int)(wh * this.helplineRulerCtrl1.Zoom), 1)));
                                     }
                             }
                             else
