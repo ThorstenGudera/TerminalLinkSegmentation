@@ -836,7 +836,10 @@ namespace AvoidAGrabCutEasy
                             if (bTrimap != null)
                             {
                                 Bitmap? b = bTrimap;
-                                bTrimap = new Bitmap(bTrimapTmp);
+                                bTrimap = new Bitmap(bTrimapTmp.Width, bTrimapTmp.Height);
+                                using Graphics gx = Graphics.FromImage(bTrimap);
+                                gx.Clear(Color.Black);
+                                gx.DrawImage(bTrimapTmp, 0, 0);
                                 if (b != null)
                                     b.Dispose();
                                 b = null;
@@ -5362,6 +5365,18 @@ namespace AvoidAGrabCutEasy
                     this.numBoundInner.Value = (int)(5 * d * f2);
                     this.numBoundOuter.Value = (int)(5 * d * f2);
                 }
+            }
+        }
+
+        private void btnLoadBasePic_Click(object sender, EventArgs e)
+        {
+            if (this.openFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                Bitmap? bmp = null;
+                using Image img = Image.FromFile(this.openFileDialog1.FileName);
+                bmp = new Bitmap(img);
+
+                this.SetBitmap(ref this._bmpOrig, ref bmp);
             }
         }
     }

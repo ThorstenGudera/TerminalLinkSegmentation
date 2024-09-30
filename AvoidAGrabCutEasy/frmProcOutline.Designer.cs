@@ -156,6 +156,9 @@
             backgroundWorker5 = new System.ComponentModel.BackgroundWorker();
             backgroundWorker6 = new System.ComponentModel.BackgroundWorker();
             backgroundWorker7 = new System.ComponentModel.BackgroundWorker();
+            label16 = new Label();
+            btnLoadBasePic = new Button();
+            openFileDialog1 = new OpenFileDialog();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
             splitContainer1.Panel2.SuspendLayout();
@@ -214,6 +217,8 @@
             // 
             // splitContainer1.Panel2
             // 
+            splitContainer1.Panel2.Controls.Add(label16);
+            splitContainer1.Panel2.Controls.Add(btnLoadBasePic);
             splitContainer1.Panel2.Controls.Add(groupBox2);
             splitContainer1.Panel2.Controls.Add(label1);
             splitContainer1.Panel2.Controls.Add(btmSetBU);
@@ -377,7 +382,7 @@
             cbBGColor.AutoSize = true;
             cbBGColor.Checked = true;
             cbBGColor.CheckState = CheckState.Checked;
-            cbBGColor.Location = new Point(185, 772);
+            cbBGColor.Location = new Point(184, 772);
             cbBGColor.Margin = new Padding(4, 3, 4, 3);
             cbBGColor.Name = "cbBGColor";
             cbBGColor.Size = new Size(67, 19);
@@ -390,7 +395,7 @@
             // 
             button10.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             button10.ForeColor = SystemColors.ControlText;
-            button10.Location = new Point(378, 810);
+            button10.Location = new Point(377, 810);
             button10.Margin = new Padding(4, 3, 4, 3);
             button10.Name = "button10";
             button10.Size = new Size(88, 27);
@@ -403,7 +408,7 @@
             // 
             button8.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             button8.ForeColor = SystemColors.ControlText;
-            button8.Location = new Point(283, 810);
+            button8.Location = new Point(282, 810);
             button8.Margin = new Padding(4, 3, 4, 3);
             button8.Name = "button8";
             button8.Size = new Size(88, 27);
@@ -417,7 +422,7 @@
             button2.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             button2.FlatStyle = FlatStyle.System;
             button2.ForeColor = SystemColors.ControlText;
-            button2.Location = new Point(378, 770);
+            button2.Location = new Point(377, 770);
             button2.Margin = new Padding(4, 3, 4, 3);
             button2.Name = "button2";
             button2.Size = new Size(88, 27);
@@ -430,7 +435,7 @@
             btnCancel.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             btnCancel.DialogResult = DialogResult.Cancel;
             btnCancel.ForeColor = SystemColors.ControlText;
-            btnCancel.Location = new Point(387, 845);
+            btnCancel.Location = new Point(386, 845);
             btnCancel.Margin = new Padding(4, 3, 4, 3);
             btnCancel.Name = "btnCancel";
             btnCancel.Size = new Size(88, 27);
@@ -443,7 +448,7 @@
             btnOK.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             btnOK.DialogResult = DialogResult.OK;
             btnOK.ForeColor = SystemColors.ControlText;
-            btnOK.Location = new Point(294, 845);
+            btnOK.Location = new Point(293, 845);
             btnOK.Margin = new Padding(4, 3, 4, 3);
             btnOK.Name = "btnOK";
             btnOK.Size = new Size(88, 27);
@@ -1681,6 +1686,33 @@
             backgroundWorker7.DoWork += backgroundWorker7_DoWork;
             backgroundWorker7.RunWorkerCompleted += backgroundWorker7_RunWorkerCompleted;
             // 
+            // label16
+            // 
+            label16.AutoSize = true;
+            label16.Location = new Point(15, 851);
+            label16.Name = "label16";
+            label16.Size = new Size(73, 15);
+            label16.TabIndex = 662;
+            label16.Text = "load orig pic";
+            // 
+            // btnLoadBasePic
+            // 
+            btnLoadBasePic.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            btnLoadBasePic.ForeColor = SystemColors.ControlText;
+            btnLoadBasePic.Location = new Point(96, 845);
+            btnLoadBasePic.Margin = new Padding(4, 3, 4, 3);
+            btnLoadBasePic.Name = "btnLoadBasePic";
+            btnLoadBasePic.Size = new Size(88, 27);
+            btnLoadBasePic.TabIndex = 661;
+            btnLoadBasePic.Text = "Load";
+            btnLoadBasePic.UseVisualStyleBackColor = true;
+            btnLoadBasePic.Click += btnLoadBasePic_Click;
+            // 
+            // openFileDialog1
+            // 
+            openFileDialog1.FileName = "openFileDialog1";
+            openFileDialog1.Filter = "Images - (*.bmp;*.jpg;*.jpeg;*.jfif;*.png)|*.bmp;*.jpg;*.jpeg;*.jfif;*.png";
+            // 
             // frmProcOutline
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -1877,5 +1909,8 @@
         private CheckBox cbSlices;
         private CheckBox cbInterpolated;
         private CheckBox cbForceSerial;
+        private Label label16;
+        private Button btnLoadBasePic;
+        private OpenFileDialog openFileDialog1;
     }
 }
