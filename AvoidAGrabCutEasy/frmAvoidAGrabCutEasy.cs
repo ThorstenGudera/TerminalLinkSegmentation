@@ -4252,8 +4252,8 @@ namespace AvoidAGrabCutEasy
                                             {
                                                 using (SolidBrush sb = new SolidBrush(c))
                                                     gx.FillRectangle(sb, new Rectangle(
-                                                        (int)(pt.X - wh / 2) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X,
-                                                        (int)(pt.Y - wh / 2) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y,
+                                                        (int)(pt.X - wh / 2),
+                                                        (int)(pt.Y - wh / 2),
                                                         (int)wh,
                                                         (int)wh));
                                             }
@@ -4263,8 +4263,8 @@ namespace AvoidAGrabCutEasy
                                             Point pt = pts2[0];
                                             using (SolidBrush sb = new SolidBrush(c))
                                                 gx.FillRectangle(sb, new Rectangle(
-                                                    (int)(pt.X - wh / 2) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X,
-                                                    (int)(pt.Y - wh / 2) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y,
+                                                    (int)(pt.X - wh / 2),
+                                                    (int)(pt.Y - wh / 2),
                                                     (int)wh,
                                                     (int)wh));
                                         }
@@ -4399,8 +4399,8 @@ namespace AvoidAGrabCutEasy
                                             {
                                                 using (SolidBrush sb = new SolidBrush(c))
                                                     gx.FillRectangle(sb, new Rectangle(
-                                                        (int)(pt.X - wh / 2) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X,
-                                                        (int)(pt.Y - wh / 2) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y,
+                                                        (int)(pt.X - wh / 2),
+                                                        (int)(pt.Y - wh / 2),
                                                         (int)wh,
                                                         (int)wh));
                                             }
@@ -4410,8 +4410,8 @@ namespace AvoidAGrabCutEasy
                                             Point pt = pts2[0];
                                             using (SolidBrush sb = new SolidBrush(c))
                                                 gx.FillRectangle(sb, new Rectangle(
-                                                    (int)(pt.X - wh / 2) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X,
-                                                    (int)(pt.Y - wh / 2) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y,
+                                                    (int)(pt.X - wh / 2),
+                                                    (int)(pt.Y - wh / 2),
                                                     (int)wh,
                                                     (int)wh));
                                         }
