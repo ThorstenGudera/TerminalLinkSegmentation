@@ -19,6 +19,7 @@ namespace LUBitmapDesigner
         private float _rotationStart;
 
         public ShapeList? ShapeList { get; set; }
+        public BitmapShape? SelectedShape { get; private set; }
 
         public event EventHandler<BitmapShape>? ShapeChanged;
 
@@ -50,59 +51,6 @@ namespace LUBitmapDesigner
 
             return bOut;
         }
-
-        //public void SetUpperImage(Bitmap bmp, float x, float y)
-        //{
-        //    if (AvailMem.AvailMem.checkAvailRam(bmp.Width * bmp.Height * 16L))
-        //    {
-        //        if (this.ShapeList == null)
-        //            this.ShapeList = new ShapeList();
-        //        if (this.ShapeList.Count == 0)
-        //            SetBlankLowerImage();
-        //        if (bmp != null && this.ShapeList.Count > 0)
-        //        {
-        //            for (int i = 2; i < this.ShapeList.Count; i++)
-        //                this.ShapeList.RemoveAt(i);
-
-        //            int cnt = this.ShapeList.Count;
-
-        //            BitmapShape? b = null;
-        //            if (this.ShapeList.Count > 1)
-        //                b = this.ShapeList[1];
-
-        //            RectangleF rc = new RectangleF(x, y, bmp.Width, bmp.Height);
-
-        //            this.ShapeList.AllowAdding = true;
-        //            this.ShapeList.Add(new BitmapShape() { Bmp = bmp, Bounds = rc, Rotation = 0, Zoom = 1f });
-        //            if (cnt >= 2)
-        //                this.ShapeList.RemoveAt(1);
-
-        //            if (b != null)
-        //            {
-        //                b.Dispose();
-        //                b = null;
-        //            }
-        //        }
-
-        //    }
-        //    else
-        //    {
-        //        MessageBox.Show("Not enough Memory");
-        //        return;
-        //    }
-
-        //    this.helplineRulerCtrl1.Bmp = this.ShapeList[0].Bmp;
-
-        //    double faktor = System.Convert.ToDouble(helplineRulerCtrl1.dbPanel1.Width) / System.Convert.ToDouble(helplineRulerCtrl1.dbPanel1.Height);
-        //    double multiplier = System.Convert.ToDouble(this.helplineRulerCtrl1.Bmp?.Width) / System.Convert.ToDouble(this.helplineRulerCtrl1.Bmp?.Height);
-        //    if (multiplier >= faktor)
-        //        this.helplineRulerCtrl1.Zoom = System.Convert.ToSingle(System.Convert.ToDouble(helplineRulerCtrl1.dbPanel1.Width) / System.Convert.ToDouble(this.helplineRulerCtrl1.Bmp?.Width));
-        //    else
-        //        this.helplineRulerCtrl1.Zoom = System.Convert.ToSingle(System.Convert.ToDouble(helplineRulerCtrl1.dbPanel1.Height) / System.Convert.ToDouble(this.helplineRulerCtrl1.Bmp?.Height));
-
-        //    this.helplineRulerCtrl1.dbPanel1.AutoScrollMinSize = new Size(System.Convert.ToInt32(this.helplineRulerCtrl1.Bmp?.Width * this.helplineRulerCtrl1.Zoom), System.Convert.ToInt32(this.helplineRulerCtrl1.Bmp?.Height * this.helplineRulerCtrl1.Zoom));
-        //    this.helplineRulerCtrl1.MakeBitmap(this.helplineRulerCtrl1.Bmp);
-        //}
 
         public void SetUpperImage(Bitmap bmp, float x, float y)
         {
@@ -201,7 +149,7 @@ namespace LUBitmapDesigner
                         this._ix = ix;
                         this._iy = iy;
 
-                        if (e.Button == MouseButtons.Right)
+                        if (e.Button == MouseButtons.Right && this.SelectedShape?.IsLocked == false)
                         {
                             BitmapShape b = this.ShapeList[1];
 
@@ -217,7 +165,7 @@ namespace LUBitmapDesigner
 
         private void helplineRulerCtrl1_MouseMove(object? sender, MouseEventArgs e)
         {
-            if (this.ShapeList?.Count > 1 && e.Button == MouseButtons.Left)
+            if (this.ShapeList?.Count > 1 && e.Button == MouseButtons.Left && this.SelectedShape?.IsLocked == false)
             {
                 int ix = (int)((e.X - this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X) / (double)this.helplineRulerCtrl1.Zoom);
                 int iy = (int)((e.Y - this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y) / (double)this.helplineRulerCtrl1.Zoom);
@@ -237,7 +185,7 @@ namespace LUBitmapDesigner
                     }
                 }
             }
-            if (this.ShapeList?.Count > 1 && e.Button == MouseButtons.Right)
+            if (this.ShapeList?.Count > 1 && e.Button == MouseButtons.Right && this.SelectedShape?.IsLocked == false)
             {
                 int ix = (int)((e.X - this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X) / (double)this.helplineRulerCtrl1.Zoom);
                 int iy = (int)((e.Y - this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y) / (double)this.helplineRulerCtrl1.Zoom);
@@ -272,6 +220,7 @@ namespace LUBitmapDesigner
             // check, if a DrawnRectangle is at the current point
             if (this.ShapeList != null && this.ShapeList.Count > 1)
             {
+                this.SelectedShape = null;
                 // we use a GraphicsPath for testing, because it is easy to handle when obects are rotated
                 // then, we simply rotate the path
                 using (GraphicsPath gP = new GraphicsPath())
@@ -297,6 +246,7 @@ namespace LUBitmapDesigner
                     {
                         ShapeChanged?.Invoke(this, this.ShapeList[1]);
                         gP.Dispose();
+                        this.SelectedShape = this.ShapeList[1];
                         return true;
                     }
                 }
@@ -307,7 +257,7 @@ namespace LUBitmapDesigner
 
         private void helplineRulerCtrl1_MouseUp(object? sender, MouseEventArgs e)
         {
-            if (this.ShapeList?.Count > 1 && e.Button == MouseButtons.Left)
+            if (this.ShapeList?.Count > 1 && e.Button == MouseButtons.Left && this.SelectedShape?.IsLocked == false)
             {
                 BitmapShape b = this.ShapeList[1];
             }

@@ -28,290 +28,266 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.GroupBox1 = new System.Windows.Forms.GroupBox();
-            this.cbIntVals = new System.Windows.Forms.CheckBox();
-            this.Label6 = new System.Windows.Forms.Label();
-            this.Button3 = new System.Windows.Forms.Button();
-            this.Button1 = new System.Windows.Forms.Button();
-            this.Label1 = new System.Windows.Forms.Label();
-            this.cbLock = new System.Windows.Forms.CheckBox();
-            this.Label2 = new System.Windows.Forms.Label();
-            this.Label3 = new System.Windows.Forms.Label();
-            this.btnOrigSize = new System.Windows.Forms.Button();
-            this.Label4 = new System.Windows.Forms.Label();
-            this.cbAspect = new System.Windows.Forms.CheckBox();
-            this.numX = new System.Windows.Forms.NumericUpDown();
-            this.numH = new System.Windows.Forms.NumericUpDown();
-            this.numW = new System.Windows.Forms.NumericUpDown();
-            this.numY = new System.Windows.Forms.NumericUpDown();
-            this.numRot = new System.Windows.Forms.NumericUpDown();
-            this.numOpacity = new System.Windows.Forms.NumericUpDown();
-            this.GroupBox1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numX)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numH)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numW)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numY)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numRot)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numOpacity)).BeginInit();
-            this.SuspendLayout();
+            GroupBox1 = new GroupBox();
+            cbIntVals = new CheckBox();
+            Label6 = new Label();
+            Button3 = new Button();
+            Button1 = new Button();
+            Label1 = new Label();
+            cbLock = new CheckBox();
+            Label2 = new Label();
+            Label3 = new Label();
+            btnOrigSize = new Button();
+            Label4 = new Label();
+            cbAspect = new CheckBox();
+            numX = new NumericUpDown();
+            numH = new NumericUpDown();
+            numW = new NumericUpDown();
+            numY = new NumericUpDown();
+            numRot = new NumericUpDown();
+            numOpacity = new NumericUpDown();
+            GroupBox1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)numX).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)numH).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)numW).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)numY).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)numRot).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)numOpacity).BeginInit();
+            SuspendLayout();
             // 
             // GroupBox1
             // 
-            this.GroupBox1.Controls.Add(this.cbIntVals);
-            this.GroupBox1.Controls.Add(this.Label6);
-            this.GroupBox1.Controls.Add(this.Button3);
-            this.GroupBox1.Controls.Add(this.Button1);
-            this.GroupBox1.Controls.Add(this.Label1);
-            this.GroupBox1.Controls.Add(this.cbLock);
-            this.GroupBox1.Controls.Add(this.Label2);
-            this.GroupBox1.Controls.Add(this.Label3);
-            this.GroupBox1.Controls.Add(this.btnOrigSize);
-            this.GroupBox1.Controls.Add(this.Label4);
-            this.GroupBox1.Controls.Add(this.cbAspect);
-            this.GroupBox1.Controls.Add(this.numX);
-            this.GroupBox1.Controls.Add(this.numH);
-            this.GroupBox1.Controls.Add(this.numW);
-            this.GroupBox1.Controls.Add(this.numY);
-            this.GroupBox1.Controls.Add(this.numRot);
-            this.GroupBox1.Controls.Add(this.numOpacity);
-            this.GroupBox1.Location = new System.Drawing.Point(13, -1);
-            this.GroupBox1.Name = "GroupBox1";
-            this.GroupBox1.Size = new System.Drawing.Size(215, 255);
-            this.GroupBox1.TabIndex = 38;
-            this.GroupBox1.TabStop = false;
-            this.GroupBox1.Text = "Settings";
+            GroupBox1.Controls.Add(cbIntVals);
+            GroupBox1.Controls.Add(Label6);
+            GroupBox1.Controls.Add(Button3);
+            GroupBox1.Controls.Add(Button1);
+            GroupBox1.Controls.Add(Label1);
+            GroupBox1.Controls.Add(cbLock);
+            GroupBox1.Controls.Add(Label2);
+            GroupBox1.Controls.Add(Label3);
+            GroupBox1.Controls.Add(btnOrigSize);
+            GroupBox1.Controls.Add(Label4);
+            GroupBox1.Controls.Add(cbAspect);
+            GroupBox1.Controls.Add(numX);
+            GroupBox1.Controls.Add(numH);
+            GroupBox1.Controls.Add(numW);
+            GroupBox1.Controls.Add(numY);
+            GroupBox1.Controls.Add(numRot);
+            GroupBox1.Controls.Add(numOpacity);
+            GroupBox1.Location = new Point(15, -1);
+            GroupBox1.Margin = new Padding(4, 3, 4, 3);
+            GroupBox1.Name = "GroupBox1";
+            GroupBox1.Padding = new Padding(4, 3, 4, 3);
+            GroupBox1.Size = new Size(251, 294);
+            GroupBox1.TabIndex = 38;
+            GroupBox1.TabStop = false;
+            GroupBox1.Text = "Settings";
             // 
             // cbIntVals
             // 
-            this.cbIntVals.AutoSize = true;
-            this.cbIntVals.Location = new System.Drawing.Point(121, 110);
-            this.cbIntVals.Name = "cbIntVals";
-            this.cbIntVals.Size = new System.Drawing.Size(60, 17);
-            this.cbIntVals.TabIndex = 43;
-            this.cbIntVals.Text = "Int vals";
-            this.cbIntVals.UseVisualStyleBackColor = true;
+            cbIntVals.AutoSize = true;
+            cbIntVals.Location = new Point(141, 127);
+            cbIntVals.Margin = new Padding(4, 3, 4, 3);
+            cbIntVals.Name = "cbIntVals";
+            cbIntVals.Size = new Size(63, 19);
+            cbIntVals.TabIndex = 43;
+            cbIntVals.Text = "Int vals";
+            cbIntVals.UseVisualStyleBackColor = true;
             // 
             // Label6
             // 
-            this.Label6.AutoSize = true;
-            this.Label6.Location = new System.Drawing.Point(20, 158);
-            this.Label6.Name = "Label6";
-            this.Label6.Size = new System.Drawing.Size(49, 13);
-            this.Label6.TabIndex = 41;
-            this.Label6.Text = "OrigSize:";
+            Label6.AutoSize = true;
+            Label6.Location = new Point(23, 182);
+            Label6.Margin = new Padding(4, 0, 4, 0);
+            Label6.Name = "Label6";
+            Label6.Size = new Size(53, 15);
+            Label6.TabIndex = 41;
+            Label6.Text = "OrigSize:";
             // 
             // Button3
             // 
-            this.Button3.Location = new System.Drawing.Point(17, 350);
-            this.Button3.Name = "Button3";
-            this.Button3.Size = new System.Drawing.Size(98, 23);
-            this.Button3.TabIndex = 36;
-            this.Button3.Text = "PasteSettings";
-            this.Button3.UseVisualStyleBackColor = true;
+            Button3.Location = new Point(20, 404);
+            Button3.Margin = new Padding(4, 3, 4, 3);
+            Button3.Name = "Button3";
+            Button3.Size = new Size(114, 27);
+            Button3.TabIndex = 36;
+            Button3.Text = "PasteSettings";
+            Button3.UseVisualStyleBackColor = true;
             // 
             // Button1
             // 
-            this.Button1.Location = new System.Drawing.Point(134, 361);
-            this.Button1.Name = "Button1";
-            this.Button1.Size = new System.Drawing.Size(75, 23);
-            this.Button1.TabIndex = 36;
-            this.Button1.Text = "Set";
-            this.Button1.UseVisualStyleBackColor = true;
+            Button1.Location = new Point(156, 417);
+            Button1.Margin = new Padding(4, 3, 4, 3);
+            Button1.Name = "Button1";
+            Button1.Size = new Size(88, 27);
+            Button1.TabIndex = 36;
+            Button1.Text = "Set";
+            Button1.UseVisualStyleBackColor = true;
             // 
             // Label1
             // 
-            this.Label1.AutoSize = true;
-            this.Label1.Location = new System.Drawing.Point(16, 16);
-            this.Label1.Name = "Label1";
-            this.Label1.Size = new System.Drawing.Size(51, 13);
-            this.Label1.TabIndex = 23;
-            this.Label1.Text = "Location:";
+            Label1.AutoSize = true;
+            Label1.Location = new Point(19, 18);
+            Label1.Margin = new Padding(4, 0, 4, 0);
+            Label1.Name = "Label1";
+            Label1.Size = new Size(56, 15);
+            Label1.TabIndex = 23;
+            Label1.Text = "Location:";
             // 
             // cbLock
             // 
-            this.cbLock.AutoSize = true;
-            this.cbLock.Location = new System.Drawing.Point(17, 135);
-            this.cbLock.Name = "cbLock";
-            this.cbLock.Size = new System.Drawing.Size(50, 17);
-            this.cbLock.TabIndex = 33;
-            this.cbLock.Text = "Lock";
-            this.cbLock.UseVisualStyleBackColor = true;
+            cbLock.AutoSize = true;
+            cbLock.Location = new Point(20, 156);
+            cbLock.Margin = new Padding(4, 3, 4, 3);
+            cbLock.Name = "cbLock";
+            cbLock.Size = new Size(51, 19);
+            cbLock.TabIndex = 33;
+            cbLock.Text = "Lock";
+            cbLock.UseVisualStyleBackColor = true;
+            cbLock.CheckedChanged += cbLock_CheckedChanged;
             // 
             // Label2
             // 
-            this.Label2.AutoSize = true;
-            this.Label2.Location = new System.Drawing.Point(17, 65);
-            this.Label2.Name = "Label2";
-            this.Label2.Size = new System.Drawing.Size(30, 13);
-            this.Label2.TabIndex = 23;
-            this.Label2.Text = "Size:";
+            Label2.AutoSize = true;
+            Label2.Location = new Point(20, 75);
+            Label2.Margin = new Padding(4, 0, 4, 0);
+            Label2.Name = "Label2";
+            Label2.Size = new Size(30, 15);
+            Label2.TabIndex = 23;
+            Label2.Text = "Size:";
             // 
             // Label3
             // 
-            this.Label3.AutoSize = true;
-            this.Label3.Location = new System.Drawing.Point(17, 206);
-            this.Label3.Name = "Label3";
-            this.Label3.Size = new System.Drawing.Size(50, 13);
-            this.Label3.TabIndex = 23;
-            this.Label3.Text = "Rotation:";
+            Label3.AutoSize = true;
+            Label3.Location = new Point(20, 238);
+            Label3.Margin = new Padding(4, 0, 4, 0);
+            Label3.Name = "Label3";
+            Label3.Size = new Size(55, 15);
+            Label3.TabIndex = 23;
+            Label3.Text = "Rotation:";
             // 
             // btnOrigSize
             // 
-            this.btnOrigSize.Location = new System.Drawing.Point(20, 174);
-            this.btnOrigSize.Name = "btnOrigSize";
-            this.btnOrigSize.Size = new System.Drawing.Size(75, 23);
-            this.btnOrigSize.TabIndex = 31;
-            this.btnOrigSize.Text = "OrigSize";
-            this.btnOrigSize.UseVisualStyleBackColor = true;
-            this.btnOrigSize.Click += new System.EventHandler(this.btnOrigSize_Click);
+            btnOrigSize.Location = new Point(23, 201);
+            btnOrigSize.Margin = new Padding(4, 3, 4, 3);
+            btnOrigSize.Name = "btnOrigSize";
+            btnOrigSize.Size = new Size(88, 27);
+            btnOrigSize.TabIndex = 31;
+            btnOrigSize.Text = "OrigSize";
+            btnOrigSize.UseVisualStyleBackColor = true;
+            btnOrigSize.Click += btnOrigSize_Click;
             // 
             // Label4
             // 
-            this.Label4.AutoSize = true;
-            this.Label4.Location = new System.Drawing.Point(118, 206);
-            this.Label4.Name = "Label4";
-            this.Label4.Size = new System.Drawing.Size(46, 13);
-            this.Label4.TabIndex = 23;
-            this.Label4.Text = "Opacity:";
+            Label4.AutoSize = true;
+            Label4.Location = new Point(138, 238);
+            Label4.Margin = new Padding(4, 0, 4, 0);
+            Label4.Name = "Label4";
+            Label4.Size = new Size(51, 15);
+            Label4.TabIndex = 23;
+            Label4.Text = "Opacity:";
             // 
             // cbAspect
             // 
-            this.cbAspect.AutoSize = true;
-            this.cbAspect.Checked = true;
-            this.cbAspect.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbAspect.Location = new System.Drawing.Point(18, 110);
-            this.cbAspect.Name = "cbAspect";
-            this.cbAspect.Size = new System.Drawing.Size(85, 17);
-            this.cbAspect.TabIndex = 32;
-            this.cbAspect.Text = "keep aspect";
-            this.cbAspect.UseVisualStyleBackColor = true;
+            cbAspect.AutoSize = true;
+            cbAspect.Checked = true;
+            cbAspect.CheckState = CheckState.Checked;
+            cbAspect.Location = new Point(21, 127);
+            cbAspect.Margin = new Padding(4, 3, 4, 3);
+            cbAspect.Name = "cbAspect";
+            cbAspect.Size = new Size(88, 19);
+            cbAspect.TabIndex = 32;
+            cbAspect.Text = "keep aspect";
+            cbAspect.UseVisualStyleBackColor = true;
             // 
             // numX
             // 
-            this.numX.DecimalPlaces = 2;
-            this.numX.Location = new System.Drawing.Point(17, 35);
-            this.numX.Maximum = new decimal(new int[] {
-            32767,
-            0,
-            0,
-            0});
-            this.numX.Minimum = new decimal(new int[] {
-            32768,
-            0,
-            0,
-            -2147483648});
-            this.numX.Name = "numX";
-            this.numX.Size = new System.Drawing.Size(74, 20);
-            this.numX.TabIndex = 30;
-            this.numX.ValueChanged += new System.EventHandler(this.numX_ValueChanged);
+            numX.DecimalPlaces = 2;
+            numX.Location = new Point(20, 40);
+            numX.Margin = new Padding(4, 3, 4, 3);
+            numX.Maximum = new decimal(new int[] { 32767, 0, 0, 0 });
+            numX.Minimum = new decimal(new int[] { 32768, 0, 0, int.MinValue });
+            numX.Name = "numX";
+            numX.Size = new Size(86, 23);
+            numX.TabIndex = 30;
+            numX.ValueChanged += numX_ValueChanged;
             // 
             // numH
             // 
-            this.numH.DecimalPlaces = 2;
-            this.numH.Location = new System.Drawing.Point(121, 84);
-            this.numH.Maximum = new decimal(new int[] {
-            32767,
-            0,
-            0,
-            0});
-            this.numH.Name = "numH";
-            this.numH.Size = new System.Drawing.Size(74, 20);
-            this.numH.TabIndex = 24;
-            this.numH.ValueChanged += new System.EventHandler(this.numH_ValueChanged);
+            numH.DecimalPlaces = 2;
+            numH.Location = new Point(141, 97);
+            numH.Margin = new Padding(4, 3, 4, 3);
+            numH.Maximum = new decimal(new int[] { 32767, 0, 0, 0 });
+            numH.Name = "numH";
+            numH.Size = new Size(86, 23);
+            numH.TabIndex = 24;
+            numH.ValueChanged += numH_ValueChanged;
             // 
             // numW
             // 
-            this.numW.DecimalPlaces = 2;
-            this.numW.Location = new System.Drawing.Point(18, 84);
-            this.numW.Maximum = new decimal(new int[] {
-            32767,
-            0,
-            0,
-            0});
-            this.numW.Name = "numW";
-            this.numW.Size = new System.Drawing.Size(74, 20);
-            this.numW.TabIndex = 29;
-            this.numW.ValueChanged += new System.EventHandler(this.numW_ValueChanged);
+            numW.DecimalPlaces = 2;
+            numW.Location = new Point(21, 97);
+            numW.Margin = new Padding(4, 3, 4, 3);
+            numW.Maximum = new decimal(new int[] { 32767, 0, 0, 0 });
+            numW.Name = "numW";
+            numW.Size = new Size(86, 23);
+            numW.TabIndex = 29;
+            numW.ValueChanged += numW_ValueChanged;
             // 
             // numY
             // 
-            this.numY.DecimalPlaces = 2;
-            this.numY.Location = new System.Drawing.Point(120, 35);
-            this.numY.Maximum = new decimal(new int[] {
-            32767,
-            0,
-            0,
-            0});
-            this.numY.Minimum = new decimal(new int[] {
-            32768,
-            0,
-            0,
-            -2147483648});
-            this.numY.Name = "numY";
-            this.numY.Size = new System.Drawing.Size(74, 20);
-            this.numY.TabIndex = 25;
-            this.numY.ValueChanged += new System.EventHandler(this.numY_ValueChanged);
+            numY.DecimalPlaces = 2;
+            numY.Location = new Point(140, 40);
+            numY.Margin = new Padding(4, 3, 4, 3);
+            numY.Maximum = new decimal(new int[] { 32767, 0, 0, 0 });
+            numY.Minimum = new decimal(new int[] { 32768, 0, 0, int.MinValue });
+            numY.Name = "numY";
+            numY.Size = new Size(86, 23);
+            numY.TabIndex = 25;
+            numY.ValueChanged += numY_ValueChanged;
             // 
             // numRot
             // 
-            this.numRot.DecimalPlaces = 2;
-            this.numRot.Location = new System.Drawing.Point(21, 225);
-            this.numRot.Maximum = new decimal(new int[] {
-            360,
-            0,
-            0,
-            0});
-            this.numRot.Minimum = new decimal(new int[] {
-            360,
-            0,
-            0,
-            -2147483648});
-            this.numRot.Name = "numRot";
-            this.numRot.Size = new System.Drawing.Size(74, 20);
-            this.numRot.TabIndex = 28;
-            this.numRot.ValueChanged += new System.EventHandler(this.numRot_ValueChanged);
+            numRot.DecimalPlaces = 2;
+            numRot.Location = new Point(24, 260);
+            numRot.Margin = new Padding(4, 3, 4, 3);
+            numRot.Maximum = new decimal(new int[] { 360, 0, 0, 0 });
+            numRot.Minimum = new decimal(new int[] { 360, 0, 0, int.MinValue });
+            numRot.Name = "numRot";
+            numRot.Size = new Size(86, 23);
+            numRot.TabIndex = 28;
+            numRot.ValueChanged += numRot_ValueChanged;
             // 
             // numOpacity
             // 
-            this.numOpacity.DecimalPlaces = 2;
-            this.numOpacity.Increment = new decimal(new int[] {
-            1,
-            0,
-            0,
-            65536});
-            this.numOpacity.Location = new System.Drawing.Point(121, 225);
-            this.numOpacity.Maximum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.numOpacity.Name = "numOpacity";
-            this.numOpacity.Size = new System.Drawing.Size(74, 20);
-            this.numOpacity.TabIndex = 27;
-            this.numOpacity.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.numOpacity.ValueChanged += new System.EventHandler(this.numOpacity_ValueChanged);
+            numOpacity.DecimalPlaces = 2;
+            numOpacity.Increment = new decimal(new int[] { 1, 0, 0, 65536 });
+            numOpacity.Location = new Point(141, 260);
+            numOpacity.Margin = new Padding(4, 3, 4, 3);
+            numOpacity.Maximum = new decimal(new int[] { 1, 0, 0, 0 });
+            numOpacity.Name = "numOpacity";
+            numOpacity.Size = new Size(86, 23);
+            numOpacity.TabIndex = 27;
+            numOpacity.Value = new decimal(new int[] { 1, 0, 0, 0 });
+            numOpacity.ValueChanged += numOpacity_ValueChanged;
             // 
             // PicInfoCtrl
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.GroupBox1);
-            this.Name = "PicInfoCtrl";
-            this.Size = new System.Drawing.Size(240, 260);
-            this.GroupBox1.ResumeLayout(false);
-            this.GroupBox1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numX)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numH)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numW)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numY)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numRot)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numOpacity)).EndInit();
-            this.ResumeLayout(false);
-
+            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleMode = AutoScaleMode.Font;
+            Controls.Add(GroupBox1);
+            Margin = new Padding(4, 3, 4, 3);
+            Name = "PicInfoCtrl";
+            Size = new Size(280, 300);
+            GroupBox1.ResumeLayout(false);
+            GroupBox1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)numX).EndInit();
+            ((System.ComponentModel.ISupportInitialize)numH).EndInit();
+            ((System.ComponentModel.ISupportInitialize)numW).EndInit();
+            ((System.ComponentModel.ISupportInitialize)numY).EndInit();
+            ((System.ComponentModel.ISupportInitialize)numRot).EndInit();
+            ((System.ComponentModel.ISupportInitialize)numOpacity).EndInit();
+            ResumeLayout(false);
         }
 
         #endregion
