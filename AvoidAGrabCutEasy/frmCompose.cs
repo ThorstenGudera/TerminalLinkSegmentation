@@ -50,8 +50,8 @@ namespace AvoidAGrabCutEasy
                 bUpper = ScanForPic(bUpperTmp, 0);
 
                 //dont dispose, its the pic from hlc2
-                //bUpperTmp.Dispose();
-                //bUpperTmp = null;
+                bUpperTmp.Dispose();
+                bUpperTmp = null;
 
                 if (bUpper != null && AvailMem.AvailMem.checkAvailRam(bUpper.Width * bUpper.Height * 16L))
                 {
