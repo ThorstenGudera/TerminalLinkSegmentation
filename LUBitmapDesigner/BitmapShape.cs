@@ -19,6 +19,7 @@ namespace LUBitmapDesigner
         public override int ID { get; set; }
         public Bitmap? OrigBmp { get; set; }
         public bool IsLocked { get; set; }
+        public bool DrawUnrotatedFast { get; set; } = true;
 
         public BitmapShape()
         {
@@ -59,8 +60,10 @@ namespace LUBitmapDesigner
 
                 bool dI = this.CheckDrawInt();
 
-                //if (dI)
-                //    mx.Scale(1.04f, 1.04f); //.RotateAt(0.1f, new PointF(0f, 0f));
+                //make sure, drawing is done fast for scenes with a gdi+ compositing matrix equal the Identity.
+                //Comment this out to see the difference (use a larger pic)
+                if (dI && this.DrawUnrotatedFast)
+                    mx.RotateAt(0.1f, new PointF(10000f, 10000f));
 
                 gx.Transform = mx;
                 gx.SetClip(boundsZ);

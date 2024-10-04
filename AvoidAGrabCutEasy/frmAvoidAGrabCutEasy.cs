@@ -932,6 +932,7 @@ namespace AvoidAGrabCutEasy
             _undoOPCache = new Cache.UndoOPCache(this.GetType(), CachePathAddition, "testApp");
             if (this.helplineRulerCtrl1.Bmp != null)
                 _undoOPCache.Add(this.helplineRulerCtrl1.Bmp);
+            this.btnCache.Enabled = true;
         }
 
         private void bitmappanel1_DragOver(object? sender, DragEventArgs e)

@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             GroupBox1 = new GroupBox();
+            cbDrawFast = new CheckBox();
             cbIntVals = new CheckBox();
             Label6 = new Label();
             Button3 = new Button();
@@ -57,6 +58,7 @@
             // 
             // GroupBox1
             // 
+            GroupBox1.Controls.Add(cbDrawFast);
             GroupBox1.Controls.Add(cbIntVals);
             GroupBox1.Controls.Add(Label6);
             GroupBox1.Controls.Add(Button3);
@@ -82,6 +84,19 @@
             GroupBox1.TabIndex = 38;
             GroupBox1.TabStop = false;
             GroupBox1.Text = "Settings";
+            // 
+            // cbDrawFast
+            // 
+            cbDrawFast.AutoSize = true;
+            cbDrawFast.Checked = true;
+            cbDrawFast.CheckState = CheckState.Checked;
+            cbDrawFast.Location = new Point(141, 156);
+            cbDrawFast.Name = "cbDrawFast";
+            cbDrawFast.Size = new Size(77, 19);
+            cbDrawFast.TabIndex = 44;
+            cbDrawFast.Text = "Draw Fast";
+            cbDrawFast.UseVisualStyleBackColor = true;
+            cbDrawFast.CheckedChanged += cbDrawFast_CheckedChanged;
             // 
             // cbIntVals
             // 
@@ -311,5 +326,6 @@
         public System.Windows.Forms.NumericUpDown numRot;
         public System.Windows.Forms.NumericUpDown numOpacity;
         public CheckBox cbIntVals;
+        private CheckBox cbDrawFast;
     }
 }
