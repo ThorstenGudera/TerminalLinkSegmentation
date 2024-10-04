@@ -46,9 +46,9 @@ namespace LUBitmapDesigner
                 if (this.Zoom == 0f)
                     this.Zoom = 1f;
 
-                RectangleF boundsZ = new RectangleF(this.Bounds.X * this.Zoom, 
-                    this.Bounds.Y * this.Zoom, 
-                    this.Bounds.Width * this.Zoom, 
+                RectangleF boundsZ = new RectangleF(this.Bounds.X * this.Zoom,
+                    this.Bounds.Y * this.Zoom,
+                    this.Bounds.Width * this.Zoom,
                     this.Bounds.Height * this.Zoom);
 
                 GraphicsContainer con = gx.BeginContainer();
@@ -72,21 +72,12 @@ namespace LUBitmapDesigner
                 {
                     if (this.Rotation == 0f && dI)
                     {
-                        //gx.DrawImage(this.Bmp, (int)(this.Bounds.X * this.Zoom),
-                        //    (int)(this.Bounds.Y * this.Zoom),
-                        //    (int)(this.Bounds.Width * this.Zoom),
-                        //    (int)(this.Bounds.Height * this.Zoom));  
-                        
                         gx.DrawImage(this.Bmp, (int)boundsZ.X,
                             (int)boundsZ.Y,
                             (int)boundsZ.Width,
                             (int)boundsZ.Height);
                     }
                     else
-                        //gx.DrawImage(this.Bmp, this.Bounds.X * this.Zoom,
-                        //    this.Bounds.Y * this.Zoom,
-                        //    this.Bounds.Width * this.Zoom,
-                        //    this.Bounds.Height * this.Zoom);    
                         gx.DrawImage(this.Bmp, boundsZ);
                 }
                 else
@@ -114,10 +105,15 @@ namespace LUBitmapDesigner
 
         private bool CheckDrawInt()
         {
-            return ((this.Bounds.X * this.Zoom - (int)this.Bounds.X * this.Zoom == 0) &&
-                 (this.Bounds.Y * this.Zoom - (int)this.Bounds.Y * this.Zoom == 0) &&
-                 (this.Bounds.Width * this.Zoom - (int)this.Bounds.Width * this.Zoom == 0) &&
-                 (this.Bounds.Height * this.Zoom - (int)this.Bounds.Height * this.Zoom == 0));
+            return ((this.Bounds.X - (int)this.Bounds.X == 0) &&
+                 (this.Bounds.Y - (int)this.Bounds.Y == 0) &&
+                 (this.Bounds.Width - (int)this.Bounds.Width == 0) &&
+                 (this.Bounds.Height - (int)this.Bounds.Height == 0));
+
+            //return ((this.Bounds.X * this.Zoom - (int)this.Bounds.X * this.Zoom == 0) &&
+            //     (this.Bounds.Y * this.Zoom - (int)this.Bounds.Y * this.Zoom == 0) &&
+            //     (this.Bounds.Width * this.Zoom - (int)this.Bounds.Width * this.Zoom == 0) &&
+            //     (this.Bounds.Height * this.Zoom - (int)this.Bounds.Height * this.Zoom == 0));
         }
 
         public override void Dispose()
