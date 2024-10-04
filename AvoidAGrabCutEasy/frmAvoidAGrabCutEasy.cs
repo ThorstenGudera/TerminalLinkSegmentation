@@ -4143,7 +4143,7 @@ namespace AvoidAGrabCutEasy
             {
                 if (this.CachePathAddition != null)
                 {
-                    bool test = false;
+                    bool test = true;
                     if (test)
                     {
                         using (PseudoShadow.frmComposePseudoShadow frm = new PseudoShadow.frmComposePseudoShadow(new Bitmap(this.helplineRulerCtrl2.Bmp), this.CachePathAddition))

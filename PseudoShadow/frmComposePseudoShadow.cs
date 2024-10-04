@@ -1040,7 +1040,7 @@ namespace PseudoShadow
                 {
                     if (this.luBitmapDesignerCtrl1.SelectedShape != null && this.luBitmapDesignerCtrl1.SelectedShape.Bmp != null)
                     {
-                        Bitmap? bmp = this.luBitmapDesignerCtrl1.SelectedShape.Bmp;
+                        Bitmap? bmp = this.GetNewSizedBitmap(this.luBitmapDesignerCtrl1.SelectedShape.Bmp, blur);
 
                         if (bmp != null)
                         {
@@ -1056,6 +1056,17 @@ namespace PseudoShadow
                                 true, true, true, true, conv, true, false);
 
                             conv.ProgressPlus -= Conv_ProgressPlus;
+
+                            Bitmap? b2 = this.luBitmapDesignerCtrl1.SelectedShape.Bmp;
+                            this.luBitmapDesignerCtrl1.SelectedShape.Bmp = bmp;
+                            this.luBitmapDesignerCtrl1.SelectedShape.Bounds =
+                                new RectangleF((this.luBitmapDesignerCtrl1.SelectedShape.Bounds.X - blur) * this.luBitmapDesignerCtrl1.SelectedShape.Zoom,
+                                (this.luBitmapDesignerCtrl1.SelectedShape.Bounds.Y - blur) * this.luBitmapDesignerCtrl1.SelectedShape.Zoom,
+                                this.luBitmapDesignerCtrl1.SelectedShape.Bmp.Width * this.luBitmapDesignerCtrl1.SelectedShape.Zoom,
+                                this.luBitmapDesignerCtrl1.SelectedShape.Bmp.Height * this.luBitmapDesignerCtrl1.SelectedShape.Zoom);
+                            if (b2 != null)
+                                b2.Dispose();
+                            b2 = null;
                         }
                     }
                     e.Result = b;
@@ -1063,6 +1074,19 @@ namespace PseudoShadow
             }
             else
                 e.Result = false;
+        }
+
+        private Bitmap? GetNewSizedBitmap(Bitmap bmp, int blur)
+        {
+            Bitmap? b = null;
+            if (bmp != null && blur > 0)
+            {
+                b = new Bitmap(bmp.Width + blur * 2 + 1, bmp.Height + blur * 2 + 1);
+                using Graphics gx = Graphics.FromImage(b);
+                gx.DrawImage(bmp, new PointF((b.Width - bmp.Width) / 2f, (b.Width - bmp.Width) / 2f));
+            }
+
+            return b;
         }
 
         private void Conv_ProgressPlus(object sender, ProgressEventArgs e)
