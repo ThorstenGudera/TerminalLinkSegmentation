@@ -56,14 +56,14 @@ namespace LUBitmapDesigner
                 Matrix mx = gx.Transform;
 
                 if (this.Rotation != 0f)
-                    mx.RotateAt(this.Rotation, new PointF(this.Bounds.X * this.Zoom, this.Bounds.Y * this.Zoom));
+                    mx.RotateAt(this.Rotation, new PointF(boundsZ.X, boundsZ.Y));
 
                 bool dI = this.CheckDrawInt();
 
                 //make sure, drawing is done fast for scenes with a gdi+ compositing matrix equal the Identity.
                 //Comment this out to see the difference (use a larger pic)
                 if (dI && this.DrawUnrotatedFast)
-                    mx.RotateAt(0.1f, new PointF(10000f, 10000f));
+                    mx.RotateAt(0.05f, new PointF(boundsZ.Width / 2f, boundsZ.Height / 2f));
 
                 gx.Transform = mx;
                 gx.SetClip(boundsZ);

@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             GroupBox1 = new GroupBox();
+            cbPersist = new CheckBox();
             cbDrawFast = new CheckBox();
             cbIntVals = new CheckBox();
             Label6 = new Label();
@@ -58,6 +59,7 @@
             // 
             // GroupBox1
             // 
+            GroupBox1.Controls.Add(cbPersist);
             GroupBox1.Controls.Add(cbDrawFast);
             GroupBox1.Controls.Add(cbIntVals);
             GroupBox1.Controls.Add(Label6);
@@ -80,10 +82,22 @@
             GroupBox1.Margin = new Padding(4, 3, 4, 3);
             GroupBox1.Name = "GroupBox1";
             GroupBox1.Padding = new Padding(4, 3, 4, 3);
-            GroupBox1.Size = new Size(251, 294);
+            GroupBox1.Size = new Size(275, 294);
             GroupBox1.TabIndex = 38;
             GroupBox1.TabStop = false;
             GroupBox1.Text = "Settings";
+            // 
+            // cbPersist
+            // 
+            cbPersist.AutoSize = true;
+            cbPersist.Checked = true;
+            cbPersist.CheckState = CheckState.Checked;
+            cbPersist.Location = new Point(155, 180);
+            cbPersist.Name = "cbPersist";
+            cbPersist.Size = new Size(101, 19);
+            cbPersist.TabIndex = 45;
+            cbPersist.Text = "persist normal";
+            cbPersist.UseVisualStyleBackColor = true;
             // 
             // cbDrawFast
             // 
@@ -294,7 +308,7 @@
             Controls.Add(GroupBox1);
             Margin = new Padding(4, 3, 4, 3);
             Name = "PicInfoCtrl";
-            Size = new Size(280, 300);
+            Size = new Size(304, 300);
             GroupBox1.ResumeLayout(false);
             GroupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)numX).EndInit();
@@ -327,5 +341,6 @@
         public System.Windows.Forms.NumericUpDown numOpacity;
         public CheckBox cbIntVals;
         private CheckBox cbDrawFast;
+        public CheckBox cbPersist;
     }
 }

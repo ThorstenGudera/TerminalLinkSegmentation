@@ -214,8 +214,11 @@ namespace LUBitmapDesigner
 
         private void cbDrawFast_CheckedChanged(object sender, EventArgs e)
         {
-            if(this._curShape != null)
+            if (this._curShape != null)
+            {
                 this._curShape.DrawUnrotatedFast = this.cbDrawFast.Checked;
+                ShapeChanged?.Invoke(this, this._curShape);
+            }
         }
     }
 }
