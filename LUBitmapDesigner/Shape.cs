@@ -9,6 +9,8 @@ namespace LUBitmapDesigner
 {
     public abstract class Shape : IDisposable
     {
+        internal static int Cnt = 0;
+        public abstract int ID { get; set; }
         public abstract RectangleF Bounds { get; set; }
         public abstract float Rotation { get; set; }
         public abstract float Zoom { get; set; }

@@ -17,11 +17,15 @@ namespace LUBitmapDesigner
         private int _ix;
         private int _iy;
         private float _rotationStart;
+        public BitmapShape? SelectedShape { get; set; }
+        public PointF CurPt { get; private set; }
+        public bool ShadowMode { get; set; }
 
         public ShapeList? ShapeList { get; set; }
-        public BitmapShape? SelectedShape { get; private set; }
 
         public event EventHandler<BitmapShape>? ShapeChanged;
+        public event EventHandler<BitmapShape>? ShapeRemoved;
+        public event EventHandler<bool>? SPC;
 
         public LUBitmapDesignerCtrl()
         {
@@ -32,7 +36,7 @@ namespace LUBitmapDesigner
         {
             Bitmap bLower = new Bitmap(this.Width, this.Height);
             if (this.ShapeList == null)
-                this.ShapeList = new ShapeList();
+                this.ShapeList = this.ShadowMode ? new ShadowShapeList() : new ShapeList();
             BitmapShape b = new BitmapShape() { Bmp = bLower, Bounds = new RectangleF(0, 0, bLower.Width, bLower.Height), Rotation = 0, Zoom = 1f };
             this.ShapeList.Add(b);
 
@@ -43,10 +47,12 @@ namespace LUBitmapDesigner
         {
             Bitmap? bOut = null;
             if (this.ShapeList == null)
-                this.ShapeList = new ShapeList();
+                this.ShapeList = this.ShadowMode ? new ShadowShapeList() : new ShapeList();
             if (this.ShapeList.Count == 0)
                 SetBlankLowerImage();
-            if (this.ShapeList.Count > 1)
+            if (this.ShapeList.Count > 2)
+                bOut = this.ShapeList[2].Bmp;
+            else if (this.ShapeList.Count > 1)
                 bOut = this.ShapeList[1].Bmp;
 
             return bOut;
@@ -57,46 +63,89 @@ namespace LUBitmapDesigner
             if (AvailMem.AvailMem.checkAvailRam(bmp.Width * bmp.Height * 16L))
             {
                 if (this.ShapeList == null)
-                    this.ShapeList = new ShapeList();
+                    this.ShapeList = this.ShadowMode ? new ShadowShapeList() : new ShapeList();
                 if (this.ShapeList.Count == 0)
                     SetBlankLowerImage();
+
                 if (bmp != null && this.ShapeList.Count > 0)
                 {
-                    for (int i = 2; i < this.ShapeList.Count; i++)
-                        this.ShapeList.RemoveAt(i);
-
-                    int cnt = this.ShapeList.Count;
-
-                    BitmapShape? b = null;
-                    if (this.ShapeList.Count > 1)
-                        b = this.ShapeList[1];
-
-                    RectangleF? r = null;
-                    float? rot = null;
-                    //old loaction and size
-                    if (b != null)
+                    if (this.ShapeList is ShadowShapeList)
                     {
-                        r = b.Bounds;
-                        rot = b.Rotation;
+                        for (int i = 3; i < this.ShapeList.Count; i++)
+                            this.ShapeList.RemoveAt(i);
+
+                        int cnt = this.ShapeList.Count;
+
+                        BitmapShape? b = null;
+                        if (this.ShapeList.Count > 1)
+                            b = this.ShapeList[this.ShapeList.Count - 1];
+
+                        RectangleF? r = null;
+                        float? rot = null;
+                        //old location and size
+                        if (b != null)
+                        {
+                            r = b.Bounds;
+                            rot = b.Rotation;
+                        }
+
+                        RectangleF rc = new RectangleF(x, y, bmp.Width, bmp.Height);
+
+                        this.ShapeList.AllowAdding = true;
+                        this.ShapeList.Add(new BitmapShape() { Bmp = bmp, Bounds = rc, Rotation = 0, Zoom = 1f });
+                        if (r != null && rot != null)
+                        {
+                            this.ShapeList[this.ShapeList.Count - 1].Bounds = r.Value;
+                            this.ShapeList[this.ShapeList.Count - 1].Rotation = rot.Value;
+                        }
+
+                        if (cnt >= 2)
+                            this.ShapeList.RemoveAt(cnt - 1);
+
+                        if (b != null)
+                        {
+                            b.Dispose();
+                            b = null;
+                        }
                     }
-
-                    RectangleF rc = new RectangleF(x, y, bmp.Width, bmp.Height);
-
-                    this.ShapeList.AllowAdding = true;
-                    this.ShapeList.Add(new BitmapShape() { Bmp = bmp, Bounds = rc, Rotation = 0, Zoom = 1f });
-                    if (r != null && rot != null)
+                    else
                     {
-                        this.ShapeList[this.ShapeList.Count - 1].Bounds = r.Value;
-                        this.ShapeList[this.ShapeList.Count - 1].Rotation = rot.Value;
-                    }
+                        for (int i = 2; i < this.ShapeList.Count; i++)
+                            this.ShapeList.RemoveAt(i);
 
-                    if (cnt >= 2)
-                        this.ShapeList.RemoveAt(1);
+                        int cnt = this.ShapeList.Count;
 
-                    if (b != null)
-                    {
-                        b.Dispose();
-                        b = null;
+                        BitmapShape? b = null;
+                        if (this.ShapeList.Count > 1)
+                            b = this.ShapeList[1];
+
+                        RectangleF? r = null;
+                        float? rot = null;
+                        //old location and size
+                        if (b != null)
+                        {
+                            r = b.Bounds;
+                            rot = b.Rotation;
+                        }
+
+                        RectangleF rc = new RectangleF(x, y, bmp.Width, bmp.Height);
+
+                        this.ShapeList.AllowAdding = true;
+                        this.ShapeList.Add(new BitmapShape() { Bmp = bmp, Bounds = rc, Rotation = 0, Zoom = 1f });
+                        if (r != null && rot != null)
+                        {
+                            this.ShapeList[this.ShapeList.Count - 1].Bounds = r.Value;
+                            this.ShapeList[this.ShapeList.Count - 1].Rotation = rot.Value;
+                        }
+
+                        if (cnt >= 2)
+                            this.ShapeList.RemoveAt(1);
+
+                        if (b != null)
+                        {
+                            b.Dispose();
+                            b = null;
+                        }
                     }
                 }
 
@@ -118,6 +167,35 @@ namespace LUBitmapDesigner
 
             this.helplineRulerCtrl1.dbPanel1.AutoScrollMinSize = new Size(System.Convert.ToInt32(this.helplineRulerCtrl1.Bmp?.Width * this.helplineRulerCtrl1.Zoom), System.Convert.ToInt32(this.helplineRulerCtrl1.Bmp?.Height * this.helplineRulerCtrl1.Zoom));
             this.helplineRulerCtrl1.MakeBitmap(this.helplineRulerCtrl1.Bmp);
+        }
+
+        public void AddUpperImage(Bitmap bmp)
+        {
+            if (this.ShapeList != null)
+            {
+                for (int i = 3; i < this.ShapeList.Count; i++)
+                    this.ShapeList.RemoveAt(i);
+
+                int cnt = this.ShapeList.Count;
+
+                BitmapShape? b = null;
+                if (this.ShapeList.Count > 1)
+                    b = this.ShapeList[this.ShapeList.Count - 1];
+
+                RectangleF? r = null;
+                float? rot = null;
+                //old location and size
+                if (b != null)
+                {
+                    r = b.Bounds;
+                    rot = b.Rotation;
+                }
+
+                RectangleF rc = new RectangleF(0, 0, bmp.Width, bmp.Height);
+
+                //this.ShapeList.AllowAdding = true;
+                this.ShapeList.Add(new BitmapShape() { Bmp = bmp, Bounds = rc, Rotation = 0, Zoom = 1f });
+            }
         }
 
         private void helplineRulerCtrl1_Load(object sender, EventArgs e)
@@ -142,17 +220,25 @@ namespace LUBitmapDesigner
                 int ix = (int)((e.X - this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X) / (double)this.helplineRulerCtrl1.Zoom);
                 int iy = (int)((e.Y - this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y) / (double)this.helplineRulerCtrl1.Zoom);
 
+                this.SelectedShape = null;
+                this.SPC?.Invoke(this, false);
+
                 if (this.ShapeList.Count > 1 && (e.Button == MouseButtons.Left || e.Button == MouseButtons.Right))
                 {
-                    if (HitTest(ix, iy))
+                    int id = HitTest(ix, iy);
+
+                    if (id > -1)
                     {
                         this._ix = ix;
                         this._iy = iy;
 
+                        BitmapShape b = this.ShapeList.Shapes.Where(a => a.ID == id).First();
+                        this.SelectedShape = b;
+                        this.CurPt = new PointF(ix - b.Bounds.X, iy - b.Bounds.Y);
+                        this.SPC?.Invoke(this, true);
+
                         if (e.Button == MouseButtons.Right && this.SelectedShape?.IsLocked == false)
                         {
-                            BitmapShape b = this.ShapeList[1];
-
                             float xP1 = ix - b.Bounds.X;
                             float yP1 = iy - b.Bounds.Y;
 
@@ -160,12 +246,14 @@ namespace LUBitmapDesigner
                         }
                     }
                 }
+
+                this.helplineRulerCtrl1.dbPanel1.Invalidate();
             }
         }
 
         private void helplineRulerCtrl1_MouseMove(object? sender, MouseEventArgs e)
         {
-            if (this.ShapeList?.Count > 1 && e.Button == MouseButtons.Left && this.SelectedShape?.IsLocked == false)
+            if (this.ShapeList?.Count > 1 && e.Button == MouseButtons.Left)
             {
                 int ix = (int)((e.X - this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X) / (double)this.helplineRulerCtrl1.Zoom);
                 int iy = (int)((e.Y - this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y) / (double)this.helplineRulerCtrl1.Zoom);
@@ -175,92 +263,92 @@ namespace LUBitmapDesigner
 
                 if (ix >= 0 && ix < this.helplineRulerCtrl1.Bmp.Width && iy >= 0 && iy < this.helplineRulerCtrl1.Bmp.Height)
                 {
-                    if (HitTest(ix, iy))
+                    if (this.SelectedShape != null && this.SelectedShape?.IsLocked == false)
                     {
-                        BitmapShape b = this.ShapeList[1];
-                        b.Bounds = new RectangleF(b.Bounds.X + (ix - _ix), b.Bounds.Y + (iy - _iy), b.Bounds.Width, b.Bounds.Height);
+                        this.SelectedShape.Bounds = new RectangleF(this.SelectedShape.Bounds.X + (ix - _ix), this.SelectedShape.Bounds.Y + (iy - _iy), this.SelectedShape.Bounds.Width, this.SelectedShape.Bounds.Height);
                         this._ix = ix;
                         this._iy = iy;
                         this.helplineRulerCtrl1.dbPanel1.Invalidate();
+
+                        ShapeChanged?.Invoke(this, this.SelectedShape);
                     }
                 }
             }
-            if (this.ShapeList?.Count > 1 && e.Button == MouseButtons.Right && this.SelectedShape?.IsLocked == false)
+            if (this.ShapeList?.Count > 1 && e.Button == MouseButtons.Right)
             {
                 int ix = (int)((e.X - this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X) / (double)this.helplineRulerCtrl1.Zoom);
                 int iy = (int)((e.Y - this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y) / (double)this.helplineRulerCtrl1.Zoom);
 
                 if (ix >= 0 && ix < this.helplineRulerCtrl1.Bmp.Width && iy >= 0 && iy < this.helplineRulerCtrl1.Bmp.Height)
                 {
-                    if (HitTest(ix, iy))
+                    if (this.SelectedShape != null && this.SelectedShape?.IsLocked == false)
                     {
-                        BitmapShape b = this.ShapeList[1];
-
-                        PointF f = b.Bounds.Location;
+                        PointF f = this.SelectedShape.Bounds.Location;
 
                         float pX = ix - f.X;
                         float pY = iy - f.Y;
 
-                        b.Rotation = (float)(Math.Atan2(pY, pX) / (Math.PI / 180.0)) - _rotationStart;
+                        this.SelectedShape.Rotation = (float)(Math.Atan2(pY, pX) / (Math.PI / 180.0)) - _rotationStart;
 
-                        if (b.Rotation > 360.0F)
-                            b.Rotation -= 360;
+                        if (this.SelectedShape.Rotation > 360.0F)
+                            this.SelectedShape.Rotation -= 360;
 
-                        if (b.Rotation < -360.0F)
-                            b.Rotation += 360;
+                        if (this.SelectedShape.Rotation < -360.0F)
+                            this.SelectedShape.Rotation += 360;
 
                         this.helplineRulerCtrl1.dbPanel1.Invalidate();
+
+                        ShapeChanged?.Invoke(this, this.SelectedShape);
                     }
                 }
             }
         }
 
-        private bool HitTest(int ix, int iy)
+        private int HitTest(int ix, int iy)
         {
             // check, if a DrawnRectangle is at the current point
             if (this.ShapeList != null && this.ShapeList.Count > 1)
             {
-                this.SelectedShape = null;
-                // we use a GraphicsPath for testing, because it is easy to handle when obects are rotated
-                // then, we simply rotate the path
-                using (GraphicsPath gP = new GraphicsPath())
+                for (int i = this.ShapeList.Count - 1; i > 0; i--)
                 {
-                    gP.FillMode = FillMode.Winding;
-
-                    using (Matrix m = new Matrix(1, 0, 0, 1, 0, 0))
+                    // we use a GraphicsPath for testing, because it is easy to handle when obects are rotated
+                    // then, we simply rotate the path
+                    using (GraphicsPath gP = new GraphicsPath())
                     {
-                        gP.AddRectangle(this.ShapeList[1].Bounds);
+                        gP.FillMode = FillMode.Winding;
 
-                        // setup the matrix
-                        if (this.ShapeList[1].Rotation != 0)
-                            m.RotateAt(this.ShapeList[1].Rotation, this.ShapeList[1].Bounds.Location, MatrixOrder.Prepend);
+                        using (Matrix m = new Matrix(1, 0, 0, 1, 0, 0))
+                        {
+                            gP.AddRectangle(this.ShapeList[i].Bounds);
 
-                        // and transform (here: rotate) the path
-                        gP.Transform(m);
-                    }
+                            // setup the matrix
+                            if (this.ShapeList[i].Rotation != 0)
+                                m.RotateAt(this.ShapeList[i].Rotation, this.ShapeList[i].Bounds.Location, MatrixOrder.Prepend);
 
-                    PointF p = new PointF(ix, iy);
+                            // and transform (here: rotate) the path
+                            gP.Transform(m);
+                        }
 
-                    // with the method "IsVisible" we check, if the current point is inside the path
-                    if (gP.IsVisible(p))
-                    {
-                        ShapeChanged?.Invoke(this, this.ShapeList[1]);
-                        gP.Dispose();
-                        this.SelectedShape = this.ShapeList[1];
-                        return true;
+                        PointF p = new PointF(ix, iy);
+
+                        // with the method "IsVisible" we check, if the current point is inside the path
+                        if (gP.IsVisible(p))
+                        {
+                            ShapeChanged?.Invoke(this, this.ShapeList[i]);
+                            gP.Dispose();
+                            return this.ShapeList[i].ID;
+                        }
                     }
                 }
             }
 
-            return false;
+            return -1;
         }
 
         private void helplineRulerCtrl1_MouseUp(object? sender, MouseEventArgs e)
         {
-            if (this.ShapeList?.Count > 1 && e.Button == MouseButtons.Left && this.SelectedShape?.IsLocked == false)
-            {
-                BitmapShape b = this.ShapeList[1];
-            }
+            if (this.ShapeList?.Count > 1 && e.Button == MouseButtons.Left && this.SelectedShape != null && this.SelectedShape?.IsLocked == false)
+                ShapeChanged?.Invoke(this, this.SelectedShape);
         }
 
         private void helplineRulerCtrl1_Paint(object? sender, PaintEventArgs e)
@@ -269,7 +357,34 @@ namespace LUBitmapDesigner
             {
                 e.Graphics.TranslateTransform(this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X,
                     this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y);
+
                 this.ShapeList[1].Draw(e.Graphics);
+                if (this.ShapeList.Count > 2)
+                    this.ShapeList[2].Draw(e.Graphics);
+
+                if (this.SelectedShape != null)
+                {
+                    RectangleF rc = new RectangleF(this.SelectedShape.Bounds.X * this.helplineRulerCtrl1.Zoom,
+                      this.SelectedShape.Bounds.Y * this.helplineRulerCtrl1.Zoom,
+                      this.SelectedShape.Bounds.Width * this.helplineRulerCtrl1.Zoom,
+                      this.SelectedShape.Bounds.Height * this.helplineRulerCtrl1.Zoom);
+
+                    using GraphicsPath gP = new GraphicsPath();
+                    gP.AddRectangle(rc);
+
+                    if (this.SelectedShape.Rotation != 0f)
+                    {
+                        using Matrix mx = new Matrix(1f, 0, 0, 1f, 0, 0);
+                        mx.RotateAt(this.SelectedShape.Rotation, new PointF(rc.X, rc.Y));
+                        gP.Transform(mx);
+                    }
+
+                    e.Graphics.SetClip(gP);
+                    using Pen pen = new Pen(Color.Red, 2);
+                    e.Graphics.DrawPath(pen, gP);
+                    e.Graphics.ResetClip();
+                }
+
                 e.Graphics.ResetTransform();
             }
         }
@@ -330,6 +445,16 @@ namespace LUBitmapDesigner
                     this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition = new Point(Int16.MaxValue, Int16.MaxValue);
                     return true;
                 }
+
+                if (this.SelectedShape != null && keyData == Keys.Delete)
+                {
+                    //this.ShapeList?.Remove(this.SelectedShape);
+                    //this.SelectedShape = null;
+                    //this.helplineRulerCtrl1.dbPanel1.Invalidate();
+
+                    this.ShapeRemoved?.Invoke(this, this.SelectedShape);
+                    return true;
+                }
             }
 
             return base.ProcessCmdKey(ref msg, keyData);
@@ -380,6 +505,23 @@ namespace LUBitmapDesigner
             }
         }
 
+        public void SetSelectedImage(Bitmap bmp, float x, float y)
+        {
+            if (this.SelectedShape != null)
+            {
+                this.SelectedShape.Bmp = bmp;
+                this.SelectedShape.Bounds = new RectangleF(x, y, this.SelectedShape.Bounds.Width, this.SelectedShape.Bounds.Height);
+                this.helplineRulerCtrl1.dbPanel1.Invalidate();
+            }
+        }
 
+        private void helplineRulerCtrl1_DBPanelDblClicked(object sender, HelplineRulerControl.ZoomEventArgs e)
+        {
+            for (int i = 1; i < this.ShapeList?.Count; i++)
+            {
+                if (this.ShapeList[i].Zoom != e.Zoom)
+                    SetZoom(e.Zoom.ToString());
+            }
+        }
     }
 }

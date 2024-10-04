@@ -28,37 +28,40 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.helplineRulerCtrl1 = new HelplineRulerControl.HelplineRulerCtrl();
-            this.SuspendLayout();
+            helplineRulerCtrl1 = new HelplineRulerControl.HelplineRulerCtrl();
+            SuspendLayout();
             // 
             // helplineRulerCtrl1
             // 
-            this.helplineRulerCtrl1.Bmp = null;
-            this.helplineRulerCtrl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.helplineRulerCtrl1.DontDoLayout = false;
-            this.helplineRulerCtrl1.DontHandleDoubleClick = false;
-            this.helplineRulerCtrl1.DontPaintBaseImg = false;
-            this.helplineRulerCtrl1.DontProcDoubleClick = false;
-            this.helplineRulerCtrl1.IgnoreZoom = false;
-            this.helplineRulerCtrl1.Location = new System.Drawing.Point(0, 0);
-            this.helplineRulerCtrl1.MoveHelpLinesOnResize = false;
-            this.helplineRulerCtrl1.Name = "helplineRulerCtrl1";
-            this.helplineRulerCtrl1.SetZoomOnlyByMethodCall = false;
-            this.helplineRulerCtrl1.Size = new System.Drawing.Size(750, 750);
-            this.helplineRulerCtrl1.TabIndex = 0;
-            this.helplineRulerCtrl1.Zoom = 1F;
-            this.helplineRulerCtrl1.ZoomSetManually = false;
-            this.helplineRulerCtrl1.Load += new System.EventHandler(this.helplineRulerCtrl1_Load);
+            helplineRulerCtrl1.Bmp = null;
+            helplineRulerCtrl1.Dock = DockStyle.Fill;
+            helplineRulerCtrl1.DontDoLayout = false;
+            helplineRulerCtrl1.DontHandleDoubleClick = false;
+            helplineRulerCtrl1.DontPaintBaseImg = false;
+            helplineRulerCtrl1.DontProcDoubleClick = false;
+            helplineRulerCtrl1.DrawModeClipped = false;
+            helplineRulerCtrl1.IgnoreZoom = false;
+            helplineRulerCtrl1.Location = new Point(0, 0);
+            helplineRulerCtrl1.Margin = new Padding(5, 3, 5, 3);
+            helplineRulerCtrl1.MoveHelpLinesOnResize = false;
+            helplineRulerCtrl1.Name = "helplineRulerCtrl1";
+            helplineRulerCtrl1.SetZoomOnlyByMethodCall = false;
+            helplineRulerCtrl1.Size = new Size(875, 865);
+            helplineRulerCtrl1.TabIndex = 0;
+            helplineRulerCtrl1.Zoom = 1F;
+            helplineRulerCtrl1.ZoomSetManually = false;
+            helplineRulerCtrl1.DBPanelDblClicked += helplineRulerCtrl1_DBPanelDblClicked;
+            helplineRulerCtrl1.Load += helplineRulerCtrl1_Load;
             // 
             // LUBitmapDesignerCtrl
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.helplineRulerCtrl1);
-            this.Name = "LUBitmapDesignerCtrl";
-            this.Size = new System.Drawing.Size(750, 750);
-            this.ResumeLayout(false);
-
+            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleMode = AutoScaleMode.Font;
+            Controls.Add(helplineRulerCtrl1);
+            Margin = new Padding(4, 3, 4, 3);
+            Name = "LUBitmapDesignerCtrl";
+            Size = new Size(875, 865);
+            ResumeLayout(false);
         }
 
         #endregion

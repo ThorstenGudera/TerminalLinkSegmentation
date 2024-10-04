@@ -93,6 +93,7 @@
             cbIntVals.TabIndex = 43;
             cbIntVals.Text = "Int vals";
             cbIntVals.UseVisualStyleBackColor = true;
+            cbIntVals.CheckedChanged += cbIntVals_CheckedChanged;
             // 
             // Label6
             // 
@@ -293,7 +294,6 @@
         #endregion
 
         internal System.Windows.Forms.GroupBox GroupBox1;
-        internal System.Windows.Forms.CheckBox cbIntVals;
         internal System.Windows.Forms.Label Label6;
         public System.Windows.Forms.Button Button3;
         public System.Windows.Forms.Button Button1;
@@ -310,5 +310,6 @@
         public System.Windows.Forms.NumericUpDown numY;
         public System.Windows.Forms.NumericUpDown numRot;
         public System.Windows.Forms.NumericUpDown numOpacity;
+        public CheckBox cbIntVals;
     }
 }

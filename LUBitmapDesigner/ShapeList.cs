@@ -17,7 +17,7 @@ namespace LUBitmapDesigner
 
         public bool AllowAdding { get; set; }
 
-        private const int _MAXSIZE = 2;
+        internal const int _MAXSIZE = 2;
 
         internal ShapeList()
         {
@@ -36,12 +36,12 @@ namespace LUBitmapDesigner
             }
         }
 
-        internal void Add(BitmapShape b)
+        public void Add(BitmapShape b)
         {
             if (this.Shapes == null)
                 this.Shapes = new List<BitmapShape>();
 
-            if (this.Shapes.Count < ShapeList._MAXSIZE || this.AllowAdding)
+            if (this.Shapes.Count < ShadowShapeList._SHADOWMAXSIZE || this.AllowAdding)
             {
                 this.Shapes.Add(b);
                 this.AllowAdding = false;
@@ -50,7 +50,7 @@ namespace LUBitmapDesigner
                 throw new Exception("This List already contains its maximum amount of Shapes");
         }
 
-        internal void Remove(BitmapShape? b)
+        public void Remove(BitmapShape? b)
         {
             if (this.Shapes == null)
                 this.Shapes = new List<BitmapShape>();
@@ -63,7 +63,7 @@ namespace LUBitmapDesigner
             }
         }
 
-        internal void RemoveAt(int index)
+        public void RemoveAt(int index)
         {
             BitmapShape? bitmapShape = this.Shapes[index];
             this.Shapes.RemoveAt(index);
@@ -71,9 +71,46 @@ namespace LUBitmapDesigner
             bitmapShape = null;
         }
 
-        internal void Clear()
+        public void Clear()
         {
+            for (int j = this.Shapes.Count - 1; j >= 0; j--)
+            {
+                BitmapShape? b = this.Shapes[j];
+                b.Dispose();
+                b = null;
+            }
+
             this.Shapes.Clear();
+        }
+
+        public void ClearWithoutBG()
+        {
+            for (int j = this.Shapes.Count - 1; j > 0; j--)
+            {
+                BitmapShape? b = this.Shapes[j];
+                this.Shapes.RemoveAt(j);
+                b.Dispose();
+                b = null;
+            }
+        }
+
+        public BitmapShape? GetShapeById(int id)
+        {
+            BitmapShape? bOut = null;
+
+            IEnumerable<BitmapShape> b = this.Shapes.Where(a => a.ID == id);
+            if (b != null)
+                bOut = b.First();
+
+            return bOut;
+        }
+
+        public bool AddingAllowed(bool shadowMode)
+        {
+            if (shadowMode)
+                return this.Count < ShadowShapeList._SHADOWMAXSIZE;
+            else
+                return this.Count < ShapeList._MAXSIZE;
         }
     }
 }

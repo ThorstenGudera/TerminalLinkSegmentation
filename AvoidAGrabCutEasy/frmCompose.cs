@@ -37,22 +37,167 @@ namespace AvoidAGrabCutEasy
 
         private string? m_CachePathAddition;
 
-        public frmCompose(Bitmap bUpper, string basePathAddition)
+        public frmCompose(Bitmap? bUpperTmp, string basePathAddition)
         {
             InitializeComponent();
 
             CachePathAddition = basePathAddition;
 
-            if (AvailMem.AvailMem.checkAvailRam(bUpper.Width * bUpper.Height * 16L))
-            {
-                this._bmpBU = new Bitmap(bUpper);
-                this.luBitmapDesignerCtrl1.SetUpperImage(new Bitmap(bUpper), 0, 0);
-            }
-            else
-                MessageBox.Show("Not enough memory.");
+            Bitmap? bUpper = null;
 
-            this.luBitmapDesignerCtrl1.ShapeChanged += LuBitmapDesignerCtrl1_ShapeChanged;
-            this.picInfoCtrl1.ShapeChanged += PicInfoCtrl1_ShapeChanged;
+            if (bUpperTmp != null)
+            {
+                bUpper = ScanForPic(bUpperTmp, 0);
+
+                //dont dispose, its the pic from hlc2
+                //bUpperTmp.Dispose();
+                //bUpperTmp = null;
+
+                if (bUpper != null && AvailMem.AvailMem.checkAvailRam(bUpper.Width * bUpper.Height * 16L))
+                {
+                    this._bmpBU = new Bitmap(bUpper);
+                    this.luBitmapDesignerCtrl1.SetUpperImage(new Bitmap(bUpper), 0, 0);
+                }
+                else
+                    MessageBox.Show("Not enough memory.");
+
+                this.luBitmapDesignerCtrl1.ShapeChanged += LuBitmapDesignerCtrl1_ShapeChanged;
+                this.picInfoCtrl1.ShapeChanged += PicInfoCtrl1_ShapeChanged;
+            }
+        }
+
+        public Bitmap? ScanForPic(Bitmap bmp, int add)
+        {
+            // GDI+ still lies to us - the return format is BGR, NOT RGB.
+            BitmapData? bmData = null;
+
+            try
+            {
+                bmData = bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height), ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
+
+                int scanline = bmData.Stride;
+
+                System.IntPtr Scan0 = bmData.Scan0;
+
+                Point top = new Point(), left = new Point(), right = new Point(), bottom = new Point();
+                bool complete = false;
+
+                unsafe
+                {
+                    byte* p = (byte*)(void*)Scan0;
+
+                    for (int y = 0; y < bmp.Height; y++)
+                    {
+                        for (int x = 0; x < bmp.Width; x++)
+                        {
+                            if (p[3] != 0)
+                            {
+                                top = new Point(x, y);
+                                complete = true;
+                                break;
+                            }
+
+                            p += 4;
+                        }
+                        if (complete)
+                            break;
+                    }
+
+                    p = (byte*)(void*)Scan0;
+                    complete = false;
+
+                    for (int y = bmp.Height - 1; y >= 0; y--)
+                    {
+                        for (int x = 0; x < bmp.Width; x++)
+                        {
+                            if (p[x * 4 + y * scanline + 3] != 0)
+                            {
+                                bottom = new Point(x + 1, y + 1);
+                                complete = true;
+                                break;
+                            }
+                        }
+                        if (complete)
+                            break;
+                    }
+
+                    p = (byte*)(void*)Scan0;
+                    complete = false;
+
+                    for (int x = 0; x < bmp.Width; x++)
+                    {
+                        for (int y = 0; y < bmp.Height; y++)
+                        {
+                            if (p[x * 4 + y * scanline + 3] != 0)
+                            {
+                                left = new Point(x, y);
+                                complete = true;
+                                break;
+                            }
+                        }
+                        if (complete)
+                            break;
+                    }
+
+                    p = (byte*)(void*)Scan0;
+                    complete = false;
+
+                    for (int x = bmp.Width - 1; x >= 0; x--)
+                    {
+                        for (int y = 0; y < bmp.Height; y++)
+                        {
+                            if (p[x * 4 + y * scanline + 3] != 0)
+                            {
+                                right = new Point(x + 1, y + 1);
+                                complete = true;
+                                break;
+                            }
+                        }
+                        if (complete)
+                            break;
+                    }
+                }
+
+                bmp.UnlockBits(bmData);
+
+                Rectangle rectangle = new Rectangle(left.X, top.Y, right.X - left.X, bottom.Y - top.Y);
+
+                Bitmap? b = null;
+                Graphics? g = null;
+
+                try
+                {
+                    b = new Bitmap(rectangle.Width + add * 2, rectangle.Height + add * 2);
+                    g = Graphics.FromImage(b);
+                    g.DrawImage(bmp, add, add, rectangle, GraphicsUnit.Pixel);
+                    g.Dispose();
+
+                    return b;
+                }
+                catch
+                {
+                    if (b != null)
+                        b.Dispose();
+                    if (g != null)
+                        g.Dispose();
+
+                    throw new Exception("Error at ScanForPic.");
+                }
+            }
+            catch
+            {
+                try
+                {
+                    if (bmData != null)
+                        bmp.UnlockBits(bmData);
+                }
+                catch
+                {
+
+                }
+            }
+
+            return null;
         }
 
         public void SetupCache()
@@ -381,7 +526,7 @@ namespace AvoidAGrabCutEasy
                     float x = 0f;
                     float y = 0f;
 
-                    if (this.luBitmapDesignerCtrl1.ShapeList != null && this.luBitmapDesignerCtrl1.ShapeList.Count > 1)
+                    if(this.luBitmapDesignerCtrl1.ShapeList != null && this.luBitmapDesignerCtrl1.ShapeList.Count > 1)
                     {
                         x = this.luBitmapDesignerCtrl1.ShapeList[1].Bounds.X;
                         y = this.luBitmapDesignerCtrl1.ShapeList[1].Bounds.Y;
