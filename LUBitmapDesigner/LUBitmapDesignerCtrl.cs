@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -9,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Forms.VisualStyles;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace LUBitmapDesigner
 {
@@ -27,9 +29,51 @@ namespace LUBitmapDesigner
         public event EventHandler<BitmapShape>? ShapeRemoved;
         public event EventHandler<bool>? SPC;
 
+        private Bitmap? _bgImage;
+        //private bool _drawing;
+
         public LUBitmapDesignerCtrl()
         {
             InitializeComponent();
+        }
+
+        public void SetupBGImage()
+        {
+            //draw bgImage and call hlc_MakeBitmap(bgImage), then draw the top shape in postpaint
+            if (/*!this._drawing &&*/ this.ShapeList != null && this.ShapeList.Count > 0)
+            {
+                //this._drawing = true;
+
+                using Bitmap bmp = new(this.helplineRulerCtrl1.Bmp);
+
+                using Graphics gx = Graphics.FromImage(bmp);
+                for (int i = 1; i < this.ShapeList.Count; i++)
+                {
+                    if (this.SelectedShape != null && !this.ShapeList[i].Equals(this.SelectedShape))
+                    {
+                        float zoom = this.ShapeList[i].Zoom;
+                        this.ShapeList[i].Zoom = 1.0F;
+                        this.ShapeList[i].Draw(gx, bmp);
+                        this.ShapeList[i].Zoom = zoom;
+                    }
+                }
+
+                this.helplineRulerCtrl1.MakeBitmap(bmp);
+
+                if (this.helplineRulerCtrl1.BmpTmp != null)
+                {
+                    Bitmap? bOld = this._bgImage;
+                    this._bgImage = new Bitmap(this.helplineRulerCtrl1.BmpTmp);
+                    if (bOld != null)
+                        bOld.Dispose();
+
+                    bOld = null;
+                }
+
+                this.helplineRulerCtrl1.dbPanel1.Invalidate();               
+            } 
+            
+            //this._drawing = false;
         }
 
         public void SetBlankLowerImage()
@@ -234,6 +278,7 @@ namespace LUBitmapDesigner
 
                         BitmapShape b = this.ShapeList.Shapes.Where(a => a.ID == id).First();
                         this.SelectedShape = b;
+                        SetupBGImage();
                         this.CurPt = new PointF(ix - b.Bounds.X, iy - b.Bounds.Y);
                         this.SPC?.Invoke(this, true);
 
@@ -355,37 +400,55 @@ namespace LUBitmapDesigner
         {
             if (this.ShapeList?.Count > 1)
             {
-                e.Graphics.TranslateTransform(this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X,
-                    this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y);
+                e.Graphics.SetClip(new Rectangle(0, 0, this.helplineRulerCtrl1.dbPanel1.ClientSize.Width, this.helplineRulerCtrl1.dbPanel1.ClientSize.Height));
 
-                this.ShapeList[1].Draw(e.Graphics);
-                if (this.ShapeList.Count > 2)
-                    this.ShapeList[2].Draw(e.Graphics);
-
-                if (this.SelectedShape != null)
+                if (this._bgImage != null)
                 {
-                    RectangleF rc = new RectangleF(this.SelectedShape.Bounds.X * this.helplineRulerCtrl1.Zoom,
-                      this.SelectedShape.Bounds.Y * this.helplineRulerCtrl1.Zoom,
-                      this.SelectedShape.Bounds.Width * this.helplineRulerCtrl1.Zoom,
-                      this.SelectedShape.Bounds.Height * this.helplineRulerCtrl1.Zoom);
-
-                    using GraphicsPath gP = new GraphicsPath();
-                    gP.AddRectangle(rc);
-
-                    if (this.SelectedShape.Rotation != 0f)
+                    using Bitmap bmp = new Bitmap(this._bgImage);
+                    using Graphics g = Graphics.FromImage(bmp);
+                    if (this.ShapeList.Count > 1 && this.SelectedShape != null)
                     {
-                        using Matrix mx = new Matrix(1f, 0, 0, 1f, 0, 0);
-                        mx.RotateAt(this.SelectedShape.Rotation, new PointF(rc.X, rc.Y));
-                        gP.Transform(mx);
+                        this.SelectedShape.Draw(g, bmp);
+                        e.Graphics.Clear(this.helplineRulerCtrl1.dbPanel1.BackColor); //needed for Alphamasks
+                        e.Graphics.DrawImageUnscaled(bmp, this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X, this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y);
+                    }
+                    else if(this.ShapeList.Count > 1 && this.SelectedShape == null)
+                    {
+                        this.ShapeList[this.ShapeList.Count - 1].Draw(g, bmp);
+                        e.Graphics.Clear(this.helplineRulerCtrl1.dbPanel1.BackColor); //needed for Alphamasks
+                        e.Graphics.DrawImageUnscaled(bmp, this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X, this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y);
                     }
 
-                    e.Graphics.SetClip(gP);
-                    using Pen pen = new Pen(Color.Red, 2);
-                    e.Graphics.DrawPath(pen, gP);
-                    e.Graphics.ResetClip();
-                }
+                    e.Graphics.TranslateTransform(this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X,
+                        this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y);
 
-                e.Graphics.ResetTransform();
+                    e.Graphics.ResetClip();
+
+                    if (this.SelectedShape != null)
+                    {
+                        RectangleF rc = new RectangleF(this.SelectedShape.Bounds.X * this.helplineRulerCtrl1.Zoom,
+                          this.SelectedShape.Bounds.Y * this.helplineRulerCtrl1.Zoom,
+                          this.SelectedShape.Bounds.Width * this.helplineRulerCtrl1.Zoom,
+                          this.SelectedShape.Bounds.Height * this.helplineRulerCtrl1.Zoom);
+
+                        using GraphicsPath gP = new GraphicsPath();
+                        gP.AddRectangle(rc);
+
+                        if (this.SelectedShape.Rotation != 0f)
+                        {
+                            using Matrix mx = new Matrix(1f, 0, 0, 1f, 0, 0);
+                            mx.RotateAt(this.SelectedShape.Rotation, new PointF(rc.X, rc.Y));
+                            gP.Transform(mx);
+                        }
+
+                        e.Graphics.SetClip(gP);
+                        using Pen pen = new Pen(Color.Red, 2);
+                        e.Graphics.DrawPath(pen, gP);
+                        e.Graphics.ResetClip();
+                    }
+
+                    e.Graphics.ResetTransform();
+                }
             }
         }
 
@@ -522,6 +585,13 @@ namespace LUBitmapDesigner
                 if (this.ShapeList[i].Zoom != e.Zoom)
                     SetZoom(e.Zoom.ToString());
             }
+        }
+
+        public void DisposeBGImage()
+        {
+            if (this._bgImage != null)
+                this._bgImage.Dispose();
+            this._bgImage = null;
         }
     }
 }

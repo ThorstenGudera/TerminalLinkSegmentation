@@ -58,6 +58,7 @@ namespace PseudoShadow
             saveFileDialog1 = new SaveFileDialog();
             splitContainer2 = new SplitContainer();
             luBitmapDesignerCtrl1 = new LUBitmapDesigner.LUBitmapDesignerCtrl();
+            label14 = new Label();
             panel3 = new Panel();
             cbAuto = new CheckBox();
             label13 = new Label();
@@ -96,6 +97,8 @@ namespace PseudoShadow
             label1 = new Label();
             btnClone = new Button();
             btnSwap = new Button();
+            btnLoadUpper = new Button();
+            btnMerge = new Button();
             btnRemove = new Button();
             btnCancel = new Button();
             splitContainer1 = new SplitContainer();
@@ -105,8 +108,6 @@ namespace PseudoShadow
             colorDialog1 = new ColorDialog();
             backgroundWorker3 = new System.ComponentModel.BackgroundWorker();
             backgroundWorker4 = new System.ComponentModel.BackgroundWorker();
-            label14 = new Label();
-            btnLoadUpper = new Button();
             statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer2).BeginInit();
             splitContainer2.Panel1.SuspendLayout();
@@ -283,11 +284,12 @@ namespace PseudoShadow
             splitContainer2.Panel2.Controls.Add(btnClone);
             splitContainer2.Panel2.Controls.Add(btnSwap);
             splitContainer2.Panel2.Controls.Add(btnLoadUpper);
+            splitContainer2.Panel2.Controls.Add(btnMerge);
             splitContainer2.Panel2.Controls.Add(btnRemove);
             splitContainer2.Panel2.Controls.Add(button8);
             splitContainer2.Panel2.Controls.Add(button2);
             splitContainer2.Size = new Size(1486, 862);
-            splitContainer2.SplitterDistance = 1129;
+            splitContainer2.SplitterDistance = 1127;
             splitContainer2.SplitterWidth = 5;
             splitContainer2.TabIndex = 0;
             // 
@@ -300,8 +302,17 @@ namespace PseudoShadow
             luBitmapDesignerCtrl1.SelectedShape = null;
             luBitmapDesignerCtrl1.ShadowMode = false;
             luBitmapDesignerCtrl1.ShapeList = null;
-            luBitmapDesignerCtrl1.Size = new Size(1129, 862);
+            luBitmapDesignerCtrl1.Size = new Size(1127, 862);
             luBitmapDesignerCtrl1.TabIndex = 0;
+            // 
+            // label14
+            // 
+            label14.AutoSize = true;
+            label14.Location = new Point(122, 720);
+            label14.Name = "label14";
+            label14.Size = new Size(98, 15);
+            label14.TabIndex = 722;
+            label14.Text = "load upper shape";
             // 
             // panel3
             // 
@@ -727,10 +738,34 @@ namespace PseudoShadow
             btnSwap.UseVisualStyleBackColor = true;
             btnSwap.Click += btnSwap_Click;
             // 
+            // btnLoadUpper
+            // 
+            btnLoadUpper.ForeColor = SystemColors.ControlText;
+            btnLoadUpper.Location = new Point(231, 714);
+            btnLoadUpper.Margin = new Padding(4, 3, 4, 3);
+            btnLoadUpper.Name = "btnLoadUpper";
+            btnLoadUpper.Size = new Size(88, 27);
+            btnLoadUpper.TabIndex = 652;
+            btnLoadUpper.Text = "Load";
+            btnLoadUpper.UseVisualStyleBackColor = true;
+            btnLoadUpper.Click += btnLoadUpper_Click;
+            // 
+            // btnMerge
+            // 
+            btnMerge.ForeColor = SystemColors.ControlText;
+            btnMerge.Location = new Point(16, 670);
+            btnMerge.Margin = new Padding(4, 3, 4, 3);
+            btnMerge.Name = "btnMerge";
+            btnMerge.Size = new Size(88, 27);
+            btnMerge.TabIndex = 652;
+            btnMerge.Text = "Merge";
+            btnMerge.UseVisualStyleBackColor = true;
+            btnMerge.Click += btnMerge_Click;
+            // 
             // btnRemove
             // 
             btnRemove.ForeColor = SystemColors.ControlText;
-            btnRemove.Location = new Point(16, 684);
+            btnRemove.Location = new Point(16, 714);
             btnRemove.Margin = new Padding(4, 3, 4, 3);
             btnRemove.Name = "btnRemove";
             btnRemove.Size = new Size(88, 27);
@@ -812,27 +847,6 @@ namespace PseudoShadow
             backgroundWorker4.DoWork += backgroundWorker4_DoWork;
             backgroundWorker4.ProgressChanged += backgroundWorker4_ProgressChanged;
             backgroundWorker4.RunWorkerCompleted += backgroundWorker4_RunWorkerCompleted;
-            // 
-            // label14
-            // 
-            label14.AutoSize = true;
-            label14.Location = new Point(122, 690);
-            label14.Name = "label14";
-            label14.Size = new Size(98, 15);
-            label14.TabIndex = 722;
-            label14.Text = "load upper shape";
-            // 
-            // btnLoadUpper
-            // 
-            btnLoadUpper.ForeColor = SystemColors.ControlText;
-            btnLoadUpper.Location = new Point(231, 684);
-            btnLoadUpper.Margin = new Padding(4, 3, 4, 3);
-            btnLoadUpper.Name = "btnLoadUpper";
-            btnLoadUpper.Size = new Size(88, 27);
-            btnLoadUpper.TabIndex = 652;
-            btnLoadUpper.Text = "Load";
-            btnLoadUpper.UseVisualStyleBackColor = true;
-            btnLoadUpper.Click += btnLoadUpper_Click;
             // 
             // frmComposePseudoShadow
             // 
@@ -942,5 +956,6 @@ namespace PseudoShadow
         private Button btnRemove;
         private Label label14;
         private Button btnLoadUpper;
+        private Button btnMerge;
     }
 }

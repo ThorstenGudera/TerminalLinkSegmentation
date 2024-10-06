@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
+using System.Drawing.Text;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,12 +12,7 @@ namespace LUBitmapDesigner
 {
     public class BitmapShape : Shape, IDisposable
     {
-        public override RectangleF Bounds { get; set; }
-        public override float Rotation { get; set; }
-        public override float Zoom { get; set; } = 1.0f;
         public Bitmap? Bmp { get; set; }
-        public float Opacity { get; set; } = 1.0f;
-        public override int ID { get; set; }
         public Bitmap? OrigBmp { get; set; }
         public bool IsLocked { get; set; }
         public bool DrawUnrotatedFast { get; set; } = true;
@@ -51,10 +47,28 @@ namespace LUBitmapDesigner
                     this.Bounds.Width * this.Zoom,
                     this.Bounds.Height * this.Zoom);
 
+                //Create a GraphicsContainer for Rotation at the desired Point
+                //see documentation for details
                 GraphicsContainer con = gx.BeginContainer();
+
+                if (this.ForceHQRendering)
+                {
+                    gx.SmoothingMode = SmoothingMode.AntiAlias;
+                    gx.TextRenderingHint = TextRenderingHint.AntiAliasGridFit;
+                    gx.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                    gx.PixelOffsetMode = PixelOffsetMode.HighQuality;
+                        }
+                else
+                {
+                    gx.SmoothingMode = SmoothingMode.None;
+                    gx.TextRenderingHint = TextRenderingHint.SystemDefault;
+                    gx.InterpolationMode = InterpolationMode.NearestNeighbor;
+                    gx.PixelOffsetMode = PixelOffsetMode.Half;
+                }
 
                 Matrix mx = gx.Transform;
 
+                //rotate if needed
                 if (this.Rotation != 0f)
                     mx.RotateAt(this.Rotation, new PointF(boundsZ.X, boundsZ.Y));
 
@@ -128,26 +142,6 @@ namespace LUBitmapDesigner
                 this.OrigBmp.Dispose();
                 this.OrigBmp = null;
             }
-        }
-
-        internal GraphicsPath GetCompatibleGraphicsPath()
-        {
-            RectangleF rc = new RectangleF(this.Bounds.X * this.Zoom,
-                this.Bounds.Y * this.Zoom,
-                this.Bounds.Width * this.Zoom,
-                this.Bounds.Height * this.Zoom);
-
-            GraphicsPath gP = new GraphicsPath();
-            gP.AddRectangle(rc);
-
-            if (this.Rotation != 0f)
-            {
-                using Matrix mx = new Matrix(1f, 0, 0, 1f, 0, 0);
-                mx.RotateAt(this.Rotation, new PointF(rc.X, rc.Y));
-                gP.Transform(mx);
-            }
-
-            return gP;
         }
     }
 }

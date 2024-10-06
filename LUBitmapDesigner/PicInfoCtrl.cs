@@ -40,6 +40,9 @@ namespace LUBitmapDesigner
                 this.numH.Value = (decimal)r.Height;
                 this.numRot.Value = (decimal)rot;
 
+                if( this.cmbMergeOP.SelectedIndex > -1)
+                    this.cmbMergeOP.SelectedIndex = (int)this._curShape.MergeOperation;
+
                 this.cbAspect.Checked = chckd;
             }
         }
@@ -212,11 +215,11 @@ namespace LUBitmapDesigner
             }
         }
 
-        private void cbDrawFast_CheckedChanged(object sender, EventArgs e)
+        private void cmbMergeOP_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (this._curShape != null)
             {
-                this._curShape.DrawUnrotatedFast = this.cbDrawFast.Checked;
+                this._curShape.MergeOperation = (MergeOperation)this.cmbMergeOP.SelectedIndex;
                 ShapeChanged?.Invoke(this, this._curShape);
             }
         }

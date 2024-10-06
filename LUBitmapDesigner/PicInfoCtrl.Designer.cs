@@ -29,10 +29,9 @@
         private void InitializeComponent()
         {
             GroupBox1 = new GroupBox();
-            cbPersist = new CheckBox();
-            cbDrawFast = new CheckBox();
+            cmbMergeOP = new ComboBox();
+            label5 = new Label();
             cbIntVals = new CheckBox();
-            Label6 = new Label();
             Button3 = new Button();
             Button1 = new Button();
             Label1 = new Label();
@@ -59,10 +58,9 @@
             // 
             // GroupBox1
             // 
-            GroupBox1.Controls.Add(cbPersist);
-            GroupBox1.Controls.Add(cbDrawFast);
+            GroupBox1.Controls.Add(cmbMergeOP);
+            GroupBox1.Controls.Add(label5);
             GroupBox1.Controls.Add(cbIntVals);
-            GroupBox1.Controls.Add(Label6);
             GroupBox1.Controls.Add(Button3);
             GroupBox1.Controls.Add(Button1);
             GroupBox1.Controls.Add(Label1);
@@ -87,35 +85,30 @@
             GroupBox1.TabStop = false;
             GroupBox1.Text = "Settings";
             // 
-            // cbPersist
+            // cmbMergeOP
             // 
-            cbPersist.AutoSize = true;
-            cbPersist.Checked = true;
-            cbPersist.CheckState = CheckState.Checked;
-            cbPersist.Location = new Point(155, 180);
-            cbPersist.Name = "cbPersist";
-            cbPersist.Size = new Size(101, 19);
-            cbPersist.TabIndex = 45;
-            cbPersist.Text = "persist normal";
-            cbPersist.UseVisualStyleBackColor = true;
+            cmbMergeOP.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbMergeOP.DropDownWidth = 224;
+            cmbMergeOP.FormattingEnabled = true;
+            cmbMergeOP.Location = new Point(135, 263);
+            cmbMergeOP.Name = "cmbMergeOP";
+            cmbMergeOP.Size = new Size(121, 23);
+            cmbMergeOP.TabIndex = 47;
+            cmbMergeOP.SelectedIndexChanged += cmbMergeOP_SelectedIndexChanged;
             // 
-            // cbDrawFast
+            // label5
             // 
-            cbDrawFast.AutoSize = true;
-            cbDrawFast.Checked = true;
-            cbDrawFast.CheckState = CheckState.Checked;
-            cbDrawFast.Location = new Point(141, 156);
-            cbDrawFast.Name = "cbDrawFast";
-            cbDrawFast.Size = new Size(77, 19);
-            cbDrawFast.TabIndex = 44;
-            cbDrawFast.Text = "Draw Fast";
-            cbDrawFast.UseVisualStyleBackColor = true;
-            cbDrawFast.CheckedChanged += cbDrawFast_CheckedChanged;
+            label5.AutoSize = true;
+            label5.Location = new Point(53, 266);
+            label5.Name = "label5";
+            label5.Size = new Size(57, 15);
+            label5.TabIndex = 46;
+            label5.Text = "MergeOP";
             // 
             // cbIntVals
             // 
             cbIntVals.AutoSize = true;
-            cbIntVals.Location = new Point(141, 127);
+            cbIntVals.Location = new Point(141, 123);
             cbIntVals.Margin = new Padding(4, 3, 4, 3);
             cbIntVals.Name = "cbIntVals";
             cbIntVals.Size = new Size(63, 19);
@@ -123,16 +116,6 @@
             cbIntVals.Text = "Int vals";
             cbIntVals.UseVisualStyleBackColor = true;
             cbIntVals.CheckedChanged += cbIntVals_CheckedChanged;
-            // 
-            // Label6
-            // 
-            Label6.AutoSize = true;
-            Label6.Location = new Point(23, 182);
-            Label6.Margin = new Padding(4, 0, 4, 0);
-            Label6.Name = "Label6";
-            Label6.Size = new Size(53, 15);
-            Label6.TabIndex = 41;
-            Label6.Text = "OrigSize:";
             // 
             // Button3
             // 
@@ -167,7 +150,7 @@
             // cbLock
             // 
             cbLock.AutoSize = true;
-            cbLock.Location = new Point(20, 156);
+            cbLock.Location = new Point(20, 152);
             cbLock.Margin = new Padding(4, 3, 4, 3);
             cbLock.Name = "cbLock";
             cbLock.Size = new Size(51, 19);
@@ -179,7 +162,7 @@
             // Label2
             // 
             Label2.AutoSize = true;
-            Label2.Location = new Point(20, 75);
+            Label2.Location = new Point(20, 71);
             Label2.Margin = new Padding(4, 0, 4, 0);
             Label2.Name = "Label2";
             Label2.Size = new Size(30, 15);
@@ -189,7 +172,7 @@
             // Label3
             // 
             Label3.AutoSize = true;
-            Label3.Location = new Point(20, 238);
+            Label3.Location = new Point(20, 206);
             Label3.Margin = new Padding(4, 0, 4, 0);
             Label3.Name = "Label3";
             Label3.Size = new Size(55, 15);
@@ -198,7 +181,7 @@
             // 
             // btnOrigSize
             // 
-            btnOrigSize.Location = new Point(23, 201);
+            btnOrigSize.Location = new Point(21, 174);
             btnOrigSize.Margin = new Padding(4, 3, 4, 3);
             btnOrigSize.Name = "btnOrigSize";
             btnOrigSize.Size = new Size(88, 27);
@@ -210,7 +193,7 @@
             // Label4
             // 
             Label4.AutoSize = true;
-            Label4.Location = new Point(138, 238);
+            Label4.Location = new Point(138, 206);
             Label4.Margin = new Padding(4, 0, 4, 0);
             Label4.Name = "Label4";
             Label4.Size = new Size(51, 15);
@@ -222,7 +205,7 @@
             cbAspect.AutoSize = true;
             cbAspect.Checked = true;
             cbAspect.CheckState = CheckState.Checked;
-            cbAspect.Location = new Point(21, 127);
+            cbAspect.Location = new Point(21, 123);
             cbAspect.Margin = new Padding(4, 3, 4, 3);
             cbAspect.Name = "cbAspect";
             cbAspect.Size = new Size(88, 19);
@@ -245,7 +228,7 @@
             // numH
             // 
             numH.DecimalPlaces = 2;
-            numH.Location = new Point(141, 97);
+            numH.Location = new Point(141, 93);
             numH.Margin = new Padding(4, 3, 4, 3);
             numH.Maximum = new decimal(new int[] { 32767, 0, 0, 0 });
             numH.Name = "numH";
@@ -256,7 +239,7 @@
             // numW
             // 
             numW.DecimalPlaces = 2;
-            numW.Location = new Point(21, 97);
+            numW.Location = new Point(21, 93);
             numW.Margin = new Padding(4, 3, 4, 3);
             numW.Maximum = new decimal(new int[] { 32767, 0, 0, 0 });
             numW.Name = "numW";
@@ -279,7 +262,7 @@
             // numRot
             // 
             numRot.DecimalPlaces = 2;
-            numRot.Location = new Point(24, 260);
+            numRot.Location = new Point(24, 228);
             numRot.Margin = new Padding(4, 3, 4, 3);
             numRot.Maximum = new decimal(new int[] { 360, 0, 0, 0 });
             numRot.Minimum = new decimal(new int[] { 360, 0, 0, int.MinValue });
@@ -292,7 +275,7 @@
             // 
             numOpacity.DecimalPlaces = 2;
             numOpacity.Increment = new decimal(new int[] { 1, 0, 0, 65536 });
-            numOpacity.Location = new Point(141, 260);
+            numOpacity.Location = new Point(141, 228);
             numOpacity.Margin = new Padding(4, 3, 4, 3);
             numOpacity.Maximum = new decimal(new int[] { 1, 0, 0, 0 });
             numOpacity.Name = "numOpacity";
@@ -323,7 +306,6 @@
         #endregion
 
         internal System.Windows.Forms.GroupBox GroupBox1;
-        internal System.Windows.Forms.Label Label6;
         public System.Windows.Forms.Button Button3;
         public System.Windows.Forms.Button Button1;
         public System.Windows.Forms.Label Label1;
@@ -340,7 +322,7 @@
         public System.Windows.Forms.NumericUpDown numRot;
         public System.Windows.Forms.NumericUpDown numOpacity;
         public CheckBox cbIntVals;
-        private CheckBox cbDrawFast;
-        public CheckBox cbPersist;
+        private Label label5;
+        public ComboBox cmbMergeOP;
     }
 }

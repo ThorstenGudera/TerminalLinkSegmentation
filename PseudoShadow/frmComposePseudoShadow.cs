@@ -63,6 +63,7 @@ namespace PseudoShadow
                 {
                     this._bmpBU = new Bitmap(bUpper);
                     this.luBitmapDesignerCtrl1.SetUpperImage(new Bitmap(bUpper), 0, 0);
+                    this.luBitmapDesignerCtrl1.SetupBGImage();
                 }
                 else
                     MessageBox.Show("Not enough memory.");
@@ -71,6 +72,9 @@ namespace PseudoShadow
                 this.picInfoCtrl1.ShapeChanged += PicInfoCtrl1_ShapeChanged;
                 this.luBitmapDesignerCtrl1.ShapeRemoved += LuBitmapDesignerCtrl1_ShapeRemoved;
                 this.luBitmapDesignerCtrl1.SPC += LuBitmapDesignerCtrl1_SPC;
+
+                if (this.luBitmapDesignerCtrl1.ShapeList != null && this.luBitmapDesignerCtrl1.ShapeList.Count > 0)
+                    this.LuBitmapDesignerCtrl1_ShapeChanged(this, this.luBitmapDesignerCtrl1.ShapeList[this.luBitmapDesignerCtrl1.ShapeList.Count - 1]);
             }
         }
 
@@ -196,7 +200,7 @@ namespace PseudoShadow
             {
                 try
                 {
-                    if(bmData != null)
+                    if (bmData != null)
                         bmp.UnlockBits(bmData);
                 }
                 catch
@@ -256,14 +260,16 @@ namespace PseudoShadow
         {
             if (this.Visible && this.luBitmapDesignerCtrl1.helplineRulerCtrl1.Bmp != null && cmbZoom.SelectedItem != null)
             {
+                this.luBitmapDesignerCtrl1.helplineRulerCtrl1.DontDoLayout = true;
                 this.luBitmapDesignerCtrl1.helplineRulerCtrl1.Enabled = false;
                 this.luBitmapDesignerCtrl1.helplineRulerCtrl1.Refresh();
                 this.luBitmapDesignerCtrl1.SetZoom(cmbZoom.SelectedItem.ToString());
                 this.luBitmapDesignerCtrl1.helplineRulerCtrl1.Enabled = true;
                 if (this.cmbZoom.SelectedIndex < 2)
-                    this.luBitmapDesignerCtrl1.helplineRulerCtrl1.ZoomSetManually = true;
-
-                this.luBitmapDesignerCtrl1.helplineRulerCtrl1.dbPanel1.Invalidate();
+                    this.luBitmapDesignerCtrl1.helplineRulerCtrl1.ZoomSetManually = true;    
+                
+                this.luBitmapDesignerCtrl1.helplineRulerCtrl1.DontDoLayout = false;
+                this.luBitmapDesignerCtrl1.SetupBGImage();
             }
         }
 
@@ -312,10 +318,8 @@ namespace PseudoShadow
 
                         for (int j = 1; j < this.luBitmapDesignerCtrl1.ShapeList.Count; j++)
                         {
-                            if(this.picInfoCtrl1.cbPersist.Checked)
-                                this.luBitmapDesignerCtrl1.ShapeList[j].DrawUnrotatedFast = false;
                             this.luBitmapDesignerCtrl1.ShapeList[j].Zoom = 1.0f;
-                            this.luBitmapDesignerCtrl1.ShapeList[j].Draw(gx);
+                            this.luBitmapDesignerCtrl1.ShapeList[j].Draw(gx, bOut);
                             this.luBitmapDesignerCtrl1.ShapeList[j].Zoom = zBU;
                         }
                     }
@@ -366,6 +370,8 @@ namespace PseudoShadow
 
                         _undoOPCache?.Reset(true);
                         this.btnUndo.Enabled = this.btnRedo.Enabled = false;
+
+                        this.luBitmapDesignerCtrl1?.SetupBGImage();
                     }
                     catch
                     {
@@ -407,6 +413,11 @@ namespace PseudoShadow
 
         private void frmCompose_Load(object sender, EventArgs e)
         {
+            foreach (string z in System.Enum.GetNames(typeof(MergeOperation)))
+                this.picInfoCtrl1.cmbMergeOP.Items.Add(z.ToString());
+
+            this.picInfoCtrl1.cmbMergeOP.SelectedIndex = 0;
+
             this.cmbZoom.SelectedIndex = 4;
             this.cbBGColor_CheckedChanged(this.cbBGColor, new EventArgs());
         }
@@ -449,6 +460,8 @@ namespace PseudoShadow
                 this._undoOPCache.Dispose();
             if (this._undoOPCache2 != null)
                 this._undoOPCache2.Dispose();
+
+            this.luBitmapDesignerCtrl1.DisposeBGImage();
         }
 
         private void btnOK_Click(object sender, EventArgs e)
@@ -587,6 +600,9 @@ namespace PseudoShadow
 
                 this.SetControls(true);
                 this.Cursor = Cursors.Default;
+
+                this.luBitmapDesignerCtrl1.SetupBGImage();
+                //this.luBitmapDesignerCtrl1.helplineRulerCtrl1.dbPanel1.Invalidate();
 
                 this.btnOK.Enabled = this.btnCancel.Enabled = true;
 
@@ -752,6 +768,8 @@ namespace PseudoShadow
                 this.SetControls(true);
                 this.Cursor = Cursors.Default;
 
+                this.luBitmapDesignerCtrl1.SetupBGImage();
+
                 this.btnOK.Enabled = this.btnCancel.Enabled = true;
 
                 this._pic_changed = true;
@@ -782,17 +800,6 @@ namespace PseudoShadow
 
                 if (bOut != null)
                 {
-                    //float x = 0f;
-                    //float y = 0f;
-
-                    //if (this.luBitmapDesignerCtrl1.ShapeList != null && this.luBitmapDesignerCtrl1.ShapeList.Count > 1)
-                    //{
-                    //    x = this.luBitmapDesignerCtrl1.ShapeList[1].Bounds.X;
-                    //    y = this.luBitmapDesignerCtrl1.ShapeList[1].Bounds.Y;
-                    //}
-
-                    //this.luBitmapDesignerCtrl1.SetUpperImage(bOut, x, y);
-
                     BitmapShape? b = this.luBitmapDesignerCtrl1?.SelectedShape;
                     if (b != null)
                         b.Bmp = bOut;
@@ -806,6 +813,8 @@ namespace PseudoShadow
                     this.cmbZoom_SelectedIndexChanged(this.cmbZoom, new EventArgs());
 
                     this.CheckRedoButton();
+
+                    this.luBitmapDesignerCtrl1?.SetupBGImage();
                 }
                 else
                     MessageBox.Show("Error while undoing.");
@@ -837,17 +846,6 @@ namespace PseudoShadow
 
                 if (bOut != null)
                 {
-                    //float x = 0f;
-                    //float y = 0f;
-
-                    //if (this.luBitmapDesignerCtrl1.ShapeList != null && this.luBitmapDesignerCtrl1.ShapeList.Count > 1)
-                    //{
-                    //    x = this.luBitmapDesignerCtrl1.ShapeList[1].Bounds.X;
-                    //    y = this.luBitmapDesignerCtrl1.ShapeList[1].Bounds.Y;
-                    //}
-
-                    //this.luBitmapDesignerCtrl1.SetUpperImage(bOut, x, y);
-
                     BitmapShape? b = this.luBitmapDesignerCtrl1?.SelectedShape;
                     if (b != null)
                         b.Bmp = bOut;
@@ -858,6 +856,8 @@ namespace PseudoShadow
 
                     this.CheckRedoButton();
                     this.btnUndo.Enabled = true;
+
+                    this.luBitmapDesignerCtrl1?.SetupBGImage();
                 }
                 else
                     MessageBox.Show("Error while redoing.");
@@ -950,6 +950,8 @@ namespace PseudoShadow
             this.btnUndo.Enabled = true;
             this.CheckRedoButton();
 
+            this.luBitmapDesignerCtrl1.SetupBGImage();
+
             this.backgroundWorker3.Dispose();
             this.backgroundWorker3 = new BackgroundWorker();
             this.backgroundWorker3.WorkerReportsProgress = true;
@@ -966,6 +968,7 @@ namespace PseudoShadow
             {
                 ShadowShapeList sl = (ShadowShapeList)this.luBitmapDesignerCtrl1.ShapeList;
                 sl.SwapUpperShapes();
+                this.luBitmapDesignerCtrl1.SetupBGImage();
                 this.luBitmapDesignerCtrl1.helplineRulerCtrl1.dbPanel1.Invalidate();
             }
         }
@@ -984,6 +987,7 @@ namespace PseudoShadow
                 }
 
                 this.luBitmapDesignerCtrl1.SetZoom(cmbZoom?.SelectedItem?.ToString());
+                this.luBitmapDesignerCtrl1.SetupBGImage();
                 this.luBitmapDesignerCtrl1.helplineRulerCtrl1.dbPanel1.Invalidate();
             }
 
@@ -1108,6 +1112,8 @@ namespace PseudoShadow
             this.btnUndo.Enabled = true;
             this.CheckRedoButton();
 
+            this.luBitmapDesignerCtrl1.SetupBGImage();
+
             this.backgroundWorker4.Dispose();
             this.backgroundWorker4 = new BackgroundWorker();
             this.backgroundWorker4.WorkerReportsProgress = true;
@@ -1231,6 +1237,8 @@ namespace PseudoShadow
 
                     SetControls(true);
                     this.btnShear.Enabled = true;
+
+                    this.luBitmapDesignerCtrl1.SetupBGImage();
                 }
             }
         }
@@ -1246,6 +1254,8 @@ namespace PseudoShadow
                 if (this.luBitmapDesignerCtrl1 != null && this.luBitmapDesignerCtrl1.ShapeList != null &&
                     this.luBitmapDesignerCtrl1.ShapeList.AddingAllowed(this.luBitmapDesignerCtrl1.ShadowMode))
                     this.btnClone.Enabled = this.btnLoadUpper.Enabled = true;
+
+                this.luBitmapDesignerCtrl1?.SetupBGImage();
             }
         }
 
@@ -1288,11 +1298,52 @@ namespace PseudoShadow
 
                 this.luBitmapDesignerCtrl1.SetZoom(cmbZoom?.SelectedItem?.ToString());
                 this.luBitmapDesignerCtrl1.helplineRulerCtrl1.dbPanel1.Invalidate();
+
+                this.luBitmapDesignerCtrl1.SetupBGImage();
             }
 
             if (this.luBitmapDesignerCtrl1 != null && this.luBitmapDesignerCtrl1.ShapeList != null &&
                 !this.luBitmapDesignerCtrl1.ShapeList.AddingAllowed(this.luBitmapDesignerCtrl1.ShadowMode))
                 this.btnClone.Enabled = this.btnLoadUpper.Enabled = false;
+        }
+
+        private void btnMerge_Click(object sender, EventArgs e)
+        {
+            if (this.luBitmapDesignerCtrl1.helplineRulerCtrl1.Bmp != null)
+            {
+                Bitmap? bmp = DrawToBmp();
+
+                if (this.luBitmapDesignerCtrl1.ShapeList != null && this.luBitmapDesignerCtrl1.ShapeList.Count > 0 && bmp != null)
+                {
+                    for (int i = this.luBitmapDesignerCtrl1.ShapeList.Count - 1; i > 0; i--) //only go to 1
+                    {
+                        //BitmapShape? b = this.luBitmapDesignerCtrl1.ShapeList[i];
+                        this.luBitmapDesignerCtrl1.ShapeList.RemoveAt(i); //will also dispose it
+                        //b.Dispose();
+                        //b = null;
+                    }
+
+                    BitmapShape? bOld = this.luBitmapDesignerCtrl1.ShapeList[0];
+                    BitmapShape bNew = new BitmapShape() { Bmp = bmp, Bounds = new RectangleF(0, 0, bmp.Width, bmp.Height), Rotation = 0, Zoom = this.luBitmapDesignerCtrl1.helplineRulerCtrl1.Zoom };
+
+                    if (!this.luBitmapDesignerCtrl1.helplineRulerCtrl1.IsDisposed)
+                    {
+                        this.luBitmapDesignerCtrl1.ShapeList[0] = bNew;
+                        this.luBitmapDesignerCtrl1.helplineRulerCtrl1.Bmp = bNew.Bmp;
+                        this.luBitmapDesignerCtrl1.helplineRulerCtrl1.MakeBitmap(this.luBitmapDesignerCtrl1.helplineRulerCtrl1.Bmp);
+                        this.luBitmapDesignerCtrl1.helplineRulerCtrl1.dbPanel1.Invalidate();
+                    }
+
+                    if (bOld != null)
+                        bOld.Dispose();
+                    bOld = null;
+
+                    this.cmbZoom_SelectedIndexChanged(this.cmbZoom, new EventArgs());
+                    this.LuBitmapDesignerCtrl1_SPC(this, false);
+                }
+
+                _pic_changed = false;
+            }
         }
     }
 }
