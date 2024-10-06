@@ -262,6 +262,7 @@ namespace PseudoShadow
             // 
             // splitContainer2.Panel2
             // 
+            splitContainer2.Panel2.AutoScroll = true;
             splitContainer2.Panel2.Controls.Add(label14);
             splitContainer2.Panel2.Controls.Add(panel3);
             splitContainer2.Panel2.Controls.Add(panel2);
@@ -289,7 +290,7 @@ namespace PseudoShadow
             splitContainer2.Panel2.Controls.Add(button8);
             splitContainer2.Panel2.Controls.Add(button2);
             splitContainer2.Size = new Size(1486, 862);
-            splitContainer2.SplitterDistance = 1127;
+            splitContainer2.SplitterDistance = 1124;
             splitContainer2.SplitterWidth = 5;
             splitContainer2.TabIndex = 0;
             // 
@@ -302,7 +303,7 @@ namespace PseudoShadow
             luBitmapDesignerCtrl1.SelectedShape = null;
             luBitmapDesignerCtrl1.ShadowMode = false;
             luBitmapDesignerCtrl1.ShapeList = null;
-            luBitmapDesignerCtrl1.Size = new Size(1127, 862);
+            luBitmapDesignerCtrl1.Size = new Size(1124, 862);
             luBitmapDesignerCtrl1.TabIndex = 0;
             // 
             // label14
@@ -331,7 +332,7 @@ namespace PseudoShadow
             panel3.Controls.Add(numericUpDown2);
             panel3.Controls.Add(numericUpDown3);
             panel3.Controls.Add(numericUpDown1);
-            panel3.Location = new Point(9, 518);
+            panel3.Location = new Point(9, 564);
             panel3.Name = "panel3";
             panel3.Size = new Size(317, 139);
             panel3.TabIndex = 721;
@@ -496,7 +497,7 @@ namespace PseudoShadow
             panel2.BorderStyle = BorderStyle.FixedSingle;
             panel2.Controls.Add(label2);
             panel2.Controls.Add(btnGaussian);
-            panel2.Location = new Point(9, 479);
+            panel2.Location = new Point(9, 525);
             panel2.Name = "panel2";
             panel2.Size = new Size(317, 33);
             panel2.TabIndex = 720;
@@ -529,7 +530,7 @@ namespace PseudoShadow
             panel1.Controls.Add(btnFloodfill);
             panel1.Controls.Add(btnColor);
             panel1.Controls.Add(numTolerance);
-            panel1.Location = new Point(9, 419);
+            panel1.Location = new Point(9, 465);
             panel1.Name = "panel1";
             panel1.Size = new Size(317, 54);
             panel1.TabIndex = 719;
@@ -616,7 +617,7 @@ namespace PseudoShadow
             // label6
             // 
             label6.AutoSize = true;
-            label6.Location = new Point(193, 361);
+            label6.Location = new Point(193, 407);
             label6.Name = "label6";
             label6.Size = new Size(27, 15);
             label6.TabIndex = 715;
@@ -625,7 +626,7 @@ namespace PseudoShadow
             // label5
             // 
             label5.AutoSize = true;
-            label5.Location = new Point(24, 361);
+            label5.Location = new Point(24, 407);
             label5.Name = "label5";
             label5.Size = new Size(85, 15);
             label5.TabIndex = 716;
@@ -633,7 +634,7 @@ namespace PseudoShadow
             // 
             // btnAlphaZAndGain
             // 
-            btnAlphaZAndGain.Location = new Point(230, 355);
+            btnAlphaZAndGain.Location = new Point(230, 401);
             btnAlphaZAndGain.Margin = new Padding(4, 3, 4, 3);
             btnAlphaZAndGain.Name = "btnAlphaZAndGain";
             btnAlphaZAndGain.Size = new Size(88, 27);
@@ -644,7 +645,7 @@ namespace PseudoShadow
             // 
             // btnSetGamma
             // 
-            btnSetGamma.Location = new Point(210, 386);
+            btnSetGamma.Location = new Point(210, 432);
             btnSetGamma.Margin = new Padding(4, 3, 4, 3);
             btnSetGamma.Name = "btnSetGamma";
             btnSetGamma.Size = new Size(88, 27);
@@ -656,7 +657,7 @@ namespace PseudoShadow
             // label4
             // 
             label4.AutoSize = true;
-            label4.Location = new Point(24, 392);
+            label4.Location = new Point(24, 438);
             label4.Margin = new Padding(4, 0, 4, 0);
             label4.Name = "label4";
             label4.Size = new Size(98, 15);
@@ -667,7 +668,7 @@ namespace PseudoShadow
             // 
             numGamma.DecimalPlaces = 2;
             numGamma.Increment = new decimal(new int[] { 1, 0, 0, 65536 });
-            numGamma.Location = new Point(132, 390);
+            numGamma.Location = new Point(132, 436);
             numGamma.Margin = new Padding(4, 3, 4, 3);
             numGamma.Minimum = new decimal(new int[] { 1, 0, 0, 131072 });
             numGamma.Name = "numGamma";
@@ -677,7 +678,7 @@ namespace PseudoShadow
             // 
             // numAlphaZAndGain
             // 
-            numAlphaZAndGain.Location = new Point(116, 359);
+            numAlphaZAndGain.Location = new Point(116, 405);
             numAlphaZAndGain.Margin = new Padding(4, 3, 4, 3);
             numAlphaZAndGain.Maximum = new decimal(new int[] { 255, 0, 0, 0 });
             numAlphaZAndGain.Name = "numAlphaZAndGain";
@@ -753,7 +754,7 @@ namespace PseudoShadow
             // btnMerge
             // 
             btnMerge.ForeColor = SystemColors.ControlText;
-            btnMerge.Location = new Point(16, 670);
+            btnMerge.Location = new Point(24, 357);
             btnMerge.Margin = new Padding(4, 3, 4, 3);
             btnMerge.Name = "btnMerge";
             btnMerge.Size = new Size(88, 27);
