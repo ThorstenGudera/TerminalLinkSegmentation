@@ -74,11 +74,6 @@ namespace LUBitmapDesigner
 
                 bool dI = this.CheckDrawInt();
 
-                //make sure, drawing is done fast for scenes with a gdi+ compositing matrix equal the Identity.
-                //Comment this out to see the difference (use a larger pic)
-                if (dI && this.DrawUnrotatedFast)
-                    mx.RotateAt(0.05f, new PointF(boundsZ.Width / 2f, boundsZ.Height / 2f));
-
                 gx.Transform = mx;
                 gx.SetClip(boundsZ);
 
