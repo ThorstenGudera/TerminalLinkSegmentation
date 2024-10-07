@@ -51,6 +51,7 @@ namespace PseudoShadow
             toolStripStatusLabel1 = new ToolStripStatusLabel();
             btnOK = new Button();
             statusStrip1 = new StatusStrip();
+            toolStripStatusLabel3 = new ToolStripStatusLabel();
             cmbZoom = new ComboBox();
             cbBGColor = new CheckBox();
             button8 = new Button();
@@ -185,13 +186,20 @@ namespace PseudoShadow
             // 
             // statusStrip1
             // 
-            statusStrip1.Items.AddRange(new ToolStripItem[] { toolStripStatusLabel1, toolStripStatusLabel2, toolStripProgressBar1, toolStripStatusLabel4 });
+            statusStrip1.Items.AddRange(new ToolStripItem[] { toolStripStatusLabel1, toolStripStatusLabel3, toolStripStatusLabel2, toolStripProgressBar1, toolStripStatusLabel4 });
             statusStrip1.Location = new Point(0, 69);
             statusStrip1.Name = "statusStrip1";
             statusStrip1.Padding = new Padding(1, 0, 16, 0);
             statusStrip1.Size = new Size(1486, 45);
             statusStrip1.TabIndex = 2;
             statusStrip1.Text = "statusStrip1";
+            // 
+            // toolStripStatusLabel3
+            // 
+            toolStripStatusLabel3.Font = new Font("Segoe UI", 15.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            toolStripStatusLabel3.Name = "toolStripStatusLabel3";
+            toolStripStatusLabel3.Size = new Size(37, 40);
+            toolStripStatusLabel3.Text = "    ";
             // 
             // cmbZoom
             // 
@@ -290,7 +298,7 @@ namespace PseudoShadow
             splitContainer2.Panel2.Controls.Add(button8);
             splitContainer2.Panel2.Controls.Add(button2);
             splitContainer2.Size = new Size(1486, 862);
-            splitContainer2.SplitterDistance = 1124;
+            splitContainer2.SplitterDistance = 1122;
             splitContainer2.SplitterWidth = 5;
             splitContainer2.TabIndex = 0;
             // 
@@ -303,7 +311,7 @@ namespace PseudoShadow
             luBitmapDesignerCtrl1.SelectedShape = null;
             luBitmapDesignerCtrl1.ShadowMode = false;
             luBitmapDesignerCtrl1.ShapeList = null;
-            luBitmapDesignerCtrl1.Size = new Size(1124, 862);
+            luBitmapDesignerCtrl1.Size = new Size(1122, 862);
             luBitmapDesignerCtrl1.TabIndex = 0;
             // 
             // label14
@@ -958,5 +966,6 @@ namespace PseudoShadow
         private Label label14;
         private Button btnLoadUpper;
         private Button btnMerge;
+        private ToolStripStatusLabel toolStripStatusLabel3;
     }
 }

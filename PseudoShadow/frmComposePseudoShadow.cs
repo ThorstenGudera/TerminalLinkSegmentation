@@ -73,8 +73,27 @@ namespace PseudoShadow
                 this.luBitmapDesignerCtrl1.ShapeRemoved += LuBitmapDesignerCtrl1_ShapeRemoved;
                 this.luBitmapDesignerCtrl1.SPC += LuBitmapDesignerCtrl1_SPC;
 
+                this.luBitmapDesignerCtrl1.helplineRulerCtrl1.dbPanel1.MouseMove += DbPanel1_MouseMove;
+
                 if (this.luBitmapDesignerCtrl1.ShapeList != null && this.luBitmapDesignerCtrl1.ShapeList.Count > 0)
                     this.LuBitmapDesignerCtrl1_ShapeChanged(this, this.luBitmapDesignerCtrl1.ShapeList[this.luBitmapDesignerCtrl1.ShapeList.Count - 1]);
+            }
+        }
+
+        private void DbPanel1_MouseMove(object? sender, MouseEventArgs e)
+        {
+            int ix = (int)((e.X - this.luBitmapDesignerCtrl1.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X) / (double)this.luBitmapDesignerCtrl1.helplineRulerCtrl1.Zoom);
+            int iy = (int)((e.Y - this.luBitmapDesignerCtrl1.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y) / (double)this.luBitmapDesignerCtrl1.helplineRulerCtrl1.Zoom);
+
+            //int eX = e.X - this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X;
+            //int eY = e.Y - this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y;
+
+            if (ix >= 0 && ix < this.luBitmapDesignerCtrl1.helplineRulerCtrl1.Bmp.Width && iy >= 0 && iy < this.luBitmapDesignerCtrl1.helplineRulerCtrl1.Bmp.Height)
+            {
+                this.toolStripStatusLabel1.Text = "x: " + ix.ToString() + ", y: " + iy.ToString();
+                Color c =this.luBitmapDesignerCtrl1.helplineRulerCtrl1.Bmp.GetPixel(ix, iy);
+                this.toolStripStatusLabel3.Text = c.ToString();
+                this.toolStripStatusLabel2.BackColor = c;
             }
         }
 
@@ -266,8 +285,8 @@ namespace PseudoShadow
                 this.luBitmapDesignerCtrl1.SetZoom(cmbZoom.SelectedItem.ToString());
                 this.luBitmapDesignerCtrl1.helplineRulerCtrl1.Enabled = true;
                 if (this.cmbZoom.SelectedIndex < 2)
-                    this.luBitmapDesignerCtrl1.helplineRulerCtrl1.ZoomSetManually = true;    
-                
+                    this.luBitmapDesignerCtrl1.helplineRulerCtrl1.ZoomSetManually = true;
+
                 this.luBitmapDesignerCtrl1.helplineRulerCtrl1.DontDoLayout = false;
                 this.luBitmapDesignerCtrl1.SetupBGImage();
             }
