@@ -56,6 +56,9 @@ namespace AvoidAGrabCutEasy
         private GrabCutOp? _gc;
         private object _lockObject = new object();
         private List<List<Rectangle>>? _rectsList;
+        private Bitmap? _bmpWork;
+        private Bitmap? _bmpTrimap;
+        private Bitmap? _bmpMatte;
 
         public Bitmap FBitmap
         {
@@ -411,8 +414,14 @@ namespace AvoidAGrabCutEasy
                     this._bmpBU.Dispose();
                 if (this._bmpOrig != null)
                     this._bmpOrig.Dispose();
-                if (this._bmpRef != null)
+                if (this._bmpRef != null) //--> result
                     this._bmpRef.Dispose();
+                if (this._bmpTrimap != null)
+                    this._bmpTrimap.Dispose();
+                if (this._bmpWork != null)
+                    this._bmpWork.Dispose();
+                if (this._bmpMatte != null)
+                    this._bmpMatte.Dispose();
 
                 if (this._cfop != null)
                 {
@@ -920,9 +929,17 @@ namespace AvoidAGrabCutEasy
                             bool trySingleTile = scalesPics ? false : this.cbHalfSize.Checked ? false : true;
                             bool verifyTrimaps = false;
 
+                            Bitmap? tr = new Bitmap(trWork);
+                            Bitmap? bWrk = new Bitmap(bWork);
+                            if (tr != null && bWrk != null)
+                            {
+                                this.SetBitmap(ref this._bmpWork, ref bWrk);
+                                this.SetBitmap(ref this._bmpTrimap, ref tr);
+                            }
+
                             this.backgroundWorker4.RunWorkerAsync(new object[] { 1 /*GMRES_r; 0 is GaussSeidel*/, scalesPics, scales, overlap,
-                            interpolated, forceSerial, group, groupAmountX, groupAmountY, maxSize, bWork, trWork,
-                            trySingleTile, verifyTrimaps });
+                                interpolated, forceSerial, group, groupAmountX, groupAmountY, maxSize, bWork, trWork,
+                                trySingleTile, verifyTrimaps });
                         }
                     }
                 }
@@ -3730,6 +3747,10 @@ namespace AvoidAGrabCutEasy
 
                     if (bmp != null)
                     {
+                        Bitmap? bmpMatte = new Bitmap(bmp);
+                        if (bmpMatte != null)
+                            this.SetBitmap(ref this._bmpMatte, ref bmpMatte);
+
                         frmEdgePic frm4 = new frmEdgePic(bmp);
                         frm4.Text = "Alpha Matte";
                         frm4.ShowDialog();
@@ -3750,6 +3771,8 @@ namespace AvoidAGrabCutEasy
 
                     Bitmap? bC = new Bitmap(bmp);
                     this.SetBitmap(ref _bmpRef, ref bC);
+
+                    this.toolStripDropDownButton1.Enabled = true;
 
                     this.helplineRulerCtrl1.SetZoom(this.helplineRulerCtrl1.Zoom.ToString());
                     this.helplineRulerCtrl1.MakeBitmap(this.helplineRulerCtrl1.Bmp);
@@ -5391,6 +5414,13 @@ namespace AvoidAGrabCutEasy
                 this.pictureBox1.Image = this._bmpOrig;
                 this.pictureBox1.Refresh();
             }
+        }
+
+        private void toolStripDropDownButton1_Click(object sender, EventArgs e)
+        {
+            //bmpRef, bmpTrimap, bmpMatte, bmpWork, bmpOrig
+            using frmPictures frm = new(_bmpRef, _bmpTrimap, _bmpMatte, _bmpWork, _bmpOrig);
+            frm.ShowDialog();
         }
     }
 }
