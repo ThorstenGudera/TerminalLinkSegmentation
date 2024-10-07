@@ -23,10 +23,13 @@ namespace LUBitmapDesigner
         public abstract void Draw(Graphics gx);
         public abstract void Dispose();
 
-        public void Draw(Graphics gx, Bitmap? background)
+        public void Draw(Bitmap? background)
         {
-            if (this.MergeOperation == MergeOperation.Normal)
+            if (this.MergeOperation == MergeOperation.Normal && background != null)
+            {
+                using Graphics gx = Graphics.FromImage(background);
                 this.Draw(gx);
+            }
             else if (background != null)
             {
                 //we change the Bounds temporilarily later
@@ -326,19 +329,21 @@ namespace LUBitmapDesigner
                 {
                     case MergeOperation.AlphaMask_BGForAlphaGr0:
                     case MergeOperation.AlphaMask_AlphaFromMask:
-                    case MergeOperation.AlphaMask_Invers:
+                    //case MergeOperation.AlphaMask_Invers: //switched off, since we usually want to keep the whole orig part.
                     case MergeOperation.AlphaMask_AlphaFromMaskWhenLower:
-                        byte* p = (byte*)bmL.Scan0;
-                        for (int y = 0; y < bH; y++)
+                        Parallel.For(0, bH, y =>
                         {
+                            Rectangle rcDrawTmp = new(rcDraw.Location, rcDraw.Size);
+                            byte* p = (byte*)bmL.Scan0;
+                            p += y * strideL;
                             for (int x = 0; x < bW; x++)
                             {
-                                if (!rcDraw.Contains(x, y))
+                                if (!rcDrawTmp.Contains(x, y))
                                     p[3] = 0;
 
                                 p += 4;
                             }
-                        }
+                        });
                         break;
 
                     default:

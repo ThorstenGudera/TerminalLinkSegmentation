@@ -4169,6 +4169,7 @@ namespace AvoidAGrabCutEasy
                                     Bitmap bC = new Bitmap(bmp);
                                     this.SetBitmap(ref this._bmpBU, ref bC);
 
+                                    this._pic_changed = true;
                                     this.btnOK.Enabled = true;
                                 }
                             }

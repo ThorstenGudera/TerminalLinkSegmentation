@@ -308,20 +308,18 @@ namespace PseudoShadow
             {
                 bOut = new Bitmap(this.luBitmapDesignerCtrl1.helplineRulerCtrl1.Bmp.Width, this.luBitmapDesignerCtrl1.helplineRulerCtrl1.Bmp.Height);
                 using (Graphics gx = Graphics.FromImage(bOut))
-                {
                     if (this.luBitmapDesignerCtrl1.ShapeList != null && this.luBitmapDesignerCtrl1.ShapeList.Count > 0)
                         gx.DrawImage(this.luBitmapDesignerCtrl1.helplineRulerCtrl1.Bmp, 0, 0);
 
-                    if (this.luBitmapDesignerCtrl1.ShapeList != null && this.luBitmapDesignerCtrl1.ShapeList.Count > 1)
-                    {
-                        float zBU = this.luBitmapDesignerCtrl1.ShapeList[0].Zoom;
+                if (this.luBitmapDesignerCtrl1.ShapeList != null && this.luBitmapDesignerCtrl1.ShapeList.Count > 1)
+                {
+                    float zBU = this.luBitmapDesignerCtrl1.ShapeList[0].Zoom;
 
-                        for (int j = 1; j < this.luBitmapDesignerCtrl1.ShapeList.Count; j++)
-                        {
-                            this.luBitmapDesignerCtrl1.ShapeList[j].Zoom = 1.0f;
-                            this.luBitmapDesignerCtrl1.ShapeList[j].Draw(gx, bOut);
-                            this.luBitmapDesignerCtrl1.ShapeList[j].Zoom = zBU;
-                        }
+                    for (int j = 1; j < this.luBitmapDesignerCtrl1.ShapeList.Count; j++)
+                    {
+                        this.luBitmapDesignerCtrl1.ShapeList[j].Zoom = 1.0f;
+                        this.luBitmapDesignerCtrl1.ShapeList[j].Draw(bOut);
+                        this.luBitmapDesignerCtrl1.ShapeList[j].Zoom = zBU;
                     }
                 }
             }

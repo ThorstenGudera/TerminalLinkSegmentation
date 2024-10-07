@@ -46,14 +46,13 @@ namespace LUBitmapDesigner
 
                 using Bitmap bmp = new(this.helplineRulerCtrl1.Bmp);
 
-                using Graphics gx = Graphics.FromImage(bmp);
                 for (int i = 1; i < this.ShapeList.Count; i++)
                 {
                     if (this.SelectedShape != null && !this.ShapeList[i].Equals(this.SelectedShape))
-                    {
+                    {   
                         float zoom = this.ShapeList[i].Zoom;
                         this.ShapeList[i].Zoom = 1.0F;
-                        this.ShapeList[i].Draw(gx, bmp);
+                        this.ShapeList[i].Draw(bmp);
                         this.ShapeList[i].Zoom = zoom;
                     }
                 }
@@ -405,16 +404,15 @@ namespace LUBitmapDesigner
                 if (this._bgImage != null)
                 {
                     using Bitmap bmp = new Bitmap(this._bgImage);
-                    using Graphics g = Graphics.FromImage(bmp);
                     if (this.ShapeList.Count > 1 && this.SelectedShape != null)
                     {
-                        this.SelectedShape.Draw(g, bmp);
+                        this.SelectedShape.Draw(bmp);
                         e.Graphics.Clear(this.helplineRulerCtrl1.dbPanel1.BackColor); //needed for Alphamasks
                         e.Graphics.DrawImageUnscaled(bmp, this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X, this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y);
                     }
                     else if(this.ShapeList.Count > 1 && this.SelectedShape == null)
                     {
-                        this.ShapeList[this.ShapeList.Count - 1].Draw(g, bmp);
+                        this.ShapeList[this.ShapeList.Count - 1].Draw(bmp);
                         e.Graphics.Clear(this.helplineRulerCtrl1.dbPanel1.BackColor); //needed for Alphamasks
                         e.Graphics.DrawImageUnscaled(bmp, this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X, this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y);
                     }
