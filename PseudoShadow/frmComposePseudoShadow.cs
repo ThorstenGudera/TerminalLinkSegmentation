@@ -1252,6 +1252,9 @@ namespace PseudoShadow
                         MessageBox.Show("Error, or impossible Operation.", "Hello", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
 
+                    if (this.luBitmapDesignerCtrl1.SelectedShape != null)
+                        this.picInfoCtrl1.SetValues(this.luBitmapDesignerCtrl1.SelectedShape);
+
                     SetControls(true);
                     this.btnShear.Enabled = true;
 

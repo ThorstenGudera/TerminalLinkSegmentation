@@ -378,9 +378,23 @@ namespace LUBitmapDesigner
                         // with the method "IsVisible" we check, if the current point is inside the path
                         if (gP.IsVisible(p))
                         {
-                            ShapeChanged?.Invoke(this, this.ShapeList[i]);
-                            gP.Dispose();
-                            return this.ShapeList[i].ID;
+                            //if we hit the lower shape, bring it to front
+                            if (this.ShapeList.Count > 2 && i != this.ShapeList.Count - 1) //if we only have one shape and the background, the upper shape is always shaapelist.count - 1, so the first check isnt really needed
+                            {
+                                ShadowShapeList sl = (ShadowShapeList)this.ShapeList;
+                                sl.SwapUpperShapes();
+
+                                int j = this.ShapeList.Count - 1;
+                                ShapeChanged?.Invoke(this, this.ShapeList[j]);
+                                gP.Dispose();
+                                return this.ShapeList[j].ID;
+                            }
+                            else
+                            {
+                                ShapeChanged?.Invoke(this, this.ShapeList[i]);
+                                gP.Dispose();
+                                return this.ShapeList[i].ID;
+                            }
                         }
                     }
                 }
