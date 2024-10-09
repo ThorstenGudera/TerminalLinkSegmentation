@@ -35,6 +35,7 @@
             btnCancel = new Button();
             btnOK = new Button();
             saveFileDialog1 = new SaveFileDialog();
+            label1 = new Label();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
             splitContainer1.Panel2.SuspendLayout();
@@ -55,6 +56,7 @@
             // 
             // splitContainer1.Panel2
             // 
+            splitContainer1.Panel2.Controls.Add(label1);
             splitContainer1.Panel2.Controls.Add(btnSave);
             splitContainer1.Panel2.Controls.Add(listBox1);
             splitContainer1.Panel2.Controls.Add(btnCancel);
@@ -75,7 +77,7 @@
             // 
             // btnSave
             // 
-            btnSave.Location = new Point(17, 141);
+            btnSave.Location = new Point(17, 181);
             btnSave.Name = "btnSave";
             btnSave.Size = new Size(103, 27);
             btnSave.TabIndex = 107;
@@ -122,6 +124,15 @@
             saveFileDialog1.FileName = "Bild1.png";
             saveFileDialog1.Filter = "Png-Images (*.png)|*.png";
             // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Location = new Point(17, 142);
+            label1.Name = "label1";
+            label1.Size = new Size(19, 15);
+            label1.TabIndex = 108;
+            label1.Text = "    ";
+            // 
             // frmPictures
             // 
             AcceptButton = btnOK;
@@ -137,6 +148,7 @@
             Load += frmPictures_Load;
             splitContainer1.Panel1.ResumeLayout(false);
             splitContainer1.Panel2.ResumeLayout(false);
+            splitContainer1.Panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).EndInit();
             splitContainer1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
@@ -152,5 +164,6 @@
         private ListBox listBox1;
         private Button btnSave;
         private SaveFileDialog saveFileDialog1;
+        private Label label1;
     }
 }

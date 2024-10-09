@@ -1120,6 +1120,8 @@ namespace AvoidAGrabCutEasy
 
             DisableBoundControls(this.cbExpOutlProc.Checked);
             this.btnOnlyRestore.Enabled = false;
+
+            this.cbExpOutlProc.Checked = true;
         }
 
         private void SetControls(bool e)

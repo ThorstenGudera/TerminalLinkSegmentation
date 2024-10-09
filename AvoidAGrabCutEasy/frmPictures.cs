@@ -78,6 +78,9 @@ namespace AvoidAGrabCutEasy
                     default:
                         break;
                 }
+
+            if (this.pictureBox1.Image != null)
+                this.label1.Text = "Size: " + this.pictureBox1.Image.Size.ToString();
         }
 
         private void frmPictures_FormClosing(object sender, FormClosingEventArgs e)
