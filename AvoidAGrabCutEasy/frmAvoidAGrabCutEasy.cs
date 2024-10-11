@@ -4934,14 +4934,6 @@ namespace AvoidAGrabCutEasy
 
         private void btnDoAll_Click(object sender, EventArgs e)
         {
-            if(this.cbRectMode.Checked == false || this._rW == 0 ||  this._rH == 0)
-            {
-                MessageBox.Show("No rect specified.");
-                this.button4_Click(this.btnReset2, new EventArgs());
-                this.cbRectMode.Checked = true;
-                return;
-            }
-
             //reset state
             if (this.backgroundWorker1.IsBusy || this.backgroundWorker2.IsBusy)
             {
@@ -4951,6 +4943,16 @@ namespace AvoidAGrabCutEasy
                 if (this.backgroundWorker2.IsBusy)
                     this.backgroundWorker2.CancelAsync();
 
+                return;
+            }
+
+            if ((!this.cbRectMode.Checked && !this.cbScribbleMode.Checked && this._b4Copy == null) ||
+                (this.cbRectMode.Checked && this._rW == 0) || (this.cbRectMode.Checked && this._rH == 0) ||
+                (this.cbScribbleMode.Checked && this._scribbles == null))
+            {
+                MessageBox.Show("No rect specified.");
+                this.button4_Click(this.btnReset2, new EventArgs());
+                this.cbRectMode.Checked = true;
                 return;
             }
 
