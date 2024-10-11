@@ -1474,6 +1474,12 @@ namespace AvoidAGrabCutEasy
                     this._undoOPCache.Dispose();
                 if (this._scribblesBitmap != null)
                     this._scribblesBitmap.Dispose();
+                if (this._bmpTrimap != null)
+                    this._bmpTrimap.Dispose();
+                if (this._bmpWork != null)
+                    this._bmpWork.Dispose();
+                if (this._bmpMatte != null)
+                    this._bmpMatte.Dispose();
 
                 if (this._pathList != null)
                 {
