@@ -4934,6 +4934,14 @@ namespace AvoidAGrabCutEasy
 
         private void btnDoAll_Click(object sender, EventArgs e)
         {
+            if(this.cbRectMode.Checked == false || this._rW == 0 ||  this._rH == 0)
+            {
+                MessageBox.Show("No rect specified.");
+                this.button4_Click(this.btnReset2, new EventArgs());
+                this.cbRectMode.Checked = true;
+                return;
+            }
+
             //reset state
             if (this.backgroundWorker1.IsBusy || this.backgroundWorker2.IsBusy)
             {
@@ -6699,7 +6707,9 @@ namespace AvoidAGrabCutEasy
                         {
                             Bitmap? bmp2 = null;
 
-                            if (frm.ShowDialog() == DialogResult.OK && frm.FBitmap != null)
+                            DialogResult dlg = frm.ShowDialog();
+
+                            if (dlg == DialogResult.OK && frm.FBitmap != null)
                             {
                                 bmp2 = new Bitmap(frm.FBitmap);
 
@@ -6710,6 +6720,16 @@ namespace AvoidAGrabCutEasy
                                     bOld2.Dispose();
                                     bOld2 = null;
                                 }
+                            }
+                            else if(dlg == DialogResult.Cancel)
+                            {
+                                bTrimap.Dispose();
+                                bWork.Dispose();
+                                this._cancelledOp = true;
+                                Cleanup();
+                                this.button4_Click(this.btnReset2, new EventArgs());
+                                this.cbRectMode.Checked = true;
+                                return;
                             }
                         }
                     }
