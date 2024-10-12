@@ -5745,6 +5745,9 @@ namespace AvoidAGrabCutEasy
 
                 if (this._finishedPart1)
                 {
+                    if (cbDraw.Checked)
+                        cbDraw.Checked = false;
+
                     Bitmap? bPrev = new Bitmap(this.helplineRulerCtrl2.Bmp);
 
                     if (approxCurves)
