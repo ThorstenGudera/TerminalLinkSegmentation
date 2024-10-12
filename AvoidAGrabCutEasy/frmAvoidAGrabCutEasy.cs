@@ -1504,11 +1504,6 @@ namespace AvoidAGrabCutEasy
 
             this.cbQuickEst_CheckedChanged(this.cbQuickEst, new EventArgs());
             this.cbDraw_CheckedChanged(this.cbDraw, new EventArgs());
-
-            this.numAlgMaxIter.Maximum = Int32.MaxValue;
-            this.numAlgMaxIter.Value = (decimal)this._algMaxIter;
-            this.numQATH.Maximum = Int32.MaxValue;
-            this.numQATH.Value = (decimal)this._algQATH;
         }
 
         private double CheckWidthHeight(Bitmap bmp, bool fp)
@@ -1630,26 +1625,6 @@ namespace AvoidAGrabCutEasy
             }
         }
 
-        private void numAlgMaxIter_ValueChanged(object sender, EventArgs e)
-        {
-            this._algMaxIter = (int)this.numAlgMaxIter.Value;
-
-            if (this._gc != null && this._gc.Alg != null)
-                this._gc.MaxIter = this._gc.Alg.MaxIter = (int)this._algMaxIter;
-
-            if (this._gc != null && this._gc.AlgBK != null)
-                this._gc.MaxIter = this._gc.AlgBK.MaxIter = (int)this._algMaxIter;
-        }
-
-        private void numQATH_ValueChanged(object sender, EventArgs e)
-        {
-            this._algQATH = (int)this.numQATH.Value;
-
-            if (this._gc != null && this._gc.Alg != null)
-                if (this._gc.Alg is IQATHAlg)
-                    ((IQATHAlg)this._gc.Alg).QATH = (int)this._algQATH;
-        }
-
         private void btnGo_Click(object sender, EventArgs e)
         {
             //reset state
@@ -1705,8 +1680,6 @@ namespace AvoidAGrabCutEasy
                     this.btnGo.Enabled = true;
                     this.toolStripProgressBar1.Value = 0;
                     this.toolStripProgressBar1.Visible = true;
-                    this.label39.Enabled = this.numAlgMaxIter.Enabled = true;
-                    this.label40.Enabled = this.numQATH.Enabled = true;
 
                     this.toolStripStatusLabel1.Text = "resFactor: " + Math.Max(res, 1).ToString("N2");
 
@@ -1904,8 +1877,6 @@ namespace AvoidAGrabCutEasy
                         NumCorrect = numCorrect,
                         NumItems2 = numItems2,
                         NumCorrect2 = numCorrect2,
-                        MaxIter = this._algMaxIter,
-                        QATH = this._algQATH,
                         AutoThreshold = autoThreshold,
                         KMeansInitIters = KMeansInitIters,
                         kMInitRnd = kMInitRnd,
@@ -3022,16 +2993,6 @@ namespace AvoidAGrabCutEasy
             }
         }
 
-        private void btnResQATH_Click(object sender, EventArgs e)
-        {
-            this.numQATH.Value = 1000000;
-        }
-
-        private void btnResMaxIter_Click(object sender, EventArgs e)
-        {
-            this.numAlgMaxIter.Value = Int32.MaxValue / 3;
-        }
-
         private void btnMinCut_Click(object sender, EventArgs e)
         {
             if (this.backgroundWorker1.IsBusy || this.backgroundWorker2.IsBusy)
@@ -3086,8 +3047,6 @@ namespace AvoidAGrabCutEasy
                     this.btnMinCut.Enabled = true;
                     this.toolStripProgressBar1.Value = 0;
                     this.toolStripProgressBar1.Visible = true;
-                    this.label39.Enabled = this.numAlgMaxIter.Enabled = true;
-                    this.label40.Enabled = this.numQATH.Enabled = true;
 
                     this.toolStripStatusLabel1.Text = "resFactor: " + Math.Max(res, 1).ToString("N2");
 
@@ -3273,8 +3232,6 @@ namespace AvoidAGrabCutEasy
                         NumCorrect = numCorrect,
                         NumItems2 = numItems2,
                         NumCorrect2 = numCorrect2,
-                        MaxIter = this._algMaxIter,
-                        QATH = this._algQATH,
                         AutoThreshold = autoThreshold,
                         KMeansInitIters = KMeansInitIters,
                         kMInitRnd = kMInitRnd,
@@ -5019,8 +4976,6 @@ namespace AvoidAGrabCutEasy
                     this.btnDoAll.Enabled = true;
                     this.toolStripProgressBar1.Value = 0;
                     this.toolStripProgressBar1.Visible = true;
-                    this.label39.Enabled = this.numAlgMaxIter.Enabled = true;
-                    this.label40.Enabled = this.numQATH.Enabled = true;
 
                     this.toolStripStatusLabel1.Text = "resFactor: " + Math.Max(res, 1).ToString("N2");
 
@@ -5239,8 +5194,6 @@ namespace AvoidAGrabCutEasy
                         NumCorrect = numCorrect,
                         NumItems2 = numItems2,
                         NumCorrect2 = numCorrect2,
-                        MaxIter = this._algMaxIter,
-                        QATH = this._algQATH,
                         AutoThreshold = autoThreshold,
                         KMeansInitIters = KMeansInitIters,
                         kMInitRnd = kMInitRnd,

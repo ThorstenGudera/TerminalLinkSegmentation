@@ -14,7 +14,7 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement.TreeView;
 
 namespace AvoidAGrabCutEasy
 {
-    public class BoykovKolmogorov : IMaxFlowAlg //Correct Results but Too Slow For Pictures
+    public class BoykovKolmogorov
     {
         private List<int> _activeList = new List<int>();
         private Queue<int> _orphans = new Queue<int>();

@@ -86,8 +86,6 @@
             cbSkipLearn = new CheckBox();
             label1 = new Label();
             btnMinCut = new Button();
-            btnResQATH = new Button();
-            btnResMaxIter = new Button();
             cbEightAdj = new CheckBox();
             btnRecut = new Button();
             btnRemStroke = new Button();
@@ -95,10 +93,6 @@
             cmbCurrentColor = new ComboBox();
             cbDraw = new CheckBox();
             numWH = new NumericUpDown();
-            label40 = new Label();
-            label39 = new Label();
-            numQATH = new NumericUpDown();
-            numAlgMaxIter = new NumericUpDown();
             Label20 = new Label();
             cmbZoom = new ComboBox();
             cbBGColor = new CheckBox();
@@ -166,8 +160,6 @@
             ((System.ComponentModel.ISupportInitialize)numComponents2).BeginInit();
             panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numWH).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)numQATH).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)numAlgMaxIter).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numMultTLCap).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numMaxSize).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numProbMult1).BeginInit();
@@ -228,8 +220,6 @@
             panel1.Controls.Add(cbSkipLearn);
             panel1.Controls.Add(label1);
             panel1.Controls.Add(btnMinCut);
-            panel1.Controls.Add(btnResQATH);
-            panel1.Controls.Add(btnResMaxIter);
             panel1.Controls.Add(cbEightAdj);
             panel1.Controls.Add(btnRecut);
             panel1.Controls.Add(btnRemStroke);
@@ -237,10 +227,6 @@
             panel1.Controls.Add(cmbCurrentColor);
             panel1.Controls.Add(cbDraw);
             panel1.Controls.Add(numWH);
-            panel1.Controls.Add(label40);
-            panel1.Controls.Add(label39);
-            panel1.Controls.Add(numQATH);
-            panel1.Controls.Add(numAlgMaxIter);
             panel1.Controls.Add(Label20);
             panel1.Controls.Add(cmbZoom);
             panel1.Controls.Add(cbBGColor);
@@ -887,28 +873,6 @@
             btnMinCut.UseVisualStyleBackColor = true;
             btnMinCut.Click += btnMinCut_Click;
             // 
-            // btnResQATH
-            // 
-            btnResQATH.Location = new Point(831, 150);
-            btnResQATH.Margin = new Padding(4, 3, 4, 3);
-            btnResQATH.Name = "btnResQATH";
-            btnResQATH.Size = new Size(49, 27);
-            btnResQATH.TabIndex = 662;
-            btnResQATH.Text = "res";
-            btnResQATH.UseVisualStyleBackColor = true;
-            btnResQATH.Click += btnResQATH_Click;
-            // 
-            // btnResMaxIter
-            // 
-            btnResMaxIter.Location = new Point(831, 118);
-            btnResMaxIter.Margin = new Padding(4, 3, 4, 3);
-            btnResMaxIter.Name = "btnResMaxIter";
-            btnResMaxIter.Size = new Size(49, 27);
-            btnResMaxIter.TabIndex = 662;
-            btnResMaxIter.Text = "res";
-            btnResMaxIter.UseVisualStyleBackColor = true;
-            btnResMaxIter.Click += btnResMaxIter_Click;
-            // 
             // cbEightAdj
             // 
             cbEightAdj.AutoSize = true;
@@ -987,50 +951,6 @@
             numWH.Size = new Size(52, 23);
             numWH.TabIndex = 655;
             numWH.Value = new decimal(new int[] { 25, 0, 0, 0 });
-            // 
-            // label40
-            // 
-            label40.AutoSize = true;
-            label40.Location = new Point(662, 156);
-            label40.Margin = new Padding(4, 0, 4, 0);
-            label40.Name = "label40";
-            label40.Size = new Size(38, 15);
-            label40.TabIndex = 653;
-            label40.Text = "QATH";
-            toolTip1.SetToolTip(label40, "maximum number of re-inserting a node to the queue\r\nwhen using a mincut algorithm\r\n(CGwQE checked, or QuickEstimation unchecked)\r\n");
-            // 
-            // label39
-            // 
-            label39.AutoSize = true;
-            label39.Location = new Point(663, 123);
-            label39.Margin = new Padding(4, 0, 4, 0);
-            label39.Name = "label39";
-            label39.Size = new Size(47, 15);
-            label39.TabIndex = 654;
-            label39.Text = "maxIter";
-            toolTip1.SetToolTip(label39, "maximum number of iterations\r\nwhen using a mincut algorithm\r\n(CGwQE checked, or QuickEstimation unchecked)");
-            // 
-            // numQATH
-            // 
-            numQATH.Location = new Point(718, 152);
-            numQATH.Margin = new Padding(4, 3, 4, 3);
-            numQATH.Maximum = new decimal(new int[] { 1410065407, 2, 0, 0 });
-            numQATH.Name = "numQATH";
-            numQATH.Size = new Size(104, 23);
-            numQATH.TabIndex = 651;
-            numQATH.Value = new decimal(new int[] { 1000000, 0, 0, 0 });
-            numQATH.ValueChanged += numQATH_ValueChanged;
-            // 
-            // numAlgMaxIter
-            // 
-            numAlgMaxIter.Location = new Point(718, 121);
-            numAlgMaxIter.Margin = new Padding(4, 3, 4, 3);
-            numAlgMaxIter.Maximum = new decimal(new int[] { 1410065407, 2, 0, 0 });
-            numAlgMaxIter.Name = "numAlgMaxIter";
-            numAlgMaxIter.Size = new Size(104, 23);
-            numAlgMaxIter.TabIndex = 652;
-            numAlgMaxIter.Value = new decimal(new int[] { 1000000, 0, 0, 0 });
-            numAlgMaxIter.ValueChanged += numAlgMaxIter_ValueChanged;
             // 
             // Label20
             // 
@@ -1690,8 +1610,6 @@
             panel2.ResumeLayout(false);
             panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)numWH).EndInit();
-            ((System.ComponentModel.ISupportInitialize)numQATH).EndInit();
-            ((System.ComponentModel.ISupportInitialize)numAlgMaxIter).EndInit();
             ((System.ComponentModel.ISupportInitialize)numMultTLCap).EndInit();
             ((System.ComponentModel.ISupportInitialize)numMaxSize).EndInit();
             ((System.ComponentModel.ISupportInitialize)numProbMult1).EndInit();
@@ -1754,10 +1672,6 @@
         internal System.Windows.Forms.Button button2;
         private System.Windows.Forms.Button btnCancel;
         private System.Windows.Forms.Button btnOK;
-        private System.Windows.Forms.Label label40;
-        private System.Windows.Forms.Label label39;
-        private System.Windows.Forms.NumericUpDown numQATH;
-        private System.Windows.Forms.NumericUpDown numAlgMaxIter;
         private HelplineRulerControl.HelplineRulerCtrl helplineRulerCtrl1;
         private HelplineRulerControl.HelplineRulerCtrl helplineRulerCtrl2;
         private System.Windows.Forms.Button btnRecut;
@@ -1771,8 +1685,6 @@
         private System.Windows.Forms.SaveFileDialog saveFileDialog1;
         private System.Windows.Forms.ToolTip toolTip1;
         private System.Windows.Forms.CheckBox cbEightAdj;
-        private System.Windows.Forms.Button btnResQATH;
-        private System.Windows.Forms.Button btnResMaxIter;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button btnMinCut;
         internal System.ComponentModel.BackgroundWorker backgroundWorker2;

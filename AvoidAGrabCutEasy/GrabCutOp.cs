@@ -49,11 +49,9 @@ namespace AvoidAGrabCutEasy
         public Rectangle Rc { get; internal set; }
         public BackgroundWorker? BGW { get; internal set; }
         public int[,]? Mask { get; internal set; }
-        public int MaxIter { get; internal set; } = Int32.MaxValue / 3;
         public List<int>? Result { get; internal set; }
         public bool ScribbleMode { get; internal set; }
         public List<StartNode> StartNodes { get; private set; } = new List<StartNode> { };
-        public int QATH { get; internal set; } = 1000000;
         public Dictionary<int, Dictionary<int, List<List<Point>>>>? Scribbles { get; internal set; }
         public bool QuickEstimation { get; set; }
         public bool EightAdj { get; internal set; }
@@ -70,7 +68,6 @@ namespace AvoidAGrabCutEasy
         public double NumCorrect { get; internal set; }
         public double NumItems2 { get; internal set; }
         public double NumCorrect2 { get; internal set; }
-        public PushRelabelFifo? Alg { get; internal set; }
         public double KMInitW { get; internal set; } = 2;
         public double KMInitH { get; internal set; } = 2;
         public BoykovKolmogorov? AlgBK { get; internal set; }
