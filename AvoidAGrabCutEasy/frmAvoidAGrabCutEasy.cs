@@ -4909,9 +4909,11 @@ namespace AvoidAGrabCutEasy
 
             if ((!this.cbRectMode.Checked && !this.cbScribbleMode.Checked && this._b4Copy == null) ||
                 (this.cbRectMode.Checked && this._rW == 0) || (this.cbRectMode.Checked && this._rH == 0) ||
-                (this.cbScribbleMode.Checked && this._scribbles == null))
+                (this.cbScribbleMode.Checked && this._scribbles == null) || this.btnDoAll.Text == "Cancel")
             {
                 MessageBox.Show("No rect specified.");
+                this.SetControls(true);
+                this.btnDoAll.Text = "DoAll";
                 this.button4_Click(this.btnReset2, new EventArgs());
                 this.cbRectMode.Checked = true;
                 return;
