@@ -31,6 +31,8 @@
             components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmAvoidAGrabCutEasy));
             panel1 = new Panel();
+            label22 = new Label();
+            btnResScribbles = new Button();
             panel7 = new Panel();
             panel5 = new Panel();
             cbApproxC = new CheckBox();
@@ -152,8 +154,6 @@
             bgwDoAll2 = new System.ComponentModel.BackgroundWorker();
             bgwDoAll3 = new System.ComponentModel.BackgroundWorker();
             bgwDoAll4 = new System.ComponentModel.BackgroundWorker();
-            label22 = new Label();
-            btnResScribbles = new Button();
             panel1.SuspendLayout();
             panel5.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numBoundOuter).BeginInit();
@@ -274,6 +274,27 @@
             panel1.TabIndex = 0;
             panel1.MouseDoubleClick += panel1_MouseDoubleClick;
             panel1.MouseDown += panel1_MouseDown;
+            // 
+            // label22
+            // 
+            label22.AutoSize = true;
+            label22.Location = new Point(810, 194);
+            label22.Name = "label22";
+            label22.Size = new Size(82, 15);
+            label22.TabIndex = 712;
+            label22.Text = "reset Scribbles";
+            toolTip1.SetToolTip(label22, "if scribbbles are drawn too small or too large.\r\nIf a processing pass has stopped by an error,\r\nthe scribbles may not be reset to its original zoom of 1.");
+            // 
+            // btnResScribbles
+            // 
+            btnResScribbles.Location = new Point(898, 190);
+            btnResScribbles.Name = "btnResScribbles";
+            btnResScribbles.Size = new Size(75, 23);
+            btnResScribbles.TabIndex = 711;
+            btnResScribbles.Text = "Reset";
+            toolTip1.SetToolTip(btnResScribbles, "if scribbbles are drawn too small or too large.\r\nIf a processing pass has stopped by an error,\r\nthe scribbles may not be reset to its original zoom of 1.");
+            btnResScribbles.UseVisualStyleBackColor = true;
+            btnResScribbles.Click += btnResScribbles_Click;
             // 
             // panel7
             // 
@@ -1586,25 +1607,6 @@
             bgwDoAll4.WorkerSupportsCancellation = true;
             bgwDoAll4.DoWork += bgwDoAll4_DoWork;
             bgwDoAll4.RunWorkerCompleted += bgwDoAll4_RunWorkerCompleted;
-            // 
-            // label22
-            // 
-            label22.AutoSize = true;
-            label22.Location = new Point(810, 194);
-            label22.Name = "label22";
-            label22.Size = new Size(82, 15);
-            label22.TabIndex = 712;
-            label22.Text = "reset Scribbles";
-            // 
-            // btnResScribbles
-            // 
-            btnResScribbles.Location = new Point(898, 190);
-            btnResScribbles.Name = "btnResScribbles";
-            btnResScribbles.Size = new Size(75, 23);
-            btnResScribbles.TabIndex = 711;
-            btnResScribbles.Text = "Reset";
-            btnResScribbles.UseVisualStyleBackColor = true;
-            btnResScribbles.Click += btnResScribbles_Click;
             // 
             // frmAvoidAGrabCutEasy
             // 

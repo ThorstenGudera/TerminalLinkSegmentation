@@ -2382,45 +2382,50 @@ namespace AvoidAGrabCutEasy
         {
             Dictionary<int, Dictionary<int, List<List<Point>>>> res = new Dictionary<int, Dictionary<int, List<List<Point>>>>();
 
-            foreach (int j in scribbles.Keys)
-            {
-                res.Add(j, new Dictionary<int, List<List<Point>>>());
-                Dictionary<int, List<List<Point>>> ptsWH = scribbles[j];
-
-                foreach (int wh in ptsWH.Keys)
+            if (scribbles != null && resWC != 0)
+                foreach (int j in scribbles.Keys)
                 {
-                    int newWH = (int)Math.Max(wh / resWC, 1);
+                    res.Add(j, new Dictionary<int, List<List<Point>>>());
 
-                    if (res[j].ContainsKey(newWH))
-                    {
-                        List<List<Point>> ja = ptsWH[wh];
+                    Dictionary<int, List<List<Point>>> ptsWH = scribbles[j];
 
-                        foreach (List<Point> pts in ja)
+                    if (ptsWH != null)
+                        foreach (int wh in ptsWH.Keys)
                         {
-                            List<Point> newPts = new List<Point>();
-                            Point[] transPts = pts.Select(a => new Point((int)(a.X / resWC), (int)(a.Y / resWC))).ToArray();
-                            newPts.AddRange(transPts);
+                            int newWH = (int)Math.Max(wh / resWC, 1);
 
-                            res[j][newWH].Add(newPts);
+                            if (res[j].ContainsKey(newWH))
+                            {
+                                List<List<Point>> ja = ptsWH[wh];
+
+                                if (ja != null)
+                                    foreach (List<Point> pts in ja)
+                                    {
+                                        List<Point> newPts = new List<Point>();
+                                        Point[] transPts = pts.Select(a => new Point((int)(a.X / resWC), (int)(a.Y / resWC))).ToArray();
+                                        newPts.AddRange(transPts);
+
+                                        res[j][newWH].Add(newPts);
+                                    }
+                            }
+                            else
+                            {
+                                res[j].Add(newWH, new List<List<Point>>());
+
+                                List<List<Point>> ja = ptsWH[wh];
+
+                                if (ja != null)
+                                    foreach (List<Point> pts in ja)
+                                    {
+                                        List<Point> newPts = new List<Point>();
+                                        Point[] transPts = pts.Select(a => new Point((int)(a.X / resWC), (int)(a.Y / resWC))).ToArray();
+                                        newPts.AddRange(transPts);
+
+                                        res[j][newWH].Add(newPts);
+                                    }
+                            }
                         }
-                    }
-                    else
-                    {
-                        res[j].Add(newWH, new List<List<Point>>());
-
-                        List<List<Point>> ja = ptsWH[wh];
-
-                        foreach (List<Point> pts in ja)
-                        {
-                            List<Point> newPts = new List<Point>();
-                            Point[] transPts = pts.Select(a => new Point((int)(a.X / resWC), (int)(a.Y / resWC))).ToArray();
-                            newPts.AddRange(transPts);
-
-                            res[j][newWH].Add(newPts);
-                        }
-                    }
                 }
-            }
 
             return res;
         }
@@ -2429,8 +2434,9 @@ namespace AvoidAGrabCutEasy
         {
             List<Tuple<int, int, int, bool, List<List<Point>>>> res = new List<Tuple<int, int, int, bool, List<List<Point>>>>();
 
-            for (int i = 0; i < scribbleSeq.Count; i++)
-                res.Add(Tuple.Create(scribbleSeq[i].Item1, (int)(scribbleSeq[i].Item2 / resWC), scribbleSeq[i].Item3, false, new List<List<Point>>()));
+            if (scribbleSeq != null)
+                for (int i = 0; i < scribbleSeq.Count; i++)
+                    res.Add(Tuple.Create(scribbleSeq[i].Item1, (int)(scribbleSeq[i].Item2 / resWC), scribbleSeq[i].Item3, false, new List<List<Point>>()));
 
             if (verify)
             {
