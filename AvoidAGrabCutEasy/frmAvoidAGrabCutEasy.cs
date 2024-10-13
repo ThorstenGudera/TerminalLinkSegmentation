@@ -6677,7 +6677,7 @@ namespace AvoidAGrabCutEasy
                                     bOld2 = null;
                                 }
                             }
-                            else if(dlg == DialogResult.Cancel)
+                            else if (dlg == DialogResult.Cancel)
                             {
                                 bTrimap.Dispose();
                                 bWork.Dispose();
@@ -8983,6 +8983,16 @@ namespace AvoidAGrabCutEasy
             //bmpRef, bmpTrimap, bmpMatte, bmpWork
             using frmPictures frm = new(_b4Copy, _bmpTrimap, _bmpMatte, _bmpWork, this.helplineRulerCtrl1.Bmp);
             frm.ShowDialog();
+        }
+
+        private void btnResScribbles_Click(object sender, EventArgs e)
+        {
+            if (this._scribblesBU != null && this._scribbleSeqBU != null)
+            {
+                this._scribbles = this._scribblesBU;
+                this._scribbleSeq = this._scribbleSeqBU;
+                this.helplineRulerCtrl1.dbPanel1.Invalidate();
+            }
         }
     }
 }

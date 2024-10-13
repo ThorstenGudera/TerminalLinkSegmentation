@@ -152,6 +152,8 @@
             bgwDoAll2 = new System.ComponentModel.BackgroundWorker();
             bgwDoAll3 = new System.ComponentModel.BackgroundWorker();
             bgwDoAll4 = new System.ComponentModel.BackgroundWorker();
+            label22 = new Label();
+            btnResScribbles = new Button();
             panel1.SuspendLayout();
             panel5.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numBoundOuter).BeginInit();
@@ -180,6 +182,8 @@
             // 
             // panel1
             // 
+            panel1.Controls.Add(label22);
+            panel1.Controls.Add(btnResScribbles);
             panel1.Controls.Add(panel7);
             panel1.Controls.Add(panel5);
             panel1.Controls.Add(cbHighlight);
@@ -1583,6 +1587,25 @@
             bgwDoAll4.DoWork += bgwDoAll4_DoWork;
             bgwDoAll4.RunWorkerCompleted += bgwDoAll4_RunWorkerCompleted;
             // 
+            // label22
+            // 
+            label22.AutoSize = true;
+            label22.Location = new Point(810, 194);
+            label22.Name = "label22";
+            label22.Size = new Size(82, 15);
+            label22.TabIndex = 712;
+            label22.Text = "reset Scribbles";
+            // 
+            // btnResScribbles
+            // 
+            btnResScribbles.Location = new Point(898, 190);
+            btnResScribbles.Name = "btnResScribbles";
+            btnResScribbles.Size = new Size(75, 23);
+            btnResScribbles.TabIndex = 711;
+            btnResScribbles.Text = "Reset";
+            btnResScribbles.UseVisualStyleBackColor = true;
+            btnResScribbles.Click += btnResScribbles_Click;
+            // 
             // frmAvoidAGrabCutEasy
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -1755,5 +1778,7 @@
         internal System.ComponentModel.BackgroundWorker bgwDoAll3;
         internal System.ComponentModel.BackgroundWorker bgwDoAll4;
         private ToolStripDropDownButton toolStripDropDownButton1;
+        private Label label22;
+        private Button btnResScribbles;
     }
 }
