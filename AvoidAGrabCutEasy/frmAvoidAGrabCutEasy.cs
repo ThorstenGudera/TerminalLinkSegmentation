@@ -93,8 +93,6 @@ namespace AvoidAGrabCutEasy
         private Dictionary<int, Dictionary<int, List<List<Point>>>>? _scribbles;
         private int _maxSize = 1200;
         private bool _finishedPart1;
-        private int _algMaxIter = Int32.MaxValue / 3;
-        private int _algQATH = 1000000;
 
         private double _items = 10;
         private double _correctItems = 5;
