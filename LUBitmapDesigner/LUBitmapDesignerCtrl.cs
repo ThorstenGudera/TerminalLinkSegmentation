@@ -89,14 +89,25 @@ namespace LUBitmapDesigner
         public Bitmap? GetUpperImage()
         {
             Bitmap? bOut = null;
-            if (this.ShapeList == null)
-                this.ShapeList = this.ShadowMode ? new ShadowShapeList() : new ShapeList();
-            if (this.ShapeList.Count == 0)
-                SetBlankLowerImage();
-            if (this.ShapeList.Count > 2)
-                bOut = this.ShapeList[2].Bmp;
-            else if (this.ShapeList.Count > 1)
-                bOut = this.ShapeList[1].Bmp;
+            if (this.SelectedShape != null)
+                bOut = this.SelectedShape.Bmp;
+            else
+            {
+                if (this.ShapeList == null)
+                    this.ShapeList = this.ShadowMode ? new ShadowShapeList() : new ShapeList();
+                if (this.ShapeList.Count == 0)
+                    SetBlankLowerImage();
+                if (this.ShapeList.Count > 2)
+                {
+                    bOut = this.ShapeList[2].Bmp;
+                    this.SelectedShape = this.ShapeList[2];
+                }
+                else if (this.ShapeList.Count > 1)
+                {
+                    bOut = this.ShapeList[1].Bmp;
+                    this.SelectedShape = this.ShapeList[1];
+                }
+            }
 
             return bOut;
         }
