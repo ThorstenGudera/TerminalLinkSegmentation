@@ -560,7 +560,7 @@ namespace AvoidAGrabCutEasy
                 HelplineRulerControl.DBPanel pz = this.helplineRulerCtrl1.dbPanel1;
 
                 ColorMatrix cm = new ColorMatrix();
-                cm.Matrix33 = 0.25F;
+                cm.Matrix33 = 0.75F;
 
                 using (ImageAttributes ia = new ImageAttributes())
                 {
