@@ -741,6 +741,8 @@ namespace AvoidAGrabCutEasy
             this.cmbGradMode.SelectedIndex = 2;
 
             this.cbBGColor_CheckedChanged(this.cbBGColor, new EventArgs());
+
+            this.cmbZoom.SelectedIndex = 4;
         }
 
         private void frmChainCode_FormClosing(object sender, FormClosingEventArgs e)
@@ -1123,6 +1125,8 @@ namespace AvoidAGrabCutEasy
                             this.btnUndo.Enabled = true;
                             CheckRedoButton();
                             this._pic_changed = true;
+
+                            DrawPointsToBitmap();
                         }
                     }
                     catch
