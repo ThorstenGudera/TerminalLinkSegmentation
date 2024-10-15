@@ -24,18 +24,19 @@ closed form matting: https://github.com/MarcoForte/closed-form-matting
 
 I maybe havent implemented the BoykovKolmogorov Algorithm correctly. I did it from the PseudoCode in the paper, but mine sometimes doesnt stop. The queue doesnt get empty, so I aded a Check-Method that compares the current path to the last checked path and breaks when similarity exceeds a given amount.
 
-It's IMHO better to use Bayes-Matting here, since a relatively thin (slim) unknown part in a closed curve (= our setup), is kind of ideal for Bayesian Matting. Bayesian Matting also does not use the big graph-like sparse matrix (the matting laplacian), because its done by solving small(er) eq-systems and so, we dont need so much memory while processing.
-But I dont know, if it is allowed to post code for Bayesian Matting. It's some code out there for that, but on the other hand, the people from https://alphamatting.com/code.php say that they do not post Bayesian Matting example code due to licensing issues.
-
 Note: Writes cached files to: LocalApplicationData\Thorsten_Gudera...
 
 Usage:
 
-    Start the app (WinForms, .net 8.0) and open an Image, click the go-button to open the Segmentation form.
-    Draw a rectangle with the mouse, set the parameters like the threshold-value and click onto the Go-button. Sometimes its good to lower the number of components to return, try a value of 1. [Optional]
-    On the right pane, check the draw on result checkbox and draw with the mouse onto regions that should be the type you selected from the combobox (eg. Background, Foregound etc)
-    Click onto the Go-button again
-    Process the outline
+Start the app (WinForms, .net 8.0) and open an Image, click the go-button to open the Segmentation form.
+Draw a rectangle with the mouse, set the parameters like the threshold-value and click onto the Go-button. Sometimes its good to lower the number of components to return, try a value of 1. [Optional]
+On the right pane, check the draw on result checkbox and draw with the mouse onto regions that should be the type you selected from the combobox (eg. Background, Foregound etc)
+Click onto the Go-button again
+Process the outline
+
+Or: Check the useScribbles checkbox and the Unknown radiobutton, draw (follow) the outline of the desired object until the curve is closed. Fill the inner of it by Contextmenu as Foreground and click the create a Matte button, let the form create the trimap by button click and the click onto go.
+
+You also could do a test for a complete result by clicking onto the DoAll button. You can draw onto the result and click that button again, if you like to edit the results.
 
 If you implement this in a performance optimized technology and language, you could get the segmentation [almost] in real-time.
 
