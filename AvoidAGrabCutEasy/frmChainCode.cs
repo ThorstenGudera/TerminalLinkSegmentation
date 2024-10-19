@@ -1494,12 +1494,14 @@ namespace AvoidAGrabCutEasy
 
         private void cbErase_CheckedChanged(object sender, EventArgs e)
         {
-            this.cbDraw.Checked = false;
+            if (this.cbErase.Checked)
+                this.cbDraw.Checked = false;
         }
 
         private void cbDraw_CheckedChanged(object sender, EventArgs e)
         {
-            this.cbErase.Checked = false;
+            if (this.cbDraw.Checked)
+                this.cbErase.Checked = false;
         }
 
         private void btnRemLastScribbles2_Click(object sender, EventArgs e)
