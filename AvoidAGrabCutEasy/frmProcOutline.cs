@@ -5424,5 +5424,12 @@ namespace AvoidAGrabCutEasy
             using frmPictures frm = new(_bmpRef, _bmpTrimap, _bmpMatte, _bmpWork, _bmpOrig);
             frm.ShowDialog();
         }
+
+        private void pictureBox1_DoubleClick(object sender, EventArgs e)
+        {
+            frmEdgePic frm4 = new frmEdgePic(this.pictureBox1.Image);
+            frm4.Text = "Orig";
+            frm4.ShowDialog();
+        }
     }
 }

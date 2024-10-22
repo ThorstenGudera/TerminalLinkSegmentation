@@ -4495,5 +4495,12 @@ namespace AvoidAGrabCutEasy
         {
             this.helplineRulerCtrl1.dbPanel1.Invalidate();
         }
+
+        private void pictureBox1_DoubleClick(object sender, EventArgs e)
+        {
+            frmEdgePic frm4 = new frmEdgePic(this.pictureBox1.Image);
+            frm4.Text = "Trimap";
+            frm4.ShowDialog();
+        }
     }
 }
