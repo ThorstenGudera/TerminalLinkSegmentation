@@ -4261,6 +4261,7 @@ namespace AvoidAGrabCutEasy
                     Color startColor = b.GetPixel(ptSt.X, ptSt.Y);
                     Color replaceColor = Color.Black;
 
+                    //first, draw the unknown curve(s)
                     using (Graphics gx = Graphics.FromImage(b))
                     {
                         if (this._scribbles != null)
@@ -4289,6 +4290,12 @@ namespace AvoidAGrabCutEasy
                                                             (int)(pt.Y - wh / 2),
                                                             (int)wh,
                                                             (int)wh));
+                                                    using (Pen pen = new Pen(c, 1))
+                                                        gx.DrawRectangle(pen, new Rectangle(
+                                                            (int)(pt.X - wh / 2),
+                                                            (int)(pt.Y - wh / 2),
+                                                            (int)wh,
+                                                            (int)wh));
                                                 }
                                             }
                                             else
@@ -4300,6 +4307,12 @@ namespace AvoidAGrabCutEasy
                                                         (int)(pt.Y - wh / 2),
                                                         (int)wh,
                                                         (int)wh));
+                                                using (Pen pen = new Pen(c, 1))
+                                                    gx.DrawRectangle(pen, new Rectangle(
+                                                        (int)(pt.X - wh / 2),
+                                                        (int)(pt.Y - wh / 2),
+                                                        (int)wh,
+                                                        (int)wh));
                                             }
                                         }
                                     }
@@ -4307,7 +4320,7 @@ namespace AvoidAGrabCutEasy
                             }
                     }
 
-                    FloodFillMethods.floodfill(b, ptSt.X, ptSt.Y, 7, startColor, replaceColor,
+                    FloodFillMethods.floodfill(b, ptSt.X, ptSt.Y, 125, startColor, replaceColor,
                         Int32.MaxValue, false, false, 1.0, false, false);
 
                     List<Point> ll = new List<Point>();
@@ -4364,11 +4377,19 @@ namespace AvoidAGrabCutEasy
             using Graphics gx = Graphics.FromImage(bmp);
             int wh = 3;
             foreach (Point pt in points)
+            {
                 gx.FillRectangle(Brushes.Black, new Rectangle(
                                             (int)(int)(pt.X - wh / 2),
                                             (int)(int)(pt.Y - wh / 2),
                                             (int)wh,
                                             (int)wh));
+                using Pen pen = new(Color.Black, 2);
+                gx.DrawRectangle(pen, new Rectangle(
+                                            (int)(int)(pt.X - wh / 2),
+                                            (int)(int)(pt.Y - wh / 2),
+                                            (int)wh,
+                                            (int)wh));
+            }
 
             List<ChainCode>? c = this.GetBoundary(bmp);
             if (c != null)
@@ -4414,6 +4435,7 @@ namespace AvoidAGrabCutEasy
                     Color startColor = b.GetPixel(ptSt.X, ptSt.Y);
                     Color replaceColor = Color.White;
 
+                    //first, draw the unknown curve(s)
                     using (Graphics gx = Graphics.FromImage(b))
                     {
                         if (this._scribbles != null)
@@ -4442,6 +4464,12 @@ namespace AvoidAGrabCutEasy
                                                             (int)(pt.Y - wh / 2),
                                                             (int)wh,
                                                             (int)wh));
+                                                    using (Pen pen = new Pen(c, 1))
+                                                        gx.DrawRectangle(pen, new Rectangle(
+                                                            (int)(pt.X - wh / 2),
+                                                            (int)(pt.Y - wh / 2),
+                                                            (int)wh,
+                                                            (int)wh));
                                                 }
                                             }
                                             else
@@ -4453,6 +4481,12 @@ namespace AvoidAGrabCutEasy
                                                         (int)(pt.Y - wh / 2),
                                                         (int)wh,
                                                         (int)wh));
+                                                using (Pen pen = new Pen(c, 1))
+                                                    gx.DrawRectangle(pen, new Rectangle(
+                                                        (int)(pt.X - wh / 2),
+                                                        (int)(pt.Y - wh / 2),
+                                                        (int)wh,
+                                                        (int)wh));
                                             }
                                         }
                                     }
@@ -4460,7 +4494,7 @@ namespace AvoidAGrabCutEasy
                             }
                     }
 
-                    FloodFillMethods.floodfill(b, ptSt.X, ptSt.Y, 7, startColor, replaceColor,
+                    FloodFillMethods.floodfill(b, ptSt.X, ptSt.Y, 125, startColor, replaceColor,
                         Int32.MaxValue, false, false, 1.0, false, false);
 
                     List<Point> ll = new List<Point>();

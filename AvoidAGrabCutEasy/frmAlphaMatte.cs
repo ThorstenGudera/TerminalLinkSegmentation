@@ -1434,100 +1434,117 @@ namespace AvoidAGrabCutEasy
                 Bitmap? b = this._scribblesBitmap;
 
                 Point ptSt = this._ptHLC1BG;
-                Color startColor = b.GetPixel(ptSt.X, ptSt.Y);
-                Color replaceColor = Color.Black;
 
-                using (Graphics gx = Graphics.FromImage(b))
+                if (ptSt.X != -1 && ptSt.Y != -1)
                 {
-                    if (this._scribbles != null)
-                        if (this._scribbles.ContainsKey(3)) //Unknown
-                        {
-                            if (this._scribbles[3] != null)
+                    Color startColor = b.GetPixel(ptSt.X, ptSt.Y);
+                    Color replaceColor = Color.Black;
+
+                    //first, draw the unknown curve(s)
+                    using (Graphics gx = Graphics.FromImage(b))
+                    {
+                        if (this._scribbles != null)
+                            if (this._scribbles.ContainsKey(3)) //Unknown
                             {
-                                foreach (int wh in this._scribbles[3].Keys)
+                                if (this._scribbles[3] != null)
                                 {
-                                    List<List<Point>> whPts = this._scribbles[3][wh];
-
-                                    foreach (List<Point> pts in whPts)
+                                    foreach (int wh in this._scribbles[3].Keys)
                                     {
-                                        bool doRect = pts.Count > 1;
-                                        Color c = Color.Gray;
+                                        List<List<Point>> whPts = this._scribbles[3][wh];
 
-                                        List<Point> pts2 = pts.Distinct().ToList();
-
-                                        if (doRect)
+                                        foreach (List<Point> pts in whPts)
                                         {
-                                            foreach (Point pt in pts2)
+                                            bool doRect = pts.Count > 1;
+                                            Color c = Color.Gray;
+
+                                            List<Point> pts2 = pts.Distinct().ToList();
+
+                                            if (doRect)
                                             {
+                                                foreach (Point pt in pts2)
+                                                {
+                                                    using (SolidBrush sb = new SolidBrush(c))
+                                                        gx.FillRectangle(sb, new Rectangle(
+                                                            (int)(pt.X - wh / 2),
+                                                            (int)(pt.Y - wh / 2),
+                                                            (int)wh,
+                                                            (int)wh));
+                                                    using (Pen pen = new Pen(c, 1))
+                                                        gx.DrawRectangle(pen, new Rectangle(
+                                                            (int)(pt.X - wh / 2),
+                                                            (int)(pt.Y - wh / 2),
+                                                            (int)wh,
+                                                            (int)wh));
+                                                }
+                                            }
+                                            else
+                                            {
+                                                Point pt = pts2[0];
                                                 using (SolidBrush sb = new SolidBrush(c))
                                                     gx.FillRectangle(sb, new Rectangle(
                                                         (int)(pt.X - wh / 2),
                                                         (int)(pt.Y - wh / 2),
                                                         (int)wh,
                                                         (int)wh));
+                                                using (Pen pen = new Pen(c, 1))
+                                                    gx.DrawRectangle(pen, new Rectangle(
+                                                        (int)(pt.X - wh / 2),
+                                                        (int)(pt.Y - wh / 2),
+                                                        (int)wh,
+                                                        (int)wh));
                                             }
-                                        }
-                                        else
-                                        {
-                                            Point pt = pts2[0];
-                                            using (SolidBrush sb = new SolidBrush(c))
-                                                gx.FillRectangle(sb, new Rectangle(
-                                                    (int)(pt.X - wh / 2),
-                                                    (int)(pt.Y - wh / 2),
-                                                    (int)wh,
-                                                    (int)wh));
                                         }
                                     }
                                 }
                             }
-                        }
-                }
-
-                FloodFillMethods.floodfill(b, ptSt.X, ptSt.Y, 7, startColor, replaceColor,
-                    Int32.MaxValue, false, false, 1.0, false, false);
-
-                List<Point> ll = new List<Point>();
-
-                int w = b.Width;
-                int h = b.Height;
-
-                BitmapData bmD = b.LockBits(new Rectangle(0, 0, w, h), ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
-                int stride = bmD.Stride;
-
-                byte* p = (byte*)bmD.Scan0;
-
-                for (int y = 0; y < h; y++)
-                {
-                    for (int x = 0; x < w; x++)
-                    {
-                        if (p[3] == 255 && p[0] == 0 && !this._bitsBG.Get(y * w + x))
-                        {
-                            ll.Add(new Point(x, y));
-                            this._bitsBG.Set(y * w + x, true);
-                        }
-
-                        p += 4;
                     }
+
+                    FloodFillMethods.floodfill(b, ptSt.X, ptSt.Y, 125, startColor, replaceColor,
+                        Int32.MaxValue, false, false, 1.0, false, false);
+
+                    List<Point> ll = new List<Point>();
+
+                    int w = b.Width;
+                    int h = b.Height;
+
+                    BitmapData bmD = b.LockBits(new Rectangle(0, 0, w, h), ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
+                    int stride = bmD.Stride;
+
+                    byte* p = (byte*)bmD.Scan0;
+
+                    for (int y = 0; y < h; y++)
+                    {
+                        for (int x = 0; x < w; x++)
+                        {
+                            if (p[3] == 255 && p[0] == 0 && !this._bitsBG.Get(y * w + x))
+                            {
+                                ll.Add(new Point(x, y));
+                                this._bitsBG.Set(y * w + x, true);
+                            }
+
+                            p += 4;
+                        }
+                    }
+
+                    b.UnlockBits(bmD);
+
+                    if (this._scribbles == null)
+                        this._scribbles = new Dictionary<int, Dictionary<int, List<List<Point>>>>();
+
+                    if (!this._scribbles.ContainsKey(0))
+                        this._scribbles.Add(0, new Dictionary<int, List<List<Point>>>());
+
+                    if (!this._scribbles[0].ContainsKey(3))
+                        this._scribbles[0].Add(3, new List<List<Point>>());
+
+                    if (this._scribbleSeq == null)
+                        this._scribbleSeq = new List<Tuple<int, int, int, bool, List<List<Point>>>>();
+
+                    this._scribbles[0][3].Add(ll.Distinct().ToList());
+                    this._scribbleSeq.Add(Tuple.Create(0, 3, this._scribbles[0][3].Count - 1, true, GetBoundariesForScribbleFill(this._scribbles[0][3][this._scribbles[0][3].Count - 1], w, h)));
+
+                    this.helplineRulerCtrl1.dbPanel1.Invalidate();
                 }
-
-                b.UnlockBits(bmD);
-
-                if (this._scribbles == null)
-                    this._scribbles = new Dictionary<int, Dictionary<int, List<List<Point>>>>();
-
-                if (!this._scribbles.ContainsKey(0))
-                    this._scribbles.Add(0, new Dictionary<int, List<List<Point>>>());
-
-                if (!this._scribbles[0].ContainsKey(3))
-                    this._scribbles[0].Add(3, new List<List<Point>>());
-
-                if (this._scribbleSeq == null)
-                    this._scribbleSeq = new List<Tuple<int, int, int, bool, List<List<Point>>>>();
-
-                this._scribbles[0][3].Add(ll.Distinct().ToList());
-                this._scribbleSeq.Add(Tuple.Create(0, 3, this._scribbles[0][3].Count - 1, true, GetBoundariesForScribbleFill(this._scribbles[0][3][this._scribbles[0][3].Count - 1], w, h)));
-
-                this.helplineRulerCtrl1.dbPanel1.Invalidate();
             }
         }
 
@@ -1539,11 +1556,19 @@ namespace AvoidAGrabCutEasy
             using Graphics gx = Graphics.FromImage(bmp);
             int wh = 3;
             foreach (Point pt in points)
+            {
                 gx.FillRectangle(Brushes.Black, new Rectangle(
                                             (int)(int)(pt.X - wh / 2),
                                             (int)(int)(pt.Y - wh / 2),
                                             (int)wh,
                                             (int)wh));
+                using Pen pen = new(Color.Black, 2);
+                gx.DrawRectangle(pen, new Rectangle(
+                                            (int)(int)(pt.X - wh / 2),
+                                            (int)(int)(pt.Y - wh / 2),
+                                            (int)wh,
+                                            (int)wh));
+            }
 
             List<ChainCode>? c = this.GetBoundary(bmp);
             if (c != null)
@@ -1588,101 +1613,117 @@ namespace AvoidAGrabCutEasy
                 Bitmap? b = this._scribblesBitmap;
 
                 Point ptSt = this._ptHLC1FG;
-                Color startColor = b.GetPixel(ptSt.X, ptSt.Y);
-                Color replaceColor = Color.White;
-
-                using (Graphics gx = Graphics.FromImage(b))
+                if (ptSt.X != -1 && ptSt.Y != -1)
                 {
-                    if (this._scribbles != null)
-                        if (this._scribbles.ContainsKey(3)) //Unknown
-                        {
-                            if (this._scribbles[3] != null)
+                    Color startColor = b.GetPixel(ptSt.X, ptSt.Y);
+                    Color replaceColor = Color.White;
+
+                    //first, draw the unknown curve(s)
+                    using (Graphics gx = Graphics.FromImage(b))
+                    {
+                        if (this._scribbles != null)
+                            if (this._scribbles.ContainsKey(3)) //Unknown
                             {
-                                foreach (int wh in this._scribbles[3].Keys)
+                                if (this._scribbles[3] != null)
                                 {
-                                    List<List<Point>> whPts = this._scribbles[3][wh];
-
-                                    foreach (List<Point> pts in whPts)
+                                    foreach (int wh in this._scribbles[3].Keys)
                                     {
-                                        bool doRect = pts.Count > 1;
-                                        Color c = Color.Gray;
+                                        List<List<Point>> whPts = this._scribbles[3][wh];
 
-                                        List<Point> pts2 = pts.Distinct().ToList();
-
-                                        if (doRect)
+                                        foreach (List<Point> pts in whPts)
                                         {
-                                            foreach (Point pt in pts2)
+                                            bool doRect = pts.Count > 1;
+                                            Color c = Color.Gray;
+
+                                            List<Point> pts2 = pts.Distinct().ToList();
+
+                                            if (doRect)
                                             {
+                                                foreach (Point pt in pts2)
+                                                {
+                                                    using (SolidBrush sb = new SolidBrush(c))
+                                                        gx.FillRectangle(sb, new Rectangle(
+                                                            (int)(pt.X - wh / 2),
+                                                            (int)(pt.Y - wh / 2),
+                                                            (int)wh,
+                                                            (int)wh));
+                                                    using (Pen pen = new Pen(c, 1))
+                                                        gx.DrawRectangle(pen, new Rectangle(
+                                                            (int)(pt.X - wh / 2),
+                                                            (int)(pt.Y - wh / 2),
+                                                            (int)wh,
+                                                            (int)wh));
+                                                }
+                                            }
+                                            else
+                                            {
+                                                Point pt = pts2[0];
                                                 using (SolidBrush sb = new SolidBrush(c))
                                                     gx.FillRectangle(sb, new Rectangle(
                                                         (int)(pt.X - wh / 2),
                                                         (int)(pt.Y - wh / 2),
                                                         (int)wh,
                                                         (int)wh));
+                                                using (Pen pen = new Pen(c, 1))
+                                                    gx.DrawRectangle(pen, new Rectangle(
+                                                        (int)(pt.X - wh / 2),
+                                                        (int)(pt.Y - wh / 2),
+                                                        (int)wh,
+                                                        (int)wh));
                                             }
-                                        }
-                                        else
-                                        {
-                                            Point pt = pts2[0];
-                                            using (SolidBrush sb = new SolidBrush(c))
-                                                gx.FillRectangle(sb, new Rectangle(
-                                                    (int)(pt.X - wh / 2),
-                                                    (int)(pt.Y - wh / 2),
-                                                    (int)wh,
-                                                    (int)wh));
                                         }
                                     }
                                 }
                             }
-                        }
-                }
-
-                FloodFillMethods.floodfill(b, ptSt.X, ptSt.Y, 7, startColor, replaceColor,
-                    Int32.MaxValue, false, false, 1.0, false, false);
-
-                List<Point> ll = new List<Point>();
-
-                int w = b.Width;
-                int h = b.Height;
-
-                BitmapData bmD = b.LockBits(new Rectangle(0, 0, w, h), ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
-                int stride = bmD.Stride;
-
-                byte* p = (byte*)bmD.Scan0;
-
-                for (int y = 0; y < h; y++)
-                {
-                    for (int x = 0; x < w; x++)
-                    {
-                        if (p[3] == 255 && p[0] == 255 && !this._bitsFG.Get(y * w + x))
-                        {
-                            ll.Add(new Point(x, y));
-                            this._bitsFG.Set(y * w + x, true);
-                        }
-
-                        p += 4;
                     }
+
+                    FloodFillMethods.floodfill(b, ptSt.X, ptSt.Y, 125, startColor, replaceColor,
+                        Int32.MaxValue, false, false, 1.0, false, false);
+
+                    List<Point> ll = new List<Point>();
+
+                    int w = b.Width;
+                    int h = b.Height;
+
+                    BitmapData bmD = b.LockBits(new Rectangle(0, 0, w, h), ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
+                    int stride = bmD.Stride;
+
+                    byte* p = (byte*)bmD.Scan0;
+
+                    for (int y = 0; y < h; y++)
+                    {
+                        for (int x = 0; x < w; x++)
+                        {
+                            if (p[3] == 255 && p[0] == 255 && !this._bitsFG.Get(y * w + x))
+                            {
+                                ll.Add(new Point(x, y));
+                                this._bitsFG.Set(y * w + x, true);
+                            }
+
+                            p += 4;
+                        }
+                    }
+
+                    b.UnlockBits(bmD);
+
+                    //cleanup
+                    if (this._scribbles == null)
+                        this._scribbles = new Dictionary<int, Dictionary<int, List<List<Point>>>>();
+
+                    if (!this._scribbles.ContainsKey(1))
+                        this._scribbles.Add(1, new Dictionary<int, List<List<Point>>>());
+
+                    if (!this._scribbles[1].ContainsKey(3))
+                        this._scribbles[1].Add(3, new List<List<Point>>());
+
+                    if (this._scribbleSeq == null)
+                        this._scribbleSeq = new List<Tuple<int, int, int, bool, List<List<Point>>>>();
+
+                    this._scribbles[1][3].Add(ll.Distinct().ToList());
+                    this._scribbleSeq.Add(Tuple.Create(1, 3, this._scribbles[1][3].Count - 1, true, GetBoundariesForScribbleFill(this._scribbles[1][3][this._scribbles[1][3].Count - 1], w, h)));
+
+                    this.helplineRulerCtrl1.dbPanel1.Invalidate();
                 }
-
-                b.UnlockBits(bmD);
-
-                //cleanup
-                if (this._scribbles == null)
-                    this._scribbles = new Dictionary<int, Dictionary<int, List<List<Point>>>>();
-
-                if (!this._scribbles.ContainsKey(1))
-                    this._scribbles.Add(1, new Dictionary<int, List<List<Point>>>());
-
-                if (!this._scribbles[1].ContainsKey(3))
-                    this._scribbles[1].Add(3, new List<List<Point>>());
-
-                if (this._scribbleSeq == null)
-                    this._scribbleSeq = new List<Tuple<int, int, int, bool, List<List<Point>>>>();
-
-                this._scribbles[1][3].Add(ll.Distinct().ToList());
-                this._scribbleSeq.Add(Tuple.Create(1, 3, this._scribbles[1][3].Count - 1, true, GetBoundariesForScribbleFill(this._scribbles[1][3][this._scribbles[1][3].Count - 1], w, h)));
-
-                this.helplineRulerCtrl1.dbPanel1.Invalidate();
             }
         }
 
@@ -4202,8 +4243,15 @@ namespace AvoidAGrabCutEasy
                                                         gx.FillRectangle(sb, new Rectangle(
                                                             (int)((int)(pt.X - wh / 2) / factor),
                                                             (int)((int)(pt.Y - wh / 2) / factor),
-                                                        (int)(wh / factor),
+                                                            (int)(wh / factor),
                                                             (int)(wh / factor)));
+                                                    if (l == 1)
+                                                        using (Pen pen = new Pen(c, (factor > 1) ? 2 : 1))
+                                                            gx.DrawRectangle(pen, new Rectangle(
+                                                                (int)((int)(pt.X - wh / 2) / factor),
+                                                                (int)((int)(pt.Y - wh / 2) / factor),
+                                                                (int)(wh / factor),
+                                                                (int)(wh / factor)));
                                                 }
                                             }
                                             else
@@ -4217,6 +4265,13 @@ namespace AvoidAGrabCutEasy
                                                             (int)((int)(pt.Y - wh / 2) / factor),
                                                             (int)(wh / factor),
                                                             (int)(wh / factor)));
+                                                    if (l == 1)
+                                                        using (Pen pen = new Pen(c, (factor > 1) ? 2 : 1))
+                                                            gx.DrawRectangle(pen, new Rectangle(
+                                                                (int)((int)(pt.X - wh / 2) / factor),
+                                                                (int)((int)(pt.Y - wh / 2) / factor),
+                                                                (int)(wh / factor),
+                                                                (int)(wh / factor)));
                                                 }
                                             }
                                         }
@@ -4241,7 +4296,11 @@ namespace AvoidAGrabCutEasy
                                                 List<Point> pts = list[j].Select(a => new Point((int)(a.X / factor), (int)(a.Y / factor))).ToList();
 
                                                 foreach (Point pt in pts)
+                                                {
                                                     gx.FillRectangle(Brushes.White, new Rectangle(pt.X - wh / 2, pt.Y - wh / 2, wh, wh));
+                                                    using Pen pen = new(Color.White, (factor > 1) ? 2 : 1);
+                                                    gx.DrawRectangle(pen, new Rectangle(pt.X - wh / 2, pt.Y - wh / 2, wh, wh));
+                                                }
                                             }
 
                                         }
@@ -4303,6 +4362,13 @@ namespace AvoidAGrabCutEasy
                                                             (int)((int)(pt.Y - wh / 2) / factor),
                                                         (int)(wh / factor),
                                                             (int)(wh / factor)));
+                                                    if (l == 1)
+                                                        using (Pen pen = new Pen(c, (factor > 1) ? 2 : 1))
+                                                            gx.DrawRectangle(pen, new Rectangle(
+                                                                (int)((int)(pt.X - wh / 2) / factor),
+                                                                (int)((int)(pt.Y - wh / 2) / factor),
+                                                                (int)(wh / factor),
+                                                                (int)(wh / factor)));
                                                 }
                                             }
                                             else
@@ -4316,6 +4382,13 @@ namespace AvoidAGrabCutEasy
                                                             (int)((int)(pt.Y - wh / 2) / factor),
                                                             (int)(wh / factor),
                                                             (int)(wh / factor)));
+                                                    if (l == 1)
+                                                        using (Pen pen = new Pen(c, (factor > 1) ? 2 : 1))
+                                                            gx.DrawRectangle(pen, new Rectangle(
+                                                                (int)((int)(pt.X - wh / 2) / factor),
+                                                                (int)((int)(pt.Y - wh / 2) / factor),
+                                                                (int)(wh / factor),
+                                                                (int)(wh / factor)));
                                                 }
                                             }
                                         }
@@ -4363,7 +4436,11 @@ namespace AvoidAGrabCutEasy
                                                 List<Point> pts = list[j].Select(a => new Point((int)(a.X / factor), (int)(a.Y / factor))).ToList();
 
                                                 foreach (Point pt in pts)
+                                                {
                                                     gx.FillRectangle(Brushes.White, new Rectangle(pt.X - wh / 2, pt.Y - wh / 2, wh, wh));
+                                                    using Pen pen = new(Color.White, (factor > 1) ? 2 : 1);
+                                                    gx.DrawRectangle(pen, new Rectangle(pt.X - wh / 2, pt.Y - wh / 2, wh, wh));
+                                                }
                                             }
 
                                         }
