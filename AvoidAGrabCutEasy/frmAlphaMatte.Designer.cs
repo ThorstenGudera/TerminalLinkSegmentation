@@ -116,6 +116,7 @@
             backgroundWorker5 = new System.ComponentModel.BackgroundWorker();
             backgroundWorker3 = new System.ComponentModel.BackgroundWorker();
             backgroundWorker4 = new System.ComponentModel.BackgroundWorker();
+            cbClickMode = new CheckBox();
             statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
@@ -502,6 +503,7 @@
             // 
             // panel1
             // 
+            panel1.Controls.Add(cbClickMode);
             panel1.Controls.Add(cbHighlight);
             panel1.Controls.Add(panel6);
             panel1.Controls.Add(label5);
@@ -1116,6 +1118,16 @@
             backgroundWorker4.DoWork += backgroundWorker4_DoWork;
             backgroundWorker4.RunWorkerCompleted += backgroundWorker4_RunWorkerCompleted;
             // 
+            // cbClickMode
+            // 
+            cbClickMode.AutoSize = true;
+            cbClickMode.Location = new Point(14, 78);
+            cbClickMode.Name = "cbClickMode";
+            cbClickMode.Size = new Size(81, 19);
+            cbClickMode.TabIndex = 715;
+            cbClickMode.Text = "clickMode";
+            cbClickMode.UseVisualStyleBackColor = true;
+            // 
             // frmAlphaMatte
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -1246,5 +1258,6 @@
         private RadioButton rbFullScribble;
         internal System.ComponentModel.BackgroundWorker backgroundWorker4;
         private CheckBox cbHighlight;
+        private CheckBox cbClickMode;
     }
 }

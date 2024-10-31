@@ -154,6 +154,7 @@
             bgwDoAll2 = new System.ComponentModel.BackgroundWorker();
             bgwDoAll3 = new System.ComponentModel.BackgroundWorker();
             bgwDoAll4 = new System.ComponentModel.BackgroundWorker();
+            cbClickMode = new CheckBox();
             panel1.SuspendLayout();
             panel5.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numBoundOuter).BeginInit();
@@ -182,6 +183,7 @@
             // 
             // panel1
             // 
+            panel1.Controls.Add(cbClickMode);
             panel1.Controls.Add(label22);
             panel1.Controls.Add(btnResScribbles);
             panel1.Controls.Add(panel7);
@@ -1608,6 +1610,16 @@
             bgwDoAll4.DoWork += bgwDoAll4_DoWork;
             bgwDoAll4.RunWorkerCompleted += bgwDoAll4_RunWorkerCompleted;
             // 
+            // cbClickMode
+            // 
+            cbClickMode.AutoSize = true;
+            cbClickMode.Location = new Point(759, 64);
+            cbClickMode.Name = "cbClickMode";
+            cbClickMode.Size = new Size(81, 19);
+            cbClickMode.TabIndex = 713;
+            cbClickMode.Text = "clickMode";
+            cbClickMode.UseVisualStyleBackColor = true;
+            // 
             // frmAvoidAGrabCutEasy
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -1782,5 +1794,6 @@
         private ToolStripDropDownButton toolStripDropDownButton1;
         private Label label22;
         private Button btnResScribbles;
+        private CheckBox cbClickMode;
     }
 }

@@ -131,6 +131,7 @@ namespace AvoidAGrabCutEasy
         private ClosedFormMatteOp? _cfop;
         private ClosedFormMatteOp[]? _cfopArray;
         private Bitmap? _bmpMatte;
+        private Point? _ptSt;
 
         public event EventHandler<string>? ShowInfo;
         //public event EventHandler<string> BoundaryError;
@@ -598,7 +599,7 @@ namespace AvoidAGrabCutEasy
                     this._rect = new Rectangle(this._rX, this._rY, this._rW, this._rH);
                 }
 
-                if (this._tracking4)
+                if (this._tracking4 && !this.cbClickMode.Checked)
                 {
                     AddPointsToScribblePath();
                     this._points2.Clear();
@@ -628,11 +629,95 @@ namespace AvoidAGrabCutEasy
                 if (this._scribbleSeq == null)
                     this._scribbleSeq = new List<Tuple<int, int, int, bool, List<List<Point>>>>();
 
-                List<List<Point>> whPts = this._scribbles[fgbg][wh];
-                whPts.Add(new List<Point>());
-                whPts[whPts.Count - 1].AddRange(this._points2.ToArray());
-                this._scribbleSeq.Add(Tuple.Create(fgbg, wh, this._scribbles[fgbg][wh].Count - 1, false, new List<List<Point>>()));
+                if (this._points2 != null)
+                {
+                    if (this.cbClickMode.Checked && this._points2.Count == 1)
+                    {
+                        Point? ptSt = GetLastPoint();
+
+                        if (ptSt == null)
+                        {
+                            if (this._ptSt != null)
+                            {
+                                ptSt = new Point(this._ptSt.Value.X, this._ptSt.Value.Y);
+                                this._ptSt = null;
+                            }
+                            else
+                            {
+                                this._ptSt = this._points2[0];
+                                return;
+                            }
+                        }
+
+                        this._points2 = GetPointsSequence(ptSt, this._points2[0], wh);
+                    }
+
+                    List<List<Point>> whPts = this._scribbles[fgbg][wh];
+                    whPts.Add(new List<Point>());
+                    whPts[whPts.Count - 1].AddRange(this._points2.ToArray());
+                    this._scribbleSeq.Add(Tuple.Create(fgbg, wh, this._scribbles[fgbg][wh].Count - 1, false, new List<List<Point>>()));
+                }
             }
+        }
+
+        private List<Point> GetPointsSequence(Point? ptSt, Point pt, int wh)
+        {
+            List<Point> pts = new List<Point>();
+
+            if (ptSt != null)
+            {
+                double dx = pt.X - ptSt.Value.X;
+                double dy = pt.Y - ptSt.Value.Y;
+
+                double nrm = Math.Sqrt(dx * dx + dy * dy);
+
+                dx /= nrm;
+                dy /= nrm;
+
+                pts.Add(ptSt.Value);
+
+                double dist = 0;
+                double dstX = Math.Max(wh / 2, 1) * dx;
+                double dstY = Math.Max(wh / 2, 1) * dy;
+
+                while (dist < nrm)
+                {
+                    double x = pts[pts.Count - 1].X + dstX;
+                    double y = pts[pts.Count - 1].Y + dstY;
+
+                    pts.Add(new Point((int)x, (int)y));
+
+                    dist += Math.Sqrt(dstX * dstX + dstY * dstY);
+                }
+
+                pts.Add(pt);
+            }
+
+            return pts;
+        }
+
+        private Point? GetLastPoint()
+        {
+            Point? res = null;
+
+            if (this._scribbles != null && this._scribbleSeq != null && this._scribbleSeq.Count > 0)
+            {
+                var j = this._scribbleSeq[this._scribbleSeq.Count - 1];
+
+                int l = j.Item1;
+                int wh = j.Item2;
+                int listNo = j.Item3;
+
+                List<List<Point>> ptsList = this._scribbles[l][wh];
+
+                if (ptsList != null && ptsList.Count > 0 && ptsList.Count > listNo)
+                {
+                    if (ptsList[listNo] != null && ptsList[listNo].Count > 0)
+                        res = ptsList[listNo][ptsList[listNo].Count - 1];
+                }
+            }
+
+            return res;
         }
 
         private void helplineRulerCtrl1_Paint(object? sender, PaintEventArgs e)
