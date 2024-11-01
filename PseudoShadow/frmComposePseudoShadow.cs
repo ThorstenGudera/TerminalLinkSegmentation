@@ -1063,7 +1063,7 @@ namespace PseudoShadow
                 {
                     if (this.luBitmapDesignerCtrl1.SelectedShape != null && this.luBitmapDesignerCtrl1.SelectedShape.Bmp != null)
                     {
-                        Bitmap? bmp = this.luBitmapDesignerCtrl1.SelectedShape.Bmp;
+                        Bitmap? bmp = GetResizedBitmap(this.luBitmapDesignerCtrl1.SelectedShape.Bmp, blur);
 
                         if (bmp != null)
                         {
@@ -1078,6 +1078,17 @@ namespace PseudoShadow
                             b = Fipbmp.FastZGaussian_Blur_NxN(bmp, blur, blur > 3 ? 0.01 : 0.16, 255, true, true,
                                 true, true, true, true, conv, true, false);
 
+                            Bitmap? bOld = this.luBitmapDesignerCtrl1.SelectedShape.Bmp;
+                            RectangleF? rc = new RectangleF(this.luBitmapDesignerCtrl1.SelectedShape.Bounds.X - blur,
+                                  this.luBitmapDesignerCtrl1.SelectedShape.Bounds.Y - blur,
+                                  bmp.Width, bmp.Height);
+
+                            this.luBitmapDesignerCtrl1.SelectedShape.Bounds = rc.Value;
+                            this.luBitmapDesignerCtrl1.SelectedShape.Bmp = bmp;
+                            if (bOld != null)
+                                bOld.Dispose();
+                            bOld = null;
+
                             conv.ProgressPlus -= Conv_ProgressPlus;
                         }
                     }
@@ -1086,6 +1097,15 @@ namespace PseudoShadow
             }
             else
                 e.Result = false;
+        }
+
+        private Bitmap? GetResizedBitmap(Bitmap bmp, int blur)
+        {
+            Bitmap? bRes = new Bitmap(bmp.Width + blur * 2, bmp.Height + blur * 2);
+            using Graphics gx = Graphics.FromImage(bRes);
+            gx.DrawImage(bmp, blur, blur);
+
+            return bRes;
         }
 
         private void Conv_ProgressPlus(object sender, ProgressEventArgs e)
