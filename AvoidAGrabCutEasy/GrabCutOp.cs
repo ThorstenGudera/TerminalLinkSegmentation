@@ -131,7 +131,7 @@ namespace AvoidAGrabCutEasy
 
                                 List<List<Point>> ptsList = this.Scribbles[l][wh];
 
-                                if (ptsList != null && ptsList.Count > 0)
+                                if (ptsList != null && ptsList.Count > listNo)
                                 {
                                     foreach (Point pt in ptsList[listNo])
                                     {
@@ -175,7 +175,7 @@ namespace AvoidAGrabCutEasy
 
                                 List<List<Point>> ptsList = this.Scribbles[l][wh];
 
-                                if (ptsList != null && ptsList.Count > 0)
+                                if (ptsList != null && ptsList.Count > listNo)
                                 {
                                     foreach (Point pt in ptsList[listNo])
                                     {
@@ -2414,7 +2414,7 @@ namespace AvoidAGrabCutEasy
 
                                 List<List<Point>> ptsList = this.Scribbles[l][wh];
 
-                                if (ptsList != null && ptsList.Count > 0)
+                                if (ptsList != null && ptsList.Count > listNo)
                                 {
                                     foreach (Point pt in ptsList[listNo])
                                     {
@@ -2460,7 +2460,7 @@ namespace AvoidAGrabCutEasy
 
                                 List<List<Point>> ptsList = this.Scribbles[l][wh];
 
-                                if (ptsList != null && ptsList.Count > 0)
+                                if (ptsList != null && ptsList.Count > listNo)
                                 {
                                     foreach (Point pt in ptsList[listNo])
                                     {

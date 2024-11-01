@@ -422,7 +422,7 @@ namespace AvoidAGrabCutEasy
                     {
                         List<List<Point>> ptsList = this._scribbles[l][wh];
 
-                        if (ptsList != null && ptsList.Count > 0)
+                        if (ptsList != null && ptsList.Count > listNo)
                         {
                             bool doRect = ptsList[listNo].Count > 1;
 
@@ -4314,7 +4314,7 @@ namespace AvoidAGrabCutEasy
                                     {
                                         List<List<Point>> ptsList = this._scribbles[l][wh];
 
-                                        if (ptsList != null && ptsList.Count > 0)
+                                        if (ptsList != null && ptsList.Count > listNo)
                                         {
                                             bool doRect = ptsList[listNo].Count > 1;
 
@@ -4431,7 +4431,7 @@ namespace AvoidAGrabCutEasy
                                     {
                                         List<List<Point>> ptsList = this._scribbles[l][wh];
 
-                                        if (ptsList != null && ptsList.Count > 0)
+                                        if (ptsList != null && ptsList.Count > listNo)
                                         {
                                             bool doRect = ptsList[listNo].Count > 1;
 
