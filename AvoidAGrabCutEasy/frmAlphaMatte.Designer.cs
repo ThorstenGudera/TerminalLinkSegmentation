@@ -65,6 +65,7 @@
             cbLSBmp = new CheckBox();
             Label20 = new Label();
             panel1 = new Panel();
+            cbClickMode = new CheckBox();
             cbHighlight = new CheckBox();
             panel6 = new Panel();
             label5 = new Label();
@@ -116,7 +117,6 @@
             backgroundWorker5 = new System.ComponentModel.BackgroundWorker();
             backgroundWorker3 = new System.ComponentModel.BackgroundWorker();
             backgroundWorker4 = new System.ComponentModel.BackgroundWorker();
-            cbClickMode = new CheckBox();
             statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
@@ -212,6 +212,7 @@
             cbRefPtFG.TabIndex = 684;
             cbRefPtFG.Text = "set ref pt fg";
             cbRefPtFG.UseVisualStyleBackColor = true;
+            cbRefPtFG.Visible = false;
             cbRefPtFG.CheckedChanged += cbRefPtFG_CheckedChanged;
             // 
             // cbRefPtBG
@@ -223,6 +224,7 @@
             cbRefPtBG.TabIndex = 684;
             cbRefPtBG.Text = "set ref pt bg";
             cbRefPtBG.UseVisualStyleBackColor = true;
+            cbRefPtBG.Visible = false;
             cbRefPtBG.CheckedChanged += cbRefPtBG_CheckedChanged;
             // 
             // label14
@@ -233,6 +235,7 @@
             label14.Size = new Size(37, 15);
             label14.TabIndex = 682;
             label14.Text = "Flood";
+            label14.Visible = false;
             // 
             // btnFloodFG
             // 
@@ -243,6 +246,7 @@
             btnFloodFG.TabIndex = 681;
             btnFloodFG.Text = "FG";
             btnFloodFG.UseVisualStyleBackColor = true;
+            btnFloodFG.Visible = false;
             btnFloodFG.Click += btnFloodFG_Click;
             // 
             // btnFloodBG
@@ -254,6 +258,7 @@
             btnFloodBG.TabIndex = 681;
             btnFloodBG.Text = "BG";
             btnFloodBG.UseVisualStyleBackColor = true;
+            btnFloodBG.Visible = false;
             btnFloodBG.Click += btnFloodBG_Click;
             // 
             // rbUnknown
@@ -557,6 +562,16 @@
             panel1.Name = "panel1";
             panel1.Size = new Size(1479, 224);
             panel1.TabIndex = 226;
+            // 
+            // cbClickMode
+            // 
+            cbClickMode.AutoSize = true;
+            cbClickMode.Location = new Point(14, 78);
+            cbClickMode.Name = "cbClickMode";
+            cbClickMode.Size = new Size(81, 19);
+            cbClickMode.TabIndex = 715;
+            cbClickMode.Text = "clickMode";
+            cbClickMode.UseVisualStyleBackColor = true;
             // 
             // cbHighlight
             // 
@@ -1081,19 +1096,19 @@
             // 
             contextMenuStrip1.Items.AddRange(new ToolStripItem[] { floodBGToolStripMenuItem, floodFGToolStripMenuItem });
             contextMenuStrip1.Name = "contextMenuStrip1";
-            contextMenuStrip1.Size = new Size(123, 48);
+            contextMenuStrip1.Size = new Size(181, 70);
             // 
             // floodBGToolStripMenuItem
             // 
             floodBGToolStripMenuItem.Name = "floodBGToolStripMenuItem";
-            floodBGToolStripMenuItem.Size = new Size(122, 22);
+            floodBGToolStripMenuItem.Size = new Size(180, 22);
             floodBGToolStripMenuItem.Text = "Flood BG";
             floodBGToolStripMenuItem.Click += floodBGToolStripMenuItem_Click;
             // 
             // floodFGToolStripMenuItem
             // 
             floodFGToolStripMenuItem.Name = "floodFGToolStripMenuItem";
-            floodFGToolStripMenuItem.Size = new Size(122, 22);
+            floodFGToolStripMenuItem.Size = new Size(180, 22);
             floodFGToolStripMenuItem.Text = "Flood FG";
             floodFGToolStripMenuItem.Click += floodFGToolStripMenuItem_Click;
             // 
@@ -1117,16 +1132,6 @@
             backgroundWorker4.WorkerSupportsCancellation = true;
             backgroundWorker4.DoWork += backgroundWorker4_DoWork;
             backgroundWorker4.RunWorkerCompleted += backgroundWorker4_RunWorkerCompleted;
-            // 
-            // cbClickMode
-            // 
-            cbClickMode.AutoSize = true;
-            cbClickMode.Location = new Point(14, 78);
-            cbClickMode.Name = "cbClickMode";
-            cbClickMode.Size = new Size(81, 19);
-            cbClickMode.TabIndex = 715;
-            cbClickMode.Text = "clickMode";
-            cbClickMode.UseVisualStyleBackColor = true;
             // 
             // frmAlphaMatte
             // 

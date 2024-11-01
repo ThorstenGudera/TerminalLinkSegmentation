@@ -4644,16 +4644,16 @@ namespace AvoidAGrabCutEasy
             Point pt = this._ptHLC1BG;
             this._ptHLC1BG = this._ptHLC1FGBG;
             this.btnFloodBG.Enabled = true;
-            this.btnFloodBG.PerformClick();
+            this.btnFloodBG_Click(this.btnFloodBG, new EventArgs());
             this._ptHLC1BG = pt;
         }
 
         private void floodFGToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Point pt = this._ptHLC1FG;
-            this._ptHLC1FG = this._ptHLC1FGBG;
+            this._ptHLC1FG = this._ptHLC1FGBG; //!
             this.btnFloodFG.Enabled = true;
-            this.btnFloodFG.PerformClick();
+            this.btnFloodFG_Click(this.btnFloodFG, new EventArgs());
             this._ptHLC1FG = pt;
         }
 

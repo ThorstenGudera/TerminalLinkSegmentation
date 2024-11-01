@@ -31,6 +31,7 @@
             components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmAvoidAGrabCutEasy));
             panel1 = new Panel();
+            cbClickMode = new CheckBox();
             label22 = new Label();
             btnResScribbles = new Button();
             panel7 = new Panel();
@@ -154,7 +155,6 @@
             bgwDoAll2 = new System.ComponentModel.BackgroundWorker();
             bgwDoAll3 = new System.ComponentModel.BackgroundWorker();
             bgwDoAll4 = new System.ComponentModel.BackgroundWorker();
-            cbClickMode = new CheckBox();
             panel1.SuspendLayout();
             panel5.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numBoundOuter).BeginInit();
@@ -276,6 +276,16 @@
             panel1.TabIndex = 0;
             panel1.MouseDoubleClick += panel1_MouseDoubleClick;
             panel1.MouseDown += panel1_MouseDown;
+            // 
+            // cbClickMode
+            // 
+            cbClickMode.AutoSize = true;
+            cbClickMode.Location = new Point(759, 64);
+            cbClickMode.Name = "cbClickMode";
+            cbClickMode.Size = new Size(81, 19);
+            cbClickMode.TabIndex = 713;
+            cbClickMode.Text = "clickMode";
+            cbClickMode.UseVisualStyleBackColor = true;
             // 
             // label22
             // 
@@ -597,6 +607,7 @@
             cbRefPtFG.TabIndex = 689;
             cbRefPtFG.Text = "set ref pt fg";
             cbRefPtFG.UseVisualStyleBackColor = true;
+            cbRefPtFG.Visible = false;
             cbRefPtFG.CheckedChanged += cbRefPtFG_CheckedChanged;
             // 
             // cbRefPtBG
@@ -608,6 +619,7 @@
             cbRefPtBG.TabIndex = 690;
             cbRefPtBG.Text = "set ref pt bg";
             cbRefPtBG.UseVisualStyleBackColor = true;
+            cbRefPtBG.Visible = false;
             cbRefPtBG.CheckedChanged += cbRefPtBG_CheckedChanged;
             // 
             // label14
@@ -618,6 +630,7 @@
             label14.Size = new Size(37, 15);
             label14.TabIndex = 687;
             label14.Text = "Flood";
+            label14.Visible = false;
             // 
             // btnFloodFG
             // 
@@ -628,6 +641,7 @@
             btnFloodFG.TabIndex = 685;
             btnFloodFG.Text = "FG";
             btnFloodFG.UseVisualStyleBackColor = true;
+            btnFloodFG.Visible = false;
             btnFloodFG.Click += btnFloodFG_Click;
             // 
             // btnFloodBG
@@ -639,6 +653,7 @@
             btnFloodBG.TabIndex = 686;
             btnFloodBG.Text = "BG";
             btnFloodBG.UseVisualStyleBackColor = true;
+            btnFloodBG.Visible = false;
             btnFloodBG.Click += btnFloodBG_Click;
             // 
             // cbAllowRS
@@ -1564,19 +1579,19 @@
             // 
             contextMenuStrip1.Items.AddRange(new ToolStripItem[] { floodBGToolStripMenuItem, floodFGToolStripMenuItem });
             contextMenuStrip1.Name = "contextMenuStrip1";
-            contextMenuStrip1.Size = new Size(123, 48);
+            contextMenuStrip1.Size = new Size(181, 70);
             // 
             // floodBGToolStripMenuItem
             // 
             floodBGToolStripMenuItem.Name = "floodBGToolStripMenuItem";
-            floodBGToolStripMenuItem.Size = new Size(122, 22);
+            floodBGToolStripMenuItem.Size = new Size(180, 22);
             floodBGToolStripMenuItem.Text = "Flood BG";
             floodBGToolStripMenuItem.Click += floodBGToolStripMenuItem_Click;
             // 
             // floodFGToolStripMenuItem
             // 
             floodFGToolStripMenuItem.Name = "floodFGToolStripMenuItem";
-            floodFGToolStripMenuItem.Size = new Size(122, 22);
+            floodFGToolStripMenuItem.Size = new Size(180, 22);
             floodFGToolStripMenuItem.Text = "Flood FG";
             floodFGToolStripMenuItem.Click += floodFGToolStripMenuItem_Click;
             // 
@@ -1609,16 +1624,6 @@
             bgwDoAll4.WorkerSupportsCancellation = true;
             bgwDoAll4.DoWork += bgwDoAll4_DoWork;
             bgwDoAll4.RunWorkerCompleted += bgwDoAll4_RunWorkerCompleted;
-            // 
-            // cbClickMode
-            // 
-            cbClickMode.AutoSize = true;
-            cbClickMode.Location = new Point(759, 64);
-            cbClickMode.Name = "cbClickMode";
-            cbClickMode.Size = new Size(81, 19);
-            cbClickMode.TabIndex = 713;
-            cbClickMode.Text = "clickMode";
-            cbClickMode.UseVisualStyleBackColor = true;
             // 
             // frmAvoidAGrabCutEasy
             // 
