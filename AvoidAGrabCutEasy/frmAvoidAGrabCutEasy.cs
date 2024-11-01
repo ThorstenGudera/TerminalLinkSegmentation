@@ -677,17 +677,18 @@ namespace AvoidAGrabCutEasy
                 pts.Add(ptSt.Value);
 
                 double dist = 0;
-                double dstX = Math.Max(wh / 2, 1) * dx;
-                double dstY = Math.Max(wh / 2, 1) * dy;
+                double dstX = Math.Max(wh / 2.0, 1) * dx;
+                double dstY = Math.Max(wh / 2.0, 1) * dy;
+                double add = Math.Sqrt(dstX * dstX + dstY * dstY);
 
-                while (dist < nrm)
+                while (dist < nrm - add)
                 {
                     double x = pts[pts.Count - 1].X + dstX;
                     double y = pts[pts.Count - 1].Y + dstY;
 
-                    pts.Add(new Point((int)x, (int)y));
+                    pts.Add(new Point((int)Math.Round(x), (int)Math.Round(y)));
 
-                    dist += Math.Sqrt(dstX * dstX + dstY * dstY);
+                    dist += add;
                 }
 
                 pts.Add(pt);
