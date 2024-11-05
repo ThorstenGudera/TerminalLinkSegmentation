@@ -115,7 +115,7 @@ namespace AvoidAGrabCutEasy
             this._dontDoZoom = false;
 
             //while developing...
-            AvailMem.AvailMem.NoMemCheck = true;
+            //AvailMem.AvailMem.NoMemCheck = true;
         }
 
         private void helplineRulerCtrl1_MouseDown(object? sender, MouseEventArgs e)

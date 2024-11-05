@@ -207,7 +207,7 @@ namespace AvoidAGrabCutEasy
             this.helplineRulerCtrl2.ResetAllHelpLineLabelsColor();
 
             //while developing...
-            AvailMem.AvailMem.NoMemCheck = true;
+            //AvailMem.AvailMem.NoMemCheck = true;
         }
 
         private void helplineRulerCtrl2_MouseDown(object? sender, MouseEventArgs e)

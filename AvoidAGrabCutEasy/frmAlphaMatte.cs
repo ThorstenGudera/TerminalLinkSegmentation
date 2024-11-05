@@ -170,7 +170,7 @@ namespace AvoidAGrabCutEasy
             this.helplineRulerCtrl2.ResetAllHelpLineLabelsColor();
 
             //while developing...
-            AvailMem.AvailMem.NoMemCheck = true;
+            //AvailMem.AvailMem.NoMemCheck = true;
         }
 
         public void SetScribbles(Dictionary<int, Dictionary<int, List<List<Point>>>>? scribbles, List<Tuple<int, int, int, bool, List<List<Point>>>> scribbleSeq)
