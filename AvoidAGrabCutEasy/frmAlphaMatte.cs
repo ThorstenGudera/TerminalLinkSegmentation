@@ -1930,7 +1930,7 @@ namespace AvoidAGrabCutEasy
                 int groupAmountX = scalesPics ? 1 : 0; //we dont use grouping, so set it simply to 1
                 int groupAmountY = scalesPics ? 1 : 0;
                 int maxSize = bWork.Width * bWork.Height * 2;
-                bool trySingleTile = scalesPics ? false : this.cbHalfSize.Checked ? false : true;
+                bool trySingleTile = scalesPics ? false : this.cbHalfSize.Checked ? true : false;
                 bool verifyTrimaps = false;
 
                 this.backgroundWorker1.RunWorkerAsync(new object[] { 1 /* GMRES_r; 0 is GaussSeidel */, scalesPics, scales, overlap,
