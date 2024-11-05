@@ -660,7 +660,7 @@ namespace AvoidAGrabCutEasy
             }
         }
 
-        private List<Point> GetPointsSequence(Point? ptSt, Point? pt, int wh)
+        private List<Point> GetPointsSequence(Point? ptSt, Point? pt, int wh, double div = 10)
         {
             List<Point> pts = new List<Point>();
 
@@ -677,8 +677,8 @@ namespace AvoidAGrabCutEasy
                 pts.Add(ptSt.Value);
 
                 double dist = 0;
-                double dstX = Math.Max(wh / 2.0, 1) * dx;
-                double dstY = Math.Max(wh / 2.0, 1) * dy;
+                double dstX = Math.Max(wh / div, 1) * dx;
+                double dstY = Math.Max(wh / div, 1) * dy;
                 double add = Math.Sqrt(dstX * dstX + dstY * dstY);
                 double lastX = ptSt.Value.X;
                 double lastY = ptSt.Value.Y;

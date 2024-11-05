@@ -920,12 +920,12 @@ namespace AvoidAGrabCutEasy
                             bool scalesPics = this.cbSlices.Checked;
                             int scales = scalesPics ? rb4.Checked ? 4 : 16 : 0;
                             int overlap = 32;
-                            bool interpolated = false;
+                            bool interpolated = this.cbInterpolated.Checked;
                             bool forceSerial = this.cbForceSerial.Checked;
                             bool group = false;
                             int groupAmountX = scalesPics ? 1 : 0; //we dont use grouping, so set it simply to 1
                             int groupAmountY = scalesPics ? 1 : 0;
-                            int maxSize = bWork.Width * bWork.Height;
+                            int maxSize = bWork.Width * bWork.Height * 2;
                             bool trySingleTile = scalesPics ? false : this.cbHalfSize.Checked ? false : true;
                             bool verifyTrimaps = false;
 

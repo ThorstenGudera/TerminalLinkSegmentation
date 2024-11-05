@@ -276,7 +276,7 @@
             // 
             btnLoadBasePic.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             btnLoadBasePic.ForeColor = SystemColors.ControlText;
-            btnLoadBasePic.Location = new Point(92, 845);
+            btnLoadBasePic.Location = new Point(91, 845);
             btnLoadBasePic.Margin = new Padding(4, 3, 4, 3);
             btnLoadBasePic.Name = "btnLoadBasePic";
             btnLoadBasePic.Size = new Size(88, 27);
@@ -408,7 +408,7 @@
             cbBGColor.AutoSize = true;
             cbBGColor.Checked = true;
             cbBGColor.CheckState = CheckState.Checked;
-            cbBGColor.Location = new Point(180, 772);
+            cbBGColor.Location = new Point(179, 772);
             cbBGColor.Margin = new Padding(4, 3, 4, 3);
             cbBGColor.Name = "cbBGColor";
             cbBGColor.Size = new Size(67, 19);
@@ -421,7 +421,7 @@
             // 
             button10.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             button10.ForeColor = SystemColors.ControlText;
-            button10.Location = new Point(373, 810);
+            button10.Location = new Point(372, 810);
             button10.Margin = new Padding(4, 3, 4, 3);
             button10.Name = "button10";
             button10.Size = new Size(88, 27);
@@ -434,7 +434,7 @@
             // 
             button8.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             button8.ForeColor = SystemColors.ControlText;
-            button8.Location = new Point(278, 810);
+            button8.Location = new Point(277, 810);
             button8.Margin = new Padding(4, 3, 4, 3);
             button8.Name = "button8";
             button8.Size = new Size(88, 27);
@@ -448,7 +448,7 @@
             button2.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             button2.FlatStyle = FlatStyle.System;
             button2.ForeColor = SystemColors.ControlText;
-            button2.Location = new Point(373, 770);
+            button2.Location = new Point(372, 770);
             button2.Margin = new Padding(4, 3, 4, 3);
             button2.Name = "button2";
             button2.Size = new Size(88, 27);
@@ -461,7 +461,7 @@
             btnCancel.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             btnCancel.DialogResult = DialogResult.Cancel;
             btnCancel.ForeColor = SystemColors.ControlText;
-            btnCancel.Location = new Point(382, 845);
+            btnCancel.Location = new Point(381, 845);
             btnCancel.Margin = new Padding(4, 3, 4, 3);
             btnCancel.Name = "btnCancel";
             btnCancel.Size = new Size(88, 27);
@@ -474,7 +474,7 @@
             btnOK.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             btnOK.DialogResult = DialogResult.OK;
             btnOK.ForeColor = SystemColors.ControlText;
-            btnOK.Location = new Point(289, 845);
+            btnOK.Location = new Point(288, 845);
             btnOK.Margin = new Padding(4, 3, 4, 3);
             btnOK.Name = "btnOK";
             btnOK.Size = new Size(88, 27);
