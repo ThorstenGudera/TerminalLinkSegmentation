@@ -117,6 +117,7 @@
             backgroundWorker5 = new System.ComponentModel.BackgroundWorker();
             backgroundWorker3 = new System.ComponentModel.BackgroundWorker();
             backgroundWorker4 = new System.ComponentModel.BackgroundWorker();
+            btnCMNew = new Button();
             statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
@@ -206,7 +207,7 @@
             // cbRefPtFG
             // 
             cbRefPtFG.AutoSize = true;
-            cbRefPtFG.Location = new Point(107, 132);
+            cbRefPtFG.Location = new Point(1062, 198);
             cbRefPtFG.Name = "cbRefPtFG";
             cbRefPtFG.Size = new Size(86, 19);
             cbRefPtFG.TabIndex = 684;
@@ -218,7 +219,7 @@
             // cbRefPtBG
             // 
             cbRefPtBG.AutoSize = true;
-            cbRefPtBG.Location = new Point(13, 132);
+            cbRefPtBG.Location = new Point(968, 198);
             cbRefPtBG.Name = "cbRefPtBG";
             cbRefPtBG.Size = new Size(89, 19);
             cbRefPtBG.TabIndex = 684;
@@ -230,7 +231,7 @@
             // label14
             // 
             label14.AutoSize = true;
-            label14.Location = new Point(197, 134);
+            label14.Location = new Point(1152, 200);
             label14.Name = "label14";
             label14.Size = new Size(37, 15);
             label14.TabIndex = 682;
@@ -240,7 +241,7 @@
             // btnFloodFG
             // 
             btnFloodFG.Enabled = false;
-            btnFloodFG.Location = new Point(278, 129);
+            btnFloodFG.Location = new Point(1233, 195);
             btnFloodFG.Name = "btnFloodFG";
             btnFloodFG.Size = new Size(32, 23);
             btnFloodFG.TabIndex = 681;
@@ -252,7 +253,7 @@
             // btnFloodBG
             // 
             btnFloodBG.Enabled = false;
-            btnFloodBG.Location = new Point(240, 129);
+            btnFloodBG.Location = new Point(1195, 195);
             btnFloodBG.Name = "btnFloodBG";
             btnFloodBG.Size = new Size(32, 23);
             btnFloodBG.TabIndex = 681;
@@ -508,6 +509,7 @@
             // 
             // panel1
             // 
+            panel1.Controls.Add(btnCMNew);
             panel1.Controls.Add(cbClickMode);
             panel1.Controls.Add(cbHighlight);
             panel1.Controls.Add(panel6);
@@ -1096,19 +1098,19 @@
             // 
             contextMenuStrip1.Items.AddRange(new ToolStripItem[] { floodBGToolStripMenuItem, floodFGToolStripMenuItem });
             contextMenuStrip1.Name = "contextMenuStrip1";
-            contextMenuStrip1.Size = new Size(181, 70);
+            contextMenuStrip1.Size = new Size(123, 48);
             // 
             // floodBGToolStripMenuItem
             // 
             floodBGToolStripMenuItem.Name = "floodBGToolStripMenuItem";
-            floodBGToolStripMenuItem.Size = new Size(180, 22);
+            floodBGToolStripMenuItem.Size = new Size(122, 22);
             floodBGToolStripMenuItem.Text = "Flood BG";
             floodBGToolStripMenuItem.Click += floodBGToolStripMenuItem_Click;
             // 
             // floodFGToolStripMenuItem
             // 
             floodFGToolStripMenuItem.Name = "floodFGToolStripMenuItem";
-            floodFGToolStripMenuItem.Size = new Size(180, 22);
+            floodFGToolStripMenuItem.Size = new Size(122, 22);
             floodFGToolStripMenuItem.Text = "Flood FG";
             floodFGToolStripMenuItem.Click += floodFGToolStripMenuItem_Click;
             // 
@@ -1132,6 +1134,16 @@
             backgroundWorker4.WorkerSupportsCancellation = true;
             backgroundWorker4.DoWork += backgroundWorker4_DoWork;
             backgroundWorker4.RunWorkerCompleted += backgroundWorker4_RunWorkerCompleted;
+            // 
+            // btnCMNew
+            // 
+            btnCMNew.Location = new Point(35, 101);
+            btnCMNew.Name = "btnCMNew";
+            btnCMNew.Size = new Size(75, 23);
+            btnCMNew.TabIndex = 717;
+            btnCMNew.Text = "startNew";
+            btnCMNew.UseVisualStyleBackColor = true;
+            btnCMNew.Click += btnCMNew_Click;
             // 
             // frmAlphaMatte
             // 
@@ -1264,5 +1276,6 @@
         internal System.ComponentModel.BackgroundWorker backgroundWorker4;
         private CheckBox cbHighlight;
         private CheckBox cbClickMode;
+        private Button btnCMNew;
     }
 }

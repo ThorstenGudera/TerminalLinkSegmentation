@@ -31,6 +31,7 @@
             components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmAvoidAGrabCutEasy));
             panel1 = new Panel();
+            btnCMNew = new Button();
             cbClickMode = new CheckBox();
             label22 = new Label();
             btnResScribbles = new Button();
@@ -183,6 +184,7 @@
             // 
             // panel1
             // 
+            panel1.Controls.Add(btnCMNew);
             panel1.Controls.Add(cbClickMode);
             panel1.Controls.Add(label22);
             panel1.Controls.Add(btnResScribbles);
@@ -277,10 +279,20 @@
             panel1.MouseDoubleClick += panel1_MouseDoubleClick;
             panel1.MouseDown += panel1_MouseDown;
             // 
+            // btnCMNew
+            // 
+            btnCMNew.Location = new Point(575, 59);
+            btnCMNew.Name = "btnCMNew";
+            btnCMNew.Size = new Size(75, 23);
+            btnCMNew.TabIndex = 716;
+            btnCMNew.Text = "startNew";
+            btnCMNew.UseVisualStyleBackColor = true;
+            btnCMNew.Click += btnCMNew_Click;
+            // 
             // cbClickMode
             // 
             cbClickMode.AutoSize = true;
-            cbClickMode.Location = new Point(759, 64);
+            cbClickMode.Location = new Point(483, 62);
             cbClickMode.Name = "cbClickMode";
             cbClickMode.Size = new Size(81, 19);
             cbClickMode.TabIndex = 713;
@@ -538,7 +550,7 @@
             // cbOverlay
             // 
             cbOverlay.AutoSize = true;
-            cbOverlay.Location = new Point(544, 63);
+            cbOverlay.Location = new Point(304, 59);
             cbOverlay.Name = "cbOverlay";
             cbOverlay.Size = new Size(88, 19);
             cbOverlay.TabIndex = 696;
@@ -601,7 +613,7 @@
             // cbRefPtFG
             // 
             cbRefPtFG.AutoSize = true;
-            cbRefPtFG.Location = new Point(335, 65);
+            cbRefPtFG.Location = new Point(1267, 196);
             cbRefPtFG.Name = "cbRefPtFG";
             cbRefPtFG.Size = new Size(86, 19);
             cbRefPtFG.TabIndex = 689;
@@ -613,7 +625,7 @@
             // cbRefPtBG
             // 
             cbRefPtBG.AutoSize = true;
-            cbRefPtBG.Location = new Point(241, 65);
+            cbRefPtBG.Location = new Point(1173, 196);
             cbRefPtBG.Name = "cbRefPtBG";
             cbRefPtBG.Size = new Size(89, 19);
             cbRefPtBG.TabIndex = 690;
@@ -625,7 +637,7 @@
             // label14
             // 
             label14.AutoSize = true;
-            label14.Location = new Point(425, 67);
+            label14.Location = new Point(1357, 198);
             label14.Name = "label14";
             label14.Size = new Size(37, 15);
             label14.TabIndex = 687;
@@ -635,7 +647,7 @@
             // btnFloodFG
             // 
             btnFloodFG.Enabled = false;
-            btnFloodFG.Location = new Point(506, 62);
+            btnFloodFG.Location = new Point(1438, 193);
             btnFloodFG.Name = "btnFloodFG";
             btnFloodFG.Size = new Size(32, 23);
             btnFloodFG.TabIndex = 685;
@@ -647,7 +659,7 @@
             // btnFloodBG
             // 
             btnFloodBG.Enabled = false;
-            btnFloodBG.Location = new Point(468, 62);
+            btnFloodBG.Location = new Point(1400, 193);
             btnFloodBG.Name = "btnFloodBG";
             btnFloodBG.Size = new Size(32, 23);
             btnFloodBG.TabIndex = 686;
@@ -1579,19 +1591,19 @@
             // 
             contextMenuStrip1.Items.AddRange(new ToolStripItem[] { floodBGToolStripMenuItem, floodFGToolStripMenuItem });
             contextMenuStrip1.Name = "contextMenuStrip1";
-            contextMenuStrip1.Size = new Size(181, 70);
+            contextMenuStrip1.Size = new Size(123, 48);
             // 
             // floodBGToolStripMenuItem
             // 
             floodBGToolStripMenuItem.Name = "floodBGToolStripMenuItem";
-            floodBGToolStripMenuItem.Size = new Size(180, 22);
+            floodBGToolStripMenuItem.Size = new Size(122, 22);
             floodBGToolStripMenuItem.Text = "Flood BG";
             floodBGToolStripMenuItem.Click += floodBGToolStripMenuItem_Click;
             // 
             // floodFGToolStripMenuItem
             // 
             floodFGToolStripMenuItem.Name = "floodFGToolStripMenuItem";
-            floodFGToolStripMenuItem.Size = new Size(180, 22);
+            floodFGToolStripMenuItem.Size = new Size(122, 22);
             floodFGToolStripMenuItem.Text = "Flood FG";
             floodFGToolStripMenuItem.Click += floodFGToolStripMenuItem_Click;
             // 
@@ -1800,5 +1812,6 @@
         private Label label22;
         private Button btnResScribbles;
         private CheckBox cbClickMode;
+        private Button btnCMNew;
     }
 }

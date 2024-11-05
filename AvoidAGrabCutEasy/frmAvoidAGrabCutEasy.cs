@@ -132,6 +132,7 @@ namespace AvoidAGrabCutEasy
         private ClosedFormMatteOp[]? _cfopArray;
         private Bitmap? _bmpMatte;
         private Point? _ptSt;
+        private List<Point>? _ptPrev;
 
         public event EventHandler<string>? ShowInfo;
         //public event EventHandler<string> BoundaryError;
@@ -631,43 +632,42 @@ namespace AvoidAGrabCutEasy
 
                 if (this._points2 != null)
                 {
+                    Point? ptEnd = null;
+
                     if (this.cbClickMode.Checked && this._points2.Count == 1)
                     {
-                        Point? ptSt = GetLastPoint();
-
-                        if (ptSt == null)
-                        {
-                            if (this._ptSt != null)
-                            {
-                                ptSt = new Point(this._ptSt.Value.X, this._ptSt.Value.Y);
-                                this._ptSt = null;
-                            }
-                            else
-                            {
-                                this._ptSt = this._points2[0];
-                                return;
-                            }
-                        }
-
-                        this._points2 = GetPointsSequence(ptSt, this._points2[0], wh);
+                        Point? ptSt = this._ptSt;
+                        ptEnd = this._points2[0];
+                        this._points2 = GetPointsSequence(ptSt, ptEnd, wh);
                     }
 
-                    List<List<Point>> whPts = this._scribbles[fgbg][wh];
-                    whPts.Add(new List<Point>());
-                    whPts[whPts.Count - 1].AddRange(this._points2.ToArray());
-                    this._scribbleSeq.Add(Tuple.Create(fgbg, wh, this._scribbles[fgbg][wh].Count - 1, false, new List<List<Point>>()));
+                    if (this._ptPrev == null)
+                        this._ptPrev = new List<Point>();
+
+                    this._ptSt = ptEnd;
+
+                    if (ptEnd != null)
+                        this._ptPrev.Add(ptEnd.Value);
+
+                    if (this._points2.Count > 0)
+                    {
+                        List<List<Point>> whPts = this._scribbles[fgbg][wh];
+                        whPts.Add(new List<Point>());
+                        whPts[whPts.Count - 1].AddRange(this._points2.ToArray());
+                        this._scribbleSeq.Add(Tuple.Create(fgbg, wh, this._scribbles[fgbg][wh].Count - 1, false, new List<List<Point>>()));
+                    }
                 }
             }
         }
 
-        private List<Point> GetPointsSequence(Point? ptSt, Point pt, int wh)
+        private List<Point> GetPointsSequence(Point? ptSt, Point? pt, int wh)
         {
             List<Point> pts = new List<Point>();
 
-            if (ptSt != null)
+            if (ptSt != null && pt != null)
             {
-                double dx = pt.X - ptSt.Value.X;
-                double dy = pt.Y - ptSt.Value.Y;
+                double dx = pt.Value.X - ptSt.Value.X;
+                double dy = pt.Value.Y - ptSt.Value.Y;
 
                 double nrm = Math.Sqrt(dx * dx + dy * dy);
 
@@ -691,34 +691,10 @@ namespace AvoidAGrabCutEasy
                     dist += add;
                 }
 
-                pts.Add(pt);
+                pts.Add(pt.Value);
             }
 
             return pts;
-        }
-
-        private Point? GetLastPoint()
-        {
-            Point? res = null;
-
-            if (this._scribbles != null && this._scribbleSeq != null && this._scribbleSeq.Count > 0)
-            {
-                var j = this._scribbleSeq[this._scribbleSeq.Count - 1];
-
-                int l = j.Item1;
-                int wh = j.Item2;
-                int listNo = j.Item3;
-
-                List<List<Point>> ptsList = this._scribbles[l][wh];
-
-                if (ptsList != null && ptsList.Count > 0 && ptsList.Count > listNo)
-                {
-                    if (ptsList[listNo] != null && ptsList[listNo].Count > 0)
-                        res = ptsList[listNo][ptsList[listNo].Count - 1];
-                }
-            }
-
-            return res;
         }
 
         private void helplineRulerCtrl1_Paint(object? sender, PaintEventArgs e)
@@ -2818,6 +2794,14 @@ namespace AvoidAGrabCutEasy
                         //if (this._scribbleSeq != null)
                         //    this._scribbleSeq.RemoveAt(this._scribbleSeq.Count - 1);
                     }
+
+                    if (this._ptPrev != null && this._ptPrev.Count > 0)
+                    {
+                        this._ptPrev.RemoveAt(this._ptPrev.Count - 1);
+                        this._ptSt = this._ptPrev[this._ptPrev.Count - 1];
+                    }
+                    else
+                        this._ptSt = null;
                 }
                 else
                     using (frmLastScribbles frm = new frmLastScribbles(this.helplineRulerCtrl1.Bmp, this._scribbles, this._scribbleSeq))
@@ -9133,6 +9117,11 @@ namespace AvoidAGrabCutEasy
                 this._scribbleSeq = this._scribbleSeqBU;
                 this.helplineRulerCtrl1.dbPanel1.Invalidate();
             }
+        }
+
+        private void btnCMNew_Click(object sender, EventArgs e)
+        {
+            this._ptSt = null;
         }
     }
 }
