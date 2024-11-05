@@ -680,13 +680,17 @@ namespace AvoidAGrabCutEasy
                 double dstX = Math.Max(wh / 2.0, 1) * dx;
                 double dstY = Math.Max(wh / 2.0, 1) * dy;
                 double add = Math.Sqrt(dstX * dstX + dstY * dstY);
+                double lastX = ptSt.Value.X;
+                double lastY = ptSt.Value.Y;
 
                 while (dist < nrm - add)
                 {
-                    double x = pts[pts.Count - 1].X + dstX;
-                    double y = pts[pts.Count - 1].Y + dstY;
+                    double x = lastX + dstX;
+                    double y = lastY + dstY;
 
                     pts.Add(new Point((int)Math.Round(x), (int)Math.Round(y)));
+                    lastX = x;
+                    lastY = y;
 
                     dist += add;
                 }
