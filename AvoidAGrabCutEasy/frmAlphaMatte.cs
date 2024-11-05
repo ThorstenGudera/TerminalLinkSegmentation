@@ -285,7 +285,7 @@ namespace AvoidAGrabCutEasy
 
                 this._rect = new Rectangle(this._rX, this._rY, this._rW, this._rH);
 
-                if (this._tracking4 && !this.cbClickMode.Checked)
+                if (this._tracking4)
                 {
                     AddPointsToScribblePath();
                     this._points2.Clear();
