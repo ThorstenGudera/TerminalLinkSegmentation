@@ -4208,6 +4208,12 @@ namespace AvoidAGrabCutEasy
                 return;
             }
 
+            if (this.helplineRulerCtrl1.Bmp != null && this._bmpRef == null)
+            {
+                Bitmap? bC = new Bitmap(this.helplineRulerCtrl1.Bmp);
+                this.SetBitmap(ref _bmpRef, ref bC);
+            }
+
             if (this.helplineRulerCtrl1.Bmp != null && this._bmpRef != null)
             {
                 this.Cursor = Cursors.WaitCursor;
