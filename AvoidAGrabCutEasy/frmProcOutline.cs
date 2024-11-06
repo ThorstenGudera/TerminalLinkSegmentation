@@ -1210,11 +1210,11 @@ namespace AvoidAGrabCutEasy
 
         private void backgroundWorker1_DoWork(object? sender, DoWorkEventArgs e)
         {
-            if (this._bmpBU != null && this._bmpOrig != null)
+            if (this.helplineRulerCtrl1.Bmp != null && this._bmpOrig != null)
             {
                 Bitmap? bmp = null;
 
-                DefaultSmoothenOP dsOP = new DefaultSmoothenOP(this._bmpBU, this._bmpOrig);
+                DefaultSmoothenOP dsOP = new DefaultSmoothenOP(this.helplineRulerCtrl1.Bmp, this._bmpOrig);
                 //dsOP.ShowInfo += _gc_ShowInfo;
                 dsOP.BGW = this.backgroundWorker1;
                 dsOP.Init((double)this.numPPEpsilon.Value, (double)this.numPPEpsilon2.Value, this.cbPPRemove.Checked, (int)this.numPPRemove.Value, (int)this.numPPRemove2.Value, this.cbApproxLines.Checked);
@@ -1958,6 +1958,8 @@ namespace AvoidAGrabCutEasy
             for (int i = 0; i < this.groupBox4.Controls.Count; i++)
                 if (!(this.groupBox4.Controls[i] is GroupBox) && !(this.groupBox4.Controls[i] is Button))
                     this.groupBox4.Controls[i].Enabled = !ch;
+
+            this.pictureBox1.Enabled = true;
 
             this.label45.Enabled = this.label46.Enabled = this.numBoundOuter.Enabled = this.numBoundInner.Enabled = true;
             this.label52.Enabled = this.cbBlur.Enabled = this.numBlur.Enabled = !ch; //maybe this changes
@@ -4208,7 +4210,8 @@ namespace AvoidAGrabCutEasy
                 return;
             }
 
-            if (this.helplineRulerCtrl1.Bmp != null && this._bmpRef == null)
+            //test, if _bmpRef could be trashed class-wide
+            if (this.helplineRulerCtrl1.Bmp != null)
             {
                 Bitmap? bC = new Bitmap(this.helplineRulerCtrl1.Bmp);
                 this.SetBitmap(ref _bmpRef, ref bC);
@@ -5436,6 +5439,63 @@ namespace AvoidAGrabCutEasy
             frmEdgePic frm4 = new frmEdgePic(this.pictureBox1.Image);
             frm4.Text = "Orig";
             frm4.ShowDialog();
+        }
+
+        private void btnUndo_Click(object sender, EventArgs e)
+        {
+            if (_undoOPCache != null && _undoOPCache.Processing == false)
+            {
+                Bitmap bOut = _undoOPCache.DoUndo();
+
+                if (bOut != null)
+                {
+                    this.SetBitmap(this.helplineRulerCtrl1.Bmp, bOut, this.helplineRulerCtrl1, "Bmp");
+                    if (_undoOPCache.CurrentPosition < 1)
+                    {
+                        this.btnUndo.Enabled = false;
+                        this._pic_changed = false;
+                    }
+
+                    this.helplineRulerCtrl1.MakeBitmap(this.helplineRulerCtrl1.Bmp);
+
+                    this.helplineRulerCtrl1.dbPanel1.AutoScrollMinSize = new Size(System.Convert.ToInt32(this.helplineRulerCtrl1.Bmp.Width * this.helplineRulerCtrl1.Zoom), System.Convert.ToInt32(this.helplineRulerCtrl1.Bmp.Height * this.helplineRulerCtrl1.Zoom));
+                    this.helplineRulerCtrl1.dbPanel1.Invalidate();
+
+                    this.CheckRedoButton();
+                }
+                else
+                    MessageBox.Show("Error while undoing.");
+            }
+        }
+
+        private void btnRedo_Click(object sender, EventArgs e)
+        {
+            if (_undoOPCache != null && _undoOPCache.Processing == false)
+            {
+                Bitmap bOut = _undoOPCache.DoRedo();
+
+                if (bOut != null)
+                {
+                    this.SetBitmap(this.helplineRulerCtrl1.Bmp, bOut, this.helplineRulerCtrl1, "Bmp");
+                    this._pic_changed = true;
+
+                    this.helplineRulerCtrl1.MakeBitmap(this.helplineRulerCtrl1.Bmp);
+
+                    this.helplineRulerCtrl1.dbPanel1.AutoScrollMinSize = new Size(System.Convert.ToInt32(this.helplineRulerCtrl1.Bmp.Width * this.helplineRulerCtrl1.Zoom), System.Convert.ToInt32(this.helplineRulerCtrl1.Bmp.Height * this.helplineRulerCtrl1.Zoom));
+                    this.helplineRulerCtrl1.dbPanel1.Invalidate();
+
+                    this.CheckRedoButton();
+
+                    this.btnUndo.Enabled = true;
+                }
+                else
+                    MessageBox.Show("Error while redoing.");
+            }
+        }
+
+        private void CheckRedoButton()
+        {
+            _undoOPCache?.CheckRedoButton(this.btnRedo);
         }
     }
 }

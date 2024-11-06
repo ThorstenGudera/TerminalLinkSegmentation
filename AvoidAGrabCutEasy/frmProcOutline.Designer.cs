@@ -40,8 +40,6 @@
             numGamma = new NumericUpDown();
             label9 = new Label();
             numMaxSize = new NumericUpDown();
-            label1 = new Label();
-            btmSetBU = new Button();
             Label20 = new Label();
             cmbZoom = new ComboBox();
             cbBGColor = new CheckBox();
@@ -162,6 +160,8 @@
             backgroundWorker6 = new System.ComponentModel.BackgroundWorker();
             backgroundWorker7 = new System.ComponentModel.BackgroundWorker();
             openFileDialog1 = new OpenFileDialog();
+            btnRedo = new Button();
+            btnUndo = new Button();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
             splitContainer1.Panel2.SuspendLayout();
@@ -221,11 +221,11 @@
             // 
             // splitContainer1.Panel2
             // 
+            splitContainer1.Panel2.Controls.Add(btnRedo);
+            splitContainer1.Panel2.Controls.Add(btnUndo);
             splitContainer1.Panel2.Controls.Add(label16);
             splitContainer1.Panel2.Controls.Add(btnLoadBasePic);
             splitContainer1.Panel2.Controls.Add(groupBox2);
-            splitContainer1.Panel2.Controls.Add(label1);
-            splitContainer1.Panel2.Controls.Add(btmSetBU);
             splitContainer1.Panel2.Controls.Add(Label20);
             splitContainer1.Panel2.Controls.Add(cmbZoom);
             splitContainer1.Panel2.Controls.Add(cbBGColor);
@@ -276,7 +276,7 @@
             // 
             btnLoadBasePic.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             btnLoadBasePic.ForeColor = SystemColors.ControlText;
-            btnLoadBasePic.Location = new Point(90, 845);
+            btnLoadBasePic.Location = new Point(89, 845);
             btnLoadBasePic.Margin = new Padding(4, 3, 4, 3);
             btnLoadBasePic.Name = "btnLoadBasePic";
             btnLoadBasePic.Size = new Size(88, 27);
@@ -359,27 +359,6 @@
             numMaxSize.TabIndex = 673;
             numMaxSize.Value = new decimal(new int[] { 1200, 0, 0, 0 });
             // 
-            // label1
-            // 
-            label1.AutoSize = true;
-            label1.Location = new Point(15, 816);
-            label1.Margin = new Padding(4, 0, 4, 0);
-            label1.Name = "label1";
-            label1.Size = new Size(144, 15);
-            label1.TabIndex = 658;
-            label1.Text = "set current pic as work pic";
-            // 
-            // btmSetBU
-            // 
-            btmSetBU.Location = new Point(176, 810);
-            btmSetBU.Margin = new Padding(4, 3, 4, 3);
-            btmSetBU.Name = "btmSetBU";
-            btmSetBU.Size = new Size(88, 27);
-            btmSetBU.TabIndex = 657;
-            btmSetBU.Text = "set";
-            btmSetBU.UseVisualStyleBackColor = true;
-            btmSetBU.Click += btmSetBU_Click;
-            // 
             // Label20
             // 
             Label20.AutoSize = true;
@@ -408,7 +387,7 @@
             cbBGColor.AutoSize = true;
             cbBGColor.Checked = true;
             cbBGColor.CheckState = CheckState.Checked;
-            cbBGColor.Location = new Point(178, 772);
+            cbBGColor.Location = new Point(183, 772);
             cbBGColor.Margin = new Padding(4, 3, 4, 3);
             cbBGColor.Name = "cbBGColor";
             cbBGColor.Size = new Size(67, 19);
@@ -421,7 +400,7 @@
             // 
             button10.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             button10.ForeColor = SystemColors.ControlText;
-            button10.Location = new Point(371, 810);
+            button10.Location = new Point(370, 810);
             button10.Margin = new Padding(4, 3, 4, 3);
             button10.Name = "button10";
             button10.Size = new Size(88, 27);
@@ -434,7 +413,7 @@
             // 
             button8.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             button8.ForeColor = SystemColors.ControlText;
-            button8.Location = new Point(276, 810);
+            button8.Location = new Point(275, 810);
             button8.Margin = new Padding(4, 3, 4, 3);
             button8.Name = "button8";
             button8.Size = new Size(88, 27);
@@ -448,7 +427,7 @@
             button2.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             button2.FlatStyle = FlatStyle.System;
             button2.ForeColor = SystemColors.ControlText;
-            button2.Location = new Point(371, 770);
+            button2.Location = new Point(370, 770);
             button2.Margin = new Padding(4, 3, 4, 3);
             button2.Name = "button2";
             button2.Size = new Size(88, 27);
@@ -461,7 +440,7 @@
             btnCancel.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             btnCancel.DialogResult = DialogResult.Cancel;
             btnCancel.ForeColor = SystemColors.ControlText;
-            btnCancel.Location = new Point(380, 845);
+            btnCancel.Location = new Point(379, 845);
             btnCancel.Margin = new Padding(4, 3, 4, 3);
             btnCancel.Name = "btnCancel";
             btnCancel.Size = new Size(88, 27);
@@ -474,7 +453,7 @@
             btnOK.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             btnOK.DialogResult = DialogResult.OK;
             btnOK.ForeColor = SystemColors.ControlText;
-            btnOK.Location = new Point(287, 845);
+            btnOK.Location = new Point(286, 845);
             btnOK.Margin = new Padding(4, 3, 4, 3);
             btnOK.Name = "btnOK";
             btnOK.Size = new Size(88, 27);
@@ -1742,6 +1721,32 @@
             openFileDialog1.FileName = "openFileDialog1";
             openFileDialog1.Filter = "Images - (*.bmp;*.jpg;*.jpeg;*.jfif;*.png)|*.bmp;*.jpg;*.jpeg;*.jfif;*.png";
             // 
+            // btnRedo
+            // 
+            btnRedo.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            btnRedo.ForeColor = SystemColors.ControlText;
+            btnRedo.Location = new Point(117, 810);
+            btnRedo.Margin = new Padding(4, 3, 4, 3);
+            btnRedo.Name = "btnRedo";
+            btnRedo.Size = new Size(88, 27);
+            btnRedo.TabIndex = 653;
+            btnRedo.Text = "Redo";
+            btnRedo.UseVisualStyleBackColor = true;
+            btnRedo.Click += btnRedo_Click;
+            // 
+            // btnUndo
+            // 
+            btnUndo.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            btnUndo.ForeColor = SystemColors.ControlText;
+            btnUndo.Location = new Point(21, 810);
+            btnUndo.Margin = new Padding(4, 3, 4, 3);
+            btnUndo.Name = "btnUndo";
+            btnUndo.Size = new Size(88, 27);
+            btnUndo.TabIndex = 654;
+            btnUndo.Text = "Undo";
+            btnUndo.UseVisualStyleBackColor = true;
+            btnUndo.Click += btnUndo_Click;
+            // 
             // frmProcOutline
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -1894,8 +1899,6 @@
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.NumericUpDown numShiftY;
         private System.Windows.Forms.NumericUpDown numShiftX;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Button btmSetBU;
         internal System.ComponentModel.BackgroundWorker backgroundWorker4;
         private System.Windows.Forms.CheckBox cbHalfSize;
         private System.Windows.Forms.Label label2;
@@ -1944,5 +1947,7 @@
         private OpenFileDialog openFileDialog1;
         private PictureBox pictureBox1;
         private ToolStripDropDownButton toolStripDropDownButton1;
+        private Button btnRedo;
+        private Button btnUndo;
     }
 }

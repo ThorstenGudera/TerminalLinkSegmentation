@@ -4095,7 +4095,7 @@ namespace AvoidAGrabCutEasy
 
         private void btnOutline_Click(object sender, EventArgs e)
         {
-            if (this._b4Copy != null && this._bmpBU != null && this.CachePathAddition != null)
+            if ((this._b4Copy != null || this.helplineRulerCtrl2.Bmp != null) && this._bmpBU != null && this.CachePathAddition != null)
             {
                 using (frmProcOutline frm = new frmProcOutline(this.helplineRulerCtrl2.Bmp, this._bmpBU, this.CachePathAddition))
                 {
