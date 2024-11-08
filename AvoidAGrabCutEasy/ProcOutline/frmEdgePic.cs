@@ -63,7 +63,7 @@ namespace GetAlphaMatte
 
         private void btnSave_Click(object sender, EventArgs e)
         {
-            if (this.helplineRulerCtrl1.Bmp != null)
+            if (this.helplineRulerCtrl1.Bmp != null && this.saveFileDialog1.ShowDialog() == DialogResult.OK)
             {
                 try
                 {
@@ -79,10 +79,10 @@ namespace GetAlphaMatte
                             graphics.DrawImage(this.helplineRulerCtrl1.Bmp, 0, 0, bmp.Width, bmp.Height);
                             bmp.Save(this.saveFileDialog1.FileName, System.Drawing.Imaging.ImageFormat.Png);
                         }
-                        else if (this.helplineRulerCtrl1.Bmp != null && this.saveFileDialog1.ShowDialog() == DialogResult.OK)
+                        else if (this.helplineRulerCtrl1.Bmp != null)
                             this.helplineRulerCtrl1.Bmp.Save(this.saveFileDialog1.FileName, System.Drawing.Imaging.ImageFormat.Png);
                     }
-                    else if (this.helplineRulerCtrl1.Bmp != null && this.saveFileDialog1.ShowDialog() == DialogResult.OK)
+                    else if (this.helplineRulerCtrl1.Bmp != null)
                         this.helplineRulerCtrl1.Bmp.Save(this.saveFileDialog1.FileName, System.Drawing.Imaging.ImageFormat.Png);
                 }
                 catch (Exception ex)
