@@ -727,25 +727,29 @@ namespace AvoidAGrabCutEasy
                                         throw new Exception();
                                 }
 
+                                if (this.helplineRulerCtrl1.Bmp != null)
+                                {
+                                    this.numMaxSize.Value = (decimal)Math.Max(this.helplineRulerCtrl1.Bmp.Width, this.helplineRulerCtrl1.Bmp.Height);
 
-                                _undoOPCache?.Clear(this.helplineRulerCtrl1.Bmp);
+                                    _undoOPCache?.Clear(this.helplineRulerCtrl1.Bmp);
 
-                                _pic_changed = false;
+                                    _pic_changed = false;
 
-                                double faktor = System.Convert.ToDouble(this.helplineRulerCtrl1.dbPanel1.Width) / System.Convert.ToDouble(this.helplineRulerCtrl1.dbPanel1.Height);
-                                double multiplier = System.Convert.ToDouble(this.helplineRulerCtrl1.Bmp.Width) / System.Convert.ToDouble(this.helplineRulerCtrl1.Bmp.Height);
-                                if (multiplier >= faktor)
-                                    this.helplineRulerCtrl1.Zoom = System.Convert.ToSingle(System.Convert.ToDouble(this.helplineRulerCtrl1.dbPanel1.Width) / System.Convert.ToDouble(this.helplineRulerCtrl1.Bmp.Width));
-                                else
-                                    this.helplineRulerCtrl1.Zoom = System.Convert.ToSingle(System.Convert.ToDouble(this.helplineRulerCtrl1.dbPanel1.Height) / System.Convert.ToDouble(this.helplineRulerCtrl1.Bmp.Height));
+                                    double faktor = System.Convert.ToDouble(this.helplineRulerCtrl1.dbPanel1.Width) / System.Convert.ToDouble(this.helplineRulerCtrl1.dbPanel1.Height);
+                                    double multiplier = System.Convert.ToDouble(this.helplineRulerCtrl1.Bmp.Width) / System.Convert.ToDouble(this.helplineRulerCtrl1.Bmp.Height);
+                                    if (multiplier >= faktor)
+                                        this.helplineRulerCtrl1.Zoom = System.Convert.ToSingle(System.Convert.ToDouble(this.helplineRulerCtrl1.dbPanel1.Width) / System.Convert.ToDouble(this.helplineRulerCtrl1.Bmp.Width));
+                                    else
+                                        this.helplineRulerCtrl1.Zoom = System.Convert.ToSingle(System.Convert.ToDouble(this.helplineRulerCtrl1.dbPanel1.Height) / System.Convert.ToDouble(this.helplineRulerCtrl1.Bmp.Height));
 
-                                this.helplineRulerCtrl1.dbPanel1.AutoScrollMinSize = new Size(System.Convert.ToInt32(this.helplineRulerCtrl1.Bmp.Width * this.helplineRulerCtrl1.Zoom), System.Convert.ToInt32(this.helplineRulerCtrl1.Bmp.Height * this.helplineRulerCtrl1.Zoom));
+                                    this.helplineRulerCtrl1.dbPanel1.AutoScrollMinSize = new Size(System.Convert.ToInt32(this.helplineRulerCtrl1.Bmp.Width * this.helplineRulerCtrl1.Zoom), System.Convert.ToInt32(this.helplineRulerCtrl1.Bmp.Height * this.helplineRulerCtrl1.Zoom));
 
-                                this.helplineRulerCtrl1.MakeBitmap(this.helplineRulerCtrl1.Bmp);
+                                    this.helplineRulerCtrl1.MakeBitmap(this.helplineRulerCtrl1.Bmp);
 
-                                this.helplineRulerCtrl1.dbPanel1.Invalidate();
+                                    this.helplineRulerCtrl1.dbPanel1.Invalidate();
 
-                                this.Text = files[0] + " - frmQuickExtract";
+                                    this.Text = files[0] + " - frmQuickExtract";
+                                }
                             }
                         }
                     }
@@ -1255,7 +1259,20 @@ namespace AvoidAGrabCutEasy
                 if (f != null)
                 {
                     this._scribbles = f.ToDictionary();
-                    //this._scribblesChanged = true;
+
+                    double resPic = 1.0;
+
+                    if (f.BaseSize != null)
+                        resPic = (double)Math.Max(this.helplineRulerCtrl1.Bmp.Width, this.helplineRulerCtrl1.Bmp.Height) /
+                            (double)Math.Max(f.BaseSize.Value.Width, f.BaseSize.Value.Height);
+
+                    if (this._scribbles != null && resPic != 1.0)
+                    {
+                        Dictionary<int, Dictionary<int, List<List<Point>>>> scribbles2 = ResizeAllScribbles(this._scribbles, resPic);
+                        this._scribbles = scribbles2;
+                        List<Tuple<int, int, int, bool, List<List<Point>>>> scribbleSeq2 = ResizeScribbleSeq(this._scribbleSeq, resPic, true);
+                        this._scribbleSeq = scribbleSeq2;
+                    }
 
                     if (f.Bmp != null && this.cbLSBmp.Checked)
                     {
@@ -1292,6 +1309,9 @@ namespace AvoidAGrabCutEasy
             if (this._scribbles != null)
             {
                 SavedScribbles f = new SavedScribbles();
+
+                if (this.helplineRulerCtrl1.Bmp != null)
+                    f.BaseSize = this.helplineRulerCtrl1.Bmp.Size;
 
                 if (this._scribbles.ContainsKey(0)) //BG
                 {
@@ -1486,6 +1506,75 @@ namespace AvoidAGrabCutEasy
 
             return f;
         }
+
+        private Dictionary<int, Dictionary<int, List<List<Point>>>> ResizeAllScribbles(Dictionary<int, Dictionary<int, List<List<Point>>>> scribbles, double resWC)
+        {
+            Dictionary<int, Dictionary<int, List<List<Point>>>> res = new Dictionary<int, Dictionary<int, List<List<Point>>>>();
+
+            if (scribbles != null && resWC != 0)
+                foreach (int j in scribbles.Keys)
+                {
+                    res.Add(j, new Dictionary<int, List<List<Point>>>());
+
+                    Dictionary<int, List<List<Point>>> ptsWH = scribbles[j];
+
+                    if (ptsWH != null)
+                        foreach (int wh in ptsWH.Keys)
+                        {
+                            int newWH = (int)Math.Max(wh / resWC, 1);
+
+                            if (res[j].ContainsKey(newWH))
+                            {
+                                List<List<Point>> ja = ptsWH[wh];
+
+                                if (ja != null)
+                                    foreach (List<Point> pts in ja)
+                                    {
+                                        List<Point> newPts = new List<Point>();
+                                        Point[] transPts = pts.Select(a => new Point((int)(a.X / resWC), (int)(a.Y / resWC))).ToArray();
+                                        newPts.AddRange(transPts);
+
+                                        res[j][newWH].Add(newPts);
+                                    }
+                            }
+                            else
+                            {
+                                res[j].Add(newWH, new List<List<Point>>());
+
+                                List<List<Point>> ja = ptsWH[wh];
+
+                                if (ja != null)
+                                    foreach (List<Point> pts in ja)
+                                    {
+                                        List<Point> newPts = new List<Point>();
+                                        Point[] transPts = pts.Select(a => new Point((int)(a.X / resWC), (int)(a.Y / resWC))).ToArray();
+                                        newPts.AddRange(transPts);
+
+                                        res[j][newWH].Add(newPts);
+                                    }
+                            }
+                        }
+                }
+
+            return res;
+        }
+
+        private List<Tuple<int, int, int, bool, List<List<Point>>>> ResizeScribbleSeq(List<Tuple<int, int, int, bool, List<List<Point>>>> scribbleSeq, double resWC, bool verify)
+        {
+            List<Tuple<int, int, int, bool, List<List<Point>>>> res = new List<Tuple<int, int, int, bool, List<List<Point>>>>();
+
+            if (scribbleSeq != null)
+                for (int i = 0; i < scribbleSeq.Count; i++)
+                    res.Add(Tuple.Create(scribbleSeq[i].Item1, (int)(scribbleSeq[i].Item2 / resWC), scribbleSeq[i].Item3, false, new List<List<Point>>()));
+
+            if (verify)
+            {
+
+            }
+
+            return res;
+        }
+
 
         private unsafe void btnFloodBG_Click(object sender, EventArgs e)
         {
@@ -3895,6 +3984,9 @@ namespace AvoidAGrabCutEasy
             this.cbBGColor_CheckedChanged(this.cbBGColor, new EventArgs());
             rbClosedForm_CheckedChanged(this.rbClosedForm, new EventArgs());
             this._hs = this.cbHalfSize.Checked;
+
+            if (this.helplineRulerCtrl1.Bmp != null)
+                this.numMaxSize.Value = (decimal)Math.Max(this.helplineRulerCtrl1.Bmp.Width, this.helplineRulerCtrl1.Bmp.Height);
         }
 
         private void floodBGToolStripMenuItem_Click(object sender, EventArgs e)
@@ -4572,7 +4664,7 @@ namespace AvoidAGrabCutEasy
 
         private void pictureBox1_DoubleClick(object sender, EventArgs e)
         {
-            frmEdgePic frm4 = new frmEdgePic(this.pictureBox1.Image);
+            GetAlphaMatte.frmEdgePic frm4 = new GetAlphaMatte.frmEdgePic(this.pictureBox1.Image, this.helplineRulerCtrl1.Bmp.Size);
             frm4.Text = "Trimap";
             frm4.ShowDialog();
         }
