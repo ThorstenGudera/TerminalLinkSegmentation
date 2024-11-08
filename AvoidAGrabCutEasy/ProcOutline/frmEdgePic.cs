@@ -69,12 +69,12 @@ namespace GetAlphaMatte
                 {
                     if (this.BaseSize != null)
                     {
-                        if (MessageBox.Show("Resize Matte?", "", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
-                        {
-                            double resPic = (double)Math.Max(this.helplineRulerCtrl1.Bmp.Width, this.helplineRulerCtrl1.Bmp.Height) /
+                        double resPic = (double)Math.Max(this.helplineRulerCtrl1.Bmp.Width, this.helplineRulerCtrl1.Bmp.Height) /
                                 (double)Math.Max(this.BaseSize.Value.Width, this.BaseSize.Value.Height);
 
-                            Bitmap bmp = new Bitmap(this.helplineRulerCtrl1.Bmp.Width, this.helplineRulerCtrl1.Bmp.Height);
+                        if (resPic != 1.0 && MessageBox.Show("Resize Matte?", "", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                        {
+                            Bitmap bmp = new Bitmap(this.BaseSize.Value.Width, this.BaseSize.Value.Height);
                             using Graphics graphics = Graphics.FromImage(bmp);
                             graphics.DrawImage(this.helplineRulerCtrl1.Bmp, 0, 0, bmp.Width, bmp.Height);
                             if (this.saveFileDialog1.ShowDialog() == DialogResult.OK)

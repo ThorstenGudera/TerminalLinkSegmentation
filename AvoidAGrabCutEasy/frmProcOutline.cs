@@ -3755,7 +3755,7 @@ namespace AvoidAGrabCutEasy
                         if (bmpMatte != null)
                             this.SetBitmap(ref this._bmpMatte, ref bmpMatte);
 
-                        frmEdgePic frm4 = new frmEdgePic(bmp);
+                        frmEdgePic frm4 = new frmEdgePic(bmp, this.helplineRulerCtrl1.Bmp.Size);
                         frm4.Text = "Alpha Matte";
                         frm4.ShowDialog();
 
@@ -5436,7 +5436,7 @@ namespace AvoidAGrabCutEasy
 
         private void pictureBox1_DoubleClick(object sender, EventArgs e)
         {
-            frmEdgePic frm4 = new frmEdgePic(this.pictureBox1.Image);
+            frmEdgePic frm4 = new frmEdgePic(this.pictureBox1.Image, this.helplineRulerCtrl1.Bmp.Size);
             frm4.Text = "Orig";
             frm4.ShowDialog();
         }

@@ -9040,7 +9040,7 @@ namespace AvoidAGrabCutEasy
                         if (bmpMatte != null)
                             this.SetBitmap(ref this._bmpMatte, ref bmpMatte);
 
-                        frmEdgePic frm4 = new frmEdgePic(bmp);
+                        frmEdgePic frm4 = new frmEdgePic(bmp, this.helplineRulerCtrl1.Bmp.Size);
                         frm4.Text = "Alpha Matte";
                         frm4.ShowDialog();
 

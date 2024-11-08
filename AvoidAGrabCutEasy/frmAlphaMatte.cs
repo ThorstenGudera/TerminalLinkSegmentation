@@ -3732,7 +3732,7 @@ namespace AvoidAGrabCutEasy
 
                     if (bmp != null)
                     {
-                        frmEdgePic frm4 = new frmEdgePic(bmp);
+                        frmEdgePic frm4 = new frmEdgePic(bmp, this.helplineRulerCtrl1.Bmp.Size);
                         frm4.Text = "Alpha Matte";
                         frm4.ShowDialog();
 
