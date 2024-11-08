@@ -3799,8 +3799,8 @@ namespace AvoidAGrabCutEasy
                     double resPic = 1.0;
 
                     if (f.BaseSize != null)
-                        resPic = (double)Math.Max(this.helplineRulerCtrl1.Bmp.Width, this.helplineRulerCtrl1.Bmp.Height) /
-                            (double)Math.Max(f.BaseSize.Value.Width, f.BaseSize.Value.Height);
+                        resPic = (double)Math.Max(f.BaseSize.Value.Width, f.BaseSize.Value.Height) /
+                            (double)Math.Max(this.helplineRulerCtrl1.Bmp.Width, this.helplineRulerCtrl1.Bmp.Height);
 
                     if (this._scribbles != null && resPic != 1.0)
                     {
