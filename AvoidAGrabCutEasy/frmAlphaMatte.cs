@@ -2205,7 +2205,9 @@ namespace AvoidAGrabCutEasy
                 Bitmap bTrimap = new Bitmap(bWork.Width, bWork.Height);
                 this.SetBitmap(ref _bWork, ref bWork);
 
-                this.backgroundWorker4.RunWorkerAsync(new object[] { factor, bTrimap });
+                bool drawPaths = this.cbDrawPaths.Checked;
+
+                this.backgroundWorker4.RunWorkerAsync(new object[] { factor, bTrimap, drawPaths });
             }
         }
 
@@ -4371,6 +4373,7 @@ namespace AvoidAGrabCutEasy
 
                 double factor = (double)o[0];
                 Bitmap bTrimap = (Bitmap)o[1];
+                bool drawPaths = (bool)o[2];
 
                 using (Graphics gx = Graphics.FromImage(bTrimap))
                 {
@@ -4419,6 +4422,18 @@ namespace AvoidAGrabCutEasy
                                                                 (int)(wh / factor),
                                                                 (int)(wh / factor)));
                                                 }
+
+                                                if (drawPaths && !f.Item4)
+                                                {
+                                                    using SolidBrush sb = new SolidBrush(c);
+                                                    using Pen pen = new Pen(c, (wh * 2f) / (float)factor);
+                                                    pen.LineJoin = LineJoin.Round;
+                                                    using GraphicsPath gP = new GraphicsPath();
+                                                    gP.AddLines(ptsList[listNo].Select(a => new PointF(a.X, a.Y)).ToArray());
+                                                    using Matrix mx = new Matrix(1.0f / (float)factor, 0, 0, 1.0f / (float)factor, 0, 0);
+                                                    gP.Transform(mx);
+                                                    gx.DrawPath(pen, gP);
+                                                }
                                             }
                                             else
                                             {
@@ -4438,6 +4453,16 @@ namespace AvoidAGrabCutEasy
                                                                 (int)((int)(pt.Y - wh / 2) / factor),
                                                                 (int)(wh / factor),
                                                                 (int)(wh / factor)));
+                                                }
+
+                                                if (drawPaths && !f.Item4)
+                                                {
+                                                    using SolidBrush sb = new SolidBrush(c);
+                                                    using GraphicsPath gP = new GraphicsPath();
+                                                    gP.AddEllipse(ptsList[listNo][0].X - wh / 2f / (float)factor,
+                                                        ptsList[listNo][0].Y - wh / 2f / (float)factor,
+                                                        wh / (float)factor, wh / (float)factor);
+                                                    gx.FillPath(sb, gP);
                                                 }
                                             }
                                         }
@@ -4536,6 +4561,18 @@ namespace AvoidAGrabCutEasy
                                                                 (int)(wh / factor),
                                                                 (int)(wh / factor)));
                                                 }
+
+                                                if (drawPaths && !f.Item4)
+                                                {
+                                                    using SolidBrush sb = new SolidBrush(c);
+                                                    using Pen pen = new Pen(c, (wh * 2f) / (float)factor);
+                                                    pen.LineJoin = LineJoin.Round;
+                                                    using GraphicsPath gP = new GraphicsPath();
+                                                    gP.AddLines(ptsList[listNo].Select(a => new PointF(a.X, a.Y)).ToArray());
+                                                    using Matrix mx = new Matrix(1.0f / (float)factor, 0, 0, 1.0f / (float)factor, 0, 0);
+                                                    gP.Transform(mx);
+                                                    gx.DrawPath(pen, gP);
+                                                }
                                             }
                                             else
                                             {
@@ -4555,6 +4592,16 @@ namespace AvoidAGrabCutEasy
                                                                 (int)((int)(pt.Y - wh / 2) / factor),
                                                                 (int)(wh / factor),
                                                                 (int)(wh / factor)));
+                                                }
+
+                                                if (drawPaths && !f.Item4)
+                                                {
+                                                    using SolidBrush sb = new SolidBrush(c);
+                                                    using GraphicsPath gP = new GraphicsPath();
+                                                    gP.AddEllipse(ptsList[listNo][0].X - wh / 2f / (float)factor,
+                                                        ptsList[listNo][0].Y - wh / 2f / (float)factor,
+                                                        wh / (float)factor, wh / (float)factor);
+                                                    gx.FillPath(sb, gP);
                                                 }
                                             }
                                         }
@@ -4614,6 +4661,9 @@ namespace AvoidAGrabCutEasy
                                 }
                             }
                         }
+
+                        //if (this._oldUnknownFT != null)
+                        //    this.FillUnknownByBG(bTrimap, this._oldUnknownFT);
                     }
                 }
 

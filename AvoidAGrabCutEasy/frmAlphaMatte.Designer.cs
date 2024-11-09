@@ -65,6 +65,7 @@
             cbLSBmp = new CheckBox();
             Label20 = new Label();
             panel1 = new Panel();
+            btnCMNew = new Button();
             cbClickMode = new CheckBox();
             cbHighlight = new CheckBox();
             panel6 = new Panel();
@@ -117,7 +118,7 @@
             backgroundWorker5 = new System.ComponentModel.BackgroundWorker();
             backgroundWorker3 = new System.ComponentModel.BackgroundWorker();
             backgroundWorker4 = new System.ComponentModel.BackgroundWorker();
-            btnCMNew = new Button();
+            cbDrawPaths = new CheckBox();
             statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
@@ -277,7 +278,7 @@
             // 
             // btnSaveScribbles
             // 
-            btnSaveScribbles.Location = new Point(425, 175);
+            btnSaveScribbles.Location = new Point(425, 151);
             btnSaveScribbles.Margin = new Padding(4, 3, 4, 3);
             btnSaveScribbles.Name = "btnSaveScribbles";
             btnSaveScribbles.Size = new Size(99, 27);
@@ -288,7 +289,7 @@
             // 
             // btnLoadScribbles
             // 
-            btnLoadScribbles.Location = new Point(316, 175);
+            btnLoadScribbles.Location = new Point(316, 151);
             btnLoadScribbles.Margin = new Padding(4, 3, 4, 3);
             btnLoadScribbles.Name = "btnLoadScribbles";
             btnLoadScribbles.Size = new Size(99, 27);
@@ -489,7 +490,7 @@
             // cbLSBmp
             // 
             cbLSBmp.AutoSize = true;
-            cbLSBmp.Location = new Point(532, 180);
+            cbLSBmp.Location = new Point(532, 156);
             cbLSBmp.Margin = new Padding(4, 3, 4, 3);
             cbLSBmp.Name = "cbLSBmp";
             cbLSBmp.Size = new Size(90, 19);
@@ -509,6 +510,7 @@
             // 
             // panel1
             // 
+            panel1.Controls.Add(cbDrawPaths);
             panel1.Controls.Add(btnCMNew);
             panel1.Controls.Add(cbClickMode);
             panel1.Controls.Add(cbHighlight);
@@ -565,6 +567,16 @@
             panel1.Size = new Size(1479, 224);
             panel1.TabIndex = 226;
             // 
+            // btnCMNew
+            // 
+            btnCMNew.Location = new Point(35, 101);
+            btnCMNew.Name = "btnCMNew";
+            btnCMNew.Size = new Size(75, 23);
+            btnCMNew.TabIndex = 717;
+            btnCMNew.Text = "startNew";
+            btnCMNew.UseVisualStyleBackColor = true;
+            btnCMNew.Click += btnCMNew_Click;
+            // 
             // cbClickMode
             // 
             cbClickMode.AutoSize = true;
@@ -593,7 +605,7 @@
             panel6.BorderStyle = BorderStyle.FixedSingle;
             panel6.Controls.Add(rbSparseScribble);
             panel6.Controls.Add(rbFullScribble);
-            panel6.Location = new Point(356, 97);
+            panel6.Location = new Point(356, 73);
             panel6.Name = "panel6";
             panel6.Size = new Size(233, 41);
             panel6.TabIndex = 713;
@@ -692,7 +704,7 @@
             // 
             panel5.BorderStyle = BorderStyle.FixedSingle;
             panel5.Controls.Add(rbClosedForm);
-            panel5.Location = new Point(356, 50);
+            panel5.Location = new Point(356, 26);
             panel5.Name = "panel5";
             panel5.Size = new Size(164, 41);
             panel5.TabIndex = 703;
@@ -726,7 +738,7 @@
             panel2.Controls.Add(numMaxRestarts);
             panel2.Controls.Add(numSleep);
             panel2.Controls.Add(label2);
-            panel2.Location = new Point(604, 50);
+            panel2.Location = new Point(604, 26);
             panel2.Name = "panel2";
             panel2.Size = new Size(232, 113);
             panel2.TabIndex = 701;
@@ -902,7 +914,7 @@
             // 
             // btnGenerateTrimap
             // 
-            btnGenerateTrimap.Location = new Point(638, 175);
+            btnGenerateTrimap.Location = new Point(638, 151);
             btnGenerateTrimap.Margin = new Padding(4, 3, 4, 3);
             btnGenerateTrimap.Name = "btnGenerateTrimap";
             btnGenerateTrimap.Size = new Size(99, 27);
@@ -1008,7 +1020,7 @@
             // 
             btnGo.Enabled = false;
             btnGo.Font = new Font("Microsoft Sans Serif", 8.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            btnGo.Location = new Point(748, 175);
+            btnGo.Location = new Point(748, 151);
             btnGo.Margin = new Padding(4, 3, 4, 3);
             btnGo.Name = "btnGo";
             btnGo.Size = new Size(88, 27);
@@ -1135,15 +1147,18 @@
             backgroundWorker4.DoWork += backgroundWorker4_DoWork;
             backgroundWorker4.RunWorkerCompleted += backgroundWorker4_RunWorkerCompleted;
             // 
-            // btnCMNew
+            // cbDrawPaths
             // 
-            btnCMNew.Location = new Point(35, 101);
-            btnCMNew.Name = "btnCMNew";
-            btnCMNew.Size = new Size(75, 23);
-            btnCMNew.TabIndex = 717;
-            btnCMNew.Text = "startNew";
-            btnCMNew.UseVisualStyleBackColor = true;
-            btnCMNew.Click += btnCMNew_Click;
+            cbDrawPaths.AutoSize = true;
+            cbDrawPaths.Checked = true;
+            cbDrawPaths.CheckState = CheckState.Checked;
+            cbDrawPaths.Location = new Point(652, 184);
+            cbDrawPaths.Name = "cbDrawPaths";
+            cbDrawPaths.Size = new Size(148, 19);
+            cbDrawPaths.TabIndex = 718;
+            cbDrawPaths.Text = "draw Scribbles as Paths";
+            toolTip1.SetToolTip(cbDrawPaths, "draw non-fill_In scriblles as smotth path");
+            cbDrawPaths.UseVisualStyleBackColor = true;
             // 
             // frmAlphaMatte
             // 
@@ -1277,5 +1292,6 @@
         private CheckBox cbHighlight;
         private CheckBox cbClickMode;
         private Button btnCMNew;
+        private CheckBox cbDrawPaths;
     }
 }
