@@ -2206,8 +2206,9 @@ namespace AvoidAGrabCutEasy
                 this.SetBitmap(ref _bWork, ref bWork);
 
                 bool drawPaths = this.cbDrawPaths.Checked;
+                float wFactor = (float)this.numScribblesWFactor.Value;
 
-                this.backgroundWorker4.RunWorkerAsync(new object[] { factor, bTrimap, drawPaths });
+                this.backgroundWorker4.RunWorkerAsync(new object[] { factor, bTrimap, drawPaths, wFactor });
             }
         }
 
@@ -4374,6 +4375,7 @@ namespace AvoidAGrabCutEasy
                 double factor = (double)o[0];
                 Bitmap bTrimap = (Bitmap)o[1];
                 bool drawPaths = (bool)o[2];
+                float wFactor = (float)o[3];
 
                 using (Graphics gx = Graphics.FromImage(bTrimap))
                 {
@@ -4426,7 +4428,7 @@ namespace AvoidAGrabCutEasy
                                                 if (drawPaths && !f.Item4)
                                                 {
                                                     using SolidBrush sb = new SolidBrush(c);
-                                                    using Pen pen = new Pen(c, (wh * 2f) / (float)factor);
+                                                    using Pen pen = new Pen(c, (wh * wFactor) / (float)factor);
                                                     pen.LineJoin = LineJoin.Round;
                                                     using GraphicsPath gP = new GraphicsPath();
                                                     gP.AddLines(ptsList[listNo].Select(a => new PointF(a.X, a.Y)).ToArray());
@@ -4565,7 +4567,7 @@ namespace AvoidAGrabCutEasy
                                                 if (drawPaths && !f.Item4)
                                                 {
                                                     using SolidBrush sb = new SolidBrush(c);
-                                                    using Pen pen = new Pen(c, (wh * 2f) / (float)factor);
+                                                    using Pen pen = new Pen(c, (wh * wFactor) / (float)factor);
                                                     pen.LineJoin = LineJoin.Round;
                                                     using GraphicsPath gP = new GraphicsPath();
                                                     gP.AddLines(ptsList[listNo].Select(a => new PointF(a.X, a.Y)).ToArray());

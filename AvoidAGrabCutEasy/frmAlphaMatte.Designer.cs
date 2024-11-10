@@ -59,6 +59,7 @@
             cbInterpolated = new CheckBox();
             rbSparseScribble = new RadioButton();
             rbFullScribble = new RadioButton();
+            cbDrawPaths = new CheckBox();
             saveFileDialog1 = new SaveFileDialog();
             Timer3 = new System.Windows.Forms.Timer(components);
             backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
@@ -118,7 +119,8 @@
             backgroundWorker5 = new System.ComponentModel.BackgroundWorker();
             backgroundWorker3 = new System.ComponentModel.BackgroundWorker();
             backgroundWorker4 = new System.ComponentModel.BackgroundWorker();
-            cbDrawPaths = new CheckBox();
+            label11 = new Label();
+            numScribblesWFactor = new NumericUpDown();
             statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
@@ -138,6 +140,7 @@
             ((System.ComponentModel.ISupportInitialize)numMaxSize).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numWHScribbles).BeginInit();
             contextMenuStrip1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)numScribblesWFactor).BeginInit();
             SuspendLayout();
             // 
             // statusStrip1
@@ -333,7 +336,7 @@
             // splitContainer1
             // 
             splitContainer1.Dock = DockStyle.Fill;
-            splitContainer1.Location = new Point(0, 224);
+            splitContainer1.Location = new Point(0, 227);
             splitContainer1.Margin = new Padding(4, 3, 4, 3);
             splitContainer1.Name = "splitContainer1";
             // 
@@ -344,7 +347,7 @@
             // splitContainer1.Panel2
             // 
             splitContainer1.Panel2.Controls.Add(helplineRulerCtrl2);
-            splitContainer1.Size = new Size(1479, 648);
+            splitContainer1.Size = new Size(1479, 645);
             splitContainer1.SplitterDistance = 756;
             splitContainer1.SplitterWidth = 5;
             splitContainer1.TabIndex = 227;
@@ -364,7 +367,7 @@
             helplineRulerCtrl1.MoveHelpLinesOnResize = false;
             helplineRulerCtrl1.Name = "helplineRulerCtrl1";
             helplineRulerCtrl1.SetZoomOnlyByMethodCall = false;
-            helplineRulerCtrl1.Size = new Size(756, 648);
+            helplineRulerCtrl1.Size = new Size(756, 645);
             helplineRulerCtrl1.TabIndex = 0;
             helplineRulerCtrl1.Zoom = 1F;
             helplineRulerCtrl1.ZoomSetManually = false;
@@ -384,7 +387,7 @@
             helplineRulerCtrl2.MoveHelpLinesOnResize = false;
             helplineRulerCtrl2.Name = "helplineRulerCtrl2";
             helplineRulerCtrl2.SetZoomOnlyByMethodCall = false;
-            helplineRulerCtrl2.Size = new Size(718, 648);
+            helplineRulerCtrl2.Size = new Size(718, 645);
             helplineRulerCtrl2.TabIndex = 0;
             helplineRulerCtrl2.Zoom = 1F;
             helplineRulerCtrl2.ZoomSetManually = false;
@@ -469,6 +472,19 @@
             toolTip1.SetToolTip(rbFullScribble, "Start with a Black (BG) Image.\r\nDraw scribbles for Unknown and FG to it,\r\nor draw Unknown (closed curve or from pic-bounds to pic-bounds,\r\n then fill in BG and FG scribbles.\r\n");
             rbFullScribble.UseVisualStyleBackColor = true;
             // 
+            // cbDrawPaths
+            // 
+            cbDrawPaths.AutoSize = true;
+            cbDrawPaths.Checked = true;
+            cbDrawPaths.CheckState = CheckState.Checked;
+            cbDrawPaths.Location = new Point(652, 180);
+            cbDrawPaths.Name = "cbDrawPaths";
+            cbDrawPaths.Size = new Size(148, 19);
+            cbDrawPaths.TabIndex = 718;
+            cbDrawPaths.Text = "draw Scribbles as Paths";
+            toolTip1.SetToolTip(cbDrawPaths, "draw non-fill_In scriblles as smotth path");
+            cbDrawPaths.UseVisualStyleBackColor = true;
+            // 
             // saveFileDialog1
             // 
             saveFileDialog1.FileName = "Bild1.png";
@@ -510,6 +526,8 @@
             // 
             // panel1
             // 
+            panel1.Controls.Add(label11);
+            panel1.Controls.Add(numScribblesWFactor);
             panel1.Controls.Add(cbDrawPaths);
             panel1.Controls.Add(btnCMNew);
             panel1.Controls.Add(cbClickMode);
@@ -564,7 +582,7 @@
             panel1.Location = new Point(0, 0);
             panel1.Margin = new Padding(4, 3, 4, 3);
             panel1.Name = "panel1";
-            panel1.Size = new Size(1479, 224);
+            panel1.Size = new Size(1479, 227);
             panel1.TabIndex = 226;
             // 
             // btnCMNew
@@ -1147,18 +1165,27 @@
             backgroundWorker4.DoWork += backgroundWorker4_DoWork;
             backgroundWorker4.RunWorkerCompleted += backgroundWorker4_RunWorkerCompleted;
             // 
-            // cbDrawPaths
+            // label11
             // 
-            cbDrawPaths.AutoSize = true;
-            cbDrawPaths.Checked = true;
-            cbDrawPaths.CheckState = CheckState.Checked;
-            cbDrawPaths.Location = new Point(652, 184);
-            cbDrawPaths.Name = "cbDrawPaths";
-            cbDrawPaths.Size = new Size(148, 19);
-            cbDrawPaths.TabIndex = 718;
-            cbDrawPaths.Text = "draw Scribbles as Paths";
-            toolTip1.SetToolTip(cbDrawPaths, "draw non-fill_In scriblles as smotth path");
-            cbDrawPaths.UseVisualStyleBackColor = true;
+            label11.AutoSize = true;
+            label11.Location = new Point(708, 202);
+            label11.Name = "label11";
+            label11.Size = new Size(49, 15);
+            label11.TabIndex = 720;
+            label11.Text = "wFactor";
+            // 
+            // numScribblesWFactor
+            // 
+            numScribblesWFactor.DecimalPlaces = 4;
+            numScribblesWFactor.Increment = new decimal(new int[] { 1, 0, 0, 65536 });
+            numScribblesWFactor.Location = new Point(761, 198);
+            numScribblesWFactor.Margin = new Padding(4, 3, 4, 3);
+            numScribblesWFactor.Maximum = new decimal(new int[] { 255, 0, 0, 0 });
+            numScribblesWFactor.Minimum = new decimal(new int[] { 1, 0, 0, 65536 });
+            numScribblesWFactor.Name = "numScribblesWFactor";
+            numScribblesWFactor.Size = new Size(71, 23);
+            numScribblesWFactor.TabIndex = 719;
+            numScribblesWFactor.Value = new decimal(new int[] { 14142, 0, 0, 262144 });
             // 
             // frmAlphaMatte
             // 
@@ -1197,6 +1224,7 @@
             ((System.ComponentModel.ISupportInitialize)numMaxSize).EndInit();
             ((System.ComponentModel.ISupportInitialize)numWHScribbles).EndInit();
             contextMenuStrip1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)numScribblesWFactor).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -1293,5 +1321,7 @@
         private CheckBox cbClickMode;
         private Button btnCMNew;
         private CheckBox cbDrawPaths;
+        private Label label11;
+        private NumericUpDown numScribblesWFactor;
     }
 }
