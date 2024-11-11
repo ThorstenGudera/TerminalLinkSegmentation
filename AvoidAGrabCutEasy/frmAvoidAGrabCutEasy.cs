@@ -509,11 +509,14 @@ namespace AvoidAGrabCutEasy
                     this._eY = eY;
                 }
 
-                if (this.cbScribbleMode.Checked && !this.cbRefPtBG.Checked && !this.cbRefPtFG.Checked && e.Button == MouseButtons.Left)
+                if (this.cbScribbleMode.Checked && !this.cbRefPtBG.Checked && !this.cbRefPtFG.Checked && e.Button == MouseButtons.Left && !this.cbClickMode.Checked)
                 {
                     this._points2.Add(new Point(ix, iy));
                     this._tracking4 = true;
                 }
+
+                if (this.cbScribbleMode.Checked && !this.cbRefPtBG.Checked && !this.cbRefPtFG.Checked && e.Button == MouseButtons.Left && this.cbClickMode.Checked)
+                    this._points2.Add(new Point(ix, iy));
 
                 if (e.Button == MouseButtons.Left && this.cbRefPtBG.Checked)
                 {
@@ -600,7 +603,7 @@ namespace AvoidAGrabCutEasy
                     this._rect = new Rectangle(this._rX, this._rY, this._rW, this._rH);
                 }
 
-                if (this._tracking4 && !this.cbClickMode.Checked)
+                if (this._tracking4 || (this.cbClickMode.Checked && e.Button == MouseButtons.Left))
                 {
                     AddPointsToScribblePath();
                     this._points2.Clear();
@@ -2808,13 +2811,17 @@ namespace AvoidAGrabCutEasy
                         //    this._scribbleSeq.RemoveAt(this._scribbleSeq.Count - 1);
                     }
 
-                    if (this._ptPrev != null && this._ptPrev.Count > 0)
+                    if (this._ptPrev != null && this._ptPrev.Count > 1)
                     {
                         this._ptPrev.RemoveAt(this._ptPrev.Count - 1);
                         this._ptSt = this._ptPrev[this._ptPrev.Count - 1];
                     }
                     else
+                    {
+                        if (this._ptPrev != null && this._ptPrev.Count > 0)
+                            this._ptPrev.RemoveAt(this._ptPrev.Count - 1);
                         this._ptSt = null;
+                    }
                 }
                 else
                     using (frmLastScribbles frm = new frmLastScribbles(this.helplineRulerCtrl1.Bmp, this._scribbles, this._scribbleSeq))
