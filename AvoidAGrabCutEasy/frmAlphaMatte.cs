@@ -3735,6 +3735,7 @@ namespace AvoidAGrabCutEasy
 
                     if (bmp != null)
                     {
+                        this._undoOPCache?.Add(bmp);
                         frmEdgePic frm4 = new frmEdgePic(bmp, this.helplineRulerCtrl1.Bmp.Size);
                         frm4.Text = "Alpha Matte";
                         frm4.ShowDialog();
