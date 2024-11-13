@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<html>
+	<head>
+		<style>
+			img 	{display: block; margin-left: auto; margin-right: auto; width:55%;}
+			p	{text-align:center;display: block; margin-left: auto; margin-right: auto; width:55%;}
+			hr 	{margin-left: auto; margin-right: auto; width:65%;}
+			h2	{text-align:center;}	
+			h3	{text-align:center;}
+		</style>
+	</head>
+	<body>
+		<h2>How to use this program...</h2>
+		<h3>Basic operations</h3>
+		<p>Start the application and click onto the "open" button to load an Image.</p>
+		<img src="images/Bild0.png" width="600" /><br />
+		<p>Click onto the "Go" button...</p>
+		<img src="images/Bild1_1.png" width="600" /><br />
+		<p>...to get to this window:</p>
+		<img src="images/Bild1.png" width="800" /><br />
+		<p>Make sure, the "rect Mode" checkbox is checked and draw a rectangle around the desired object 
+			with the mouse, left button pressed.</p>
+		<img src="images/Bild1_2.png" width="800" /><br />
+		<p>Click onto the "Go" button...</p>
+		<img src="images/Bild1_3.png" width="800" /><br />
+		<p>...to get a result. As you see, the result is not optimal, with some parts being classified as 
+			background, which definitely are foreground...</p>
+		<img src="images/Bild1_4.png" width="800" /><br />
+		<p>...usually, you now would mark these parts in the results pane as foreground, by checking the "draw on result"
+		 	checkbox, selecting "foreground" in the dropdown combobox and drawing onto the result. Then clicking "Go" 
+			again. But we now will click the "reset"-button, ...</p>		
+		<img src="images/Bild1_5.png" width="800" /><br />
+		<p>...re-check the "rectMode" checkbox, draw a new Rectangle, maybe somewhat tighter around the objects
+			boundaries, and you could click onto "Go" again. ...</p>	
+		<img src="images/Bild1_6.png" width="800" /><br />
+		<p>... But because here we will test, if a closed-form-matte computation
+			with some predefined parameters will resolve the issues, we "Reset" and simply click onto "DoAll".</p>	
+		<img src="images/Bild1_7.png" width="800" /><br />
+		<p>This will lead us to a matte that shows, that its not good enough for production use,
+			but ok for the demo right now.</p>
+		<img src="images/Bild1_8.png" width="800" /><br />
+		<p>Now we will test this picture in a new background, and so, we click the "compose"-button.</p>
+		<img src="images/Bild1_10.png" width="800" /><br />
+		<p>...which will lead us to the following view.</p>
+		<img src="images/Bild1_11.png" width="800" /><br />
+		<p>Clicking onto the "Go" button (which will be renamed into something related to background), and selecting 
+			an image shows up something like this...</p>
+		<img src="images/Bild1_12.png" width="800" /><br />
+		<p>...or this. Move around the object with your mouse (left button pressed). 
+			Rotate it with the right mouse-button pressed.</p>
+		<img src="images/Bild1_13.png" width="800" /><br />
+		<p>&nbsp;</p><hr />
+		<p>Now, we will show a different use, that may be sufficent for pictures that are hard to segment with 
+			the previous method. Again, we load an image, but now we check the "scribbleMode" checkbox and
+			check the "Unknown" radio button. Now we could draw an unknown region in the picture with the mouse.
+			But we want to make it somewhat easier for us, an so we also check the "clickMode" checkbox...</p>
+		<img src="images/Bild1_14.png" width="800" /><br />
+		<p>... and click repeatedly onto the boundary of our desired object, beginning at a random point on the 
+			border of the object, then following the boundary until the "unknown-curve" is closed...</p>
+		<img src="images/Bild1_15.png" width="800" /><br />
+		<p>Now click - with the right mouse button - into the part, thats enclosed by the curve and mark it as 
+			foreground, by clcking the "FloodFG" context menu label...</p>
+		<img src="images/Bild1_16.png" width="800" /><br />
+		<p>... leading to a white overlayed foreground part. A click onto the "Compute a matte" button ...</p>
+		<img src="images/Bild1_17.png" width="800" /><br />
+		<p>... will show up this form - in which all the drawing also could have been done.
+			If the drawings seem alright, press the "gen trimap" button, to create a grayscale picture with the
+			foreground parts as white, the background parts as black, and the unknown part in a gray color.</p>
+		<img src="images/Bild1_18.png" width="800" /><br />
+		<p> The trimap bitmap will be shown zoomed in the picturebox.
+			Now click onto the "Go" button, to start the computation...</p>
+		<img src="images/Bild1_19.png" width="800" /><br />
+		<p>... with a result like this (After closing the window, which shows the alpha-matte).</p>
+		<img src="images/Bild1_20.png" width="800" /><br />
+		<p>The result shows a part (near the boundary left of the nose, top of the right arm of the teddy), where
+			the picture is not as transparent, as needed...We will solve this by drawing the affected region 
+			as background. To do so, click the "BG" radiobutton and select a reasonable size (the numeric control 
+			left of the "BG" radiobutton, labeled "width") for the strokes being drawn with the mouse. To have 
+			a better view, you could check the "overlay img" checkbox, which should do as expected. I also redrawed
+			a part of the foreground ("FG" radiobutton) on the left arm of the teddybear.</p>
+		<img src="images/Bild1_21.png" width="800" /><br />
+		<p>...re-generate the trimap...</p>
+		<img src="images/Bild1_22.png" width="800" /><br />
+		<p>...and click "Go" again...</p>
+		<img src="images/Bild1_24.png" width="800" /><br />
+		<p>... to get an acceptable result</p>
+		<img src="images/Bild1_25.png" width="800" /><br />
+		<p>Since we computed the matte in "reduced size mode" (see the checkbox), the gradient of the alpha channel 
+			might not be sufficient. We could change this by setting a range from 0 to the desired value to zero 
+			in the alpha channel - and recompute the values up to the "fully opaque level", which is 255 in this case. 
+			Also it is possible to change the alpha gamma.</p>
+		<img src="images/Bild1_28.png" width="800" /><br />
+		<p>The final picture now looks loke this:</p>
+		<img src="images/Bild1_29.png" width="800" /><br />
+		<p>&nbsp;</p><hr /></p>
+		<h3>Pseudo shadow</h3>
+		<p>Load the extracted object into the "compose"-form, select a background and click on the "CloneUpperShape"
+			- button.</p>
+		<img src="images/Bild1_30.png" width="800" /><br />
+		<p>Select an opaque region of the newly presented shape and click the "Floodfill" - button, to make all content 
+			of this shape black.</p>
+		<img src="images/Bild1_31.png" width="800" /><br />
+		<p>Now click the "Gaussian-blur" - button and ...</p>
+		<img src="images/Bild1_32.png" width="800" /><br />
+		<p>... select a reasonable value to get the shape blurred.</p>
+		<img src="images/Bild1_33.png" width="800" /><br />
+		<p>Shear the shape to fit the lighting in the background picture. (Please note that the undo operation 
+			for this will be revisited, to set again the size of the unsheared image).</p>
+		<img src="images/Bild1_34.png" width="800" /><br />
+		<p>Now uncheck the "keep aspect" checkbox...</p>
+		<img src="images/Bild1_35.png" width="800" /><br />
+		<p>...and set the width and height according to your composition imagination. Move the shape to its 
+			final position to test the size.</p>
+		<img src="images/Bild1_36.png" width="800" /><br />
+		<p>Decrease the opacity...</p>
+		<img src="images/Bild1_37.png" width="800" /><br />
+		<p>... and click onto the original shape, to bring it to front.</p>
+		<img src="images/Bild1_39.png" width="800" /><br />
+		<p>"Merge" the scene into one layer (button "merge"), or simply...</p>
+		<img src="images/Bild1_40.png" width="800" /><br />
+		<p>... "OK" out of the form. The scene will be auto-merged then.</p>
+		<img src="images/Bild1_41.png" width="800" /><br />
+		<p>&nbsp;</p><hr /></p>
+		<h3>Multiple passes of segmenting, draw onto result</h3>
+		<p>Sometimes some parts of the background close to the objects boundary will be extracted, when doing 
+			one pass of the segmentation...</p>
+		<img src="images/Bild1_42.png" width="800" /><br />
+		<img src="images/Bild1_43.png" width="800" /><br />
+		<p>If you click again onto the "Go" button, a further pass of assigning samples and fitting the 
+			gaussian surfaces is done, which may lead to better results. Here, overall three passes are done.</p>
+		<img src="images/Bild1_44.png" width="800" /><br />
+		<p>You can also draw onto the results pane. Check the "draw on result" checkbox, select the type of the 
+			pixels you want to mark from the dropdown right to the mentioned checkbox. Here we select "Background" 
+			and draw the parts that should be treated as background in the results pane. Then click the "Go" button.</p>
+		<img src="images/Bild1_45.png" width="800" /><br />
+		<p>If a small window will be opened, dont care, just close it, its just a debugging helper image that 
+			displayes the current mask being used in the computation...</p>
+		<img src="images/Bild1_46.png" width="800" /><br />
+		<p>The result now looks like this:</p>
+		<img src="images/Bild1_47.png" width="800" /><br />
+		<p>Now you can click the "process Outline" button...</p>
+		<img src="images/Bild1_48.png" width="800" /><br />
+		<p>...to go to this form. Make sure, the "Matte" checkbox in the "Matting" groupbox is checked and, if you want to, 
+			click onto the "res vals" button.</p>
+		<img src="images/Bild1_49.png" width="800" /><br />
+		<p>...This will set the inner and outer widths of the "unknown" part (computed automatically around the current 
+			boundary of the object). Since the legs of the sheep are small in one dimension (slim), I recommend to reduce the 
+			"inner" value in the numeric control (here, I set it to "3").</p>
+		<img src="images/Bild1_50.png" width="800" /><br />
+		<p>This leads to the following matte...</p>
+		<img src="images/Bild1_51.png" width="800" /><br />
+		<p>...and this result. Maybe you want to adjust the gamma distribution of the alpha channel a bit.</p>
+		<img src="images/Bild1_52.png" width="800" /><br />
+		<p>... to get to this final image:</p>
+		<img src="images/Bild1_53.png" width="800" /><br />
+		<p>&nbsp;</p><hr /></p>
+		<h3>Transparent inner parts, number of components</h3>
+		<p>Sometimes your picture will contain inner parts that should be treated as background. The normal result
+			looks like this...</p>
+		<img src="images/Bild1_54.png" width="800" /><br />
+		<p>... but you can increase the amount of initially displayed components by setting the desired value in the 
+			"max # components" numeric-control.</p>
+		<img src="images/Bild1_55.png" width="800" /><br />
+		<p>&nbsp;</p><hr /></p>
+		<h3>Automatic threshold evaluation vs. setting the parameters manually</h3>
+		<p>Sometimes the automatic evaluation of the threshold for segmenting produces not very good results...</p>
+		<img src="images/Bild1_56.png" width="800" /><br />
+		<p>... if you uncheck the "assume exp dist in dH" checkbox, it might get better...</p>
+		<img src="images/Bild1_57.png" width="800" /><br />
+		<p>... or simply uncheck the "auto threshold" checkbox too and set the parameters manually. A value of 13.5 
+			in this case is already a bit too much. Increasing the threshold value will lead to more pixels 
+			being classified as background. Play around with the parameters a bit to get some feeling for it.</p>
+		<img src="images/Bild1_58.png" width="800" /><br />
+	</body>
+</html>
