@@ -34,7 +34,7 @@ On the right pane, check the draw on result checkbox and draw with the mouse ont
 Click onto the Go-button again
 Process the outline
 
-Some usage examples: https://1drv.ms/u/c/d5e5bd21dbf5e4e9/EcIJVgHXE_xLsaS2VD6DrxcBGiVEzn5qIyT6KpvP-iOBiQ?e=njY9Uv
+Some usage examples: https://1drv.ms/f/c/d5e5bd21dbf5e4e9/Qunk9dshveUggNWqBQAAAAAAgNBhg89iBjkpsQ
 
 Or: Check the useScribbles checkbox and the Unknown radiobutton, draw (follow) the outline of the desired object until the curve is closed. Fill the inner of it by Contextmenu as Foreground and click the create a Matte button, let the form create the trimap by button click and the click onto go.
 
