@@ -156,6 +156,7 @@
             bgwDoAll2 = new System.ComponentModel.BackgroundWorker();
             bgwDoAll3 = new System.ComponentModel.BackgroundWorker();
             bgwDoAll4 = new System.ComponentModel.BackgroundWorker();
+            btnOutlineOperations = new Button();
             panel1.SuspendLayout();
             panel5.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numBoundOuter).BeginInit();
@@ -184,6 +185,7 @@
             // 
             // panel1
             // 
+            panel1.Controls.Add(btnOutlineOperations);
             panel1.Controls.Add(btnCMNew);
             panel1.Controls.Add(cbClickMode);
             panel1.Controls.Add(label22);
@@ -504,7 +506,7 @@
             // 
             // btnCFM
             // 
-            btnCFM.Location = new Point(1018, 72);
+            btnCFM.Location = new Point(1018, 64);
             btnCFM.Name = "btnCFM";
             btnCFM.Size = new Size(88, 27);
             btnCFM.TabIndex = 700;
@@ -516,7 +518,7 @@
             // label16
             // 
             label16.AutoSize = true;
-            label16.Location = new Point(917, 78);
+            label16.Location = new Point(917, 70);
             label16.Name = "label16";
             label16.Size = new Size(98, 15);
             label16.TabIndex = 699;
@@ -571,7 +573,7 @@
             // label15
             // 
             label15.AutoSize = true;
-            label15.Location = new Point(946, 174);
+            label15.Location = new Point(946, 164);
             label15.Name = "label15";
             label15.Size = new Size(64, 15);
             label15.TabIndex = 694;
@@ -579,9 +581,9 @@
             // 
             // btnChaincode
             // 
-            btnChaincode.Location = new Point(1031, 170);
+            btnChaincode.Location = new Point(1019, 159);
             btnChaincode.Name = "btnChaincode";
-            btnChaincode.Size = new Size(75, 23);
+            btnChaincode.Size = new Size(87, 26);
             btnChaincode.TabIndex = 693;
             btnChaincode.Text = "Chaincode";
             btnChaincode.UseVisualStyleBackColor = true;
@@ -819,7 +821,7 @@
             // label12
             // 
             label12.AutoSize = true;
-            label12.Location = new Point(953, 140);
+            label12.Location = new Point(953, 132);
             label12.Margin = new Padding(4, 0, 4, 0);
             label12.Name = "label12";
             label12.Size = new Size(56, 15);
@@ -829,7 +831,7 @@
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(917, 109);
+            label3.Location = new Point(917, 101);
             label3.Margin = new Padding(4, 0, 4, 0);
             label3.Name = "label3";
             label3.Size = new Size(89, 15);
@@ -838,7 +840,7 @@
             // 
             // btnCompose
             // 
-            btnCompose.Location = new Point(1018, 134);
+            btnCompose.Location = new Point(1018, 126);
             btnCompose.Margin = new Padding(4, 3, 4, 3);
             btnCompose.Name = "btnCompose";
             btnCompose.Size = new Size(88, 27);
@@ -849,7 +851,7 @@
             // 
             // btnOutline
             // 
-            btnOutline.Location = new Point(1018, 103);
+            btnOutline.Location = new Point(1018, 95);
             btnOutline.Margin = new Padding(4, 3, 4, 3);
             btnOutline.Name = "btnOutline";
             btnOutline.Size = new Size(88, 27);
@@ -1637,6 +1639,18 @@
             bgwDoAll4.DoWork += bgwDoAll4_DoWork;
             bgwDoAll4.RunWorkerCompleted += bgwDoAll4_RunWorkerCompleted;
             // 
+            // btnOutlineOperations
+            // 
+            btnOutlineOperations.ForeColor = SystemColors.ControlText;
+            btnOutlineOperations.Location = new Point(1003, 186);
+            btnOutlineOperations.Margin = new Padding(4, 3, 4, 3);
+            btnOutlineOperations.Name = "btnOutlineOperations";
+            btnOutlineOperations.Size = new Size(88, 27);
+            btnOutlineOperations.TabIndex = 717;
+            btnOutlineOperations.Text = "OutlineOps";
+            btnOutlineOperations.UseVisualStyleBackColor = true;
+            btnOutlineOperations.Click += btnOutlineOperations_Click;
+            // 
             // frmAvoidAGrabCutEasy
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -1813,5 +1827,6 @@
         private Button btnResScribbles;
         private CheckBox cbClickMode;
         private Button btnCMNew;
+        private Button btnOutlineOperations;
     }
 }

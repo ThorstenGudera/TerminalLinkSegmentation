@@ -1,4 +1,5 @@
 using AvoidAGrabCutEasy;
+using OutlineOperations;
 using System.Drawing.Imaging;
 
 namespace TerminalLinkSegmentation
@@ -90,11 +91,11 @@ namespace TerminalLinkSegmentation
             if (this.pictureBox1.Image != null)
             {
                 if (this._ix < 0)
-                    this._ix = 0;  
+                    this._ix = 0;
                 if (this._ix < 0)
                     this._ix = 0;
                 if (this._endX - this._ix <= 0)
-                    this._endX = this.pictureBox1.Image.Width;   
+                    this._endX = this.pictureBox1.Image.Width;
                 if (this._endY - this._iy <= 0)
                     this._endY = this.pictureBox1.Image.Height;
 
@@ -297,6 +298,33 @@ namespace TerminalLinkSegmentation
         {
             if (this.pictureBox1.Image != null)
                 pictureBox1_DoubleClick(this.pictureBox1, new EventArgs());
+        }
+
+        private void btnOutlineOperations_Click(object sender, EventArgs e)
+        {
+            if (this.pictureBox1.Image != null)
+            {
+                using Bitmap bmp = new Bitmap(this.pictureBox1.Image);
+                using (frnOutlineOperations frm = new frnOutlineOperations(bmp, this._basePathAddition))
+                {
+                    frm.SetupCache();
+
+                    if (frm.ShowDialog() == DialogResult.OK)
+                    {
+                        if (frm.FBitmap != null)
+                        {
+                            Image iOld = this.pictureBox1.Image;
+
+                            this.pictureBox1.Image = new Bitmap(frm.FBitmap);
+                            if (iOld != null)
+                                iOld.Dispose();
+
+                            this.button4_Click(this.button4, new EventArgs());
+                            this._picChanged = true;
+                        }
+                    }
+                }
+            }
         }
     }
 }

@@ -66,6 +66,8 @@
             cbLSBmp = new CheckBox();
             Label20 = new Label();
             panel1 = new Panel();
+            label11 = new Label();
+            numScribblesWFactor = new NumericUpDown();
             btnCMNew = new Button();
             cbClickMode = new CheckBox();
             cbHighlight = new CheckBox();
@@ -119,14 +121,14 @@
             backgroundWorker5 = new System.ComponentModel.BackgroundWorker();
             backgroundWorker3 = new System.ComponentModel.BackgroundWorker();
             backgroundWorker4 = new System.ComponentModel.BackgroundWorker();
-            label11 = new Label();
-            numScribblesWFactor = new NumericUpDown();
+            btnOutlineOperations = new Button();
             statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
             splitContainer1.Panel2.SuspendLayout();
             splitContainer1.SuspendLayout();
             panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)numScribblesWFactor).BeginInit();
             panel6.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numGamma).BeginInit();
             panel5.SuspendLayout();
@@ -140,7 +142,6 @@
             ((System.ComponentModel.ISupportInitialize)numMaxSize).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numWHScribbles).BeginInit();
             contextMenuStrip1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)numScribblesWFactor).BeginInit();
             SuspendLayout();
             // 
             // statusStrip1
@@ -305,7 +306,7 @@
             // 
             btnCache.Enabled = false;
             btnCache.ForeColor = SystemColors.ControlText;
-            btnCache.Location = new Point(1109, 79);
+            btnCache.Location = new Point(1109, 46);
             btnCache.Margin = new Padding(4, 3, 4, 3);
             btnCache.Name = "btnCache";
             btnCache.Size = new Size(88, 27);
@@ -526,6 +527,7 @@
             // 
             // panel1
             // 
+            panel1.Controls.Add(btnOutlineOperations);
             panel1.Controls.Add(label11);
             panel1.Controls.Add(numScribblesWFactor);
             panel1.Controls.Add(cbDrawPaths);
@@ -584,6 +586,28 @@
             panel1.Name = "panel1";
             panel1.Size = new Size(1479, 227);
             panel1.TabIndex = 226;
+            // 
+            // label11
+            // 
+            label11.AutoSize = true;
+            label11.Location = new Point(708, 202);
+            label11.Name = "label11";
+            label11.Size = new Size(49, 15);
+            label11.TabIndex = 720;
+            label11.Text = "wFactor";
+            // 
+            // numScribblesWFactor
+            // 
+            numScribblesWFactor.DecimalPlaces = 4;
+            numScribblesWFactor.Increment = new decimal(new int[] { 1, 0, 0, 65536 });
+            numScribblesWFactor.Location = new Point(761, 198);
+            numScribblesWFactor.Margin = new Padding(4, 3, 4, 3);
+            numScribblesWFactor.Maximum = new decimal(new int[] { 255, 0, 0, 0 });
+            numScribblesWFactor.Minimum = new decimal(new int[] { 1, 0, 0, 65536 });
+            numScribblesWFactor.Name = "numScribblesWFactor";
+            numScribblesWFactor.Size = new Size(71, 23);
+            numScribblesWFactor.TabIndex = 719;
+            numScribblesWFactor.Value = new decimal(new int[] { 14142, 0, 0, 262144 });
             // 
             // btnCMNew
             // 
@@ -1165,27 +1189,18 @@
             backgroundWorker4.DoWork += backgroundWorker4_DoWork;
             backgroundWorker4.RunWorkerCompleted += backgroundWorker4_RunWorkerCompleted;
             // 
-            // label11
+            // btnOutlineOperations
             // 
-            label11.AutoSize = true;
-            label11.Location = new Point(708, 202);
-            label11.Name = "label11";
-            label11.Size = new Size(49, 15);
-            label11.TabIndex = 720;
-            label11.Text = "wFactor";
-            // 
-            // numScribblesWFactor
-            // 
-            numScribblesWFactor.DecimalPlaces = 4;
-            numScribblesWFactor.Increment = new decimal(new int[] { 1, 0, 0, 65536 });
-            numScribblesWFactor.Location = new Point(761, 198);
-            numScribblesWFactor.Margin = new Padding(4, 3, 4, 3);
-            numScribblesWFactor.Maximum = new decimal(new int[] { 255, 0, 0, 0 });
-            numScribblesWFactor.Minimum = new decimal(new int[] { 1, 0, 0, 65536 });
-            numScribblesWFactor.Name = "numScribblesWFactor";
-            numScribblesWFactor.Size = new Size(71, 23);
-            numScribblesWFactor.TabIndex = 719;
-            numScribblesWFactor.Value = new decimal(new int[] { 14142, 0, 0, 262144 });
+            btnOutlineOperations.Enabled = false;
+            btnOutlineOperations.ForeColor = SystemColors.ControlText;
+            btnOutlineOperations.Location = new Point(1139, 79);
+            btnOutlineOperations.Margin = new Padding(4, 3, 4, 3);
+            btnOutlineOperations.Name = "btnOutlineOperations";
+            btnOutlineOperations.Size = new Size(88, 27);
+            btnOutlineOperations.TabIndex = 721;
+            btnOutlineOperations.Text = "OutlineOps";
+            btnOutlineOperations.UseVisualStyleBackColor = true;
+            btnOutlineOperations.Click += btnOutlineOperations_Click;
             // 
             // frmAlphaMatte
             // 
@@ -1208,6 +1223,7 @@
             splitContainer1.ResumeLayout(false);
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)numScribblesWFactor).EndInit();
             panel6.ResumeLayout(false);
             panel6.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)numGamma).EndInit();
@@ -1224,7 +1240,6 @@
             ((System.ComponentModel.ISupportInitialize)numMaxSize).EndInit();
             ((System.ComponentModel.ISupportInitialize)numWHScribbles).EndInit();
             contextMenuStrip1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)numScribblesWFactor).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -1323,5 +1338,6 @@
         private CheckBox cbDrawPaths;
         private Label label11;
         private NumericUpDown numScribblesWFactor;
+        private Button btnOutlineOperations;
     }
 }

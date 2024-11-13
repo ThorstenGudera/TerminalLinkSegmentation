@@ -29,6 +29,10 @@ Project("{778DAE3C-4631-46EA-AA77-85C1314464D9}") = "SegmentsListLib", "Segments
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PseudoShadow", "PseudoShadow\PseudoShadow.csproj", "{0A5C0DDB-7706-4EE6-8C11-54107C24E8C7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OutlineOperations", "OutlineOperations\OutlineOperations.csproj", "{873AD4D7-E0F6-4CFF-9C5A-9A8121A2027B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MorphologicalProcessing2", "MorphologicalProcessing2\MorphologicalProcessing2.csproj", "{E3897FBD-A86B-4D74-A933-30B2174F63CF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -87,6 +91,14 @@ Global
 		{0A5C0DDB-7706-4EE6-8C11-54107C24E8C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0A5C0DDB-7706-4EE6-8C11-54107C24E8C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0A5C0DDB-7706-4EE6-8C11-54107C24E8C7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{873AD4D7-E0F6-4CFF-9C5A-9A8121A2027B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{873AD4D7-E0F6-4CFF-9C5A-9A8121A2027B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{873AD4D7-E0F6-4CFF-9C5A-9A8121A2027B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{873AD4D7-E0F6-4CFF-9C5A-9A8121A2027B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E3897FBD-A86B-4D74-A933-30B2174F63CF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E3897FBD-A86B-4D74-A933-30B2174F63CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E3897FBD-A86B-4D74-A933-30B2174F63CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E3897FBD-A86B-4D74-A933-30B2174F63CF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

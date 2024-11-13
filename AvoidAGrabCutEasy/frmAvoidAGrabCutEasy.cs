@@ -18,6 +18,7 @@ using System.Collections;
 using AvoidAGrabCutEasy.ProcOutline;
 using GetAlphaMatte;
 using System.Runtime.InteropServices;
+using OutlineOperations;
 
 namespace AvoidAGrabCutEasy
 {
@@ -9047,7 +9048,7 @@ namespace AvoidAGrabCutEasy
                         if (bmpMatte != null)
                             this.SetBitmap(ref this._bmpMatte, ref bmpMatte);
 
-                        frmEdgePic frm4 = new frmEdgePic(bmp, this.helplineRulerCtrl1.Bmp.Size);
+                        GetAlphaMatte.frmEdgePic frm4 = new GetAlphaMatte.frmEdgePic(bmp, this.helplineRulerCtrl1.Bmp.Size);
                         frm4.Text = "Alpha Matte";
                         frm4.ShowDialog();
 
@@ -9160,6 +9161,42 @@ namespace AvoidAGrabCutEasy
         private void btnCMNew_Click(object sender, EventArgs e)
         {
             this._ptSt = null;
+        }
+
+        private void btnOutlineOperations_Click(object sender, EventArgs e)
+        {
+            if (this.helplineRulerCtrl2.Bmp != null && this.CachePathAddition != null)
+            {
+                using (frnOutlineOperations frm = new frnOutlineOperations(this.helplineRulerCtrl2.Bmp, this.CachePathAddition))
+                {
+                    frm.SetupCache();
+
+                    if (frm.ShowDialog() == DialogResult.OK)
+                    {
+                        if (frm.FBitmap != null)
+                        {
+                            Bitmap b = new Bitmap(frm.FBitmap);
+
+                            this.SetBitmap(this.helplineRulerCtrl2.Bmp, b, this.helplineRulerCtrl2, "Bmp");
+
+                            Bitmap bC = new Bitmap(this.helplineRulerCtrl2.Bmp);
+                            this.SetBitmap(ref this._b4Copy, ref bC);
+
+                            this.helplineRulerCtrl2.SetZoom(this.helplineRulerCtrl1.Zoom.ToString());
+                            this.helplineRulerCtrl2.MakeBitmap(this.helplineRulerCtrl2.Bmp);
+                            this.helplineRulerCtrl2.dbPanel1.AutoScrollMinSize = new Size(
+                                (int)(this.helplineRulerCtrl2.Bmp.Width * this.helplineRulerCtrl2.Zoom),
+                                (int)(this.helplineRulerCtrl2.Bmp.Height * this.helplineRulerCtrl2.Zoom));
+
+                            _undoOPCache?.Add(b);
+
+                            this.btnOK.Enabled = true;
+                        }
+                    }
+                }
+            }
+
+            this.btnRecut.Enabled = this.numComponents2.Enabled = false;
         }
     }
 }

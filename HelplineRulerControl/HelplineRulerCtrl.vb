@@ -102,6 +102,7 @@ Partial Public Class HelplineRulerCtrl
         End Get
     End Property
 
+    Public Property DrawPixelated As Boolean 'with DrawModeClipped
     Public Event ContentPanelDoubleClicked As EventHandler
     Public Event HelpLineAdded As EventHandler
 
@@ -872,7 +873,11 @@ Partial Public Class HelplineRulerCtrl
                 g.DrawImage(Me._bmpTmp, New RectangleF(0, 0, Math.Min(pz.ClientRectangle.Width, _bmpTmp.Width), Math.Min(pz.ClientRectangle.Height, _bmpTmp.Height)),
                         New RectangleF(pzX, pzY, Math.Min(pz.ClientRectangle.Width, _bmpTmp.Width), Math.Min(pz.ClientRectangle.Height, _bmpTmp.Height)), GraphicsUnit.Pixel)
             ElseIf _bmp IsNot Nothing Then
-                g.InterpolationMode = InterpolationMode.HighQualityBicubic
+                If Me.DrawPixelated Then
+                    g.InterpolationMode = InterpolationMode.NearestNeighbor
+                Else
+                    g.InterpolationMode = InterpolationMode.HighQualityBicubic
+                End If
                 g.PixelOffsetMode = PixelOffsetMode.Half
                 g.DrawImage(_bmp, New RectangleF(0, 0, pz.ClientRectangle.Width, pz.ClientRectangle.Height), New RectangleF(-pz.AutoScrollPosition.X / Me.Zoom, -pz.AutoScrollPosition.Y / Me.Zoom, pz.ClientRectangle.Width / Me.Zoom, pz.ClientRectangle.Height / Me.Zoom), GraphicsUnit.Pixel)
                 SetHRControlVars()

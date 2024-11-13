@@ -16,6 +16,7 @@ using System.Text.Json.Serialization;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using OutlineOperations;
 
 namespace AvoidAGrabCutEasy
 {
@@ -99,6 +100,7 @@ namespace AvoidAGrabCutEasy
         private bool _hs;
         private Point? _ptSt;
         private List<Point>? _ptPrev;
+        private Bitmap? _bmpMatte;
 
         public frmAlphaMatte()
         {
@@ -1165,6 +1167,8 @@ namespace AvoidAGrabCutEasy
                     this._undoOPCache.Dispose();
                 if (this.pictureBox1.Image != null)
                     this.pictureBox1.Image.Dispose();
+                if (this._bmpMatte != null)
+                    this._bmpMatte.Dispose();
 
                 if (this._cfop != null)
                 {
@@ -3743,9 +3747,12 @@ namespace AvoidAGrabCutEasy
                     if (bmp != null)
                     {
                         this._undoOPCache?.Add(bmp);
-                        frmEdgePic frm4 = new frmEdgePic(bmp, this.helplineRulerCtrl1.Bmp.Size);
+                        GetAlphaMatte.frmEdgePic frm4 = new GetAlphaMatte.frmEdgePic(bmp, this.helplineRulerCtrl1.Bmp.Size);
                         frm4.Text = "Alpha Matte";
                         frm4.ShowDialog();
+
+                        Bitmap? bC = new Bitmap(bmp);
+                        this.SetBitmap(ref _bmpMatte, ref bC);
 
                         if (this.helplineRulerCtrl1.Bmp != null)
                         {
@@ -4732,6 +4739,45 @@ namespace AvoidAGrabCutEasy
         private void btnCMNew_Click(object sender, EventArgs e)
         {
             this._ptSt = null;
+        }
+
+        private void btnOutlineOperations_Click(object sender, EventArgs e)
+        {
+            if (this.helplineRulerCtrl2.Bmp != null && this.CachePathAddition != null)
+            {
+                using (frnOutlineOperations frm = new frnOutlineOperations(this.helplineRulerCtrl2.Bmp, this.CachePathAddition))
+                {
+                    frm.SetupCache();
+
+                    if (this.helplineRulerCtrl1.Bmp != null)
+                        frm.SetOrig(this.helplineRulerCtrl1.Bmp);
+                    if (this._bmpMatte != null)
+                        frm.SetMatte(this._bmpMatte);
+
+                    if (frm.ShowDialog() == DialogResult.OK)
+                    {
+                        if (frm.FBitmap != null)
+                        {
+                            Bitmap b = new Bitmap(frm.FBitmap);
+
+                            this.SetBitmap(this.helplineRulerCtrl2.Bmp, b, this.helplineRulerCtrl2, "Bmp");
+
+                            //Bitmap bC = new Bitmap(this.helplineRulerCtrl2.Bmp);
+                            //this.SetBitmap(ref this._b4Copy, ref bC);
+
+                            this.helplineRulerCtrl2.SetZoom(this.helplineRulerCtrl1.Zoom.ToString());
+                            this.helplineRulerCtrl2.MakeBitmap(this.helplineRulerCtrl2.Bmp);
+                            this.helplineRulerCtrl2.dbPanel1.AutoScrollMinSize = new Size(
+                                (int)(this.helplineRulerCtrl2.Bmp.Width * this.helplineRulerCtrl2.Zoom),
+                                (int)(this.helplineRulerCtrl2.Bmp.Height * this.helplineRulerCtrl2.Zoom));
+
+                            _undoOPCache?.Add(b);
+
+                            this.btnOK.Enabled = true;
+                        }
+                    }
+                }
+            }
         }
     }
 }

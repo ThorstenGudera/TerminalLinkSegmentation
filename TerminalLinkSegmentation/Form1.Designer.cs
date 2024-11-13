@@ -31,15 +31,16 @@
             components = new System.ComponentModel.Container();
             pictureBox1 = new PictureBox();
             splitContainer1 = new SplitContainer();
+            button5 = new Button();
             button4 = new Button();
             button3 = new Button();
+            btnOutlineOperations = new Button();
             button2 = new Button();
             button1 = new Button();
             OpenFileDialog1 = new OpenFileDialog();
             saveFileDialog1 = new SaveFileDialog();
             ToolTip1 = new ToolTip(components);
             timer1 = new System.Windows.Forms.Timer(components);
-            button5 = new Button();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
@@ -53,7 +54,7 @@
             pictureBox1.Location = new Point(0, 0);
             pictureBox1.Margin = new Padding(4, 3, 4, 3);
             pictureBox1.Name = "pictureBox1";
-            pictureBox1.Size = new Size(933, 452);
+            pictureBox1.Size = new Size(983, 592);
             pictureBox1.SizeMode = PictureBoxSizeMode.Zoom;
             pictureBox1.TabIndex = 0;
             pictureBox1.TabStop = false;
@@ -77,6 +78,7 @@
             splitContainer1.Panel1.Controls.Add(button5);
             splitContainer1.Panel1.Controls.Add(button4);
             splitContainer1.Panel1.Controls.Add(button3);
+            splitContainer1.Panel1.Controls.Add(btnOutlineOperations);
             splitContainer1.Panel1.Controls.Add(button2);
             splitContainer1.Panel1.Controls.Add(button1);
             // 
@@ -85,14 +87,24 @@
             splitContainer1.Panel2.AutoScroll = true;
             splitContainer1.Panel2.BackColor = SystemColors.ControlDarkDark;
             splitContainer1.Panel2.Controls.Add(pictureBox1);
-            splitContainer1.Size = new Size(933, 519);
+            splitContainer1.Size = new Size(983, 659);
             splitContainer1.SplitterDistance = 62;
             splitContainer1.SplitterWidth = 5;
             splitContainer1.TabIndex = 5;
             // 
+            // button5
+            // 
+            button5.Location = new Point(508, 14);
+            button5.Name = "button5";
+            button5.Size = new Size(88, 27);
+            button5.TabIndex = 3;
+            button5.Text = "switch zoom";
+            button5.UseVisualStyleBackColor = true;
+            button5.Click += button5_Click;
+            // 
             // button4
             // 
-            button4.Location = new Point(641, 14);
+            button4.Location = new Point(612, 14);
             button4.Name = "button4";
             button4.Size = new Size(88, 27);
             button4.TabIndex = 3;
@@ -110,9 +122,21 @@
             button3.UseVisualStyleBackColor = true;
             button3.Click += button3_Click;
             // 
+            // btnOutlineOperations
+            // 
+            btnOutlineOperations.Location = new Point(753, 14);
+            btnOutlineOperations.Margin = new Padding(4, 3, 4, 3);
+            btnOutlineOperations.Name = "btnOutlineOperations";
+            btnOutlineOperations.Size = new Size(88, 27);
+            btnOutlineOperations.TabIndex = 1;
+            btnOutlineOperations.Text = "OutlineOps";
+            ToolTip1.SetToolTip(btnOutlineOperations, "If you have a Matte and the orig pic,\r\nyou can apply the matte here and/or\r\ndo some further operations.");
+            btnOutlineOperations.UseVisualStyleBackColor = true;
+            btnOutlineOperations.Click += btnOutlineOperations_Click;
+            // 
             // button2
             // 
-            button2.Location = new Point(816, 14);
+            button2.Location = new Point(873, 14);
             button2.Margin = new Padding(4, 3, 4, 3);
             button2.Name = "button2";
             button2.Size = new Size(88, 27);
@@ -146,21 +170,11 @@
             // 
             timer1.Tick += timer1_Tick;
             // 
-            // button5
-            // 
-            button5.Location = new Point(537, 14);
-            button5.Name = "button5";
-            button5.Size = new Size(88, 27);
-            button5.TabIndex = 3;
-            button5.Text = "switch zoom";
-            button5.UseVisualStyleBackColor = true;
-            button5.Click += button5_Click;
-            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(933, 519);
+            ClientSize = new Size(983, 659);
             Controls.Add(splitContainer1);
             Margin = new Padding(4, 3, 4, 3);
             Name = "Form1";
@@ -188,5 +202,6 @@
         private System.Windows.Forms.Timer timer1;
         private Button button4;
         private Button button5;
+        private Button btnOutlineOperations;
     }
 }
