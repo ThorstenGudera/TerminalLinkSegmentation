@@ -702,7 +702,7 @@ namespace AvoidAGrabCutEasy
                     this.btnAlphaV.Text = "Cancel";
                     this.btnAlphaV.Enabled = true;
 
-                    this.numSleep.Enabled = this.label2.Enabled = true;
+                    this.numSleep.Enabled = this.label2.Enabled = this.numError.Enabled = this.label54.Enabled = true;
 
                     if (_sw == null)
                         _sw = new Stopwatch();
@@ -1152,10 +1152,13 @@ namespace AvoidAGrabCutEasy
                                         GroupBox g = (GroupBox)c;
                                         foreach (Control c1 in g.Controls)
                                         {
-                                            if (!(c1 is Button) && !(c1.Name == "numSleep"))
+                                            if (!(c1 is Button) && !(c1.Name == "numSleep") && !(c1.Name == "numError"))
                                                 c1.Enabled = e;
 
                                             if (c1.Name == "numSleep")
+                                                c1.Enabled = true;
+
+                                            if (c1.Name == "numError")
                                                 c1.Enabled = true;
                                         }
                                     }
@@ -1191,10 +1194,13 @@ namespace AvoidAGrabCutEasy
                                 GroupBox g = (GroupBox)c;
                                 foreach (Control c1 in g.Controls)
                                 {
-                                    if (!(c1 is Button) && !(c1.Name == "numSleep"))
+                                    if (!(c1 is Button) && !(c1.Name == "numSleep") && !(c1.Name == "numError"))
                                         c1.Enabled = e;
 
                                     if (c1.Name == "numSleep")
+                                        c1.Enabled = true;
+
+                                    if (c1.Name == "numError")
                                         c1.Enabled = true;
                                 }
                             }
@@ -2579,7 +2585,7 @@ namespace AvoidAGrabCutEasy
                                 bParam.DesiredMaxLinearError = _cfop.BlendParameters.DesiredMaxLinearError;
                                 bParam.Sleep = _cfop.BlendParameters.Sleep;
                                 bParam.SleepAmount = _cfop.BlendParameters.SleepAmount;
-                                bParam.BGW = this.backgroundWorker1;
+                                bParam.BGW = this.backgroundWorker4;
                                 cfop.BlendParameters = bParam;
 
                                 cfop.ShowProgess += Cfop_UpdateProgress;
@@ -2616,7 +2622,7 @@ namespace AvoidAGrabCutEasy
                                     bParam.DesiredMaxLinearError = _cfop.BlendParameters.DesiredMaxLinearError;
                                     bParam.Sleep = _cfop.BlendParameters.Sleep;
                                     bParam.SleepAmount = _cfop.BlendParameters.SleepAmount;
-                                    bParam.BGW = this.backgroundWorker1;
+                                    bParam.BGW = this.backgroundWorker4;
                                     cfop.BlendParameters = bParam;
 
                                     cfop.ShowProgess += Cfop_UpdateProgress;
@@ -2952,7 +2958,7 @@ namespace AvoidAGrabCutEasy
                                 bParam.DesiredMaxLinearError = _cfop.BlendParameters.DesiredMaxLinearError;
                                 bParam.Sleep = _cfop.BlendParameters.Sleep;
                                 bParam.SleepAmount = _cfop.BlendParameters.SleepAmount;
-                                bParam.BGW = this.backgroundWorker1;
+                                bParam.BGW = this.backgroundWorker4;
                                 cfop.BlendParameters = bParam;
 
                                 cfop.ShowProgess += Cfop_UpdateProgress;
@@ -2988,7 +2994,7 @@ namespace AvoidAGrabCutEasy
                                 bParam.DesiredMaxLinearError = _cfop.BlendParameters.DesiredMaxLinearError;
                                 bParam.Sleep = _cfop.BlendParameters.Sleep;
                                 bParam.SleepAmount = _cfop.BlendParameters.SleepAmount;
-                                bParam.BGW = this.backgroundWorker1;
+                                bParam.BGW = this.backgroundWorker4;
                                 cfop.BlendParameters = bParam;
 
                                 cfop.ShowProgess += Cfop_UpdateProgress;
@@ -3477,7 +3483,7 @@ namespace AvoidAGrabCutEasy
                                     bParam.DesiredMaxLinearError = _cfop.BlendParameters.DesiredMaxLinearError;
                                     bParam.Sleep = _cfop.BlendParameters.Sleep;
                                     bParam.SleepAmount = _cfop.BlendParameters.SleepAmount;
-                                    bParam.BGW = this.backgroundWorker1;
+                                    bParam.BGW = this.backgroundWorker4;
                                     cfop.BlendParameters = bParam;
 
                                     cfop.ShowProgess += Cfop_UpdateProgress;
@@ -3513,7 +3519,7 @@ namespace AvoidAGrabCutEasy
                                     bParam.DesiredMaxLinearError = _cfop.BlendParameters.DesiredMaxLinearError;
                                     bParam.Sleep = _cfop.BlendParameters.Sleep;
                                     bParam.SleepAmount = _cfop.BlendParameters.SleepAmount;
-                                    bParam.BGW = this.backgroundWorker1;
+                                    bParam.BGW = this.backgroundWorker4;
                                     cfop.BlendParameters = bParam;
 
                                     cfop.ShowProgess += Cfop_UpdateProgress;
@@ -5496,6 +5502,28 @@ namespace AvoidAGrabCutEasy
         private void CheckRedoButton()
         {
             _undoOPCache?.CheckRedoButton(this.btnRedo);
+        }
+
+        private void numError_ValueChanged(object sender, EventArgs e)
+        {
+            if (this._cfop != null && this._cfop.BlendParameters != null)
+                this._cfop.BlendParameters.DesiredMaxLinearError = (double)this.numError.Value;
+
+            if (this._cfopArray != null)
+            {
+                for (int i = 0; i < _cfopArray.Length; i++)
+                    if (_cfopArray[i] != null)
+                        try
+                        {
+                            BlendParameters? cb = _cfopArray[i].BlendParameters;
+                            if (cb != null)
+                                cb.DesiredMaxLinearError = (double)this.numError.Value;
+                        }
+                        catch
+                        {
+
+                        }
+            }
         }
     }
 }

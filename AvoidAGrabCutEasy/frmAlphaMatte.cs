@@ -1091,6 +1091,24 @@ namespace AvoidAGrabCutEasy
                     {
                         if (ct.Name != "btnCancel" && !(ct is PictureBox))
                             ct.Enabled = e;
+
+                        if (ct is Panel)
+                        {
+                            ct.Enabled = true;
+                            Panel pn = (Panel)ct;
+
+                            foreach (Control c in pn.Controls)
+                            {
+                                if (!(c is Button) && !(c.Name == "numSleep") && !(c.Name == "numError"))
+                                    c.Enabled = e;
+
+                                if (c.Name == "numSleep")
+                                    c.Enabled = true;
+
+                                if (c.Name == "numError")
+                                    c.Enabled = true;
+                            }
+                        }
                     }
 
                     this.helplineRulerCtrl1.Enabled = this.helplineRulerCtrl2.Enabled = e;
@@ -1104,6 +1122,21 @@ namespace AvoidAGrabCutEasy
                 {
                     if (ct.Name != "btnCancel" && !(ct is PictureBox))
                         ct.Enabled = e;
+
+                    if (ct is Panel)
+                    {
+                        ct.Enabled = true;
+                        Panel pn = (Panel)ct;
+
+                        foreach (Control c in pn.Controls)
+                        {
+                            if (!(c is Button) && !(c.Name == "numSleep"))
+                                c.Enabled = e;
+
+                            if (c.Name == "numSleep")
+                                c.Enabled = true;
+                        }
+                    }
                 }
 
                 this.helplineRulerCtrl1.Enabled = this.helplineRulerCtrl2.Enabled = e;
@@ -1993,7 +2026,7 @@ namespace AvoidAGrabCutEasy
                 this.btnGo.Text = "Cancel";
                 this.btnGo.Enabled = true;
 
-                this.numSleep.Enabled = this.label2.Enabled = true;
+                this.numSleep.Enabled = this.label2.Enabled = this.numError.Enabled = this.label54.Enabled = true;
 
                 if (_sw == null)
                     _sw = new Stopwatch();
@@ -4777,6 +4810,28 @@ namespace AvoidAGrabCutEasy
                         }
                     }
                 }
+            }
+        }
+
+        private void numError_ValueChanged(object sender, EventArgs e)
+        {
+            if (this._cfop != null && this._cfop.BlendParameters != null)
+                this._cfop.BlendParameters.DesiredMaxLinearError = (double)this.numError.Value;
+
+            if (this._cfopArray != null)
+            {
+                for (int i = 0; i < _cfopArray.Length; i++)
+                    if (_cfopArray[i] != null)
+                        try
+                        {
+                            BlendParameters? cb = _cfopArray[i].BlendParameters;
+                            if (cb != null)
+                                cb.DesiredMaxLinearError = (double)this.numError.Value;
+                        }
+                        catch
+                        {
+
+                        }
             }
         }
     }

@@ -66,6 +66,7 @@
             cbLSBmp = new CheckBox();
             Label20 = new Label();
             panel1 = new Panel();
+            btnOutlineOperations = new Button();
             label11 = new Label();
             numScribblesWFactor = new NumericUpDown();
             btnCMNew = new Button();
@@ -121,7 +122,6 @@
             backgroundWorker5 = new System.ComponentModel.BackgroundWorker();
             backgroundWorker3 = new System.ComponentModel.BackgroundWorker();
             backgroundWorker4 = new System.ComponentModel.BackgroundWorker();
-            btnOutlineOperations = new Button();
             statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
@@ -362,6 +362,7 @@
             helplineRulerCtrl1.DontPaintBaseImg = false;
             helplineRulerCtrl1.DontProcDoubleClick = false;
             helplineRulerCtrl1.DrawModeClipped = false;
+            helplineRulerCtrl1.DrawPixelated = false;
             helplineRulerCtrl1.IgnoreZoom = false;
             helplineRulerCtrl1.Location = new Point(0, 0);
             helplineRulerCtrl1.Margin = new Padding(5, 3, 5, 3);
@@ -382,6 +383,7 @@
             helplineRulerCtrl2.DontPaintBaseImg = false;
             helplineRulerCtrl2.DontProcDoubleClick = false;
             helplineRulerCtrl2.DrawModeClipped = false;
+            helplineRulerCtrl2.DrawPixelated = false;
             helplineRulerCtrl2.IgnoreZoom = false;
             helplineRulerCtrl2.Location = new Point(0, 0);
             helplineRulerCtrl2.Margin = new Padding(5, 3, 5, 3);
@@ -586,6 +588,19 @@
             panel1.Name = "panel1";
             panel1.Size = new Size(1479, 227);
             panel1.TabIndex = 226;
+            // 
+            // btnOutlineOperations
+            // 
+            btnOutlineOperations.Enabled = false;
+            btnOutlineOperations.ForeColor = SystemColors.ControlText;
+            btnOutlineOperations.Location = new Point(1139, 79);
+            btnOutlineOperations.Margin = new Padding(4, 3, 4, 3);
+            btnOutlineOperations.Name = "btnOutlineOperations";
+            btnOutlineOperations.Size = new Size(88, 27);
+            btnOutlineOperations.TabIndex = 721;
+            btnOutlineOperations.Text = "OutlineOps";
+            btnOutlineOperations.UseVisualStyleBackColor = true;
+            btnOutlineOperations.Click += btnOutlineOperations_Click;
             // 
             // label11
             // 
@@ -853,6 +868,7 @@
             numError.Size = new Size(70, 23);
             numError.TabIndex = 690;
             numError.Value = new decimal(new int[] { 1, 0, 0, 131072 });
+            numError.ValueChanged += numError_ValueChanged;
             // 
             // numMaxRestarts
             // 
@@ -1188,19 +1204,6 @@
             backgroundWorker4.WorkerSupportsCancellation = true;
             backgroundWorker4.DoWork += backgroundWorker4_DoWork;
             backgroundWorker4.RunWorkerCompleted += backgroundWorker4_RunWorkerCompleted;
-            // 
-            // btnOutlineOperations
-            // 
-            btnOutlineOperations.Enabled = false;
-            btnOutlineOperations.ForeColor = SystemColors.ControlText;
-            btnOutlineOperations.Location = new Point(1139, 79);
-            btnOutlineOperations.Margin = new Padding(4, 3, 4, 3);
-            btnOutlineOperations.Name = "btnOutlineOperations";
-            btnOutlineOperations.Size = new Size(88, 27);
-            btnOutlineOperations.TabIndex = 721;
-            btnOutlineOperations.Text = "OutlineOps";
-            btnOutlineOperations.UseVisualStyleBackColor = true;
-            btnOutlineOperations.Click += btnOutlineOperations_Click;
             // 
             // frmAlphaMatte
             // 

@@ -32,6 +32,8 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmProcOutline));
             splitContainer1 = new SplitContainer();
             helplineRulerCtrl1 = new HelplineRulerControl.HelplineRulerCtrl();
+            btnRedo = new Button();
+            btnUndo = new Button();
             label16 = new Label();
             btnLoadBasePic = new Button();
             groupBox2 = new GroupBox();
@@ -160,8 +162,6 @@
             backgroundWorker6 = new System.ComponentModel.BackgroundWorker();
             backgroundWorker7 = new System.ComponentModel.BackgroundWorker();
             openFileDialog1 = new OpenFileDialog();
-            btnRedo = new Button();
-            btnUndo = new Button();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
             splitContainer1.Panel2.SuspendLayout();
@@ -251,6 +251,7 @@
             helplineRulerCtrl1.DontPaintBaseImg = false;
             helplineRulerCtrl1.DontProcDoubleClick = false;
             helplineRulerCtrl1.DrawModeClipped = false;
+            helplineRulerCtrl1.DrawPixelated = false;
             helplineRulerCtrl1.IgnoreZoom = false;
             helplineRulerCtrl1.Location = new Point(0, 0);
             helplineRulerCtrl1.Margin = new Padding(5, 3, 5, 3);
@@ -262,6 +263,32 @@
             helplineRulerCtrl1.Zoom = 1F;
             helplineRulerCtrl1.ZoomSetManually = false;
             helplineRulerCtrl1.DBPanelDblClicked += helplineRulerCtrl1_DBPanelDblClicked;
+            // 
+            // btnRedo
+            // 
+            btnRedo.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            btnRedo.ForeColor = SystemColors.ControlText;
+            btnRedo.Location = new Point(116, 810);
+            btnRedo.Margin = new Padding(4, 3, 4, 3);
+            btnRedo.Name = "btnRedo";
+            btnRedo.Size = new Size(88, 27);
+            btnRedo.TabIndex = 653;
+            btnRedo.Text = "Redo";
+            btnRedo.UseVisualStyleBackColor = true;
+            btnRedo.Click += btnRedo_Click;
+            // 
+            // btnUndo
+            // 
+            btnUndo.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            btnUndo.ForeColor = SystemColors.ControlText;
+            btnUndo.Location = new Point(20, 810);
+            btnUndo.Margin = new Padding(4, 3, 4, 3);
+            btnUndo.Name = "btnUndo";
+            btnUndo.Size = new Size(88, 27);
+            btnUndo.TabIndex = 654;
+            btnUndo.Text = "Undo";
+            btnUndo.UseVisualStyleBackColor = true;
+            btnUndo.Click += btnUndo_Click;
             // 
             // label16
             // 
@@ -276,7 +303,7 @@
             // 
             btnLoadBasePic.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             btnLoadBasePic.ForeColor = SystemColors.ControlText;
-            btnLoadBasePic.Location = new Point(89, 845);
+            btnLoadBasePic.Location = new Point(88, 845);
             btnLoadBasePic.Margin = new Padding(4, 3, 4, 3);
             btnLoadBasePic.Name = "btnLoadBasePic";
             btnLoadBasePic.Size = new Size(88, 27);
@@ -387,7 +414,7 @@
             cbBGColor.AutoSize = true;
             cbBGColor.Checked = true;
             cbBGColor.CheckState = CheckState.Checked;
-            cbBGColor.Location = new Point(183, 772);
+            cbBGColor.Location = new Point(182, 772);
             cbBGColor.Margin = new Padding(4, 3, 4, 3);
             cbBGColor.Name = "cbBGColor";
             cbBGColor.Size = new Size(67, 19);
@@ -400,7 +427,7 @@
             // 
             button10.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             button10.ForeColor = SystemColors.ControlText;
-            button10.Location = new Point(370, 810);
+            button10.Location = new Point(369, 810);
             button10.Margin = new Padding(4, 3, 4, 3);
             button10.Name = "button10";
             button10.Size = new Size(88, 27);
@@ -413,7 +440,7 @@
             // 
             button8.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             button8.ForeColor = SystemColors.ControlText;
-            button8.Location = new Point(275, 810);
+            button8.Location = new Point(274, 810);
             button8.Margin = new Padding(4, 3, 4, 3);
             button8.Name = "button8";
             button8.Size = new Size(88, 27);
@@ -427,7 +454,7 @@
             button2.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             button2.FlatStyle = FlatStyle.System;
             button2.ForeColor = SystemColors.ControlText;
-            button2.Location = new Point(370, 770);
+            button2.Location = new Point(369, 770);
             button2.Margin = new Padding(4, 3, 4, 3);
             button2.Name = "button2";
             button2.Size = new Size(88, 27);
@@ -440,7 +467,7 @@
             btnCancel.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             btnCancel.DialogResult = DialogResult.Cancel;
             btnCancel.ForeColor = SystemColors.ControlText;
-            btnCancel.Location = new Point(379, 845);
+            btnCancel.Location = new Point(378, 845);
             btnCancel.Margin = new Padding(4, 3, 4, 3);
             btnCancel.Name = "btnCancel";
             btnCancel.Size = new Size(88, 27);
@@ -453,7 +480,7 @@
             btnOK.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             btnOK.DialogResult = DialogResult.OK;
             btnOK.ForeColor = SystemColors.ControlText;
-            btnOK.Location = new Point(286, 845);
+            btnOK.Location = new Point(285, 845);
             btnOK.Margin = new Padding(4, 3, 4, 3);
             btnOK.Name = "btnOK";
             btnOK.Size = new Size(88, 27);
@@ -866,6 +893,7 @@
             numError.Size = new Size(70, 23);
             numError.TabIndex = 511;
             numError.Value = new decimal(new int[] { 1, 0, 0, 131072 });
+            numError.ValueChanged += numError_ValueChanged;
             // 
             // label13
             // 
@@ -1720,32 +1748,6 @@
             // 
             openFileDialog1.FileName = "openFileDialog1";
             openFileDialog1.Filter = "Images - (*.bmp;*.jpg;*.jpeg;*.jfif;*.png)|*.bmp;*.jpg;*.jpeg;*.jfif;*.png";
-            // 
-            // btnRedo
-            // 
-            btnRedo.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            btnRedo.ForeColor = SystemColors.ControlText;
-            btnRedo.Location = new Point(117, 810);
-            btnRedo.Margin = new Padding(4, 3, 4, 3);
-            btnRedo.Name = "btnRedo";
-            btnRedo.Size = new Size(88, 27);
-            btnRedo.TabIndex = 653;
-            btnRedo.Text = "Redo";
-            btnRedo.UseVisualStyleBackColor = true;
-            btnRedo.Click += btnRedo_Click;
-            // 
-            // btnUndo
-            // 
-            btnUndo.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            btnUndo.ForeColor = SystemColors.ControlText;
-            btnUndo.Location = new Point(21, 810);
-            btnUndo.Margin = new Padding(4, 3, 4, 3);
-            btnUndo.Name = "btnUndo";
-            btnUndo.Size = new Size(88, 27);
-            btnUndo.TabIndex = 654;
-            btnUndo.Text = "Undo";
-            btnUndo.UseVisualStyleBackColor = true;
-            btnUndo.Click += btnUndo_Click;
             // 
             // frmProcOutline
             // 
