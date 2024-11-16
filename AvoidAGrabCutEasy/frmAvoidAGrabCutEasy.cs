@@ -9384,6 +9384,9 @@ namespace AvoidAGrabCutEasy
 
                     bool igg = frm.rbIGG.Checked;
 
+                    this.toolStripProgressBar1.Value = 0;
+                    this.toolStripProgressBar1.Visible = true;
+
                     object[] o = { kernelLength, cornerWeight, sigma, steepness,
                                radius, alpha, gradientMode, divisor, grayscale, stretchValues,
                                threshold, replaceBG, replaceTol, numVarKernel, numVarExpander,
@@ -9540,6 +9543,10 @@ namespace AvoidAGrabCutEasy
                 this.btnInvGaussGrad.Text = "InvGG";
 
                 this.cbAutoCropFromOrig.Enabled = this.btnCropFromOrig.Enabled = true;
+
+                if (this.Timer3.Enabled)
+                    this.Timer3.Stop();
+                this.Timer3.Start();
 
                 this.backgroundWorker4.Dispose();
                 this.backgroundWorker4 = new BackgroundWorker();

@@ -71,7 +71,7 @@
             // 
             btnCancel.DialogResult = DialogResult.Cancel;
             btnCancel.ForeColor = SystemColors.ControlText;
-            btnCancel.Location = new Point(246, 331);
+            btnCancel.Location = new Point(246, 373);
             btnCancel.Margin = new Padding(4, 3, 4, 3);
             btnCancel.Name = "btnCancel";
             btnCancel.Size = new Size(88, 27);
@@ -83,7 +83,7 @@
             // 
             btnOK.DialogResult = DialogResult.OK;
             btnOK.ForeColor = SystemColors.ControlText;
-            btnOK.Location = new Point(149, 331);
+            btnOK.Location = new Point(149, 373);
             btnOK.Margin = new Padding(4, 3, 4, 3);
             btnOK.Name = "btnOK";
             btnOK.Size = new Size(88, 27);
@@ -234,7 +234,7 @@
             // rbVariance
             // 
             rbVariance.AutoSize = true;
-            rbVariance.Location = new Point(115, 10);
+            rbVariance.Location = new Point(12, 194);
             rbVariance.Name = "rbVariance";
             rbVariance.Size = new Size(69, 19);
             rbVariance.TabIndex = 746;
@@ -252,7 +252,7 @@
             groupBox2.Controls.Add(label2);
             groupBox2.Controls.Add(numVarKernel);
             groupBox2.Controls.Add(numVarTolerance);
-            groupBox2.Location = new Point(12, 194);
+            groupBox2.Location = new Point(12, 220);
             groupBox2.Name = "groupBox2";
             groupBox2.Size = new Size(254, 120);
             groupBox2.TabIndex = 747;
@@ -352,7 +352,7 @@
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             CancelButton = btnCancel;
-            ClientSize = new Size(347, 370);
+            ClientSize = new Size(347, 412);
             Controls.Add(groupBox2);
             Controls.Add(rbVariance);
             Controls.Add(rbIGG);
