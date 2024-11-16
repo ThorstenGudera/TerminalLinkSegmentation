@@ -7572,6 +7572,8 @@ namespace AvoidAGrabCutEasy
                 if (this.timer1.Enabled)
                     this.timer1.Stop();
                 this.timer1.Start();
+
+                this.cbAutoCropFromOrig.Enabled = this.btnCropFromOrig.Enabled = true;
             }
         }
 
