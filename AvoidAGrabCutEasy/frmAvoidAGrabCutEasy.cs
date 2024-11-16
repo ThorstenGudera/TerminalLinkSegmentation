@@ -2466,6 +2466,8 @@ namespace AvoidAGrabCutEasy
 
             this.toolStripStatusLabel4.Text = "done";
 
+            this.cbAutoCropFromOrig.Enabled = this.btnCropFromOrig.Enabled = true;
+
             if (this.timer1.Enabled)
                 this.timer1.Stop();
             this.timer1.Start();
@@ -3804,6 +3806,8 @@ namespace AvoidAGrabCutEasy
             this.label17.Enabled = this.numComponents2.Enabled = true;
 
             this.toolStripStatusLabel4.Text = "done";
+
+            this.cbAutoCropFromOrig.Enabled = this.btnCropFromOrig.Enabled = true;
 
             if (this.timer1.Enabled)
                 this.timer1.Stop();
