@@ -31,6 +31,8 @@
             components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmAvoidAGrabCutEasy));
             panel1 = new Panel();
+            btnDrawSettings = new Button();
+            btnOutlineOperations = new Button();
             btnCMNew = new Button();
             cbClickMode = new CheckBox();
             label22 = new Label();
@@ -74,7 +76,6 @@
             label13 = new Label();
             cbAutoThreshold = new CheckBox();
             btnCache = new Button();
-            cbSetPFGToFG = new CheckBox();
             label11 = new Label();
             label10 = new Label();
             label9 = new Label();
@@ -87,7 +88,6 @@
             cbLSBmp = new CheckBox();
             btnLoadScribbles = new Button();
             btnSaveScribbles = new Button();
-            cbSkipLearn = new CheckBox();
             label1 = new Label();
             btnMinCut = new Button();
             cbEightAdj = new CheckBox();
@@ -156,7 +156,7 @@
             bgwDoAll2 = new System.ComponentModel.BackgroundWorker();
             bgwDoAll3 = new System.ComponentModel.BackgroundWorker();
             bgwDoAll4 = new System.ComponentModel.BackgroundWorker();
-            btnOutlineOperations = new Button();
+            timer1 = new System.Windows.Forms.Timer(components);
             panel1.SuspendLayout();
             panel5.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numBoundOuter).BeginInit();
@@ -185,6 +185,7 @@
             // 
             // panel1
             // 
+            panel1.Controls.Add(btnDrawSettings);
             panel1.Controls.Add(btnOutlineOperations);
             panel1.Controls.Add(btnCMNew);
             panel1.Controls.Add(cbClickMode);
@@ -214,7 +215,6 @@
             panel1.Controls.Add(btnInitSettings);
             panel1.Controls.Add(panel2);
             panel1.Controls.Add(btnCache);
-            panel1.Controls.Add(cbSetPFGToFG);
             panel1.Controls.Add(label11);
             panel1.Controls.Add(label10);
             panel1.Controls.Add(label9);
@@ -227,7 +227,6 @@
             panel1.Controls.Add(cbLSBmp);
             panel1.Controls.Add(btnLoadScribbles);
             panel1.Controls.Add(btnSaveScribbles);
-            panel1.Controls.Add(cbSkipLearn);
             panel1.Controls.Add(label1);
             panel1.Controls.Add(btnMinCut);
             panel1.Controls.Add(cbEightAdj);
@@ -280,6 +279,28 @@
             panel1.TabIndex = 0;
             panel1.MouseDoubleClick += panel1_MouseDoubleClick;
             panel1.MouseDown += panel1_MouseDown;
+            // 
+            // btnDrawSettings
+            // 
+            btnDrawSettings.Location = new Point(1201, 223);
+            btnDrawSettings.Name = "btnDrawSettings";
+            btnDrawSettings.Size = new Size(65, 27);
+            btnDrawSettings.TabIndex = 725;
+            btnDrawSettings.Text = "settings";
+            btnDrawSettings.UseVisualStyleBackColor = true;
+            btnDrawSettings.Click += btnDrawSettings_Click;
+            // 
+            // btnOutlineOperations
+            // 
+            btnOutlineOperations.ForeColor = SystemColors.ControlText;
+            btnOutlineOperations.Location = new Point(1003, 186);
+            btnOutlineOperations.Margin = new Padding(4, 3, 4, 3);
+            btnOutlineOperations.Name = "btnOutlineOperations";
+            btnOutlineOperations.Size = new Size(88, 27);
+            btnOutlineOperations.TabIndex = 717;
+            btnOutlineOperations.Text = "OutlineOps";
+            btnOutlineOperations.UseVisualStyleBackColor = true;
+            btnOutlineOperations.Click += btnOutlineOperations_Click;
             // 
             // btnCMNew
             // 
@@ -528,7 +549,7 @@
             // 
             label17.AutoSize = true;
             label17.Enabled = false;
-            label17.Location = new Point(449, 230);
+            label17.Location = new Point(546, 230);
             label17.Name = "label17";
             label17.Size = new Size(89, 15);
             label17.TabIndex = 698;
@@ -538,7 +559,7 @@
             // numComponents2
             // 
             numComponents2.Enabled = false;
-            numComponents2.Location = new Point(542, 227);
+            numComponents2.Location = new Point(639, 227);
             numComponents2.Margin = new Padding(4, 3, 4, 3);
             numComponents2.Maximum = new decimal(new int[] { 9999, 0, 0, 0 });
             numComponents2.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
@@ -753,19 +774,6 @@
             btnCache.UseVisualStyleBackColor = true;
             btnCache.Click += btnCache_Click;
             // 
-            // cbSetPFGToFG
-            // 
-            cbSetPFGToFG.AutoSize = true;
-            cbSetPFGToFG.Enabled = false;
-            cbSetPFGToFG.Location = new Point(1018, 229);
-            cbSetPFGToFG.Margin = new Padding(4, 3, 4, 3);
-            cbSetPFGToFG.Name = "cbSetPFGToFG";
-            cbSetPFGToFG.Size = new Size(73, 19);
-            cbSetPFGToFG.TabIndex = 674;
-            cbSetPFGToFG.Text = "PFGToFG";
-            toolTip1.SetToolTip(cbSetPFGToFG, "set all \"probably foreground\" values to \"foreground\" in mask");
-            cbSetPFGToFG.UseVisualStyleBackColor = true;
-            // 
             // label11
             // 
             label11.AutoSize = true;
@@ -896,18 +904,6 @@
             btnSaveScribbles.UseVisualStyleBackColor = true;
             btnSaveScribbles.Click += btnSaveScribbles_Click;
             // 
-            // cbSkipLearn
-            // 
-            cbSkipLearn.AutoSize = true;
-            cbSkipLearn.Enabled = false;
-            cbSkipLearn.Location = new Point(934, 229);
-            cbSkipLearn.Margin = new Padding(4, 3, 4, 3);
-            cbSkipLearn.Name = "cbSkipLearn";
-            cbSkipLearn.Size = new Size(76, 19);
-            cbSkipLearn.TabIndex = 665;
-            cbSkipLearn.Text = "skipLearn";
-            cbSkipLearn.UseVisualStyleBackColor = true;
-            // 
             // label1
             // 
             label1.AutoSize = true;
@@ -942,7 +938,7 @@
             // 
             // btnRecut
             // 
-            btnRecut.Location = new Point(599, 224);
+            btnRecut.Location = new Point(696, 224);
             btnRecut.Margin = new Padding(4, 3, 4, 3);
             btnRecut.Name = "btnRecut";
             btnRecut.Size = new Size(57, 27);
@@ -954,10 +950,10 @@
             // 
             // btnRemStroke
             // 
-            btnRemStroke.Location = new Point(1210, 224);
+            btnRemStroke.Location = new Point(1128, 224);
             btnRemStroke.Margin = new Padding(4, 3, 4, 3);
             btnRemStroke.Name = "btnRemStroke";
-            btnRemStroke.Size = new Size(88, 27);
+            btnRemStroke.Size = new Size(66, 27);
             btnRemStroke.TabIndex = 659;
             btnRemStroke.Text = "rem last";
             btnRemStroke.UseVisualStyleBackColor = true;
@@ -966,7 +962,7 @@
             // label6
             // 
             label6.AutoSize = true;
-            label6.Location = new Point(1099, 230);
+            label6.Location = new Point(1017, 230);
             label6.Margin = new Padding(4, 0, 4, 0);
             label6.Name = "label6";
             label6.Size = new Size(37, 15);
@@ -978,7 +974,7 @@
             cmbCurrentColor.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbCurrentColor.FormattingEnabled = true;
             cmbCurrentColor.Items.AddRange(new object[] { "Background", "Foreground", "Probably Background", "Probably Foreground" });
-            cmbCurrentColor.Location = new Point(809, 227);
+            cmbCurrentColor.Location = new Point(891, 227);
             cmbCurrentColor.Margin = new Padding(4, 3, 4, 3);
             cmbCurrentColor.Name = "cmbCurrentColor";
             cmbCurrentColor.Size = new Size(117, 23);
@@ -988,7 +984,7 @@
             // cbDraw
             // 
             cbDraw.AutoSize = true;
-            cbDraw.Location = new Point(699, 229);
+            cbDraw.Location = new Point(781, 229);
             cbDraw.Margin = new Padding(4, 3, 4, 3);
             cbDraw.Name = "cbDraw";
             cbDraw.Size = new Size(101, 19);
@@ -999,7 +995,7 @@
             // 
             // numWH
             // 
-            numWH.Location = new Point(1143, 228);
+            numWH.Location = new Point(1061, 228);
             numWH.Margin = new Padding(4, 3, 4, 3);
             numWH.Maximum = new decimal(new int[] { 127, 0, 0, 0 });
             numWH.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
@@ -1459,6 +1455,7 @@
             helplineRulerCtrl1.DontPaintBaseImg = false;
             helplineRulerCtrl1.DontProcDoubleClick = false;
             helplineRulerCtrl1.DrawModeClipped = false;
+            helplineRulerCtrl1.DrawPixelated = false;
             helplineRulerCtrl1.IgnoreZoom = false;
             helplineRulerCtrl1.Location = new Point(0, 0);
             helplineRulerCtrl1.Margin = new Padding(5, 3, 5, 3);
@@ -1480,6 +1477,7 @@
             helplineRulerCtrl2.DontPaintBaseImg = false;
             helplineRulerCtrl2.DontProcDoubleClick = false;
             helplineRulerCtrl2.DrawModeClipped = false;
+            helplineRulerCtrl2.DrawPixelated = false;
             helplineRulerCtrl2.IgnoreZoom = false;
             helplineRulerCtrl2.Location = new Point(0, 0);
             helplineRulerCtrl2.Margin = new Padding(5, 3, 5, 3);
@@ -1639,17 +1637,10 @@
             bgwDoAll4.DoWork += bgwDoAll4_DoWork;
             bgwDoAll4.RunWorkerCompleted += bgwDoAll4_RunWorkerCompleted;
             // 
-            // btnOutlineOperations
+            // timer1
             // 
-            btnOutlineOperations.ForeColor = SystemColors.ControlText;
-            btnOutlineOperations.Location = new Point(1003, 186);
-            btnOutlineOperations.Margin = new Padding(4, 3, 4, 3);
-            btnOutlineOperations.Name = "btnOutlineOperations";
-            btnOutlineOperations.Size = new Size(88, 27);
-            btnOutlineOperations.TabIndex = 717;
-            btnOutlineOperations.Text = "OutlineOps";
-            btnOutlineOperations.UseVisualStyleBackColor = true;
-            btnOutlineOperations.Click += btnOutlineOperations_Click;
+            timer1.Interval = 200;
+            timer1.Tick += timer1_Tick;
             // 
             // frmAvoidAGrabCutEasy
             // 
@@ -1756,7 +1747,6 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button btnMinCut;
         internal System.ComponentModel.BackgroundWorker backgroundWorker2;
-        private System.Windows.Forms.CheckBox cbSkipLearn;
         private System.Windows.Forms.Button btnLoadScribbles;
         private System.Windows.Forms.Button btnSaveScribbles;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
@@ -1773,7 +1763,6 @@
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.NumericUpDown numShiftY;
         private System.Windows.Forms.NumericUpDown numShiftX;
-        private System.Windows.Forms.CheckBox cbSetPFGToFG;
         private System.Windows.Forms.Button btnCache;
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.Button btnCompose;
@@ -1828,5 +1817,7 @@
         private CheckBox cbClickMode;
         private Button btnCMNew;
         private Button btnOutlineOperations;
+        private Button btnDrawSettings;
+        internal System.Windows.Forms.Timer timer1;
     }
 }

@@ -134,6 +134,10 @@ namespace AvoidAGrabCutEasy
         private Bitmap? _bmpMatte;
         private Point? _ptSt;
         private List<Point>? _ptPrev;
+        private bool _cbSetPFGToFG;
+        private bool _cbSkipLearnEnabled;
+        private bool _cbSkipLearnChecked;
+        private float _opacityDraw;
 
         public event EventHandler<string>? ShowInfo;
         //public event EventHandler<string> BoundaryError;
@@ -464,7 +468,7 @@ namespace AvoidAGrabCutEasy
                     HelplineRulerControl.DBPanel pz = this.helplineRulerCtrl2.dbPanel1;
 
                     ColorMatrix cm = new ColorMatrix();
-                    cm.Matrix33 = 0.25F;
+                    cm.Matrix33 = this._opacityDraw;
 
                     using (ImageAttributes ia = new ImageAttributes())
                     {
@@ -1223,7 +1227,6 @@ namespace AvoidAGrabCutEasy
 
                 if (!_pic_changed)
                 {
-                    string f = this.Text.Split(new String[] { " - " }, StringSplitOptions.None)[0];
                     Bitmap? b1 = null;
 
                     try
@@ -1746,9 +1749,9 @@ namespace AvoidAGrabCutEasy
                     int intMult = 1;
                     double gamma = (double)this.numGamma.Value;
                     double xi = 1.0;
-                    bool setPFGToFG = this.cbSetPFGToFG.Checked;
+                    bool setPFGToFG = this._cbSetPFGToFG;
 
-                    bool skipLearn = this.cbSkipLearn.Enabled && this.cbSkipLearn.Checked;
+                    bool skipLearn = this._cbSkipLearnEnabled && this._cbSkipLearnChecked;
 
                     this.SetControls(false);
                     this.btnGo.Text = "Cancel";
@@ -2448,11 +2451,15 @@ namespace AvoidAGrabCutEasy
             this.cbRectMode.Enabled = false;
             this.cbScribbleMode.Checked = false;
             this.cbScribbleMode.Enabled = false;
-            this.label17.Enabled = this.numComponents2.Enabled = false;
+            this.label17.Enabled = this.numComponents2.Enabled = true;
 
             this.numMaxSize.Enabled = this.numGmmComp.Enabled = false;
 
             this.toolStripStatusLabel4.Text = "done";
+
+            if(this.timer1.Enabled)
+               this.timer1.Stop();
+            this.timer1.Start();
         }
 
         private Dictionary<int, Dictionary<int, List<List<Point>>>> ResizeAllScribbles(Dictionary<int, Dictionary<int, List<List<Point>>>> scribbles, double resWC)
@@ -2845,8 +2852,8 @@ namespace AvoidAGrabCutEasy
         private void cbDraw_CheckedChanged(object sender, EventArgs e)
         {
             this._drawImgOverlay = cbDraw.Checked;
-            this.cbSkipLearn.Enabled = cbDraw.Checked;
-            this.cbSkipLearn.Checked = cbDraw.Checked;
+            this._cbSkipLearnEnabled = cbDraw.Checked;
+            this._cbSkipLearnChecked = cbDraw.Checked;
             this.helplineRulerCtrl2.dbPanel1.Invalidate();
         }
 
@@ -3133,7 +3140,7 @@ namespace AvoidAGrabCutEasy
                     double gamma = (double)this.numGamma.Value;
                     double xi = 1.0;
                     bool setPFGToFG = true;
-                    bool skipLearn = this.cbSkipLearn.Enabled && this.cbSkipLearn.Checked;
+                    bool skipLearn = this._cbSkipLearnEnabled && this._cbSkipLearnChecked;
 
                     this.SetControls(false);
                     this.btnMinCut.Text = "Cancel";
@@ -3785,9 +3792,13 @@ namespace AvoidAGrabCutEasy
             this.cbRectMode.Enabled = false;
             this.cbScribbleMode.Checked = false;
             this.cbScribbleMode.Enabled = false;
-            this.label17.Enabled = this.numComponents2.Enabled = false;
+            this.label17.Enabled = this.numComponents2.Enabled = true;
 
             this.toolStripStatusLabel4.Text = "done";
+
+            if (this.timer1.Enabled)
+                this.timer1.Stop();
+            this.timer1.Start();
         }
 
         private void btnLoadScribbles_Click(object sender, EventArgs e)
@@ -5128,9 +5139,9 @@ namespace AvoidAGrabCutEasy
                     int intMult = 1;
                     double gamma = (double)this.numGamma.Value;
                     double xi = 1.0;
-                    bool setPFGToFG = this.cbSetPFGToFG.Checked;
+                    bool setPFGToFG = this._cbSetPFGToFG;
 
-                    bool skipLearn = this.cbSkipLearn.Enabled && this.cbSkipLearn.Checked;
+                    bool skipLearn = this._cbSkipLearnEnabled && this._cbSkipLearnChecked;
 
                     this.SetControls(false);
                     this.btnDoAll.Text = "Cancel";
@@ -7543,11 +7554,15 @@ namespace AvoidAGrabCutEasy
                 this.cbRectMode.Enabled = false;
                 this.cbScribbleMode.Checked = false;
                 this.cbScribbleMode.Enabled = false;
-                this.label17.Enabled = this.numComponents2.Enabled = false;
+                this.label17.Enabled = this.numComponents2.Enabled = true;
 
                 this.numMaxSize.Enabled = this.numGmmComp.Enabled = false;
 
                 this.toolStripStatusLabel4.Text = "done";
+
+                if (this.timer1.Enabled)
+                    this.timer1.Stop();
+                this.timer1.Start();
             }
         }
 
@@ -9197,6 +9212,43 @@ namespace AvoidAGrabCutEasy
             }
 
             this.btnRecut.Enabled = this.numComponents2.Enabled = false;
+        }
+
+        private void btnDrawSettings_Click(object sender, EventArgs e)
+        {
+            if (this.helplineRulerCtrl2.Bmp != null)
+            {
+                using frmDrawOnResultSettings frm = new();
+
+                frm.cbSetPFGToFG.Checked = this._cbSetPFGToFG;
+                frm.cbSkipLearn.Checked = this._cbSkipLearnEnabled && this._cbSkipLearnChecked;
+                frm.numOpacity.Value = (decimal)this._opacityDraw;
+
+                if (frm.ShowDialog() == DialogResult.OK)
+                {
+                    this._cbSetPFGToFG = frm.cbSetPFGToFG.Checked;
+                    this._cbSkipLearnEnabled = frm.cbSkipLearn.Checked;
+                    this._cbSkipLearnChecked = frm.cbSkipLearn.Checked;
+                    this._opacityDraw = (float)frm.numOpacity.Value;
+
+                    this.helplineRulerCtrl2.dbPanel1.Invalidate();
+                }
+            }
+        }
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            this.timer1.Stop();
+            try
+            {
+                this._dontUpdateNumComp = true;
+                this.numComponents2.Value = this.numMaxComponents.Value;  
+                this._dontUpdateNumComp = false;
+            }
+            catch(Exception exc)
+            {
+                MessageBox.Show(exc.Message);
+            }
         }
     }
 }
