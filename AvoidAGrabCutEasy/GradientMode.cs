@@ -1,6 +1,6 @@
 ﻿namespace AvoidAGrabCutEasy
 {
-    internal enum GradientMode
+    public enum GradientMode
     {
         Linear = 0,
         Sobel = 1,

@@ -31,6 +31,9 @@
             components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmAvoidAGrabCutEasy));
             panel1 = new Panel();
+            btnCropFromOrig = new Button();
+            cbAutoCropFromOrig = new CheckBox();
+            btnInvGaussGrad = new Button();
             btnDrawSettings = new Button();
             btnOutlineOperations = new Button();
             btnCMNew = new Button();
@@ -157,6 +160,7 @@
             bgwDoAll3 = new System.ComponentModel.BackgroundWorker();
             bgwDoAll4 = new System.ComponentModel.BackgroundWorker();
             timer1 = new System.Windows.Forms.Timer(components);
+            backgroundWorker4 = new System.ComponentModel.BackgroundWorker();
             panel1.SuspendLayout();
             panel5.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numBoundOuter).BeginInit();
@@ -185,6 +189,9 @@
             // 
             // panel1
             // 
+            panel1.Controls.Add(btnCropFromOrig);
+            panel1.Controls.Add(cbAutoCropFromOrig);
+            panel1.Controls.Add(btnInvGaussGrad);
             panel1.Controls.Add(btnDrawSettings);
             panel1.Controls.Add(btnOutlineOperations);
             panel1.Controls.Add(btnCMNew);
@@ -280,6 +287,42 @@
             panel1.MouseDoubleClick += panel1_MouseDoubleClick;
             panel1.MouseDown += panel1_MouseDown;
             // 
+            // btnCropFromOrig
+            // 
+            btnCropFromOrig.Enabled = false;
+            btnCropFromOrig.Location = new Point(1307, 189);
+            btnCropFromOrig.Name = "btnCropFromOrig";
+            btnCropFromOrig.Size = new Size(93, 23);
+            btnCropFromOrig.TabIndex = 728;
+            btnCropFromOrig.Text = "crop from orig";
+            btnCropFromOrig.UseVisualStyleBackColor = true;
+            btnCropFromOrig.Click += btnCropFromOrig_Click;
+            // 
+            // cbAutoCropFromOrig
+            // 
+            cbAutoCropFromOrig.AutoSize = true;
+            cbAutoCropFromOrig.Checked = true;
+            cbAutoCropFromOrig.CheckState = CheckState.Checked;
+            cbAutoCropFromOrig.Enabled = false;
+            cbAutoCropFromOrig.Location = new Point(1171, 191);
+            cbAutoCropFromOrig.Name = "cbAutoCropFromOrig";
+            cbAutoCropFromOrig.Size = new Size(130, 19);
+            cbAutoCropFromOrig.TabIndex = 727;
+            cbAutoCropFromOrig.Text = "auto crop from orig";
+            toolTip1.SetToolTip(cbAutoCropFromOrig, "auto crop from orig when using the igg options");
+            cbAutoCropFromOrig.UseVisualStyleBackColor = true;
+            // 
+            // btnInvGaussGrad
+            // 
+            btnInvGaussGrad.Location = new Point(212, 224);
+            btnInvGaussGrad.Name = "btnInvGaussGrad";
+            btnInvGaussGrad.Size = new Size(53, 23);
+            btnInvGaussGrad.TabIndex = 726;
+            btnInvGaussGrad.Text = "invGG";
+            toolTip1.SetToolTip(btnInvGaussGrad, "add neighborhodd influence information to the picture");
+            btnInvGaussGrad.UseVisualStyleBackColor = true;
+            btnInvGaussGrad.Click += btnInvGaussGrad_Click;
+            // 
             // btnDrawSettings
             // 
             btnDrawSettings.Location = new Point(1201, 223);
@@ -364,7 +407,7 @@
             panel5.Controls.Add(cbEditTrimap);
             panel5.Controls.Add(cbRedrawInner);
             panel5.Controls.Add(btnDoAll);
-            panel5.Location = new Point(1119, 95);
+            panel5.Location = new Point(1119, 83);
             panel5.Name = "panel5";
             panel5.Size = new Size(377, 100);
             panel5.TabIndex = 703;
@@ -1642,6 +1685,14 @@
             timer1.Interval = 200;
             timer1.Tick += timer1_Tick;
             // 
+            // backgroundWorker4
+            // 
+            backgroundWorker4.WorkerReportsProgress = true;
+            backgroundWorker4.WorkerSupportsCancellation = true;
+            backgroundWorker4.DoWork += backgroundWorker4_DoWork;
+            backgroundWorker4.ProgressChanged += backgroundWorker4_ProgressChanged;
+            backgroundWorker4.RunWorkerCompleted += backgroundWorker4_RunWorkerCompleted;
+            // 
             // frmAvoidAGrabCutEasy
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -1819,5 +1870,9 @@
         private Button btnOutlineOperations;
         private Button btnDrawSettings;
         internal System.Windows.Forms.Timer timer1;
+        private Button btnCropFromOrig;
+        private CheckBox cbAutoCropFromOrig;
+        private Button btnInvGaussGrad;
+        internal System.ComponentModel.BackgroundWorker backgroundWorker4;
     }
 }

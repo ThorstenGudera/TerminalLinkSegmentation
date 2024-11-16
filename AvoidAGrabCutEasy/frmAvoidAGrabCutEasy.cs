@@ -19,6 +19,7 @@ using AvoidAGrabCutEasy.ProcOutline;
 using GetAlphaMatte;
 using System.Runtime.InteropServices;
 using OutlineOperations;
+using ConvolutionLib;
 
 namespace AvoidAGrabCutEasy
 {
@@ -138,6 +139,8 @@ namespace AvoidAGrabCutEasy
         private bool _cbSkipLearnEnabled;
         private bool _cbSkipLearnChecked;
         private float _opacityDraw;
+        private Bitmap? _bmpOrig;
+        private float _opacity;
 
         public event EventHandler<string>? ShowInfo;
         //public event EventHandler<string> BoundaryError;
@@ -1149,6 +1152,8 @@ namespace AvoidAGrabCutEasy
                 this.numMaxComponents.Value = this.numComponents2.Value;
 
             this.btnGo.Enabled = true;
+
+            this.cbAutoCropFromOrig.Enabled = this.btnCropFromOrig.Enabled = false;
         }
 
         private void button5_Click(object sender, EventArgs e)
@@ -1258,6 +1263,8 @@ namespace AvoidAGrabCutEasy
                             //    this.btnRedo.Enabled = true;
                             //else
                             //    this.btnRedo.Enabled = false;
+
+                            this.cbAutoCropFromOrig.Enabled = this.btnCropFromOrig.Enabled = false;
                         }
                     }
                     catch
@@ -1553,6 +1560,8 @@ namespace AvoidAGrabCutEasy
                     this._bmpWork.Dispose();
                 if (this._bmpMatte != null)
                     this._bmpMatte.Dispose();
+                if (this._bmpOrig != null)
+                    this._bmpOrig.Dispose();
 
                 if (this._pathList != null)
                 {
@@ -2457,8 +2466,8 @@ namespace AvoidAGrabCutEasy
 
             this.toolStripStatusLabel4.Text = "done";
 
-            if(this.timer1.Enabled)
-               this.timer1.Stop();
+            if (this.timer1.Enabled)
+                this.timer1.Stop();
             this.timer1.Start();
         }
 
@@ -6004,7 +6013,7 @@ namespace AvoidAGrabCutEasy
             }
         }
 
-        private void Cfop_UpdateProgress(object? sender, ProgressEventArgs e)
+        private void Cfop_UpdateProgress(object? sender, GetAlphaMatte.ProgressEventArgs e)
         {
             this.bgwDoAll3.ReportProgress((int)(e.CurrentProgress / e.ImgWidthHeight * 100));
         }
@@ -9242,12 +9251,300 @@ namespace AvoidAGrabCutEasy
             try
             {
                 this._dontUpdateNumComp = true;
-                this.numComponents2.Value = this.numMaxComponents.Value;  
+                this.numComponents2.Value = this.numMaxComponents.Value;
                 this._dontUpdateNumComp = false;
             }
-            catch(Exception exc)
+            catch (Exception exc)
             {
                 MessageBox.Show(exc.Message);
+            }
+
+            if (this.cbAutoCropFromOrig.Checked)
+                btnCropFromOrig_Click(this.btnCropFromOrig, new EventArgs());
+        }
+
+        private void btnCropFromOrig_Click(object sender, EventArgs e)
+        {
+            if (this.helplineRulerCtrl2.Bmp != null && this._bmpOrig != null)
+            {
+                Bitmap bmp = new Bitmap(this._bmpOrig);
+                SetImageAlpha(bmp, this.helplineRulerCtrl2.Bmp);
+
+                this.SetBitmap(this.helplineRulerCtrl2.Bmp, bmp, this.helplineRulerCtrl2, "Bmp");
+
+                Bitmap bC = new Bitmap(this.helplineRulerCtrl2.Bmp);
+                this.SetBitmap(ref this._b4Copy, ref bC);
+
+                Bitmap bC2 = new Bitmap(this.helplineRulerCtrl1.Bmp);
+                this.SetBitmap(ref this._bmpBU, ref bC2);
+
+                this.helplineRulerCtrl2.SetZoom(this.helplineRulerCtrl1.Zoom.ToString());
+                this.helplineRulerCtrl2.MakeBitmap(this.helplineRulerCtrl2.Bmp);
+                this.helplineRulerCtrl2.dbPanel1.AutoScrollMinSize = new Size(
+                    (int)(this.helplineRulerCtrl2.Bmp.Width * this.helplineRulerCtrl2.Zoom),
+                    (int)(this.helplineRulerCtrl2.Bmp.Height * this.helplineRulerCtrl2.Zoom));
+
+                _undoOPCache?.Add(bmp);
+            }
+        }
+
+        private unsafe void SetImageAlpha(Bitmap bmp, Bitmap bmpRef)
+        {
+            int w = bmp.Width;
+            int h = bmp.Height;
+
+            BitmapData bmD = bmp.LockBits(new Rectangle(0, 0, w, h), ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
+            BitmapData bmRead = bmpRef.LockBits(new Rectangle(0, 0, w, h), ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
+            int stride = bmD.Stride;
+
+            Parallel.For(0, h, y =>
+            {
+                byte* p = (byte*)bmD.Scan0;
+                p += y * stride;
+                byte* pRead = (byte*)bmRead.Scan0;
+                pRead += y * stride;
+
+                for (int x = 0; x < w; x++)
+                {
+                    p[3] = pRead[3];
+
+                    p += 4;
+                    pRead += 4;
+                }
+            });
+
+            bmp.UnlockBits(bmD);
+            bmpRef.UnlockBits(bmRead);
+        }
+
+        //Since a grabCut uses a markov random field for computing the influence of neighboring
+        //pixels for the minCut algorithm (beta values and capacities), I'm tying to find a way
+        //to add that information directly to the picture and then use my method to extract the
+        //features.
+        private void btnInvGaussGrad_Click(object sender, EventArgs e)
+        {
+            if (this.backgroundWorker4.IsBusy)
+            {
+                this.backgroundWorker4.CancelAsync();
+                return;
+            }
+
+            if (!this.backgroundWorker4.IsBusy && this.helplineRulerCtrl1.Bmp != null)
+            {
+                frmIGGVals frm = new();
+                frm.numIGGKernel.Value = (decimal)7;
+                frm.numIGGAlpha.Value = (decimal)100.0;
+                frm.numIGGDivisor.Value = (decimal)16;
+                frm.numOpacity.Value = (decimal)0.5;
+                frm.rbIGG.Checked = true;
+                frm.numReplace.Value = (decimal)60;
+                frm.cbReplaceBG.Checked = false;
+
+                frm.numVarKernel.Value = (decimal)27;
+                frm.numVarExpander.Value = (decimal)32;
+                frm.numVarTolerance.Value = (decimal)60;
+
+                frm.groupBox2.Enabled = false;
+
+                if (frm.ShowDialog() == DialogResult.OK)
+                {
+                    SetControls(false);
+
+                    this.btnInvGaussGrad.Text = "Cancel";
+                    this.btnInvGaussGrad.Enabled = true;
+
+                    this.toolStripProgressBar1.Value = 0;
+
+                    int kernelLength = (int)frm.numIGGKernel.Value;
+                    double cornerWeight = 0.01;
+                    int sigma = 255;
+                    double steepness = 1E-12;
+                    int radius = 340;
+                    double alpha = (double)frm.numIGGAlpha.Value * 255.0;
+                    GradientMode gradientMode = GradientMode.Scharr16;
+                    double divisor = (double)frm.numIGGDivisor.Value;
+                    bool grayscale = false;
+                    bool stretchValues = true;
+                    int threshold = 127;
+                    this._opacity = (float)frm.numOpacity.Value;
+                    bool replaceBG = frm.cbReplaceBG.Checked;
+                    int replaceTol = (int)frm.numReplace.Value;
+
+                    int numVarKernel = (int)frm.numVarKernel.Value;
+                    int numVarExpander = (int)frm.numVarExpander.Value;
+                    int numVarTolerance = (int)frm.numVarTolerance.Value;
+                    bool numVarLog = frm.cbVarLog.Checked;
+                    double numVarGamma = (double)frm.numVarGamma.Value;
+
+                    bool igg = frm.rbIGG.Checked;
+
+                    object[] o = { kernelLength, cornerWeight, sigma, steepness,
+                               radius, alpha, gradientMode, divisor, grayscale, stretchValues,
+                               threshold, replaceBG, replaceTol, numVarKernel, numVarExpander,
+                               numVarTolerance, igg, numVarLog, numVarGamma};
+
+                    this.backgroundWorker4.RunWorkerAsync(o);
+                }
+            }
+        }
+
+        private void backgroundWorker4_DoWork(object? sender, DoWorkEventArgs e)
+        {
+            if (e.Argument != null && this.helplineRulerCtrl1.Bmp != null)
+            {
+                Bitmap bmp = new Bitmap(this.helplineRulerCtrl1.Bmp);
+
+                object[] o = (object[])e.Argument;
+
+                int kernelLength = (int)o[0];
+                double cornerWeight = (double)o[1];
+                int sigma = (int)o[2];
+                double steepness = (double)o[3];
+                int radius = (int)o[4];
+                double alpha = (double)o[5];
+                GradientMode gradientMode = (GradientMode)o[6];
+                double divisor = (double)o[7];
+                bool grayscale = (bool)o[8];
+                bool stretchValues = (bool)o[9];
+                int threshold = (int)o[10];
+                bool replaceBG = (bool)o[11];
+                int replaceTol = (int)o[12];
+
+                int numVarKernel = (int)o[13];
+                int numVarExpander = (int)o[14];
+                int numVarTolerance = (int)o[15];
+
+                bool doIGG = (bool)o[16];
+
+                bool log = (bool)o[17];
+                double gamma = (double)o[18];
+
+                Rectangle r = new Rectangle(0, 0, bmp.Width, bmp.Height);
+
+                if (doIGG)
+                    using (GraphicsPath gp = new GraphicsPath())
+                    {
+                        if (r.Width > 0 && r.Height > 0)
+                        {
+                            InvGaussGradOp igg = new InvGaussGradOp();
+                            igg.BGW = this.backgroundWorker4;
+                            Bitmap? iG = igg.Inv_InvGaussGrad(bmp, alpha, gradientMode, divisor, kernelLength, cornerWeight,
+                                sigma, steepness, radius, stretchValues, threshold, this.backgroundWorker4);
+
+                            if (replaceBG && iG != null)
+                                EdgeDetectionMethods.ReplaceColors(iG, 0, 0, 0, 0, replaceTol, 255, 0, 0, 0);
+                            e.Result = iG;
+                        }
+                    }
+                else
+                {
+                    EdgeDetectionMethods edd = new EdgeDetectionMethods();
+                    using Bitmap? bmpSquares = edd.ComputeProductsOfImage(bmp);
+
+                    Convolution conv = new();
+                    conv.CancelLoops = false;
+
+                    conv.ProgressPlus += Conv_ProgressPlus;
+
+                    bool b = false;
+
+                    if (bmpSquares != null)
+                    {
+                        b = edd.FastZBinomial_Blur_NxN(bmpSquares, numVarKernel, 0.01, 255, false, false, conv, this.backgroundWorker4, log);
+
+                        if (b)
+                        {
+                            b = false;
+                            b = edd.FastZBinomial_Blur_NxN(bmp, numVarKernel, 0.01, 255, false, false, conv, this.backgroundWorker4, log);
+
+                            if (b)
+                            {
+                                using Bitmap? bmpMean = edd.ComputeProductsOfImage(bmp);
+                                Bitmap? bVar = null;
+                                if (bmpMean != null)
+                                    bVar = edd.Subtract(bmpSquares, bmpMean, numVarExpander / 128.0, 1.0 / (gamma == 0 ? 1 : gamma));
+
+                                if (bVar != null)
+                                    EdgeDetectionMethods.ReplaceColors(bVar, 0, 0, 0, 0, numVarTolerance, 255, 0, 0, 0);
+                                Form fff = new Form();
+                                fff.BackgroundImage = bVar;
+                                fff.BackgroundImageLayout = ImageLayout.Zoom;
+                                fff.ShowDialog();
+                                e.Result = bVar;
+                            }
+                        }
+                    }
+
+                    conv.ProgressPlus -= Conv_ProgressPlus;
+                }
+            }
+        }
+
+        private void Conv_ProgressPlus(object sender, ConvolutionLib.ProgressEventArgs e)
+        {
+            this.backgroundWorker4.ReportProgress((int)e.CurrentProgress);
+        }
+
+        private void backgroundWorker4_ProgressChanged(object? sender, ProgressChangedEventArgs e)
+        {
+            if (e.ProgressPercentage <= this.toolStripProgressBar1.Maximum)
+                this.toolStripProgressBar1.Value = e.ProgressPercentage;
+        }
+
+        private void backgroundWorker4_RunWorkerCompleted(object? sender, RunWorkerCompletedEventArgs e)
+        {
+            if (e.Result != null)
+            {
+                using Bitmap bmp = (Bitmap)e.Result;
+
+                if (bmp != null)
+                {
+                    Bitmap bOrig = new Bitmap(this.helplineRulerCtrl1.Bmp);
+                    this.SetBitmap(ref this._bmpOrig, ref bOrig);
+
+                    Bitmap b = new Bitmap(this.helplineRulerCtrl1.Bmp);
+                    using Graphics gx = Graphics.FromImage(b);
+
+                    ColorMatrix cm = new ColorMatrix();
+                    cm.Matrix33 = this._opacity;
+
+                    using ImageAttributes ia = new ImageAttributes();
+
+                    ia.SetColorMatrix(cm);
+                    gx.DrawImage(bmp,
+                                new Rectangle(0, 0, b.Width, b.Height),
+                                0,
+                                0,
+                                b.Width,
+                                b.Height, GraphicsUnit.Pixel, ia);
+
+                    this.SetBitmap(this.helplineRulerCtrl1.Bmp, b, this.helplineRulerCtrl1, "Bmp");
+
+                    this._undoOPCache?.Add(b);
+
+                    this._pic_changed = true;
+
+                    this.helplineRulerCtrl1.MakeBitmap(this.helplineRulerCtrl1.Bmp);
+
+                    this.helplineRulerCtrl1.dbPanel1.AutoScrollMinSize = new Size(System.Convert.ToInt32(this.helplineRulerCtrl1.Bmp.Width * this.helplineRulerCtrl1.Zoom), System.Convert.ToInt32(this.helplineRulerCtrl1.Bmp.Height * this.helplineRulerCtrl1.Zoom));
+                    this.helplineRulerCtrl1.dbPanel1.Invalidate();
+                }
+
+                this.SetControls(true);
+
+                this.CheckRedoButton();
+
+                this.btnInvGaussGrad.Text = "InvGG";
+
+                this.cbAutoCropFromOrig.Enabled = this.btnCropFromOrig.Enabled = true;
+
+                this.backgroundWorker4.Dispose();
+                this.backgroundWorker4 = new BackgroundWorker();
+                this.backgroundWorker4.WorkerReportsProgress = true;
+                this.backgroundWorker4.WorkerSupportsCancellation = true;
+                this.backgroundWorker4.DoWork += backgroundWorker4_DoWork;
+                this.backgroundWorker4.ProgressChanged += backgroundWorker4_ProgressChanged;
+                this.backgroundWorker4.RunWorkerCompleted += backgroundWorker4_RunWorkerCompleted;
             }
         }
     }
