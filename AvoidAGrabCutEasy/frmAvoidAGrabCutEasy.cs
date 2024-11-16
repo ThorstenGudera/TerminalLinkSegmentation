@@ -9472,10 +9472,7 @@ namespace AvoidAGrabCutEasy
 
                                 if (bVar != null)
                                     EdgeDetectionMethods.ReplaceColors(bVar, 0, 0, 0, 0, numVarTolerance, 255, 0, 0, 0);
-                                Form fff = new Form();
-                                fff.BackgroundImage = bVar;
-                                fff.BackgroundImageLayout = ImageLayout.Zoom;
-                                fff.ShowDialog();
+
                                 e.Result = bVar;
                             }
                         }

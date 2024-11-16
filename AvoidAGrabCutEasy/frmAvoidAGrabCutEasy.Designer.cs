@@ -314,7 +314,7 @@
             // 
             // btnInvGaussGrad
             // 
-            btnInvGaussGrad.Location = new Point(212, 224);
+            btnInvGaussGrad.Location = new Point(348, 225);
             btnInvGaussGrad.Name = "btnInvGaussGrad";
             btnInvGaussGrad.Size = new Size(53, 23);
             btnInvGaussGrad.TabIndex = 726;
