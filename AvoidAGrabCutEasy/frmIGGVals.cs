@@ -1,5 +1,6 @@
 ﻿using ConvolutionLib;
 using HelplineRulerControl;
+using SegmentsListLib;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -76,12 +77,21 @@ namespace AvoidAGrabCutEasy
 
                 bool igg = this.rbIGG.Checked;
 
+                bool blur = this.cbBlur.Checked;
+                bool colors = this.cbColors.Checked;
+                bool blurFirst = this.rbBefore.Checked;
+
+                int krnl = (int)this.numKernel.Value;
+                int maxVal = (int)this.numDistWeight.Value;
+                Point pt = new Point((int)this.numValSrc.Value, (int)this.numValDst.Value);
+
                 this.progressBar1.Value = 0;
 
                 object[] o = { kernelLength, cornerWeight, sigma, steepness,
                                radius, alpha, gradientMode, divisor, grayscale, stretchValues,
                                threshold, replaceBG, replaceTol, numVarKernel, numVarExpander,
-                               numVarTolerance, igg, numVarLog, numVarGamma, b};
+                               numVarTolerance, igg, numVarLog, numVarGamma, b,
+                               blur, colors, blurFirst, krnl, maxVal, pt};
 
                 this.backgroundWorker1.RunWorkerAsync(o);
             }
@@ -120,7 +130,33 @@ namespace AvoidAGrabCutEasy
                 bool log = (bool)o[17];
                 double gamma = (double)o[18];
 
+                bool blur = (bool)o[20];
+                bool colors = (bool)o[21];
+                bool blurFirst = (bool)o[22];
+
+                int krnl = (int)o[23];
+                int maxVal = (int)o[24];
+                Point pt = (Point)o[25];
+
                 Rectangle r = new Rectangle(0, 0, bmp.Width, bmp.Height);
+
+                if (blur && !colors)
+                    DoBlur(bmp, krnl, maxVal);
+                if (!blur && colors)
+                    DoColors(bmp, pt);
+                if (blur && colors)
+                {
+                    if (blurFirst)
+                    {
+                        DoBlur(bmp, krnl, maxVal);
+                        DoColors(bmp, pt);
+                    }
+                    else
+                    {
+                        DoColors(bmp, pt);
+                        DoBlur(bmp, krnl, maxVal);
+                    }
+                }
 
                 if (doIGG)
                     using (GraphicsPath gp = new GraphicsPath())
@@ -176,6 +212,35 @@ namespace AvoidAGrabCutEasy
                     conv.ProgressPlus -= Conv_ProgressPlus;
                 }
             }
+        }
+
+        private void DoBlur(Bitmap bmp, int krnl, int maxVal)
+        {
+            Convolution conv = new();
+            conv.ProgressPlus += Conv_ProgressPlus;
+            conv.CancelLoops = false;
+
+            InvGaussGradOp igg = new InvGaussGradOp();
+            igg.BGW = this.backgroundWorker1;
+
+            igg.FastZGaussian_Blur_NxN_SigmaAsDistance(bmp, krnl, 0.01, 255, false, false, conv, false, 1E-12, maxVal);
+            conv.ProgressPlus -= Conv_ProgressPlus;
+        }
+
+        private void DoColors(Bitmap bmp, Point pt)
+        {
+            byte[] rgb = new byte[256];
+            List<Point> p = new();
+            p.Add(new Point(0, 0));
+            p.Add(pt);
+            p.Add(new Point(255, 255));
+
+            CurveSegment cuSgmt = new();
+            List<BezierSegment> bz = cuSgmt.CalcBezierSegments(p.ToArray(), 0.5f);
+            List<PointF> pts = cuSgmt.GetAllPoints(bz, 256, 0, 255);
+            cuSgmt.MapPoints(pts, rgb);
+
+            ColorCurves.fipbmp.GradColors(bmp, rgb, rgb, rgb);
         }
 
         private void Conv_ProgressPlus(object sender, ProgressEventArgs e)
