@@ -13,7 +13,7 @@ namespace AvoidAGrabCutEasy
     {
         public BackgroundWorker? BGW { get; set; }
         public Bitmap? Inv_InvGaussGrad(Bitmap bmp, double alpha, GradientMode gradientMode, double divisor, int kernelLength,
-            double cornerWeight, int sigma, double steepness, int radius, bool stretchValues, int threshold, BackgroundWorker bgw)
+            double cornerWeight, int sigma, double steepness, int radius, bool stretchValues, int threshold)
         {
             //apply Gaussian
             Convolution? conv = new Convolution();

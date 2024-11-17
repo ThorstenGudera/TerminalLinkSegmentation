@@ -13,6 +13,10 @@
         /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         protected override void Dispose(bool disposing)
         {
+            if (this.pictureBox2.Image != null)
+                this.pictureBox2.Image.Dispose();
+            if (this.pictureBox3.Image != null)
+                this.pictureBox3.Image.Dispose();
             if (disposing && (components != null))
             {
                 components.Dispose();
@@ -54,6 +58,14 @@
             label2 = new Label();
             numVarKernel = new NumericUpDown();
             numVarTolerance = new NumericUpDown();
+            splitContainer1 = new SplitContainer();
+            progressBar1 = new ProgressBar();
+            btnPreview = new Button();
+            pictureBox1 = new PictureBox();
+            splitContainer2 = new SplitContainer();
+            pictureBox2 = new PictureBox();
+            pictureBox3 = new PictureBox();
+            backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             ((System.ComponentModel.ISupportInitialize)numIGGDivisor).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numIGGAlpha).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numIGGKernel).BeginInit();
@@ -65,13 +77,24 @@
             ((System.ComponentModel.ISupportInitialize)numVarExpander).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numVarKernel).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numVarTolerance).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
+            splitContainer1.Panel1.SuspendLayout();
+            splitContainer1.Panel2.SuspendLayout();
+            splitContainer1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)splitContainer2).BeginInit();
+            splitContainer2.Panel1.SuspendLayout();
+            splitContainer2.Panel2.SuspendLayout();
+            splitContainer2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)pictureBox2).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox3).BeginInit();
             SuspendLayout();
             // 
             // btnCancel
             // 
             btnCancel.DialogResult = DialogResult.Cancel;
             btnCancel.ForeColor = SystemColors.ControlText;
-            btnCancel.Location = new Point(246, 373);
+            btnCancel.Location = new Point(988, 166);
             btnCancel.Margin = new Padding(4, 3, 4, 3);
             btnCancel.Name = "btnCancel";
             btnCancel.Size = new Size(88, 27);
@@ -83,13 +106,14 @@
             // 
             btnOK.DialogResult = DialogResult.OK;
             btnOK.ForeColor = SystemColors.ControlText;
-            btnOK.Location = new Point(149, 373);
+            btnOK.Location = new Point(891, 166);
             btnOK.Margin = new Padding(4, 3, 4, 3);
             btnOK.Name = "btnOK";
             btnOK.Size = new Size(88, 27);
             btnOK.TabIndex = 735;
             btnOK.Text = "OK";
             btnOK.UseVisualStyleBackColor = true;
+            btnOK.Click += btnOK_Click;
             // 
             // label22
             // 
@@ -201,7 +225,7 @@
             groupBox1.Controls.Add(label22);
             groupBox1.Controls.Add(label21);
             groupBox1.Controls.Add(numIGGDivisor);
-            groupBox1.Location = new Point(12, 35);
+            groupBox1.Location = new Point(15, 40);
             groupBox1.Name = "groupBox1";
             groupBox1.Size = new Size(254, 153);
             groupBox1.TabIndex = 745;
@@ -222,7 +246,7 @@
             // 
             rbIGG.AutoSize = true;
             rbIGG.Checked = true;
-            rbIGG.Location = new Point(12, 10);
+            rbIGG.Location = new Point(15, 15);
             rbIGG.Name = "rbIGG";
             rbIGG.Size = new Size(97, 19);
             rbIGG.TabIndex = 746;
@@ -234,7 +258,7 @@
             // rbVariance
             // 
             rbVariance.AutoSize = true;
-            rbVariance.Location = new Point(12, 194);
+            rbVariance.Location = new Point(283, 15);
             rbVariance.Name = "rbVariance";
             rbVariance.Size = new Size(69, 19);
             rbVariance.TabIndex = 746;
@@ -252,7 +276,7 @@
             groupBox2.Controls.Add(label2);
             groupBox2.Controls.Add(numVarKernel);
             groupBox2.Controls.Add(numVarTolerance);
-            groupBox2.Location = new Point(12, 220);
+            groupBox2.Location = new Point(283, 40);
             groupBox2.Name = "groupBox2";
             groupBox2.Size = new Size(254, 120);
             groupBox2.TabIndex = 747;
@@ -346,19 +370,114 @@
             numVarTolerance.TabIndex = 744;
             numVarTolerance.Value = new decimal(new int[] { 60, 0, 0, 0 });
             // 
+            // splitContainer1
+            // 
+            splitContainer1.Dock = DockStyle.Fill;
+            splitContainer1.Location = new Point(0, 0);
+            splitContainer1.Name = "splitContainer1";
+            splitContainer1.Orientation = Orientation.Horizontal;
+            // 
+            // splitContainer1.Panel1
+            // 
+            splitContainer1.Panel1.Controls.Add(progressBar1);
+            splitContainer1.Panel1.Controls.Add(btnPreview);
+            splitContainer1.Panel1.Controls.Add(pictureBox1);
+            splitContainer1.Panel1.Controls.Add(rbIGG);
+            splitContainer1.Panel1.Controls.Add(btnCancel);
+            splitContainer1.Panel1.Controls.Add(btnOK);
+            splitContainer1.Panel1.Controls.Add(groupBox2);
+            splitContainer1.Panel1.Controls.Add(groupBox1);
+            splitContainer1.Panel1.Controls.Add(rbVariance);
+            // 
+            // splitContainer1.Panel2
+            // 
+            splitContainer1.Panel2.Controls.Add(splitContainer2);
+            splitContainer1.Size = new Size(1089, 713);
+            splitContainer1.SplitterDistance = 202;
+            splitContainer1.TabIndex = 748;
+            // 
+            // progressBar1
+            // 
+            progressBar1.Location = new Point(283, 166);
+            progressBar1.Name = "progressBar1";
+            progressBar1.Size = new Size(155, 23);
+            progressBar1.TabIndex = 750;
+            // 
+            // btnPreview
+            // 
+            btnPreview.Location = new Point(444, 168);
+            btnPreview.Name = "btnPreview";
+            btnPreview.Size = new Size(75, 23);
+            btnPreview.TabIndex = 749;
+            btnPreview.Text = "Preview";
+            btnPreview.UseVisualStyleBackColor = true;
+            btnPreview.Click += btnPreview_Click;
+            // 
+            // pictureBox1
+            // 
+            pictureBox1.BorderStyle = BorderStyle.FixedSingle;
+            pictureBox1.Location = new Point(557, 12);
+            pictureBox1.Name = "pictureBox1";
+            pictureBox1.Size = new Size(272, 181);
+            pictureBox1.SizeMode = PictureBoxSizeMode.Zoom;
+            pictureBox1.TabIndex = 748;
+            pictureBox1.TabStop = false;
+            // 
+            // splitContainer2
+            // 
+            splitContainer2.Dock = DockStyle.Fill;
+            splitContainer2.Location = new Point(0, 0);
+            splitContainer2.Name = "splitContainer2";
+            // 
+            // splitContainer2.Panel1
+            // 
+            splitContainer2.Panel1.AutoScroll = true;
+            splitContainer2.Panel1.Controls.Add(pictureBox2);
+            // 
+            // splitContainer2.Panel2
+            // 
+            splitContainer2.Panel2.AutoScroll = true;
+            splitContainer2.Panel2.Controls.Add(pictureBox3);
+            splitContainer2.Size = new Size(1089, 507);
+            splitContainer2.SplitterDistance = 543;
+            splitContainer2.TabIndex = 0;
+            // 
+            // pictureBox2
+            // 
+            pictureBox2.Location = new Point(0, 0);
+            pictureBox2.Name = "pictureBox2";
+            pictureBox2.Size = new Size(543, 507);
+            pictureBox2.SizeMode = PictureBoxSizeMode.AutoSize;
+            pictureBox2.TabIndex = 0;
+            pictureBox2.TabStop = false;
+            pictureBox2.Click += pictureBox2_Click;
+            // 
+            // pictureBox3
+            // 
+            pictureBox3.Location = new Point(0, 0);
+            pictureBox3.Name = "pictureBox3";
+            pictureBox3.Size = new Size(542, 507);
+            pictureBox3.SizeMode = PictureBoxSizeMode.AutoSize;
+            pictureBox3.TabIndex = 0;
+            pictureBox3.TabStop = false;
+            pictureBox3.Click += pictureBox3_Click;
+            // 
+            // backgroundWorker1
+            // 
+            backgroundWorker1.WorkerReportsProgress = true;
+            backgroundWorker1.WorkerSupportsCancellation = true;
+            backgroundWorker1.DoWork += backgroundWorker1_DoWork;
+            backgroundWorker1.ProgressChanged += backgroundWorker1_ProgressChanged;
+            backgroundWorker1.RunWorkerCompleted += backgroundWorker1_RunWorkerCompleted;
+            // 
             // frmIGGVals
             // 
             AcceptButton = btnOK;
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             CancelButton = btnCancel;
-            ClientSize = new Size(347, 412);
-            Controls.Add(groupBox2);
-            Controls.Add(rbVariance);
-            Controls.Add(rbIGG);
-            Controls.Add(groupBox1);
-            Controls.Add(btnCancel);
-            Controls.Add(btnOK);
+            ClientSize = new Size(1089, 713);
+            Controls.Add(splitContainer1);
             FormBorderStyle = FormBorderStyle.Fixed3D;
             MaximizeBox = false;
             Name = "frmIGGVals";
@@ -377,8 +496,21 @@
             ((System.ComponentModel.ISupportInitialize)numVarExpander).EndInit();
             ((System.ComponentModel.ISupportInitialize)numVarKernel).EndInit();
             ((System.ComponentModel.ISupportInitialize)numVarTolerance).EndInit();
+            splitContainer1.Panel1.ResumeLayout(false);
+            splitContainer1.Panel1.PerformLayout();
+            splitContainer1.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)splitContainer1).EndInit();
+            splitContainer1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
+            splitContainer2.Panel1.ResumeLayout(false);
+            splitContainer2.Panel1.PerformLayout();
+            splitContainer2.Panel2.ResumeLayout(false);
+            splitContainer2.Panel2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)splitContainer2).EndInit();
+            splitContainer2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)pictureBox2).EndInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox3).EndInit();
             ResumeLayout(false);
-            PerformLayout();
         }
 
         #endregion
@@ -408,5 +540,13 @@
         private Label label6;
         internal CheckBox cbVarLog;
         internal GroupBox groupBox2;
+        private SplitContainer splitContainer1;
+        private PictureBox pictureBox1;
+        private SplitContainer splitContainer2;
+        private PictureBox pictureBox2;
+        private PictureBox pictureBox3;
+        private Button btnPreview;
+        private System.ComponentModel.BackgroundWorker backgroundWorker1;
+        private ProgressBar progressBar1;
     }
 }

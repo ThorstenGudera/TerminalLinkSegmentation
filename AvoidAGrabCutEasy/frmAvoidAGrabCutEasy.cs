@@ -9337,7 +9337,7 @@ namespace AvoidAGrabCutEasy
 
             if (!this.backgroundWorker4.IsBusy && this.helplineRulerCtrl1.Bmp != null)
             {
-                frmIGGVals frm = new();
+                frmIGGVals frm = new(this.helplineRulerCtrl1.Bmp);
                 frm.numIGGKernel.Value = (decimal)7;
                 frm.numIGGAlpha.Value = (decimal)100.0;
                 frm.numIGGDivisor.Value = (decimal)16;
@@ -9354,6 +9354,31 @@ namespace AvoidAGrabCutEasy
 
                 if (frm.ShowDialog() == DialogResult.OK)
                 {
+                    if (frm.FBitmap != null)
+                    {
+                        Bitmap bOrig = new Bitmap(this.helplineRulerCtrl1.Bmp);
+                        this.SetBitmap(ref this._bmpOrig, ref bOrig);
+
+                        this.SetBitmap(this.helplineRulerCtrl1.Bmp, frm.FBitmap, this.helplineRulerCtrl1, "Bmp");
+
+                        this._undoOPCache?.Add(this.helplineRulerCtrl1.Bmp);
+
+                        this._pic_changed = true;
+
+                        this.helplineRulerCtrl1.MakeBitmap(this.helplineRulerCtrl1.Bmp);
+
+                        this.helplineRulerCtrl1.dbPanel1.AutoScrollMinSize = new Size(System.Convert.ToInt32(this.helplineRulerCtrl1.Bmp.Width * this.helplineRulerCtrl1.Zoom), System.Convert.ToInt32(this.helplineRulerCtrl1.Bmp.Height * this.helplineRulerCtrl1.Zoom));
+                        this.helplineRulerCtrl1.dbPanel1.Invalidate();
+
+                        this.CheckRedoButton();
+
+                        this.btnInvGaussGrad.Text = "InvGG";
+
+                        this.cbAutoCropFromOrig.Enabled = this.btnCropFromOrig.Enabled = true;
+
+                        return;
+                    }
+
                     SetControls(false);
 
                     this.btnInvGaussGrad.Text = "Cancel";
@@ -9438,7 +9463,7 @@ namespace AvoidAGrabCutEasy
                             InvGaussGradOp igg = new InvGaussGradOp();
                             igg.BGW = this.backgroundWorker4;
                             Bitmap? iG = igg.Inv_InvGaussGrad(bmp, alpha, gradientMode, divisor, kernelLength, cornerWeight,
-                                sigma, steepness, radius, stretchValues, threshold, this.backgroundWorker4);
+                                sigma, steepness, radius, stretchValues, threshold);
 
                             if (replaceBG && iG != null)
                                 EdgeDetectionMethods.ReplaceColors(iG, 0, 0, 0, 0, replaceTol, 255, 0, 0, 0);
