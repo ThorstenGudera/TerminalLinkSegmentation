@@ -9333,7 +9333,7 @@ namespace AvoidAGrabCutEasy
         }
 
         //Note: This is completely experimental, and bound to change a lot, or even might be removed
-        private void btnInvGaussGrad_Click(object sender, EventArgs e)
+        private void btnPreBlur_Click(object sender, EventArgs e)
         {
             if (this.backgroundWorker4.IsBusy)
             {
@@ -9357,7 +9357,8 @@ namespace AvoidAGrabCutEasy
                     _frm.ValsChanged = _frmValsChanged;
                 }
 
-                if (_frm.ShowDialog() == DialogResult.OK)
+                DialogResult dlg = _frm.ShowDialog();
+                if (dlg == DialogResult.OK)
                 {
                     if (_frm.FBitmap != null && !_frm.ValsChanged)
                     {
@@ -9377,7 +9378,7 @@ namespace AvoidAGrabCutEasy
 
                         this.CheckRedoButton();
 
-                        this.btnInvGaussGrad.Text = "preBlur";
+                        this.btnPreBlur.Text = "preBlur";
 
                         this.cbAutoCropFromOrig.Enabled = this.btnCropFromOrig.Enabled = true;
 
@@ -9390,8 +9391,8 @@ namespace AvoidAGrabCutEasy
 
                     SetControls(false);
 
-                    this.btnInvGaussGrad.Text = "Cancel";
-                    this.btnInvGaussGrad.Enabled = true;
+                    this.btnPreBlur.Text = "Cancel";
+                    this.btnPreBlur.Enabled = true;
 
                     this.toolStripProgressBar1.Value = 0;
 
@@ -9408,10 +9409,12 @@ namespace AvoidAGrabCutEasy
                     this.toolStripProgressBar1.Value = 0;
                     this.toolStripProgressBar1.Visible = true;
 
-                    object[] o = { blur, colors, blurFirst, krnl, maxVal, pt};
+                    object[] o = { blur, colors, blurFirst, krnl, maxVal, pt };
 
                     this.backgroundWorker4.RunWorkerAsync(o);
                 }
+                else
+                    _frmValsChanged = _frm.ValsChanged;
 
                 _frmValsChanged = _frm.ValsChanged;
             }
@@ -9535,15 +9538,15 @@ namespace AvoidAGrabCutEasy
                     this.helplineRulerCtrl1.dbPanel1.AutoScrollMinSize = new Size(System.Convert.ToInt32(this.helplineRulerCtrl1.Bmp.Width * this.helplineRulerCtrl1.Zoom), System.Convert.ToInt32(this.helplineRulerCtrl1.Bmp.Height * this.helplineRulerCtrl1.Zoom));
                     this.helplineRulerCtrl1.dbPanel1.Invalidate();
 
-                    if(_frm != null)
-                        _frmValsChanged = _frm.ValsChanged;
+                    if (_frm != null)
+                        _frmValsChanged = false;
                 }
 
                 this.SetControls(true);
 
                 this.CheckRedoButton();
 
-                this.btnInvGaussGrad.Text = "preBlur";
+                this.btnPreBlur.Text = "preBlur";
 
                 this.cbAutoCropFromOrig.Enabled = this.btnCropFromOrig.Enabled = true;
 

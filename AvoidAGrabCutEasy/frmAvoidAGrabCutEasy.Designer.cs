@@ -33,7 +33,7 @@
             panel1 = new Panel();
             btnCropFromOrig = new Button();
             cbAutoCropFromOrig = new CheckBox();
-            btnInvGaussGrad = new Button();
+            btnPreBlur = new Button();
             btnDrawSettings = new Button();
             btnOutlineOperations = new Button();
             btnCMNew = new Button();
@@ -191,7 +191,7 @@
             // 
             panel1.Controls.Add(btnCropFromOrig);
             panel1.Controls.Add(cbAutoCropFromOrig);
-            panel1.Controls.Add(btnInvGaussGrad);
+            panel1.Controls.Add(btnPreBlur);
             panel1.Controls.Add(btnDrawSettings);
             panel1.Controls.Add(btnOutlineOperations);
             panel1.Controls.Add(btnCMNew);
@@ -312,16 +312,16 @@
             toolTip1.SetToolTip(cbAutoCropFromOrig, "auto crop from orig when using the igg options");
             cbAutoCropFromOrig.UseVisualStyleBackColor = true;
             // 
-            // btnInvGaussGrad
+            // btnPreBlur
             // 
-            btnInvGaussGrad.Location = new Point(348, 225);
-            btnInvGaussGrad.Name = "btnInvGaussGrad";
-            btnInvGaussGrad.Size = new Size(53, 23);
-            btnInvGaussGrad.TabIndex = 726;
-            btnInvGaussGrad.Text = "preBlur ";
-            toolTip1.SetToolTip(btnInvGaussGrad, "add neighborhodd influence information to the picture");
-            btnInvGaussGrad.UseVisualStyleBackColor = true;
-            btnInvGaussGrad.Click += btnInvGaussGrad_Click;
+            btnPreBlur.Location = new Point(348, 225);
+            btnPreBlur.Name = "btnPreBlur";
+            btnPreBlur.Size = new Size(53, 23);
+            btnPreBlur.TabIndex = 726;
+            btnPreBlur.Text = "preBlur ";
+            toolTip1.SetToolTip(btnPreBlur, "add neighborhodd influence information to the picture");
+            btnPreBlur.UseVisualStyleBackColor = true;
+            btnPreBlur.Click += btnPreBlur_Click;
             // 
             // btnDrawSettings
             // 
@@ -1872,7 +1872,7 @@
         internal System.Windows.Forms.Timer timer1;
         private Button btnCropFromOrig;
         private CheckBox cbAutoCropFromOrig;
-        private Button btnInvGaussGrad;
+        private Button btnPreBlur;
         internal System.ComponentModel.BackgroundWorker backgroundWorker4;
     }
 }

@@ -32,6 +32,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
             btnCancel = new Button();
             btnOK = new Button();
             splitContainer1 = new SplitContainer();
@@ -56,6 +57,7 @@
             pictureBox2 = new PictureBox();
             pictureBox3 = new PictureBox();
             backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
+            toolTip1 = new ToolTip(components);
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
             splitContainer1.Panel2.SuspendLayout();
@@ -135,7 +137,7 @@
             numOpacity.Name = "numOpacity";
             numOpacity.Size = new Size(52, 23);
             numOpacity.TabIndex = 756;
-            numOpacity.Value = new decimal(new int[] { 5, 0, 0, 65536 });
+            numOpacity.Value = new decimal(new int[] { 1, 0, 0, 0 });
             // 
             // label1
             // 
@@ -241,6 +243,8 @@
             // cbBlur
             // 
             cbBlur.AutoSize = true;
+            cbBlur.Checked = true;
+            cbBlur.CheckState = CheckState.Checked;
             cbBlur.Location = new Point(8, 22);
             cbBlur.Name = "cbBlur";
             cbBlur.Size = new Size(100, 19);
@@ -257,6 +261,7 @@
             label16.Size = new Size(64, 15);
             label16.TabIndex = 754;
             label16.Text = "distWeight";
+            toolTip1.SetToolTip(label16, "max color dist to keep blurring.\r\n\"Edge weight\" - bigger blurs more edges\r\nvalue range from 0 to 442");
             // 
             // numKernel
             // 
@@ -278,6 +283,7 @@
             numDistWeight.Name = "numDistWeight";
             numDistWeight.Size = new Size(52, 23);
             numDistWeight.TabIndex = 752;
+            toolTip1.SetToolTip(numDistWeight, "max color dist to keep blurring.\r\n\"Edge weight\" - bigger blurs more edges\r\nvalue range from 0 to 443");
             numDistWeight.Value = new decimal(new int[] { 101, 0, 0, 0 });
             numDistWeight.ValueChanged += numIGGKernel_ValueChanged;
             // 
@@ -417,5 +423,6 @@
         internal RadioButton rbBefore;
         internal NumericUpDown numOpacity;
         private Label label1;
+        private ToolTip toolTip1;
     }
 }
