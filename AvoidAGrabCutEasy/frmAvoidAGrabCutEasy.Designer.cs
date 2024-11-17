@@ -318,7 +318,7 @@
             btnInvGaussGrad.Name = "btnInvGaussGrad";
             btnInvGaussGrad.Size = new Size(53, 23);
             btnInvGaussGrad.TabIndex = 726;
-            btnInvGaussGrad.Text = "invGG";
+            btnInvGaussGrad.Text = "preBlur ";
             toolTip1.SetToolTip(btnInvGaussGrad, "add neighborhodd influence information to the picture");
             btnInvGaussGrad.UseVisualStyleBackColor = true;
             btnInvGaussGrad.Click += btnInvGaussGrad_Click;

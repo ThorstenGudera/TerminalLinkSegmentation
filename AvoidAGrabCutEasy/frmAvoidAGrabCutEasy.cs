@@ -142,7 +142,7 @@ namespace AvoidAGrabCutEasy
         private float _opacityDraw;
         private Bitmap? _bmpOrig;
         private float _opacity;
-        private frmIGGVals? _frm;
+        private frmPreBlurVals? _frm;
         private bool _frmValsChanged;
 
         public event EventHandler<string>? ShowInfo;
@@ -9332,11 +9332,6 @@ namespace AvoidAGrabCutEasy
             bmpRef.UnlockBits(bmRead);
         }
 
-        //Since a grabCut uses a markov random field for computing the influence of neighboring
-        //pixels for the minCut algorithm (beta values and capacities), I'm tying to find a way
-        //to add that information directly to the picture and then use my method to extract the
-        //features.
-
         //Note: This is completely experimental, and bound to change a lot, or even might be removed
         private void btnInvGaussGrad_Click(object sender, EventArgs e)
         {
@@ -9349,7 +9344,7 @@ namespace AvoidAGrabCutEasy
             if (!this.backgroundWorker4.IsBusy && this.helplineRulerCtrl1.Bmp != null && this._bmpBU != null)
             {
                 if (_frm == null)
-                    _frm = new frmIGGVals(new Bitmap(this._bmpBU));
+                    _frm = new frmPreBlurVals(new Bitmap(this._bmpBU));
                 else
                 {
                     Image? iOld = _frm.pictureBox1.Image;
@@ -9361,20 +9356,6 @@ namespace AvoidAGrabCutEasy
                     }
                     _frm.ValsChanged = _frmValsChanged;
                 }
-
-                //frm.numIGGKernel.Value = (decimal)7;
-                //frm.numIGGAlpha.Value = (decimal)100.0;
-                //frm.numIGGDivisor.Value = (decimal)16;
-                //frm.numOpacity.Value = (decimal)0.5;
-                //frm.rbIGG.Checked = true;
-                //frm.numReplace.Value = (decimal)60;
-                //frm.cbReplaceBG.Checked = false;
-
-                //frm.numVarKernel.Value = (decimal)27;
-                //frm.numVarExpander.Value = (decimal)32;
-                //frm.numVarTolerance.Value = (decimal)60;
-
-                //frm.groupBox2.Enabled = false;
 
                 if (_frm.ShowDialog() == DialogResult.OK)
                 {
@@ -9396,7 +9377,7 @@ namespace AvoidAGrabCutEasy
 
                         this.CheckRedoButton();
 
-                        this.btnInvGaussGrad.Text = "InvGG";
+                        this.btnInvGaussGrad.Text = "preBlur";
 
                         this.cbAutoCropFromOrig.Enabled = this.btnCropFromOrig.Enabled = true;
 
@@ -9414,29 +9395,6 @@ namespace AvoidAGrabCutEasy
 
                     this.toolStripProgressBar1.Value = 0;
 
-                    int kernelLength = (int)_frm.numIGGKernel.Value;
-                    double cornerWeight = 0.01;
-                    int sigma = 255;
-                    double steepness = 1E-12;
-                    int radius = 340;
-                    double alpha = (double)_frm.numIGGAlpha.Value * 255.0;
-                    GradientMode gradientMode = GradientMode.Scharr16;
-                    double divisor = (double)_frm.numIGGDivisor.Value;
-                    bool grayscale = false;
-                    bool stretchValues = true;
-                    int threshold = 127;
-                    this._opacity = (float)_frm.numOpacity.Value;
-                    bool replaceBG = _frm.cbReplaceBG.Checked;
-                    int replaceTol = (int)_frm.numReplace.Value;
-
-                    int numVarKernel = (int)_frm.numVarKernel.Value;
-                    int numVarExpander = (int)_frm.numVarExpander.Value;
-                    int numVarTolerance = (int)_frm.numVarTolerance.Value;
-                    bool numVarLog = _frm.cbVarLog.Checked;
-                    double numVarGamma = (double)_frm.numVarGamma.Value;
-
-                    bool igg = _frm.rbIGG.Checked;
-
                     bool blur = _frm.cbBlur.Checked;
                     bool colors = _frm.cbColors.Checked;
                     bool blurFirst = _frm.rbBefore.Checked;
@@ -9445,14 +9403,12 @@ namespace AvoidAGrabCutEasy
                     int maxVal = (int)_frm.numDistWeight.Value;
                     Point pt = new Point((int)_frm.numValSrc.Value, (int)_frm.numValDst.Value);
 
+                    this._opacity = (float)_frm.numOpacity.Value;
+
                     this.toolStripProgressBar1.Value = 0;
                     this.toolStripProgressBar1.Visible = true;
 
-                    object[] o = { kernelLength, cornerWeight, sigma, steepness,
-                               radius, alpha, gradientMode, divisor, grayscale, stretchValues,
-                               threshold, replaceBG, replaceTol, numVarKernel, numVarExpander,
-                               numVarTolerance, igg, numVarLog, numVarGamma,
-                               blur, colors, blurFirst, krnl, maxVal, pt};
+                    object[] o = { blur, colors, blurFirst, krnl, maxVal, pt};
 
                     this.backgroundWorker4.RunWorkerAsync(o);
                 }
@@ -9469,36 +9425,13 @@ namespace AvoidAGrabCutEasy
 
                 object[] o = (object[])e.Argument;
 
-                int kernelLength = (int)o[0];
-                double cornerWeight = (double)o[1];
-                int sigma = (int)o[2];
-                double steepness = (double)o[3];
-                int radius = (int)o[4];
-                double alpha = (double)o[5];
-                GradientMode gradientMode = (GradientMode)o[6];
-                double divisor = (double)o[7];
-                bool grayscale = (bool)o[8];
-                bool stretchValues = (bool)o[9];
-                int threshold = (int)o[10];
-                bool replaceBG = (bool)o[11];
-                int replaceTol = (int)o[12];
+                bool blur = (bool)o[0];
+                bool colors = (bool)o[1];
+                bool blurFirst = (bool)o[2];
 
-                int numVarKernel = (int)o[13];
-                int numVarExpander = (int)o[14];
-                int numVarTolerance = (int)o[15];
-
-                bool doIGG = (bool)o[16];
-
-                bool log = (bool)o[17];
-                double gamma = (double)o[18];
-
-                bool blur = (bool)o[19];
-                bool colors = (bool)o[20];
-                bool blurFirst = (bool)o[21];
-
-                int krnl = (int)o[22];
-                int maxVal = (int)o[23];
-                Point pt = (Point)o[24];
+                int krnl = (int)o[3];
+                int maxVal = (int)o[4];
+                Point pt = (Point)o[5];
 
                 Rectangle r = new Rectangle(0, 0, bmp.Width, bmp.Height);
 
@@ -9520,59 +9453,7 @@ namespace AvoidAGrabCutEasy
                     }
                 }
 
-                if (doIGG)
-                    using (GraphicsPath gp = new GraphicsPath())
-                    {
-                        if (r.Width > 0 && r.Height > 0)
-                        {
-                            InvGaussGradOp igg = new InvGaussGradOp();
-                            igg.BGW = this.backgroundWorker4;
-                            Bitmap? iG = igg.Inv_InvGaussGrad(bmp, alpha, gradientMode, divisor, kernelLength, cornerWeight,
-                                sigma, steepness, radius, stretchValues, threshold);
-
-                            if (replaceBG && iG != null)
-                                EdgeDetectionMethods.ReplaceColors(iG, 0, 0, 0, 0, replaceTol, 255, 0, 0, 0);
-                            e.Result = iG;
-                        }
-                    }
-                else
-                {
-                    EdgeDetectionMethods edd = new EdgeDetectionMethods();
-                    using Bitmap? bmpSquares = edd.ComputeProductsOfImage(bmp);
-
-                    Convolution conv = new();
-                    conv.CancelLoops = false;
-
-                    conv.ProgressPlus += Conv_ProgressPlus;
-
-                    bool b = false;
-
-                    if (bmpSquares != null)
-                    {
-                        b = edd.FastZBinomial_Blur_NxN(bmpSquares, numVarKernel, 0.01, 255, false, false, conv, this.backgroundWorker4, log);
-
-                        if (b)
-                        {
-                            b = false;
-                            b = edd.FastZBinomial_Blur_NxN(bmp, numVarKernel, 0.01, 255, false, false, conv, this.backgroundWorker4, log);
-
-                            if (b)
-                            {
-                                using Bitmap? bmpMean = edd.ComputeProductsOfImage(bmp);
-                                Bitmap? bVar = null;
-                                if (bmpMean != null)
-                                    bVar = edd.Subtract(bmpSquares, bmpMean, numVarExpander / 128.0, 1.0 / (gamma == 0 ? 1 : gamma));
-
-                                if (bVar != null)
-                                    EdgeDetectionMethods.ReplaceColors(bVar, 0, 0, 0, 0, numVarTolerance, 255, 0, 0, 0);
-
-                                e.Result = bVar;
-                            }
-                        }
-                    }
-
-                    conv.ProgressPlus -= Conv_ProgressPlus;
-                }
+                e.Result = bmp;
             }
         }
 
@@ -9662,7 +9543,7 @@ namespace AvoidAGrabCutEasy
 
                 this.CheckRedoButton();
 
-                this.btnInvGaussGrad.Text = "InvGG";
+                this.btnInvGaussGrad.Text = "preBlur";
 
                 this.cbAutoCropFromOrig.Enabled = this.btnCropFromOrig.Enabled = true;
 
