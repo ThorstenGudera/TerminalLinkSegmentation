@@ -12,7 +12,9 @@
         /// </summary>
         /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         protected override void Dispose(bool disposing)
-        {
+        {          
+            if (this.pictureBox1.Image != null)
+                this.pictureBox1.Image.Dispose();
             if (this.pictureBox2.Image != null)
                 this.pictureBox2.Image.Dispose();
             if (this.pictureBox3.Image != null)
@@ -132,7 +134,8 @@
             numIGGDivisor.Name = "numIGGDivisor";
             numIGGDivisor.Size = new Size(52, 23);
             numIGGDivisor.TabIndex = 736;
-            numIGGDivisor.Value = new decimal(new int[] { 8, 0, 0, 0 });
+            numIGGDivisor.Value = new decimal(new int[] { 16, 0, 0, 0 });
+            numIGGDivisor.ValueChanged += numIGGKernel_ValueChanged;
             // 
             // label21
             // 
@@ -160,7 +163,8 @@
             numIGGAlpha.Name = "numIGGAlpha";
             numIGGAlpha.Size = new Size(52, 23);
             numIGGAlpha.TabIndex = 737;
-            numIGGAlpha.Value = new decimal(new int[] { 101, 0, 0, 0 });
+            numIGGAlpha.Value = new decimal(new int[] { 100, 0, 0, 0 });
+            numIGGAlpha.ValueChanged += numIGGKernel_ValueChanged;
             // 
             // numIGGKernel
             // 
@@ -172,6 +176,7 @@
             numIGGKernel.Size = new Size(52, 23);
             numIGGKernel.TabIndex = 738;
             numIGGKernel.Value = new decimal(new int[] { 27, 0, 0, 0 });
+            numIGGKernel.ValueChanged += numIGGKernel_ValueChanged;
             // 
             // label1
             // 
@@ -193,6 +198,7 @@
             numOpacity.Size = new Size(52, 23);
             numOpacity.TabIndex = 738;
             numOpacity.Value = new decimal(new int[] { 5, 0, 0, 65536 });
+            numOpacity.ValueChanged += numIGGKernel_ValueChanged;
             // 
             // numReplace
             // 
@@ -202,6 +208,7 @@
             numReplace.Size = new Size(52, 23);
             numReplace.TabIndex = 744;
             numReplace.Value = new decimal(new int[] { 60, 0, 0, 0 });
+            numReplace.ValueChanged += numIGGKernel_ValueChanged;
             // 
             // label3
             // 
@@ -241,6 +248,7 @@
             cbReplaceBG.TabIndex = 745;
             cbReplaceBG.Text = "replace BG";
             cbReplaceBG.UseVisualStyleBackColor = true;
+            cbReplaceBG.CheckedChanged += cbVarLog_CheckedChanged;
             // 
             // rbIGG
             // 
@@ -293,6 +301,7 @@
             numVarGamma.Size = new Size(69, 23);
             numVarGamma.TabIndex = 747;
             numVarGamma.Value = new decimal(new int[] { 2, 0, 0, 0 });
+            numVarGamma.ValueChanged += numIGGKernel_ValueChanged;
             // 
             // label6
             // 
@@ -312,6 +321,7 @@
             cbVarLog.TabIndex = 745;
             cbVarLog.Text = "logarithmic";
             cbVarLog.UseVisualStyleBackColor = true;
+            cbVarLog.CheckedChanged += cbVarLog_CheckedChanged;
             // 
             // label5
             // 
@@ -339,7 +349,8 @@
             numVarExpander.Name = "numVarExpander";
             numVarExpander.Size = new Size(52, 23);
             numVarExpander.TabIndex = 738;
-            numVarExpander.Value = new decimal(new int[] { 64, 0, 0, 0 });
+            numVarExpander.Value = new decimal(new int[] { 32, 0, 0, 0 });
+            numVarExpander.ValueChanged += numIGGKernel_ValueChanged;
             // 
             // label2
             // 
@@ -360,6 +371,7 @@
             numVarKernel.Size = new Size(52, 23);
             numVarKernel.TabIndex = 738;
             numVarKernel.Value = new decimal(new int[] { 27, 0, 0, 0 });
+            numVarKernel.ValueChanged += numIGGKernel_ValueChanged;
             // 
             // numVarTolerance
             // 
@@ -369,6 +381,7 @@
             numVarTolerance.Size = new Size(52, 23);
             numVarTolerance.TabIndex = 744;
             numVarTolerance.Value = new decimal(new int[] { 60, 0, 0, 0 });
+            numVarTolerance.ValueChanged += numIGGKernel_ValueChanged;
             // 
             // splitContainer1
             // 
@@ -541,12 +554,12 @@
         internal CheckBox cbVarLog;
         internal GroupBox groupBox2;
         private SplitContainer splitContainer1;
-        private PictureBox pictureBox1;
         private SplitContainer splitContainer2;
         private PictureBox pictureBox2;
         private PictureBox pictureBox3;
         private Button btnPreview;
         private System.ComponentModel.BackgroundWorker backgroundWorker1;
         private ProgressBar progressBar1;
+        internal PictureBox pictureBox1;
     }
 }

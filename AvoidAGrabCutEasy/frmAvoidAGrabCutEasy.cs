@@ -141,6 +141,8 @@ namespace AvoidAGrabCutEasy
         private float _opacityDraw;
         private Bitmap? _bmpOrig;
         private float _opacity;
+        private frmIGGVals? _frm;
+        private bool _frmValsChanged;
 
         public event EventHandler<string>? ShowInfo;
         //public event EventHandler<string> BoundaryError;
@@ -1535,6 +1537,9 @@ namespace AvoidAGrabCutEasy
                     this.backgroundWorker1.CancelAsync();
                     return;
                 }
+
+                if (this._frm != null)
+                    this._frm.Close();
 
                 if (this._gc != null)
                 {
@@ -9335,31 +9340,44 @@ namespace AvoidAGrabCutEasy
                 return;
             }
 
-            if (!this.backgroundWorker4.IsBusy && this.helplineRulerCtrl1.Bmp != null)
+            if (!this.backgroundWorker4.IsBusy && this.helplineRulerCtrl1.Bmp != null && this._bmpBU != null)
             {
-                frmIGGVals frm = new(this.helplineRulerCtrl1.Bmp);
-                frm.numIGGKernel.Value = (decimal)7;
-                frm.numIGGAlpha.Value = (decimal)100.0;
-                frm.numIGGDivisor.Value = (decimal)16;
-                frm.numOpacity.Value = (decimal)0.5;
-                frm.rbIGG.Checked = true;
-                frm.numReplace.Value = (decimal)60;
-                frm.cbReplaceBG.Checked = false;
-
-                frm.numVarKernel.Value = (decimal)27;
-                frm.numVarExpander.Value = (decimal)32;
-                frm.numVarTolerance.Value = (decimal)60;
-
-                frm.groupBox2.Enabled = false;
-
-                if (frm.ShowDialog() == DialogResult.OK)
+                if (_frm == null)
+                    _frm = new frmIGGVals(new Bitmap(this._bmpBU));
+                else
                 {
-                    if (frm.FBitmap != null)
+                    Image? iOld = _frm.pictureBox1.Image;
+                    _frm.pictureBox1.Image = new Bitmap(this._bmpBU);
+                    if (iOld != null && !iOld.Equals(this.helplineRulerCtrl1.Bmp))
+                    {
+                        iOld.Dispose();
+                        iOld = null;
+                    }
+                    _frm.ValsChanged = _frmValsChanged;
+                }
+
+                //frm.numIGGKernel.Value = (decimal)7;
+                //frm.numIGGAlpha.Value = (decimal)100.0;
+                //frm.numIGGDivisor.Value = (decimal)16;
+                //frm.numOpacity.Value = (decimal)0.5;
+                //frm.rbIGG.Checked = true;
+                //frm.numReplace.Value = (decimal)60;
+                //frm.cbReplaceBG.Checked = false;
+
+                //frm.numVarKernel.Value = (decimal)27;
+                //frm.numVarExpander.Value = (decimal)32;
+                //frm.numVarTolerance.Value = (decimal)60;
+
+                //frm.groupBox2.Enabled = false;
+
+                if (_frm.ShowDialog() == DialogResult.OK)
+                {
+                    if (_frm.FBitmap != null && !_frm.ValsChanged)
                     {
                         Bitmap bOrig = new Bitmap(this.helplineRulerCtrl1.Bmp);
                         this.SetBitmap(ref this._bmpOrig, ref bOrig);
 
-                        this.SetBitmap(this.helplineRulerCtrl1.Bmp, frm.FBitmap, this.helplineRulerCtrl1, "Bmp");
+                        this.SetBitmap(this.helplineRulerCtrl1.Bmp, _frm.FBitmap, this.helplineRulerCtrl1, "Bmp");
 
                         this._undoOPCache?.Add(this.helplineRulerCtrl1.Bmp);
 
@@ -9376,6 +9394,10 @@ namespace AvoidAGrabCutEasy
 
                         this.cbAutoCropFromOrig.Enabled = this.btnCropFromOrig.Enabled = true;
 
+                        this.btnReset2.Enabled = true;
+
+                        _frmValsChanged = _frm.ValsChanged;
+
                         return;
                     }
 
@@ -9386,28 +9408,28 @@ namespace AvoidAGrabCutEasy
 
                     this.toolStripProgressBar1.Value = 0;
 
-                    int kernelLength = (int)frm.numIGGKernel.Value;
+                    int kernelLength = (int)_frm.numIGGKernel.Value;
                     double cornerWeight = 0.01;
                     int sigma = 255;
                     double steepness = 1E-12;
                     int radius = 340;
-                    double alpha = (double)frm.numIGGAlpha.Value * 255.0;
+                    double alpha = (double)_frm.numIGGAlpha.Value * 255.0;
                     GradientMode gradientMode = GradientMode.Scharr16;
-                    double divisor = (double)frm.numIGGDivisor.Value;
+                    double divisor = (double)_frm.numIGGDivisor.Value;
                     bool grayscale = false;
                     bool stretchValues = true;
                     int threshold = 127;
-                    this._opacity = (float)frm.numOpacity.Value;
-                    bool replaceBG = frm.cbReplaceBG.Checked;
-                    int replaceTol = (int)frm.numReplace.Value;
+                    this._opacity = (float)_frm.numOpacity.Value;
+                    bool replaceBG = _frm.cbReplaceBG.Checked;
+                    int replaceTol = (int)_frm.numReplace.Value;
 
-                    int numVarKernel = (int)frm.numVarKernel.Value;
-                    int numVarExpander = (int)frm.numVarExpander.Value;
-                    int numVarTolerance = (int)frm.numVarTolerance.Value;
-                    bool numVarLog = frm.cbVarLog.Checked;
-                    double numVarGamma = (double)frm.numVarGamma.Value;
+                    int numVarKernel = (int)_frm.numVarKernel.Value;
+                    int numVarExpander = (int)_frm.numVarExpander.Value;
+                    int numVarTolerance = (int)_frm.numVarTolerance.Value;
+                    bool numVarLog = _frm.cbVarLog.Checked;
+                    double numVarGamma = (double)_frm.numVarGamma.Value;
 
-                    bool igg = frm.rbIGG.Checked;
+                    bool igg = _frm.rbIGG.Checked;
 
                     this.toolStripProgressBar1.Value = 0;
                     this.toolStripProgressBar1.Visible = true;
@@ -9419,14 +9441,16 @@ namespace AvoidAGrabCutEasy
 
                     this.backgroundWorker4.RunWorkerAsync(o);
                 }
+
+                _frmValsChanged = _frm.ValsChanged;
             }
         }
 
         private void backgroundWorker4_DoWork(object? sender, DoWorkEventArgs e)
         {
-            if (e.Argument != null && this.helplineRulerCtrl1.Bmp != null)
+            if (e.Argument != null && this.helplineRulerCtrl1.Bmp != null && this._bmpBU != null)
             {
-                Bitmap bmp = new Bitmap(this.helplineRulerCtrl1.Bmp);
+                Bitmap bmp = new Bitmap(this._bmpBU);
 
                 object[] o = (object[])e.Argument;
 
@@ -9528,12 +9552,12 @@ namespace AvoidAGrabCutEasy
             {
                 using Bitmap bmp = (Bitmap)e.Result;
 
-                if (bmp != null)
+                if (bmp != null && this._bmpBU != null)
                 {
-                    Bitmap bOrig = new Bitmap(this.helplineRulerCtrl1.Bmp);
+                    Bitmap bOrig = new Bitmap(this._bmpBU);
                     this.SetBitmap(ref this._bmpOrig, ref bOrig);
 
-                    Bitmap b = new Bitmap(this.helplineRulerCtrl1.Bmp);
+                    Bitmap b = new Bitmap(this._bmpBU);
                     using Graphics gx = Graphics.FromImage(b);
 
                     ColorMatrix cm = new ColorMatrix();
@@ -9559,6 +9583,9 @@ namespace AvoidAGrabCutEasy
 
                     this.helplineRulerCtrl1.dbPanel1.AutoScrollMinSize = new Size(System.Convert.ToInt32(this.helplineRulerCtrl1.Bmp.Width * this.helplineRulerCtrl1.Zoom), System.Convert.ToInt32(this.helplineRulerCtrl1.Bmp.Height * this.helplineRulerCtrl1.Zoom));
                     this.helplineRulerCtrl1.dbPanel1.Invalidate();
+
+                    if(_frm != null)
+                        _frmValsChanged = _frm.ValsChanged;
                 }
 
                 this.SetControls(true);

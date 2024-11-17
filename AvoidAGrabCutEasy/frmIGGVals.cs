@@ -24,6 +24,9 @@ namespace AvoidAGrabCutEasy
                 return _fBitmap;
             }
         }
+
+        public bool ValsChanged { get; internal set; } = false;
+
         public frmIGGVals(Bitmap bmp)
         {
             InitializeComponent();
@@ -43,6 +46,7 @@ namespace AvoidAGrabCutEasy
                 this.groupBox1.Enabled = false;
                 this.groupBox2.Enabled = true;
             }
+            this.ValsChanged = true;
         }
 
         private void btnPreview_Click(object sender, EventArgs e)
@@ -249,15 +253,20 @@ namespace AvoidAGrabCutEasy
             this.splitContainer2.Panel2.Focus();
         }
 
-        private void frmIGGVals_FormClosing(object sender, FormClosingEventArgs e)
-        {
-
-        }
-
         private void btnOK_Click(object sender, EventArgs e)
         {
-            if (this.pictureBox3.Image != null)
+            if (this.pictureBox3.Image != null || (this.ValsChanged && this.pictureBox3.Image != null))
                 this._fBitmap = new Bitmap(this.pictureBox3.Image);
+        }
+
+        private void numIGGKernel_ValueChanged(object sender, EventArgs e)
+        {
+            this.ValsChanged = true;
+        }
+
+        private void cbVarLog_CheckedChanged(object sender, EventArgs e)
+        {
+            this.ValsChanged = true;
         }
     }
 }
