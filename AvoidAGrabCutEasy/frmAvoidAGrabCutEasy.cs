@@ -1267,6 +1267,9 @@ namespace AvoidAGrabCutEasy
                             //    this.btnRedo.Enabled = false;
 
                             this.cbAutoCropFromOrig.Enabled = this.btnCropFromOrig.Enabled = false;
+
+                            this.btnReset2.Enabled = true;
+                            this.cbScribbleMode.Checked = false;
                         }
                     }
                     catch
@@ -2374,8 +2377,8 @@ namespace AvoidAGrabCutEasy
                 Bitmap bC = new Bitmap(this.helplineRulerCtrl2.Bmp);
                 this.SetBitmap(ref this._b4Copy, ref bC);
 
-                Bitmap bC2 = new Bitmap(this.helplineRulerCtrl1.Bmp);
-                this.SetBitmap(ref this._bmpBU, ref bC2);
+                //Bitmap bC2 = new Bitmap(this.helplineRulerCtrl1.Bmp);
+                //this.SetBitmap(ref this._bmpBU, ref bC2);
 
                 this.helplineRulerCtrl2.SetZoom(this.helplineRulerCtrl1.Zoom.ToString());
                 this.helplineRulerCtrl2.MakeBitmap(this.helplineRulerCtrl2.Bmp);
@@ -4234,8 +4237,8 @@ namespace AvoidAGrabCutEasy
                                             (int)(this.helplineRulerCtrl1.Bmp.Width * this.helplineRulerCtrl1.Zoom),
                                             (int)(this.helplineRulerCtrl1.Bmp.Height * this.helplineRulerCtrl1.Zoom));
 
-                                        Bitmap bC = new Bitmap(bmp);
-                                        this.SetBitmap(ref this._bmpBU, ref bC);
+                                        //Bitmap bC = new Bitmap(bmp);
+                                        //this.SetBitmap(ref this._bmpBU, ref bC);
                                     }
                                 }
                             }
@@ -4297,8 +4300,8 @@ namespace AvoidAGrabCutEasy
                                         (int)(this.helplineRulerCtrl2.Bmp.Width * this.helplineRulerCtrl2.Zoom),
                                         (int)(this.helplineRulerCtrl2.Bmp.Height * this.helplineRulerCtrl2.Zoom));
 
-                                    Bitmap bC = new Bitmap(bmp);
-                                    this.SetBitmap(ref this._bmpBU, ref bC);
+                                    //Bitmap bC = new Bitmap(bmp);
+                                    //this.SetBitmap(ref this._bmpBU, ref bC);
 
                                     this._pic_changed = true;
                                     this.btnOK.Enabled = true;
@@ -4326,8 +4329,8 @@ namespace AvoidAGrabCutEasy
                                         (int)(this.helplineRulerCtrl2.Bmp.Width * this.helplineRulerCtrl2.Zoom),
                                         (int)(this.helplineRulerCtrl2.Bmp.Height * this.helplineRulerCtrl2.Zoom));
 
-                                    Bitmap bC = new Bitmap(bmp);
-                                    this.SetBitmap(ref this._bmpBU, ref bC);
+                                    //Bitmap bC = new Bitmap(bmp);
+                                    //this.SetBitmap(ref this._bmpBU, ref bC);
                                 }
                             }
                         }
@@ -9286,8 +9289,8 @@ namespace AvoidAGrabCutEasy
                 Bitmap bC = new Bitmap(this.helplineRulerCtrl2.Bmp);
                 this.SetBitmap(ref this._b4Copy, ref bC);
 
-                Bitmap bC2 = new Bitmap(this.helplineRulerCtrl1.Bmp);
-                this.SetBitmap(ref this._bmpBU, ref bC2);
+                //Bitmap bC2 = new Bitmap(this.helplineRulerCtrl1.Bmp);
+                //this.SetBitmap(ref this._bmpBU, ref bC2);
 
                 this.helplineRulerCtrl2.SetZoom(this.helplineRulerCtrl1.Zoom.ToString());
                 this.helplineRulerCtrl2.MakeBitmap(this.helplineRulerCtrl2.Bmp);
