@@ -8,5 +8,6 @@
         public double Exponent1 { get; internal set; } = 1.0;
         public double Exponent2 { get; internal set; } = 1.0;
         public double ThMultiplier { get; internal set; } = Math.Pow(10.0, -10.0);
+        public bool MultAuto { get; internal set; } = true;
     }
 }

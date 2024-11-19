@@ -42,6 +42,7 @@
             numExp2 = new NumericUpDown();
             label6 = new Label();
             numThMultiplier = new NumericUpDown();
+            cbAuto = new CheckBox();
             ((System.ComponentModel.ISupportInitialize)numF1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numTh).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numF2).BeginInit();
@@ -54,7 +55,7 @@
             // 
             btnCancel.DialogResult = DialogResult.Cancel;
             btnCancel.ForeColor = SystemColors.ControlText;
-            btnCancel.Location = new Point(314, 122);
+            btnCancel.Location = new Point(314, 165);
             btnCancel.Margin = new Padding(4, 3, 4, 3);
             btnCancel.Name = "btnCancel";
             btnCancel.Size = new Size(88, 27);
@@ -66,7 +67,7 @@
             // 
             btnOK.DialogResult = DialogResult.OK;
             btnOK.ForeColor = SystemColors.ControlText;
-            btnOK.Location = new Point(217, 122);
+            btnOK.Location = new Point(217, 165);
             btnOK.Margin = new Padding(4, 3, 4, 3);
             btnOK.Name = "btnOK";
             btnOK.Size = new Size(88, 27);
@@ -95,7 +96,7 @@
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(15, 76);
+            label3.Location = new Point(15, 107);
             label3.Name = "label3";
             label3.Size = new Size(44, 15);
             label3.TabIndex = 734;
@@ -125,7 +126,7 @@
             // 
             numF2.DecimalPlaces = 4;
             numF2.Increment = new decimal(new int[] { 1, 0, 0, 65536 });
-            numF2.Location = new Point(89, 73);
+            numF2.Location = new Point(89, 104);
             numF2.Name = "numF2";
             numF2.Size = new Size(88, 23);
             numF2.TabIndex = 735;
@@ -153,7 +154,7 @@
             // label5
             // 
             label5.AutoSize = true;
-            label5.Location = new Point(202, 76);
+            label5.Location = new Point(202, 107);
             label5.Name = "label5";
             label5.Size = new Size(63, 15);
             label5.TabIndex = 734;
@@ -163,7 +164,7 @@
             // 
             numExp2.DecimalPlaces = 4;
             numExp2.Increment = new decimal(new int[] { 1, 0, 0, 65536 });
-            numExp2.Location = new Point(292, 73);
+            numExp2.Location = new Point(292, 104);
             numExp2.Name = "numExp2";
             numExp2.Size = new Size(88, 23);
             numExp2.TabIndex = 735;
@@ -188,11 +189,23 @@
             numThMultiplier.TabIndex = 735;
             numThMultiplier.Value = new decimal(new int[] { 10, 0, 0, 0 });
             // 
+            // cbAuto
+            // 
+            cbAuto.AutoSize = true;
+            cbAuto.Location = new Point(89, 73);
+            cbAuto.Name = "cbAuto";
+            cbAuto.Size = new Size(50, 19);
+            cbAuto.TabIndex = 736;
+            cbAuto.Text = "auto";
+            cbAuto.UseVisualStyleBackColor = true;
+            cbAuto.CheckedChanged += cbAuto_CheckedChanged;
+            // 
             // frmLumMapSettings
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(415, 161);
+            ClientSize = new Size(415, 204);
+            Controls.Add(cbAuto);
             Controls.Add(numExp2);
             Controls.Add(numF2);
             Controls.Add(numThMultiplier);
@@ -238,5 +251,6 @@
         internal NumericUpDown numExp2;
         private Label label6;
         internal NumericUpDown numThMultiplier;
+        internal CheckBox cbAuto;
     }
 }

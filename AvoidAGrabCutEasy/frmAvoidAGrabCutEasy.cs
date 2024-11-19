@@ -9646,6 +9646,7 @@ namespace AvoidAGrabCutEasy
                 frm.numExp1.Value = (decimal)this._lmas.Exponent1;
                 frm.numExp2.Value = (decimal)this._lmas.Exponent2;
                 frm.numThMultiplier.Value = (decimal)-Math.Log10(this._lmas.ThMultiplier);
+                frm.cbAuto.Checked = this._lmas.MultAuto;
 
                 if (frm.ShowDialog() == DialogResult.OK)
                 {
@@ -9655,6 +9656,7 @@ namespace AvoidAGrabCutEasy
                     double e1 = (double)frm.numExp1.Value;
                     double e2 = (double)frm.numExp2.Value;
                     double m = Math.Pow(10, (double)-frm.numThMultiplier.Value);
+                    bool auto = frm.cbAuto.Checked;
 
                     LumMapApplicationSettings lmas = new()
                     {
@@ -9663,7 +9665,8 @@ namespace AvoidAGrabCutEasy
                         Factor2 = f2,
                         Exponent1 = e1,
                         Exponent2 = e2,
-                        ThMultiplier = m
+                        ThMultiplier = m,
+                        MultAuto = auto
                     };
 
                     this._lmas = lmas;

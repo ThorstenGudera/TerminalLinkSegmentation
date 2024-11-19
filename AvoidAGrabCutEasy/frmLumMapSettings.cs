@@ -16,5 +16,10 @@ namespace AvoidAGrabCutEasy
         {
             InitializeComponent();
         }
+
+        private void cbAuto_CheckedChanged(object sender, EventArgs e)
+        {
+            this.numThMultiplier.Enabled = this.label6.Enabled = !cbAuto.Checked;
+        }
     }
 }

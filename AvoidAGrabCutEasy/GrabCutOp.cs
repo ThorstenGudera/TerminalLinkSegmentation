@@ -1396,6 +1396,15 @@ namespace AvoidAGrabCutEasy
                 //test with a lum_map, first application of idea, may change
                 //influence here is bigger than below
                 if (this.IGGLuminanceMap != null && this.LumMapSettings != null)
+                {
+                    double lumTh = this.LumMapSettings.Threshold;
+                    double lumMult = this.LumMapSettings.ThMultiplier;
+                    if (this.LumMapSettings.MultAuto)
+                    {
+                        double dMin = d.Min();
+                        lumTh = dMin + ((d.Max() - dMin) * this.LumMapSettings.Threshold);
+                        lumMult = 1.0;
+                    }
                     for (int j = 0; j < d.Length; j++)
                     {
                         int x = vf[j].Item2 % w;
@@ -1403,9 +1412,10 @@ namespace AvoidAGrabCutEasy
                         //first multiply all, factor and/or complete setting will assumably change
                         d[j] *= Math.Pow(this.IGGLuminanceMap[x, y], this.LumMapSettings.Exponent1) * this.LumMapSettings.Factor1;
                         //then multiply the low ones, factor and/or complete setting will assumably change
-                        if (d[j] < this.LumMapSettings.Threshold * this.LumMapSettings.ThMultiplier)
+                        if (d[j] < lumTh * lumMult)
                             d[j] *= Math.Pow(this.IGGLuminanceMap[x, y], this.LumMapSettings.Exponent2) * this.LumMapSettings.Factor2;
                     }
+                }
 
                 IEnumerable<double> dTmp = d.Except(d.Where(a => a == 0));
                 double d1 = 0;
