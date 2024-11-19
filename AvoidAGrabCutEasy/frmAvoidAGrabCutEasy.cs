@@ -144,6 +144,7 @@ namespace AvoidAGrabCutEasy
         private float _opacity;
         private frmPreBlurVals? _frm;
         private bool _frmValsChanged;
+        private float[,]? _iggLuminanceMap;
 
         public event EventHandler<string>? ShowInfo;
         //public event EventHandler<string> BoundaryError;
@@ -1548,6 +1549,7 @@ namespace AvoidAGrabCutEasy
                 if (this._gc != null)
                 {
                     this._gc.ShowInfo -= _gc_ShowInfo;
+                    this._gc.ShowTHInfo -= _gc_ShowTHInfo;
                     this._gc.Dispose();
                 }
 
@@ -1751,6 +1753,7 @@ namespace AvoidAGrabCutEasy
                     if (this.cbRectMode.Enabled && this._gc != null)
                     {
                         this._gc.ShowInfo -= _gc_ShowInfo;
+                        this._gc.ShowTHInfo -= _gc_ShowTHInfo;
                         this._gc.Dispose();
                         this._gc = null;
                     }
@@ -1982,6 +1985,7 @@ namespace AvoidAGrabCutEasy
                     };
 
                     this._gc.ShowInfo += _gc_ShowInfo;
+                    this._gc.ShowTHInfo += _gc_ShowTHInfo;
                 }
 
                 //now do the initialisation
@@ -2076,6 +2080,38 @@ namespace AvoidAGrabCutEasy
                         this._gc.SetAllPointsInMask(allPts4, this._pointsListSeq, setPFGToFG);
 
                         this._gc.SkipLearn = skipLearn;
+                    }
+                }
+
+                //test
+                //since the MinCut in the GrabCut method uses neighborhood information,
+                //let's try to use this information in our method too.
+                //For this, we compute a gradient pic and from this, we get the inverted
+                //luminance map. This may change, also the settings for the invGaussGrad
+                //method for conputing the gradient pic may change.
+                if (this.cbCompLumMap.Checked)
+                {
+                    if (this._iggLuminanceMap != null)
+                        this._gc.IGGLuminanceMap = this._iggLuminanceMap;
+                    else
+                    {
+                        if (this._bmpBU != null)
+                        {
+                            this.Invoke(new Action(() =>
+                            {
+                                this.toolStripStatusLabel4.Text = "Computing LumMap";
+                                this.lblLumMap.Text = "computing...";
+                            }));
+                            LuminancMapOp lop = new LuminancMapOp();
+                            using Bitmap bmp = new Bitmap(this._bmpBU);
+                            float[,]? lMap = lop.ComputeInvLuminanceMapSync(bmp);
+                            this._iggLuminanceMap = this._gc.IGGLuminanceMap = lMap;
+                            this.Invoke(new Action(() =>
+                            {
+                                this.toolStripStatusLabel4.Text = "LumMap done.";
+                                this.lblLumMap.Text = "done.";
+                            }));
+                        }
                     }
                 }
 
@@ -2349,6 +2385,19 @@ namespace AvoidAGrabCutEasy
                     e.Result = bRes;
                 }
             }
+        }
+
+        private void _gc_ShowTHInfo(object? sender, string e)
+        {
+            if (!InvokeRequired)
+            {
+                this.lblTh.Text = e;
+            }
+            else
+                this.Invoke(new Action(() =>
+                {
+                    this.lblTh.Text = e;
+                }));
         }
 
         private void backgroundWorker1_ProgressChanged(object? sender, ProgressChangedEventArgs e)
@@ -3145,6 +3194,7 @@ namespace AvoidAGrabCutEasy
                     if (this.cbRectMode.Enabled && this._gc != null)
                     {
                         this._gc.ShowInfo -= _gc_ShowInfo;
+                        this._gc.ShowTHInfo -= _gc_ShowTHInfo;
                         this._gc.Dispose();
                         this._gc = null;
                     }
@@ -3361,6 +3411,7 @@ namespace AvoidAGrabCutEasy
                     };
 
                     this._gc.ShowInfo += _gc_ShowInfo;
+                    this._gc.ShowTHInfo += _gc_ShowTHInfo;
                 }
 
                 if (!skipInit)
@@ -5145,6 +5196,7 @@ namespace AvoidAGrabCutEasy
                     if (this.cbRectMode.Enabled && this._gc != null)
                     {
                         this._gc.ShowInfo -= _gc_ShowInfo;
+                        this._gc.ShowTHInfo -= _gc_ShowTHInfo;
                         this._gc.Dispose();
                         this._gc = null;
                     }
@@ -5397,6 +5449,7 @@ namespace AvoidAGrabCutEasy
                     };
 
                     this._gc.ShowInfo += _gc_ShowInfo;
+                    this._gc.ShowTHInfo += _gc_ShowTHInfo;
                 }
 
                 //now do the initialisation
@@ -9561,6 +9614,19 @@ namespace AvoidAGrabCutEasy
                 this.backgroundWorker4.DoWork += backgroundWorker4_DoWork;
                 this.backgroundWorker4.ProgressChanged += backgroundWorker4_ProgressChanged;
                 this.backgroundWorker4.RunWorkerCompleted += backgroundWorker4_RunWorkerCompleted;
+            }
+        }
+
+        private async void btnCmpLMap_Click(object sender, EventArgs e)
+        {
+            if (this._bmpBU != null)
+            {
+                this.lblLumMap.Text = "computing...";
+                LuminancMapOp lop = new LuminancMapOp();
+                using Bitmap bmp = new Bitmap(this._bmpBU);
+                float[,]? lMap = await lop.ComputeInvLuminanceMap(bmp);
+                this._iggLuminanceMap = lMap;
+                this.lblLumMap.Text = "done";
             }
         }
     }

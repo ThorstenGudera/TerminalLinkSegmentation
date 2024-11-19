@@ -80,7 +80,10 @@ namespace AvoidAGrabCutEasy
         public bool AssumeExpDist { get; internal set; }
         public List<Tuple<int, int, int, bool, List<List<Point>>>>? ScribbleSeq { get; internal set; }
 
+        public float[,]? IGGLuminanceMap { get; internal set; }
+
         public event EventHandler<string>? ShowInfo;
+        public event EventHandler<string>? ShowTHInfo;
 
         public GrabCutOp()
         {
@@ -658,6 +661,11 @@ namespace AvoidAGrabCutEasy
         private void OnShowInfo(string message)
         {
             ShowInfo?.Invoke(this, message);
+        }
+
+        private void OnShowTHInfo(string message)
+        {
+            ShowTHInfo?.Invoke(this, message);
         }
 
         private unsafe void InitGMMs()
@@ -1385,6 +1393,20 @@ namespace AvoidAGrabCutEasy
                 for (int j = 0; j < d.Length; j++)
                     d[j] *= this.ProbMult1;
 
+                //test with a lum_map, first application of idea, may change
+                //influence here is bigger than below
+                if (this.IGGLuminanceMap != null)
+                    for (int j = 0; j < d.Length; j++)
+                    {
+                        int x = vf[j].Item2 % w;
+                        int y = vf[j].Item2 / w;
+                        //first multiply all, factor and/or complete setting will assumably change
+                        d[j] *= this.IGGLuminanceMap[x, y] * 2.5f;
+                        //then multiply the low ones, factor and/or complete setting will assumably change
+                        if (d[j] < 0.5)
+                            d[j] *= this.IGGLuminanceMap[x, y] * 2f;
+                    }
+
                 IEnumerable<double> dTmp = d.Except(d.Where(a => a == 0));
                 double d1 = 0;
                 if (dTmp.Count() > 0)
@@ -1516,6 +1538,7 @@ namespace AvoidAGrabCutEasy
                                 {
                                     this.Threshold = th;
                                     OnShowInfo(this.Threshold.ToString());
+                                    OnShowTHInfo(this.Threshold.ToString());
                                     //temp
                                     //MessageBox.Show(this.Threshold.ToString() + "\n\nrel pos: " + cGC.ToString() + "\nrel amount: " + ga.ToString() +
                                     //    "\naddOne: " + addOne.ToString() + "\nsubOne: " + subOne.ToString() + "\nZeros: " + lIndx.ToString());
@@ -1530,6 +1553,18 @@ namespace AvoidAGrabCutEasy
                 }
                 #endregion //autoThreshold
                 //end test
+
+                //test with a lum_map, may change
+                //if (this.IGGLuminanceMap != null)
+                //    for (int j = 0; j < d.Length; j++)
+                //    {
+                //        int x = vf[j].Item2 % w;
+                //        int y = vf[j].Item2 / w;
+                //        d[j] *= this.IGGLuminanceMap[x, y];
+                //        //d2[j] *= (float)Math.Pow(this.IGGLuminanceMap[x, y], 0.1);
+                //        //if (d[j] < 0.5)
+                //        //    d2[j] *= this.IGGLuminanceMap[x, y] * 2f;
+                //    }
 
                 int[] z = new int[this.Mask.GetLength(0) * this.Mask.GetLength(1)];
 

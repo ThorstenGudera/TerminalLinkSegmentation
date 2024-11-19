@@ -31,6 +31,10 @@
             components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmAvoidAGrabCutEasy));
             panel1 = new Panel();
+            lblLumMap = new Label();
+            cbCompLumMap = new CheckBox();
+            btnCmpLMap = new Button();
+            lblTh = new Label();
             btnCropFromOrig = new Button();
             cbAutoCropFromOrig = new CheckBox();
             btnPreBlur = new Button();
@@ -189,6 +193,10 @@
             // 
             // panel1
             // 
+            panel1.Controls.Add(lblLumMap);
+            panel1.Controls.Add(cbCompLumMap);
+            panel1.Controls.Add(btnCmpLMap);
+            panel1.Controls.Add(lblTh);
             panel1.Controls.Add(btnCropFromOrig);
             panel1.Controls.Add(cbAutoCropFromOrig);
             panel1.Controls.Add(btnPreBlur);
@@ -286,6 +294,45 @@
             panel1.TabIndex = 0;
             panel1.MouseDoubleClick += panel1_MouseDoubleClick;
             panel1.MouseDown += panel1_MouseDown;
+            // 
+            // lblLumMap
+            // 
+            lblLumMap.AutoSize = true;
+            lblLumMap.Location = new Point(803, 162);
+            lblLumMap.Name = "lblLumMap";
+            lblLumMap.Size = new Size(19, 15);
+            lblLumMap.TabIndex = 734;
+            lblLumMap.Text = "    ";
+            // 
+            // cbCompLumMap
+            // 
+            cbCompLumMap.AutoSize = true;
+            cbCompLumMap.Location = new Point(598, 160);
+            cbCompLumMap.Name = "cbCompLumMap";
+            cbCompLumMap.Size = new Size(95, 19);
+            cbCompLumMap.TabIndex = 733;
+            cbCompLumMap.Text = "use LumMap";
+            cbCompLumMap.UseVisualStyleBackColor = true;
+            // 
+            // btnCmpLMap
+            // 
+            btnCmpLMap.Location = new Point(692, 157);
+            btnCmpLMap.Name = "btnCmpLMap";
+            btnCmpLMap.Size = new Size(105, 23);
+            btnCmpLMap.TabIndex = 732;
+            btnCmpLMap.Text = "compInvLMap";
+            btnCmpLMap.UseVisualStyleBackColor = true;
+            btnCmpLMap.Click += btnCmpLMap_Click;
+            // 
+            // lblTh
+            // 
+            lblTh.AutoSize = true;
+            lblTh.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            lblTh.Location = new Point(605, 130);
+            lblTh.Name = "lblTh";
+            lblTh.Size = new Size(19, 21);
+            lblTh.TabIndex = 731;
+            lblTh.Text = "...";
             // 
             // btnCropFromOrig
             // 
@@ -1874,5 +1921,9 @@
         private CheckBox cbAutoCropFromOrig;
         private Button btnPreBlur;
         internal System.ComponentModel.BackgroundWorker backgroundWorker4;
+        private Label lblLumMap;
+        private CheckBox cbCompLumMap;
+        private Button btnCmpLMap;
+        private Label lblTh;
     }
 }
