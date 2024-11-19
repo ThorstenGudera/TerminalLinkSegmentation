@@ -145,6 +145,7 @@ namespace AvoidAGrabCutEasy
         private frmPreBlurVals? _frm;
         private bool _frmValsChanged;
         private float[,]? _iggLuminanceMap;
+        private LumMapApplicationSettings? _lmas = new LumMapApplicationSettings() { Factor1 = 1.0f, Threshold = 0.5, Factor2 = 2.0f };
 
         public event EventHandler<string>? ShowInfo;
         //public event EventHandler<string> BoundaryError;
@@ -2092,7 +2093,10 @@ namespace AvoidAGrabCutEasy
                 if (this.cbCompLumMap.Checked)
                 {
                     if (this._iggLuminanceMap != null)
+                    {
                         this._gc.IGGLuminanceMap = this._iggLuminanceMap;
+                        this._gc.LumMapSettings = this._lmas;
+                    }
                     else
                     {
                         if (this._bmpBU != null)
@@ -2106,6 +2110,7 @@ namespace AvoidAGrabCutEasy
                             using Bitmap bmp = new Bitmap(this._bmpBU);
                             float[,]? lMap = lop.ComputeInvLuminanceMapSync(bmp);
                             this._iggLuminanceMap = this._gc.IGGLuminanceMap = lMap;
+                            this._gc.LumMapSettings = this._lmas;
                             this.Invoke(new Action(() =>
                             {
                                 this.toolStripStatusLabel4.Text = "LumMap done.";
@@ -9627,6 +9632,42 @@ namespace AvoidAGrabCutEasy
                 float[,]? lMap = await lop.ComputeInvLuminanceMap(bmp);
                 this._iggLuminanceMap = lMap;
                 this.lblLumMap.Text = "done";
+            }
+        }
+
+        private void btnLumMapSettings_Click(object sender, EventArgs e)
+        {
+            if (this._lmas != null)
+            {
+                using frmLumMapSettings frm = new();
+                frm.numF1.Value = (decimal)this._lmas.Factor1;
+                frm.numTh.Value = (decimal)this._lmas.Threshold;
+                frm.numF2.Value = (decimal)this._lmas.Factor2;
+                frm.numExp1.Value = (decimal)this._lmas.Exponent1;
+                frm.numExp2.Value = (decimal)this._lmas.Exponent2;
+                frm.numThMultiplier.Value = (decimal)-Math.Log10(this._lmas.ThMultiplier);
+
+                if (frm.ShowDialog() == DialogResult.OK)
+                {
+                    float f1 = (float)frm.numF1.Value;
+                    double th = (double)frm.numTh.Value;
+                    float f2 = (float)frm.numF2.Value;
+                    double e1 = (double)frm.numExp1.Value;
+                    double e2 = (double)frm.numExp2.Value;
+                    double m = Math.Pow(10, (double)-frm.numThMultiplier.Value);
+
+                    LumMapApplicationSettings lmas = new()
+                    {
+                        Factor1 = f1,
+                        Threshold = th,
+                        Factor2 = f2,
+                        Exponent1 = e1,
+                        Exponent2 = e2,
+                        ThMultiplier = m
+                    };
+
+                    this._lmas = lmas;
+                }
             }
         }
     }

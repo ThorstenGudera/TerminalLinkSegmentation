@@ -31,6 +31,7 @@
             components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmAvoidAGrabCutEasy));
             panel1 = new Panel();
+            btnLumMapSettings = new Button();
             lblLumMap = new Label();
             cbCompLumMap = new CheckBox();
             btnCmpLMap = new Button();
@@ -193,6 +194,7 @@
             // 
             // panel1
             // 
+            panel1.Controls.Add(btnLumMapSettings);
             panel1.Controls.Add(lblLumMap);
             panel1.Controls.Add(cbCompLumMap);
             panel1.Controls.Add(btnCmpLMap);
@@ -295,10 +297,20 @@
             panel1.MouseDoubleClick += panel1_MouseDoubleClick;
             panel1.MouseDown += panel1_MouseDown;
             // 
+            // btnLumMapSettings
+            // 
+            btnLumMapSettings.Location = new Point(803, 157);
+            btnLumMapSettings.Name = "btnLumMapSettings";
+            btnLumMapSettings.Size = new Size(57, 23);
+            btnLumMapSettings.TabIndex = 735;
+            btnLumMapSettings.Text = "settings";
+            btnLumMapSettings.UseVisualStyleBackColor = true;
+            btnLumMapSettings.Click += btnLumMapSettings_Click;
+            // 
             // lblLumMap
             // 
             lblLumMap.AutoSize = true;
-            lblLumMap.Location = new Point(803, 162);
+            lblLumMap.Location = new Point(693, 139);
             lblLumMap.Name = "lblLumMap";
             lblLumMap.Size = new Size(19, 15);
             lblLumMap.TabIndex = 734;
@@ -1925,5 +1937,6 @@
         private CheckBox cbCompLumMap;
         private Button btnCmpLMap;
         private Label lblTh;
+        private Button btnLumMapSettings;
     }
 }

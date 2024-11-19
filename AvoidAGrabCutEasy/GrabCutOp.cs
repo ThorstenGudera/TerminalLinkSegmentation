@@ -79,8 +79,8 @@ namespace AvoidAGrabCutEasy
         public bool kMInitRnd { get; internal set; } = false;
         public bool AssumeExpDist { get; internal set; }
         public List<Tuple<int, int, int, bool, List<List<Point>>>>? ScribbleSeq { get; internal set; }
-
         public float[,]? IGGLuminanceMap { get; internal set; }
+        internal LumMapApplicationSettings? LumMapSettings { get; set; }
 
         public event EventHandler<string>? ShowInfo;
         public event EventHandler<string>? ShowTHInfo;
@@ -1395,16 +1395,16 @@ namespace AvoidAGrabCutEasy
 
                 //test with a lum_map, first application of idea, may change
                 //influence here is bigger than below
-                if (this.IGGLuminanceMap != null)
+                if (this.IGGLuminanceMap != null && this.LumMapSettings != null)
                     for (int j = 0; j < d.Length; j++)
                     {
                         int x = vf[j].Item2 % w;
                         int y = vf[j].Item2 / w;
                         //first multiply all, factor and/or complete setting will assumably change
-                        d[j] *= this.IGGLuminanceMap[x, y] * 2.5f;
+                        d[j] *= Math.Pow(this.IGGLuminanceMap[x, y], this.LumMapSettings.Exponent1) * this.LumMapSettings.Factor1;
                         //then multiply the low ones, factor and/or complete setting will assumably change
-                        if (d[j] < 0.5)
-                            d[j] *= this.IGGLuminanceMap[x, y] * 2f;
+                        if (d[j] < this.LumMapSettings.Threshold * this.LumMapSettings.ThMultiplier)
+                            d[j] *= Math.Pow(this.IGGLuminanceMap[x, y], this.LumMapSettings.Exponent2) * this.LumMapSettings.Factor2;
                     }
 
                 IEnumerable<double> dTmp = d.Except(d.Where(a => a == 0));
