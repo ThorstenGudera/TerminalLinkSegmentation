@@ -162,6 +162,8 @@
             backgroundWorker6 = new System.ComponentModel.BackgroundWorker();
             backgroundWorker7 = new System.ComponentModel.BackgroundWorker();
             openFileDialog1 = new OpenFileDialog();
+            btnCreateTrimap = new Button();
+            pictureBox2 = new PictureBox();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
             splitContainer1.Panel2.SuspendLayout();
@@ -206,6 +208,7 @@
             ((System.ComponentModel.ISupportInitialize)numJRem2).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numJRem1).BeginInit();
             statusStrip1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)pictureBox2).BeginInit();
             SuspendLayout();
             // 
             // splitContainer1
@@ -268,7 +271,7 @@
             // 
             btnRedo.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             btnRedo.ForeColor = SystemColors.ControlText;
-            btnRedo.Location = new Point(116, 810);
+            btnRedo.Location = new Point(115, 810);
             btnRedo.Margin = new Padding(4, 3, 4, 3);
             btnRedo.Name = "btnRedo";
             btnRedo.Size = new Size(88, 27);
@@ -281,7 +284,7 @@
             // 
             btnUndo.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             btnUndo.ForeColor = SystemColors.ControlText;
-            btnUndo.Location = new Point(20, 810);
+            btnUndo.Location = new Point(19, 810);
             btnUndo.Margin = new Padding(4, 3, 4, 3);
             btnUndo.Name = "btnUndo";
             btnUndo.Size = new Size(88, 27);
@@ -303,7 +306,7 @@
             // 
             btnLoadBasePic.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             btnLoadBasePic.ForeColor = SystemColors.ControlText;
-            btnLoadBasePic.Location = new Point(88, 845);
+            btnLoadBasePic.Location = new Point(87, 845);
             btnLoadBasePic.Margin = new Padding(4, 3, 4, 3);
             btnLoadBasePic.Name = "btnLoadBasePic";
             btnLoadBasePic.Size = new Size(88, 27);
@@ -414,7 +417,7 @@
             cbBGColor.AutoSize = true;
             cbBGColor.Checked = true;
             cbBGColor.CheckState = CheckState.Checked;
-            cbBGColor.Location = new Point(182, 772);
+            cbBGColor.Location = new Point(181, 772);
             cbBGColor.Margin = new Padding(4, 3, 4, 3);
             cbBGColor.Name = "cbBGColor";
             cbBGColor.Size = new Size(67, 19);
@@ -427,7 +430,7 @@
             // 
             button10.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             button10.ForeColor = SystemColors.ControlText;
-            button10.Location = new Point(369, 810);
+            button10.Location = new Point(368, 810);
             button10.Margin = new Padding(4, 3, 4, 3);
             button10.Name = "button10";
             button10.Size = new Size(88, 27);
@@ -440,7 +443,7 @@
             // 
             button8.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             button8.ForeColor = SystemColors.ControlText;
-            button8.Location = new Point(274, 810);
+            button8.Location = new Point(273, 810);
             button8.Margin = new Padding(4, 3, 4, 3);
             button8.Name = "button8";
             button8.Size = new Size(88, 27);
@@ -454,7 +457,7 @@
             button2.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             button2.FlatStyle = FlatStyle.System;
             button2.ForeColor = SystemColors.ControlText;
-            button2.Location = new Point(369, 770);
+            button2.Location = new Point(368, 770);
             button2.Margin = new Padding(4, 3, 4, 3);
             button2.Name = "button2";
             button2.Size = new Size(88, 27);
@@ -467,7 +470,7 @@
             btnCancel.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             btnCancel.DialogResult = DialogResult.Cancel;
             btnCancel.ForeColor = SystemColors.ControlText;
-            btnCancel.Location = new Point(378, 845);
+            btnCancel.Location = new Point(377, 845);
             btnCancel.Margin = new Padding(4, 3, 4, 3);
             btnCancel.Name = "btnCancel";
             btnCancel.Size = new Size(88, 27);
@@ -480,7 +483,7 @@
             btnOK.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             btnOK.DialogResult = DialogResult.OK;
             btnOK.ForeColor = SystemColors.ControlText;
-            btnOK.Location = new Point(285, 845);
+            btnOK.Location = new Point(284, 845);
             btnOK.Margin = new Padding(4, 3, 4, 3);
             btnOK.Name = "btnOK";
             btnOK.Size = new Size(88, 27);
@@ -491,6 +494,8 @@
             // 
             // groupBox4
             // 
+            groupBox4.Controls.Add(btnCreateTrimap);
+            groupBox4.Controls.Add(pictureBox2);
             groupBox4.Controls.Add(pictureBox1);
             groupBox4.Controls.Add(cbRedrawInner);
             groupBox4.Controls.Add(cbEditTrimap);
@@ -550,7 +555,7 @@
             // pictureBox1
             // 
             pictureBox1.BorderStyle = BorderStyle.FixedSingle;
-            pictureBox1.Location = new Point(15, 141);
+            pictureBox1.Location = new Point(15, 134);
             pictureBox1.Name = "pictureBox1";
             pictureBox1.Size = new Size(59, 50);
             pictureBox1.SizeMode = PictureBoxSizeMode.Zoom;
@@ -564,7 +569,7 @@
             cbRedrawInner.Checked = true;
             cbRedrawInner.CheckState = CheckState.Checked;
             cbRedrawInner.Enabled = false;
-            cbRedrawInner.Location = new Point(243, 200);
+            cbRedrawInner.Location = new Point(243, 195);
             cbRedrawInner.Name = "cbRedrawInner";
             cbRedrawInner.Size = new Size(137, 19);
             cbRedrawInner.TabIndex = 686;
@@ -574,7 +579,7 @@
             // cbEditTrimap
             // 
             cbEditTrimap.AutoSize = true;
-            cbEditTrimap.Location = new Point(387, 200);
+            cbEditTrimap.Location = new Point(147, 195);
             cbEditTrimap.Margin = new Padding(4, 3, 4, 3);
             cbEditTrimap.Name = "cbEditTrimap";
             cbEditTrimap.Size = new Size(84, 19);
@@ -754,7 +759,7 @@
             groupBox5.Controls.Add(label13);
             groupBox5.Controls.Add(cbExpOutlProc);
             groupBox5.Controls.Add(label54);
-            groupBox5.Location = new Point(222, 50);
+            groupBox5.Location = new Point(222, 43);
             groupBox5.Margin = new Padding(4, 3, 4, 3);
             groupBox5.Name = "groupBox5";
             groupBox5.Padding = new Padding(4, 3, 4, 3);
@@ -952,7 +957,7 @@
             // label53
             // 
             label53.AutoSize = true;
-            label53.Location = new Point(334, 30);
+            label53.Location = new Point(334, 23);
             label53.Margin = new Padding(4, 0, 4, 0);
             label53.Name = "label53";
             label53.Size = new Size(37, 15);
@@ -963,7 +968,7 @@
             // 
             cmbBlendType.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbBlendType.FormattingEnabled = true;
-            cmbBlendType.Location = new Point(379, 25);
+            cmbBlendType.Location = new Point(379, 18);
             cmbBlendType.Margin = new Padding(4, 3, 4, 3);
             cmbBlendType.Name = "cmbBlendType";
             cmbBlendType.Size = new Size(87, 23);
@@ -1051,7 +1056,7 @@
             // label49
             // 
             label49.AutoSize = true;
-            label49.Location = new Point(14, 118);
+            label49.Location = new Point(14, 111);
             label49.Margin = new Padding(4, 0, 4, 0);
             label49.Name = "label49";
             label49.Size = new Size(88, 15);
@@ -1061,7 +1066,7 @@
             // label48
             // 
             label48.AutoSize = true;
-            label48.Location = new Point(14, 88);
+            label48.Location = new Point(14, 81);
             label48.Margin = new Padding(4, 0, 4, 0);
             label48.Name = "label48";
             label48.Size = new Size(74, 15);
@@ -1071,7 +1076,7 @@
             // label47
             // 
             label47.AutoSize = true;
-            label47.Location = new Point(14, 57);
+            label47.Location = new Point(14, 50);
             label47.Margin = new Padding(4, 0, 4, 0);
             label47.Name = "label47";
             label47.Size = new Size(85, 15);
@@ -1093,7 +1098,7 @@
             // 
             // numAlphaStart
             // 
-            numAlphaStart.Location = new Point(152, 115);
+            numAlphaStart.Location = new Point(152, 108);
             numAlphaStart.Margin = new Padding(4, 3, 4, 3);
             numAlphaStart.Maximum = new decimal(new int[] { 255, 0, 0, 0 });
             numAlphaStart.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
@@ -1105,7 +1110,7 @@
             // label45
             // 
             label45.AutoSize = true;
-            label45.Location = new Point(14, 27);
+            label45.Location = new Point(14, 20);
             label45.Margin = new Padding(4, 0, 4, 0);
             label45.Name = "label45";
             label45.Size = new Size(128, 15);
@@ -1158,7 +1163,7 @@
             // 
             // numColDistDist
             // 
-            numColDistDist.Location = new Point(152, 85);
+            numColDistDist.Location = new Point(152, 78);
             numColDistDist.Margin = new Padding(4, 3, 4, 3);
             numColDistDist.Maximum = new decimal(new int[] { 9999, 0, 0, 0 });
             numColDistDist.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
@@ -1181,7 +1186,7 @@
             // 
             // numNormalDist
             // 
-            numNormalDist.Location = new Point(152, 54);
+            numNormalDist.Location = new Point(152, 47);
             numNormalDist.Margin = new Padding(4, 3, 4, 3);
             numNormalDist.Maximum = new decimal(new int[] { 9999, 0, 0, 0 });
             numNormalDist.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
@@ -1204,7 +1209,7 @@
             // 
             // numBoundOuter
             // 
-            numBoundOuter.Location = new Point(152, 24);
+            numBoundOuter.Location = new Point(152, 17);
             numBoundOuter.Margin = new Padding(4, 3, 4, 3);
             numBoundOuter.Maximum = new decimal(new int[] { 127, 0, 0, 0 });
             numBoundOuter.Name = "numBoundOuter";
@@ -1215,7 +1220,7 @@
             // 
             // numBoundInner
             // 
-            numBoundInner.Location = new Point(260, 24);
+            numBoundInner.Location = new Point(260, 17);
             numBoundInner.Margin = new Padding(4, 3, 4, 3);
             numBoundInner.Maximum = new decimal(new int[] { 127, 0, 0, 0 });
             numBoundInner.Name = "numBoundInner";
@@ -1227,7 +1232,7 @@
             // label46
             // 
             label46.AutoSize = true;
-            label46.Location = new Point(218, 29);
+            label46.Location = new Point(218, 22);
             label46.Margin = new Padding(4, 0, 4, 0);
             label46.Name = "label46";
             label46.Size = new Size(34, 15);
@@ -1749,6 +1754,29 @@
             openFileDialog1.FileName = "openFileDialog1";
             openFileDialog1.Filter = "Images - (*.bmp;*.jpg;*.jpeg;*.jfif;*.png)|*.bmp;*.jpg;*.jpeg;*.jfif;*.png";
             // 
+            // btnCreateTrimap
+            // 
+            btnCreateTrimap.ForeColor = SystemColors.ControlText;
+            btnCreateTrimap.Location = new Point(381, 190);
+            btnCreateTrimap.Margin = new Padding(4, 3, 4, 3);
+            btnCreateTrimap.Name = "btnCreateTrimap";
+            btnCreateTrimap.Size = new Size(88, 27);
+            btnCreateTrimap.TabIndex = 688;
+            btnCreateTrimap.Text = "create Trimap";
+            btnCreateTrimap.UseVisualStyleBackColor = true;
+            btnCreateTrimap.Click += btnCreateTrimap_Click;
+            // 
+            // pictureBox2
+            // 
+            pictureBox2.BorderStyle = BorderStyle.FixedSingle;
+            pictureBox2.Location = new Point(85, 135);
+            pictureBox2.Name = "pictureBox2";
+            pictureBox2.Size = new Size(59, 50);
+            pictureBox2.SizeMode = PictureBoxSizeMode.Zoom;
+            pictureBox2.TabIndex = 687;
+            pictureBox2.TabStop = false;
+            pictureBox2.DoubleClick += pictureBox2_DoubleClick;
+            // 
             // frmProcOutline
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -1813,6 +1841,7 @@
             ((System.ComponentModel.ISupportInitialize)numJRem1).EndInit();
             statusStrip1.ResumeLayout(false);
             statusStrip1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)pictureBox2).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -1951,5 +1980,7 @@
         private ToolStripDropDownButton toolStripDropDownButton1;
         private Button btnRedo;
         private Button btnUndo;
+        private Button btnCreateTrimap;
+        private PictureBox pictureBox2;
     }
 }
