@@ -28,6 +28,7 @@ namespace AvoidAGrabCutEasy.ProcOutline
         private Dictionary<int, List<Tuple<List<Point>, int>>>? _allPoints;
         private int _currentDraw;
         private List<int>? _lastDraw;
+        private bool _dontDoZoom;
 
         public Bitmap? FBitmap
         {
@@ -515,7 +516,7 @@ namespace AvoidAGrabCutEasy.ProcOutline
 
         private void cmbZoom_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (this.Visible && this.helplineRulerCtrl1.Bmp != null /*&& !this._dontDoZoom*/)
+            if (this.Visible && this.helplineRulerCtrl1.Bmp != null && !this._dontDoZoom)
             {
                 this.helplineRulerCtrl1.Enabled = false;
                 this.helplineRulerCtrl1.Refresh();
@@ -606,6 +607,22 @@ namespace AvoidAGrabCutEasy.ProcOutline
 
                 this.SetBitmap(this.helplineRulerCtrl1.Bmp, bmp, this.helplineRulerCtrl1, "Bmp");
             }
+        }
+
+        private void helplineRulerCtrl1_DBPanelDblClicked(object sender, HelplineRulerControl.ZoomEventArgs e)
+        {
+            this._dontDoZoom = true;
+
+            if (e.Zoom == 1.0F)
+                this.cmbZoom.SelectedIndex = 2;
+            else if (e.ZoomWidth)
+                this.cmbZoom.SelectedIndex = 3;
+            else
+                this.cmbZoom.SelectedIndex = 4;
+
+            this.helplineRulerCtrl1.dbPanel1.Invalidate();
+
+            this._dontDoZoom = false;
         }
     }
 }

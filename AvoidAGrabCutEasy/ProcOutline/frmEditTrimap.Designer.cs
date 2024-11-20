@@ -32,6 +32,10 @@
             splitContainer1 = new SplitContainer();
             splitContainer2 = new SplitContainer();
             helplineRulerCtrl1 = new HelplineRulerControl.HelplineRulerCtrl();
+            label16 = new Label();
+            btnLoadBasePic = new Button();
+            numError = new NumericUpDown();
+            label54 = new Label();
             cbDraw = new CheckBox();
             label1 = new Label();
             cmbCurrentColor = new ComboBox();
@@ -53,10 +57,6 @@
             toolStripStatusLabel4 = new ToolStripStatusLabel();
             saveFileDialog1 = new SaveFileDialog();
             toolTip1 = new ToolTip(components);
-            label16 = new Label();
-            btnLoadBasePic = new Button();
-            numError = new NumericUpDown();
-            label54 = new Label();
             openFileDialog1 = new OpenFileDialog();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
@@ -66,9 +66,9 @@
             splitContainer2.Panel1.SuspendLayout();
             splitContainer2.Panel2.SuspendLayout();
             splitContainer2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)numError).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numWH).BeginInit();
             statusStrip1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)numError).BeginInit();
             SuspendLayout();
             // 
             // splitContainer1
@@ -124,7 +124,7 @@
             splitContainer2.Panel2.Controls.Add(button8);
             splitContainer2.Panel2.Controls.Add(button2);
             splitContainer2.Size = new Size(1386, 862);
-            splitContainer2.SplitterDistance = 1088;
+            splitContainer2.SplitterDistance = 1087;
             splitContainer2.SplitterWidth = 5;
             splitContainer2.TabIndex = 0;
             // 
@@ -144,10 +144,58 @@
             helplineRulerCtrl1.MoveHelpLinesOnResize = false;
             helplineRulerCtrl1.Name = "helplineRulerCtrl1";
             helplineRulerCtrl1.SetZoomOnlyByMethodCall = false;
-            helplineRulerCtrl1.Size = new Size(1088, 862);
+            helplineRulerCtrl1.Size = new Size(1087, 862);
             helplineRulerCtrl1.TabIndex = 0;
             helplineRulerCtrl1.Zoom = 1F;
             helplineRulerCtrl1.ZoomSetManually = false;
+            helplineRulerCtrl1.DBPanelDblClicked += helplineRulerCtrl1_DBPanelDblClicked;
+            // 
+            // label16
+            // 
+            label16.AutoSize = true;
+            label16.Location = new Point(49, 168);
+            label16.Name = "label16";
+            label16.Size = new Size(68, 15);
+            label16.TabIndex = 673;
+            label16.Text = "load trimap";
+            // 
+            // btnLoadBasePic
+            // 
+            btnLoadBasePic.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            btnLoadBasePic.ForeColor = SystemColors.ControlText;
+            btnLoadBasePic.Location = new Point(156, 162);
+            btnLoadBasePic.Margin = new Padding(4, 3, 4, 3);
+            btnLoadBasePic.Name = "btnLoadBasePic";
+            btnLoadBasePic.Size = new Size(88, 27);
+            btnLoadBasePic.TabIndex = 672;
+            btnLoadBasePic.Text = "Load";
+            btnLoadBasePic.UseVisualStyleBackColor = true;
+            btnLoadBasePic.Click += btnLoadBasePic_Click;
+            // 
+            // numError
+            // 
+            numError.DecimalPlaces = 4;
+            numError.Increment = new decimal(new int[] { 1, 0, 0, 65536 });
+            numError.Location = new Point(123, 677);
+            numError.Margin = new Padding(4, 3, 4, 3);
+            numError.Maximum = new decimal(new int[] { 1, 0, 0, 0 });
+            numError.Minimum = new decimal(new int[] { 1, 0, 0, 262144 });
+            numError.Name = "numError";
+            numError.Size = new Size(70, 23);
+            numError.TabIndex = 670;
+            numError.Value = new decimal(new int[] { 1, 0, 0, 131072 });
+            numError.Visible = false;
+            // 
+            // label54
+            // 
+            label54.AutoSize = true;
+            label54.Location = new Point(71, 679);
+            label54.Margin = new Padding(4, 0, 4, 0);
+            label54.Name = "label54";
+            label54.Size = new Size(32, 15);
+            label54.TabIndex = 671;
+            label54.Text = "Error";
+            label54.Visible = false;
             // 
             // cbDraw
             // 
@@ -358,53 +406,6 @@
             saveFileDialog1.FileName = "Bild1.png";
             saveFileDialog1.Filter = "Png-Images (*.png)|*.png";
             // 
-            // label16
-            // 
-            label16.AutoSize = true;
-            label16.Location = new Point(49, 168);
-            label16.Name = "label16";
-            label16.Size = new Size(68, 15);
-            label16.TabIndex = 673;
-            label16.Text = "load trimap";
-            // 
-            // btnLoadBasePic
-            // 
-            btnLoadBasePic.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            btnLoadBasePic.ForeColor = SystemColors.ControlText;
-            btnLoadBasePic.Location = new Point(156, 162);
-            btnLoadBasePic.Margin = new Padding(4, 3, 4, 3);
-            btnLoadBasePic.Name = "btnLoadBasePic";
-            btnLoadBasePic.Size = new Size(88, 27);
-            btnLoadBasePic.TabIndex = 672;
-            btnLoadBasePic.Text = "Load";
-            btnLoadBasePic.UseVisualStyleBackColor = true;
-            btnLoadBasePic.Click += btnLoadBasePic_Click;
-            // 
-            // numError
-            // 
-            numError.DecimalPlaces = 4;
-            numError.Increment = new decimal(new int[] { 1, 0, 0, 65536 });
-            numError.Location = new Point(123, 677);
-            numError.Margin = new Padding(4, 3, 4, 3);
-            numError.Maximum = new decimal(new int[] { 1, 0, 0, 0 });
-            numError.Minimum = new decimal(new int[] { 1, 0, 0, 262144 });
-            numError.Name = "numError";
-            numError.Size = new Size(70, 23);
-            numError.TabIndex = 670;
-            numError.Value = new decimal(new int[] { 1, 0, 0, 131072 });
-            numError.Visible = false;
-            // 
-            // label54
-            // 
-            label54.AutoSize = true;
-            label54.Location = new Point(71, 679);
-            label54.Margin = new Padding(4, 0, 4, 0);
-            label54.Name = "label54";
-            label54.Size = new Size(32, 15);
-            label54.TabIndex = 671;
-            label54.Text = "Error";
-            label54.Visible = false;
-            // 
             // openFileDialog1
             // 
             openFileDialog1.FileName = "openFileDialog1";
@@ -431,10 +432,10 @@
             splitContainer2.Panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer2).EndInit();
             splitContainer2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)numError).EndInit();
             ((System.ComponentModel.ISupportInitialize)numWH).EndInit();
             statusStrip1.ResumeLayout(false);
             statusStrip1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)numError).EndInit();
             ResumeLayout(false);
         }
 
