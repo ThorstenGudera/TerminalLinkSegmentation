@@ -29,9 +29,9 @@ namespace AvoidAGrabCutEasy.ProcOutline
         private int _currentDraw;
         private List<int>? _lastDraw;
 
-        public Bitmap? FBitmap 
-        { 
-            get { return this.helplineRulerCtrl1.Bmp; } 
+        public Bitmap? FBitmap
+        {
+            get { return this.helplineRulerCtrl1.Bmp; }
         }
 
         public frmEditTrimap(Bitmap trWork, Bitmap orig, double factor)
@@ -427,10 +427,10 @@ namespace AvoidAGrabCutEasy.ProcOutline
                                 {
                                     using (SolidBrush sb = new SolidBrush(c))
                                         gx.FillRectangle(sb, new Rectangle(
-                                            (int)((int)(pt.X - ll[i].Item2 / 2) ),
-                                            (int)((int)(pt.Y - ll[i].Item2 / 2) ),
-                                            (int)(ll[i].Item2 ),
-                                            (int)(ll[i].Item2 )));
+                                            (int)((int)(pt.X - ll[i].Item2 / 2)),
+                                            (int)((int)(pt.Y - ll[i].Item2 / 2)),
+                                            (int)(ll[i].Item2),
+                                            (int)(ll[i].Item2)));
                                 }
                             }
                             else
@@ -438,10 +438,10 @@ namespace AvoidAGrabCutEasy.ProcOutline
                                 Point pt = ll[i].Item1[0];
                                 using (SolidBrush sb = new SolidBrush(c))
                                     gx.FillRectangle(sb, new Rectangle(
-                                        (int)((int)(pt.X - ll[i].Item2 / 2) ),
-                                        (int)((int)(pt.Y - ll[i].Item2 / 2) ),
-                                        (int)(ll[i].Item2 ),
-                                        (int)(ll[i].Item2 )));
+                                        (int)((int)(pt.X - ll[i].Item2 / 2)),
+                                        (int)((int)(pt.Y - ll[i].Item2 / 2)),
+                                        (int)(ll[i].Item2),
+                                        (int)(ll[i].Item2)));
                             }
                         }
                     }
@@ -556,10 +556,10 @@ namespace AvoidAGrabCutEasy.ProcOutline
             if (this._allPoints == null)
                 this._allPoints = new Dictionary<int, List<Tuple<List<Point>, int>>>();
 
-            if (this._allPoints.Count > 0 && this._lastDraw  != null && this._lastDraw.Count > 0 && this._allPoints.ContainsKey(this._lastDraw[this._lastDraw.Count - 1]) && this._allPoints[this._lastDraw[this._lastDraw.Count - 1]].Count > 0)
+            if (this._allPoints.Count > 0 && this._lastDraw != null && this._lastDraw.Count > 0 && this._allPoints.ContainsKey(this._lastDraw[this._lastDraw.Count - 1]) && this._allPoints[this._lastDraw[this._lastDraw.Count - 1]].Count > 0)
                 this._allPoints[this._lastDraw[this._lastDraw.Count - 1]].RemoveAt(this._allPoints[this._lastDraw[this._lastDraw.Count - 1]].Count - 1);
 
-            if (this._lastDraw  != null && this._lastDraw.Count > 0 && this._pathList.ContainsKey(this._lastDraw[this._lastDraw.Count - 1]))
+            if (this._lastDraw != null && this._lastDraw.Count > 0 && this._pathList.ContainsKey(this._lastDraw[this._lastDraw.Count - 1]))
             {
                 GraphicsPath gp = this._pathList[this._lastDraw[this._lastDraw.Count - 1]];
                 gp.Reset();
@@ -585,6 +585,27 @@ namespace AvoidAGrabCutEasy.ProcOutline
         private void btnOK_Click(object sender, EventArgs e)
         {
             this.DrawToBmp();
+        }
+
+        private void btnLoadBasePic_Click(object sender, EventArgs e)
+        {
+            if (this.openFileDialog1.ShowDialog() == DialogResult.OK && this.helplineRulerCtrl1.Bmp != null)
+            {
+                Bitmap? bmp = null;
+                using Image img = Image.FromFile(this.openFileDialog1.FileName);
+                //if(img.Width >= this.helplineRulerCtrl1.Bmp.Width && img.Height >= this.helplineRulerCtrl1.Bmp.Height)
+                if (img.Width == this.helplineRulerCtrl1.Bmp.Width && img.Height == this.helplineRulerCtrl1.Bmp.Height)
+                    bmp = new Bitmap(img);
+                else
+                {
+                    bmp = new Bitmap(this.helplineRulerCtrl1.Bmp.Width, this.helplineRulerCtrl1.Bmp.Height);
+                    using Graphics gx = Graphics.FromImage(bmp);
+                    gx.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                    gx.DrawImage(img, 0, 0, bmp.Width, bmp.Height);
+                }
+
+                this.SetBitmap(this.helplineRulerCtrl1.Bmp, bmp, this.helplineRulerCtrl1, "Bmp");
+            }
         }
     }
 }

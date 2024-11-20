@@ -28,357 +28,414 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
-            this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
-            this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
-            this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
-            this.toolStripProgressBar1 = new System.Windows.Forms.ToolStripProgressBar();
-            this.toolStripStatusLabel4 = new System.Windows.Forms.ToolStripStatusLabel();
-            this.splitContainer2 = new System.Windows.Forms.SplitContainer();
-            this.helplineRulerCtrl1 = new HelplineRulerControl.HelplineRulerCtrl();
-            this.Label20 = new System.Windows.Forms.Label();
-            this.cmbZoom = new System.Windows.Forms.ComboBox();
-            this.cbBGColor = new System.Windows.Forms.CheckBox();
-            this.button8 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
-            this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
-            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.btnCancel = new System.Windows.Forms.Button();
-            this.btnOK = new System.Windows.Forms.Button();
-            this.cbImgOverlay = new System.Windows.Forms.CheckBox();
-            this.btnRemStroke = new System.Windows.Forms.Button();
-            this.label6 = new System.Windows.Forms.Label();
-            this.numWH = new System.Windows.Forms.NumericUpDown();
-            this.cmbCurrentColor = new System.Windows.Forms.ComboBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.cbDraw = new System.Windows.Forms.CheckBox();
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
-            this.splitContainer1.Panel1.SuspendLayout();
-            this.splitContainer1.Panel2.SuspendLayout();
-            this.splitContainer1.SuspendLayout();
-            this.statusStrip1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).BeginInit();
-            this.splitContainer2.Panel1.SuspendLayout();
-            this.splitContainer2.Panel2.SuspendLayout();
-            this.splitContainer2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numWH)).BeginInit();
-            this.SuspendLayout();
+            components = new System.ComponentModel.Container();
+            splitContainer1 = new SplitContainer();
+            splitContainer2 = new SplitContainer();
+            helplineRulerCtrl1 = new HelplineRulerControl.HelplineRulerCtrl();
+            cbDraw = new CheckBox();
+            label1 = new Label();
+            cmbCurrentColor = new ComboBox();
+            btnRemStroke = new Button();
+            label6 = new Label();
+            numWH = new NumericUpDown();
+            cbImgOverlay = new CheckBox();
+            Label20 = new Label();
+            cmbZoom = new ComboBox();
+            cbBGColor = new CheckBox();
+            button8 = new Button();
+            button2 = new Button();
+            btnCancel = new Button();
+            btnOK = new Button();
+            statusStrip1 = new StatusStrip();
+            toolStripStatusLabel1 = new ToolStripStatusLabel();
+            toolStripStatusLabel2 = new ToolStripStatusLabel();
+            toolStripProgressBar1 = new ToolStripProgressBar();
+            toolStripStatusLabel4 = new ToolStripStatusLabel();
+            saveFileDialog1 = new SaveFileDialog();
+            toolTip1 = new ToolTip(components);
+            label16 = new Label();
+            btnLoadBasePic = new Button();
+            numError = new NumericUpDown();
+            label54 = new Label();
+            openFileDialog1 = new OpenFileDialog();
+            ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
+            splitContainer1.Panel1.SuspendLayout();
+            splitContainer1.Panel2.SuspendLayout();
+            splitContainer1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)splitContainer2).BeginInit();
+            splitContainer2.Panel1.SuspendLayout();
+            splitContainer2.Panel2.SuspendLayout();
+            splitContainer2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)numWH).BeginInit();
+            statusStrip1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)numError).BeginInit();
+            SuspendLayout();
             // 
             // splitContainer1
             // 
-            this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainer1.Location = new System.Drawing.Point(0, 0);
-            this.splitContainer1.Name = "splitContainer1";
-            this.splitContainer1.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            splitContainer1.Dock = DockStyle.Fill;
+            splitContainer1.Location = new Point(0, 0);
+            splitContainer1.Margin = new Padding(4, 3, 4, 3);
+            splitContainer1.Name = "splitContainer1";
+            splitContainer1.Orientation = Orientation.Horizontal;
             // 
             // splitContainer1.Panel1
             // 
-            this.splitContainer1.Panel1.Controls.Add(this.splitContainer2);
+            splitContainer1.Panel1.Controls.Add(splitContainer2);
             // 
             // splitContainer1.Panel2
             // 
-            this.splitContainer1.Panel2.Controls.Add(this.btnCancel);
-            this.splitContainer1.Panel2.Controls.Add(this.btnOK);
-            this.splitContainer1.Panel2.Controls.Add(this.statusStrip1);
-            this.splitContainer1.Size = new System.Drawing.Size(1188, 850);
-            this.splitContainer1.SplitterDistance = 747;
-            this.splitContainer1.TabIndex = 0;
-            // 
-            // statusStrip1
-            // 
-            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripStatusLabel1,
-            this.toolStripStatusLabel2,
-            this.toolStripProgressBar1,
-            this.toolStripStatusLabel4});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 60);
-            this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(1188, 39);
-            this.statusStrip1.TabIndex = 2;
-            this.statusStrip1.Text = "statusStrip1";
-            // 
-            // toolStripStatusLabel1
-            // 
-            this.toolStripStatusLabel1.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top) 
-            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Right) 
-            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
-            this.toolStripStatusLabel1.Font = new System.Drawing.Font("Segoe UI", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            this.toolStripStatusLabel1.Size = new System.Drawing.Size(41, 34);
-            this.toolStripStatusLabel1.Text = "    ";
-            // 
-            // toolStripStatusLabel2
-            // 
-            this.toolStripStatusLabel2.AutoSize = false;
-            this.toolStripStatusLabel2.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top) 
-            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Right) 
-            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
-            this.toolStripStatusLabel2.Font = new System.Drawing.Font("Segoe UI", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.toolStripStatusLabel2.Name = "toolStripStatusLabel2";
-            this.toolStripStatusLabel2.Size = new System.Drawing.Size(100, 34);
-            // 
-            // toolStripProgressBar1
-            // 
-            this.toolStripProgressBar1.Name = "toolStripProgressBar1";
-            this.toolStripProgressBar1.Size = new System.Drawing.Size(400, 33);
-            // 
-            // toolStripStatusLabel4
-            // 
-            this.toolStripStatusLabel4.Font = new System.Drawing.Font("Segoe UI", 15.75F);
-            this.toolStripStatusLabel4.Name = "toolStripStatusLabel4";
-            this.toolStripStatusLabel4.Size = new System.Drawing.Size(37, 34);
-            this.toolStripStatusLabel4.Text = "    ";
+            splitContainer1.Panel2.Controls.Add(btnCancel);
+            splitContainer1.Panel2.Controls.Add(btnOK);
+            splitContainer1.Panel2.Controls.Add(statusStrip1);
+            splitContainer1.Size = new Size(1386, 981);
+            splitContainer1.SplitterDistance = 862;
+            splitContainer1.SplitterWidth = 5;
+            splitContainer1.TabIndex = 0;
             // 
             // splitContainer2
             // 
-            this.splitContainer2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainer2.FixedPanel = System.Windows.Forms.FixedPanel.Panel2;
-            this.splitContainer2.Location = new System.Drawing.Point(0, 0);
-            this.splitContainer2.Name = "splitContainer2";
+            splitContainer2.Dock = DockStyle.Fill;
+            splitContainer2.FixedPanel = FixedPanel.Panel2;
+            splitContainer2.Location = new Point(0, 0);
+            splitContainer2.Margin = new Padding(4, 3, 4, 3);
+            splitContainer2.Name = "splitContainer2";
             // 
             // splitContainer2.Panel1
             // 
-            this.splitContainer2.Panel1.Controls.Add(this.helplineRulerCtrl1);
+            splitContainer2.Panel1.Controls.Add(helplineRulerCtrl1);
             // 
             // splitContainer2.Panel2
             // 
-            this.splitContainer2.Panel2.Controls.Add(this.cbDraw);
-            this.splitContainer2.Panel2.Controls.Add(this.label1);
-            this.splitContainer2.Panel2.Controls.Add(this.cmbCurrentColor);
-            this.splitContainer2.Panel2.Controls.Add(this.btnRemStroke);
-            this.splitContainer2.Panel2.Controls.Add(this.label6);
-            this.splitContainer2.Panel2.Controls.Add(this.numWH);
-            this.splitContainer2.Panel2.Controls.Add(this.cbImgOverlay);
-            this.splitContainer2.Panel2.Controls.Add(this.Label20);
-            this.splitContainer2.Panel2.Controls.Add(this.cmbZoom);
-            this.splitContainer2.Panel2.Controls.Add(this.cbBGColor);
-            this.splitContainer2.Panel2.Controls.Add(this.button8);
-            this.splitContainer2.Panel2.Controls.Add(this.button2);
-            this.splitContainer2.Size = new System.Drawing.Size(1188, 747);
-            this.splitContainer2.SplitterDistance = 933;
-            this.splitContainer2.TabIndex = 0;
+            splitContainer2.Panel2.Controls.Add(label16);
+            splitContainer2.Panel2.Controls.Add(btnLoadBasePic);
+            splitContainer2.Panel2.Controls.Add(numError);
+            splitContainer2.Panel2.Controls.Add(label54);
+            splitContainer2.Panel2.Controls.Add(cbDraw);
+            splitContainer2.Panel2.Controls.Add(label1);
+            splitContainer2.Panel2.Controls.Add(cmbCurrentColor);
+            splitContainer2.Panel2.Controls.Add(btnRemStroke);
+            splitContainer2.Panel2.Controls.Add(label6);
+            splitContainer2.Panel2.Controls.Add(numWH);
+            splitContainer2.Panel2.Controls.Add(cbImgOverlay);
+            splitContainer2.Panel2.Controls.Add(Label20);
+            splitContainer2.Panel2.Controls.Add(cmbZoom);
+            splitContainer2.Panel2.Controls.Add(cbBGColor);
+            splitContainer2.Panel2.Controls.Add(button8);
+            splitContainer2.Panel2.Controls.Add(button2);
+            splitContainer2.Size = new Size(1386, 862);
+            splitContainer2.SplitterDistance = 1088;
+            splitContainer2.SplitterWidth = 5;
+            splitContainer2.TabIndex = 0;
             // 
             // helplineRulerCtrl1
             // 
-            this.helplineRulerCtrl1.Bmp = null;
-            this.helplineRulerCtrl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.helplineRulerCtrl1.DontDoLayout = false;
-            this.helplineRulerCtrl1.DontHandleDoubleClick = false;
-            this.helplineRulerCtrl1.DontPaintBaseImg = false;
-            this.helplineRulerCtrl1.DontProcDoubleClick = false;
-            this.helplineRulerCtrl1.IgnoreZoom = false;
-            this.helplineRulerCtrl1.Location = new System.Drawing.Point(0, 0);
-            this.helplineRulerCtrl1.MoveHelpLinesOnResize = false;
-            this.helplineRulerCtrl1.Name = "helplineRulerCtrl1";
-            this.helplineRulerCtrl1.SetZoomOnlyByMethodCall = false;
-            this.helplineRulerCtrl1.Size = new System.Drawing.Size(933, 747);
-            this.helplineRulerCtrl1.TabIndex = 0;
-            this.helplineRulerCtrl1.Zoom = 1F;
-            this.helplineRulerCtrl1.ZoomSetManually = false;
-            // 
-            // Label20
-            // 
-            this.Label20.AutoSize = true;
-            this.Label20.Location = new System.Drawing.Point(46, 713);
-            this.Label20.Name = "Label20";
-            this.Label20.Size = new System.Drawing.Size(53, 13);
-            this.Label20.TabIndex = 655;
-            this.Label20.Text = "Set Zoom";
-            // 
-            // cmbZoom
-            // 
-            this.cmbZoom.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbZoom.FormattingEnabled = true;
-            this.cmbZoom.Items.AddRange(new object[] {
-            "4",
-            "2",
-            "1",
-            "Fit_Width",
-            "Fit"});
-            this.cmbZoom.Location = new System.Drawing.Point(105, 710);
-            this.cmbZoom.Name = "cmbZoom";
-            this.cmbZoom.Size = new System.Drawing.Size(75, 21);
-            this.cmbZoom.TabIndex = 654;
-            this.cmbZoom.SelectedIndexChanged += new System.EventHandler(this.cmbZoom_SelectedIndexChanged);
-            // 
-            // cbBGColor
-            // 
-            this.cbBGColor.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.cbBGColor.AutoSize = true;
-            this.cbBGColor.Checked = true;
-            this.cbBGColor.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbBGColor.Location = new System.Drawing.Point(48, 641);
-            this.cbBGColor.Name = "cbBGColor";
-            this.cbBGColor.Size = new System.Drawing.Size(65, 17);
-            this.cbBGColor.TabIndex = 653;
-            this.cbBGColor.Text = "BG dark";
-            this.cbBGColor.UseVisualStyleBackColor = true;
-            this.cbBGColor.CheckedChanged += new System.EventHandler(this.cbBGColor_CheckedChanged);
-            // 
-            // button8
-            // 
-            this.button8.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button8.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.button8.Location = new System.Drawing.Point(48, 672);
-            this.button8.Name = "button8";
-            this.button8.Size = new System.Drawing.Size(75, 23);
-            this.button8.TabIndex = 652;
-            this.button8.Text = "Reload";
-            this.button8.UseVisualStyleBackColor = true;
-            this.button8.Click += new System.EventHandler(this.button8_Click);
-            // 
-            // button2
-            // 
-            this.button2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button2.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.button2.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.button2.Location = new System.Drawing.Point(129, 637);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(75, 23);
-            this.button2.TabIndex = 651;
-            this.button2.Text = "Save";
-            this.button2.Click += new System.EventHandler(this.button2_Click);
-            // 
-            // saveFileDialog1
-            // 
-            this.saveFileDialog1.FileName = "Bild1.png";
-            this.saveFileDialog1.Filter = "Png-Images (*.png)|*.png";
-            // 
-            // btnCancel
-            // 
-            this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancel.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.btnCancel.Location = new System.Drawing.Point(1101, 22);
-            this.btnCancel.Name = "btnCancel";
-            this.btnCancel.Size = new System.Drawing.Size(75, 23);
-            this.btnCancel.TabIndex = 656;
-            this.btnCancel.Text = "Cancel";
-            this.btnCancel.UseVisualStyleBackColor = true;
-            // 
-            // btnOK
-            // 
-            this.btnOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnOK.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.btnOK.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.btnOK.Location = new System.Drawing.Point(1021, 22);
-            this.btnOK.Name = "btnOK";
-            this.btnOK.Size = new System.Drawing.Size(75, 23);
-            this.btnOK.TabIndex = 657;
-            this.btnOK.Text = "OK";
-            this.btnOK.UseVisualStyleBackColor = true;
-            this.btnOK.Click += new System.EventHandler(this.btnOK_Click);
-            // 
-            // cbImgOverlay
-            // 
-            this.cbImgOverlay.AutoSize = true;
-            this.cbImgOverlay.Location = new System.Drawing.Point(16, 21);
-            this.cbImgOverlay.Name = "cbImgOverlay";
-            this.cbImgOverlay.Size = new System.Drawing.Size(97, 17);
-            this.cbImgOverlay.TabIndex = 656;
-            this.cbImgOverlay.Text = "overlay orig pic";
-            this.cbImgOverlay.UseVisualStyleBackColor = true;
-            this.cbImgOverlay.CheckedChanged += new System.EventHandler(this.cbImgOverlay_CheckedChanged);
-            // 
-            // btnRemStroke
-            // 
-            this.btnRemStroke.Location = new System.Drawing.Point(121, 107);
-            this.btnRemStroke.Name = "btnRemStroke";
-            this.btnRemStroke.Size = new System.Drawing.Size(75, 23);
-            this.btnRemStroke.TabIndex = 662;
-            this.btnRemStroke.Text = "rem last";
-            this.btnRemStroke.UseVisualStyleBackColor = true;
-            this.btnRemStroke.Click += new System.EventHandler(this.btnRemStroke_Click);
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(26, 112);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(32, 13);
-            this.label6.TabIndex = 661;
-            this.label6.Text = "width";
-            // 
-            // numWH
-            // 
-            this.numWH.Location = new System.Drawing.Point(64, 110);
-            this.numWH.Maximum = new decimal(new int[] {
-            127,
-            0,
-            0,
-            0});
-            this.numWH.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.numWH.Name = "numWH";
-            this.numWH.Size = new System.Drawing.Size(45, 20);
-            this.numWH.TabIndex = 660;
-            this.numWH.Value = new decimal(new int[] {
-            25,
-            0,
-            0,
-            0});
-            // 
-            // cmbCurrentColor
-            // 
-            this.cmbCurrentColor.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbCurrentColor.FormattingEnabled = true;
-            this.cmbCurrentColor.Items.AddRange(new object[] {
-            "Background",
-            "Foreground",
-            "Unknown"});
-            this.cmbCurrentColor.Location = new System.Drawing.Point(29, 75);
-            this.cmbCurrentColor.Name = "cmbCurrentColor";
-            this.cmbCurrentColor.Size = new System.Drawing.Size(101, 21);
-            this.cmbCurrentColor.TabIndex = 663;
-            this.cmbCurrentColor.SelectedIndexChanged += new System.EventHandler(this.cmbCurrentColor_SelectedIndexChanged);
-            // 
-            // label1
-            // 
-            this.label1.Location = new System.Drawing.Point(139, 73);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(50, 23);
-            this.label1.TabIndex = 664;
-            this.label1.Text = "    ";
+            helplineRulerCtrl1.Bmp = null;
+            helplineRulerCtrl1.Dock = DockStyle.Fill;
+            helplineRulerCtrl1.DontDoLayout = false;
+            helplineRulerCtrl1.DontHandleDoubleClick = false;
+            helplineRulerCtrl1.DontPaintBaseImg = false;
+            helplineRulerCtrl1.DontProcDoubleClick = false;
+            helplineRulerCtrl1.DrawModeClipped = false;
+            helplineRulerCtrl1.DrawPixelated = false;
+            helplineRulerCtrl1.IgnoreZoom = false;
+            helplineRulerCtrl1.Location = new Point(0, 0);
+            helplineRulerCtrl1.Margin = new Padding(5, 3, 5, 3);
+            helplineRulerCtrl1.MoveHelpLinesOnResize = false;
+            helplineRulerCtrl1.Name = "helplineRulerCtrl1";
+            helplineRulerCtrl1.SetZoomOnlyByMethodCall = false;
+            helplineRulerCtrl1.Size = new Size(1088, 862);
+            helplineRulerCtrl1.TabIndex = 0;
+            helplineRulerCtrl1.Zoom = 1F;
+            helplineRulerCtrl1.ZoomSetManually = false;
             // 
             // cbDraw
             // 
-            this.cbDraw.AutoSize = true;
-            this.cbDraw.Location = new System.Drawing.Point(29, 52);
-            this.cbDraw.Name = "cbDraw";
-            this.cbDraw.Size = new System.Drawing.Size(49, 17);
-            this.cbDraw.TabIndex = 665;
-            this.cbDraw.Text = "draw";
-            this.cbDraw.UseVisualStyleBackColor = true;
+            cbDraw.AutoSize = true;
+            cbDraw.Location = new Point(34, 60);
+            cbDraw.Margin = new Padding(4, 3, 4, 3);
+            cbDraw.Name = "cbDraw";
+            cbDraw.Size = new Size(52, 19);
+            cbDraw.TabIndex = 665;
+            cbDraw.Text = "draw";
+            cbDraw.UseVisualStyleBackColor = true;
+            // 
+            // label1
+            // 
+            label1.Location = new Point(162, 84);
+            label1.Margin = new Padding(4, 0, 4, 0);
+            label1.Name = "label1";
+            label1.Size = new Size(58, 27);
+            label1.TabIndex = 664;
+            label1.Text = "    ";
+            // 
+            // cmbCurrentColor
+            // 
+            cmbCurrentColor.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbCurrentColor.FormattingEnabled = true;
+            cmbCurrentColor.Items.AddRange(new object[] { "Background", "Foreground", "Unknown" });
+            cmbCurrentColor.Location = new Point(34, 87);
+            cmbCurrentColor.Margin = new Padding(4, 3, 4, 3);
+            cmbCurrentColor.Name = "cmbCurrentColor";
+            cmbCurrentColor.Size = new Size(117, 23);
+            cmbCurrentColor.TabIndex = 663;
+            cmbCurrentColor.SelectedIndexChanged += cmbCurrentColor_SelectedIndexChanged;
+            // 
+            // btnRemStroke
+            // 
+            btnRemStroke.Location = new Point(141, 123);
+            btnRemStroke.Margin = new Padding(4, 3, 4, 3);
+            btnRemStroke.Name = "btnRemStroke";
+            btnRemStroke.Size = new Size(88, 27);
+            btnRemStroke.TabIndex = 662;
+            btnRemStroke.Text = "rem last";
+            btnRemStroke.UseVisualStyleBackColor = true;
+            btnRemStroke.Click += btnRemStroke_Click;
+            // 
+            // label6
+            // 
+            label6.AutoSize = true;
+            label6.Location = new Point(30, 129);
+            label6.Margin = new Padding(4, 0, 4, 0);
+            label6.Name = "label6";
+            label6.Size = new Size(37, 15);
+            label6.TabIndex = 661;
+            label6.Text = "width";
+            // 
+            // numWH
+            // 
+            numWH.Location = new Point(75, 127);
+            numWH.Margin = new Padding(4, 3, 4, 3);
+            numWH.Maximum = new decimal(new int[] { 127, 0, 0, 0 });
+            numWH.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
+            numWH.Name = "numWH";
+            numWH.Size = new Size(52, 23);
+            numWH.TabIndex = 660;
+            numWH.Value = new decimal(new int[] { 25, 0, 0, 0 });
+            // 
+            // cbImgOverlay
+            // 
+            cbImgOverlay.AutoSize = true;
+            cbImgOverlay.Location = new Point(19, 24);
+            cbImgOverlay.Margin = new Padding(4, 3, 4, 3);
+            cbImgOverlay.Name = "cbImgOverlay";
+            cbImgOverlay.Size = new Size(107, 19);
+            cbImgOverlay.TabIndex = 656;
+            cbImgOverlay.Text = "overlay orig pic";
+            cbImgOverlay.UseVisualStyleBackColor = true;
+            cbImgOverlay.CheckedChanged += cbImgOverlay_CheckedChanged;
+            // 
+            // Label20
+            // 
+            Label20.AutoSize = true;
+            Label20.Location = new Point(54, 823);
+            Label20.Margin = new Padding(4, 0, 4, 0);
+            Label20.Name = "Label20";
+            Label20.Size = new Size(58, 15);
+            Label20.TabIndex = 655;
+            Label20.Text = "Set Zoom";
+            // 
+            // cmbZoom
+            // 
+            cmbZoom.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbZoom.FormattingEnabled = true;
+            cmbZoom.Items.AddRange(new object[] { "4", "2", "1", "Fit_Width", "Fit" });
+            cmbZoom.Location = new Point(122, 819);
+            cmbZoom.Margin = new Padding(4, 3, 4, 3);
+            cmbZoom.Name = "cmbZoom";
+            cmbZoom.Size = new Size(87, 23);
+            cmbZoom.TabIndex = 654;
+            cmbZoom.SelectedIndexChanged += cmbZoom_SelectedIndexChanged;
+            // 
+            // cbBGColor
+            // 
+            cbBGColor.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            cbBGColor.AutoSize = true;
+            cbBGColor.Checked = true;
+            cbBGColor.CheckState = CheckState.Checked;
+            cbBGColor.Location = new Point(65, 740);
+            cbBGColor.Margin = new Padding(4, 3, 4, 3);
+            cbBGColor.Name = "cbBGColor";
+            cbBGColor.Size = new Size(67, 19);
+            cbBGColor.TabIndex = 653;
+            cbBGColor.Text = "BG dark";
+            cbBGColor.UseVisualStyleBackColor = true;
+            cbBGColor.CheckedChanged += cbBGColor_CheckedChanged;
+            // 
+            // button8
+            // 
+            button8.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            button8.ForeColor = SystemColors.ControlText;
+            button8.Location = new Point(56, 775);
+            button8.Margin = new Padding(4, 3, 4, 3);
+            button8.Name = "button8";
+            button8.Size = new Size(88, 27);
+            button8.TabIndex = 652;
+            button8.Text = "Reload";
+            button8.UseVisualStyleBackColor = true;
+            button8.Click += button8_Click;
+            // 
+            // button2
+            // 
+            button2.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            button2.FlatStyle = FlatStyle.System;
+            button2.ForeColor = SystemColors.ControlText;
+            button2.Location = new Point(150, 735);
+            button2.Margin = new Padding(4, 3, 4, 3);
+            button2.Name = "button2";
+            button2.Size = new Size(88, 27);
+            button2.TabIndex = 651;
+            button2.Text = "Save";
+            button2.Click += button2_Click;
+            // 
+            // btnCancel
+            // 
+            btnCancel.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            btnCancel.DialogResult = DialogResult.Cancel;
+            btnCancel.ForeColor = SystemColors.ControlText;
+            btnCancel.Location = new Point(1284, 25);
+            btnCancel.Margin = new Padding(4, 3, 4, 3);
+            btnCancel.Name = "btnCancel";
+            btnCancel.Size = new Size(88, 27);
+            btnCancel.TabIndex = 656;
+            btnCancel.Text = "Cancel";
+            btnCancel.UseVisualStyleBackColor = true;
+            // 
+            // btnOK
+            // 
+            btnOK.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            btnOK.DialogResult = DialogResult.OK;
+            btnOK.ForeColor = SystemColors.ControlText;
+            btnOK.Location = new Point(1191, 25);
+            btnOK.Margin = new Padding(4, 3, 4, 3);
+            btnOK.Name = "btnOK";
+            btnOK.Size = new Size(88, 27);
+            btnOK.TabIndex = 657;
+            btnOK.Text = "OK";
+            btnOK.UseVisualStyleBackColor = true;
+            btnOK.Click += btnOK_Click;
+            // 
+            // statusStrip1
+            // 
+            statusStrip1.Items.AddRange(new ToolStripItem[] { toolStripStatusLabel1, toolStripStatusLabel2, toolStripProgressBar1, toolStripStatusLabel4 });
+            statusStrip1.Location = new Point(0, 70);
+            statusStrip1.Name = "statusStrip1";
+            statusStrip1.Padding = new Padding(1, 0, 16, 0);
+            statusStrip1.Size = new Size(1386, 44);
+            statusStrip1.TabIndex = 2;
+            statusStrip1.Text = "statusStrip1";
+            // 
+            // toolStripStatusLabel1
+            // 
+            toolStripStatusLabel1.BorderSides = ToolStripStatusLabelBorderSides.Left | ToolStripStatusLabelBorderSides.Top | ToolStripStatusLabelBorderSides.Right | ToolStripStatusLabelBorderSides.Bottom;
+            toolStripStatusLabel1.Font = new Font("Segoe UI", 15.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            toolStripStatusLabel1.Name = "toolStripStatusLabel1";
+            toolStripStatusLabel1.Size = new Size(41, 39);
+            toolStripStatusLabel1.Text = "    ";
+            // 
+            // toolStripStatusLabel2
+            // 
+            toolStripStatusLabel2.AutoSize = false;
+            toolStripStatusLabel2.BorderSides = ToolStripStatusLabelBorderSides.Left | ToolStripStatusLabelBorderSides.Top | ToolStripStatusLabelBorderSides.Right | ToolStripStatusLabelBorderSides.Bottom;
+            toolStripStatusLabel2.Font = new Font("Segoe UI", 15.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            toolStripStatusLabel2.Name = "toolStripStatusLabel2";
+            toolStripStatusLabel2.Size = new Size(100, 39);
+            // 
+            // toolStripProgressBar1
+            // 
+            toolStripProgressBar1.Name = "toolStripProgressBar1";
+            toolStripProgressBar1.Size = new Size(467, 38);
+            // 
+            // toolStripStatusLabel4
+            // 
+            toolStripStatusLabel4.Font = new Font("Segoe UI", 15.75F);
+            toolStripStatusLabel4.Name = "toolStripStatusLabel4";
+            toolStripStatusLabel4.Size = new Size(37, 39);
+            toolStripStatusLabel4.Text = "    ";
+            // 
+            // saveFileDialog1
+            // 
+            saveFileDialog1.FileName = "Bild1.png";
+            saveFileDialog1.Filter = "Png-Images (*.png)|*.png";
+            // 
+            // label16
+            // 
+            label16.AutoSize = true;
+            label16.Location = new Point(49, 168);
+            label16.Name = "label16";
+            label16.Size = new Size(68, 15);
+            label16.TabIndex = 673;
+            label16.Text = "load trimap";
+            // 
+            // btnLoadBasePic
+            // 
+            btnLoadBasePic.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            btnLoadBasePic.ForeColor = SystemColors.ControlText;
+            btnLoadBasePic.Location = new Point(156, 162);
+            btnLoadBasePic.Margin = new Padding(4, 3, 4, 3);
+            btnLoadBasePic.Name = "btnLoadBasePic";
+            btnLoadBasePic.Size = new Size(88, 27);
+            btnLoadBasePic.TabIndex = 672;
+            btnLoadBasePic.Text = "Load";
+            btnLoadBasePic.UseVisualStyleBackColor = true;
+            btnLoadBasePic.Click += btnLoadBasePic_Click;
+            // 
+            // numError
+            // 
+            numError.DecimalPlaces = 4;
+            numError.Increment = new decimal(new int[] { 1, 0, 0, 65536 });
+            numError.Location = new Point(123, 677);
+            numError.Margin = new Padding(4, 3, 4, 3);
+            numError.Maximum = new decimal(new int[] { 1, 0, 0, 0 });
+            numError.Minimum = new decimal(new int[] { 1, 0, 0, 262144 });
+            numError.Name = "numError";
+            numError.Size = new Size(70, 23);
+            numError.TabIndex = 670;
+            numError.Value = new decimal(new int[] { 1, 0, 0, 131072 });
+            numError.Visible = false;
+            // 
+            // label54
+            // 
+            label54.AutoSize = true;
+            label54.Location = new Point(71, 679);
+            label54.Margin = new Padding(4, 0, 4, 0);
+            label54.Name = "label54";
+            label54.Size = new Size(32, 15);
+            label54.TabIndex = 671;
+            label54.Text = "Error";
+            label54.Visible = false;
+            // 
+            // openFileDialog1
+            // 
+            openFileDialog1.FileName = "openFileDialog1";
+            openFileDialog1.Filter = "Images - (*.bmp;*.jpg;*.jpeg;*.jfif;*.png)|*.bmp;*.jpg;*.jpeg;*.jfif;*.png";
             // 
             // frmEditTrimap
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1188, 850);
-            this.Controls.Add(this.splitContainer1);
-            this.Name = "frmEditTrimap";
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "frmEditTrimap";
-            this.Load += new System.EventHandler(this.frmEditTrimap_Load);
-            this.splitContainer1.Panel1.ResumeLayout(false);
-            this.splitContainer1.Panel2.ResumeLayout(false);
-            this.splitContainer1.Panel2.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
-            this.splitContainer1.ResumeLayout(false);
-            this.statusStrip1.ResumeLayout(false);
-            this.statusStrip1.PerformLayout();
-            this.splitContainer2.Panel1.ResumeLayout(false);
-            this.splitContainer2.Panel2.ResumeLayout(false);
-            this.splitContainer2.Panel2.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).EndInit();
-            this.splitContainer2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.numWH)).EndInit();
-            this.ResumeLayout(false);
-
+            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleMode = AutoScaleMode.Font;
+            ClientSize = new Size(1386, 981);
+            Controls.Add(splitContainer1);
+            Margin = new Padding(4, 3, 4, 3);
+            Name = "frmEditTrimap";
+            StartPosition = FormStartPosition.CenterParent;
+            Text = "frmEditTrimap";
+            Load += frmEditTrimap_Load;
+            splitContainer1.Panel1.ResumeLayout(false);
+            splitContainer1.Panel2.ResumeLayout(false);
+            splitContainer1.Panel2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)splitContainer1).EndInit();
+            splitContainer1.ResumeLayout(false);
+            splitContainer2.Panel1.ResumeLayout(false);
+            splitContainer2.Panel2.ResumeLayout(false);
+            splitContainer2.Panel2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)splitContainer2).EndInit();
+            splitContainer2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)numWH).EndInit();
+            statusStrip1.ResumeLayout(false);
+            statusStrip1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)numError).EndInit();
+            ResumeLayout(false);
         }
 
         #endregion
@@ -407,5 +464,10 @@
         private System.Windows.Forms.ComboBox cmbCurrentColor;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.CheckBox cbDraw;
+        private Label label16;
+        private Button btnLoadBasePic;
+        internal NumericUpDown numError;
+        internal Label label54;
+        private OpenFileDialog openFileDialog1;
     }
 }

@@ -894,9 +894,15 @@ namespace AvoidAGrabCutEasy
                                 {
                                     Bitmap? bmp = null;
 
+                                    frm.numError.Visible = frm.label54.Visible = true;
+                                    frm.numError.Value = this.numError.Value;
+
                                     if (frm.ShowDialog() == DialogResult.OK && frm.FBitmap != null)
                                     {
                                         bmp = new Bitmap(frm.FBitmap);
+
+                                        this.numError.Value = frm.numError.Value;
+                                        frm.numError.Visible = frm.label54.Visible = false;
 
                                         Bitmap? bOld2 = trWork;
                                         trWork = bmp;
