@@ -922,45 +922,47 @@ namespace AvoidAGrabCutEasy
                                 }
                             }
 
-                            ClosedFormMatteOp cfop = new ClosedFormMatteOp(bWork, trWork);
-                            BlendParameters bParam = new BlendParameters();
-                            bParam.MaxIterations = (int)this.numMaxRestarts.Value; //for GaussSeidel set this to 10000 or so
-                            bParam.InnerIterations = 35; //maybe 25 will do
-                            bParam.DesiredMaxLinearError = (double)this.numError.Value;
-                            bParam.Sleep = this.numSleep.Value > 0 ? true : false;
-                            bParam.SleepAmount = (int)this.numSleep.Value;
-                            bParam.BGW = this.backgroundWorker4;
-                            cfop.BlendParameters = bParam;
-                            this._cfop = cfop;
-
-                            this._cfop.ShowProgess += Cfop_UpdateProgress;
-                            this._cfop.ShowInfo += _cfop_ShowInfo;
-
-                            bool scalesPics = this.cbSlices.Checked;
-                            int scales = scalesPics ? rb4.Checked ? 4 : 16 : 0;
-                            int overlap = 32;
-                            bool interpolated = this.cbInterpolated.Checked;
-                            bool forceSerial = this.cbForceSerial.Checked;
-                            bool group = false;
-                            int groupAmountX = scalesPics ? 1 : 0; //we dont use grouping, so set it simply to 1
-                            int groupAmountY = scalesPics ? 1 : 0;
-                            int maxSize = bWork.Width * bWork.Height * 2;
-                            bool trySingleTile = scalesPics ? false : this.cbHalfSize.Checked ? true : false;
-                            bool verifyTrimaps = false;
-
-                            Bitmap? tr = new Bitmap(trWork);
-                            Bitmap? bWrk = new Bitmap(bWork);
-                            if (tr != null && bWrk != null)
+                            if (trWork != null)
                             {
-                                this.SetBitmap(ref this._bmpWork, ref bWrk);
-                                this.SetBitmap(ref this._bmpTrimap, ref tr);
-                            }
+                                ClosedFormMatteOp cfop = new ClosedFormMatteOp(bWork, trWork);
+                                BlendParameters bParam = new BlendParameters();
+                                bParam.MaxIterations = (int)this.numMaxRestarts.Value; //for GaussSeidel set this to 10000 or so
+                                bParam.InnerIterations = 35; //maybe 25 will do
+                                bParam.DesiredMaxLinearError = (double)this.numError.Value;
+                                bParam.Sleep = this.numSleep.Value > 0 ? true : false;
+                                bParam.SleepAmount = (int)this.numSleep.Value;
+                                bParam.BGW = this.backgroundWorker4;
+                                cfop.BlendParameters = bParam;
+                                this._cfop = cfop;
 
-                            this.backgroundWorker4.RunWorkerAsync(new object[] { 1 /*GMRES_r; 0 is GaussSeidel*/, scalesPics, scales, overlap,
+                                this._cfop.ShowProgess += Cfop_UpdateProgress;
+                                this._cfop.ShowInfo += _cfop_ShowInfo;
+
+                                bool scalesPics = this.cbSlices.Checked;
+                                int scales = scalesPics ? rb4.Checked ? 4 : 16 : 0;
+                                int overlap = 32;
+                                bool interpolated = this.cbInterpolated.Checked;
+                                bool forceSerial = this.cbForceSerial.Checked;
+                                bool group = false;
+                                int groupAmountX = scalesPics ? 1 : 0; //we dont use grouping, so set it simply to 1
+                                int groupAmountY = scalesPics ? 1 : 0;
+                                int maxSize = bWork.Width * bWork.Height * 2;
+                                bool trySingleTile = scalesPics ? false : this.cbHalfSize.Checked ? true : false;
+                                bool verifyTrimaps = false;
+
+                                Bitmap? tr = new Bitmap(trWork);
+                                Bitmap? bWrk = new Bitmap(bWork);
+                                if (tr != null && bWrk != null)
+                                {
+                                    this.SetBitmap(ref this._bmpWork, ref bWrk);
+                                    this.SetBitmap(ref this._bmpTrimap, ref tr);
+                                }
+
+                                this.backgroundWorker4.RunWorkerAsync(new object[] { 1 /*GMRES_r; 0 is GaussSeidel*/, scalesPics, scales, overlap,
                                 interpolated, forceSerial, group, groupAmountX, groupAmountY, maxSize, bWork, trWork,
                                 trySingleTile, verifyTrimaps });
+                            }
                         }
-
                     }
                 }
                 else
