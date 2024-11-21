@@ -50,6 +50,7 @@ namespace AvoidAGrabCutEasy
         private int _ix;
         private int _iy;
         private Bitmap? _bmpBU;
+        private Bitmap? _baseImg;
 
         public frmLumMapSettings(Bitmap bmp, string basePathAddition)
         {
@@ -194,6 +195,19 @@ namespace AvoidAGrabCutEasy
                                         this.SetBitmap(this.helplineRulerCtrl1.Bmp, b1, this.helplineRulerCtrl1, "Bmp");
                                         b2 = new Bitmap((Bitmap)img.Clone());
                                         this.SetBitmap(ref this._bmpBU, ref b2);
+
+                                        if (this._baseImg != null)
+                                        {
+                                            Image? iOld = this.pictureBox1.Image;
+                                            this.pictureBox1.Image = new Bitmap(this._baseImg);
+                                            this.pictureBox1.Refresh();
+
+                                            if (iOld != null)
+                                            {
+                                                iOld.Dispose();
+                                                iOld = null;
+                                            }
+                                        }
                                     }
                                     else
                                         throw new Exception();
@@ -271,6 +285,19 @@ namespace AvoidAGrabCutEasy
                     this.helplineRulerCtrl1.dbPanel1.Invalidate();
 
                     this.CheckRedoButton();
+
+                    if (this._baseImg != null)
+                    {
+                        Image? iOld = this.pictureBox1.Image;
+                        this.pictureBox1.Image = new Bitmap(this._baseImg);
+                        this.pictureBox1.Refresh();
+
+                        if (iOld != null)
+                        {
+                            iOld.Dispose();
+                            iOld = null;
+                        }
+                    }
                 }
                 else
                     MessageBox.Show("Error while undoing.");
@@ -296,6 +323,19 @@ namespace AvoidAGrabCutEasy
                     this.CheckRedoButton();
 
                     this.btnUndo.Enabled = true;
+
+                    if (this._baseImg != null)
+                    {
+                        Image? iOld = this.pictureBox1.Image;
+                        this.pictureBox1.Image = new Bitmap(this._baseImg);
+                        this.pictureBox1.Refresh();
+
+                        if (iOld != null)
+                        {
+                            iOld.Dispose();
+                            iOld = null;
+                        }
+                    }
                 }
                 else
                     MessageBox.Show("Error while redoing.");
@@ -364,6 +404,19 @@ namespace AvoidAGrabCutEasy
                             this.helplineRulerCtrl1.dbPanel1.Invalidate();
 
                             _undoOPCache?.Reset(false);
+
+                            if (this._baseImg != null)
+                            {
+                                Image? iOld = this.pictureBox1.Image;
+                                this.pictureBox1.Image = new Bitmap(this._baseImg);
+                                this.pictureBox1.Refresh();
+
+                                if (iOld != null)
+                                {
+                                    iOld.Dispose();
+                                    iOld = null;
+                                }
+                            }
                         }
                     }
                     catch
@@ -449,6 +502,21 @@ namespace AvoidAGrabCutEasy
             this.rbApp_CheckedChanged(this.rbApp, new EventArgs());
             this.cbBGColor_CheckedChanged(this.cbBGColor, new EventArgs());
             this.cmbZoom.SelectedIndex = 4;
+
+            CreateBasePic();
+        }
+
+        private void CreateBasePic()
+        {
+            Bitmap bmp = new Bitmap(this.pictureBox1.ClientSize.Width, this.pictureBox1.ClientSize.Height);
+            using Graphics graphics = Graphics.FromImage(bmp);
+            graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
+            using Pen pen = new Pen(Color.Black, 2);
+            graphics.DrawLine(pen, new Point(0, bmp.Height), new Point(bmp.Width, 0));
+
+            this._baseImg = bmp;
+            this.pictureBox1.Image = new Bitmap(this._baseImg);
+            this.pictureBox1.Refresh();
         }
 
         private void cbBGColor_CheckedChanged(object sender, EventArgs e)
@@ -503,7 +571,42 @@ namespace AvoidAGrabCutEasy
                 this.helplineRulerCtrl1.MakeBitmap(this.helplineRulerCtrl1.Bmp);
                 this.helplineRulerCtrl1.dbPanel1.AutoScrollMinSize = new Size(System.Convert.ToInt32(this.helplineRulerCtrl1.Bmp.Width * this.helplineRulerCtrl1.Zoom), System.Convert.ToInt32(this.helplineRulerCtrl1.Bmp.Height * this.helplineRulerCtrl1.Zoom));
                 this.helplineRulerCtrl1.dbPanel1.Invalidate();
+
+                DisplayGradPic(p);
             }
+        }
+
+        private void DisplayGradPic(List<Point> p)
+        {
+            Bitmap bmp = new Bitmap(this.pictureBox1.ClientSize.Width, this.pictureBox1.ClientSize.Height);
+            using Graphics gx = Graphics.FromImage(bmp);
+            gx.SmoothingMode = SmoothingMode.AntiAlias;
+
+            double factor = this.pictureBox1.ClientSize.Width / 255.0;
+
+            List<PointF> pNew = new();
+            for (int i = 0; i < p.Count; i++)
+                pNew.Add(new PointF((float)(p[i].X * factor), (float)(p[i].Y * factor)));
+            pNew.Reverse();
+
+            using Pen pen = new Pen(Color.Black, 2f);
+
+            gx.ScaleTransform(1f, -1f);
+            gx.TranslateTransform(0, bmp.Height, MatrixOrder.Append);
+            gx.DrawCurve(pen, pNew.ToArray());
+
+            Image? iOld = this.pictureBox1.Image;
+            this.pictureBox1.Image = bmp;
+            this.pictureBox1.Refresh();
+
+            if (iOld != null)
+            {
+                iOld.Dispose();
+                iOld = null;
+            }
+
+            //Maybe add a copy of bmp to a List<Bitmap>, and correlate the List indices with the _undoOPCache.CurrentPositions
+            //when doing "Undo" or "Redo"
         }
 
         private void btnBlur_Click(object sender, EventArgs e)
@@ -711,6 +814,8 @@ namespace AvoidAGrabCutEasy
                 if (this._bmpBU != null)
                     this._bmpBU.Dispose();
                 this._bmpBU = null;
+                if (this._baseImg != null)
+                    this._baseImg.Dispose();
 
                 if (this._undoOPCache != null)
                     this._undoOPCache.Dispose();

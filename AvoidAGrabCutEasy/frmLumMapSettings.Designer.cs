@@ -51,6 +51,7 @@
             toolStripStatusLabel2 = new ToolStripStatusLabel();
             toolStripProgressBar1 = new ToolStripProgressBar();
             toolStripStatusLabel3 = new ToolStripStatusLabel();
+            cbAppSettingsOnly = new CheckBox();
             button10 = new Button();
             button8 = new Button();
             button2 = new Button();
@@ -92,7 +93,7 @@
             backgroundWorker3 = new System.ComponentModel.BackgroundWorker();
             Timer3 = new System.Windows.Forms.Timer(components);
             backgroundWorker4 = new System.ComponentModel.BackgroundWorker();
-            cbAppSettingsOnly = new CheckBox();
+            pictureBox1 = new PictureBox();
             ((System.ComponentModel.ISupportInitialize)numF1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numTh).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numF2).BeginInit();
@@ -117,6 +118,7 @@
             ((System.ComponentModel.ISupportInitialize)numValDst).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numValSrc).BeginInit();
             groupBox1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             SuspendLayout();
             // 
             // btnCancel
@@ -152,6 +154,7 @@
             label1.Size = new Size(44, 15);
             label1.TabIndex = 734;
             label1.Text = "factor1";
+            toolTip1.SetToolTip(label1, "Greater factors lead to a result with less pixels displayed.");
             // 
             // label2
             // 
@@ -170,6 +173,7 @@
             label3.Size = new Size(44, 15);
             label3.TabIndex = 734;
             label3.Text = "factor2";
+            toolTip1.SetToolTip(label3, "Greater factors lead to a result with less pixels displayed.");
             // 
             // numF1
             // 
@@ -180,6 +184,7 @@
             numF1.Name = "numF1";
             numF1.Size = new Size(88, 23);
             numF1.TabIndex = 735;
+            toolTip1.SetToolTip(numF1, "Greater factors lead to a result with less pixels displayed.");
             numF1.Value = new decimal(new int[] { 25, 0, 0, 65536 });
             // 
             // numTh
@@ -201,6 +206,7 @@
             numF2.Name = "numF2";
             numF2.Size = new Size(88, 23);
             numF2.TabIndex = 735;
+            toolTip1.SetToolTip(numF2, "Greater factors lead to a result with less pixels displayed.");
             numF2.Value = new decimal(new int[] { 2, 0, 0, 0 });
             // 
             // label4
@@ -268,6 +274,7 @@
             cbAuto.Size = new Size(50, 19);
             cbAuto.TabIndex = 736;
             cbAuto.Text = "auto";
+            toolTip1.SetToolTip(cbAuto, "Split the real range of values at the specified threshold ");
             cbAuto.UseVisualStyleBackColor = true;
             cbAuto.CheckedChanged += cbAuto_CheckedChanged;
             // 
@@ -363,6 +370,17 @@
             toolStripStatusLabel3.Name = "toolStripStatusLabel3";
             toolStripStatusLabel3.Size = new Size(61, 30);
             toolStripStatusLabel3.Text = "Hallo";
+            // 
+            // cbAppSettingsOnly
+            // 
+            cbAppSettingsOnly.AutoSize = true;
+            cbAppSettingsOnly.Location = new Point(13, 537);
+            cbAppSettingsOnly.Name = "cbAppSettingsOnly";
+            cbAppSettingsOnly.Size = new Size(174, 19);
+            cbAppSettingsOnly.TabIndex = 750;
+            cbAppSettingsOnly.Text = "do Application settings only";
+            toolTip1.SetToolTip(cbAppSettingsOnly, "Dont set the image, but the factors and threshold");
+            cbAppSettingsOnly.UseVisualStyleBackColor = true;
             // 
             // button10
             // 
@@ -644,6 +662,7 @@
             // 
             // groupBox2
             // 
+            groupBox2.Controls.Add(pictureBox1);
             groupBox2.Controls.Add(cbSecondColor);
             groupBox2.Controls.Add(label8);
             groupBox2.Controls.Add(numValDst2);
@@ -750,6 +769,7 @@
             btnColors.Size = new Size(65, 27);
             btnColors.TabIndex = 686;
             btnColors.Text = "Colors";
+            toolTip1.SetToolTip(btnColors, "Create a cardinal spline (curve) of color mappings, by specifying one or two colors.");
             btnColors.UseVisualStyleBackColor = true;
             btnColors.Click += btnColors_Click;
             // 
@@ -809,15 +829,14 @@
             backgroundWorker4.ProgressChanged += backgroundWorker4_ProgressChanged;
             backgroundWorker4.RunWorkerCompleted += backgroundWorker4_RunWorkerCompleted;
             // 
-            // cbAppSettingsOnly
+            // pictureBox1
             // 
-            cbAppSettingsOnly.AutoSize = true;
-            cbAppSettingsOnly.Location = new Point(13, 537);
-            cbAppSettingsOnly.Name = "cbAppSettingsOnly";
-            cbAppSettingsOnly.Size = new Size(174, 19);
-            cbAppSettingsOnly.TabIndex = 750;
-            cbAppSettingsOnly.Text = "do Application settings only";
-            cbAppSettingsOnly.UseVisualStyleBackColor = true;
+            pictureBox1.BorderStyle = BorderStyle.FixedSingle;
+            pictureBox1.Location = new Point(359, 8);
+            pictureBox1.Name = "pictureBox1";
+            pictureBox1.Size = new Size(40, 40);
+            pictureBox1.TabIndex = 695;
+            pictureBox1.TabStop = false;
             // 
             // frmLumMapSettings
             // 
@@ -863,6 +882,7 @@
             ((System.ComponentModel.ISupportInitialize)numValSrc).EndInit();
             groupBox1.ResumeLayout(false);
             groupBox1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             ResumeLayout(false);
         }
 
@@ -932,5 +952,6 @@
         internal NumericUpDown numValDst2;
         internal NumericUpDown numValSrc2;
         internal CheckBox cbAppSettingsOnly;
+        private PictureBox pictureBox1;
     }
 }
