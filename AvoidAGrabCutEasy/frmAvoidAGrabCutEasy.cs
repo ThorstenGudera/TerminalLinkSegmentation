@@ -146,7 +146,7 @@ namespace AvoidAGrabCutEasy
         private bool _frmValsChanged;
         private float[,]? _iggLuminanceMap; 
         private float[,]? _iggLuminanceMap2;
-        private LumMapApplicationSettings? _lmas = new LumMapApplicationSettings() { Factor1 = 1.0f, Threshold = 0.5, Factor2 = 2.0f };
+        private LumMapApplicationSettings? _lmas = new LumMapApplicationSettings() { Factor1 = 2.0f, Threshold = 0.5, Factor2 = 2.5f };
         private bool _useLumMapBasePic;
 
         public event EventHandler<string>? ShowInfo;
