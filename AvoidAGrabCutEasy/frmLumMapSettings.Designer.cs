@@ -76,6 +76,10 @@
             btnBlur = new Button();
             numKernel = new NumericUpDown();
             groupBox2 = new GroupBox();
+            cbSecondColor = new CheckBox();
+            label8 = new Label();
+            numValDst2 = new NumericUpDown();
+            numValSrc2 = new NumericUpDown();
             label7 = new Label();
             label17 = new Label();
             numValDst = new NumericUpDown();
@@ -107,6 +111,8 @@
             ((System.ComponentModel.ISupportInitialize)numDistWeight).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numKernel).BeginInit();
             groupBox2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)numValDst2).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)numValSrc2).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numValDst).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numValSrc).BeginInit();
             groupBox1.SuspendLayout();
@@ -169,6 +175,7 @@
             numF1.DecimalPlaces = 4;
             numF1.Increment = new decimal(new int[] { 1, 0, 0, 65536 });
             numF1.Location = new Point(80, 17);
+            numF1.Maximum = new decimal(new int[] { 10000, 0, 0, 0 });
             numF1.Name = "numF1";
             numF1.Size = new Size(88, 23);
             numF1.TabIndex = 735;
@@ -189,6 +196,7 @@
             numF2.DecimalPlaces = 4;
             numF2.Increment = new decimal(new int[] { 1, 0, 0, 65536 });
             numF2.Location = new Point(80, 106);
+            numF2.Maximum = new decimal(new int[] { 10000, 0, 0, 0 });
             numF2.Name = "numF2";
             numF2.Size = new Size(88, 23);
             numF2.TabIndex = 735;
@@ -358,7 +366,7 @@
             // 
             button10.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             button10.ForeColor = SystemColors.ControlText;
-            button10.Location = new Point(319, 613);
+            button10.Location = new Point(319, 637);
             button10.Margin = new Padding(4, 3, 4, 3);
             button10.Name = "button10";
             button10.Size = new Size(88, 27);
@@ -371,7 +379,7 @@
             // 
             button8.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             button8.ForeColor = SystemColors.ControlText;
-            button8.Location = new Point(224, 613);
+            button8.Location = new Point(224, 637);
             button8.Margin = new Padding(4, 3, 4, 3);
             button8.Name = "button8";
             button8.Size = new Size(88, 27);
@@ -385,7 +393,7 @@
             button2.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             button2.FlatStyle = FlatStyle.System;
             button2.ForeColor = SystemColors.ControlText;
-            button2.Location = new Point(318, 522);
+            button2.Location = new Point(318, 546);
             button2.Margin = new Padding(4, 3, 4, 3);
             button2.Name = "button2";
             button2.Size = new Size(88, 27);
@@ -397,7 +405,7 @@
             // 
             btnRedo.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             btnRedo.ForeColor = SystemColors.ControlText;
-            btnRedo.Location = new Point(320, 560);
+            btnRedo.Location = new Point(320, 584);
             btnRedo.Margin = new Padding(4, 3, 4, 3);
             btnRedo.Name = "btnRedo";
             btnRedo.Size = new Size(88, 27);
@@ -410,7 +418,7 @@
             // 
             btnUndo.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             btnUndo.ForeColor = SystemColors.ControlText;
-            btnUndo.Location = new Point(224, 560);
+            btnUndo.Location = new Point(224, 584);
             btnUndo.Margin = new Padding(4, 3, 4, 3);
             btnUndo.Name = "btnUndo";
             btnUndo.Size = new Size(88, 27);
@@ -460,7 +468,7 @@
             // 
             rbApp.AutoSize = true;
             rbApp.Checked = true;
-            rbApp.Location = new Point(18, 320);
+            rbApp.Location = new Point(18, 344);
             rbApp.Name = "rbApp";
             rbApp.Size = new Size(86, 19);
             rbApp.TabIndex = 740;
@@ -488,7 +496,7 @@
             groupBox4.Controls.Add(numIGGAlpha);
             groupBox4.Controls.Add(btnInvGaussGrad);
             groupBox4.Controls.Add(numIGGKernel);
-            groupBox4.Location = new Point(13, 191);
+            groupBox4.Location = new Point(13, 215);
             groupBox4.Name = "groupBox4";
             groupBox4.Size = new Size(402, 93);
             groupBox4.TabIndex = 739;
@@ -573,7 +581,7 @@
             groupBox3.Controls.Add(numDistWeight);
             groupBox3.Controls.Add(btnBlur);
             groupBox3.Controls.Add(numKernel);
-            groupBox3.Location = new Point(13, 122);
+            groupBox3.Location = new Point(13, 146);
             groupBox3.Name = "groupBox3";
             groupBox3.Size = new Size(402, 59);
             groupBox3.TabIndex = 739;
@@ -634,6 +642,10 @@
             // 
             // groupBox2
             // 
+            groupBox2.Controls.Add(cbSecondColor);
+            groupBox2.Controls.Add(label8);
+            groupBox2.Controls.Add(numValDst2);
+            groupBox2.Controls.Add(numValSrc2);
             groupBox2.Controls.Add(label7);
             groupBox2.Controls.Add(label17);
             groupBox2.Controls.Add(numValDst);
@@ -641,10 +653,52 @@
             groupBox2.Controls.Add(btnColors);
             groupBox2.Location = new Point(13, 48);
             groupBox2.Name = "groupBox2";
-            groupBox2.Size = new Size(402, 61);
+            groupBox2.Size = new Size(402, 92);
             groupBox2.TabIndex = 739;
             groupBox2.TabStop = false;
             groupBox2.Text = "1) Colors";
+            // 
+            // cbSecondColor
+            // 
+            cbSecondColor.AutoSize = true;
+            cbSecondColor.Location = new Point(19, 56);
+            cbSecondColor.Name = "cbSecondColor";
+            cbSecondColor.Size = new Size(125, 19);
+            cbSecondColor.TabIndex = 694;
+            cbSecondColor.Text = "map a 2nd color X:";
+            cbSecondColor.UseVisualStyleBackColor = true;
+            cbSecondColor.CheckedChanged += cbSecondColor_CheckedChanged;
+            // 
+            // label8
+            // 
+            label8.AutoSize = true;
+            label8.Location = new Point(214, 58);
+            label8.Name = "label8";
+            label8.Size = new Size(31, 15);
+            label8.TabIndex = 693;
+            label8.Text = "to Y:";
+            // 
+            // numValDst2
+            // 
+            numValDst2.Enabled = false;
+            numValDst2.Location = new Point(251, 55);
+            numValDst2.Margin = new Padding(4, 3, 4, 3);
+            numValDst2.Maximum = new decimal(new int[] { 255, 0, 0, 0 });
+            numValDst2.Name = "numValDst2";
+            numValDst2.Size = new Size(52, 23);
+            numValDst2.TabIndex = 691;
+            numValDst2.Value = new decimal(new int[] { 164, 0, 0, 0 });
+            // 
+            // numValSrc2
+            // 
+            numValSrc2.Enabled = false;
+            numValSrc2.Location = new Point(155, 55);
+            numValSrc2.Margin = new Padding(4, 3, 4, 3);
+            numValSrc2.Maximum = new decimal(new int[] { 255, 0, 0, 0 });
+            numValSrc2.Name = "numValSrc2";
+            numValSrc2.Size = new Size(52, 23);
+            numValSrc2.TabIndex = 692;
+            numValSrc2.Value = new decimal(new int[] { 148, 0, 0, 0 });
             // 
             // label7
             // 
@@ -688,7 +742,7 @@
             // 
             btnColors.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             btnColors.ForeColor = SystemColors.ControlText;
-            btnColors.Location = new Point(273, 20);
+            btnColors.Location = new Point(313, 52);
             btnColors.Margin = new Padding(4, 3, 4, 3);
             btnColors.Name = "btnColors";
             btnColors.Size = new Size(65, 27);
@@ -700,7 +754,7 @@
             // panel1
             // 
             panel1.BackColor = SystemColors.ControlDarkDark;
-            panel1.Location = new Point(13, 303);
+            panel1.Location = new Point(13, 327);
             panel1.Name = "panel1";
             panel1.Size = new Size(400, 2);
             panel1.TabIndex = 738;
@@ -720,7 +774,7 @@
             groupBox1.Controls.Add(label2);
             groupBox1.Controls.Add(label4);
             groupBox1.Controls.Add(numThMultiplier);
-            groupBox1.Location = new Point(12, 357);
+            groupBox1.Location = new Point(12, 381);
             groupBox1.Name = "groupBox1";
             groupBox1.Size = new Size(403, 141);
             groupBox1.TabIndex = 737;
@@ -791,6 +845,8 @@
             ((System.ComponentModel.ISupportInitialize)numKernel).EndInit();
             groupBox2.ResumeLayout(false);
             groupBox2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)numValDst2).EndInit();
+            ((System.ComponentModel.ISupportInitialize)numValSrc2).EndInit();
             ((System.ComponentModel.ISupportInitialize)numValDst).EndInit();
             ((System.ComponentModel.ISupportInitialize)numValSrc).EndInit();
             groupBox1.ResumeLayout(false);
@@ -859,5 +915,9 @@
         private System.ComponentModel.BackgroundWorker backgroundWorker3;
         internal System.Windows.Forms.Timer Timer3;
         private System.ComponentModel.BackgroundWorker backgroundWorker4;
+        internal CheckBox cbSecondColor;
+        private Label label8;
+        internal NumericUpDown numValDst2;
+        internal NumericUpDown numValSrc2;
     }
 }

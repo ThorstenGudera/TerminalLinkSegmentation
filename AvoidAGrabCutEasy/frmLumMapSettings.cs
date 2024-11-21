@@ -482,6 +482,8 @@ namespace AvoidAGrabCutEasy
                 List<Point> p = new();
                 p.Add(new Point(0, 0));
                 p.Add(new Point((int)this.numValSrc.Value, (int)this.numValDst.Value));
+                if (this.cbSecondColor.Checked)
+                    p.Add(new Point((int)this.numValSrc2.Value, (int)this.numValDst2.Value));
                 p.Add(new Point(255, 255));
 
                 CurveSegment cuSgmt = new();
@@ -832,6 +834,11 @@ namespace AvoidAGrabCutEasy
                 this.backgroundWorker4.ProgressChanged += backgroundWorker4_ProgressChanged;
                 this.backgroundWorker4.RunWorkerCompleted += backgroundWorker4_RunWorkerCompleted;
             }
+        }
+
+        private void cbSecondColor_CheckedChanged(object sender, EventArgs e)
+        {
+            this.numValSrc2.Enabled = this.numValDst2.Enabled = this.cbSecondColor.Checked;
         }
     }
 }

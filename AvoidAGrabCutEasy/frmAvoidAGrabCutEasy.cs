@@ -5569,6 +5569,45 @@ namespace AvoidAGrabCutEasy
                     }
                 }
 
+                //test
+                //since the MinCut in the GrabCut method uses neighborhood information,
+                //let's try to use this information in our method too.
+                //For this, we compute a gradient pic and from this, we get the inverted
+                //luminance map. This may change, also the settings for the invGaussGrad
+                //method for conputing the gradient pic may change.
+                if (this.cbCompLumMap.Checked)
+                {
+                    if (this._iggLuminanceMap != null || (this._iggLuminanceMap2 != null && this._useLumMapBasePic))
+                    {
+                        this._gc.IGGLuminanceMap = (this._useLumMapBasePic && this._iggLuminanceMap2 != null) ? this._iggLuminanceMap2 : this._iggLuminanceMap;
+                        this._gc.LumMapSettings = this._lmas;
+                    }
+                    else if (this._iggLuminanceMap == null)
+                    {
+                        if (this._bmpBU != null)
+                        {
+                            this.Invoke(new Action(() =>
+                            {
+                                this.toolStripStatusLabel4.Text = "Computing LumMap";
+                                this.lblLumMap.Text = "computing...";
+                            }));
+                            LuminancMapOp lop = new LuminancMapOp();
+                            lop.ProgressPlus += lop_ProgressPlus;
+                            using Bitmap bmp = new Bitmap(this._bmpBU);
+                            float[,]? lMap = lop.ComputeInvLuminanceMapSync(bmp);
+                            this._iggLuminanceMap = lMap;
+                            this._gc.IGGLuminanceMap = (this._useLumMapBasePic && this._iggLuminanceMap2 != null) ? this._iggLuminanceMap2 : lMap;
+                            this._gc.LumMapSettings = this._lmas;
+                            lop.ProgressPlus -= lop_ProgressPlus;
+                            this.Invoke(new Action(() =>
+                            {
+                                this.toolStripStatusLabel4.Text = "LumMap done.";
+                                this.lblLumMap.Text = "done.";
+                            }));
+                        }
+                    }
+                }
+
                 //now do the work ...
                 int l = this._gc.Run();
 
