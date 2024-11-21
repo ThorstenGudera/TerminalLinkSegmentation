@@ -31,6 +31,7 @@
             components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmAvoidAGrabCutEasy));
             panel1 = new Panel();
+            cbUseLumMapBasePic = new CheckBox();
             btnLumMapSettings = new Button();
             lblLumMap = new Label();
             cbCompLumMap = new CheckBox();
@@ -194,6 +195,7 @@
             // 
             // panel1
             // 
+            panel1.Controls.Add(cbUseLumMapBasePic);
             panel1.Controls.Add(btnLumMapSettings);
             panel1.Controls.Add(lblLumMap);
             panel1.Controls.Add(cbCompLumMap);
@@ -297,6 +299,19 @@
             panel1.MouseDoubleClick += panel1_MouseDoubleClick;
             panel1.MouseDown += panel1_MouseDown;
             // 
+            // cbUseLumMapBasePic
+            // 
+            cbUseLumMapBasePic.AutoSize = true;
+            cbUseLumMapBasePic.Enabled = false;
+            cbUseLumMapBasePic.Location = new Point(776, 136);
+            cbUseLumMapBasePic.Name = "cbUseLumMapBasePic";
+            cbUseLumMapBasePic.Size = new Size(102, 19);
+            cbUseLumMapBasePic.TabIndex = 736;
+            cbUseLumMapBasePic.Text = "UseLMBasePic";
+            toolTip1.SetToolTip(cbUseLumMapBasePic, "use the picture, that's set\r\nwhen clciking \"OK\" in frmLumMapSettings");
+            cbUseLumMapBasePic.UseVisualStyleBackColor = true;
+            cbUseLumMapBasePic.CheckedChanged += cbUseLumMapBasePic_CheckedChanged;
+            // 
             // btnLumMapSettings
             // 
             btnLumMapSettings.Location = new Point(803, 157);
@@ -310,9 +325,10 @@
             // lblLumMap
             // 
             lblLumMap.AutoSize = true;
-            lblLumMap.Location = new Point(693, 139);
+            lblLumMap.BorderStyle = BorderStyle.FixedSingle;
+            lblLumMap.Location = new Point(693, 137);
             lblLumMap.Name = "lblLumMap";
-            lblLumMap.Size = new Size(19, 15);
+            lblLumMap.Size = new Size(21, 17);
             lblLumMap.TabIndex = 734;
             lblLumMap.Text = "    ";
             // 
@@ -1938,5 +1954,6 @@
         private Button btnCmpLMap;
         private Label lblTh;
         private Button btnLumMapSettings;
+        private CheckBox cbUseLumMapBasePic;
     }
 }

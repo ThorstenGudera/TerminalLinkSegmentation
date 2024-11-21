@@ -144,8 +144,10 @@ namespace AvoidAGrabCutEasy
         private float _opacity;
         private frmPreBlurVals? _frm;
         private bool _frmValsChanged;
-        private float[,]? _iggLuminanceMap;
+        private float[,]? _iggLuminanceMap; 
+        private float[,]? _iggLuminanceMap2;
         private LumMapApplicationSettings? _lmas = new LumMapApplicationSettings() { Factor1 = 1.0f, Threshold = 0.5, Factor2 = 2.0f };
+        private bool _useLumMapBasePic;
 
         public event EventHandler<string>? ShowInfo;
         //public event EventHandler<string> BoundaryError;
@@ -1544,6 +1546,12 @@ namespace AvoidAGrabCutEasy
                     return;
                 }
 
+                if (this.backgroundWorker2.IsBusy)
+                {
+                    this.backgroundWorker2.CancelAsync();
+                    return;
+                }
+
                 if (this._frm != null)
                     this._frm.Close();
 
@@ -2092,12 +2100,12 @@ namespace AvoidAGrabCutEasy
                 //method for conputing the gradient pic may change.
                 if (this.cbCompLumMap.Checked)
                 {
-                    if (this._iggLuminanceMap != null)
+                    if (this._iggLuminanceMap != null || (this._iggLuminanceMap2 != null && this._useLumMapBasePic))
                     {
-                        this._gc.IGGLuminanceMap = this._iggLuminanceMap;
+                        this._gc.IGGLuminanceMap = (this._useLumMapBasePic && this._iggLuminanceMap2 != null) ? this._iggLuminanceMap2 : this._iggLuminanceMap;
                         this._gc.LumMapSettings = this._lmas;
                     }
-                    else
+                    else if (this._iggLuminanceMap == null)
                     {
                         if (this._bmpBU != null)
                         {
@@ -2109,7 +2117,8 @@ namespace AvoidAGrabCutEasy
                             LuminancMapOp lop = new LuminancMapOp();
                             using Bitmap bmp = new Bitmap(this._bmpBU);
                             float[,]? lMap = lop.ComputeInvLuminanceMapSync(bmp);
-                            this._iggLuminanceMap = this._gc.IGGLuminanceMap = lMap;
+                            this._iggLuminanceMap = lMap;
+                            this._gc.IGGLuminanceMap = (this._useLumMapBasePic && this._iggLuminanceMap2 != null) ? this._iggLuminanceMap2 : lMap;
                             this._gc.LumMapSettings = this._lmas;
                             this.Invoke(new Action(() =>
                             {
@@ -9639,39 +9648,57 @@ namespace AvoidAGrabCutEasy
         {
             if (this._lmas != null)
             {
-                using frmLumMapSettings frm = new();
-                frm.numF1.Value = (decimal)this._lmas.Factor1;
-                frm.numTh.Value = (decimal)this._lmas.Threshold;
-                frm.numF2.Value = (decimal)this._lmas.Factor2;
-                frm.numExp1.Value = (decimal)this._lmas.Exponent1;
-                frm.numExp2.Value = (decimal)this._lmas.Exponent2;
-                frm.numThMultiplier.Value = (decimal)-Math.Log10(this._lmas.ThMultiplier);
-                frm.cbAuto.Checked = this._lmas.MultAuto;
-
-                if (frm.ShowDialog() == DialogResult.OK)
+                if (this._bmpBU != null && this.CachePathAddition != null)
                 {
-                    float f1 = (float)frm.numF1.Value;
-                    double th = (double)frm.numTh.Value;
-                    float f2 = (float)frm.numF2.Value;
-                    double e1 = (double)frm.numExp1.Value;
-                    double e2 = (double)frm.numExp2.Value;
-                    double m = Math.Pow(10, (double)-frm.numThMultiplier.Value);
-                    bool auto = frm.cbAuto.Checked;
+                    using frmLumMapSettings frm = new(this._bmpBU, this.CachePathAddition);
+                    frm.SetupCache();
 
-                    LumMapApplicationSettings lmas = new()
+                    frm.numF1.Value = (decimal)this._lmas.Factor1;
+                    frm.numTh.Value = (decimal)this._lmas.Threshold;
+                    frm.numF2.Value = (decimal)this._lmas.Factor2;
+                    frm.numExp1.Value = (decimal)this._lmas.Exponent1;
+                    frm.numExp2.Value = (decimal)this._lmas.Exponent2;
+                    frm.numThMultiplier.Value = (decimal)-Math.Log10(this._lmas.ThMultiplier);
+                    frm.cbAuto.Checked = this._lmas.MultAuto;
+
+                    if (frm.ShowDialog() == DialogResult.OK)
                     {
-                        Factor1 = f1,
-                        Threshold = th,
-                        Factor2 = f2,
-                        Exponent1 = e1,
-                        Exponent2 = e2,
-                        ThMultiplier = m,
-                        MultAuto = auto
-                    };
+                        if (frm.FBitmap != null)
+                        {
+                            using Bitmap? bmp = new Bitmap(frm.FBitmap);
+                            this._iggLuminanceMap2 = LuminancMapOp.ComputeLuminanceMapFromPicSync(bmp);
 
-                    this._lmas = lmas;
+                            this.cbUseLumMapBasePic.Enabled = true;
+                        }
+
+                        float f1 = (float)frm.numF1.Value;
+                        double th = (double)frm.numTh.Value;
+                        float f2 = (float)frm.numF2.Value;
+                        double e1 = (double)frm.numExp1.Value;
+                        double e2 = (double)frm.numExp2.Value;
+                        double m = Math.Pow(10, (double)-frm.numThMultiplier.Value);
+                        bool auto = frm.cbAuto.Checked;
+
+                        LumMapApplicationSettings lmas = new()
+                        {
+                            Factor1 = f1,
+                            Threshold = th,
+                            Factor2 = f2,
+                            Exponent1 = e1,
+                            Exponent2 = e2,
+                            ThMultiplier = m,
+                            MultAuto = auto
+                        };
+
+                        this._lmas = lmas;
+                    }
                 }
             }
+        }
+
+        private void cbUseLumMapBasePic_CheckedChanged(object sender, EventArgs e)
+        {
+            this._useLumMapBasePic = this.cbUseLumMapBasePic.Checked;
         }
     }
 }
