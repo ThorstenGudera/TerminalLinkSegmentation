@@ -667,21 +667,25 @@ Partial Public Class HelplineRulerCtrl
 
     Private Sub SetZoomLocationPictureSizeToHelpLines()
         If Me.dbPanel1 IsNot Nothing AndAlso Me.Bmp IsNot Nothing Then
-            For Each h As HelpLineControl In Me._helpLines
-                Try
-                    h.Zoom = Me.Zoom
-                    h.Picturesize = Me.Bmp.Size
+            If Me.dbPanel1 IsNot Nothing Then
+                For Each h As HelpLineControl In Me._helpLines
+                    If h IsNot Nothing AndAlso Not h.IsDisposed Then
+                        Try
+                            h.Zoom = Me.Zoom
+                            h.Picturesize = Me.Bmp.Size
 
-                    If h.Orientation = LayoutOrientation.OrientationHorizontal Then
-                        SetParentAutoScrollPosition(h)
-                        h.Location = New Point(0, CInt(Math.Ceiling(h.CurPos * h.Zoom)) - h.LayoutCorrection + h.ParentAutoScrollPosition.Y)
-                    Else
-                        SetParentAutoScrollPosition(h)
-                        h.Location = New Point(CInt(Math.Ceiling(h.CurPos * h.Zoom)) - h.LayoutCorrection + h.ParentAutoScrollPosition.X, 0)
+                            If h.Orientation = LayoutOrientation.OrientationHorizontal Then
+                                SetParentAutoScrollPosition(h)
+                                h.Location = New Point(0, CInt(Math.Ceiling(h.CurPos * h.Zoom)) - h.LayoutCorrection + h.ParentAutoScrollPosition.Y)
+                            Else
+                                SetParentAutoScrollPosition(h)
+                                h.Location = New Point(CInt(Math.Ceiling(h.CurPos * h.Zoom)) - h.LayoutCorrection + h.ParentAutoScrollPosition.X, 0)
+                            End If
+                        Catch
+                        End Try
                     End If
-                Catch
-                End Try
-            Next
+                Next
+            End If
         End If
     End Sub
 
