@@ -2115,11 +2115,13 @@ namespace AvoidAGrabCutEasy
                                 this.lblLumMap.Text = "computing...";
                             }));
                             LuminancMapOp lop = new LuminancMapOp();
+                            lop.ProgressPlus += lop_ProgressPlus;
                             using Bitmap bmp = new Bitmap(this._bmpBU);
                             float[,]? lMap = lop.ComputeInvLuminanceMapSync(bmp);
                             this._iggLuminanceMap = lMap;
                             this._gc.IGGLuminanceMap = (this._useLumMapBasePic && this._iggLuminanceMap2 != null) ? this._iggLuminanceMap2 : lMap;
                             this._gc.LumMapSettings = this._lmas;
+                            lop.ProgressPlus -= lop_ProgressPlus;
                             this.Invoke(new Action(() =>
                             {
                                 this.toolStripStatusLabel4.Text = "LumMap done.";
@@ -2399,6 +2401,12 @@ namespace AvoidAGrabCutEasy
                     e.Result = bRes;
                 }
             }
+        }
+
+        private void lop_ProgressPlus(object? sender, ConvolutionLib.ProgressEventArgs e)
+        {
+            if (this.backgroundWorker1 != null)
+                this.backgroundWorker1.ReportProgress(Math.Min((int)e.CurrentProgress, this.toolStripProgressBar1.Maximum));
         }
 
         private void _gc_ShowTHInfo(object? sender, string e)
@@ -9636,11 +9644,17 @@ namespace AvoidAGrabCutEasy
             if (this._bmpBU != null)
             {
                 this.lblLumMap.Text = "computing...";
+                this.toolStripProgressBar1.Value = 0;
+                this.toolStripProgressBar1.Visible = true;
                 LuminancMapOp lop = new LuminancMapOp();
+                lop.ProgressPlus += lop_ProgressPlus;
                 using Bitmap bmp = new Bitmap(this._bmpBU);
                 float[,]? lMap = await lop.ComputeInvLuminanceMap(bmp);
                 this._iggLuminanceMap = lMap;
+                lop.ProgressPlus -= lop_ProgressPlus;
                 this.lblLumMap.Text = "done";
+                this.toolStripProgressBar1.Value = this.toolStripProgressBar1.Maximum;
+                this.toolStripProgressBar1.Visible = false;
             }
         }
 
