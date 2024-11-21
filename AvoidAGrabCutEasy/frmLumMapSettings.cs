@@ -630,7 +630,15 @@ namespace AvoidAGrabCutEasy
 
         private void Timer3_Tick(object sender, EventArgs e)
         {
+            this.Timer3.Stop();
 
+            if (!this.toolStripProgressBar1.IsDisposed)
+            {
+                this.toolStripProgressBar1.Visible = false;
+                this.toolStripProgressBar1.Value = 0;
+
+                this.helplineRulerCtrl1.dbPanel1.Invalidate();
+            }
         }
 
         private void SetControls(bool e)
@@ -723,6 +731,7 @@ namespace AvoidAGrabCutEasy
                 this.btnInvGaussGrad.Enabled = true;
 
                 this.toolStripProgressBar1.Value = 0;
+                this.toolStripProgressBar1.Visible = true;
 
                 int kernelLength = (int)numIGGKernel.Value;
                 double cornerWeight = 0.01;
@@ -809,6 +818,11 @@ namespace AvoidAGrabCutEasy
                 this.CheckRedoButton();
 
                 this.btnInvGaussGrad.Text = "Go";
+
+                if (this.Timer3.Enabled)
+                    this.Timer3.Stop();
+                this.toolStripProgressBar1.Value = 100;
+                this.Timer3.Start();
 
                 this.backgroundWorker4.Dispose();
                 this.backgroundWorker4 = new BackgroundWorker();

@@ -12,6 +12,7 @@ namespace AvoidAGrabCutEasy
 {
     public class LuminancMapOp
     {
+        public event EventHandler<ConvolutionLib.ProgressEventArgs>? ProgressPlus;
         public float[,]? IGGLuminanceMap { get; internal set; }
 
         public LuminancMapOp() { }
@@ -190,7 +191,7 @@ namespace AvoidAGrabCutEasy
 
         private void Conv_ProgressPlus(object sender, ProgressEventArgs e)
         {
-
+            ProgressPlus?.Invoke(sender, e);
         }
         public static float[,]? ComputeLuminanceMapFromPicSync(Bitmap iG)
         {

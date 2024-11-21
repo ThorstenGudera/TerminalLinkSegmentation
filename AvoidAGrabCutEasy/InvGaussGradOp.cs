@@ -26,8 +26,6 @@ namespace AvoidAGrabCutEasy
                 sigma, false, false,
                 conv, false, steepness, radius);
 
-            conv.ProgressPlus -= Conv_ProgressPlus;
-
             //Gradients
             using (Bitmap bmpH = new Bitmap(bmp), bmpV = new Bitmap(bmp))
             {
@@ -42,6 +40,7 @@ namespace AvoidAGrabCutEasy
                 }
             }
 
+            conv.ProgressPlus -= Conv_ProgressPlus;
             conv = null;
 
             Bitmap? bOut = GetInvertedInvertedPic(bmp, alpha);
