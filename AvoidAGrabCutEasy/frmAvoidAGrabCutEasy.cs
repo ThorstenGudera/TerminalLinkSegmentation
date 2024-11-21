@@ -9713,10 +9713,11 @@ namespace AvoidAGrabCutEasy
                     frm.numExp2.Value = (decimal)this._lmas.Exponent2;
                     frm.numThMultiplier.Value = (decimal)-Math.Log10(this._lmas.ThMultiplier);
                     frm.cbAuto.Checked = this._lmas.MultAuto;
+                    frm.cbAppSettingsOnly.Checked = true;
 
                     if (frm.ShowDialog() == DialogResult.OK)
                     {
-                        if (frm.FBitmap != null)
+                        if (frm.FBitmap != null && !frm.cbAppSettingsOnly.Checked)
                         {
                             using Bitmap? bmp = new Bitmap(frm.FBitmap);
                             this._iggLuminanceMap2 = LuminancMapOp.ComputeLuminanceMapFromPicSync(bmp);

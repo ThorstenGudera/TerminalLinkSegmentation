@@ -92,6 +92,7 @@
             backgroundWorker3 = new System.ComponentModel.BackgroundWorker();
             Timer3 = new System.Windows.Forms.Timer(components);
             backgroundWorker4 = new System.ComponentModel.BackgroundWorker();
+            cbAppSettingsOnly = new CheckBox();
             ((System.ComponentModel.ISupportInitialize)numF1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numTh).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numF2).BeginInit();
@@ -283,6 +284,7 @@
             // 
             // splitContainer1.Panel2
             // 
+            splitContainer1.Panel2.Controls.Add(cbAppSettingsOnly);
             splitContainer1.Panel2.Controls.Add(button10);
             splitContainer1.Panel2.Controls.Add(button8);
             splitContainer1.Panel2.Controls.Add(button2);
@@ -807,6 +809,16 @@
             backgroundWorker4.ProgressChanged += backgroundWorker4_ProgressChanged;
             backgroundWorker4.RunWorkerCompleted += backgroundWorker4_RunWorkerCompleted;
             // 
+            // cbAppSettingsOnly
+            // 
+            cbAppSettingsOnly.AutoSize = true;
+            cbAppSettingsOnly.Location = new Point(13, 537);
+            cbAppSettingsOnly.Name = "cbAppSettingsOnly";
+            cbAppSettingsOnly.Size = new Size(174, 19);
+            cbAppSettingsOnly.TabIndex = 750;
+            cbAppSettingsOnly.Text = "do Application settings only";
+            cbAppSettingsOnly.UseVisualStyleBackColor = true;
+            // 
             // frmLumMapSettings
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -919,5 +931,6 @@
         private Label label8;
         internal NumericUpDown numValDst2;
         internal NumericUpDown numValSrc2;
+        internal CheckBox cbAppSettingsOnly;
     }
 }
