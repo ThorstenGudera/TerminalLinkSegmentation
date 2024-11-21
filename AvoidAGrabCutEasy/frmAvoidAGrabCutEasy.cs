@@ -2367,7 +2367,7 @@ namespace AvoidAGrabCutEasy
                     else //if (resPic == 1)
                     {
                         //set the list of all found paths [chains] to re_use later
-                        List<ChainCode>? allChains = GetBoundary(this._bResCopyTransp);
+                        List<ChainCode>? allChains = GetBoundary(this._bResCopyTransp, 0, false);
                         this._allChains = allChains;
 
                         if (allChains != null && allChains.Count > 0)
@@ -2668,7 +2668,7 @@ namespace AvoidAGrabCutEasy
                         if (bRes != null)
                             gx.DrawImage(bRes, 0, 0, bOut.Width, bOut.Height);
 
-                    List<ChainCode>? allChains = GetBoundary(bTmp);
+                    List<ChainCode>? allChains = GetBoundary(bTmp, 0, false);
                     this._allChains = allChains;
 
                     using (TextureBrush tb = new TextureBrush(bOrig))
@@ -2788,21 +2788,25 @@ namespace AvoidAGrabCutEasy
         }
 
 
-        private List<ChainCode>? GetBoundary(Bitmap upperImg, int minAlpha, bool grayScale)
+        private List<ChainCode>? GetBoundary(Bitmap? upperImg, int minAlpha, bool grayScale)
         {
             List<ChainCode>? l = null;
             Bitmap? bmpTmp = null;
             try
             {
-                if (AvailMem.AvailMem.checkAvailRam(upperImg.Width * upperImg.Height * 4L))
-                    bmpTmp = new Bitmap(upperImg);
-                else
-                    throw new Exception("Not enough memory.");
-                int nWidth = bmpTmp.Width;
-                int nHeight = bmpTmp.Height;
-                ChainFinder cf = new ChainFinder();
-                lock (this._lockObject)
-                    l = cf.GetOutline(bmpTmp, nWidth, nHeight, minAlpha, grayScale, 0, false, 0, false);
+                if (upperImg != null)
+                    if (AvailMem.AvailMem.checkAvailRam(upperImg.Width * upperImg.Height * 4L))
+                        bmpTmp = new Bitmap(upperImg);
+                    else
+                        throw new Exception("Not enough memory.");
+                if (bmpTmp != null)
+                {
+                    int nWidth = bmpTmp.Width;
+                    int nHeight = bmpTmp.Height;
+                    ChainFinder cf = new ChainFinder();
+                    lock (this._lockObject)
+                        l = cf.GetOutline(bmpTmp, nWidth, nHeight, minAlpha, grayScale, 0, false, 0, false);
+                }
             }
             catch (Exception exc)
             {
@@ -3745,7 +3749,7 @@ namespace AvoidAGrabCutEasy
                     }
                     else //if (resPic == 1)
                     {
-                        List<ChainCode>? allChains = GetBoundary(this._bResCopyTransp);
+                        List<ChainCode>? allChains = GetBoundary(this._bResCopyTransp, 0, false);
                         this._allChains = allChains;
 
                         if (allChains != null && allChains.Count > 0)
@@ -5844,7 +5848,7 @@ namespace AvoidAGrabCutEasy
                     else //if (resPic == 1)
                     {
                         //set the list of all found paths [chains] to re_use later
-                        List<ChainCode>? allChains = GetBoundary(this._bResCopyTransp);
+                        List<ChainCode>? allChains = GetBoundary(this._bResCopyTransp, 0, false);
                         this._allChains = allChains;
 
                         if (allChains != null && allChains.Count > 0)
