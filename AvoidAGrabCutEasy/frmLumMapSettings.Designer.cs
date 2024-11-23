@@ -77,6 +77,7 @@
             btnBlur = new Button();
             numKernel = new NumericUpDown();
             groupBox2 = new GroupBox();
+            pictureBox1 = new PictureBox();
             cbSecondColor = new CheckBox();
             label8 = new Label();
             numValDst2 = new NumericUpDown();
@@ -93,7 +94,6 @@
             backgroundWorker3 = new System.ComponentModel.BackgroundWorker();
             Timer3 = new System.Windows.Forms.Timer(components);
             backgroundWorker4 = new System.ComponentModel.BackgroundWorker();
-            pictureBox1 = new PictureBox();
             ((System.ComponentModel.ISupportInitialize)numF1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numTh).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numF2).BeginInit();
@@ -113,12 +113,12 @@
             ((System.ComponentModel.ISupportInitialize)numDistWeight).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numKernel).BeginInit();
             groupBox2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numValDst2).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numValSrc2).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numValDst).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numValSrc).BeginInit();
             groupBox1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             SuspendLayout();
             // 
             // btnCancel
@@ -424,6 +424,7 @@
             // btnRedo
             // 
             btnRedo.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            btnRedo.Enabled = false;
             btnRedo.ForeColor = SystemColors.ControlText;
             btnRedo.Location = new Point(320, 584);
             btnRedo.Margin = new Padding(4, 3, 4, 3);
@@ -437,6 +438,7 @@
             // btnUndo
             // 
             btnUndo.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            btnUndo.Enabled = false;
             btnUndo.ForeColor = SystemColors.ControlText;
             btnUndo.Location = new Point(224, 584);
             btnUndo.Margin = new Padding(4, 3, 4, 3);
@@ -679,6 +681,15 @@
             groupBox2.TabStop = false;
             groupBox2.Text = "1) Colors";
             // 
+            // pictureBox1
+            // 
+            pictureBox1.BorderStyle = BorderStyle.FixedSingle;
+            pictureBox1.Location = new Point(359, 8);
+            pictureBox1.Name = "pictureBox1";
+            pictureBox1.Size = new Size(40, 40);
+            pictureBox1.TabIndex = 695;
+            pictureBox1.TabStop = false;
+            // 
             // cbSecondColor
             // 
             cbSecondColor.AutoSize = true;
@@ -829,15 +840,6 @@
             backgroundWorker4.ProgressChanged += backgroundWorker4_ProgressChanged;
             backgroundWorker4.RunWorkerCompleted += backgroundWorker4_RunWorkerCompleted;
             // 
-            // pictureBox1
-            // 
-            pictureBox1.BorderStyle = BorderStyle.FixedSingle;
-            pictureBox1.Location = new Point(359, 8);
-            pictureBox1.Name = "pictureBox1";
-            pictureBox1.Size = new Size(40, 40);
-            pictureBox1.TabIndex = 695;
-            pictureBox1.TabStop = false;
-            // 
             // frmLumMapSettings
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -876,13 +878,13 @@
             ((System.ComponentModel.ISupportInitialize)numKernel).EndInit();
             groupBox2.ResumeLayout(false);
             groupBox2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             ((System.ComponentModel.ISupportInitialize)numValDst2).EndInit();
             ((System.ComponentModel.ISupportInitialize)numValSrc2).EndInit();
             ((System.ComponentModel.ISupportInitialize)numValDst).EndInit();
             ((System.ComponentModel.ISupportInitialize)numValSrc).EndInit();
             groupBox1.ResumeLayout(false);
             groupBox1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             ResumeLayout(false);
         }
 

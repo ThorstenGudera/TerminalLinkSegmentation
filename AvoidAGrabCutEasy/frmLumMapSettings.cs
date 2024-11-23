@@ -3,6 +3,7 @@ using ChainCodeFinder;
 using ConvolutionLib;
 using SegmentsListLib;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -51,6 +52,7 @@ namespace AvoidAGrabCutEasy
         private int _iy;
         private Bitmap? _bmpBU;
         private Bitmap? _baseImg;
+        private UndoList? _bmpInfos;
 
         public frmLumMapSettings(Bitmap bmp, string basePathAddition)
         {
@@ -269,6 +271,13 @@ namespace AvoidAGrabCutEasy
             if (_undoOPCache != null && _undoOPCache.Processing == false)
             {
                 Bitmap bOut = _undoOPCache.DoUndo();
+                bool replacePBImage = false;
+
+                if(this._bmpInfos?.CurrentPosition - 1 >= 0 && this._bmpInfos?[this._bmpInfos.CurrentPosition - 1].CachePosition == this._undoOPCache.CurrentPosition + 1) //this._undoOPCache.CurrentPosition already decremented
+                {
+                    this._bmpInfos.Undo();
+                    replacePBImage = true;
+                }
 
                 if (bOut != null)
                 {
@@ -286,7 +295,23 @@ namespace AvoidAGrabCutEasy
 
                     this.CheckRedoButton();
 
-                    if (this._baseImg != null)
+                    this.btnUndo.Enabled = this._undoOPCache.CurrentPosition > 1;
+
+                    if (replacePBImage && this._bmpInfos != null && this._bmpInfos.CurrentPosition - 1 >= 0 && this._bmpInfos[this._bmpInfos.CurrentPosition - 1].Bmp != null)
+                    {
+                        Image? iOld = this.pictureBox1.Image;
+                        BitmapInfo bi = this._bmpInfos[this._bmpInfos.CurrentPosition - 1];
+                        if(bi.Bmp != null)
+                            this.pictureBox1.Image = new Bitmap(bi.Bmp);
+                        this.pictureBox1.Refresh();
+
+                        if (iOld != null)
+                        {
+                            iOld.Dispose();
+                            iOld = null;
+                        }
+                    }
+                    else if(replacePBImage && this._bmpInfos != null && this._bmpInfos.CurrentPosition - 1 < 0 && this._baseImg != null)
                     {
                         Image? iOld = this.pictureBox1.Image;
                         this.pictureBox1.Image = new Bitmap(this._baseImg);
@@ -309,6 +334,13 @@ namespace AvoidAGrabCutEasy
             if (_undoOPCache != null && _undoOPCache.Processing == false)
             {
                 Bitmap bOut = _undoOPCache.DoRedo();
+                bool replacePBImage = false;
+
+                if (this._bmpInfos?.CurrentPosition < this._bmpInfos?.Count && this._bmpInfos?[this._bmpInfos.CurrentPosition].CachePosition == this._undoOPCache.CurrentPosition) //this._undoOPCache.CurrentPosition already decremented
+                {
+                    this._bmpInfos.Redo();
+                    replacePBImage = true;
+                }
 
                 if (bOut != null)
                 {
@@ -324,10 +356,13 @@ namespace AvoidAGrabCutEasy
 
                     this.btnUndo.Enabled = true;
 
-                    if (this._baseImg != null)
+                    if (replacePBImage && this._bmpInfos != null && this._bmpInfos.CurrentPosition <= this._bmpInfos.Count && this._bmpInfos[this._bmpInfos.CurrentPosition - 1].Bmp != null)
                     {
                         Image? iOld = this.pictureBox1.Image;
-                        this.pictureBox1.Image = new Bitmap(this._baseImg);
+
+                        BitmapInfo bi = this._bmpInfos[this._bmpInfos.CurrentPosition - 1];
+                        if (bi.Bmp != null)
+                            this.pictureBox1.Image = new Bitmap(bi.Bmp);
                         this.pictureBox1.Refresh();
 
                         if (iOld != null)
@@ -587,7 +622,6 @@ namespace AvoidAGrabCutEasy
             List<PointF> pNew = new();
             for (int i = 0; i < p.Count; i++)
                 pNew.Add(new PointF((float)(p[i].X * factor), (float)(p[i].Y * factor)));
-            pNew.Reverse();
 
             using Pen pen = new Pen(Color.Black, 2f);
 
@@ -607,6 +641,17 @@ namespace AvoidAGrabCutEasy
 
             //Maybe add a copy of bmp to a List<Bitmap>, and correlate the List indices with the _undoOPCache.CurrentPositions
             //when doing "Undo" or "Redo"
+            if (this._bmpInfos == null)
+                this._bmpInfos = new();
+
+            if (this._undoOPCache != null)
+            {
+                BitmapInfo bInfo = new(new Bitmap(bmp), this._undoOPCache.CurrentPosition);
+                if (this._bmpInfos.CurrentPosition < this._bmpInfos.Count && (this._bmpInfos.Count - this._bmpInfos.CurrentPosition) < this._bmpInfos.Count)
+                    this._bmpInfos.RemoveRange(this._bmpInfos.CurrentPosition, this._bmpInfos.Count - this._bmpInfos.CurrentPosition);
+
+                this._bmpInfos.Add(bInfo);
+            }
         }
 
         private void btnBlur_Click(object sender, EventArgs e)
@@ -819,6 +864,15 @@ namespace AvoidAGrabCutEasy
 
                 if (this._undoOPCache != null)
                     this._undoOPCache.Dispose();
+
+                if (this._bmpInfos != null)
+                {
+                    for (int i = this._bmpInfos.Count - 1; i >= 0; i--)
+                        this._bmpInfos[i].Dispose();
+
+                    this._bmpInfos.Clear();
+                }
+                    
             }
         }
 
