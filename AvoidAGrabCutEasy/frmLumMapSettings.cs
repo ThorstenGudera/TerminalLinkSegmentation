@@ -639,8 +639,6 @@ namespace AvoidAGrabCutEasy
                 iOld = null;
             }
 
-            //Maybe add a copy of bmp to a List<Bitmap>, and correlate the List indices with the _undoOPCache.CurrentPositions
-            //when doing "Undo" or "Redo"
             if (this._bmpInfos == null)
                 this._bmpInfos = new();
 
