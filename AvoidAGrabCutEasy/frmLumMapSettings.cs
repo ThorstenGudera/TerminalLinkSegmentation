@@ -273,7 +273,7 @@ namespace AvoidAGrabCutEasy
                 Bitmap bOut = _undoOPCache.DoUndo();
                 bool replacePBImage = false;
 
-                if(this._bmpInfos?.CurrentPosition - 1 >= 0 && this._bmpInfos?[this._bmpInfos.CurrentPosition - 1].CachePosition == this._undoOPCache.CurrentPosition + 1) //this._undoOPCache.CurrentPosition already decremented
+                if (this._bmpInfos?.CurrentPosition - 1 >= 0 && this._bmpInfos?[this._bmpInfos.CurrentPosition - 1].CachePosition == this._undoOPCache.CurrentPosition + 1) //this._undoOPCache.CurrentPosition already decremented
                 {
                     this._bmpInfos.Undo();
                     replacePBImage = true;
@@ -301,7 +301,7 @@ namespace AvoidAGrabCutEasy
                     {
                         Image? iOld = this.pictureBox1.Image;
                         BitmapInfo bi = this._bmpInfos[this._bmpInfos.CurrentPosition - 1];
-                        if(bi.Bmp != null)
+                        if (bi.Bmp != null)
                             this.pictureBox1.Image = new Bitmap(bi.Bmp);
                         this.pictureBox1.Refresh();
 
@@ -311,7 +311,7 @@ namespace AvoidAGrabCutEasy
                             iOld = null;
                         }
                     }
-                    else if(replacePBImage && this._bmpInfos != null && this._bmpInfos.CurrentPosition - 1 < 0 && this._baseImg != null)
+                    else if (replacePBImage && this._bmpInfos != null && this._bmpInfos.CurrentPosition - 1 < 0 && this._baseImg != null)
                     {
                         Image? iOld = this.pictureBox1.Image;
                         this.pictureBox1.Image = new Bitmap(this._baseImg);
@@ -870,7 +870,6 @@ namespace AvoidAGrabCutEasy
 
                     this._bmpInfos.Clear();
                 }
-                    
             }
         }
 

@@ -94,6 +94,9 @@
             backgroundWorker3 = new System.ComponentModel.BackgroundWorker();
             Timer3 = new System.Windows.Forms.Timer(components);
             backgroundWorker4 = new System.ComponentModel.BackgroundWorker();
+            rbLessThan = new RadioButton();
+            rbGreaterThan = new RadioButton();
+            label9 = new Label();
             ((System.ComponentModel.ISupportInitialize)numF1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numTh).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numF2).BeginInit();
@@ -636,6 +639,7 @@
             numDistWeight.Name = "numDistWeight";
             numDistWeight.Size = new Size(52, 23);
             numDistWeight.TabIndex = 687;
+            toolTip1.SetToolTip(numDistWeight, "Edge weight for blurring. \r\nIndicates, when to stop blurring.\r\nRange is 0 to 443. Greater values blur more on edges.");
             numDistWeight.Value = new decimal(new int[] { 101, 0, 0, 0 });
             // 
             // btnBlur
@@ -794,6 +798,9 @@
             // 
             // groupBox1
             // 
+            groupBox1.Controls.Add(label9);
+            groupBox1.Controls.Add(rbGreaterThan);
+            groupBox1.Controls.Add(rbLessThan);
             groupBox1.Controls.Add(label1);
             groupBox1.Controls.Add(numF1);
             groupBox1.Controls.Add(cbAuto);
@@ -839,6 +846,37 @@
             backgroundWorker4.DoWork += backgroundWorker4_DoWork;
             backgroundWorker4.ProgressChanged += backgroundWorker4_ProgressChanged;
             backgroundWorker4.RunWorkerCompleted += backgroundWorker4_RunWorkerCompleted;
+            // 
+            // rbLessThan
+            // 
+            rbLessThan.AutoSize = true;
+            rbLessThan.Checked = true;
+            rbLessThan.Location = new Point(267, 74);
+            rbLessThan.Name = "rbLessThan";
+            rbLessThan.Size = new Size(47, 19);
+            rbLessThan.TabIndex = 737;
+            rbLessThan.TabStop = true;
+            rbLessThan.Text = "< th";
+            rbLessThan.UseVisualStyleBackColor = true;
+            // 
+            // rbGreaterThan
+            // 
+            rbGreaterThan.AutoSize = true;
+            rbGreaterThan.Location = new Point(321, 74);
+            rbGreaterThan.Name = "rbGreaterThan";
+            rbGreaterThan.Size = new Size(47, 19);
+            rbGreaterThan.TabIndex = 737;
+            rbGreaterThan.Text = "> th";
+            rbGreaterThan.UseVisualStyleBackColor = true;
+            // 
+            // label9
+            // 
+            label9.AutoSize = true;
+            label9.Location = new Point(153, 76);
+            label9.Name = "label9";
+            label9.Size = new Size(102, 15);
+            label9.TabIndex = 738;
+            label9.Text = "factor2 values are ";
             // 
             // frmLumMapSettings
             // 
@@ -955,5 +993,8 @@
         internal NumericUpDown numValSrc2;
         internal CheckBox cbAppSettingsOnly;
         private PictureBox pictureBox1;
+        private Label label9;
+        internal RadioButton rbGreaterThan;
+        internal RadioButton rbLessThan;
     }
 }

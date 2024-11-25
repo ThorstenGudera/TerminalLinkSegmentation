@@ -9714,6 +9714,10 @@ namespace AvoidAGrabCutEasy
 
                     frm.numF1.Value = (decimal)this._lmas.Factor1;
                     frm.numTh.Value = (decimal)this._lmas.Threshold;
+                    if (this._lmas.ValsLessThanTh)
+                        frm.rbLessThan.Checked = true;
+                    else
+                        frm.rbGreaterThan.Checked = true;
                     frm.numF2.Value = (decimal)this._lmas.Factor2;
                     frm.numExp1.Value = (decimal)this._lmas.Exponent1;
                     frm.numExp2.Value = (decimal)this._lmas.Exponent2;
@@ -9733,6 +9737,7 @@ namespace AvoidAGrabCutEasy
 
                         float f1 = (float)frm.numF1.Value;
                         double th = (double)frm.numTh.Value;
+                        bool ltth = frm.rbLessThan.Checked;
                         float f2 = (float)frm.numF2.Value;
                         double e1 = (double)frm.numExp1.Value;
                         double e2 = (double)frm.numExp2.Value;
@@ -9743,6 +9748,7 @@ namespace AvoidAGrabCutEasy
                         {
                             Factor1 = f1,
                             Threshold = th,
+                            ValsLessThanTh = ltth,
                             Factor2 = f2,
                             Exponent1 = e1,
                             Exponent2 = e2,
