@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing.Imaging;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -29,15 +30,12 @@ namespace AvoidAGrabCutEasy
             //Gradients
             using (Bitmap bmpH = new Bitmap(bmp), bmpV = new Bitmap(bmp))
             {
-                if (this.BGW != null)
-                {
-                    EdgeDetection_Scharr_Horz(bmpH, divisor, 1, false, 127, conv, this.BGW);
-                    EdgeDetection_Scharr_Vert(bmpV, divisor, 1, false, 127, conv, this.BGW);
+                EdgeDetection_Scharr_Horz(bmpH, divisor, 1, false, 127, conv, this.BGW);
+                EdgeDetection_Scharr_Vert(bmpV, divisor, 1, false, 127, conv, this.BGW);
 
-                    //Magnitude
-                    MergeBitmaps(bmp, bmpH, bmpV, 0, 127);
-                    //ReplaceColors(bmp, 255, 0, 0, 0, 2, 255, 0, 0, 0);
-                }
+                //Magnitude
+                MergeBitmaps(bmp, bmpH, bmpV, 0, 127);
+                //ReplaceColors(bmp, 255, 0, 0, 0, 2, 255, 0, 0, 0);
             }
 
             conv.ProgressPlus -= Conv_ProgressPlus;
@@ -54,7 +52,7 @@ namespace AvoidAGrabCutEasy
             return bOut;
         }
 
-        private bool EdgeDetection_Scharr_Horz(Bitmap b, double divisor, int nWeight, bool doTransparency, int Bias, Convolution conv, System.ComponentModel.BackgroundWorker bgw)
+        private bool EdgeDetection_Scharr_Horz(Bitmap b, double divisor, int nWeight, bool doTransparency, int Bias, Convolution conv, System.ComponentModel.BackgroundWorker? bgw)
         {
             double[,] Kernel = new double[3, 3];
 
@@ -78,7 +76,7 @@ namespace AvoidAGrabCutEasy
             return conv.Convolve_par(b, Kernel, AddVals, Bias, 255, false, true, pe, bgw, divisor);
         }
 
-        private bool EdgeDetection_Scharr_Vert(Bitmap b, double divisor, int nWeight, bool doTransparency, int Bias, Convolution conv, System.ComponentModel.BackgroundWorker bgw)
+        private bool EdgeDetection_Scharr_Vert(Bitmap b, double divisor, int nWeight, bool doTransparency, int Bias, Convolution conv, System.ComponentModel.BackgroundWorker? bgw)
         {
             double[,] Kernel = new double[3, 3];
 
@@ -365,7 +363,7 @@ namespace AvoidAGrabCutEasy
 
         private void Conv_ProgressPlus(object sender, ProgressEventArgs e)
         {
-            this.BGW?.ReportProgress(Math.Min((int)(((double)e.CurrentProgress / (double)e.ImgWidthHeight) * 100), 100));
+            this.BGW?.ReportProgress(Math.Min((int)e.CurrentProgress, 100));
         }
 
         public bool FastZGaussian_Blur_NxN_SigmaAsDistance(Bitmap b, int Length, double Weight, int Sigma, bool doTransparency,
@@ -434,5 +432,87 @@ namespace AvoidAGrabCutEasy
 
             return true;
         }
+
+        public bool FastZGaussian_Blur_NxN_SigmaAsDistance(Bitmap b, int Length, double Weight, int Sigma, bool doTransparency, bool SrcOnSigma, bool logarithmic)
+        {
+            if ((Length & 0x1) != 1)
+                return false;
+
+            double[] KernelVector = new double[Length];
+
+            int Radius = Length / 2;
+
+            double a = -2.0 * Radius * Radius / Math.Log(Weight);
+            double Sum = 0.0;
+
+            for (int x = 0; x < KernelVector.Length; x++)
+            {
+                double dist = Math.Abs(x - Radius);
+                KernelVector[x] = Math.Exp(-dist * dist / a);
+                Sum += KernelVector[x];
+            }
+
+            for (int x = 0; x < KernelVector.Length; x++)
+                KernelVector[x] /= Sum;
+
+            Convolution? conv = new Convolution();
+            conv.CancelLoops = false;
+
+            conv.ProgressPlus += Conv_ProgressPlus;
+
+            double[] AddValVector = conv.CalculateStandardAddVals(KernelVector, Math.Min(255, b.Width - 1));
+
+            ProgressEventArgs pe = new ProgressEventArgs(b.Height + b.Width, 20, 1);
+
+            conv.ConvolveH_par_SigmaAsDistance(b, KernelVector, AddValVector, 0, Sigma, doTransparency, Math.Min(255, b.Width - 1), SrcOnSigma, pe, this.BGW, logarithmic);
+
+            b.RotateFlip(RotateFlipType.Rotate270FlipNone);
+
+            conv.ConvolveH_par_SigmaAsDistance(b, KernelVector, AddValVector, 0, Sigma, doTransparency, Math.Min(255, b.Width - 1), SrcOnSigma, pe, this.BGW, logarithmic);
+
+            b.RotateFlip(RotateFlipType.Rotate90FlipNone);
+
+            conv.ProgressPlus -= Conv_ProgressPlus;
+
+            return true;
+        }
+
+        public bool FastZGaussian_Blur_NxN_SigmaAsDistance(Bitmap b, int Length, double Weight, int Sigma, bool doTransparency, bool SrcOnSigma, bool logarithmic, ConvolutionLib.Convolution conv)
+        {
+            if ((Length & 0x1) != 1)
+                return false;
+
+            double[] KernelVector = new double[Length];
+
+            int Radius = Length / 2;
+
+            double a = -2.0 * Radius * Radius / Math.Log(Weight);
+            double Sum = 0.0;
+
+            for (int x = 0; x < KernelVector.Length; x++)
+            {
+                double dist = Math.Abs(x - Radius);
+                KernelVector[x] = Math.Exp(-dist * dist / a);
+                Sum += KernelVector[x];
+            }
+
+            for (int x = 0; x < KernelVector.Length; x++)
+                KernelVector[x] /= Sum;
+
+            double[] AddValVector = conv.CalculateStandardAddVals(KernelVector, Math.Min(255, b.Width - 1));
+
+            ProgressEventArgs pe = new ProgressEventArgs(b.Height + b.Width, 20, 1);
+
+            conv.ConvolveH_par_SigmaAsDistance(b, KernelVector, AddValVector, 0, Sigma, doTransparency, Math.Min(255, b.Width - 1), SrcOnSigma, pe, this.BGW, logarithmic);
+
+            b.RotateFlip(RotateFlipType.Rotate270FlipNone);
+
+            conv.ConvolveH_par_SigmaAsDistance(b, KernelVector, AddValVector, 0, Sigma, doTransparency, Math.Min(255, b.Width - 1), SrcOnSigma, pe, this.BGW, logarithmic);
+
+            b.RotateFlip(RotateFlipType.Rotate90FlipNone);
+
+            return true;
+        }
+
     }
 }

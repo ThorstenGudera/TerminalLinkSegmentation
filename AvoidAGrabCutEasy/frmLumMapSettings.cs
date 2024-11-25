@@ -902,10 +902,12 @@ namespace AvoidAGrabCutEasy
                 bool grayscale = false;
                 bool stretchValues = true;
                 int threshold = 127;
+                bool postBlur = this.cbPostBlur.Checked;
+                int pBKrnl = (int)this.numPostBlurKrrnl.Value;
 
                 object[] o = { kernelLength, cornerWeight, sigma, steepness,
                                radius, alpha, gradientMode, divisor, grayscale, stretchValues,
-                               threshold };
+                               threshold, postBlur, pBKrnl };
 
                 this.backgroundWorker4.RunWorkerAsync(o);
             }
@@ -930,6 +932,8 @@ namespace AvoidAGrabCutEasy
                 bool grayscale = (bool)o[8];
                 bool stretchValues = (bool)o[9];
                 int threshold = (int)o[10];
+                bool postBlur = (bool)o[11];
+                int pBKrnl = (int)o[12];
 
                 Rectangle r = new Rectangle(0, 0, bmp.Width, bmp.Height);
 
@@ -941,6 +945,13 @@ namespace AvoidAGrabCutEasy
                         igg.BGW = this.backgroundWorker4;
                         Bitmap? iG = igg.Inv_InvGaussGrad(bmp, alpha, gradientMode, divisor, kernelLength, cornerWeight,
                             sigma, steepness, radius, stretchValues, threshold);
+                        if (postBlur && iG != null)
+                        {
+                            if(this.backgroundWorker4.WorkerReportsProgress)
+                                this.backgroundWorker4.ReportProgress(0);      
+                            igg.FastZGaussian_Blur_NxN_SigmaAsDistance(iG, pBKrnl, 0.01,
+                                                                    255, true, true, false);  
+                        }
                         e.Result = iG;
                     }
                 }

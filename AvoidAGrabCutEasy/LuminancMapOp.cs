@@ -24,21 +24,7 @@ namespace AvoidAGrabCutEasy
                 float[,]? result = new float[bmp.Width, bmp.Height];
                 using Bitmap b = new Bitmap(bmp);
 
-                //1 colors
-                byte[] rgb = new byte[256];
-                List<Point> p = new();
-                p.Add(new Point(0, 0));
-                p.Add(new Point(62, 148));
-                p.Add(new Point(255, 255));
-
-                CurveSegment cuSgmt = new();
-                List<BezierSegment> bz = cuSgmt.CalcBezierSegments(p.ToArray(), 0.5f);
-                List<PointF> pts = cuSgmt.GetAllPoints(bz, 256, 0, 255);
-                cuSgmt.MapPoints(pts, rgb);
-
-                ColorCurves.fipbmp.GradColors(b, rgb, rgb, rgb);
-
-                //2 blur
+                //1 blur
                 int krnl = 127;
                 int maxVal = 101;
 
@@ -49,10 +35,9 @@ namespace AvoidAGrabCutEasy
                 InvGaussGradOp igg = new InvGaussGradOp();
                 igg.BGW = null;
 
-                igg.FastZGaussian_Blur_NxN_SigmaAsDistance(bmp, krnl, 0.01, 255, false, false, conv, false, 1E-12, maxVal);
-                conv.ProgressPlus -= Conv_ProgressPlus;
+                igg.FastZGaussian_Blur_NxN_SigmaAsDistance(b, krnl, 0.01, 255, false, false, conv, false, 1E-12, maxVal);
 
-                //3 igg
+                //2 igg
                 int kernelLength = 27;
                 double cornerWeight = 0.01;
                 int sigma = 255;
@@ -64,16 +49,21 @@ namespace AvoidAGrabCutEasy
                 //bool grayscale = false;
                 bool stretchValues = true;
                 int threshold = 127;
+                int pBKrnl = 7;
 
                 Rectangle r = new Rectangle(0, 0, bmp.Width, bmp.Height);
 
                 if (r.Width > 0 && r.Height > 0)
                 {
-                    Bitmap? iG = igg.Inv_InvGaussGrad(bmp, alpha, gradientMode, divisor, kernelLength, cornerWeight,
+                    Bitmap? iG = igg.Inv_InvGaussGrad(b, alpha, gradientMode, divisor, kernelLength, cornerWeight,
                         sigma, steepness, radius, stretchValues, threshold);
 
                     if (iG != null)
                     {
+                        //3 PostBlur
+                        igg.FastZGaussian_Blur_NxN_SigmaAsDistance(iG, pBKrnl, 0.01,
+                                        255, true, true, false, conv);
+
                         unsafe
                         {
                             int w = bmp.Width;
@@ -99,6 +89,8 @@ namespace AvoidAGrabCutEasy
                     }
                 }
 
+                conv.ProgressPlus -= Conv_ProgressPlus;
+
                 return result;
             });
 
@@ -111,21 +103,7 @@ namespace AvoidAGrabCutEasy
 
             using Bitmap b = new Bitmap(bmp);
 
-            //1 colors
-            byte[] rgb = new byte[256];
-            List<Point> p = new();
-            p.Add(new Point(0, 0));
-            p.Add(new Point(62, 148));
-            p.Add(new Point(255, 255));
-
-            CurveSegment cuSgmt = new();
-            List<BezierSegment> bz = cuSgmt.CalcBezierSegments(p.ToArray(), 0.5f);
-            List<PointF> pts = cuSgmt.GetAllPoints(bz, 256, 0, 255);
-            cuSgmt.MapPoints(pts, rgb);
-
-            ColorCurves.fipbmp.GradColors(b, rgb, rgb, rgb);
-
-            //2 blur
+            //1 blur
             int krnl = 127;
             int maxVal = 101;
 
@@ -136,10 +114,9 @@ namespace AvoidAGrabCutEasy
             InvGaussGradOp igg = new InvGaussGradOp();
             igg.BGW = null;
 
-            igg.FastZGaussian_Blur_NxN_SigmaAsDistance(bmp, krnl, 0.01, 255, false, false, conv, false, 1E-12, maxVal);
-            conv.ProgressPlus -= Conv_ProgressPlus;
+            igg.FastZGaussian_Blur_NxN_SigmaAsDistance(b, krnl, 0.01, 255, false, false, conv, false, 1E-12, maxVal);
 
-            //3 igg
+            //2 igg
             int kernelLength = 27;
             double cornerWeight = 0.01;
             int sigma = 255;
@@ -151,16 +128,20 @@ namespace AvoidAGrabCutEasy
             //bool grayscale = false;
             bool stretchValues = true;
             int threshold = 127;
+            int pBKrnl = 7;
 
             Rectangle r = new Rectangle(0, 0, bmp.Width, bmp.Height);
 
             if (r.Width > 0 && r.Height > 0)
             {
-                Bitmap? iG = igg.Inv_InvGaussGrad(bmp, alpha, gradientMode, divisor, kernelLength, cornerWeight,
+                Bitmap? iG = igg.Inv_InvGaussGrad(b, alpha, gradientMode, divisor, kernelLength, cornerWeight,
                     sigma, steepness, radius, stretchValues, threshold);
 
                 if (iG != null)
                 {
+                    //3 PostBlur
+                    igg.FastZGaussian_Blur_NxN_SigmaAsDistance(iG, pBKrnl, 0.01,
+                                                            255, true, true, false, conv);
                     unsafe
                     {
                         int w = bmp.Width;
@@ -185,6 +166,8 @@ namespace AvoidAGrabCutEasy
                     }
                 }
             }
+
+            conv.ProgressPlus -= Conv_ProgressPlus;
 
             return result;
         }

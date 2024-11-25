@@ -63,7 +63,10 @@
             rbApp = new RadioButton();
             rbImage = new RadioButton();
             groupBox4 = new GroupBox();
+            numPostBlurKrrnl = new NumericUpDown();
+            cbPostBlur = new CheckBox();
             label22 = new Label();
+            label10 = new Label();
             numIGGDivisor = new NumericUpDown();
             label21 = new Label();
             label18 = new Label();
@@ -89,14 +92,14 @@
             btnColors = new Button();
             panel1 = new Panel();
             groupBox1 = new GroupBox();
+            label9 = new Label();
+            rbGreaterThan = new RadioButton();
+            rbLessThan = new RadioButton();
             toolTip1 = new ToolTip(components);
             saveFileDialog1 = new SaveFileDialog();
             backgroundWorker3 = new System.ComponentModel.BackgroundWorker();
             Timer3 = new System.Windows.Forms.Timer(components);
             backgroundWorker4 = new System.ComponentModel.BackgroundWorker();
-            rbLessThan = new RadioButton();
-            rbGreaterThan = new RadioButton();
-            label9 = new Label();
             ((System.ComponentModel.ISupportInitialize)numF1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numTh).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numF2).BeginInit();
@@ -109,6 +112,7 @@
             splitContainer1.SuspendLayout();
             statusStrip1.SuspendLayout();
             groupBox4.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)numPostBlurKrrnl).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numIGGDivisor).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numIGGAlpha).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numIGGKernel).BeginInit();
@@ -514,7 +518,10 @@
             // 
             // groupBox4
             // 
+            groupBox4.Controls.Add(numPostBlurKrrnl);
+            groupBox4.Controls.Add(cbPostBlur);
             groupBox4.Controls.Add(label22);
+            groupBox4.Controls.Add(label10);
             groupBox4.Controls.Add(numIGGDivisor);
             groupBox4.Controls.Add(label21);
             groupBox4.Controls.Add(label18);
@@ -528,6 +535,30 @@
             groupBox4.TabStop = false;
             groupBox4.Text = "3) InvGaussGrad";
             // 
+            // numPostBlurKrrnl
+            // 
+            numPostBlurKrrnl.Location = new Point(177, 59);
+            numPostBlurKrrnl.Margin = new Padding(4, 3, 4, 3);
+            numPostBlurKrrnl.Maximum = new decimal(new int[] { 255, 0, 0, 0 });
+            numPostBlurKrrnl.Minimum = new decimal(new int[] { 3, 0, 0, 0 });
+            numPostBlurKrrnl.Name = "numPostBlurKrrnl";
+            numPostBlurKrrnl.Size = new Size(52, 23);
+            numPostBlurKrrnl.TabIndex = 688;
+            numPostBlurKrrnl.Value = new decimal(new int[] { 7, 0, 0, 0 });
+            // 
+            // cbPostBlur
+            // 
+            cbPostBlur.AutoSize = true;
+            cbPostBlur.Checked = true;
+            cbPostBlur.CheckState = CheckState.Checked;
+            cbPostBlur.Location = new Point(19, 62);
+            cbPostBlur.Name = "cbPostBlur";
+            cbPostBlur.Size = new Size(73, 19);
+            cbPostBlur.TabIndex = 694;
+            cbPostBlur.Text = "post Blur";
+            cbPostBlur.UseVisualStyleBackColor = true;
+            cbPostBlur.CheckedChanged += cbSecondColor_CheckedChanged;
+            // 
             // label22
             // 
             label22.AutoSize = true;
@@ -536,6 +567,15 @@
             label22.Size = new Size(38, 15);
             label22.TabIndex = 695;
             label22.Text = "Alpha";
+            // 
+            // label10
+            // 
+            label10.AutoSize = true;
+            label10.Location = new Point(132, 63);
+            label10.Name = "label10";
+            label10.Size = new Size(40, 15);
+            label10.TabIndex = 685;
+            label10.Text = "Kernel";
             // 
             // numIGGDivisor
             // 
@@ -683,7 +723,7 @@
             groupBox2.Size = new Size(402, 92);
             groupBox2.TabIndex = 739;
             groupBox2.TabStop = false;
-            groupBox2.Text = "1) Colors";
+            groupBox2.Text = "1) Colors [optional, not done in automatic methods]";
             // 
             // pictureBox1
             // 
@@ -821,6 +861,37 @@
             groupBox1.TabStop = false;
             groupBox1.Text = "Application Settings";
             // 
+            // label9
+            // 
+            label9.AutoSize = true;
+            label9.Location = new Point(153, 76);
+            label9.Name = "label9";
+            label9.Size = new Size(102, 15);
+            label9.TabIndex = 738;
+            label9.Text = "factor2 values are ";
+            // 
+            // rbGreaterThan
+            // 
+            rbGreaterThan.AutoSize = true;
+            rbGreaterThan.Location = new Point(321, 74);
+            rbGreaterThan.Name = "rbGreaterThan";
+            rbGreaterThan.Size = new Size(47, 19);
+            rbGreaterThan.TabIndex = 737;
+            rbGreaterThan.Text = "> th";
+            rbGreaterThan.UseVisualStyleBackColor = true;
+            // 
+            // rbLessThan
+            // 
+            rbLessThan.AutoSize = true;
+            rbLessThan.Checked = true;
+            rbLessThan.Location = new Point(267, 74);
+            rbLessThan.Name = "rbLessThan";
+            rbLessThan.Size = new Size(47, 19);
+            rbLessThan.TabIndex = 737;
+            rbLessThan.TabStop = true;
+            rbLessThan.Text = "< th";
+            rbLessThan.UseVisualStyleBackColor = true;
+            // 
             // saveFileDialog1
             // 
             saveFileDialog1.FileName = "Bild1.png";
@@ -846,37 +917,6 @@
             backgroundWorker4.DoWork += backgroundWorker4_DoWork;
             backgroundWorker4.ProgressChanged += backgroundWorker4_ProgressChanged;
             backgroundWorker4.RunWorkerCompleted += backgroundWorker4_RunWorkerCompleted;
-            // 
-            // rbLessThan
-            // 
-            rbLessThan.AutoSize = true;
-            rbLessThan.Checked = true;
-            rbLessThan.Location = new Point(267, 74);
-            rbLessThan.Name = "rbLessThan";
-            rbLessThan.Size = new Size(47, 19);
-            rbLessThan.TabIndex = 737;
-            rbLessThan.TabStop = true;
-            rbLessThan.Text = "< th";
-            rbLessThan.UseVisualStyleBackColor = true;
-            // 
-            // rbGreaterThan
-            // 
-            rbGreaterThan.AutoSize = true;
-            rbGreaterThan.Location = new Point(321, 74);
-            rbGreaterThan.Name = "rbGreaterThan";
-            rbGreaterThan.Size = new Size(47, 19);
-            rbGreaterThan.TabIndex = 737;
-            rbGreaterThan.Text = "> th";
-            rbGreaterThan.UseVisualStyleBackColor = true;
-            // 
-            // label9
-            // 
-            label9.AutoSize = true;
-            label9.Location = new Point(153, 76);
-            label9.Name = "label9";
-            label9.Size = new Size(102, 15);
-            label9.TabIndex = 738;
-            label9.Text = "factor2 values are ";
             // 
             // frmLumMapSettings
             // 
@@ -907,6 +947,7 @@
             statusStrip1.PerformLayout();
             groupBox4.ResumeLayout(false);
             groupBox4.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)numPostBlurKrrnl).EndInit();
             ((System.ComponentModel.ISupportInitialize)numIGGDivisor).EndInit();
             ((System.ComponentModel.ISupportInitialize)numIGGAlpha).EndInit();
             ((System.ComponentModel.ISupportInitialize)numIGGKernel).EndInit();
@@ -996,5 +1037,8 @@
         private Label label9;
         internal RadioButton rbGreaterThan;
         internal RadioButton rbLessThan;
+        internal NumericUpDown numPostBlurKrrnl;
+        internal CheckBox cbPostBlur;
+        private Label label10;
     }
 }
