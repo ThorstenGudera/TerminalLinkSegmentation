@@ -1608,7 +1608,10 @@ namespace AvoidAGrabCutEasy
             this.cbDraw_CheckedChanged(this.cbDraw, new EventArgs());
 
             if (this.helplineRulerCtrl1.Bmp != null)
+            {
                 this.numMaxSize.Value = (decimal)Math.Max(this.helplineRulerCtrl1.Bmp.Width, this.helplineRulerCtrl1.Bmp.Height);
+                btnCmpLMap_Click(this.btnCmpLMap, new EventArgs());
+            }
 
             this.btnOK.Enabled = true;
         }
@@ -9689,6 +9692,9 @@ namespace AvoidAGrabCutEasy
             if (this._bmpBU != null)
             {
                 this.lblLumMap.Text = "computing...";
+                this.btnGo.Enabled = this.btnDoAll.Enabled = false;
+                this.btnGo.Refresh();
+                this.btnDoAll.Refresh();
                 this.toolStripProgressBar1.Value = 0;
                 this.toolStripProgressBar1.Visible = true;
                 LuminancMapOp lop = new LuminancMapOp();
@@ -9697,6 +9703,7 @@ namespace AvoidAGrabCutEasy
                 float[,]? lMap = await lop.ComputeInvLuminanceMap(bmp);
                 this._iggLuminanceMap = lMap;
                 lop.ProgressPlus -= lop_ProgressPlus;
+                this.btnGo.Enabled = this.btnDoAll.Enabled = true;
                 this.lblLumMap.Text = "done";
                 this.toolStripProgressBar1.Value = this.toolStripProgressBar1.Maximum;
                 this.toolStripProgressBar1.Visible = false;
