@@ -1990,7 +1990,8 @@ namespace AvoidAGrabCutEasy
                         kMInitRnd = kMInitRnd,
                         KMeansIters = KMeansIters,
                         AssumeExpDist = assumeExpDist,
-                        ScribbleSeq = scribbleSeq
+                        ScribbleSeq = scribbleSeq,
+                        UseLumMap = this.cbCompLumMap.Checked //<- will be put into a param
                     };
 
                     this._gc.ShowInfo += _gc_ShowInfo;
@@ -2063,6 +2064,7 @@ namespace AvoidAGrabCutEasy
                     this._gc.KMeansIters = KMeansIters;
                     this._gc.AssumeExpDist = assumeExpDist;
                     this._gc.ScribbleSeq = scribbleSeq;
+                    this._gc.UseLumMap = this.cbCompLumMap.Checked;
 
                     if (!workOnPaths && this._gc.ScribbleMode && this._gc.Scribbles != null && this._gc.Scribbles.Count > 0)
                     {
@@ -2098,7 +2100,7 @@ namespace AvoidAGrabCutEasy
                 //For this, we compute a gradient pic and from this, we get the inverted
                 //luminance map. This may change, also the settings for the invGaussGrad
                 //method for conputing the gradient pic may change.
-                if (this.cbCompLumMap.Checked)
+                if (this._gc.UseLumMap)
                 {
                     if (this._iggLuminanceMap != null || (this._iggLuminanceMap2 != null && this._useLumMapBasePic))
                     {

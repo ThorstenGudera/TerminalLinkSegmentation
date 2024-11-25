@@ -81,6 +81,7 @@ namespace AvoidAGrabCutEasy
         public List<Tuple<int, int, int, bool, List<List<Point>>>>? ScribbleSeq { get; internal set; }
         public float[,]? IGGLuminanceMap { get; internal set; }
         internal LumMapApplicationSettings? LumMapSettings { get; set; }
+        public bool UseLumMap { get; set; }
 
         public event EventHandler<string>? ShowInfo;
         public event EventHandler<string>? ShowTHInfo;
@@ -1395,7 +1396,7 @@ namespace AvoidAGrabCutEasy
 
                 //test with a lum_map, first application of idea, may change
                 //influence here is bigger than below
-                if (this.IGGLuminanceMap != null && this.LumMapSettings != null)
+                if (this.UseLumMap && this.IGGLuminanceMap != null && this.LumMapSettings != null)
                 {
                     double lumTh = this.LumMapSettings.Threshold;
                     double lumMult = this.LumMapSettings.ThMultiplier;
@@ -1435,6 +1436,8 @@ namespace AvoidAGrabCutEasy
                     this.Bmp.UnlockBits(bmData);
                     return -1;
                 }
+
+                OnShowTHInfo(this.Threshold.ToString());
 
                 //test for automated finding of decision boundary... 
                 #region autoThreshold
