@@ -1,6 +1,7 @@
 ﻿using Cache;
 using ChainCodeFinder;
 using ConvolutionLib;
+using MorphologicalProcessing2.Algorithms;
 using SegmentsListLib;
 using System;
 using System.Collections;
@@ -904,10 +905,11 @@ namespace AvoidAGrabCutEasy
                 int threshold = 127;
                 bool postBlur = this.cbPostBlur.Checked;
                 int pBKrnl = (int)this.numPostBlurKrrnl.Value;
+                bool invGaussGrad = this.rbIGG.Checked;
 
                 object[] o = { kernelLength, cornerWeight, sigma, steepness,
                                radius, alpha, gradientMode, divisor, grayscale, stretchValues,
-                               threshold, postBlur, pBKrnl };
+                               threshold, postBlur, pBKrnl, invGaussGrad };
 
                 this.backgroundWorker4.RunWorkerAsync(o);
             }
@@ -917,7 +919,7 @@ namespace AvoidAGrabCutEasy
         {
             if (e.Argument != null && this.helplineRulerCtrl1.Bmp != null)
             {
-                Bitmap bmp = new Bitmap(this.helplineRulerCtrl1.Bmp);
+                using Bitmap bmp = new Bitmap(this.helplineRulerCtrl1.Bmp);
 
                 object[] o = (object[])e.Argument;
 
@@ -934,6 +936,7 @@ namespace AvoidAGrabCutEasy
                 int threshold = (int)o[10];
                 bool postBlur = (bool)o[11];
                 int pBKrnl = (int)o[12];
+                bool invGaussGrad = (bool)o[13];
 
                 Rectangle r = new Rectangle(0, 0, bmp.Width, bmp.Height);
 
@@ -943,19 +946,119 @@ namespace AvoidAGrabCutEasy
                     {
                         InvGaussGradOp igg = new InvGaussGradOp();
                         igg.BGW = this.backgroundWorker4;
-                        Bitmap? iG = igg.Inv_InvGaussGrad(bmp, alpha, gradientMode, divisor, kernelLength, cornerWeight,
-                            sigma, steepness, radius, stretchValues, threshold);
+
+                        //Bitmap? iG = igg.Inv_InvGaussGrad(bmp, alpha, gradientMode, divisor, kernelLength, cornerWeight,
+                        //    sigma, steepness, radius, stretchValues, threshold);
+
+                        Bitmap? iG = null;
+
+                        if (invGaussGrad)
+                        {
+                            iG = igg.Inv_InvGaussGrad(bmp, alpha, gradientMode, divisor, kernelLength, cornerWeight,
+                                    sigma, steepness, radius, stretchValues, threshold);
+                        }
+                        else
+                        {
+                            Grayscale(bmp);
+
+                            using Bitmap bCopy1 = new Bitmap(bmp);
+                            using Bitmap bCopy2 = new Bitmap(bmp);
+
+                            MorphologicalProcessing2.IMorphologicalOperation alg = new Dilate();
+                            alg.BGW = this.backgroundWorker4;
+                            alg.SetupEx(kernelLength, kernelLength);
+                            alg.ApplyGrayscale(bCopy1);
+                            alg.Dispose();
+
+                            alg = new Erode();
+                            alg.BGW = this.backgroundWorker4;
+                            alg.SetupEx(kernelLength, kernelLength);
+                            alg.ApplyGrayscale(bCopy2);
+                            alg.Dispose();
+
+                            Bitmap bOut = new Bitmap(bCopy1.Width, bCopy1.Height);
+                            Subtract(bCopy1, bCopy2, bOut);
+
+                            iG = bOut;
+                        }
+
                         if (postBlur && iG != null)
                         {
-                            if(this.backgroundWorker4.WorkerReportsProgress)
-                                this.backgroundWorker4.ReportProgress(0);      
+                            if (this.backgroundWorker4.WorkerReportsProgress)
+                                this.backgroundWorker4.ReportProgress(0);
                             igg.FastZGaussian_Blur_NxN_SigmaAsDistance(iG, pBKrnl, 0.01,
-                                                                    255, true, true, false);  
+                                                                    255, true, true, false);
                         }
                         e.Result = iG;
                     }
                 }
             }
+        }
+
+        public unsafe void Subtract(Bitmap bCopy1, Bitmap bCopy2, Bitmap bOut)
+        {
+            int w = bOut.Width;
+            int h = bOut.Height;
+            BitmapData bmD1 = bCopy1.LockBits(new Rectangle(0, 0, w, h), ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
+            BitmapData bmD2 = bCopy2.LockBits(new Rectangle(0, 0, w, h), ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
+            BitmapData bmOut = bOut.LockBits(new Rectangle(0, 0, w, h), ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
+            int stride = bmD1.Stride;
+
+            Parallel.For(0, h, y =>
+            {
+                byte* pC1 = (byte*)bmD1.Scan0;
+                byte* pC2 = (byte*)bmD2.Scan0;
+                byte* p = (byte*)bmOut.Scan0;
+
+                pC1 += y * stride;
+                pC2 += y * stride;
+                p += y * stride;
+
+                for (int x = 0; x < w; x++)
+                {
+                    byte b = (byte)Math.Max(Math.Min((int)pC1[0] - pC2[0], 255), 0);
+                    byte g = (byte)Math.Max(Math.Min((int)pC1[1] - pC2[1], 255), 0);
+                    byte r = (byte)Math.Max(Math.Min((int)pC1[2] - pC2[2], 255), 0);
+
+                    p[0] = b;
+                    p[1] = g;
+                    p[2] = r;
+                    p[3] = 255;
+
+                    pC1 += 4;
+                    pC2 += 4;
+                    p += 4;
+                }
+            });
+
+            bCopy1.UnlockBits(bmD1);
+            bCopy2.UnlockBits(bmD2);
+            bOut.UnlockBits(bmOut);
+        }
+
+        private unsafe void Grayscale(Bitmap bmp)
+        {
+            BitmapData bmData = bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height), ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
+            int stride = bmData.Stride;
+            int nWidth = bmp.Width;
+            int nHeight = bmp.Height;
+
+            byte* p = (byte*)bmData.Scan0;
+
+            int pos = 0;
+            for (int y = 0; y < nHeight; y++)
+            {
+                pos = y * stride;
+                for (int x = 0; x < nWidth; x++)
+                {
+                    int v = (int)Math.Max(Math.Min((double)p[pos] * 0.11 + (double)p[pos + 1] * 0.59 + (double)p[pos + 2] * 0.3, 255), 0);
+                    p[pos] = p[pos + 1] = p[pos + 2] = (byte)v;
+
+                    pos += 4;
+                }
+            }
+
+            bmp.UnlockBits(bmData);
         }
 
         private void backgroundWorker4_ProgressChanged(object? sender, ProgressChangedEventArgs e)
@@ -1006,6 +1109,11 @@ namespace AvoidAGrabCutEasy
         private void cbSecondColor_CheckedChanged(object sender, EventArgs e)
         {
             this.numValSrc2.Enabled = this.numValDst2.Enabled = this.cbSecondColor.Checked;
+        }
+
+        private void rbIGG_CheckedChanged(object sender, EventArgs e)
+        {
+            this.label22.Enabled = this.label21.Enabled = this.numIGGAlpha.Enabled = this.numIGGDivisor.Enabled = this.rbIGG.Checked;
         }
     }
 }
