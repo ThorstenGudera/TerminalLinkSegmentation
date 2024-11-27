@@ -159,7 +159,7 @@
             // 
             // numRemChainsByArea
             // 
-            numRemChainsByArea.Location = new Point(172, 343);
+            numRemChainsByArea.Location = new Point(184, 343);
             numRemChainsByArea.Maximum = new decimal(new int[] { 9999999, 0, 0, 0 });
             numRemChainsByArea.Name = "numRemChainsByArea";
             numRemChainsByArea.Size = new Size(88, 23);
@@ -171,9 +171,9 @@
             label4.AutoSize = true;
             label4.Location = new Point(22, 345);
             label4.Name = "label4";
-            label4.Size = new Size(149, 15);
+            label4.Size = new Size(163, 15);
             label4.TabIndex = 756;
-            label4.Text = "remove chains with area < ";
+            label4.Text = "remove chains with ||Area|| < ";
             // 
             // label3
             // 

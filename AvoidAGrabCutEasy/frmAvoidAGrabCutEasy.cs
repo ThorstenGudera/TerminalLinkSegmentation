@@ -2385,6 +2385,8 @@ namespace AvoidAGrabCutEasy
                         //set the list of all found paths [chains] to re_use later
                         List<ChainCode>? allChains = GetBoundary(this._bResCopyTransp, 0, false);
                         this._allChains = allChains;
+                        if (this._removedChains != null)
+                            this._removedChains.Clear();
 
                         if (allChains != null && allChains.Count > 0)
                         {
@@ -2693,6 +2695,8 @@ namespace AvoidAGrabCutEasy
 
                     List<ChainCode>? allChains = GetBoundary(bTmp, 0, false);
                     this._allChains = allChains;
+                    if (this._removedChains != null)
+                        this._removedChains.Clear();
 
                     using (TextureBrush tb = new TextureBrush(bOrig))
                     {
@@ -3786,6 +3790,8 @@ namespace AvoidAGrabCutEasy
                     {
                         List<ChainCode>? allChains = GetBoundary(this._bResCopyTransp, 0, false);
                         this._allChains = allChains;
+                        if (this._removedChains != null)
+                            this._removedChains.Clear();
 
                         if (allChains != null && allChains.Count > 0)
                         {
@@ -5898,6 +5904,8 @@ namespace AvoidAGrabCutEasy
                         //set the list of all found paths [chains] to re_use later
                         List<ChainCode>? allChains = GetBoundary(this._bResCopyTransp, 0, false);
                         this._allChains = allChains;
+                        if (this._removedChains != null)
+                            this._removedChains.Clear();
 
                         if (allChains != null && allChains.Count > 0)
                         {
@@ -9850,6 +9858,9 @@ namespace AvoidAGrabCutEasy
                             (int)(this.helplineRulerCtrl2.Bmp.Width * this.helplineRulerCtrl2.Zoom),
                             (int)(this.helplineRulerCtrl2.Bmp.Height * this.helplineRulerCtrl2.Zoom));
                         this.helplineRulerCtrl2.dbPanel1.Invalidate();
+
+                        if (this._allChains != null)
+                            this.numComponents2.Value = this.numComponents2.Maximum = this._allChains.Count;
                     }
                 }
 
