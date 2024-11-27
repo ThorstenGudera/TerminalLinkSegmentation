@@ -989,8 +989,8 @@ namespace AvoidAGrabCutEasy
             List<Point> pRIndexes = new List<Point>();
             List<Point> pRIndexesFull = new List<Point>();
 
-            List<Point> pRFIndexes = new List<Point>();
-            List<Point> pRBIndexes = new List<Point>();
+            //List<Point> pRFIndexes = new List<Point>();
+            //List<Point> pRBIndexes = new List<Point>();
 
             int w = this._w;
             int h = this._h;
@@ -1020,12 +1020,12 @@ namespace AvoidAGrabCutEasy
                         else if (this.Mask[x, y] == 2)
                         {
                             pRIndexes.Add(new Point(x, y));
-                            pRBIndexes.Add(new Point(x, y));
+                            //pRBIndexes.Add(new Point(x, y));
                         }
                         else if (this.Mask[x, y] == 3)
                         {
                             pRIndexes.Add(new Point(x, y));
-                            pRFIndexes.Add(new Point(x, y));
+                            //pRFIndexes.Add(new Point(x, y));
                         }
                     }
 
@@ -1327,8 +1327,8 @@ namespace AvoidAGrabCutEasy
             List<Point> pRIndexes = new List<Point>();
             List<Point> pRIndexesFull = new List<Point>();
 
-            List<Point> pRFIndexes = new List<Point>();
-            List<Point> pRBIndexes = new List<Point>();
+            //List<Point> pRFIndexes = new List<Point>();
+            //List<Point> pRBIndexes = new List<Point>();
 
             int w = this._w;
             int h = this._h;
@@ -1356,12 +1356,12 @@ namespace AvoidAGrabCutEasy
                         else if (this.Mask[x, y] == 2)
                         {
                             pRIndexes.Add(new Point(x, y));
-                            pRBIndexes.Add(new Point(x, y));
+                            //pRBIndexes.Add(new Point(x, y));
                         }
                         else if (this.Mask[x, y] == 3)
                         {
                             pRIndexes.Add(new Point(x, y));
-                            pRFIndexes.Add(new Point(x, y));
+                            //pRFIndexes.Add(new Point(x, y));
                         }
                     }
 
