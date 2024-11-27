@@ -81,7 +81,7 @@ Public Class ChainCode
     End Sub
 
     Public Overrides Function ToString() As String
-        Return "x = " + start.X.ToString() + "; y = " + start.Y.ToString() + "; count = " + _coord.Count.ToString()
+        Return "x = " + start.X.ToString() + "; y = " + start.Y.ToString() + "; count = " + _coord.Count.ToString() + "; area = " + Me.Area.ToString()
     End Function
 
     'Public Sub GetObjectData(info As SerializationInfo, context As StreamingContext) Implements ISerializable.GetObjectData

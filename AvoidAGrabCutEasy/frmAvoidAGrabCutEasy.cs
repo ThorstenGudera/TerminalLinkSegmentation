@@ -144,7 +144,7 @@ namespace AvoidAGrabCutEasy
         private float _opacity;
         private frmPreBlurVals? _frm;
         private bool _frmValsChanged;
-        private float[,]? _iggLuminanceMap; 
+        private float[,]? _iggLuminanceMap;
         private float[,]? _iggLuminanceMap2;
         private LumMapApplicationSettings? _lmas = new LumMapApplicationSettings() { Factor1 = 2.0f, Threshold = 0.5, Factor2 = 2.5f };
         private bool _useLumMapBasePic;
@@ -9817,6 +9817,46 @@ namespace AvoidAGrabCutEasy
         private void cbUseLumMapBasePic_CheckedChanged(object sender, EventArgs e)
         {
             this._useLumMapBasePic = this.cbUseLumMapBasePic.Checked;
+        }
+
+        private void btnOrder_Click(object sender, EventArgs e)
+        {
+            if (this._removedChains == null)
+                this._removedChains = new List<ChainCode>();
+
+            if (this._allChains != null && this._removedChains != null)
+            {
+                Bitmap? bOut = null;
+
+                using frmReOrderChains frm = new(this.helplineRulerCtrl1.Bmp, this._allChains, this._removedChains);
+
+                if (frm.ShowDialog() == DialogResult.OK)
+                {
+                    bOut = new Bitmap(frm.FBitmap);
+                    this._allChains = frm.AllChains;
+                    this._removedChains = frm.RemovedChains;
+
+                    if (bOut != null)
+                    {
+                        this.SetBitmap(this.helplineRulerCtrl2.Bmp, bOut, this.helplineRulerCtrl2, "Bmp");
+
+                        _undoOPCache?.Add(bOut);
+
+                        this._pic_changed = true;
+
+                        this.helplineRulerCtrl2.SetZoom(this.helplineRulerCtrl1.Zoom.ToString());
+                        this.helplineRulerCtrl2.MakeBitmap(this.helplineRulerCtrl2.Bmp);
+                        this.helplineRulerCtrl2.dbPanel1.AutoScrollMinSize = new Size(
+                            (int)(this.helplineRulerCtrl2.Bmp.Width * this.helplineRulerCtrl2.Zoom),
+                            (int)(this.helplineRulerCtrl2.Bmp.Height * this.helplineRulerCtrl2.Zoom));
+                        this.helplineRulerCtrl2.dbPanel1.Invalidate();
+                    }
+                }
+
+                this.SetControls(true);
+
+                this.cbRectMode.Enabled = false;
+            }
         }
     }
 }

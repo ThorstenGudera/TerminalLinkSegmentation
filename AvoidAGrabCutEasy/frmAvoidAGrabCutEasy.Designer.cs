@@ -31,6 +31,7 @@
             components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmAvoidAGrabCutEasy));
             panel1 = new Panel();
+            btnOrder = new Button();
             cbUseLumMapBasePic = new CheckBox();
             btnLumMapSettings = new Button();
             lblLumMap = new Label();
@@ -195,6 +196,7 @@
             // 
             // panel1
             // 
+            panel1.Controls.Add(btnOrder);
             panel1.Controls.Add(cbUseLumMapBasePic);
             panel1.Controls.Add(btnLumMapSettings);
             panel1.Controls.Add(lblLumMap);
@@ -298,6 +300,19 @@
             panel1.TabIndex = 0;
             panel1.MouseDoubleClick += panel1_MouseDoubleClick;
             panel1.MouseDown += panel1_MouseDown;
+            // 
+            // btnOrder
+            // 
+            btnOrder.Enabled = false;
+            btnOrder.Location = new Point(683, 224);
+            btnOrder.Margin = new Padding(4, 3, 4, 3);
+            btnOrder.Name = "btnOrder";
+            btnOrder.Size = new Size(47, 27);
+            btnOrder.TabIndex = 737;
+            btnOrder.Text = "Order";
+            toolTip1.SetToolTip(btnOrder, "apply a custom order to the chainsList");
+            btnOrder.UseVisualStyleBackColor = true;
+            btnOrder.Click += btnOrder_Click;
             // 
             // cbUseLumMapBasePic
             // 
@@ -669,7 +684,7 @@
             // 
             label17.AutoSize = true;
             label17.Enabled = false;
-            label17.Location = new Point(499, 230);
+            label17.Location = new Point(468, 230);
             label17.Name = "label17";
             label17.Size = new Size(89, 15);
             label17.TabIndex = 698;
@@ -679,7 +694,7 @@
             // numComponents2
             // 
             numComponents2.Enabled = false;
-            numComponents2.Location = new Point(592, 227);
+            numComponents2.Location = new Point(561, 227);
             numComponents2.Margin = new Padding(4, 3, 4, 3);
             numComponents2.Maximum = new decimal(new int[] { 9999, 0, 0, 0 });
             numComponents2.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
@@ -1058,13 +1073,13 @@
             // 
             // btnRecut
             // 
-            btnRecut.Location = new Point(649, 224);
+            btnRecut.Location = new Point(618, 224);
             btnRecut.Margin = new Padding(4, 3, 4, 3);
             btnRecut.Name = "btnRecut";
             btnRecut.Size = new Size(57, 27);
             btnRecut.TabIndex = 660;
             btnRecut.Text = "Recut";
-            toolTip1.SetToolTip(btnRecut, "Draw up to 1000 components\r\n");
+            toolTip1.SetToolTip(btnRecut, "Draw up to 1000 components");
             btnRecut.UseVisualStyleBackColor = true;
             btnRecut.Click += btnRecut_Click;
             // 
@@ -1957,5 +1972,6 @@
         private Label lblTh;
         private Button btnLumMapSettings;
         private CheckBox cbUseLumMapBasePic;
+        private Button btnOrder;
     }
 }
