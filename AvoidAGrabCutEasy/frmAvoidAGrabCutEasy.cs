@@ -148,6 +148,8 @@ namespace AvoidAGrabCutEasy
         private float[,]? _iggLuminanceMap2;
         private LumMapApplicationSettings? _lmas = new LumMapApplicationSettings() { Factor1 = 2.0f, Threshold = 0.5, Factor2 = 2.5f };
         private bool _useLumMapBasePic;
+        private List<(int, int)>? _bgRelatedPointsAdded;
+        private List<ChainCode>? _removedChains;
 
         public event EventHandler<string>? ShowInfo;
         //public event EventHandler<string> BoundaryError;
@@ -314,6 +316,9 @@ namespace AvoidAGrabCutEasy
             if (this._pointsListSeq == null)
                 this._pointsListSeq = new List<Tuple<int, int, int, bool, List<List<Point>>>>();
 
+            if (this._bgRelatedPointsAdded == null)
+                this._bgRelatedPointsAdded = new();
+
             GraphicsPath gp = this._pathList[this._currentDraw];
             using (GraphicsPath gpTmp = new GraphicsPath())
             {
@@ -327,6 +332,9 @@ namespace AvoidAGrabCutEasy
                     List<Point> ll = new List<Point>();
                     ll.AddRange(this._points.ToArray());
                     this._allPoints[this._currentDraw].Add(Tuple.Create(ll, (int)this.numWH.Value));
+
+                    if (this._currentDraw == 0 || this._currentDraw == 2)
+                        this._bgRelatedPointsAdded.Add((this._currentDraw, this._allPoints[this._currentDraw].Count - 1));
                 }
                 else if (z.Length == 1)
                 {
@@ -342,6 +350,9 @@ namespace AvoidAGrabCutEasy
                     List<Point> ll = new List<Point>();
                     ll.AddRange(this._points.ToArray());
                     this._allPoints[this._currentDraw].Add(Tuple.Create(ll, (int)this.numWH.Value));
+
+                    if (this._currentDraw == 0 || this._currentDraw == 2)
+                        this._bgRelatedPointsAdded.Add((this._currentDraw, this._allPoints[this._currentDraw].Count - 1));
                 }
             }
 
@@ -2465,6 +2476,11 @@ namespace AvoidAGrabCutEasy
 
                 _undoOPCache?.Add(b);
 
+                if (this.cbDraw.Checked && this._bgRelatedPointsAdded != null && this._bgRelatedPointsAdded.Count > 0)
+                {
+                    MessageBox.Show("You removed some BG pixels. Maybe increase the amount of displayed components, when those pixels are surrounded by FG pixels.");
+                }
+
                 //if (this._resWC > 1)
                 //    ResampleAndTranslateBack();
 
@@ -2492,6 +2508,8 @@ namespace AvoidAGrabCutEasy
                 this._points.Clear();
             if (this._pointsListSeq != null)
                 this._pointsListSeq.Clear();
+            if (this._bgRelatedPointsAdded != null)
+                this._bgRelatedPointsAdded.Clear();
             this._currentDrawOperation = 0;
 
             this.helplineRulerCtrl2.dbPanel1.Invalidate();
@@ -3004,6 +3022,18 @@ namespace AvoidAGrabCutEasy
                         IEnumerable<Tuple<int, int, int, bool, List<List<Point>>>> jjj = jj.Where(a => a.Item2 == this._currentDrawOperation);
                         if (jjj != null && jjj.Count() > 0)
                             this._pointsListSeq.Remove(jjj.First());
+                    }
+                }
+
+                if (this._bgRelatedPointsAdded != null &&
+                    this._allPoints.ContainsKey(this._bgRelatedPointsAdded[this._bgRelatedPointsAdded.Count - 1].Item1))
+                {
+                    IEnumerable<(int, int)>? cv = this._bgRelatedPointsAdded.Where(a => a.Item1 == j);
+                    if (cv != null && this._bgRelatedPointsAdded[this._bgRelatedPointsAdded.Count - 1].Item1 == j &&
+                        cv.Count() > this._allPoints[this._bgRelatedPointsAdded[this._bgRelatedPointsAdded.Count - 1].Item1].Count)
+                    {
+                        if (this._bgRelatedPointsAdded.Count > 0)
+                            this._bgRelatedPointsAdded.RemoveAt(this._bgRelatedPointsAdded.Count - 1);
                     }
                 }
             }
@@ -3820,6 +3850,11 @@ namespace AvoidAGrabCutEasy
 
                 _undoOPCache?.Add(b);
 
+                if (this.cbDraw.Checked && this._bgRelatedPointsAdded != null && this._bgRelatedPointsAdded.Count > 0)
+                {
+                    MessageBox.Show("You removed some BG pixels. Maybe increase the amount of displayed components, when those pixels are surrounded by FG pixels.");
+                }
+
                 //if (this._resWC > 1)
                 //    ResampleAndTranslateBack();
 
@@ -3845,6 +3880,8 @@ namespace AvoidAGrabCutEasy
                 this._points.Clear();
             if (this._pointsListSeq != null)
                 this._pointsListSeq.Clear();
+            if (this._bgRelatedPointsAdded != null)
+                this._bgRelatedPointsAdded.Clear();
             this._currentDrawOperation = 0;
 
             this.helplineRulerCtrl2.dbPanel1.Invalidate();
@@ -5955,6 +5992,8 @@ namespace AvoidAGrabCutEasy
                 this._points.Clear();
             if (this._pointsListSeq != null)
                 this._pointsListSeq.Clear();
+            if (this._bgRelatedPointsAdded != null)
+                this._bgRelatedPointsAdded.Clear();
             this._currentDrawOperation = 0;
 
             this.helplineRulerCtrl2.dbPanel1.Invalidate();

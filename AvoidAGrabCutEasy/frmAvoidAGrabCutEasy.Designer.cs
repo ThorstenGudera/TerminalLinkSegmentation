@@ -669,7 +669,7 @@
             // 
             label17.AutoSize = true;
             label17.Enabled = false;
-            label17.Location = new Point(546, 230);
+            label17.Location = new Point(499, 230);
             label17.Name = "label17";
             label17.Size = new Size(89, 15);
             label17.TabIndex = 698;
@@ -679,7 +679,7 @@
             // numComponents2
             // 
             numComponents2.Enabled = false;
-            numComponents2.Location = new Point(639, 227);
+            numComponents2.Location = new Point(592, 227);
             numComponents2.Margin = new Padding(4, 3, 4, 3);
             numComponents2.Maximum = new decimal(new int[] { 9999, 0, 0, 0 });
             numComponents2.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
@@ -1058,7 +1058,7 @@
             // 
             // btnRecut
             // 
-            btnRecut.Location = new Point(696, 224);
+            btnRecut.Location = new Point(649, 224);
             btnRecut.Margin = new Padding(4, 3, 4, 3);
             btnRecut.Name = "btnRecut";
             btnRecut.Size = new Size(57, 27);
