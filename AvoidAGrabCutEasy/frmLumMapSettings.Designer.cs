@@ -97,12 +97,13 @@
             label9 = new Label();
             rbGreaterThan = new RadioButton();
             rbLessThan = new RadioButton();
+            cbDoFirstMult = new CheckBox();
+            cbDoSecondMult = new CheckBox();
             toolTip1 = new ToolTip(components);
             saveFileDialog1 = new SaveFileDialog();
             backgroundWorker3 = new System.ComponentModel.BackgroundWorker();
             Timer3 = new System.Windows.Forms.Timer(components);
             backgroundWorker4 = new System.ComponentModel.BackgroundWorker();
-            cbDoSecondMult = new CheckBox();
             ((System.ComponentModel.ISupportInitialize)numF1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numTh).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numF2).BeginInit();
@@ -159,7 +160,7 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(6, 19);
+            label1.Location = new Point(6, 45);
             label1.Name = "label1";
             label1.Size = new Size(44, 15);
             label1.TabIndex = 734;
@@ -169,7 +170,7 @@
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(6, 48);
+            label2.Location = new Point(6, 105);
             label2.Name = "label2";
             label2.Size = new Size(57, 15);
             label2.TabIndex = 734;
@@ -178,7 +179,7 @@
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(6, 133);
+            label3.Location = new Point(6, 157);
             label3.Name = "label3";
             label3.Size = new Size(44, 15);
             label3.TabIndex = 734;
@@ -189,7 +190,7 @@
             // 
             numF1.DecimalPlaces = 4;
             numF1.Increment = new decimal(new int[] { 1, 0, 0, 65536 });
-            numF1.Location = new Point(80, 17);
+            numF1.Location = new Point(80, 43);
             numF1.Maximum = new decimal(new int[] { 10000, 0, 0, 0 });
             numF1.Name = "numF1";
             numF1.Size = new Size(88, 23);
@@ -201,7 +202,7 @@
             // 
             numTh.DecimalPlaces = 4;
             numTh.Increment = new decimal(new int[] { 1, 0, 0, 65536 });
-            numTh.Location = new Point(80, 46);
+            numTh.Location = new Point(80, 103);
             numTh.Name = "numTh";
             numTh.Size = new Size(88, 23);
             numTh.TabIndex = 735;
@@ -211,7 +212,7 @@
             // 
             numF2.DecimalPlaces = 4;
             numF2.Increment = new decimal(new int[] { 1, 0, 0, 65536 });
-            numF2.Location = new Point(80, 130);
+            numF2.Location = new Point(80, 154);
             numF2.Maximum = new decimal(new int[] { 10000, 0, 0, 0 });
             numF2.Name = "numF2";
             numF2.Size = new Size(88, 23);
@@ -222,7 +223,7 @@
             // label4
             // 
             label4.AutoSize = true;
-            label4.Location = new Point(193, 19);
+            label4.Location = new Point(193, 45);
             label4.Name = "label4";
             label4.Size = new Size(63, 15);
             label4.TabIndex = 734;
@@ -232,7 +233,7 @@
             // 
             numExp1.DecimalPlaces = 4;
             numExp1.Increment = new decimal(new int[] { 1, 0, 0, 65536 });
-            numExp1.Location = new Point(283, 17);
+            numExp1.Location = new Point(283, 43);
             numExp1.Name = "numExp1";
             numExp1.Size = new Size(88, 23);
             numExp1.TabIndex = 735;
@@ -241,7 +242,7 @@
             // label5
             // 
             label5.AutoSize = true;
-            label5.Location = new Point(193, 133);
+            label5.Location = new Point(193, 157);
             label5.Name = "label5";
             label5.Size = new Size(63, 15);
             label5.TabIndex = 734;
@@ -251,7 +252,7 @@
             // 
             numExp2.DecimalPlaces = 4;
             numExp2.Increment = new decimal(new int[] { 1, 0, 0, 65536 });
-            numExp2.Location = new Point(283, 130);
+            numExp2.Location = new Point(283, 154);
             numExp2.Name = "numExp2";
             numExp2.Size = new Size(88, 23);
             numExp2.TabIndex = 735;
@@ -260,7 +261,7 @@
             // label6
             // 
             label6.AutoSize = true;
-            label6.Location = new Point(193, 48);
+            label6.Location = new Point(193, 105);
             label6.Name = "label6";
             label6.Size = new Size(86, 15);
             label6.TabIndex = 734;
@@ -270,7 +271,7 @@
             // 
             numThMultiplier.DecimalPlaces = 4;
             numThMultiplier.Increment = new decimal(new int[] { 1, 0, 0, 65536 });
-            numThMultiplier.Location = new Point(283, 46);
+            numThMultiplier.Location = new Point(283, 103);
             numThMultiplier.Name = "numThMultiplier";
             numThMultiplier.Size = new Size(88, 23);
             numThMultiplier.TabIndex = 735;
@@ -279,7 +280,7 @@
             // cbAuto
             // 
             cbAuto.AutoSize = true;
-            cbAuto.Location = new Point(80, 103);
+            cbAuto.Location = new Point(80, 127);
             cbAuto.Name = "cbAuto";
             cbAuto.Size = new Size(50, 19);
             cbAuto.TabIndex = 736;
@@ -500,7 +501,7 @@
             // 
             rbApp.AutoSize = true;
             rbApp.Checked = true;
-            rbApp.Location = new Point(18, 384);
+            rbApp.Location = new Point(18, 372);
             rbApp.Name = "rbApp";
             rbApp.Size = new Size(86, 19);
             rbApp.TabIndex = 740;
@@ -533,7 +534,7 @@
             groupBox4.Controls.Add(numIGGKernel);
             groupBox4.Controls.Add(rbMorph);
             groupBox4.Controls.Add(rbIGG);
-            groupBox4.Location = new Point(13, 215);
+            groupBox4.Location = new Point(13, 207);
             groupBox4.Name = "groupBox4";
             groupBox4.Size = new Size(402, 132);
             groupBox4.TabIndex = 739;
@@ -674,7 +675,7 @@
             groupBox3.Controls.Add(numDistWeight);
             groupBox3.Controls.Add(btnBlur);
             groupBox3.Controls.Add(numKernel);
-            groupBox3.Location = new Point(13, 146);
+            groupBox3.Location = new Point(13, 138);
             groupBox3.Name = "groupBox3";
             groupBox3.Size = new Size(402, 59);
             groupBox3.TabIndex = 739;
@@ -746,7 +747,7 @@
             groupBox2.Controls.Add(numValDst);
             groupBox2.Controls.Add(numValSrc);
             groupBox2.Controls.Add(btnColors);
-            groupBox2.Location = new Point(13, 48);
+            groupBox2.Location = new Point(13, 40);
             groupBox2.Name = "groupBox2";
             groupBox2.Size = new Size(402, 92);
             groupBox2.TabIndex = 739;
@@ -859,19 +860,20 @@
             // panel1
             // 
             panel1.BackColor = SystemColors.ControlDarkDark;
-            panel1.Location = new Point(13, 367);
+            panel1.Location = new Point(13, 357);
             panel1.Name = "panel1";
             panel1.Size = new Size(400, 2);
             panel1.TabIndex = 738;
             // 
             // groupBox1
             // 
-            groupBox1.Controls.Add(cbDoSecondMult);
             groupBox1.Controls.Add(label9);
             groupBox1.Controls.Add(rbGreaterThan);
             groupBox1.Controls.Add(rbLessThan);
             groupBox1.Controls.Add(label1);
             groupBox1.Controls.Add(numF1);
+            groupBox1.Controls.Add(cbDoFirstMult);
+            groupBox1.Controls.Add(cbDoSecondMult);
             groupBox1.Controls.Add(cbAuto);
             groupBox1.Controls.Add(label5);
             groupBox1.Controls.Add(label3);
@@ -883,9 +885,9 @@
             groupBox1.Controls.Add(label2);
             groupBox1.Controls.Add(label4);
             groupBox1.Controls.Add(numThMultiplier);
-            groupBox1.Location = new Point(12, 421);
+            groupBox1.Location = new Point(12, 401);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(403, 162);
+            groupBox1.Size = new Size(403, 186);
             groupBox1.TabIndex = 737;
             groupBox1.TabStop = false;
             groupBox1.Text = "Application Settings";
@@ -893,7 +895,7 @@
             // label9
             // 
             label9.AutoSize = true;
-            label9.Location = new Point(153, 104);
+            label9.Location = new Point(153, 128);
             label9.Name = "label9";
             label9.Size = new Size(102, 15);
             label9.TabIndex = 738;
@@ -902,7 +904,7 @@
             // rbGreaterThan
             // 
             rbGreaterThan.AutoSize = true;
-            rbGreaterThan.Location = new Point(321, 102);
+            rbGreaterThan.Location = new Point(321, 126);
             rbGreaterThan.Name = "rbGreaterThan";
             rbGreaterThan.Size = new Size(47, 19);
             rbGreaterThan.TabIndex = 737;
@@ -913,13 +915,39 @@
             // 
             rbLessThan.AutoSize = true;
             rbLessThan.Checked = true;
-            rbLessThan.Location = new Point(267, 102);
+            rbLessThan.Location = new Point(267, 126);
             rbLessThan.Name = "rbLessThan";
             rbLessThan.Size = new Size(47, 19);
             rbLessThan.TabIndex = 737;
             rbLessThan.TabStop = true;
             rbLessThan.Text = "< th";
             rbLessThan.UseVisualStyleBackColor = true;
+            // 
+            // cbDoFirstMult
+            // 
+            cbDoFirstMult.AutoSize = true;
+            cbDoFirstMult.Checked = true;
+            cbDoFirstMult.CheckState = CheckState.Checked;
+            cbDoFirstMult.Location = new Point(8, 18);
+            cbDoFirstMult.Name = "cbDoFirstMult";
+            cbDoFirstMult.Size = new Size(87, 19);
+            cbDoFirstMult.TabIndex = 736;
+            cbDoFirstMult.Text = "Do 1st mult";
+            cbDoFirstMult.UseVisualStyleBackColor = true;
+            cbDoFirstMult.CheckedChanged += cbDoFirstMult_CheckedChanged;
+            // 
+            // cbDoSecondMult
+            // 
+            cbDoSecondMult.AutoSize = true;
+            cbDoSecondMult.Checked = true;
+            cbDoSecondMult.CheckState = CheckState.Checked;
+            cbDoSecondMult.Location = new Point(8, 78);
+            cbDoSecondMult.Name = "cbDoSecondMult";
+            cbDoSecondMult.Size = new Size(92, 19);
+            cbDoSecondMult.TabIndex = 736;
+            cbDoSecondMult.Text = "Do 2nd mult";
+            cbDoSecondMult.UseVisualStyleBackColor = true;
+            cbDoSecondMult.CheckedChanged += cbDoSecondMult_CheckedChanged;
             // 
             // saveFileDialog1
             // 
@@ -946,19 +974,6 @@
             backgroundWorker4.DoWork += backgroundWorker4_DoWork;
             backgroundWorker4.ProgressChanged += backgroundWorker4_ProgressChanged;
             backgroundWorker4.RunWorkerCompleted += backgroundWorker4_RunWorkerCompleted;
-            // 
-            // cbDoSecondMult
-            // 
-            cbDoSecondMult.AutoSize = true;
-            cbDoSecondMult.Checked = true;
-            cbDoSecondMult.CheckState = CheckState.Checked;
-            cbDoSecondMult.Location = new Point(6, 81);
-            cbDoSecondMult.Name = "cbDoSecondMult";
-            cbDoSecondMult.Size = new Size(92, 19);
-            cbDoSecondMult.TabIndex = 739;
-            cbDoSecondMult.Text = "Do 2nd mult";
-            cbDoSecondMult.UseVisualStyleBackColor = true;
-            cbDoSecondMult.CheckedChanged += cbDoSecondMult_CheckedChanged;
             // 
             // frmLumMapSettings
             // 
@@ -1085,5 +1100,6 @@
         private RadioButton rbMorph;
         private RadioButton rbIGG;
         internal CheckBox cbDoSecondMult;
+        internal CheckBox cbDoFirstMult;
     }
 }

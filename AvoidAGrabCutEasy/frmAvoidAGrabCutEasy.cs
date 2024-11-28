@@ -9785,6 +9785,7 @@ namespace AvoidAGrabCutEasy
                     frm.cbAuto.Checked = this._lmas.MultAuto;
                     frm.cbAppSettingsOnly.Checked = true;
                     frm.cbDoSecondMult.Checked = this._lmas.DoSecondMultiplication;
+                    frm.cbDoFirstMult.Checked = this._lmas.DoFirstMultiplication;
 
                     if (frm.ShowDialog() == DialogResult.OK)
                     {
@@ -9805,6 +9806,7 @@ namespace AvoidAGrabCutEasy
                         double m = Math.Pow(10, (double)-frm.numThMultiplier.Value);
                         bool auto = frm.cbAuto.Checked;
                         bool do2nd = frm.cbDoSecondMult.Checked;
+                        bool do1st = frm.cbDoFirstMult.Checked;
 
                         LumMapApplicationSettings lmas = new()
                         {
@@ -9816,7 +9818,8 @@ namespace AvoidAGrabCutEasy
                             Exponent2 = e2,
                             ThMultiplier = m,
                             MultAuto = auto,
-                            DoSecondMultiplication = do2nd
+                            DoSecondMultiplication = do2nd,
+                            DoFirstMultiplication = do1st
                         };
 
                         this._lmas = lmas;

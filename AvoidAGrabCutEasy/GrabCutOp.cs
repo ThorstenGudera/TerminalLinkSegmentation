@@ -1411,7 +1411,8 @@ namespace AvoidAGrabCutEasy
                         int x = vf[j].Item2 % w;
                         int y = vf[j].Item2 / w;
                         //first multiply all, factor and/or complete setting will assumably change
-                        d[j] *= Math.Pow(this.IGGLuminanceMap[x, y], this.LumMapSettings.Exponent1) * this.LumMapSettings.Factor1;
+                        if (this.LumMapSettings.DoFirstMultiplication)
+                            d[j] *= Math.Pow(this.IGGLuminanceMap[x, y], this.LumMapSettings.Exponent1) * this.LumMapSettings.Factor1;
                         //then multiply the low ones, factor and/or complete setting will assumably change
                         if (this.LumMapSettings.DoSecondMultiplication)
                             if (this.LumMapSettings.ValsLessThanTh)

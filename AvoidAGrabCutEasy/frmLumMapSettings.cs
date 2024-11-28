@@ -964,13 +964,13 @@ namespace AvoidAGrabCutEasy
                             using Bitmap bCopy1 = new Bitmap(bmp);
                             using Bitmap bCopy2 = new Bitmap(bmp);
 
-                            MorphologicalProcessing2.IMorphologicalOperation alg = new Dilate();
+                            MorphologicalProcessing2.IMorphologicalOperation alg = new MorphologicalProcessing2.Algorithms.Dilate();
                             alg.BGW = this.backgroundWorker4;
                             alg.SetupEx(kernelLength, kernelLength);
                             alg.ApplyGrayscale(bCopy1);
                             alg.Dispose();
 
-                            alg = new Erode();
+                            alg = new MorphologicalProcessing2.Algorithms.Erode();
                             alg.BGW = this.backgroundWorker4;
                             alg.SetupEx(kernelLength, kernelLength);
                             alg.ApplyGrayscale(bCopy2);
@@ -1119,7 +1119,13 @@ namespace AvoidAGrabCutEasy
         private void cbDoSecondMult_CheckedChanged(object sender, EventArgs e)
         {
             this.cbAuto.Enabled = this.rbLessThan.Enabled = this.rbGreaterThan.Enabled = this.label9.Enabled =
+                this.label2.Enabled = this.label6.Enabled = this.numTh.Enabled = this.numThMultiplier.Enabled =
                 this.label3.Enabled = this.label5.Enabled = this.numF2.Enabled = this.numExp2.Enabled = this.cbDoSecondMult.Checked;
+        }
+
+        private void cbDoFirstMult_CheckedChanged(object sender, EventArgs e)
+        {
+            this.label1.Enabled = this.label2.Enabled = this.numF1.Enabled = this.numExp1.Enabled = cbDoFirstMult.Checked;
         }
     }
 }
