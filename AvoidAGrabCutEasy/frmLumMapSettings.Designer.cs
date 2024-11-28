@@ -73,6 +73,8 @@
             numIGGAlpha = new NumericUpDown();
             btnInvGaussGrad = new Button();
             numIGGKernel = new NumericUpDown();
+            rbMorph = new RadioButton();
+            rbIGG = new RadioButton();
             groupBox3 = new GroupBox();
             label16 = new Label();
             label15 = new Label();
@@ -100,8 +102,7 @@
             backgroundWorker3 = new System.ComponentModel.BackgroundWorker();
             Timer3 = new System.Windows.Forms.Timer(components);
             backgroundWorker4 = new System.ComponentModel.BackgroundWorker();
-            rbIGG = new RadioButton();
-            rbMorph = new RadioButton();
+            cbDoSecondMult = new CheckBox();
             ((System.ComponentModel.ISupportInitialize)numF1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numTh).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numF2).BeginInit();
@@ -177,7 +178,7 @@
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(6, 109);
+            label3.Location = new Point(6, 133);
             label3.Name = "label3";
             label3.Size = new Size(44, 15);
             label3.TabIndex = 734;
@@ -210,7 +211,7 @@
             // 
             numF2.DecimalPlaces = 4;
             numF2.Increment = new decimal(new int[] { 1, 0, 0, 65536 });
-            numF2.Location = new Point(80, 106);
+            numF2.Location = new Point(80, 130);
             numF2.Maximum = new decimal(new int[] { 10000, 0, 0, 0 });
             numF2.Name = "numF2";
             numF2.Size = new Size(88, 23);
@@ -240,7 +241,7 @@
             // label5
             // 
             label5.AutoSize = true;
-            label5.Location = new Point(193, 109);
+            label5.Location = new Point(193, 133);
             label5.Name = "label5";
             label5.Size = new Size(63, 15);
             label5.TabIndex = 734;
@@ -250,7 +251,7 @@
             // 
             numExp2.DecimalPlaces = 4;
             numExp2.Increment = new decimal(new int[] { 1, 0, 0, 65536 });
-            numExp2.Location = new Point(283, 106);
+            numExp2.Location = new Point(283, 130);
             numExp2.Name = "numExp2";
             numExp2.Size = new Size(88, 23);
             numExp2.TabIndex = 735;
@@ -278,7 +279,7 @@
             // cbAuto
             // 
             cbAuto.AutoSize = true;
-            cbAuto.Location = new Point(80, 75);
+            cbAuto.Location = new Point(80, 103);
             cbAuto.Name = "cbAuto";
             cbAuto.Size = new Size(50, 19);
             cbAuto.TabIndex = 736;
@@ -383,7 +384,7 @@
             // cbAppSettingsOnly
             // 
             cbAppSettingsOnly.AutoSize = true;
-            cbAppSettingsOnly.Location = new Point(13, 577);
+            cbAppSettingsOnly.Location = new Point(13, 597);
             cbAppSettingsOnly.Name = "cbAppSettingsOnly";
             cbAppSettingsOnly.Size = new Size(174, 19);
             cbAppSettingsOnly.TabIndex = 750;
@@ -422,7 +423,7 @@
             button2.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             button2.FlatStyle = FlatStyle.System;
             button2.ForeColor = SystemColors.ControlText;
-            button2.Location = new Point(318, 586);
+            button2.Location = new Point(318, 602);
             button2.Margin = new Padding(4, 3, 4, 3);
             button2.Name = "button2";
             button2.Size = new Size(88, 27);
@@ -435,7 +436,7 @@
             btnRedo.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             btnRedo.Enabled = false;
             btnRedo.ForeColor = SystemColors.ControlText;
-            btnRedo.Location = new Point(320, 624);
+            btnRedo.Location = new Point(320, 640);
             btnRedo.Margin = new Padding(4, 3, 4, 3);
             btnRedo.Name = "btnRedo";
             btnRedo.Size = new Size(88, 27);
@@ -449,7 +450,7 @@
             btnUndo.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             btnUndo.Enabled = false;
             btnUndo.ForeColor = SystemColors.ControlText;
-            btnUndo.Location = new Point(224, 624);
+            btnUndo.Location = new Point(224, 640);
             btnUndo.Margin = new Padding(4, 3, 4, 3);
             btnUndo.Name = "btnUndo";
             btnUndo.Size = new Size(88, 27);
@@ -642,6 +643,29 @@
             numIGGKernel.Size = new Size(52, 23);
             numIGGKernel.TabIndex = 692;
             numIGGKernel.Value = new decimal(new int[] { 27, 0, 0, 0 });
+            // 
+            // rbMorph
+            // 
+            rbMorph.AutoSize = true;
+            rbMorph.Location = new Point(132, 22);
+            rbMorph.Name = "rbMorph";
+            rbMorph.Size = new Size(151, 19);
+            rbMorph.TabIndex = 740;
+            rbMorph.Text = "Morphological Gradient";
+            rbMorph.UseVisualStyleBackColor = true;
+            // 
+            // rbIGG
+            // 
+            rbIGG.AutoSize = true;
+            rbIGG.Checked = true;
+            rbIGG.Location = new Point(19, 22);
+            rbIGG.Name = "rbIGG";
+            rbIGG.Size = new Size(97, 19);
+            rbIGG.TabIndex = 740;
+            rbIGG.TabStop = true;
+            rbIGG.Text = "InvGaussGrad";
+            rbIGG.UseVisualStyleBackColor = true;
+            rbIGG.CheckedChanged += rbIGG_CheckedChanged;
             // 
             // groupBox3
             // 
@@ -842,6 +866,7 @@
             // 
             // groupBox1
             // 
+            groupBox1.Controls.Add(cbDoSecondMult);
             groupBox1.Controls.Add(label9);
             groupBox1.Controls.Add(rbGreaterThan);
             groupBox1.Controls.Add(rbLessThan);
@@ -860,7 +885,7 @@
             groupBox1.Controls.Add(numThMultiplier);
             groupBox1.Location = new Point(12, 421);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(403, 141);
+            groupBox1.Size = new Size(403, 162);
             groupBox1.TabIndex = 737;
             groupBox1.TabStop = false;
             groupBox1.Text = "Application Settings";
@@ -868,7 +893,7 @@
             // label9
             // 
             label9.AutoSize = true;
-            label9.Location = new Point(153, 76);
+            label9.Location = new Point(153, 104);
             label9.Name = "label9";
             label9.Size = new Size(102, 15);
             label9.TabIndex = 738;
@@ -877,7 +902,7 @@
             // rbGreaterThan
             // 
             rbGreaterThan.AutoSize = true;
-            rbGreaterThan.Location = new Point(321, 74);
+            rbGreaterThan.Location = new Point(321, 102);
             rbGreaterThan.Name = "rbGreaterThan";
             rbGreaterThan.Size = new Size(47, 19);
             rbGreaterThan.TabIndex = 737;
@@ -888,7 +913,7 @@
             // 
             rbLessThan.AutoSize = true;
             rbLessThan.Checked = true;
-            rbLessThan.Location = new Point(267, 74);
+            rbLessThan.Location = new Point(267, 102);
             rbLessThan.Name = "rbLessThan";
             rbLessThan.Size = new Size(47, 19);
             rbLessThan.TabIndex = 737;
@@ -922,28 +947,18 @@
             backgroundWorker4.ProgressChanged += backgroundWorker4_ProgressChanged;
             backgroundWorker4.RunWorkerCompleted += backgroundWorker4_RunWorkerCompleted;
             // 
-            // rbIGG
+            // cbDoSecondMult
             // 
-            rbIGG.AutoSize = true;
-            rbIGG.Checked = true;
-            rbIGG.Location = new Point(19, 22);
-            rbIGG.Name = "rbIGG";
-            rbIGG.Size = new Size(97, 19);
-            rbIGG.TabIndex = 740;
-            rbIGG.TabStop = true;
-            rbIGG.Text = "InvGaussGrad";
-            rbIGG.UseVisualStyleBackColor = true;
-            rbIGG.CheckedChanged += rbIGG_CheckedChanged;
-            // 
-            // rbMorph
-            // 
-            rbMorph.AutoSize = true;
-            rbMorph.Location = new Point(132, 22);
-            rbMorph.Name = "rbMorph";
-            rbMorph.Size = new Size(151, 19);
-            rbMorph.TabIndex = 740;
-            rbMorph.Text = "Morphological Gradient";
-            rbMorph.UseVisualStyleBackColor = true;
+            cbDoSecondMult.AutoSize = true;
+            cbDoSecondMult.Checked = true;
+            cbDoSecondMult.CheckState = CheckState.Checked;
+            cbDoSecondMult.Location = new Point(6, 81);
+            cbDoSecondMult.Name = "cbDoSecondMult";
+            cbDoSecondMult.Size = new Size(92, 19);
+            cbDoSecondMult.TabIndex = 739;
+            cbDoSecondMult.Text = "Do 2nd mult";
+            cbDoSecondMult.UseVisualStyleBackColor = true;
+            cbDoSecondMult.CheckedChanged += cbDoSecondMult_CheckedChanged;
             // 
             // frmLumMapSettings
             // 
@@ -1069,5 +1084,6 @@
         private Label label10;
         private RadioButton rbMorph;
         private RadioButton rbIGG;
+        internal CheckBox cbDoSecondMult;
     }
 }

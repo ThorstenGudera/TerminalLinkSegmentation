@@ -10,5 +10,7 @@
         public double ThMultiplier { get; internal set; } = Math.Pow(10.0, -10.0);
         public bool MultAuto { get; internal set; } = true;
         public bool ValsLessThanTh { get; internal set; } = true;
+
+        public bool DoSecondMultiplication { get; internal set; } = true;
     }
 }

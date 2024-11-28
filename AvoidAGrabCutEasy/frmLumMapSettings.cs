@@ -1115,5 +1115,11 @@ namespace AvoidAGrabCutEasy
         {
             this.label22.Enabled = this.label21.Enabled = this.numIGGAlpha.Enabled = this.numIGGDivisor.Enabled = this.rbIGG.Checked;
         }
+
+        private void cbDoSecondMult_CheckedChanged(object sender, EventArgs e)
+        {
+            this.cbAuto.Enabled = this.rbLessThan.Enabled = this.rbGreaterThan.Enabled = this.label9.Enabled =
+                this.label3.Enabled = this.label5.Enabled = this.numF2.Enabled = this.numExp2.Enabled = this.cbDoSecondMult.Checked;
+        }
     }
 }
