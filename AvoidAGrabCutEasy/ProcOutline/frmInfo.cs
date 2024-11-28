@@ -29,6 +29,18 @@ namespace GetAlphaMatte
                 catch { }
         }
 
+        public void ShowDialog(string message)
+        {
+            this.label1.Text = message;
+            if (!this.IsDisposed)
+                try
+                {
+                    this.CenterToScreen();
+                    this.ShowDialog();
+                }
+                catch { }
+        }
+
         private void btnClose_Click(object sender, EventArgs e)
         {
             this.Close();

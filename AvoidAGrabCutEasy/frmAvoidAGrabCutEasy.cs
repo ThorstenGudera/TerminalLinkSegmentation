@@ -9869,5 +9869,32 @@ namespace AvoidAGrabCutEasy
                 this.cbRectMode.Enabled = false;
             }
         }
+
+        private void buttonInfo_Click(object sender, EventArgs e)
+        {
+            using frmInfo frm = new();
+            frm.Width += 200;
+            frm.Height *= 2;
+
+            StringBuilder info = new();
+
+            info.Append("A normal GrabCut algorithm works with a Markov Random Field and a MinCut Algorithm. ");
+            info.Append("Since we dont do a MinCut, we need to pass neighborhood information in a different way to our Algorithm. ");
+            info.Append("So we create a Gradient related pic (InvGaussGrad, or Morphological Gradient), and create an inverted Luminance ");
+            info.Append("Map from it, which we then multiply with the EstimationMaximized probabilities or the GaussianMixtureModels (\"Likelihood\"). ");
+            info.Append("\n");
+            info.Append("\n");
+            info.Append("So, how to use it?");
+            info.Append("\n");
+            info.Append("Simply check the useLumMap checkbox, or do it manually by clicking the compInvLMap button.\n");
+            info.Append("To change the parameters for multiplying the Map entries with the probabilities coming from the GMM, ");
+            info.Append("click onto the \"settings\" button and change the values of the controls in the lower pane (\"Application settings\").\n");
+            info.Append("You also could pass a custom edited image to the LumMap creation algorithm. ");
+            info.Append("Click onto the \"Image\" Radiobutton in the settings form *and* uncheck the \"do Application settings only\" checkbox. ");
+            info.Append("Only then a LuminanceMap will be computed from that picture. Also, this new LumMap will only be used, when you check the ");
+            info.Append("\"UseLMBasePic\" checkbox in the main form. ");
+
+            frm.ShowDialog(info.ToString());
+        }
     }
 }

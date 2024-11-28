@@ -31,6 +31,7 @@
             components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmAvoidAGrabCutEasy));
             panel1 = new Panel();
+            btnInfo = new Button();
             btnOrder = new Button();
             cbUseLumMapBasePic = new CheckBox();
             btnLumMapSettings = new Button();
@@ -196,6 +197,7 @@
             // 
             // panel1
             // 
+            panel1.Controls.Add(btnInfo);
             panel1.Controls.Add(btnOrder);
             panel1.Controls.Add(cbUseLumMapBasePic);
             panel1.Controls.Add(btnLumMapSettings);
@@ -300,6 +302,18 @@
             panel1.TabIndex = 0;
             panel1.MouseDoubleClick += panel1_MouseDoubleClick;
             panel1.MouseDown += panel1_MouseDown;
+            // 
+            // btnInfo
+            // 
+            btnInfo.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            btnInfo.Location = new Point(868, 157);
+            btnInfo.Name = "btnInfo";
+            btnInfo.Size = new Size(14, 23);
+            btnInfo.TabIndex = 738;
+            btnInfo.Text = "i";
+            toolTip1.SetToolTip(btnInfo, "Info for LumMap relaated things.");
+            btnInfo.UseVisualStyleBackColor = true;
+            btnInfo.Click += buttonInfo_Click;
             // 
             // btnOrder
             // 
@@ -1973,5 +1987,6 @@
         private Button btnLumMapSettings;
         private CheckBox cbUseLumMapBasePic;
         private Button btnOrder;
+        private Button btnInfo;
     }
 }
