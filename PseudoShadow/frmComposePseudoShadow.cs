@@ -91,7 +91,7 @@ namespace PseudoShadow
             if (ix >= 0 && ix < this.luBitmapDesignerCtrl1.helplineRulerCtrl1.Bmp.Width && iy >= 0 && iy < this.luBitmapDesignerCtrl1.helplineRulerCtrl1.Bmp.Height)
             {
                 this.toolStripStatusLabel1.Text = "x: " + ix.ToString() + ", y: " + iy.ToString();
-                Color c =this.luBitmapDesignerCtrl1.helplineRulerCtrl1.Bmp.GetPixel(ix, iy);
+                Color c = this.luBitmapDesignerCtrl1.helplineRulerCtrl1.Bmp.GetPixel(ix, iy);
                 this.toolStripStatusLabel3.Text = c.ToString();
                 this.toolStripStatusLabel2.BackColor = c;
             }
@@ -461,6 +461,8 @@ namespace PseudoShadow
                     }
 
                     this.cmbZoom_SelectedIndexChanged(this.cmbZoom, new EventArgs());
+
+                    this.btnCloneColors.Enabled = this.luBitmapDesignerCtrl1.ShapeList.Count > 1;
                 }
             }
         }
@@ -1006,6 +1008,8 @@ namespace PseudoShadow
                 this.luBitmapDesignerCtrl1.SetZoom(cmbZoom?.SelectedItem?.ToString());
                 this.luBitmapDesignerCtrl1.SetupBGImage();
                 this.luBitmapDesignerCtrl1.helplineRulerCtrl1.dbPanel1.Invalidate();
+
+                this.btnCloneColors.Enabled = this.luBitmapDesignerCtrl1.ShapeList.Count > 1;
             }
 
             if (this.luBitmapDesignerCtrl1 != null && this.luBitmapDesignerCtrl1.ShapeList != null &&
@@ -1383,6 +1387,63 @@ namespace PseudoShadow
                 }
 
                 _pic_changed = false;
+            }
+        }
+
+        private void btnCloneColors_Click(object sender, EventArgs e)
+        {
+            if (this.luBitmapDesignerCtrl1 != null && this.luBitmapDesignerCtrl1.ShapeList != null &&
+               this.luBitmapDesignerCtrl1.ShapeList.Count > 1 && this.CachePathAddition != null)
+            {
+                using frmCloneColors frm = new(this.luBitmapDesignerCtrl1.ShapeList, this.CachePathAddition);
+                frm.SetupCache();
+
+                if (frm.ShowDialog() == DialogResult.OK)
+                {
+                    if (frm.FBitmap != null)
+                    {
+                        Bitmap? result = new Bitmap(frm.FBitmap);
+                        string? strID = frm.cmbDest?.SelectedItem?.ToString();
+                        int j = -1;
+                        if (Int32.TryParse(strID, out j))
+                        {
+                            BitmapShape? b = this.luBitmapDesignerCtrl1?.ShapeList?.GetShapeById(j);
+
+                            if (b != null)
+                            {
+                                Bitmap? bOld = b.Bmp;
+                                b.Bmp = result;
+
+                                if (bOld != null && !bOld.Equals(b.Bmp) && !bOld.Equals(this.luBitmapDesignerCtrl1?.helplineRulerCtrl1.Bmp))
+                                {
+                                    bOld.Dispose();
+                                    bOld = null;
+                                }
+
+                                if (bOld != null && bOld.Equals(this.luBitmapDesignerCtrl1?.helplineRulerCtrl1.Bmp))
+                                {
+                                    this.SetBitmap(this.luBitmapDesignerCtrl1.helplineRulerCtrl1.Bmp, result, this.luBitmapDesignerCtrl1.helplineRulerCtrl1, "Bmp");
+                                    this.luBitmapDesignerCtrl1.helplineRulerCtrl1.MakeBitmap(this.luBitmapDesignerCtrl1.helplineRulerCtrl1.Bmp);
+                                    this.luBitmapDesignerCtrl1.helplineRulerCtrl1.dbPanel1.Invalidate();
+                                }
+
+                                if (this._cacheMappings[0].Item2 == j)
+                                    this._undoOPCache?.Add(b.Bmp);
+                                else
+                                    this._undoOPCache2?.Add(b.Bmp);
+
+                                this.btnUndo.Enabled = true;
+                                this._pic_changed = true;
+
+                                this.luBitmapDesignerCtrl1?.SetZoom(cmbZoom?.SelectedItem?.ToString());
+                                this.luBitmapDesignerCtrl1?.SetupBGImage();
+                                this.luBitmapDesignerCtrl1?.helplineRulerCtrl1.dbPanel1.Invalidate();
+
+                                this.btnCloneColors.Enabled = this.luBitmapDesignerCtrl1?.ShapeList.Count > 1;
+                            }
+                        }
+                    }
+                }
             }
         }
     }

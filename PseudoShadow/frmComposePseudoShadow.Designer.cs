@@ -109,6 +109,7 @@ namespace PseudoShadow
             colorDialog1 = new ColorDialog();
             backgroundWorker3 = new System.ComponentModel.BackgroundWorker();
             backgroundWorker4 = new System.ComponentModel.BackgroundWorker();
+            btnCloneColors = new Button();
             statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer2).BeginInit();
             splitContainer2.Panel1.SuspendLayout();
@@ -271,6 +272,7 @@ namespace PseudoShadow
             // splitContainer2.Panel2
             // 
             splitContainer2.Panel2.AutoScroll = true;
+            splitContainer2.Panel2.Controls.Add(btnCloneColors);
             splitContainer2.Panel2.Controls.Add(label14);
             splitContainer2.Panel2.Controls.Add(panel3);
             splitContainer2.Panel2.Controls.Add(panel2);
@@ -298,7 +300,7 @@ namespace PseudoShadow
             splitContainer2.Panel2.Controls.Add(button8);
             splitContainer2.Panel2.Controls.Add(button2);
             splitContainer2.Size = new Size(1486, 862);
-            splitContainer2.SplitterDistance = 1122;
+            splitContainer2.SplitterDistance = 1121;
             splitContainer2.SplitterWidth = 5;
             splitContainer2.TabIndex = 0;
             // 
@@ -311,7 +313,7 @@ namespace PseudoShadow
             luBitmapDesignerCtrl1.SelectedShape = null;
             luBitmapDesignerCtrl1.ShadowMode = false;
             luBitmapDesignerCtrl1.ShapeList = null;
-            luBitmapDesignerCtrl1.Size = new Size(1122, 862);
+            luBitmapDesignerCtrl1.Size = new Size(1121, 862);
             luBitmapDesignerCtrl1.TabIndex = 0;
             // 
             // label14
@@ -857,6 +859,17 @@ namespace PseudoShadow
             backgroundWorker4.ProgressChanged += backgroundWorker4_ProgressChanged;
             backgroundWorker4.RunWorkerCompleted += backgroundWorker4_RunWorkerCompleted;
             // 
+            // btnCloneColors
+            // 
+            btnCloneColors.Enabled = false;
+            btnCloneColors.Location = new Point(230, 357);
+            btnCloneColors.Name = "btnCloneColors";
+            btnCloneColors.Size = new Size(88, 27);
+            btnCloneColors.TabIndex = 724;
+            btnCloneColors.Text = "Clone Colors";
+            btnCloneColors.UseVisualStyleBackColor = true;
+            btnCloneColors.Click += btnCloneColors_Click;
+            // 
             // frmComposePseudoShadow
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -967,5 +980,6 @@ namespace PseudoShadow
         private Button btnLoadUpper;
         private Button btnMerge;
         private ToolStripStatusLabel toolStripStatusLabel3;
+        private Button btnCloneColors;
     }
 }
