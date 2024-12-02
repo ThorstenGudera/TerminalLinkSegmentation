@@ -3029,14 +3029,14 @@ namespace AvoidAGrabCutEasy
                     }
                 }
 
-                if (this._bgRelatedPointsAdded != null &&
+                if (this._bgRelatedPointsAdded != null && this._bgRelatedPointsAdded.Count > 0 &&
                     this._allPoints.ContainsKey(this._bgRelatedPointsAdded[this._bgRelatedPointsAdded.Count - 1].Item1))
                 {
                     IEnumerable<(int, int)>? cv = this._bgRelatedPointsAdded.Where(a => a.Item1 == j);
                     if (cv != null && this._bgRelatedPointsAdded[this._bgRelatedPointsAdded.Count - 1].Item1 == j &&
                         cv.Count() > this._allPoints[this._bgRelatedPointsAdded[this._bgRelatedPointsAdded.Count - 1].Item1].Count)
                     {
-                        if (this._bgRelatedPointsAdded.Count > 0)
+                        //if (this._bgRelatedPointsAdded.Count > 0)
                             this._bgRelatedPointsAdded.RemoveAt(this._bgRelatedPointsAdded.Count - 1);
                     }
                 }
