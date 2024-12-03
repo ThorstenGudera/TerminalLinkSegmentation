@@ -32,15 +32,19 @@
             splitContainer1 = new SplitContainer();
             splitContainer2 = new SplitContainer();
             helplineRulerCtrl1 = new HelplineRulerControl.HelplineRulerCtrl();
+            label2 = new Label();
             label16 = new Label();
             btnLoadBasePic = new Button();
             numError = new NumericUpDown();
             label54 = new Label();
+            cbClickDraw = new CheckBox();
             cbDraw = new CheckBox();
             label1 = new Label();
             cmbCurrentColor = new ComboBox();
+            btnNew = new Button();
             btnRemStroke = new Button();
             label6 = new Label();
+            numOpacity = new NumericUpDown();
             numWH = new NumericUpDown();
             cbImgOverlay = new CheckBox();
             Label20 = new Label();
@@ -67,6 +71,7 @@
             splitContainer2.Panel2.SuspendLayout();
             splitContainer2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numError).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)numOpacity).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numWH).BeginInit();
             statusStrip1.SuspendLayout();
             SuspendLayout();
@@ -107,15 +112,19 @@
             // 
             // splitContainer2.Panel2
             // 
+            splitContainer2.Panel2.Controls.Add(label2);
             splitContainer2.Panel2.Controls.Add(label16);
             splitContainer2.Panel2.Controls.Add(btnLoadBasePic);
             splitContainer2.Panel2.Controls.Add(numError);
             splitContainer2.Panel2.Controls.Add(label54);
+            splitContainer2.Panel2.Controls.Add(cbClickDraw);
             splitContainer2.Panel2.Controls.Add(cbDraw);
             splitContainer2.Panel2.Controls.Add(label1);
             splitContainer2.Panel2.Controls.Add(cmbCurrentColor);
+            splitContainer2.Panel2.Controls.Add(btnNew);
             splitContainer2.Panel2.Controls.Add(btnRemStroke);
             splitContainer2.Panel2.Controls.Add(label6);
+            splitContainer2.Panel2.Controls.Add(numOpacity);
             splitContainer2.Panel2.Controls.Add(numWH);
             splitContainer2.Panel2.Controls.Add(cbImgOverlay);
             splitContainer2.Panel2.Controls.Add(Label20);
@@ -124,7 +133,7 @@
             splitContainer2.Panel2.Controls.Add(button8);
             splitContainer2.Panel2.Controls.Add(button2);
             splitContainer2.Size = new Size(1386, 862);
-            splitContainer2.SplitterDistance = 1087;
+            splitContainer2.SplitterDistance = 1079;
             splitContainer2.SplitterWidth = 5;
             splitContainer2.TabIndex = 0;
             // 
@@ -144,30 +153,39 @@
             helplineRulerCtrl1.MoveHelpLinesOnResize = false;
             helplineRulerCtrl1.Name = "helplineRulerCtrl1";
             helplineRulerCtrl1.SetZoomOnlyByMethodCall = false;
-            helplineRulerCtrl1.Size = new Size(1087, 862);
+            helplineRulerCtrl1.Size = new Size(1079, 862);
             helplineRulerCtrl1.TabIndex = 0;
             helplineRulerCtrl1.Zoom = 1F;
             helplineRulerCtrl1.ZoomSetManually = false;
             helplineRulerCtrl1.DBPanelDblClicked += helplineRulerCtrl1_DBPanelDblClicked;
             // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Location = new Point(133, 25);
+            label2.Name = "label2";
+            label2.Size = new Size(48, 15);
+            label2.TabIndex = 670;
+            label2.Text = "Opacity";
+            // 
             // label16
             // 
             label16.AutoSize = true;
-            label16.Location = new Point(49, 168);
+            label16.Location = new Point(34, 174);
             label16.Name = "label16";
             label16.Size = new Size(68, 15);
-            label16.TabIndex = 673;
+            label16.TabIndex = 669;
             label16.Text = "load trimap";
             // 
             // btnLoadBasePic
             // 
             btnLoadBasePic.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             btnLoadBasePic.ForeColor = SystemColors.ControlText;
-            btnLoadBasePic.Location = new Point(156, 162);
+            btnLoadBasePic.Location = new Point(141, 168);
             btnLoadBasePic.Margin = new Padding(4, 3, 4, 3);
             btnLoadBasePic.Name = "btnLoadBasePic";
             btnLoadBasePic.Size = new Size(88, 27);
-            btnLoadBasePic.TabIndex = 672;
+            btnLoadBasePic.TabIndex = 668;
             btnLoadBasePic.Text = "Load";
             btnLoadBasePic.UseVisualStyleBackColor = true;
             btnLoadBasePic.Click += btnLoadBasePic_Click;
@@ -176,26 +194,38 @@
             // 
             numError.DecimalPlaces = 4;
             numError.Increment = new decimal(new int[] { 1, 0, 0, 65536 });
-            numError.Location = new Point(123, 677);
+            numError.Location = new Point(108, 683);
             numError.Margin = new Padding(4, 3, 4, 3);
             numError.Maximum = new decimal(new int[] { 1, 0, 0, 0 });
             numError.Minimum = new decimal(new int[] { 1, 0, 0, 262144 });
             numError.Name = "numError";
             numError.Size = new Size(70, 23);
-            numError.TabIndex = 670;
+            numError.TabIndex = 666;
             numError.Value = new decimal(new int[] { 1, 0, 0, 131072 });
             numError.Visible = false;
             // 
             // label54
             // 
             label54.AutoSize = true;
-            label54.Location = new Point(71, 679);
+            label54.Location = new Point(56, 685);
             label54.Margin = new Padding(4, 0, 4, 0);
             label54.Name = "label54";
             label54.Size = new Size(32, 15);
-            label54.TabIndex = 671;
+            label54.TabIndex = 667;
             label54.Text = "Error";
             label54.Visible = false;
+            // 
+            // cbClickDraw
+            // 
+            cbClickDraw.AutoSize = true;
+            cbClickDraw.Location = new Point(105, 60);
+            cbClickDraw.Margin = new Padding(4, 3, 4, 3);
+            cbClickDraw.Name = "cbClickDraw";
+            cbClickDraw.Size = new Size(79, 19);
+            cbClickDraw.TabIndex = 665;
+            cbClickDraw.Text = "ClickDraw";
+            cbClickDraw.UseVisualStyleBackColor = true;
+            cbClickDraw.CheckedChanged += cbClickDraw_CheckedChanged;
             // 
             // cbDraw
             // 
@@ -229,6 +259,18 @@
             cmbCurrentColor.TabIndex = 663;
             cmbCurrentColor.SelectedIndexChanged += cmbCurrentColor_SelectedIndexChanged;
             // 
+            // btnNew
+            // 
+            btnNew.Enabled = false;
+            btnNew.Location = new Point(188, 55);
+            btnNew.Margin = new Padding(4, 3, 4, 3);
+            btnNew.Name = "btnNew";
+            btnNew.Size = new Size(52, 27);
+            btnNew.TabIndex = 662;
+            btnNew.Text = "new ";
+            btnNew.UseVisualStyleBackColor = true;
+            btnNew.Click += btnNew_Click;
+            // 
             // btnRemStroke
             // 
             btnRemStroke.Location = new Point(141, 123);
@@ -249,6 +291,19 @@
             label6.Size = new Size(37, 15);
             label6.TabIndex = 661;
             label6.Text = "width";
+            // 
+            // numOpacity
+            // 
+            numOpacity.DecimalPlaces = 2;
+            numOpacity.Increment = new decimal(new int[] { 1, 0, 0, 65536 });
+            numOpacity.Location = new Point(188, 23);
+            numOpacity.Margin = new Padding(4, 3, 4, 3);
+            numOpacity.Maximum = new decimal(new int[] { 1, 0, 0, 0 });
+            numOpacity.Name = "numOpacity";
+            numOpacity.Size = new Size(52, 23);
+            numOpacity.TabIndex = 660;
+            numOpacity.Value = new decimal(new int[] { 2, 0, 0, 65536 });
+            numOpacity.ValueChanged += numOpacity_ValueChanged;
             // 
             // numWH
             // 
@@ -433,6 +488,7 @@
             ((System.ComponentModel.ISupportInitialize)splitContainer2).EndInit();
             splitContainer2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)numError).EndInit();
+            ((System.ComponentModel.ISupportInitialize)numOpacity).EndInit();
             ((System.ComponentModel.ISupportInitialize)numWH).EndInit();
             statusStrip1.ResumeLayout(false);
             statusStrip1.PerformLayout();
@@ -465,10 +521,14 @@
         private System.Windows.Forms.ComboBox cmbCurrentColor;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.CheckBox cbDraw;
-        private Label label16;
-        private Button btnLoadBasePic;
         internal NumericUpDown numError;
         internal Label label54;
+        private Label label16;
+        private Button btnLoadBasePic;
         private OpenFileDialog openFileDialog1;
+        private Label label2;
+        private NumericUpDown numOpacity;
+        private CheckBox cbClickDraw;
+        private Button btnNew;
     }
 }

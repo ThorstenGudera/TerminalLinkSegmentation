@@ -31,26 +31,38 @@
             components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmProcOutline));
             splitContainer1 = new SplitContainer();
+            statusStrip1 = new StatusStrip();
+            toolStripStatusLabel1 = new ToolStripStatusLabel();
+            toolStripStatusLabel2 = new ToolStripStatusLabel();
+            toolStripProgressBar1 = new ToolStripProgressBar();
+            toolStripStatusLabel4 = new ToolStripStatusLabel();
+            toolStripDropDownButton1 = new ToolStripDropDownButton();
             helplineRulerCtrl1 = new HelplineRulerControl.HelplineRulerCtrl();
             btnRedo = new Button();
             btnUndo = new Button();
             label16 = new Label();
             btnLoadBasePic = new Button();
             groupBox2 = new GroupBox();
+            label1 = new Label();
+            label14 = new Label();
+            btnAlphaZAndGain = new Button();
+            numAlphaZAndGain = new NumericUpDown();
             btnSetGamma = new Button();
             label3 = new Label();
             numGamma = new NumericUpDown();
-            label9 = new Label();
-            numMaxSize = new NumericUpDown();
             Label20 = new Label();
             cmbZoom = new ComboBox();
+            label9 = new Label();
             cbBGColor = new CheckBox();
+            numMaxSize = new NumericUpDown();
             button10 = new Button();
             button8 = new Button();
             button2 = new Button();
             btnCancel = new Button();
             btnOK = new Button();
             groupBox4 = new GroupBox();
+            btnCreateTrimap = new Button();
+            pictureBox2 = new PictureBox();
             pictureBox1 = new PictureBox();
             cbRedrawInner = new CheckBox();
             cbEditTrimap = new CheckBox();
@@ -145,12 +157,6 @@
             label43 = new Label();
             label44 = new Label();
             btnJRem = new Button();
-            statusStrip1 = new StatusStrip();
-            toolStripStatusLabel1 = new ToolStripStatusLabel();
-            toolStripStatusLabel2 = new ToolStripStatusLabel();
-            toolStripProgressBar1 = new ToolStripProgressBar();
-            toolStripStatusLabel4 = new ToolStripStatusLabel();
-            toolStripDropDownButton1 = new ToolStripDropDownButton();
             saveFileDialog1 = new SaveFileDialog();
             backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             Timer3 = new System.Windows.Forms.Timer(components);
@@ -162,16 +168,18 @@
             backgroundWorker6 = new System.ComponentModel.BackgroundWorker();
             backgroundWorker7 = new System.ComponentModel.BackgroundWorker();
             openFileDialog1 = new OpenFileDialog();
-            btnCreateTrimap = new Button();
-            pictureBox2 = new PictureBox();
+            backgroundWorker8 = new System.ComponentModel.BackgroundWorker();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
             splitContainer1.Panel2.SuspendLayout();
             splitContainer1.SuspendLayout();
+            statusStrip1.SuspendLayout();
             groupBox2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)numAlphaZAndGain).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numGamma).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numMaxSize).BeginInit();
             groupBox4.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)pictureBox2).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numGamma2).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numTh).BeginInit();
@@ -207,8 +215,6 @@
             groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numJRem2).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numJRem1).BeginInit();
-            statusStrip1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)pictureBox2).BeginInit();
             SuspendLayout();
             // 
             // splitContainer1
@@ -220,6 +226,7 @@
             // 
             // splitContainer1.Panel1
             // 
+            splitContainer1.Panel1.Controls.Add(statusStrip1);
             splitContainer1.Panel1.Controls.Add(helplineRulerCtrl1);
             // 
             // splitContainer1.Panel2
@@ -231,7 +238,9 @@
             splitContainer1.Panel2.Controls.Add(groupBox2);
             splitContainer1.Panel2.Controls.Add(Label20);
             splitContainer1.Panel2.Controls.Add(cmbZoom);
+            splitContainer1.Panel2.Controls.Add(label9);
             splitContainer1.Panel2.Controls.Add(cbBGColor);
+            splitContainer1.Panel2.Controls.Add(numMaxSize);
             splitContainer1.Panel2.Controls.Add(button10);
             splitContainer1.Panel2.Controls.Add(button8);
             splitContainer1.Panel2.Controls.Add(button2);
@@ -240,10 +249,61 @@
             splitContainer1.Panel2.Controls.Add(groupBox4);
             splitContainer1.Panel2.Controls.Add(groupBox3);
             splitContainer1.Panel2.Controls.Add(groupBox1);
-            splitContainer1.Size = new Size(1479, 880);
+            splitContainer1.Size = new Size(1479, 924);
             splitContainer1.SplitterDistance = 973;
             splitContainer1.SplitterWidth = 5;
             splitContainer1.TabIndex = 0;
+            // 
+            // statusStrip1
+            // 
+            statusStrip1.Items.AddRange(new ToolStripItem[] { toolStripStatusLabel1, toolStripStatusLabel2, toolStripProgressBar1, toolStripStatusLabel4, toolStripDropDownButton1 });
+            statusStrip1.Location = new Point(0, 880);
+            statusStrip1.Name = "statusStrip1";
+            statusStrip1.Padding = new Padding(1, 0, 16, 0);
+            statusStrip1.Size = new Size(973, 44);
+            statusStrip1.TabIndex = 1;
+            statusStrip1.Text = "statusStrip1";
+            // 
+            // toolStripStatusLabel1
+            // 
+            toolStripStatusLabel1.BorderSides = ToolStripStatusLabelBorderSides.Left | ToolStripStatusLabelBorderSides.Top | ToolStripStatusLabelBorderSides.Right | ToolStripStatusLabelBorderSides.Bottom;
+            toolStripStatusLabel1.Font = new Font("Segoe UI", 15.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            toolStripStatusLabel1.Name = "toolStripStatusLabel1";
+            toolStripStatusLabel1.Size = new Size(41, 39);
+            toolStripStatusLabel1.Text = "    ";
+            // 
+            // toolStripStatusLabel2
+            // 
+            toolStripStatusLabel2.AutoSize = false;
+            toolStripStatusLabel2.BorderSides = ToolStripStatusLabelBorderSides.Left | ToolStripStatusLabelBorderSides.Top | ToolStripStatusLabelBorderSides.Right | ToolStripStatusLabelBorderSides.Bottom;
+            toolStripStatusLabel2.Font = new Font("Segoe UI", 15.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            toolStripStatusLabel2.Name = "toolStripStatusLabel2";
+            toolStripStatusLabel2.Size = new Size(100, 39);
+            // 
+            // toolStripProgressBar1
+            // 
+            toolStripProgressBar1.Name = "toolStripProgressBar1";
+            toolStripProgressBar1.Size = new Size(467, 38);
+            // 
+            // toolStripStatusLabel4
+            // 
+            toolStripStatusLabel4.Font = new Font("Segoe UI", 15.75F);
+            toolStripStatusLabel4.Name = "toolStripStatusLabel4";
+            toolStripStatusLabel4.Size = new Size(37, 39);
+            toolStripStatusLabel4.Text = "    ";
+            // 
+            // toolStripDropDownButton1
+            // 
+            toolStripDropDownButton1.DisplayStyle = ToolStripItemDisplayStyle.Text;
+            toolStripDropDownButton1.Enabled = false;
+            toolStripDropDownButton1.Font = new Font("Segoe UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            toolStripDropDownButton1.Image = (Image)resources.GetObject("toolStripDropDownButton1.Image");
+            toolStripDropDownButton1.ImageTransparentColor = Color.Magenta;
+            toolStripDropDownButton1.Name = "toolStripDropDownButton1";
+            toolStripDropDownButton1.ShowDropDownArrow = false;
+            toolStripDropDownButton1.Size = new Size(195, 42);
+            toolStripDropDownButton1.Text = "ShowAndSaveImages";
+            toolStripDropDownButton1.Click += toolStripDropDownButton1_Click;
             // 
             // helplineRulerCtrl1
             // 
@@ -261,7 +321,7 @@
             helplineRulerCtrl1.MoveHelpLinesOnResize = false;
             helplineRulerCtrl1.Name = "helplineRulerCtrl1";
             helplineRulerCtrl1.SetZoomOnlyByMethodCall = false;
-            helplineRulerCtrl1.Size = new Size(973, 880);
+            helplineRulerCtrl1.Size = new Size(973, 924);
             helplineRulerCtrl1.TabIndex = 0;
             helplineRulerCtrl1.Zoom = 1F;
             helplineRulerCtrl1.ZoomSetManually = false;
@@ -271,7 +331,7 @@
             // 
             btnRedo.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             btnRedo.ForeColor = SystemColors.ControlText;
-            btnRedo.Location = new Point(115, 810);
+            btnRedo.Location = new Point(112, 837);
             btnRedo.Margin = new Padding(4, 3, 4, 3);
             btnRedo.Name = "btnRedo";
             btnRedo.Size = new Size(88, 27);
@@ -284,7 +344,7 @@
             // 
             btnUndo.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             btnUndo.ForeColor = SystemColors.ControlText;
-            btnUndo.Location = new Point(19, 810);
+            btnUndo.Location = new Point(16, 837);
             btnUndo.Margin = new Padding(4, 3, 4, 3);
             btnUndo.Name = "btnUndo";
             btnUndo.Size = new Size(88, 27);
@@ -296,7 +356,7 @@
             // label16
             // 
             label16.AutoSize = true;
-            label16.Location = new Point(15, 851);
+            label16.Location = new Point(15, 885);
             label16.Name = "label16";
             label16.Size = new Size(73, 15);
             label16.TabIndex = 662;
@@ -306,7 +366,7 @@
             // 
             btnLoadBasePic.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             btnLoadBasePic.ForeColor = SystemColors.ControlText;
-            btnLoadBasePic.Location = new Point(87, 845);
+            btnLoadBasePic.Location = new Point(84, 879);
             btnLoadBasePic.Margin = new Padding(4, 3, 4, 3);
             btnLoadBasePic.Name = "btnLoadBasePic";
             btnLoadBasePic.Size = new Size(88, 27);
@@ -317,23 +377,64 @@
             // 
             // groupBox2
             // 
+            groupBox2.Controls.Add(label1);
+            groupBox2.Controls.Add(label14);
+            groupBox2.Controls.Add(btnAlphaZAndGain);
+            groupBox2.Controls.Add(numAlphaZAndGain);
             groupBox2.Controls.Add(btnSetGamma);
             groupBox2.Controls.Add(label3);
             groupBox2.Controls.Add(numGamma);
-            groupBox2.Controls.Add(label9);
-            groupBox2.Controls.Add(numMaxSize);
             groupBox2.Location = new Point(10, 708);
             groupBox2.Margin = new Padding(4, 3, 4, 3);
             groupBox2.Name = "groupBox2";
             groupBox2.Padding = new Padding(4, 3, 4, 3);
-            groupBox2.Size = new Size(486, 53);
+            groupBox2.Size = new Size(486, 81);
             groupBox2.TabIndex = 659;
             groupBox2.TabStop = false;
             groupBox2.Text = "AlphaGamma/MaxSize";
             // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Location = new Point(337, 21);
+            label1.Name = "label1";
+            label1.Size = new Size(27, 15);
+            label1.TabIndex = 715;
+            label1.Text = "to 0";
+            // 
+            // label14
+            // 
+            label14.AutoSize = true;
+            label14.Location = new Point(152, 21);
+            label14.Name = "label14";
+            label14.Size = new Size(85, 15);
+            label14.TabIndex = 716;
+            label14.Text = "set alpha up to";
+            // 
+            // btnAlphaZAndGain
+            // 
+            btnAlphaZAndGain.Location = new Point(371, 15);
+            btnAlphaZAndGain.Margin = new Padding(4, 3, 4, 3);
+            btnAlphaZAndGain.Name = "btnAlphaZAndGain";
+            btnAlphaZAndGain.Size = new Size(88, 27);
+            btnAlphaZAndGain.TabIndex = 714;
+            btnAlphaZAndGain.Text = "Go";
+            btnAlphaZAndGain.UseVisualStyleBackColor = true;
+            btnAlphaZAndGain.Click += btnAlphaZAndGain_Click;
+            // 
+            // numAlphaZAndGain
+            // 
+            numAlphaZAndGain.Location = new Point(257, 18);
+            numAlphaZAndGain.Margin = new Padding(4, 3, 4, 3);
+            numAlphaZAndGain.Maximum = new decimal(new int[] { 255, 0, 0, 0 });
+            numAlphaZAndGain.Name = "numAlphaZAndGain";
+            numAlphaZAndGain.Size = new Size(70, 23);
+            numAlphaZAndGain.TabIndex = 713;
+            numAlphaZAndGain.Value = new decimal(new int[] { 50, 0, 0, 0 });
+            // 
             // btnSetGamma
             // 
-            btnSetGamma.Location = new Point(372, 17);
+            btnSetGamma.Location = new Point(370, 48);
             btnSetGamma.Margin = new Padding(4, 3, 4, 3);
             btnSetGamma.Name = "btnSetGamma";
             btnSetGamma.Size = new Size(88, 27);
@@ -345,7 +446,7 @@
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(187, 23);
+            label3.Location = new Point(150, 54);
             label3.Margin = new Padding(4, 0, 4, 0);
             label3.Name = "label3";
             label3.Size = new Size(98, 15);
@@ -356,7 +457,7 @@
             // 
             numGamma.DecimalPlaces = 2;
             numGamma.Increment = new decimal(new int[] { 1, 0, 0, 65536 });
-            numGamma.Location = new Point(295, 21);
+            numGamma.Location = new Point(255, 52);
             numGamma.Margin = new Padding(4, 3, 4, 3);
             numGamma.Minimum = new decimal(new int[] { 1, 0, 0, 131072 });
             numGamma.Name = "numGamma";
@@ -364,35 +465,10 @@
             numGamma.TabIndex = 511;
             numGamma.Value = new decimal(new int[] { 1, 0, 0, 0 });
             // 
-            // label9
-            // 
-            label9.AutoSize = true;
-            label9.Enabled = false;
-            label9.Location = new Point(21, 23);
-            label9.Margin = new Padding(4, 0, 4, 0);
-            label9.Name = "label9";
-            label9.Size = new Size(53, 15);
-            label9.TabIndex = 674;
-            label9.Text = "Max Size";
-            toolTip1.SetToolTip(label9, "Maximum size of the long picture-side.\r\nBigger pictures will be resampled down - then processed -\r\nand re-resampled up again.\r\nRealMinCut MaxSize is fix at 300, due to processing time.");
-            // 
-            // numMaxSize
-            // 
-            numMaxSize.Enabled = false;
-            numMaxSize.Increment = new decimal(new int[] { 1, 0, 0, 65536 });
-            numMaxSize.Location = new Point(86, 20);
-            numMaxSize.Margin = new Padding(4, 3, 4, 3);
-            numMaxSize.Maximum = new decimal(new int[] { 9999, 0, 0, 0 });
-            numMaxSize.Minimum = new decimal(new int[] { 200, 0, 0, 0 });
-            numMaxSize.Name = "numMaxSize";
-            numMaxSize.Size = new Size(71, 23);
-            numMaxSize.TabIndex = 673;
-            numMaxSize.Value = new decimal(new int[] { 1200, 0, 0, 0 });
-            // 
             // Label20
             // 
             Label20.AutoSize = true;
-            Label20.Location = new Point(15, 773);
+            Label20.Location = new Point(15, 807);
             Label20.Margin = new Padding(4, 0, 4, 0);
             Label20.Name = "Label20";
             Label20.Size = new Size(58, 15);
@@ -404,12 +480,24 @@
             cmbZoom.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbZoom.FormattingEnabled = true;
             cmbZoom.Items.AddRange(new object[] { "4", "2", "1", "Fit_Width", "Fit" });
-            cmbZoom.Location = new Point(84, 770);
+            cmbZoom.Location = new Point(84, 804);
             cmbZoom.Margin = new Padding(4, 3, 4, 3);
             cmbZoom.Name = "cmbZoom";
             cmbZoom.Size = new Size(87, 23);
             cmbZoom.TabIndex = 655;
             cmbZoom.SelectedIndexChanged += cmbZoom_SelectedIndexChanged;
+            // 
+            // label9
+            // 
+            label9.AutoSize = true;
+            label9.Enabled = false;
+            label9.Location = new Point(254, 808);
+            label9.Margin = new Padding(4, 0, 4, 0);
+            label9.Name = "label9";
+            label9.Size = new Size(53, 15);
+            label9.TabIndex = 674;
+            label9.Text = "Max Size";
+            toolTip1.SetToolTip(label9, "Maximum size of the long picture-side.\r\nBigger pictures will be resampled down - then processed -\r\nand re-resampled up again.\r\nRealMinCut MaxSize is fix at 300, due to processing time.");
             // 
             // cbBGColor
             // 
@@ -417,7 +505,7 @@
             cbBGColor.AutoSize = true;
             cbBGColor.Checked = true;
             cbBGColor.CheckState = CheckState.Checked;
-            cbBGColor.Location = new Point(181, 772);
+            cbBGColor.Location = new Point(178, 806);
             cbBGColor.Margin = new Padding(4, 3, 4, 3);
             cbBGColor.Name = "cbBGColor";
             cbBGColor.Size = new Size(67, 19);
@@ -426,11 +514,24 @@
             cbBGColor.UseVisualStyleBackColor = true;
             cbBGColor.CheckedChanged += cbBGColor_CheckedChanged;
             // 
+            // numMaxSize
+            // 
+            numMaxSize.Enabled = false;
+            numMaxSize.Increment = new decimal(new int[] { 1, 0, 0, 65536 });
+            numMaxSize.Location = new Point(319, 805);
+            numMaxSize.Margin = new Padding(4, 3, 4, 3);
+            numMaxSize.Maximum = new decimal(new int[] { 9999, 0, 0, 0 });
+            numMaxSize.Minimum = new decimal(new int[] { 200, 0, 0, 0 });
+            numMaxSize.Name = "numMaxSize";
+            numMaxSize.Size = new Size(71, 23);
+            numMaxSize.TabIndex = 673;
+            numMaxSize.Value = new decimal(new int[] { 1200, 0, 0, 0 });
+            // 
             // button10
             // 
             button10.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             button10.ForeColor = SystemColors.ControlText;
-            button10.Location = new Point(368, 810);
+            button10.Location = new Point(365, 837);
             button10.Margin = new Padding(4, 3, 4, 3);
             button10.Name = "button10";
             button10.Size = new Size(88, 27);
@@ -443,7 +544,7 @@
             // 
             button8.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             button8.ForeColor = SystemColors.ControlText;
-            button8.Location = new Point(273, 810);
+            button8.Location = new Point(270, 837);
             button8.Margin = new Padding(4, 3, 4, 3);
             button8.Name = "button8";
             button8.Size = new Size(88, 27);
@@ -457,7 +558,7 @@
             button2.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             button2.FlatStyle = FlatStyle.System;
             button2.ForeColor = SystemColors.ControlText;
-            button2.Location = new Point(368, 770);
+            button2.Location = new Point(398, 801);
             button2.Margin = new Padding(4, 3, 4, 3);
             button2.Name = "button2";
             button2.Size = new Size(88, 27);
@@ -470,7 +571,7 @@
             btnCancel.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             btnCancel.DialogResult = DialogResult.Cancel;
             btnCancel.ForeColor = SystemColors.ControlText;
-            btnCancel.Location = new Point(377, 845);
+            btnCancel.Location = new Point(374, 882);
             btnCancel.Margin = new Padding(4, 3, 4, 3);
             btnCancel.Name = "btnCancel";
             btnCancel.Size = new Size(88, 27);
@@ -483,7 +584,7 @@
             btnOK.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             btnOK.DialogResult = DialogResult.OK;
             btnOK.ForeColor = SystemColors.ControlText;
-            btnOK.Location = new Point(284, 845);
+            btnOK.Location = new Point(281, 882);
             btnOK.Margin = new Padding(4, 3, 4, 3);
             btnOK.Name = "btnOK";
             btnOK.Size = new Size(88, 27);
@@ -551,6 +652,29 @@
             groupBox4.TabIndex = 5;
             groupBox4.TabStop = false;
             groupBox4.Text = "boundary alpha";
+            // 
+            // btnCreateTrimap
+            // 
+            btnCreateTrimap.ForeColor = SystemColors.ControlText;
+            btnCreateTrimap.Location = new Point(381, 190);
+            btnCreateTrimap.Margin = new Padding(4, 3, 4, 3);
+            btnCreateTrimap.Name = "btnCreateTrimap";
+            btnCreateTrimap.Size = new Size(88, 27);
+            btnCreateTrimap.TabIndex = 688;
+            btnCreateTrimap.Text = "create Trimap";
+            btnCreateTrimap.UseVisualStyleBackColor = true;
+            btnCreateTrimap.Click += btnCreateTrimap_Click;
+            // 
+            // pictureBox2
+            // 
+            pictureBox2.BorderStyle = BorderStyle.FixedSingle;
+            pictureBox2.Location = new Point(85, 135);
+            pictureBox2.Name = "pictureBox2";
+            pictureBox2.Size = new Size(59, 50);
+            pictureBox2.SizeMode = PictureBoxSizeMode.Zoom;
+            pictureBox2.TabIndex = 687;
+            pictureBox2.TabStop = false;
+            pictureBox2.DoubleClick += pictureBox2_DoubleClick;
             // 
             // pictureBox1
             // 
@@ -1634,57 +1758,6 @@
             btnJRem.UseVisualStyleBackColor = true;
             btnJRem.Click += btnJRem_Click;
             // 
-            // statusStrip1
-            // 
-            statusStrip1.Items.AddRange(new ToolStripItem[] { toolStripStatusLabel1, toolStripStatusLabel2, toolStripProgressBar1, toolStripStatusLabel4, toolStripDropDownButton1 });
-            statusStrip1.Location = new Point(0, 880);
-            statusStrip1.Name = "statusStrip1";
-            statusStrip1.Padding = new Padding(1, 0, 16, 0);
-            statusStrip1.Size = new Size(1479, 44);
-            statusStrip1.TabIndex = 1;
-            statusStrip1.Text = "statusStrip1";
-            // 
-            // toolStripStatusLabel1
-            // 
-            toolStripStatusLabel1.BorderSides = ToolStripStatusLabelBorderSides.Left | ToolStripStatusLabelBorderSides.Top | ToolStripStatusLabelBorderSides.Right | ToolStripStatusLabelBorderSides.Bottom;
-            toolStripStatusLabel1.Font = new Font("Segoe UI", 15.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            toolStripStatusLabel1.Size = new Size(41, 39);
-            toolStripStatusLabel1.Text = "    ";
-            // 
-            // toolStripStatusLabel2
-            // 
-            toolStripStatusLabel2.AutoSize = false;
-            toolStripStatusLabel2.BorderSides = ToolStripStatusLabelBorderSides.Left | ToolStripStatusLabelBorderSides.Top | ToolStripStatusLabelBorderSides.Right | ToolStripStatusLabelBorderSides.Bottom;
-            toolStripStatusLabel2.Font = new Font("Segoe UI", 15.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            toolStripStatusLabel2.Name = "toolStripStatusLabel2";
-            toolStripStatusLabel2.Size = new Size(100, 39);
-            // 
-            // toolStripProgressBar1
-            // 
-            toolStripProgressBar1.Name = "toolStripProgressBar1";
-            toolStripProgressBar1.Size = new Size(467, 38);
-            // 
-            // toolStripStatusLabel4
-            // 
-            toolStripStatusLabel4.Font = new Font("Segoe UI", 15.75F);
-            toolStripStatusLabel4.Name = "toolStripStatusLabel4";
-            toolStripStatusLabel4.Size = new Size(37, 39);
-            toolStripStatusLabel4.Text = "    ";
-            // 
-            // toolStripDropDownButton1
-            // 
-            toolStripDropDownButton1.DisplayStyle = ToolStripItemDisplayStyle.Text;
-            toolStripDropDownButton1.Enabled = false;
-            toolStripDropDownButton1.Font = new Font("Segoe UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            toolStripDropDownButton1.Image = (Image)resources.GetObject("toolStripDropDownButton1.Image");
-            toolStripDropDownButton1.ImageTransparentColor = Color.Magenta;
-            toolStripDropDownButton1.Name = "toolStripDropDownButton1";
-            toolStripDropDownButton1.ShowDropDownArrow = false;
-            toolStripDropDownButton1.Size = new Size(195, 42);
-            toolStripDropDownButton1.Text = "ShowAndSaveImages";
-            toolStripDropDownButton1.Click += toolStripDropDownButton1_Click;
-            // 
             // saveFileDialog1
             // 
             saveFileDialog1.FileName = "Bild1.png";
@@ -1754,28 +1827,12 @@
             openFileDialog1.FileName = "openFileDialog1";
             openFileDialog1.Filter = "Images - (*.bmp;*.jpg;*.jpeg;*.jfif;*.png)|*.bmp;*.jpg;*.jpeg;*.jfif;*.png";
             // 
-            // btnCreateTrimap
+            // backgroundWorker8
             // 
-            btnCreateTrimap.ForeColor = SystemColors.ControlText;
-            btnCreateTrimap.Location = new Point(381, 190);
-            btnCreateTrimap.Margin = new Padding(4, 3, 4, 3);
-            btnCreateTrimap.Name = "btnCreateTrimap";
-            btnCreateTrimap.Size = new Size(88, 27);
-            btnCreateTrimap.TabIndex = 688;
-            btnCreateTrimap.Text = "create Trimap";
-            btnCreateTrimap.UseVisualStyleBackColor = true;
-            btnCreateTrimap.Click += btnCreateTrimap_Click;
-            // 
-            // pictureBox2
-            // 
-            pictureBox2.BorderStyle = BorderStyle.FixedSingle;
-            pictureBox2.Location = new Point(85, 135);
-            pictureBox2.Name = "pictureBox2";
-            pictureBox2.Size = new Size(59, 50);
-            pictureBox2.SizeMode = PictureBoxSizeMode.Zoom;
-            pictureBox2.TabIndex = 687;
-            pictureBox2.TabStop = false;
-            pictureBox2.DoubleClick += pictureBox2_DoubleClick;
+            backgroundWorker8.WorkerReportsProgress = true;
+            backgroundWorker8.WorkerSupportsCancellation = true;
+            backgroundWorker8.DoWork += backgroundWorker8_DoWork;
+            backgroundWorker8.RunWorkerCompleted += backgroundWorker8_RunWorkerCompleted;
             // 
             // frmProcOutline
             // 
@@ -1783,7 +1840,6 @@
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1479, 924);
             Controls.Add(splitContainer1);
-            Controls.Add(statusStrip1);
             Margin = new Padding(4, 3, 4, 3);
             Name = "frmProcOutline";
             StartPosition = FormStartPosition.CenterParent;
@@ -1791,16 +1847,21 @@
             FormClosing += frmProcOutline_FormClosing;
             Load += frmProcOutline_Load;
             splitContainer1.Panel1.ResumeLayout(false);
+            splitContainer1.Panel1.PerformLayout();
             splitContainer1.Panel2.ResumeLayout(false);
             splitContainer1.Panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).EndInit();
             splitContainer1.ResumeLayout(false);
+            statusStrip1.ResumeLayout(false);
+            statusStrip1.PerformLayout();
             groupBox2.ResumeLayout(false);
             groupBox2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)numAlphaZAndGain).EndInit();
             ((System.ComponentModel.ISupportInitialize)numGamma).EndInit();
             ((System.ComponentModel.ISupportInitialize)numMaxSize).EndInit();
             groupBox4.ResumeLayout(false);
             groupBox4.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)pictureBox2).EndInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             ((System.ComponentModel.ISupportInitialize)numGamma2).EndInit();
             ((System.ComponentModel.ISupportInitialize)numTh).EndInit();
@@ -1839,11 +1900,7 @@
             groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)numJRem2).EndInit();
             ((System.ComponentModel.ISupportInitialize)numJRem1).EndInit();
-            statusStrip1.ResumeLayout(false);
-            statusStrip1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)pictureBox2).EndInit();
             ResumeLayout(false);
-            PerformLayout();
         }
 
         #endregion
@@ -1982,5 +2039,10 @@
         private Button btnUndo;
         private Button btnCreateTrimap;
         private PictureBox pictureBox2;
+        private Label label1;
+        private Label label14;
+        private Button btnAlphaZAndGain;
+        private NumericUpDown numAlphaZAndGain;
+        internal System.ComponentModel.BackgroundWorker backgroundWorker8;
     }
 }
