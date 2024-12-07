@@ -65,7 +65,7 @@
             numRMatteH = new NumericUpDown();
             timer1 = new System.Windows.Forms.Timer(components);
             Timer3 = new System.Windows.Forms.Timer(components);
-            BackgroundWorker2 = new System.ComponentModel.BackgroundWorker();
+            backgroundWorker2 = new System.ComponentModel.BackgroundWorker();
             openFileDialog1 = new OpenFileDialog();
             backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             panel1 = new Panel();
@@ -100,6 +100,7 @@
             backgroundWorker5 = new System.ComponentModel.BackgroundWorker();
             backgroundWorker9 = new System.ComponentModel.BackgroundWorker();
             helplineRulerCtrl1 = new HelplineRulerControl.HelplineRulerCtrl();
+            btnMask = new Button();
             statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numEpsilon).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numKernel).BeginInit();
@@ -480,10 +481,12 @@
             Timer3.Interval = 500;
             Timer3.Tick += Timer3_Tick;
             // 
-            // BackgroundWorker2
+            // backgroundWorker2
             // 
-            BackgroundWorker2.WorkerReportsProgress = true;
-            BackgroundWorker2.WorkerSupportsCancellation = true;
+            backgroundWorker2.WorkerReportsProgress = true;
+            backgroundWorker2.WorkerSupportsCancellation = true;
+            backgroundWorker2.DoWork += backgroundWorker2_DoWork;
+            backgroundWorker2.RunWorkerCompleted += backgroundWorker2_RunWorkerCompleted;
             // 
             // openFileDialog1
             // 
@@ -500,6 +503,7 @@
             // 
             // panel1
             // 
+            panel1.Controls.Add(btnMask);
             panel1.Controls.Add(panel2);
             panel1.Controls.Add(label9);
             panel1.Controls.Add(label8);
@@ -607,7 +611,7 @@
             pictureBox2.SizeMode = PictureBoxSizeMode.Zoom;
             pictureBox2.TabIndex = 729;
             pictureBox2.TabStop = false;
-            pictureBox2.DoubleClick += pictureBox1_DoubleClick;
+            pictureBox2.DoubleClick += pictureBox2_DoubleClick;
             // 
             // pictureBox1
             // 
@@ -904,6 +908,19 @@
             helplineRulerCtrl1.ZoomSetManually = false;
             helplineRulerCtrl1.DBPanelDblClicked += helplineRulerCtrl1_DBPanelDblClicked;
             // 
+            // btnMask
+            // 
+            btnMask.Enabled = false;
+            btnMask.Location = new Point(666, 43);
+            btnMask.Margin = new Padding(4, 3, 4, 3);
+            btnMask.Name = "btnMask";
+            btnMask.Size = new Size(88, 27);
+            btnMask.TabIndex = 741;
+            btnMask.Text = "MaskOrig";
+            toolTip1.SetToolTip(btnMask, "use the current pic as alpha mask for the orig pic from pictureBox2");
+            btnMask.UseVisualStyleBackColor = true;
+            btnMask.Click += btnMask_Click;
+            // 
             // frnOutlineOperations
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -953,7 +970,7 @@
         internal System.Windows.Forms.Button btnGo;
         private System.Windows.Forms.Timer timer1;
         internal System.Windows.Forms.Timer Timer3;
-        internal System.ComponentModel.BackgroundWorker BackgroundWorker2;
+        internal System.ComponentModel.BackgroundWorker backgroundWorker2;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
         private HelplineRulerControl.HelplineRulerCtrl helplineRulerCtrl1;
         internal System.ComponentModel.BackgroundWorker backgroundWorker1;
@@ -1013,5 +1030,6 @@
         private Label label10;
         private CheckBox cbDraw;
         private NumericUpDown numDrawWidth;
+        private Button btnMask;
     }
 }

@@ -175,7 +175,7 @@ namespace OutlineOperations
                     {
                         if (this.cbDraw.Checked && this._bmpOrig != null)
                         {
-                            if(ix != this._points?[0].X || iy != this._points?[0].Y)
+                            if (ix != this._points?[0].X || iy != this._points?[0].Y)
                                 this._points?.Add(new Point(ix, iy));
                             DrawPointsToBitmap();
                         }
@@ -188,9 +188,9 @@ namespace OutlineOperations
 
         private void DrawPointsToBitmap()
         {
-            if(this._points != null && this.helplineRulerCtrl1.Bmp != null && this._bmpOrig != null)
+            if (this._points != null && this.helplineRulerCtrl1.Bmp != null && this._bmpOrig != null)
             {
-                if(this._points.Count > 1)
+                if (this._points.Count > 1)
                 {
                     using GraphicsPath gP = new GraphicsPath();
                     using Graphics gx = Graphics.FromImage(this.helplineRulerCtrl1.Bmp);
@@ -1787,6 +1787,121 @@ namespace OutlineOperations
             _undoOPCache?.Add(bmp);
 
             this._pic_changed = true;
+        }
+
+        private void pictureBox2_DoubleClick(object sender, EventArgs e)
+        {
+            frmEdgePic frm4 = new frmEdgePic(this.pictureBox2.Image);
+            frm4.Text = "Orig";
+            frm4.ShowDialog();
+        }
+
+        private void btnMask_Click(object sender, EventArgs e)
+        {
+            if (this.backgroundWorker2.IsBusy)
+            {
+                this.backgroundWorker2.CancelAsync();
+                return;
+            }
+            if (!this.backgroundWorker2.IsBusy && this.helplineRulerCtrl1.Bmp != null && this._bmpOrig != null)
+            {
+                this.btnMask.Text = "Cancel";
+
+                this.SetControls(false);
+                this.Cursor = Cursors.WaitCursor;
+
+                Bitmap b = new Bitmap(this._bmpOrig);
+                Bitmap bM = new Bitmap(this.helplineRulerCtrl1.Bmp);
+
+                this.backgroundWorker2.RunWorkerAsync(new object[] { b, bM });
+            }
+        }
+
+        private void backgroundWorker2_DoWork(object? sender, DoWorkEventArgs e)
+        {
+            if (e.Argument != null)
+            {
+                object[] o = (object[])e.Argument;
+                Bitmap b = (Bitmap)o[0];
+                Bitmap bM = (Bitmap)o[1];
+                SetAlpha(b, bM);
+                e.Result = b;
+            }
+        }
+
+        private unsafe void SetAlpha(Bitmap b, Bitmap bM)
+        {
+            if (b.Width == bM.Width && b.Height == bM.Height)
+            {
+                int w = b.Width;
+                int h = b.Height;
+
+                BitmapData bmB = b.LockBits(new Rectangle(0, 0, w, h), ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
+                BitmapData bmM = bM.LockBits(new Rectangle(0, 0, w, h), ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
+                int stride = bmB.Stride;
+
+                Parallel.For(0, h, y =>
+                {
+                    byte* p = (byte*)bmB.Scan0;
+                    p += y * stride;
+                    byte* pM = (byte*)bmM.Scan0;
+                    pM += y * stride;
+
+                    for (int x = 0; x < w; x++)
+                    {
+                        p[3] = pM[3];
+                        p += 4;
+                        pM += 4;
+                    }
+                });
+
+                b.UnlockBits(bmB);
+                bM.UnlockBits(bmM);
+            }
+        }
+
+        private void backgroundWorker2_RunWorkerCompleted(object? sender, RunWorkerCompletedEventArgs e)
+        {
+            if (e.Result != null)
+            {
+                Bitmap bRes = (Bitmap)e.Result;
+
+                this.SetBitmap(this.helplineRulerCtrl1.Bmp, bRes, this.helplineRulerCtrl1, "Bmp");
+
+                //Bitmap bC = new Bitmap(bRes);
+                //this.SetBitmap(ref _bmpRef, ref bC);
+
+                this.helplineRulerCtrl1.SetZoom(this.helplineRulerCtrl1.Zoom.ToString());
+                this.helplineRulerCtrl1.MakeBitmap(this.helplineRulerCtrl1.Bmp);
+                this.helplineRulerCtrl1.dbPanel1.AutoScrollMinSize = new Size(
+                    (int)(this.helplineRulerCtrl1.Bmp.Width * this.helplineRulerCtrl1.Zoom),
+                    (int)(this.helplineRulerCtrl1.Bmp.Height * this.helplineRulerCtrl1.Zoom));
+
+                _undoOPCache?.Add(bRes);
+
+            }
+
+            this.btnMask.Text = "MaskOrig";
+
+            this.SetControls(true);
+            this.Cursor = Cursors.Default;
+
+            this._pic_changed = true;
+
+            this.helplineRulerCtrl1.dbPanel1.Invalidate();
+
+            if (this.Timer3.Enabled)
+                this.Timer3.Stop();
+
+            this.Timer3.Start();
+
+            this.backgroundWorker2.Dispose();
+            this.backgroundWorker2 = new BackgroundWorker();
+            this.backgroundWorker2.WorkerReportsProgress = true;
+            this.backgroundWorker2.WorkerSupportsCancellation = true;
+            this.backgroundWorker2.DoWork += backgroundWorker2_DoWork;
+            //this.backgroundWorker2.ProgressChanged += backgroundWorker2_ProgressChanged;
+            this.backgroundWorker2.RunWorkerCompleted += backgroundWorker2_RunWorkerCompleted;
         }
     }
 }

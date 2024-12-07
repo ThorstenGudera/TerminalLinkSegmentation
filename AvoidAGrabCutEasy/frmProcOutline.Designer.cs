@@ -226,7 +226,6 @@
             // 
             // splitContainer1.Panel1
             // 
-            splitContainer1.Panel1.Controls.Add(statusStrip1);
             splitContainer1.Panel1.Controls.Add(helplineRulerCtrl1);
             // 
             // splitContainer1.Panel2
@@ -249,7 +248,7 @@
             splitContainer1.Panel2.Controls.Add(groupBox4);
             splitContainer1.Panel2.Controls.Add(groupBox3);
             splitContainer1.Panel2.Controls.Add(groupBox1);
-            splitContainer1.Size = new Size(1479, 924);
+            splitContainer1.Size = new Size(1479, 956);
             splitContainer1.SplitterDistance = 973;
             splitContainer1.SplitterWidth = 5;
             splitContainer1.TabIndex = 0;
@@ -257,10 +256,10 @@
             // statusStrip1
             // 
             statusStrip1.Items.AddRange(new ToolStripItem[] { toolStripStatusLabel1, toolStripStatusLabel2, toolStripProgressBar1, toolStripStatusLabel4, toolStripDropDownButton1 });
-            statusStrip1.Location = new Point(0, 880);
+            statusStrip1.Location = new Point(0, 912);
             statusStrip1.Name = "statusStrip1";
             statusStrip1.Padding = new Padding(1, 0, 16, 0);
-            statusStrip1.Size = new Size(973, 44);
+            statusStrip1.Size = new Size(1479, 44);
             statusStrip1.TabIndex = 1;
             statusStrip1.Text = "statusStrip1";
             // 
@@ -321,7 +320,7 @@
             helplineRulerCtrl1.MoveHelpLinesOnResize = false;
             helplineRulerCtrl1.Name = "helplineRulerCtrl1";
             helplineRulerCtrl1.SetZoomOnlyByMethodCall = false;
-            helplineRulerCtrl1.Size = new Size(973, 924);
+            helplineRulerCtrl1.Size = new Size(973, 956);
             helplineRulerCtrl1.TabIndex = 0;
             helplineRulerCtrl1.Zoom = 1F;
             helplineRulerCtrl1.ZoomSetManually = false;
@@ -331,7 +330,7 @@
             // 
             btnRedo.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             btnRedo.ForeColor = SystemColors.ControlText;
-            btnRedo.Location = new Point(112, 837);
+            btnRedo.Location = new Point(110, 837);
             btnRedo.Margin = new Padding(4, 3, 4, 3);
             btnRedo.Name = "btnRedo";
             btnRedo.Size = new Size(88, 27);
@@ -344,7 +343,7 @@
             // 
             btnUndo.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             btnUndo.ForeColor = SystemColors.ControlText;
-            btnUndo.Location = new Point(16, 837);
+            btnUndo.Location = new Point(14, 837);
             btnUndo.Margin = new Padding(4, 3, 4, 3);
             btnUndo.Name = "btnUndo";
             btnUndo.Size = new Size(88, 27);
@@ -366,7 +365,7 @@
             // 
             btnLoadBasePic.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             btnLoadBasePic.ForeColor = SystemColors.ControlText;
-            btnLoadBasePic.Location = new Point(84, 879);
+            btnLoadBasePic.Location = new Point(82, 879);
             btnLoadBasePic.Margin = new Padding(4, 3, 4, 3);
             btnLoadBasePic.Name = "btnLoadBasePic";
             btnLoadBasePic.Size = new Size(88, 27);
@@ -391,7 +390,7 @@
             groupBox2.Size = new Size(486, 81);
             groupBox2.TabIndex = 659;
             groupBox2.TabStop = false;
-            groupBox2.Text = "AlphaGamma/MaxSize";
+            groupBox2.Text = "AlphaGammaEtc";
             // 
             // label1
             // 
@@ -505,7 +504,7 @@
             cbBGColor.AutoSize = true;
             cbBGColor.Checked = true;
             cbBGColor.CheckState = CheckState.Checked;
-            cbBGColor.Location = new Point(178, 806);
+            cbBGColor.Location = new Point(176, 806);
             cbBGColor.Margin = new Padding(4, 3, 4, 3);
             cbBGColor.Name = "cbBGColor";
             cbBGColor.Size = new Size(67, 19);
@@ -531,7 +530,7 @@
             // 
             button10.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             button10.ForeColor = SystemColors.ControlText;
-            button10.Location = new Point(365, 837);
+            button10.Location = new Point(363, 837);
             button10.Margin = new Padding(4, 3, 4, 3);
             button10.Name = "button10";
             button10.Size = new Size(88, 27);
@@ -544,7 +543,7 @@
             // 
             button8.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             button8.ForeColor = SystemColors.ControlText;
-            button8.Location = new Point(270, 837);
+            button8.Location = new Point(268, 837);
             button8.Margin = new Padding(4, 3, 4, 3);
             button8.Name = "button8";
             button8.Size = new Size(88, 27);
@@ -558,7 +557,7 @@
             button2.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             button2.FlatStyle = FlatStyle.System;
             button2.ForeColor = SystemColors.ControlText;
-            button2.Location = new Point(398, 801);
+            button2.Location = new Point(396, 801);
             button2.Margin = new Padding(4, 3, 4, 3);
             button2.Name = "button2";
             button2.Size = new Size(88, 27);
@@ -571,7 +570,7 @@
             btnCancel.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             btnCancel.DialogResult = DialogResult.Cancel;
             btnCancel.ForeColor = SystemColors.ControlText;
-            btnCancel.Location = new Point(374, 882);
+            btnCancel.Location = new Point(372, 882);
             btnCancel.Margin = new Padding(4, 3, 4, 3);
             btnCancel.Name = "btnCancel";
             btnCancel.Size = new Size(88, 27);
@@ -584,7 +583,7 @@
             btnOK.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             btnOK.DialogResult = DialogResult.OK;
             btnOK.ForeColor = SystemColors.ControlText;
-            btnOK.Location = new Point(281, 882);
+            btnOK.Location = new Point(279, 882);
             btnOK.Margin = new Padding(4, 3, 4, 3);
             btnOK.Name = "btnOK";
             btnOK.Size = new Size(88, 27);
@@ -1838,7 +1837,8 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1479, 924);
+            ClientSize = new Size(1479, 956);
+            Controls.Add(statusStrip1);
             Controls.Add(splitContainer1);
             Margin = new Padding(4, 3, 4, 3);
             Name = "frmProcOutline";
@@ -1847,7 +1847,6 @@
             FormClosing += frmProcOutline_FormClosing;
             Load += frmProcOutline_Load;
             splitContainer1.Panel1.ResumeLayout(false);
-            splitContainer1.Panel1.PerformLayout();
             splitContainer1.Panel2.ResumeLayout(false);
             splitContainer1.Panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).EndInit();
@@ -1901,6 +1900,7 @@
             ((System.ComponentModel.ISupportInitialize)numJRem2).EndInit();
             ((System.ComponentModel.ISupportInitialize)numJRem1).EndInit();
             ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
