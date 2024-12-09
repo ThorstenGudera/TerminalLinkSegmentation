@@ -69,6 +69,7 @@
             button5 = new Button();
             button2 = new Button();
             helplineRulerCtrl1 = new HelplineRulerControl.HelplineRulerCtrl();
+            timer4 = new System.Windows.Forms.Timer(components);
             statusStrip1.SuspendLayout();
             Panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numWH).BeginInit();
@@ -305,13 +306,9 @@
             // 
             // quickExtractingCtrl1
             // 
-            quickExtractingCtrl1.Alg = null;
-            quickExtractingCtrl1.EditedPath = null;
             quickExtractingCtrl1.Location = new Point(4, 3);
             quickExtractingCtrl1.Margin = new Padding(5, 3, 5, 3);
             quickExtractingCtrl1.Name = "quickExtractingCtrl1";
-            quickExtractingCtrl1.PathList = null;
-            quickExtractingCtrl1.Ramps = null;
             quickExtractingCtrl1.Size = new Size(1166, 238);
             quickExtractingCtrl1.TabIndex = 281;
             // 
@@ -466,6 +463,11 @@
             helplineRulerCtrl1.ZoomSetManually = false;
             helplineRulerCtrl1.DBPanelDblClicked += helplineRulerCtrl1_DBPanelDblClicked;
             // 
+            // timer4
+            // 
+            timer4.Interval = 50;
+            timer4.Tick += timer4_Tick;
+            // 
             // frmQuickExtract
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -531,5 +533,6 @@
         public CheckBox cbLoadTo;
         public NumericUpDown numWH;
         public CheckBox cbOutline;
+        private System.Windows.Forms.Timer timer4;
     }
 }

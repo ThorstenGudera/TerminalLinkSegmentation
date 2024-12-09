@@ -88,8 +88,10 @@ namespace QuickExtract2
         private int _frm3MinDist;
         private int _frm3Epsilon;
         private bool _frm3ReducePoints;
-        private RectangleF[]? _oldA;
         private bool _dontUpdateTempData;
+
+        private object _lockObject = new object();
+        private RectangleF[]? _tempDataZA;
 
         public frmQuickExtract(Bitmap bmp)
         {
@@ -228,40 +230,22 @@ namespace QuickExtract2
                     }
                 }
 
-                //this is a weird construct, but working for a changing tempDataZ
-                if (tempDataZ != null && tempDataZ.Count > 0)
+                if (tempDataZ != null && tempDataZ.Count > 0 && !this._dontUpdateTempData)
                 {
-                    this._dontUpdateTempData = true;
-                    List<RectangleF> tdZ = new List<RectangleF>();
-                    try
+                    if (this._tempDataZA != null && this._tempDataZA.Length > 0)
                     {
-                        tdZ.AddRange(tempDataZ);
-                    }
-                    catch
-                    {
-                        if (this._oldA != null && this._oldA.Length > 0)
-                            tdZ.AddRange(this._oldA);
-                    }
-
-                    RectangleF[] a = tdZ.ToArray();
-
-                    if (a.Length > 0)
-                    {
-                        this._oldA = a;
                         try
                         {
                             e.Graphics.TranslateTransform(this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X, this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y);
-                            e.Graphics.FillRectangles(Brushes.Lime, a);
+                            e.Graphics.FillRectangles(Brushes.Lime, this._tempDataZA);
                             e.Graphics.ResetTransform();
                         }
-                        catch (Exception ex)
+                        catch //(Exception ex)
                         {
-                            MessageBox.Show(ex.ToString());
+                            //MessageBox.Show(ex.ToString());
                         }
                     }
                 }
-
-                this._dontUpdateTempData = false;
             }
 
             if (this._selectedPath != null)
@@ -1687,8 +1671,20 @@ namespace QuickExtract2
             else
                 this.ComboBox2.SelectedIndex = 4;
 
-            this.TranslateTempDataToZoom(this.tempData);
-            this.helplineRulerCtrl1.dbPanel1.Invalidate();
+            lock (this._lockObject)
+                if (!this._dontUpdateTempData)
+                {
+                    this._dontUpdateTempData = true;
+                    this.TranslateTempDataToZoom(this.tempData);
+                    this.helplineRulerCtrl1.dbPanel1.Invalidate();
+                    this._dontUpdateTempData = false;
+                }
+                else
+                {
+                    if (this.timer4.Enabled)
+                        this.timer4.Stop();
+                    this.timer4.Start();
+                }
 
             this._dontDoZoom = false;
         }
@@ -1705,8 +1701,20 @@ namespace QuickExtract2
                 if (this.ComboBox2.SelectedIndex < 2)
                     this.helplineRulerCtrl1.ZoomSetManually = true;
 
-                this.TranslateTempDataToZoom(this.tempData);
-                this.helplineRulerCtrl1.dbPanel1.Invalidate();
+                lock (this._lockObject)
+                    if (!this._dontUpdateTempData)
+                    {
+                        this._dontUpdateTempData = true;
+                        this.TranslateTempDataToZoom(this.tempData);
+                        this.helplineRulerCtrl1.dbPanel1.Invalidate();
+                        this._dontUpdateTempData = false;
+                    }
+                    else
+                    {
+                        if (this.timer4.Enabled)
+                            this.timer4.Stop();
+                        this.timer4.Start();
+                    }
             }
         }
 
@@ -2146,11 +2154,22 @@ namespace QuickExtract2
             if (l != null && l.Count > 0)
                 this.tempData.AddRange(l);
 
-            if (!this._dontUpdateTempData)
-            {
-                TranslateTempDataToZoom(this.tempData);
-                this.helplineRulerCtrl1.dbPanel1.Invalidate();
-            }
+            lock (this._lockObject)
+                if (!this._dontUpdateTempData)
+                {
+                    this._dontUpdateTempData = true;
+                    this.TranslateTempDataToZoom(this.tempData);
+                    if (this.tempDataZ != null)
+                        this._tempDataZA = this.tempDataZ.ToArray();
+                    this.helplineRulerCtrl1.dbPanel1.Invalidate();
+                    this._dontUpdateTempData = false;
+                }
+                else
+                {
+                    if (this.timer4.Enabled)
+                        this.timer4.Stop();
+                    this.timer4.Start();
+                }
         }
 
         private void Button1_Click(object? sender, EventArgs e)
@@ -3309,6 +3328,18 @@ namespace QuickExtract2
 
                 this.PrepareBGW(new object[] { 2, new Point(_ix, _iy), @params });
             }
+        }
+
+        private void timer4_Tick(object sender, EventArgs e)
+        {
+            this.timer4.Stop();
+
+            this._dontUpdateTempData = true;
+            this.TranslateTempDataToZoom(this.tempData);
+            if (this.tempDataZ != null)
+                this._tempDataZA = this.tempDataZ.ToArray();
+            this.helplineRulerCtrl1.dbPanel1.Invalidate();
+            this._dontUpdateTempData = false;
         }
     }
 }
