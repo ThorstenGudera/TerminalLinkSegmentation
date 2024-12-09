@@ -7,6 +7,11 @@ using System.Threading.Tasks;
 
 namespace QuickExtractingLib2
 {
+    //roughly following:
+    //Interactive Segmentation with Intelligent Scissors
+    //Eric N.Mortensen
+    //William A.Barrett#
+    //https://courses.cs.washington.edu/courses/cse455/09wi/readings/seg_scissors.pdf
     public class PicAlg : IDisposable
     {
         public MagnitudeAndPixelCostMap? CostMaps { get; set; } = null;

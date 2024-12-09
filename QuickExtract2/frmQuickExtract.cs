@@ -15,6 +15,11 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement.Button;
 
 namespace QuickExtract2
 {
+    //roughly following:
+    //Interactive Segmentation with Intelligent Scissors
+    //Eric N.Mortensen
+    //William A.Barrett#
+    //https://courses.cs.washington.edu/courses/cse455/09wi/readings/seg_scissors.pdf
     public partial class frmQuickExtract : Form
     {
         private Bitmap? _bmpBU;

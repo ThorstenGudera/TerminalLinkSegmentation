@@ -9,6 +9,11 @@ using System.ComponentModel;
 
 namespace QuickExtractingLib2
 {
+    //roughly following:
+    //Interactive Segmentation with Intelligent Scissors
+    //Eric N.Mortensen
+    //William A.Barrett#
+    //https://courses.cs.washington.edu/courses/cse455/09wi/readings/seg_scissors.pdf
     public class QuickExtractingAlg : IDisposable
     {
         public double valL { get; set; }
