@@ -1823,7 +1823,7 @@ namespace OutlineOperations
             {
                 object[] o = (object[])e.Argument;
                 Bitmap b = (Bitmap)o[0];
-                Bitmap bM = (Bitmap)o[1];
+                using Bitmap bM = (Bitmap)o[1];
                 SetAlpha(b, bM);
                 e.Result = b;
             }
