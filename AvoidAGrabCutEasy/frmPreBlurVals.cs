@@ -54,9 +54,15 @@ namespace AvoidAGrabCutEasy
                 int maxVal = (int)this.numDistWeight.Value;
                 Point pt = new Point((int)this.numValSrc.Value, (int)this.numValDst.Value);
 
+                bool doIgg = this.cbIGG.Checked;
+
+                int kernelLength = (int)numIGGKernel.Value;
+                double alpha = (double)this.numIGGAlpha.Value * 255.0;
+                double divisor = (double)this.numIGGDivisor.Value;
+
                 this.progressBar1.Value = 0;
 
-                object[] o = { b, blur, colors, blurFirst, krnl, maxVal, pt };
+                object[] o = { b, blur, colors, blurFirst, krnl, maxVal, pt, doIgg, kernelLength, alpha, divisor };
 
                 this.backgroundWorker1.RunWorkerAsync(o);
             }
@@ -82,6 +88,18 @@ namespace AvoidAGrabCutEasy
                 int maxVal = (int)o[5];
                 Point pt = (Point)o[6];
 
+                bool doIgg = (bool)o[7];
+                int kernelLength = (int)o[8];
+                double cornerWeight = 0.01;
+                int sigma = 255;
+                double steepness = 1E-12;
+                int radius = 340;
+                double alpha = (double)o[9];
+                GradientMode gradientMode = GradientMode.Scharr16;
+                double divisor = (double)o[10];
+                bool stretchValues = true;
+                int threshold = 127;
+
                 Rectangle r = new Rectangle(0, 0, bmp.Width, bmp.Height);
 
                 if (blur && !colors)
@@ -102,7 +120,22 @@ namespace AvoidAGrabCutEasy
                     }
                 }
 
-                e.Result = bmp;
+                if (doIgg)
+                {
+                    using (GraphicsPath gp = new GraphicsPath())
+                    {
+                        if (r.Width > 0 && r.Height > 0)
+                        {
+                            InvGaussGradOp igg = new InvGaussGradOp();
+                            igg.BGW = this.backgroundWorker1;
+                            Bitmap? iG = igg.Inv_InvGaussGrad(bmp, alpha, gradientMode, divisor, kernelLength, cornerWeight,
+                                sigma, steepness, radius, stretchValues, threshold);
+                            e.Result = iG;
+                        }
+                    }
+                }
+                else
+                    e.Result = bmp;
             }
         }
 
@@ -224,6 +257,19 @@ namespace AvoidAGrabCutEasy
         private void cbVarLog_CheckedChanged(object sender, EventArgs e)
         {
             this.ValsChanged = true;
+        }
+
+        private void cbBGColor_CheckedChanged(object sender, EventArgs e)
+        {
+            if (cbBGColor.Checked)
+                this.pictureBox2.BackColor = this.pictureBox3.BackColor = SystemColors.ControlDarkDark;
+            else
+                this.pictureBox2.BackColor = this.pictureBox3.BackColor = SystemColors.Control;
+        }
+
+        private void frmPreBlurVals_Load(object sender, EventArgs e)
+        {
+            this.cbBGColor_CheckedChanged(this.cbBGColor, new EventArgs());
         }
     }
 }

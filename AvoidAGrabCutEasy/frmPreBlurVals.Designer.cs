@@ -36,13 +36,20 @@
             btnCancel = new Button();
             btnOK = new Button();
             splitContainer1 = new SplitContainer();
+            cbBGColor = new CheckBox();
             numOpacity = new NumericUpDown();
             label1 = new Label();
             groupBox3 = new GroupBox();
+            label22 = new Label();
+            numIGGDivisor = new NumericUpDown();
+            label21 = new Label();
+            numIGGAlpha = new NumericUpDown();
+            numIGGKernel = new NumericUpDown();
             rbAfter = new RadioButton();
             rbBefore = new RadioButton();
             label8 = new Label();
             label7 = new Label();
+            cbIGG = new CheckBox();
             cbColors = new CheckBox();
             numValDst = new NumericUpDown();
             numValSrc = new NumericUpDown();
@@ -64,6 +71,9 @@
             splitContainer1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numOpacity).BeginInit();
             groupBox3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)numIGGDivisor).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)numIGGAlpha).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)numIGGKernel).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numValDst).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numValSrc).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numKernel).BeginInit();
@@ -81,7 +91,7 @@
             // 
             btnCancel.DialogResult = DialogResult.Cancel;
             btnCancel.ForeColor = SystemColors.ControlText;
-            btnCancel.Location = new Point(988, 166);
+            btnCancel.Location = new Point(988, 184);
             btnCancel.Margin = new Padding(4, 3, 4, 3);
             btnCancel.Name = "btnCancel";
             btnCancel.Size = new Size(88, 27);
@@ -93,7 +103,7 @@
             // 
             btnOK.DialogResult = DialogResult.OK;
             btnOK.ForeColor = SystemColors.ControlText;
-            btnOK.Location = new Point(891, 166);
+            btnOK.Location = new Point(891, 184);
             btnOK.Margin = new Padding(4, 3, 4, 3);
             btnOK.Name = "btnOK";
             btnOK.Size = new Size(88, 27);
@@ -111,6 +121,7 @@
             // 
             // splitContainer1.Panel1
             // 
+            splitContainer1.Panel1.Controls.Add(cbBGColor);
             splitContainer1.Panel1.Controls.Add(numOpacity);
             splitContainer1.Panel1.Controls.Add(label1);
             splitContainer1.Panel1.Controls.Add(groupBox3);
@@ -123,15 +134,30 @@
             // splitContainer1.Panel2
             // 
             splitContainer1.Panel2.Controls.Add(splitContainer2);
-            splitContainer1.Size = new Size(1089, 713);
-            splitContainer1.SplitterDistance = 202;
+            splitContainer1.Size = new Size(1089, 752);
+            splitContainer1.SplitterDistance = 220;
             splitContainer1.TabIndex = 748;
+            // 
+            // cbBGColor
+            // 
+            cbBGColor.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            cbBGColor.AutoSize = true;
+            cbBGColor.Checked = true;
+            cbBGColor.CheckState = CheckState.Checked;
+            cbBGColor.Location = new Point(891, 144);
+            cbBGColor.Margin = new Padding(4, 3, 4, 3);
+            cbBGColor.Name = "cbBGColor";
+            cbBGColor.Size = new Size(67, 19);
+            cbBGColor.TabIndex = 758;
+            cbBGColor.Text = "BG dark";
+            cbBGColor.UseVisualStyleBackColor = true;
+            cbBGColor.CheckedChanged += cbBGColor_CheckedChanged;
             // 
             // numOpacity
             // 
             numOpacity.DecimalPlaces = 2;
             numOpacity.Increment = new decimal(new int[] { 1, 0, 0, 65536 });
-            numOpacity.Location = new Point(401, 120);
+            numOpacity.Location = new Point(401, 146);
             numOpacity.Margin = new Padding(4, 3, 4, 3);
             numOpacity.Maximum = new decimal(new int[] { 20, 0, 0, 65536 });
             numOpacity.Name = "numOpacity";
@@ -142,7 +168,7 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(338, 122);
+            label1.Location = new Point(338, 148);
             label1.Name = "label1";
             label1.Size = new Size(48, 15);
             label1.TabIndex = 757;
@@ -150,10 +176,16 @@
             // 
             // groupBox3
             // 
+            groupBox3.Controls.Add(label22);
+            groupBox3.Controls.Add(numIGGDivisor);
+            groupBox3.Controls.Add(label21);
+            groupBox3.Controls.Add(numIGGAlpha);
+            groupBox3.Controls.Add(numIGGKernel);
             groupBox3.Controls.Add(rbAfter);
             groupBox3.Controls.Add(rbBefore);
             groupBox3.Controls.Add(label8);
             groupBox3.Controls.Add(label7);
+            groupBox3.Controls.Add(cbIGG);
             groupBox3.Controls.Add(cbColors);
             groupBox3.Controls.Add(numValDst);
             groupBox3.Controls.Add(numValSrc);
@@ -163,9 +195,58 @@
             groupBox3.Controls.Add(numDistWeight);
             groupBox3.Location = new Point(12, 12);
             groupBox3.Name = "groupBox3";
-            groupBox3.Size = new Size(306, 125);
+            groupBox3.Size = new Size(306, 166);
             groupBox3.TabIndex = 755;
             groupBox3.TabStop = false;
+            // 
+            // label22
+            // 
+            label22.AutoSize = true;
+            label22.Location = new Point(45, 137);
+            label22.Name = "label22";
+            label22.Size = new Size(38, 15);
+            label22.TabIndex = 766;
+            label22.Text = "Alpha";
+            // 
+            // numIGGDivisor
+            // 
+            numIGGDivisor.Location = new Point(196, 134);
+            numIGGDivisor.Maximum = new decimal(new int[] { 32767, 0, 0, 0 });
+            numIGGDivisor.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
+            numIGGDivisor.Name = "numIGGDivisor";
+            numIGGDivisor.Size = new Size(52, 23);
+            numIGGDivisor.TabIndex = 762;
+            numIGGDivisor.Value = new decimal(new int[] { 8, 0, 0, 0 });
+            // 
+            // label21
+            // 
+            label21.AutoSize = true;
+            label21.Location = new Point(147, 137);
+            label21.Name = "label21";
+            label21.Size = new Size(43, 15);
+            label21.TabIndex = 765;
+            label21.Text = "Divisor";
+            // 
+            // numIGGAlpha
+            // 
+            numIGGAlpha.Location = new Point(90, 135);
+            numIGGAlpha.Margin = new Padding(4, 3, 4, 3);
+            numIGGAlpha.Maximum = new decimal(new int[] { 9999, 0, 0, 0 });
+            numIGGAlpha.Name = "numIGGAlpha";
+            numIGGAlpha.Size = new Size(52, 23);
+            numIGGAlpha.TabIndex = 763;
+            numIGGAlpha.Value = new decimal(new int[] { 101, 0, 0, 0 });
+            // 
+            // numIGGKernel
+            // 
+            numIGGKernel.Location = new Point(196, 106);
+            numIGGKernel.Margin = new Padding(4, 3, 4, 3);
+            numIGGKernel.Maximum = new decimal(new int[] { 255, 0, 0, 0 });
+            numIGGKernel.Minimum = new decimal(new int[] { 3, 0, 0, 0 });
+            numIGGKernel.Name = "numIGGKernel";
+            numIGGKernel.Size = new Size(52, 23);
+            numIGGKernel.TabIndex = 764;
+            numIGGKernel.Value = new decimal(new int[] { 27, 0, 0, 0 });
             // 
             // rbAfter
             // 
@@ -192,7 +273,7 @@
             // label8
             // 
             label8.AutoSize = true;
-            label8.Location = new Point(220, 86);
+            label8.Location = new Point(220, 78);
             label8.Name = "label8";
             label8.Size = new Size(16, 15);
             label8.TabIndex = 760;
@@ -201,16 +282,27 @@
             // label7
             // 
             label7.AutoSize = true;
-            label7.Location = new Point(128, 86);
+            label7.Location = new Point(128, 78);
             label7.Name = "label7";
             label7.Size = new Size(16, 15);
             label7.TabIndex = 760;
             label7.Text = "x:";
             // 
+            // cbIGG
+            // 
+            cbIGG.AutoSize = true;
+            cbIGG.Location = new Point(8, 107);
+            cbIGG.Name = "cbIGG";
+            cbIGG.Size = new Size(134, 19);
+            cbIGG.TabIndex = 759;
+            cbIGG.Text = "InvGaussGrad Kernel";
+            cbIGG.UseVisualStyleBackColor = true;
+            cbIGG.CheckedChanged += cbVarLog_CheckedChanged;
+            // 
             // cbColors
             // 
             cbColors.AutoSize = true;
-            cbColors.Location = new Point(8, 85);
+            cbColors.Location = new Point(8, 77);
             cbColors.Name = "cbColors";
             cbColors.Size = new Size(100, 19);
             cbColors.TabIndex = 759;
@@ -220,7 +312,7 @@
             // 
             // numValDst
             // 
-            numValDst.Location = new Point(243, 83);
+            numValDst.Location = new Point(243, 75);
             numValDst.Margin = new Padding(4, 3, 4, 3);
             numValDst.Maximum = new decimal(new int[] { 255, 0, 0, 0 });
             numValDst.Name = "numValDst";
@@ -231,7 +323,7 @@
             // 
             // numValSrc
             // 
-            numValSrc.Location = new Point(151, 83);
+            numValSrc.Location = new Point(151, 75);
             numValSrc.Margin = new Padding(4, 3, 4, 3);
             numValSrc.Maximum = new decimal(new int[] { 255, 0, 0, 0 });
             numValSrc.Name = "numValSrc";
@@ -261,7 +353,7 @@
             label16.Size = new Size(64, 15);
             label16.TabIndex = 754;
             label16.Text = "distWeight";
-            toolTip1.SetToolTip(label16, "max color dist to keep blurring.\r\n\"Edge weight\" - bigger blurs more edges\r\nvalue range from 0 to 442");
+            toolTip1.SetToolTip(label16, "max color dist to keep blurring.\r\n\"Edge weight\" - bigger blurs more edges\r\nvalue range from 0 to 443");
             // 
             // numKernel
             // 
@@ -289,14 +381,14 @@
             // 
             // progressBar1
             // 
-            progressBar1.Location = new Point(12, 153);
+            progressBar1.Location = new Point(12, 186);
             progressBar1.Name = "progressBar1";
             progressBar1.Size = new Size(342, 23);
             progressBar1.TabIndex = 750;
             // 
             // btnPreview
             // 
-            btnPreview.Location = new Point(378, 153);
+            btnPreview.Location = new Point(378, 186);
             btnPreview.Name = "btnPreview";
             btnPreview.Size = new Size(75, 23);
             btnPreview.TabIndex = 749;
@@ -309,7 +401,7 @@
             pictureBox1.BorderStyle = BorderStyle.FixedSingle;
             pictureBox1.Location = new Point(470, 12);
             pictureBox1.Name = "pictureBox1";
-            pictureBox1.Size = new Size(299, 181);
+            pictureBox1.Size = new Size(299, 195);
             pictureBox1.SizeMode = PictureBoxSizeMode.Zoom;
             pictureBox1.TabIndex = 748;
             pictureBox1.TabStop = false;
@@ -329,7 +421,7 @@
             // 
             splitContainer2.Panel2.AutoScroll = true;
             splitContainer2.Panel2.Controls.Add(pictureBox3);
-            splitContainer2.Size = new Size(1089, 507);
+            splitContainer2.Size = new Size(1089, 528);
             splitContainer2.SplitterDistance = 543;
             splitContainer2.TabIndex = 0;
             // 
@@ -367,13 +459,14 @@
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             CancelButton = btnCancel;
-            ClientSize = new Size(1089, 713);
+            ClientSize = new Size(1089, 752);
             Controls.Add(splitContainer1);
             FormBorderStyle = FormBorderStyle.Fixed3D;
             MaximizeBox = false;
             Name = "frmPreBlurVals";
             StartPosition = FormStartPosition.CenterParent;
             Text = "frmPreBlurVals";
+            Load += frmPreBlurVals_Load;
             splitContainer1.Panel1.ResumeLayout(false);
             splitContainer1.Panel1.PerformLayout();
             splitContainer1.Panel2.ResumeLayout(false);
@@ -382,6 +475,9 @@
             ((System.ComponentModel.ISupportInitialize)numOpacity).EndInit();
             groupBox3.ResumeLayout(false);
             groupBox3.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)numIGGDivisor).EndInit();
+            ((System.ComponentModel.ISupportInitialize)numIGGAlpha).EndInit();
+            ((System.ComponentModel.ISupportInitialize)numIGGKernel).EndInit();
             ((System.ComponentModel.ISupportInitialize)numValDst).EndInit();
             ((System.ComponentModel.ISupportInitialize)numValSrc).EndInit();
             ((System.ComponentModel.ISupportInitialize)numKernel).EndInit();
@@ -424,5 +520,12 @@
         internal NumericUpDown numOpacity;
         private Label label1;
         private ToolTip toolTip1;
+        internal CheckBox cbIGG;
+        private Label label22;
+        private Label label21;
+        internal NumericUpDown numIGGAlpha;
+        internal NumericUpDown numIGGKernel;
+        internal NumericUpDown numIGGDivisor;
+        internal CheckBox cbBGColor;
     }
 }

@@ -169,6 +169,7 @@
             bgwDoAll4 = new System.ComponentModel.BackgroundWorker();
             timer1 = new System.Windows.Forms.Timer(components);
             backgroundWorker4 = new System.ComponentModel.BackgroundWorker();
+            btnGetOutline = new Button();
             panel1.SuspendLayout();
             panel5.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numBoundOuter).BeginInit();
@@ -197,6 +198,7 @@
             // 
             // panel1
             // 
+            panel1.Controls.Add(btnGetOutline);
             panel1.Controls.Add(btnInfo);
             panel1.Controls.Add(btnOrder);
             panel1.Controls.Add(cbUseLumMapBasePic);
@@ -1799,6 +1801,17 @@
             backgroundWorker4.ProgressChanged += backgroundWorker4_ProgressChanged;
             backgroundWorker4.RunWorkerCompleted += backgroundWorker4_RunWorkerCompleted;
             // 
+            // btnGetOutline
+            // 
+            btnGetOutline.Enabled = false;
+            btnGetOutline.Location = new Point(238, 225);
+            btnGetOutline.Name = "btnGetOutline";
+            btnGetOutline.Size = new Size(75, 23);
+            btnGetOutline.TabIndex = 739;
+            btnGetOutline.Text = "outline";
+            btnGetOutline.UseVisualStyleBackColor = true;
+            btnGetOutline.Click += btnGetOutline_Click;
+            // 
             // frmAvoidAGrabCutEasy
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -1988,5 +2001,6 @@
         private CheckBox cbUseLumMapBasePic;
         private Button btnOrder;
         private Button btnInfo;
+        private Button btnGetOutline;
     }
 }

@@ -12,13 +12,9 @@
     <ProjectReference Include="..\AvailMem\AvailMem.vbproj" />
     <ProjectReference Include="..\Cache\Cache.vbproj" />
     <ProjectReference Include="..\ChainCodeFinder\ChainCodeFinder.vbproj" />
-    <ProjectReference Include="..\ColorCurves\ColorCurves.vbproj" />
-    <ProjectReference Include="..\ConvolutionLib\ConvolutionLib.vbproj" />
+    <ProjectReference Include="..\HelperFunctions\HelperFunctions.vbproj" />
     <ProjectReference Include="..\HelplineRulerControl\HelplineRulerControl.vbproj" />
-    <ProjectReference Include="..\LUBitmapDesigner\LUBitmapDesigner.csproj" />
-    <ProjectReference Include="..\OutlineOperations\OutlineOperations.csproj" />
-    <ProjectReference Include="..\PseudoShadow\PseudoShadow.csproj" />
-    <ProjectReference Include="..\QuickExtract2\QuickExtract2.csproj" />
+    <ProjectReference Include="..\QuickExtractingLib2\QuickExtractingLib2.csproj" />
   </ItemGroup>
 
 </Project>

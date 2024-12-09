@@ -21,6 +21,7 @@ using System.Runtime.InteropServices;
 using OutlineOperations;
 using ConvolutionLib;
 using SegmentsListLib;
+using QuickExtract2;
 
 namespace AvoidAGrabCutEasy
 {
@@ -1505,9 +1506,9 @@ namespace AvoidAGrabCutEasy
             }
         }
 
-        private void SetBitmap(Bitmap bitmapToSet, Bitmap bitmapToBeSet, Control ct, string property)
+        private void SetBitmap(Bitmap? bitmapToSet, Bitmap? bitmapToBeSet, Control ct, string property)
         {
-            Bitmap bOld = bitmapToSet;
+            Bitmap? bOld = bitmapToSet;
 
             bitmapToSet = bitmapToBeSet;
 
@@ -3037,7 +3038,7 @@ namespace AvoidAGrabCutEasy
                         cv.Count() > this._allPoints[this._bgRelatedPointsAdded[this._bgRelatedPointsAdded.Count - 1].Item1].Count)
                     {
                         //if (this._bgRelatedPointsAdded.Count > 0)
-                            this._bgRelatedPointsAdded.RemoveAt(this._bgRelatedPointsAdded.Count - 1);
+                        this._bgRelatedPointsAdded.RemoveAt(this._bgRelatedPointsAdded.Count - 1);
                     }
                 }
             }
@@ -9572,6 +9573,8 @@ namespace AvoidAGrabCutEasy
 
                     this.toolStripProgressBar1.Value = 0;
 
+                    this._opacity = (float)_frm.numOpacity.Value;
+
                     bool blur = _frm.cbBlur.Checked;
                     bool colors = _frm.cbColors.Checked;
                     bool blurFirst = _frm.rbBefore.Checked;
@@ -9580,19 +9583,21 @@ namespace AvoidAGrabCutEasy
                     int maxVal = (int)_frm.numDistWeight.Value;
                     Point pt = new Point((int)_frm.numValSrc.Value, (int)_frm.numValDst.Value);
 
-                    this._opacity = (float)_frm.numOpacity.Value;
+                    bool doIgg = _frm.cbIGG.Checked;
+
+                    int kernelLength = (int)_frm.numIGGKernel.Value;
+                    double alpha = (double)_frm.numIGGAlpha.Value * 255.0;
+                    double divisor = (double)_frm.numIGGDivisor.Value;
 
                     this.toolStripProgressBar1.Value = 0;
                     this.toolStripProgressBar1.Visible = true;
 
-                    object[] o = { blur, colors, blurFirst, krnl, maxVal, pt };
+                    object[] o = { blur, colors, blurFirst, krnl, maxVal, pt, doIgg, kernelLength, alpha, divisor };
 
                     this.backgroundWorker4.RunWorkerAsync(o);
                 }
                 else
                     _frmValsChanged = _frm.ValsChanged;
-
-                _frmValsChanged = _frm.ValsChanged;
             }
         }
 
@@ -9611,6 +9616,18 @@ namespace AvoidAGrabCutEasy
                 int krnl = (int)o[3];
                 int maxVal = (int)o[4];
                 Point pt = (Point)o[5];
+
+                bool doIgg = (bool)o[6];
+                int kernelLength = (int)o[7];
+                double cornerWeight = 0.01;
+                int sigma = 255;
+                double steepness = 1E-12;
+                int radius = 340;
+                double alpha = (double)o[8];
+                GradientMode gradientMode = GradientMode.Scharr16;
+                double divisor = (double)o[9];
+                bool stretchValues = true;
+                int threshold = 127;
 
                 Rectangle r = new Rectangle(0, 0, bmp.Width, bmp.Height);
 
@@ -9632,7 +9649,22 @@ namespace AvoidAGrabCutEasy
                     }
                 }
 
-                e.Result = bmp;
+                if (doIgg)
+                {
+                    using (GraphicsPath gp = new GraphicsPath())
+                    {
+                        if (r.Width > 0 && r.Height > 0)
+                        {
+                            InvGaussGradOp igg = new InvGaussGradOp();
+                            igg.BGW = this.backgroundWorker4;
+                            Bitmap? iG = igg.Inv_InvGaussGrad(bmp, alpha, gradientMode, divisor, kernelLength, cornerWeight,
+                                sigma, steepness, radius, stretchValues, threshold);
+                            e.Result = iG;
+                        }
+                    }
+                }
+                else
+                    e.Result = bmp;
             }
         }
 
@@ -9745,7 +9777,7 @@ namespace AvoidAGrabCutEasy
             if (this._bmpBU != null)
             {
                 this.lblLumMap.Text = "computing...";
-                this.btnGo.Enabled = this.btnDoAll.Enabled = false;
+                this.btnGo.Enabled = this.btnDoAll.Enabled = this.btnGetOutline.Enabled = false;
                 this.btnGo.Refresh();
                 this.btnDoAll.Refresh();
                 this.toolStripProgressBar1.Value = 0;
@@ -9756,7 +9788,7 @@ namespace AvoidAGrabCutEasy
                 float[,]? lMap = await lop.ComputeInvLuminanceMap(bmp);
                 this._iggLuminanceMap = lMap;
                 lop.ProgressPlus -= lop_ProgressPlus;
-                this.btnGo.Enabled = this.btnDoAll.Enabled = true;
+                this.btnGo.Enabled = this.btnDoAll.Enabled = this.btnGetOutline.Enabled = true;
                 this.lblLumMap.Text = "done";
                 this.toolStripProgressBar1.Value = this.toolStripProgressBar1.Maximum;
                 this.toolStripProgressBar1.Visible = false;
@@ -9878,7 +9910,7 @@ namespace AvoidAGrabCutEasy
 
         private void buttonInfo_Click(object sender, EventArgs e)
         {
-            using frmInfo frm = new();
+            using GetAlphaMatte.frmInfo frm = new();
             frm.Width += 200;
             frm.Height *= 2;
 
@@ -9901,6 +9933,113 @@ namespace AvoidAGrabCutEasy
             info.Append("\"UseLMBasePic\" checkbox in the main form. ");
 
             frm.ShowDialog(info.ToString());
+        }
+
+        private void btnGetOutline_Click(object sender, EventArgs e)
+        {
+            if (this.helplineRulerCtrl1.Bmp != null && this.CachePathAddition != null)
+            {
+                using frmQuickExtract frm = new(this.helplineRulerCtrl1.Bmp);
+
+                frm.CachePathAddition = this.CachePathAddition;
+                frm.SetupCache();
+
+                if (frm.ShowDialog() == DialogResult.OK)
+                {
+                    Bitmap? b = null;
+                    if (frm.FBitmap != null)
+                        b = new Bitmap(frm.FBitmap);
+
+                    if (frm.cbLoadTo.Checked && b != null)
+                    {
+                        this.SetBitmap(this.helplineRulerCtrl2.Bmp, b, this.helplineRulerCtrl2, "Bmp");
+
+                        Bitmap bC = new Bitmap(this.helplineRulerCtrl2.Bmp);
+                        this.SetBitmap(ref this._b4Copy, ref bC);
+
+                        //Bitmap bC2 = new Bitmap(this.helplineRulerCtrl1.Bmp);
+                        //this.SetBitmap(ref this._bmpBU, ref bC2);
+
+                        this.helplineRulerCtrl2.SetZoom(this.helplineRulerCtrl1.Zoom.ToString());
+                        this.helplineRulerCtrl2.MakeBitmap(this.helplineRulerCtrl2.Bmp);
+                        this.helplineRulerCtrl2.dbPanel1.AutoScrollMinSize = new Size(
+                            (int)(this.helplineRulerCtrl2.Bmp.Width * this.helplineRulerCtrl2.Zoom),
+                            (int)(this.helplineRulerCtrl2.Bmp.Height * this.helplineRulerCtrl2.Zoom));
+
+                        _undoOPCache?.Add(b);
+
+                        this._pic_changed = true;
+                    }
+                    else if (b != null)
+                    {
+                        b.Dispose();
+                        b = null;
+                    }
+
+                    if (frm.cbOutline.Checked && frm.FBitmap != null)
+                    {
+                        using Bitmap bmp = new Bitmap(frm.FBitmap);
+                        List<ChainCode>? c = GetBoundary(bmp, 0, false);
+                        c = c?.OrderByDescending(x => x.Coord.Count).ToList();
+
+                        int wh = (int)frm.numWH.Value;
+
+                        this.cbScribbleMode.Checked = true;
+                        this.cbClickMode.Checked = false;
+
+                        AddPointsToScribblePathFromFrmQuickExtract(c, wh);
+
+                        this._pic_changed = true;
+                    }
+                }
+            }
+        }
+
+        private void AddPointsToScribblePathFromFrmQuickExtract(List<ChainCode>? c, int wh)
+        {
+            if (this._scribbles == null)
+                this._scribbles = new Dictionary<int, Dictionary<int, List<List<Point>>>>();
+
+            if (this._scribbles != null)
+            {
+                int fgbg = 3;
+
+                if (!this._scribbles.ContainsKey(fgbg))
+                    this._scribbles.Add(fgbg, new Dictionary<int, List<List<Point>>>());
+
+                if (!this._scribbles[fgbg].ContainsKey(wh))
+                    this._scribbles[fgbg].Add(wh, new List<List<Point>>());
+
+                if (this._scribbleSeq == null)
+                    this._scribbleSeq = new List<Tuple<int, int, int, bool, List<List<Point>>>>();
+
+                if (c != null)
+                {
+                    for (int j = 0; j < c.Count; j++)
+                    {
+                        if (c[j].Coord.Count > 4)
+                        {
+                            List<Point> pts = c[j].Coord;
+
+                            if (pts != null)
+                            {
+                                if (this._ptPrev == null)
+                                    this._ptPrev = new List<Point>();
+
+                                if (pts.Count > 0)
+                                {
+                                    List<List<Point>> whPts = this._scribbles[fgbg][wh];
+                                    whPts.Add(new List<Point>());
+                                    whPts[whPts.Count - 1].AddRange(pts.ToArray());
+                                    this._scribbleSeq.Add(Tuple.Create(fgbg, wh, this._scribbles[fgbg][wh].Count - 1, false, new List<List<Point>>()));
+                                }
+                            }
+                        }
+                    }
+
+                    this.helplineRulerCtrl1.dbPanel1.Invalidate();
+                }
+            }
         }
     }
 }
