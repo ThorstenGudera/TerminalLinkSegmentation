@@ -89,6 +89,7 @@ namespace QuickExtract2
         private int _frm3Epsilon;
         private bool _frm3ReducePoints;
         private RectangleF[]? _oldA;
+        private bool _dontUpdateTempData;
 
         public frmQuickExtract(Bitmap bmp)
         {
@@ -228,13 +229,12 @@ namespace QuickExtract2
                 }
 
                 //this is a weird construct, but working for a changing tempDataZ
-                //lock{...} is no option here
                 if (tempDataZ != null && tempDataZ.Count > 0)
                 {
+                    this._dontUpdateTempData = true;
                     List<RectangleF> tdZ = new List<RectangleF>();
                     try
                     {
-                        //this might throw, since for longer paths tempDataZ.Length might change during copying
                         tdZ.AddRange(tempDataZ);
                     }
                     catch
@@ -260,6 +260,8 @@ namespace QuickExtract2
                         }
                     }
                 }
+
+                this._dontUpdateTempData = false;
             }
 
             if (this._selectedPath != null)
@@ -2144,8 +2146,11 @@ namespace QuickExtract2
             if (l != null && l.Count > 0)
                 this.tempData.AddRange(l);
 
-            TranslateTempDataToZoom(this.tempData);
-            this.helplineRulerCtrl1.dbPanel1.Invalidate();
+            if (!this._dontUpdateTempData)
+            {
+                TranslateTempDataToZoom(this.tempData);
+                this.helplineRulerCtrl1.dbPanel1.Invalidate();
+            }
         }
 
         private void Button1_Click(object? sender, EventArgs e)
