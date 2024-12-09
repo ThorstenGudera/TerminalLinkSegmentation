@@ -1303,6 +1303,8 @@ namespace QuickExtract2
             this.ComboBox2.Items.Add((0.5F).ToString());
             this.ComboBox2.Items.Add((0.25F).ToString());
 
+            this.ComboBox2.SelectedIndex = 4;
+
             this.CheckBox12_CheckedChanged(this.CheckBox12, new EventArgs());
         }
 

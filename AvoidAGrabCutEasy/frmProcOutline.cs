@@ -761,6 +761,27 @@ namespace AvoidAGrabCutEasy
                         //changed
                         Bitmap bTrimap = this._bmpTrimap == null ? new Bitmap(bWork.Width, bWork.Height) : new Bitmap(this._bmpTrimap);
 
+                        Size sTest = new((int)Math.Ceiling(this.helplineRulerCtrl1.Bmp.Width / factor),
+                            (int)Math.Ceiling(this.helplineRulerCtrl1.Bmp.Height / factor));
+
+                        if (this._bmpTrimap != null) //has existing trimap the correct size?
+                            if (sTest.Width != this._bmpTrimap.Width || sTest.Height != this._bmpTrimap.Height)
+                            {
+                                Bitmap? bTmp2 = new Bitmap(sTest.Width, sTest.Height);
+                                using Graphics gx = Graphics.FromImage(bTmp2);
+                                gx.InterpolationMode = InterpolationMode.NearestNeighbor;
+                                gx.DrawImage(this._bmpTrimap, 0, 0, bTmp2.Width, bTmp2.Height);
+                                this.SetBitmap(ref this._bmpTrimap, ref bTmp2);
+                                if (bTmp2 != null)
+                                {
+                                    Bitmap? bOld2 = bTrimap;
+                                    bTrimap = new Bitmap(bTmp2);
+                                    if (bOld2 != null)
+                                        bOld2.Dispose();
+                                    bOld2 = null;
+                                }
+                            }
+
                         if (this._bmpTrimap == null)
                         {
                             innerW = (int)Math.Max(Math.Ceiling(innerW / factor), 1);
