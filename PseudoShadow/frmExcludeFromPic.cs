@@ -911,7 +911,9 @@ namespace PseudoShadow
                 {
                     b = (Bitmap)bmp.Clone();
 
-                    for (int i = 0; i < breite; i++)
+                    int maxWidth = Math.Max(b.Width, b.Height);
+
+                    for (int i = 0; i < Math.Min(breite, maxWidth); i++)
                     {
                         if (bgw != null && bgw.WorkerSupportsCancellation && bgw.CancellationPending)
                             break;
@@ -921,7 +923,8 @@ namespace PseudoShadow
 
                         List<ChainCode> fList = cf.GetOutline(b, 0, false, 0, false);
 
-                        cf.RemoveOutline(b, fList, true);
+                        if (fList.Count > 0)
+                            cf.RemoveOutline(b, fList, true);
                     }
 
                     return b;
@@ -1209,7 +1212,7 @@ namespace PseudoShadow
             {
                 this.Cursor = Cursors.WaitCursor;
                 this.SetControls(false);
-                this.btnShow2.Text = "Cancel";
+                this.btnShow.Text = "Cancel";
                 this.btnShow2.Enabled = true;
                 this.toolStripProgressBar1.Value = 0;
                 this.toolStripProgressBar1.Visible = true;

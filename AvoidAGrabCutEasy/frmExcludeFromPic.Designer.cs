@@ -279,7 +279,7 @@
             // numExceptBounds2
             // 
             numExceptBounds2.Location = new Point(149, 85);
-            numExceptBounds2.Maximum = new decimal(new int[] { 255, 0, 0, 0 });
+            numExceptBounds2.Maximum = new decimal(new int[] { 32767, 0, 0, 0 });
             numExceptBounds2.Name = "numExceptBounds2";
             numExceptBounds2.Size = new Size(88, 23);
             numExceptBounds2.TabIndex = 297;
@@ -288,7 +288,7 @@
             // numExceptBounds
             // 
             numExceptBounds.Location = new Point(149, 12);
-            numExceptBounds.Maximum = new decimal(new int[] { 255, 0, 0, 0 });
+            numExceptBounds.Maximum = new decimal(new int[] { 32767, 0, 0, 0 });
             numExceptBounds.Name = "numExceptBounds";
             numExceptBounds.Size = new Size(88, 23);
             numExceptBounds.TabIndex = 297;
@@ -299,18 +299,18 @@
             label4.AutoSize = true;
             label4.Location = new Point(38, 87);
             label4.Name = "label4";
-            label4.Size = new Size(78, 15);
+            label4.Size = new Size(69, 15);
             label4.TabIndex = 296;
-            label4.Text = "path except a";
+            label4.Text = "from path a";
             // 
             // label1
             // 
             label1.AutoSize = true;
             label1.Location = new Point(21, 15);
             label1.Name = "label1";
-            label1.Size = new Size(105, 15);
+            label1.Size = new Size(96, 15);
             label1.TabIndex = 296;
-            label1.Text = "whole pic except a";
+            label1.Text = "from whole pic a";
             // 
             // cbDraw
             // 
@@ -503,6 +503,8 @@
             // 
             // backgroundWorker1
             // 
+            backgroundWorker1.WorkerReportsProgress = true;
+            backgroundWorker1.WorkerSupportsCancellation = true;
             backgroundWorker1.DoWork += backgroundWorker1_DoWork;
             backgroundWorker1.ProgressChanged += backgroundWorker1_ProgressChanged;
             backgroundWorker1.RunWorkerCompleted += backgroundWorker1_RunWorkerCompleted;

@@ -912,7 +912,9 @@ namespace AvoidAGrabCutEasy
                 {
                     b = (Bitmap)bmp.Clone();
 
-                    for (int i = 0; i < breite; i++)
+                    int maxWidth = Math.Max(b.Width, b.Height);
+
+                    for (int i = 0; i < Math.Min(breite, maxWidth); i++)
                     {
                         if (bgw != null && bgw.WorkerSupportsCancellation && bgw.CancellationPending)
                             break;
@@ -922,7 +924,8 @@ namespace AvoidAGrabCutEasy
 
                         List<ChainCode> fList = cf.GetOutline(b, 0, false, 0, false);
 
-                        cf.RemoveOutline(b, fList, true);
+                        if(fList.Count > 0)
+                            cf.RemoveOutline(b, fList, true);
                     }
 
                     return b;
