@@ -2165,7 +2165,7 @@ Public Class ChainFinder
         Return -1
     End Function
 
-    Public Sub RemoveOutline(b As Bitmap, fList As List(Of ChainCode), outerOnly As Boolean)
+    Public Sub RemoveOutline(b As Bitmap, fList As List(Of ChainCode), outer As Boolean, inner As Boolean)
         Dim bmData As BitmapData = Nothing
 
         If Not AvailMem.AvailMem.checkAvailRam(b.Width * b.Height * 4L) Then
@@ -2183,7 +2183,60 @@ Public Class ChainFinder
 
             If fList IsNot Nothing AndAlso fList.Count > 0 Then
                 For Each c As ChainCode In fList
-                    If outerOnly Then
+                    If outer Then
+                        If Not ChainFinder.IsInnerOutline(c) Then
+                            For i As Integer = 0 To c.Coord.Count - 1
+                                Dim x As Integer = c.Coord(i).X
+                                Dim y As Integer = c.Coord(i).Y
+
+                                p(y * stride + x * 4 + 3) = CType(0, [Byte])
+                            Next
+                        End If
+                    End If
+                    If inner Then
+                        If ChainFinder.IsInnerOutline(c) Then
+                            For i As Integer = 0 To c.Coord.Count - 1
+                                Dim x As Integer = c.Coord(i).X
+                                Dim y As Integer = c.Coord(i).Y
+
+                                p(y * stride + x * 4 + 3) = CType(0, [Byte])
+                            Next
+                        End If
+                    End If
+                Next
+            End If
+
+            Marshal.Copy(p, 0, bmData.Scan0, p.Length)
+            b.UnlockBits(bmData)
+            p = Nothing
+        Catch
+            Try
+                b.UnlockBits(bmData)
+            Catch
+
+            End Try
+        End Try
+    End Sub
+
+    Public Sub RemoveOutline(b As Bitmap, fList As List(Of ChainCode), outer As Boolean)
+        Dim bmData As BitmapData = Nothing
+
+        If Not AvailMem.AvailMem.checkAvailRam(b.Width * b.Height * 4L) Then
+            Return
+        End If
+
+        Try
+            bmData = b.LockBits(New Rectangle(0, 0, b.Width, b.Height), ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb)
+            Dim stride As Integer = bmData.Stride
+
+            Dim Scan0 As System.IntPtr = bmData.Scan0
+
+            Dim p((bmData.Stride * bmData.Height) - 1) As Byte
+            Marshal.Copy(bmData.Scan0, p, 0, p.Length)
+
+            If fList IsNot Nothing AndAlso fList.Count > 0 Then
+                For Each c As ChainCode In fList
+                    If outer Then
                         If Not ChainFinder.IsInnerOutline(c) Then
                             For i As Integer = 0 To c.Coord.Count - 1
                                 Dim x As Integer = c.Coord(i).X
@@ -2404,7 +2457,7 @@ Public Class ChainFinder
                     Dim oCPt As List(Of Point) = Nothing
                     If cSmall IsNot Nothing AndAlso useCSmall AndAlso cnt < cSmall.Count Then
                         oC = cSmall(cnt)
-                    ElseIf Not useCSmall AndAlso cnt < oPts.Count Then
+                    ElseIf Not useCSmall AndAlso cnt < oPTS.Count Then
                         oCPt = oPTS(0)(cnt) 'we always insert at position 0, so the "previous orig pixels" are always at 0
                     End If
 
@@ -2478,7 +2531,7 @@ Public Class ChainFinder
             Marshal.Copy(p, 0, bmData.Scan0, p.Length)
             b.UnlockBits(bmData)
             p = Nothing
-        Catch exc As exception
+        Catch exc As Exception
             Try
                 b.UnlockBits(bmData)
             Catch

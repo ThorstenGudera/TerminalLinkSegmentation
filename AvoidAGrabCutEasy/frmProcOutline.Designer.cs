@@ -55,6 +55,7 @@
             btnCancel = new Button();
             btnOK = new Button();
             groupBox4 = new GroupBox();
+            cbUseExistingTrimap = new CheckBox();
             btnCreateTrimap = new Button();
             pictureBox2 = new PictureBox();
             pictureBox1 = new PictureBox();
@@ -169,7 +170,7 @@
             backgroundWorker7 = new System.ComponentModel.BackgroundWorker();
             openFileDialog1 = new OpenFileDialog();
             backgroundWorker8 = new System.ComponentModel.BackgroundWorker();
-            cbUseExistingTrimap = new CheckBox();
+            cbExcludeRegions = new CheckBox();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
             splitContainer1.Panel2.SuspendLayout();
@@ -249,7 +250,7 @@
             splitContainer1.Panel2.Controls.Add(groupBox4);
             splitContainer1.Panel2.Controls.Add(groupBox3);
             splitContainer1.Panel2.Controls.Add(groupBox1);
-            splitContainer1.Size = new Size(1479, 956);
+            splitContainer1.Size = new Size(1479, 912);
             splitContainer1.SplitterDistance = 973;
             splitContainer1.SplitterWidth = 5;
             splitContainer1.TabIndex = 0;
@@ -270,7 +271,7 @@
             helplineRulerCtrl1.MoveHelpLinesOnResize = false;
             helplineRulerCtrl1.Name = "helplineRulerCtrl1";
             helplineRulerCtrl1.SetZoomOnlyByMethodCall = false;
-            helplineRulerCtrl1.Size = new Size(973, 956);
+            helplineRulerCtrl1.Size = new Size(973, 912);
             helplineRulerCtrl1.TabIndex = 0;
             helplineRulerCtrl1.Zoom = 1F;
             helplineRulerCtrl1.ZoomSetManually = false;
@@ -280,7 +281,7 @@
             // 
             btnRedo.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             btnRedo.ForeColor = SystemColors.ControlText;
-            btnRedo.Location = new Point(108, 841);
+            btnRedo.Location = new Point(106, 841);
             btnRedo.Margin = new Padding(4, 3, 4, 3);
             btnRedo.Name = "btnRedo";
             btnRedo.Size = new Size(88, 27);
@@ -293,7 +294,7 @@
             // 
             btnUndo.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             btnUndo.ForeColor = SystemColors.ControlText;
-            btnUndo.Location = new Point(12, 841);
+            btnUndo.Location = new Point(10, 841);
             btnUndo.Margin = new Padding(4, 3, 4, 3);
             btnUndo.Name = "btnUndo";
             btnUndo.Size = new Size(88, 27);
@@ -315,7 +316,7 @@
             // 
             btnLoadBasePic.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             btnLoadBasePic.ForeColor = SystemColors.ControlText;
-            btnLoadBasePic.Location = new Point(99, 879);
+            btnLoadBasePic.Location = new Point(97, 879);
             btnLoadBasePic.Margin = new Padding(4, 3, 4, 3);
             btnLoadBasePic.Name = "btnLoadBasePic";
             btnLoadBasePic.Size = new Size(88, 27);
@@ -326,6 +327,7 @@
             // 
             // groupBox2
             // 
+            groupBox2.Controls.Add(cbExcludeRegions);
             groupBox2.Controls.Add(label1);
             groupBox2.Controls.Add(label14);
             groupBox2.Controls.Add(btnAlphaZAndGain);
@@ -454,7 +456,7 @@
             cbBGColor.AutoSize = true;
             cbBGColor.Checked = true;
             cbBGColor.CheckState = CheckState.Checked;
-            cbBGColor.Location = new Point(180, 810);
+            cbBGColor.Location = new Point(178, 810);
             cbBGColor.Margin = new Padding(4, 3, 4, 3);
             cbBGColor.Name = "cbBGColor";
             cbBGColor.Size = new Size(67, 19);
@@ -480,7 +482,7 @@
             // 
             button10.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             button10.ForeColor = SystemColors.ControlText;
-            button10.Location = new Point(361, 841);
+            button10.Location = new Point(359, 841);
             button10.Margin = new Padding(4, 3, 4, 3);
             button10.Name = "button10";
             button10.Size = new Size(88, 27);
@@ -493,7 +495,7 @@
             // 
             button8.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             button8.ForeColor = SystemColors.ControlText;
-            button8.Location = new Point(266, 841);
+            button8.Location = new Point(264, 841);
             button8.Margin = new Padding(4, 3, 4, 3);
             button8.Name = "button8";
             button8.Size = new Size(88, 27);
@@ -507,7 +509,7 @@
             button2.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             button2.FlatStyle = FlatStyle.System;
             button2.ForeColor = SystemColors.ControlText;
-            button2.Location = new Point(394, 805);
+            button2.Location = new Point(392, 805);
             button2.Margin = new Padding(4, 3, 4, 3);
             button2.Name = "button2";
             button2.Size = new Size(88, 27);
@@ -520,7 +522,7 @@
             btnCancel.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             btnCancel.DialogResult = DialogResult.Cancel;
             btnCancel.ForeColor = SystemColors.ControlText;
-            btnCancel.Location = new Point(370, 882);
+            btnCancel.Location = new Point(368, 882);
             btnCancel.Margin = new Padding(4, 3, 4, 3);
             btnCancel.Name = "btnCancel";
             btnCancel.Size = new Size(88, 27);
@@ -533,7 +535,7 @@
             btnOK.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             btnOK.DialogResult = DialogResult.OK;
             btnOK.ForeColor = SystemColors.ControlText;
-            btnOK.Location = new Point(277, 882);
+            btnOK.Location = new Point(275, 882);
             btnOK.Margin = new Padding(4, 3, 4, 3);
             btnOK.Name = "btnOK";
             btnOK.Size = new Size(88, 27);
@@ -602,6 +604,17 @@
             groupBox4.TabIndex = 5;
             groupBox4.TabStop = false;
             groupBox4.Text = "boundary alpha";
+            // 
+            // cbUseExistingTrimap
+            // 
+            cbUseExistingTrimap.AutoSize = true;
+            cbUseExistingTrimap.Enabled = false;
+            cbUseExistingTrimap.Location = new Point(165, 213);
+            cbUseExistingTrimap.Name = "cbUseExistingTrimap";
+            cbUseExistingTrimap.Size = new Size(88, 19);
+            cbUseExistingTrimap.TabIndex = 689;
+            cbUseExistingTrimap.Text = "use existing";
+            cbUseExistingTrimap.UseVisualStyleBackColor = true;
             // 
             // btnCreateTrimap
             // 
@@ -1835,24 +1848,23 @@
             backgroundWorker8.DoWork += backgroundWorker8_DoWork;
             backgroundWorker8.RunWorkerCompleted += backgroundWorker8_RunWorkerCompleted;
             // 
-            // cbUseExistingTrimap
+            // cbExcludeRegions
             // 
-            cbUseExistingTrimap.AutoSize = true;
-            cbUseExistingTrimap.Enabled = false;
-            cbUseExistingTrimap.Location = new Point(165, 213);
-            cbUseExistingTrimap.Name = "cbUseExistingTrimap";
-            cbUseExistingTrimap.Size = new Size(88, 19);
-            cbUseExistingTrimap.TabIndex = 689;
-            cbUseExistingTrimap.Text = "use existing";
-            cbUseExistingTrimap.UseVisualStyleBackColor = true;
+            cbExcludeRegions.AutoSize = true;
+            cbExcludeRegions.Location = new Point(18, 36);
+            cbExcludeRegions.Name = "cbExcludeRegions";
+            cbExcludeRegions.Size = new Size(109, 19);
+            cbExcludeRegions.TabIndex = 722;
+            cbExcludeRegions.Text = "exclude regions";
+            cbExcludeRegions.UseVisualStyleBackColor = true;
             // 
             // frmProcOutline
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1479, 956);
-            Controls.Add(statusStrip1);
             Controls.Add(splitContainer1);
+            Controls.Add(statusStrip1);
             Margin = new Padding(4, 3, 4, 3);
             Name = "frmProcOutline";
             StartPosition = FormStartPosition.CenterParent;
@@ -2058,5 +2070,6 @@
         private NumericUpDown numAlphaZAndGain;
         internal System.ComponentModel.BackgroundWorker backgroundWorker8;
         private CheckBox cbUseExistingTrimap;
+        private CheckBox cbExcludeRegions;
     }
 }

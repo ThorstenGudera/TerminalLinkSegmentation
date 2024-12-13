@@ -122,6 +122,7 @@
             backgroundWorker5 = new System.ComponentModel.BackgroundWorker();
             backgroundWorker3 = new System.ComponentModel.BackgroundWorker();
             backgroundWorker4 = new System.ComponentModel.BackgroundWorker();
+            cbExcludeRegions = new CheckBox();
             statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
@@ -529,6 +530,7 @@
             // 
             // panel1
             // 
+            panel1.Controls.Add(cbExcludeRegions);
             panel1.Controls.Add(btnOutlineOperations);
             panel1.Controls.Add(label11);
             panel1.Controls.Add(numScribblesWFactor);
@@ -1205,6 +1207,16 @@
             backgroundWorker4.DoWork += backgroundWorker4_DoWork;
             backgroundWorker4.RunWorkerCompleted += backgroundWorker4_RunWorkerCompleted;
             // 
+            // cbExcludeRegions
+            // 
+            cbExcludeRegions.AutoSize = true;
+            cbExcludeRegions.Location = new Point(1109, 189);
+            cbExcludeRegions.Name = "cbExcludeRegions";
+            cbExcludeRegions.Size = new Size(109, 19);
+            cbExcludeRegions.TabIndex = 723;
+            cbExcludeRegions.Text = "exclude regions";
+            cbExcludeRegions.UseVisualStyleBackColor = true;
+            // 
             // frmAlphaMatte
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -1342,5 +1354,6 @@
         private Label label11;
         private NumericUpDown numScribblesWFactor;
         private Button btnOutlineOperations;
+        private CheckBox cbExcludeRegions;
     }
 }

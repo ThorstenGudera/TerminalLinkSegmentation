@@ -63,6 +63,7 @@
             label9 = new Label();
             numRMatteW = new NumericUpDown();
             numRMatteH = new NumericUpDown();
+            btnMask = new Button();
             timer1 = new System.Windows.Forms.Timer(components);
             Timer3 = new System.Windows.Forms.Timer(components);
             backgroundWorker2 = new System.ComponentModel.BackgroundWorker();
@@ -100,7 +101,7 @@
             backgroundWorker5 = new System.ComponentModel.BackgroundWorker();
             backgroundWorker9 = new System.ComponentModel.BackgroundWorker();
             helplineRulerCtrl1 = new HelplineRulerControl.HelplineRulerCtrl();
-            btnMask = new Button();
+            cbExcludeRegions = new CheckBox();
             statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numEpsilon).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numKernel).BeginInit();
@@ -476,6 +477,19 @@
             toolTip1.SetToolTip(numRMatteH, "1a");
             numRMatteH.Value = new decimal(new int[] { 50, 0, 0, 0 });
             // 
+            // btnMask
+            // 
+            btnMask.Enabled = false;
+            btnMask.Location = new Point(666, 43);
+            btnMask.Margin = new Padding(4, 3, 4, 3);
+            btnMask.Name = "btnMask";
+            btnMask.Size = new Size(88, 27);
+            btnMask.TabIndex = 734;
+            btnMask.Text = "MaskOrig";
+            toolTip1.SetToolTip(btnMask, "use the current pic as alpha mask for the orig pic from pictureBox2");
+            btnMask.UseVisualStyleBackColor = true;
+            btnMask.Click += btnMask_Click;
+            // 
             // Timer3
             // 
             Timer3.Interval = 500;
@@ -503,7 +517,7 @@
             // 
             // panel1
             // 
-            panel1.Controls.Add(btnMask);
+            panel1.Controls.Add(cbExcludeRegions);
             panel1.Controls.Add(panel2);
             panel1.Controls.Add(label9);
             panel1.Controls.Add(label8);
@@ -512,6 +526,7 @@
             panel1.Controls.Add(cbCurves);
             panel1.Controls.Add(label7);
             panel1.Controls.Add(label3);
+            panel1.Controls.Add(btnMask);
             panel1.Controls.Add(btnShrExt);
             panel1.Controls.Add(cmbMorph);
             panel1.Controls.Add(label2);
@@ -908,18 +923,15 @@
             helplineRulerCtrl1.ZoomSetManually = false;
             helplineRulerCtrl1.DBPanelDblClicked += helplineRulerCtrl1_DBPanelDblClicked;
             // 
-            // btnMask
+            // cbExcludeRegions
             // 
-            btnMask.Enabled = false;
-            btnMask.Location = new Point(666, 43);
-            btnMask.Margin = new Padding(4, 3, 4, 3);
-            btnMask.Name = "btnMask";
-            btnMask.Size = new Size(88, 27);
-            btnMask.TabIndex = 741;
-            btnMask.Text = "MaskOrig";
-            toolTip1.SetToolTip(btnMask, "use the current pic as alpha mask for the orig pic from pictureBox2");
-            btnMask.UseVisualStyleBackColor = true;
-            btnMask.Click += btnMask_Click;
+            cbExcludeRegions.AutoSize = true;
+            cbExcludeRegions.Location = new Point(14, 46);
+            cbExcludeRegions.Name = "cbExcludeRegions";
+            cbExcludeRegions.Size = new Size(109, 19);
+            cbExcludeRegions.TabIndex = 741;
+            cbExcludeRegions.Text = "exclude regions";
+            cbExcludeRegions.UseVisualStyleBackColor = true;
             // 
             // frnOutlineOperations
             // 
@@ -1031,5 +1043,6 @@
         private CheckBox cbDraw;
         private NumericUpDown numDrawWidth;
         private Button btnMask;
+        private CheckBox cbExcludeRegions;
     }
 }

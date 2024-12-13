@@ -101,6 +101,8 @@ namespace AvoidAGrabCutEasy
         private Point? _ptSt;
         private List<Point>? _ptPrev;
         private Bitmap? _bmpMatte;
+        private List<Bitmap>? _excludedRegions;
+        private List<Point>? _exclLocations;
 
         public frmAlphaMatte()
         {
@@ -4110,7 +4112,34 @@ namespace AvoidAGrabCutEasy
 
                 double gamma = (double)this.numGamma.Value;
 
-                this.backgroundWorker5.RunWorkerAsync(new object[] { this.helplineRulerCtrl2.Bmp, gamma });
+                Bitmap b = new Bitmap(this.helplineRulerCtrl2.Bmp);
+                bool redrawExcluded = false;
+
+                string? c = this.CachePathAddition;
+                if (c != null && this.cbExcludeRegions.Checked)
+                {
+                    using frmExcludeFromPic frm = new frmExcludeFromPic(b, c);
+                    frm.SetupCache();
+
+                    if (frm.ShowDialog() == DialogResult.OK)
+                    {
+                        if (frm.ExcludedBmpRegions != null)
+                        {
+                            using Graphics gx = Graphics.FromImage(b);
+                            for (int i = 0; i < frm.ExcludedBmpRegions.Count; i++)
+                            {
+                                Bitmap? rem = frm.ExcludedBmpRegions[i].Remaining;
+                                if (rem != null)
+                                    SetTransp(b, rem, frm.ExcludedBmpRegions[i].Location);
+                            }
+
+                            CopyRegions(frm.ExcludedBmpRegions);
+                            redrawExcluded = true;
+                        }
+                    }
+                }
+
+                this.backgroundWorker5.RunWorkerAsync(new object[] { b, gamma, redrawExcluded });
             }
         }
 
@@ -4119,10 +4148,13 @@ namespace AvoidAGrabCutEasy
             if (e.Argument != null)
             {
                 object[] o = (object[])e.Argument;
-                Bitmap bmp = new Bitmap((Bitmap)o[0]);
+                Bitmap bmp = (Bitmap)o[0];
                 double gamma = (double)o[1];
+                bool redrawExcluded = (bool)o[2];
 
-                e.Result = GetAlphaPic(bmp, gamma);
+                Bitmap? b = GetAlphaPic(bmp, gamma);
+                if (b != null)
+                    e.Result = new object[] { b, redrawExcluded };
             }
         }
 
@@ -4179,7 +4211,20 @@ namespace AvoidAGrabCutEasy
                 Bitmap? bmp = null;
 
                 if (e.Result != null)
-                    bmp = (Bitmap)e.Result;
+                {
+                    object[] o = (object[])e.Result;
+                    bmp = (Bitmap)o[0];
+
+                    if ((bool)o[1])
+                    {
+                        if (this._excludedRegions != null && this._exclLocations != null)
+                        {
+                            using Graphics gx = Graphics.FromImage(bmp);
+                            for (int i = 0; i < this._excludedRegions.Count; i++)
+                                gx.DrawImage(this._excludedRegions[i], this._exclLocations[i]);
+                        }
+                    }
+                }
 
                 if (bmp != null)
                 {
@@ -4282,8 +4327,12 @@ namespace AvoidAGrabCutEasy
                 object[] o = (object[])e.Argument;
                 Bitmap bmp = new Bitmap((Bitmap)o[0]);
                 double alphaTh = (int)o[1];
+                bool redrawExcluded = (bool)o[2];
 
-                e.Result = GetAlphaZAndGainPic(bmp, alphaTh);
+                Bitmap? b = GetAlphaZAndGainPic(bmp, alphaTh);
+
+                if (b != null)
+                    e.Result = new object[] { b, redrawExcluded };
             }
         }
 
@@ -4342,7 +4391,23 @@ namespace AvoidAGrabCutEasy
                 Bitmap? bmp = null;
 
                 if (e.Result != null)
-                    bmp = (Bitmap)e.Result;
+                {
+                    object[] o = (object[])e.Result;
+                    bmp = (Bitmap)o[0];
+
+                    if ((bool)o[1])
+                    {
+                        if (this._excludedRegions != null && this._exclLocations != null)
+                        {
+                            using Graphics gx = Graphics.FromImage(bmp);
+                            for (int i = 0; i < this._excludedRegions.Count; i++)
+                            {
+                                SetTransp(bmp, this._excludedRegions[i], this._exclLocations[i]);
+                                gx.DrawImage(this._excludedRegions[i], this._exclLocations[i]);
+                            }
+                        }
+                    }
+                }
 
                 if (bmp != null)
                 {
@@ -4394,17 +4459,102 @@ namespace AvoidAGrabCutEasy
                 return;
             }
 
-            if (this.helplineRulerCtrl2.Bmp != null)
+            this.Cursor = Cursors.WaitCursor;
+            this.SetControls(false);
+
+            this.btnAlphaZAndGain.Enabled = true;
+            this.btnAlphaZAndGain.Text = "Cancel";
+
+            int alphaTh = (int)this.numAlphaZAndGain.Value;
+
+            Bitmap b = new Bitmap(this.helplineRulerCtrl2.Bmp);
+            bool redrawExcluded = false;
+
+            string? c = this.CachePathAddition;
+            if (c != null && this.cbExcludeRegions.Checked)
             {
-                this.Cursor = Cursors.WaitCursor;
-                this.SetControls(false);
+                using frmExcludeFromPic frm = new frmExcludeFromPic(b, c);
+                frm.SetupCache();
 
-                this.btnAlphaZAndGain.Enabled = true;
-                this.btnAlphaZAndGain.Text = "Cancel";
+                if (frm.ShowDialog() == DialogResult.OK)
+                {
+                    if (frm.ExcludedBmpRegions != null)
+                    {
+                        using Graphics gx = Graphics.FromImage(b);
+                        for (int i = 0; i < frm.ExcludedBmpRegions.Count; i++)
+                        {
+                            Bitmap? rem = frm.ExcludedBmpRegions[i].Remaining;
+                            if (rem != null)
+                                SetTransp(b, rem, frm.ExcludedBmpRegions[i].Location);
+                        }
 
-                int alphaTh = (int)this.numAlphaZAndGain.Value;
+                        CopyRegions(frm.ExcludedBmpRegions);
+                        redrawExcluded = true;
+                    }
+                }
+            }
 
-                this.backgroundWorker3.RunWorkerAsync(new object[] { this.helplineRulerCtrl2.Bmp, alphaTh });
+            this.backgroundWorker3.RunWorkerAsync(new object[] { b, alphaTh, redrawExcluded });
+        }
+
+        private unsafe void SetTransp(Bitmap bOrig, Bitmap rem, Point location)
+        {
+            int w = bOrig.Width;
+            int h = bOrig.Height;
+            int wR = rem.Width;
+            int hR = rem.Height;
+
+            int xx = location.X;
+            int yy = location.Y;
+
+            BitmapData bmRead = rem.LockBits(new Rectangle(0, 0, wR, hR), ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
+            BitmapData bmOrig = bOrig.LockBits(new Rectangle(0, 0, w, h), ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
+            int stride = bmOrig.Stride;
+            int strideR = bmRead.Stride;
+
+            Parallel.For(yy, yy + hR, y =>
+            //for(int y = yy; y < yy+hR;y++)
+            {
+                byte* pR = (byte*)bmRead.Scan0;
+                pR += (y - yy) * strideR;
+                byte* pO = (byte*)bmOrig.Scan0;
+                pO += y * stride + xx * 4;
+
+                for (int x = 0; x < wR; x++)
+                {
+                    if (pR[3] > 0)
+                        pO[3] = 0;
+                    pR += 4;
+                    pO += 4;
+                }
+            });
+
+            rem.UnlockBits(bmRead);
+            bOrig.UnlockBits(bmOrig);
+        }
+
+        private void CopyRegions(List<ExcludedBmpRegion> excludedRegions)
+        {
+            if (this._excludedRegions != null)
+                for (int j = this._excludedRegions.Count - 1; j >= 0; j--)
+                    this._excludedRegions[j].Dispose();
+            else
+                this._excludedRegions = new List<Bitmap>();
+            this._excludedRegions.Clear();
+
+            if (this._exclLocations == null)
+                this._exclLocations = new List<Point>();
+
+            this._exclLocations.Clear();
+
+            for (int j = 0; j < excludedRegions.Count; j++)
+            {
+                Bitmap? excl = excludedRegions[j].Remaining;
+                if (excl != null)
+                {
+                    this._excludedRegions.Add(new Bitmap(excl));
+                    this._exclLocations.Add(excludedRegions[j].Location);
+                }
             }
         }
 

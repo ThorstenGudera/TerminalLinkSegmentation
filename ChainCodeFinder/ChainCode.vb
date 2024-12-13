@@ -1,6 +1,7 @@
 ﻿Option Strict On
 
 Imports System.Drawing
+Imports System.Runtime.CompilerServices
 Imports System.Runtime.Serialization
 Imports ChainCodeFinder
 
@@ -119,4 +120,3 @@ Public Class ChainCode
         Return cOut
     End Function
 End Class
-
