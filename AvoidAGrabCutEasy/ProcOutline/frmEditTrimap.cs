@@ -956,6 +956,7 @@ namespace AvoidAGrabCutEasy.ProcOutline
         private void numOpacity_ValueChanged(object sender, EventArgs e)
         {
             this._overlayOpacity = (float)this.numOpacity.Value;
+            this.cbImgOverlay_CheckedChanged(this.cbImgOverlay, new EventArgs());
         }
 
         private void cbClickDraw_CheckedChanged(object sender, EventArgs e)
