@@ -66,6 +66,7 @@
             cbLSBmp = new CheckBox();
             Label20 = new Label();
             panel1 = new Panel();
+            cbExcludeRegions = new CheckBox();
             btnOutlineOperations = new Button();
             label11 = new Label();
             numScribblesWFactor = new NumericUpDown();
@@ -122,7 +123,6 @@
             backgroundWorker5 = new System.ComponentModel.BackgroundWorker();
             backgroundWorker3 = new System.ComponentModel.BackgroundWorker();
             backgroundWorker4 = new System.ComponentModel.BackgroundWorker();
-            cbExcludeRegions = new CheckBox();
             statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
@@ -590,6 +590,16 @@
             panel1.Name = "panel1";
             panel1.Size = new Size(1479, 227);
             panel1.TabIndex = 226;
+            // 
+            // cbExcludeRegions
+            // 
+            cbExcludeRegions.AutoSize = true;
+            cbExcludeRegions.Location = new Point(1109, 189);
+            cbExcludeRegions.Name = "cbExcludeRegions";
+            cbExcludeRegions.Size = new Size(109, 19);
+            cbExcludeRegions.TabIndex = 723;
+            cbExcludeRegions.Text = "exclude regions";
+            cbExcludeRegions.UseVisualStyleBackColor = true;
             // 
             // btnOutlineOperations
             // 
@@ -1095,7 +1105,7 @@
             numMaxSize.Location = new Point(74, 10);
             numMaxSize.Margin = new Padding(4, 3, 4, 3);
             numMaxSize.Maximum = new decimal(new int[] { 9999, 0, 0, 0 });
-            numMaxSize.Minimum = new decimal(new int[] { 200, 0, 0, 0 });
+            numMaxSize.Minimum = new decimal(new int[] { 20, 0, 0, 0 });
             numMaxSize.Name = "numMaxSize";
             numMaxSize.Size = new Size(71, 23);
             numMaxSize.TabIndex = 636;
@@ -1206,16 +1216,6 @@
             backgroundWorker4.WorkerSupportsCancellation = true;
             backgroundWorker4.DoWork += backgroundWorker4_DoWork;
             backgroundWorker4.RunWorkerCompleted += backgroundWorker4_RunWorkerCompleted;
-            // 
-            // cbExcludeRegions
-            // 
-            cbExcludeRegions.AutoSize = true;
-            cbExcludeRegions.Location = new Point(1109, 189);
-            cbExcludeRegions.Name = "cbExcludeRegions";
-            cbExcludeRegions.Size = new Size(109, 19);
-            cbExcludeRegions.TabIndex = 723;
-            cbExcludeRegions.Text = "exclude regions";
-            cbExcludeRegions.UseVisualStyleBackColor = true;
             // 
             // frmAlphaMatte
             // 

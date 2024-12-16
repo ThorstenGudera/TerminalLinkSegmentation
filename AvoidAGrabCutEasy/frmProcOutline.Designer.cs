@@ -37,6 +37,7 @@
             label16 = new Label();
             btnLoadBasePic = new Button();
             groupBox2 = new GroupBox();
+            cbExcludeRegions = new CheckBox();
             label1 = new Label();
             label14 = new Label();
             btnAlphaZAndGain = new Button();
@@ -170,7 +171,6 @@
             backgroundWorker7 = new System.ComponentModel.BackgroundWorker();
             openFileDialog1 = new OpenFileDialog();
             backgroundWorker8 = new System.ComponentModel.BackgroundWorker();
-            cbExcludeRegions = new CheckBox();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
             splitContainer1.Panel2.SuspendLayout();
@@ -281,7 +281,7 @@
             // 
             btnRedo.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             btnRedo.ForeColor = SystemColors.ControlText;
-            btnRedo.Location = new Point(106, 841);
+            btnRedo.Location = new Point(105, 841);
             btnRedo.Margin = new Padding(4, 3, 4, 3);
             btnRedo.Name = "btnRedo";
             btnRedo.Size = new Size(88, 27);
@@ -294,7 +294,7 @@
             // 
             btnUndo.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             btnUndo.ForeColor = SystemColors.ControlText;
-            btnUndo.Location = new Point(10, 841);
+            btnUndo.Location = new Point(9, 841);
             btnUndo.Margin = new Padding(4, 3, 4, 3);
             btnUndo.Name = "btnUndo";
             btnUndo.Size = new Size(88, 27);
@@ -316,7 +316,7 @@
             // 
             btnLoadBasePic.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             btnLoadBasePic.ForeColor = SystemColors.ControlText;
-            btnLoadBasePic.Location = new Point(97, 879);
+            btnLoadBasePic.Location = new Point(96, 879);
             btnLoadBasePic.Margin = new Padding(4, 3, 4, 3);
             btnLoadBasePic.Name = "btnLoadBasePic";
             btnLoadBasePic.Size = new Size(88, 27);
@@ -343,6 +343,16 @@
             groupBox2.TabIndex = 659;
             groupBox2.TabStop = false;
             groupBox2.Text = "AlphaGammaEtc";
+            // 
+            // cbExcludeRegions
+            // 
+            cbExcludeRegions.AutoSize = true;
+            cbExcludeRegions.Location = new Point(18, 36);
+            cbExcludeRegions.Name = "cbExcludeRegions";
+            cbExcludeRegions.Size = new Size(109, 19);
+            cbExcludeRegions.TabIndex = 722;
+            cbExcludeRegions.Text = "exclude regions";
+            cbExcludeRegions.UseVisualStyleBackColor = true;
             // 
             // label1
             // 
@@ -456,7 +466,7 @@
             cbBGColor.AutoSize = true;
             cbBGColor.Checked = true;
             cbBGColor.CheckState = CheckState.Checked;
-            cbBGColor.Location = new Point(178, 810);
+            cbBGColor.Location = new Point(177, 810);
             cbBGColor.Margin = new Padding(4, 3, 4, 3);
             cbBGColor.Name = "cbBGColor";
             cbBGColor.Size = new Size(67, 19);
@@ -469,10 +479,10 @@
             // 
             numMaxSize.Enabled = false;
             numMaxSize.Increment = new decimal(new int[] { 1, 0, 0, 65536 });
-            numMaxSize.Location = new Point(319, 809);
+            numMaxSize.Location = new Point(315, 809);
             numMaxSize.Margin = new Padding(4, 3, 4, 3);
             numMaxSize.Maximum = new decimal(new int[] { 9999, 0, 0, 0 });
-            numMaxSize.Minimum = new decimal(new int[] { 200, 0, 0, 0 });
+            numMaxSize.Minimum = new decimal(new int[] { 20, 0, 0, 0 });
             numMaxSize.Name = "numMaxSize";
             numMaxSize.Size = new Size(71, 23);
             numMaxSize.TabIndex = 673;
@@ -482,7 +492,7 @@
             // 
             button10.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             button10.ForeColor = SystemColors.ControlText;
-            button10.Location = new Point(359, 841);
+            button10.Location = new Point(358, 841);
             button10.Margin = new Padding(4, 3, 4, 3);
             button10.Name = "button10";
             button10.Size = new Size(88, 27);
@@ -495,7 +505,7 @@
             // 
             button8.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             button8.ForeColor = SystemColors.ControlText;
-            button8.Location = new Point(264, 841);
+            button8.Location = new Point(263, 841);
             button8.Margin = new Padding(4, 3, 4, 3);
             button8.Name = "button8";
             button8.Size = new Size(88, 27);
@@ -509,7 +519,7 @@
             button2.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             button2.FlatStyle = FlatStyle.System;
             button2.ForeColor = SystemColors.ControlText;
-            button2.Location = new Point(392, 805);
+            button2.Location = new Point(391, 805);
             button2.Margin = new Padding(4, 3, 4, 3);
             button2.Name = "button2";
             button2.Size = new Size(88, 27);
@@ -522,7 +532,7 @@
             btnCancel.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             btnCancel.DialogResult = DialogResult.Cancel;
             btnCancel.ForeColor = SystemColors.ControlText;
-            btnCancel.Location = new Point(368, 882);
+            btnCancel.Location = new Point(367, 882);
             btnCancel.Margin = new Padding(4, 3, 4, 3);
             btnCancel.Name = "btnCancel";
             btnCancel.Size = new Size(88, 27);
@@ -535,7 +545,7 @@
             btnOK.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             btnOK.DialogResult = DialogResult.OK;
             btnOK.ForeColor = SystemColors.ControlText;
-            btnOK.Location = new Point(275, 882);
+            btnOK.Location = new Point(274, 882);
             btnOK.Margin = new Padding(4, 3, 4, 3);
             btnOK.Name = "btnOK";
             btnOK.Size = new Size(88, 27);
@@ -1847,16 +1857,6 @@
             backgroundWorker8.WorkerSupportsCancellation = true;
             backgroundWorker8.DoWork += backgroundWorker8_DoWork;
             backgroundWorker8.RunWorkerCompleted += backgroundWorker8_RunWorkerCompleted;
-            // 
-            // cbExcludeRegions
-            // 
-            cbExcludeRegions.AutoSize = true;
-            cbExcludeRegions.Location = new Point(18, 36);
-            cbExcludeRegions.Name = "cbExcludeRegions";
-            cbExcludeRegions.Size = new Size(109, 19);
-            cbExcludeRegions.TabIndex = 722;
-            cbExcludeRegions.Text = "exclude regions";
-            cbExcludeRegions.UseVisualStyleBackColor = true;
             // 
             // frmProcOutline
             // 

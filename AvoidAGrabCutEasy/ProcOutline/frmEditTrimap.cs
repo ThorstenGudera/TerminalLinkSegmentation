@@ -416,8 +416,8 @@ namespace AvoidAGrabCutEasy.ProcOutline
                                             e.Graphics.FillRectangle(sb, new Rectangle(
                                                 (int)((int)(pt.X - wh / 2) * this.helplineRulerCtrl1.Zoom) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X,
                                                 (int)((int)(pt.Y - wh / 2) * this.helplineRulerCtrl1.Zoom) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y,
-                                                (int)(wh * this.helplineRulerCtrl1.Zoom),
-                                                (int)(wh * this.helplineRulerCtrl1.Zoom)));
+                                                (int)Math.Max(wh * this.helplineRulerCtrl1.Zoom, 1),
+                                                (int)Math.Max(wh * this.helplineRulerCtrl1.Zoom, 1)));
                                     }
                             }
                             else
@@ -429,8 +429,8 @@ namespace AvoidAGrabCutEasy.ProcOutline
                                         e.Graphics.FillRectangle(sb, new Rectangle(
                                             (int)((int)(pt.X - wh / 2) * this.helplineRulerCtrl1.Zoom) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X,
                                             (int)((int)(pt.Y - wh / 2) * this.helplineRulerCtrl1.Zoom) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y,
-                                            (int)(wh * this.helplineRulerCtrl1.Zoom),
-                                            (int)(wh * this.helplineRulerCtrl1.Zoom)));
+                                            (int)Math.Max(wh * this.helplineRulerCtrl1.Zoom, 1),
+                                            (int)Math.Max(wh * this.helplineRulerCtrl1.Zoom, 1)));
                                 }
                             }
                         }
@@ -690,8 +690,8 @@ namespace AvoidAGrabCutEasy.ProcOutline
                                                 gx.FillRectangle(sb, new Rectangle(
                                                     (int)((int)(pt.X - wh / 2)) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X,
                                                     (int)((int)(pt.Y - wh / 2)) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y,
-                                                    (int)(wh),
-                                                    (int)(wh)));
+                                                    (int)Math.Max(wh, 1),
+                                                    (int)Math.Max(wh, 1)));
                                         }
                                 }
                                 else
@@ -703,8 +703,8 @@ namespace AvoidAGrabCutEasy.ProcOutline
                                             gx.FillRectangle(sb, new Rectangle(
                                                 (int)((int)(pt.X - wh / 2)) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X,
                                                 (int)((int)(pt.Y - wh / 2)) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y,
-                                                (int)(wh),
-                                                (int)(wh)));
+                                                (int)Math.Max(wh, 1),
+                                                (int)Math.Max(wh, 1)));
                                     }
                                 }
                             }

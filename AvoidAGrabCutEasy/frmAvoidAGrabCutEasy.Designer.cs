@@ -31,6 +31,7 @@
             components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmAvoidAGrabCutEasy));
             panel1 = new Panel();
+            btnGetOutline = new Button();
             btnInfo = new Button();
             btnOrder = new Button();
             cbUseLumMapBasePic = new CheckBox();
@@ -169,7 +170,6 @@
             bgwDoAll4 = new System.ComponentModel.BackgroundWorker();
             timer1 = new System.Windows.Forms.Timer(components);
             backgroundWorker4 = new System.ComponentModel.BackgroundWorker();
-            btnGetOutline = new Button();
             panel1.SuspendLayout();
             panel5.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numBoundOuter).BeginInit();
@@ -304,6 +304,17 @@
             panel1.TabIndex = 0;
             panel1.MouseDoubleClick += panel1_MouseDoubleClick;
             panel1.MouseDown += panel1_MouseDown;
+            // 
+            // btnGetOutline
+            // 
+            btnGetOutline.Enabled = false;
+            btnGetOutline.Location = new Point(238, 225);
+            btnGetOutline.Name = "btnGetOutline";
+            btnGetOutline.Size = new Size(75, 23);
+            btnGetOutline.TabIndex = 739;
+            btnGetOutline.Text = "outline";
+            btnGetOutline.UseVisualStyleBackColor = true;
+            btnGetOutline.Click += btnGetOutline_Click;
             // 
             // btnInfo
             // 
@@ -1340,7 +1351,7 @@
             numMaxSize.Location = new Point(111, 62);
             numMaxSize.Margin = new Padding(4, 3, 4, 3);
             numMaxSize.Maximum = new decimal(new int[] { 9999, 0, 0, 0 });
-            numMaxSize.Minimum = new decimal(new int[] { 200, 0, 0, 0 });
+            numMaxSize.Minimum = new decimal(new int[] { 20, 0, 0, 0 });
             numMaxSize.Name = "numMaxSize";
             numMaxSize.Size = new Size(71, 23);
             numMaxSize.TabIndex = 636;
@@ -1800,17 +1811,6 @@
             backgroundWorker4.DoWork += backgroundWorker4_DoWork;
             backgroundWorker4.ProgressChanged += backgroundWorker4_ProgressChanged;
             backgroundWorker4.RunWorkerCompleted += backgroundWorker4_RunWorkerCompleted;
-            // 
-            // btnGetOutline
-            // 
-            btnGetOutline.Enabled = false;
-            btnGetOutline.Location = new Point(238, 225);
-            btnGetOutline.Name = "btnGetOutline";
-            btnGetOutline.Size = new Size(75, 23);
-            btnGetOutline.TabIndex = 739;
-            btnGetOutline.Text = "outline";
-            btnGetOutline.UseVisualStyleBackColor = true;
-            btnGetOutline.Click += btnGetOutline_Click;
             // 
             // frmAvoidAGrabCutEasy
             // 

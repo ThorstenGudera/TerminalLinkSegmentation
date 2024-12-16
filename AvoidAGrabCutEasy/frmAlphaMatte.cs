@@ -460,8 +460,8 @@ namespace AvoidAGrabCutEasy
                                         e.Graphics.FillRectangle(sb, new Rectangle(
                                             (int)((int)(pt.X - wh / 2) * this.helplineRulerCtrl1.Zoom) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X,
                                             (int)((int)(pt.Y - wh / 2) * this.helplineRulerCtrl1.Zoom) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y,
-                                            (int)(wh * this.helplineRulerCtrl1.Zoom),
-                                            (int)(wh * this.helplineRulerCtrl1.Zoom)));
+                                            (int)Math.Max(wh * this.helplineRulerCtrl1.Zoom, 1),
+                                            (int)Math.Max(wh * this.helplineRulerCtrl1.Zoom, 1)));
                                 }
                             }
                         }
@@ -491,8 +491,8 @@ namespace AvoidAGrabCutEasy
                                             e.Graphics.FillRectangle(sb, new Rectangle(
                                                 (int)((int)(pt.X - wh / 2) * this.helplineRulerCtrl1.Zoom) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X,
                                                 (int)((int)(pt.Y - wh / 2) * this.helplineRulerCtrl1.Zoom) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y,
-                                                (int)(wh * this.helplineRulerCtrl1.Zoom),
-                                                (int)(wh * this.helplineRulerCtrl1.Zoom)));
+                                                (int)Math.Max(wh * this.helplineRulerCtrl1.Zoom, 1),
+                                                (int)Math.Max(wh * this.helplineRulerCtrl1.Zoom, 1)));
                                     }
                                 }
                                 else
@@ -504,8 +504,8 @@ namespace AvoidAGrabCutEasy
                                             e.Graphics.FillRectangle(sb, new Rectangle(
                                                 (int)((int)(pt.X - wh / 2) * this.helplineRulerCtrl1.Zoom) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X,
                                                 (int)((int)(pt.Y - wh / 2) * this.helplineRulerCtrl1.Zoom) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y,
-                                                (int)(wh * this.helplineRulerCtrl1.Zoom),
-                                                (int)(wh * this.helplineRulerCtrl1.Zoom)));
+                                                (int)Math.Max(wh * this.helplineRulerCtrl1.Zoom, 1),
+                                                (int)Math.Max(wh * this.helplineRulerCtrl1.Zoom, 1)));
                                     }
                                 }
                             }
@@ -534,8 +534,8 @@ namespace AvoidAGrabCutEasy
                                             e.Graphics.FillRectangle(sb, new Rectangle(
                                                 (int)((int)(pt.X - wh / 2) * this.helplineRulerCtrl1.Zoom) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X,
                                                 (int)((int)(pt.Y - wh / 2) * this.helplineRulerCtrl1.Zoom) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y,
-                                                (int)(wh * this.helplineRulerCtrl1.Zoom),
-                                                (int)(wh * this.helplineRulerCtrl1.Zoom)));
+                                                (int)Math.Max(wh * this.helplineRulerCtrl1.Zoom, 1),
+                                                (int)Math.Max(wh * this.helplineRulerCtrl1.Zoom, 1)));
                                     }
                                 }
                                 else
@@ -547,8 +547,8 @@ namespace AvoidAGrabCutEasy
                                             e.Graphics.FillRectangle(sb, new Rectangle(
                                                 (int)((int)(pt.X - wh / 2) * this.helplineRulerCtrl1.Zoom) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X,
                                                 (int)((int)(pt.Y - wh / 2) * this.helplineRulerCtrl1.Zoom) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y,
-                                                (int)(wh * this.helplineRulerCtrl1.Zoom),
-                                                (int)(wh * this.helplineRulerCtrl1.Zoom)));
+                                                (int)Math.Max(wh * this.helplineRulerCtrl1.Zoom, 1),
+                                                (int)Math.Max(wh * this.helplineRulerCtrl1.Zoom, 1)));
                                     }
                                 }
                             }
@@ -580,8 +580,8 @@ namespace AvoidAGrabCutEasy
                                             e.Graphics.FillRectangle(sb, new Rectangle(
                                                 (int)((int)(pt.X - wh / 2) * this.helplineRulerCtrl1.Zoom) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X,
                                                 (int)((int)(pt.Y - wh / 2) * this.helplineRulerCtrl1.Zoom) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y,
-                                                (int)(wh * this.helplineRulerCtrl1.Zoom),
-                                                (int)(wh * this.helplineRulerCtrl1.Zoom)));
+                                                (int)Math.Max(wh * this.helplineRulerCtrl1.Zoom, 1),
+                                                (int)Math.Max(wh * this.helplineRulerCtrl1.Zoom, 1)));
                                     }
                                 }
                                 else
@@ -593,8 +593,8 @@ namespace AvoidAGrabCutEasy
                                             e.Graphics.FillRectangle(sb, new Rectangle(
                                                 (int)((int)(pt.X - wh / 2) * this.helplineRulerCtrl1.Zoom) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X,
                                                 (int)((int)(pt.Y - wh / 2) * this.helplineRulerCtrl1.Zoom) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y,
-                                                (int)(wh * this.helplineRulerCtrl1.Zoom),
-                                                (int)(wh * this.helplineRulerCtrl1.Zoom)));
+                                                (int)Math.Max(wh * this.helplineRulerCtrl1.Zoom, 1),
+                                                (int)Math.Max(wh * this.helplineRulerCtrl1.Zoom, 1)));
                                     }
                                 }
                             }
@@ -1306,19 +1306,19 @@ namespace AvoidAGrabCutEasy
                 {
                     this._scribbles = f.ToDictionary();
 
-                    double resPic = 1.0;
+                    //double resPic = 1.0;
 
-                    if (f.BaseSize != null)
-                        resPic = (double)Math.Max(f.BaseSize.Value.Width, f.BaseSize.Value.Height) /
-                            (double)Math.Max(this.helplineRulerCtrl1.Bmp.Width, this.helplineRulerCtrl1.Bmp.Height);
+                    //if (f.BaseSize != null)
+                    //    resPic = (double)Math.Max(f.BaseSize.Value.Width, f.BaseSize.Value.Height) /
+                    //        (double)Math.Max(this.helplineRulerCtrl1.Bmp.Width, this.helplineRulerCtrl1.Bmp.Height);
 
-                    if (this._scribbles != null && resPic != 1.0)
-                    {
-                        Dictionary<int, Dictionary<int, List<List<Point>>>> scribbles2 = ResizeAllScribbles(this._scribbles, resPic);
-                        this._scribbles = scribbles2;
-                        List<Tuple<int, int, int, bool, List<List<Point>>>> scribbleSeq2 = ResizeScribbleSeq(this._scribbleSeq, resPic, true);
-                        this._scribbleSeq = scribbleSeq2;
-                    }
+                    //if (this._scribbles != null && resPic != 1.0)
+                    //{
+                    //    Dictionary<int, Dictionary<int, List<List<Point>>>> scribbles2 = ResizeAllScribbles(this._scribbles, resPic);
+                    //    this._scribbles = scribbles2;
+                    //    List<Tuple<int, int, int, bool, List<List<Point>>>> scribbleSeq2 = ResizeScribbleSeq(this._scribbleSeq, resPic, true);
+                    //    this._scribbleSeq = scribbleSeq2;
+                    //}
 
                     if (f.Bmp != null && this.cbLSBmp.Checked)
                     {
@@ -1611,7 +1611,7 @@ namespace AvoidAGrabCutEasy
 
             if (scribbleSeq != null)
                 for (int i = 0; i < scribbleSeq.Count; i++)
-                    res.Add(Tuple.Create(scribbleSeq[i].Item1, (int)(scribbleSeq[i].Item2 / resWC), scribbleSeq[i].Item3, false, new List<List<Point>>()));
+                    res.Add(Tuple.Create(scribbleSeq[i].Item1, (int)Math.Max(scribbleSeq[i].Item2 / resWC, 1), scribbleSeq[i].Item3, false, new List<List<Point>>()));
 
             if (verify)
             {

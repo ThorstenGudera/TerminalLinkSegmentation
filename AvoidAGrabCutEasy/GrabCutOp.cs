@@ -133,13 +133,16 @@ namespace AvoidAGrabCutEasy
                                 int listNo = f.Item3;
                                 int wh2 = wh / 2;
 
-                                List<List<Point>> ptsList = this.Scribbles[l][wh];
-
-                                if (ptsList != null && ptsList.Count > listNo)
+                                if (this.Scribbles[l].ContainsKey(wh))
                                 {
-                                    foreach (Point pt in ptsList[listNo])
+                                    List<List<Point>> ptsList = this.Scribbles[l][wh];
+
+                                    if (ptsList != null && ptsList.Count > listNo)
                                     {
-                                        Rect(pt, l, wh2);
+                                        foreach (Point pt in ptsList[listNo])
+                                        {
+                                            Rect(pt, l, wh2);
+                                        }
                                     }
                                 }
                             }
@@ -177,13 +180,16 @@ namespace AvoidAGrabCutEasy
                                 int listNo = f.Item3;
                                 int wh2 = wh / 2;
 
-                                List<List<Point>> ptsList = this.Scribbles[l][wh];
-
-                                if (ptsList != null && ptsList.Count > listNo)
+                                if (this.Scribbles[l].ContainsKey(wh))
                                 {
-                                    foreach (Point pt in ptsList[listNo])
+                                    List<List<Point>> ptsList = this.Scribbles[l][wh];
+
+                                    if (ptsList != null && ptsList.Count > listNo)
                                     {
-                                        Rect(pt, l, wh2);
+                                        foreach (Point pt in ptsList[listNo])
+                                        {
+                                            Rect(pt, l, wh2);
+                                        }
                                     }
                                 }
                             }
@@ -2470,13 +2476,16 @@ namespace AvoidAGrabCutEasy
                                 int listNo = f.Item3;
                                 int wh2 = wh / 2;
 
-                                List<List<Point>> ptsList = this.Scribbles[l][wh];
-
-                                if (ptsList != null && ptsList.Count > listNo)
+                                if (this.Scribbles[l].ContainsKey(wh))
                                 {
-                                    foreach (Point pt in ptsList[listNo])
+                                    List<List<Point>> ptsList = this.Scribbles[l][wh];
+
+                                    if (ptsList != null && ptsList.Count > listNo)
                                     {
-                                        RectReInit(pt, l, wh2);
+                                        foreach (Point pt in ptsList[listNo])
+                                        {
+                                            RectReInit(pt, l, wh2);
+                                        }
                                     }
                                 }
                             }
@@ -2516,13 +2525,16 @@ namespace AvoidAGrabCutEasy
                                 int listNo = f.Item3;
                                 int wh2 = wh / 2;
 
-                                List<List<Point>> ptsList = this.Scribbles[l][wh];
-
-                                if (ptsList != null && ptsList.Count > listNo)
+                                if (this.Scribbles[l].ContainsKey(wh))
                                 {
-                                    foreach (Point pt in ptsList[listNo])
+                                    List<List<Point>> ptsList = this.Scribbles[l][wh];
+
+                                    if (ptsList != null && ptsList.Count > listNo)
                                     {
-                                        RectReInit(pt, l, wh2);
+                                        foreach (Point pt in ptsList[listNo])
+                                        {
+                                            RectReInit(pt, l, wh2);
+                                        }
                                     }
                                 }
                             }
