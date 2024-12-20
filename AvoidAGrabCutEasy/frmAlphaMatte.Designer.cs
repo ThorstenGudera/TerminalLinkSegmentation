@@ -432,6 +432,7 @@
             cbForceSerial.Text = "serial";
             toolTip1.SetToolTip(cbForceSerial, "run threads serially to lower memory consumption");
             cbForceSerial.UseVisualStyleBackColor = true;
+            cbForceSerial.CheckedChanged += cbForceSerial_CheckedChanged;
             // 
             // cbSlices
             // 
@@ -908,7 +909,6 @@
             numSleep.Name = "numSleep";
             numSleep.Size = new Size(70, 23);
             numSleep.TabIndex = 694;
-            numSleep.Value = new decimal(new int[] { 10, 0, 0, 0 });
             numSleep.ValueChanged += numSleep_ValueChanged;
             // 
             // label2

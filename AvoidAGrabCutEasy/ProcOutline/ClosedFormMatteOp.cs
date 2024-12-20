@@ -2010,6 +2010,8 @@ namespace GetAlphaMatte
                             gx.InterpolationMode = InterpolationMode.HighQualityBilinear;
                             gx.DrawImage(trWork, 0, 0, w, h);
                         }
+
+                        VerifyTrimap(cfopTrimap);
                     }
 
                     Bitmap result = new Bitmap(w, h);
@@ -2530,6 +2532,8 @@ namespace GetAlphaMatte
                                 gx.InterpolationMode = InterpolationMode.HighQualityBilinear;
                                 gx.DrawImage(tmpF, 0, 0, w, h);
                             }
+
+                            VerifyTrimap(cfopTrimap);
                         }
 
                         Bitmap result = new Bitmap(w, h);
@@ -2979,6 +2983,35 @@ namespace GetAlphaMatte
                     return bmpResult;
                 }
             }
+        }
+
+        private unsafe void VerifyTrimap(Bitmap trWork)
+        {
+            int w = trWork.Width;
+            int h = trWork.Height;
+
+            BitmapData bmD = trWork.LockBits(new Rectangle(0, 0, w, h), ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
+            int stride = bmD.Stride;
+
+            Parallel.For(0, h, y =>
+            {
+                byte* p = (byte*)bmD.Scan0;
+                p += y * stride;
+
+                for (int x = 0; x < w; x++)
+                {
+                    if (p[0] < 12)
+                        p[0] = p[1] = p[2] = 0;
+                    else if (p[0] > 252)
+                        p[0] = p[1] = p[2] = 255;
+                    else if (p[0] >= 12 && p[0] <= 252)
+                        p[0] = p[1] = p[2] = 128;
+
+                    p += 4;
+                }
+            });
+
+            trWork.UnlockBits(bmD);
         }
 
         private void Cfop_ShowInfoOuter(object? sender, string e)

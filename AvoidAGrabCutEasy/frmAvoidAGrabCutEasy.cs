@@ -6911,8 +6911,8 @@ namespace AvoidAGrabCutEasy
                     bParam.MaxIterations = 35; //for GaussSeidel set this to 10000 or so
                     bParam.InnerIterations = 35; //maybe 25 will do
                     bParam.DesiredMaxLinearError = 0.01;
-                    bParam.Sleep = true;
-                    bParam.SleepAmount = 10;
+                    bParam.Sleep = false;
+                    bParam.SleepAmount = 0;
                     bParam.BGW = this.bgwDoAll3;
                     cfop.BlendParameters = bParam;
                     this._cfop = cfop;

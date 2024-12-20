@@ -3569,5 +3569,13 @@ namespace AvoidAGrabCutEasy
                         }
             }
         }
+
+        private void cbForceSerial_CheckedChanged(object sender, EventArgs e)
+        {
+            if (cbForceSerial.Checked)
+                this.numSleep.Value = (decimal)0;
+            else
+                this.numSleep.Value = (decimal)10;
+        }
     }
 }

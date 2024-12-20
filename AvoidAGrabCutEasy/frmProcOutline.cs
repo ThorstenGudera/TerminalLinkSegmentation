@@ -4698,5 +4698,13 @@ namespace AvoidAGrabCutEasy
             this.backgroundWorker8.RunWorkerCompleted += backgroundWorker8_RunWorkerCompleted;
 
         }
+
+        private void cbForceSerial_CheckedChanged(object sender, EventArgs e)
+        {
+            if (cbForceSerial.Checked)
+                this.numSleep.Value = (decimal)0;
+            else
+                this.numSleep.Value = (decimal)10;
+        }
     }
 }
