@@ -152,6 +152,7 @@
             toolStripStatusLabel1 = new ToolStripStatusLabel();
             ToolStripStatusLabel2 = new ToolStripStatusLabel();
             toolStripProgressBar1 = new ToolStripProgressBar();
+            toolStripStatusLabel5 = new ToolStripStatusLabel();
             toolStripStatusLabel4 = new ToolStripStatusLabel();
             toolStripStatusLabel3 = new ToolStripStatusLabel();
             toolStripDropDownButton1 = new ToolStripDropDownButton();
@@ -170,7 +171,6 @@
             bgwDoAll4 = new System.ComponentModel.BackgroundWorker();
             timer1 = new System.Windows.Forms.Timer(components);
             backgroundWorker4 = new System.ComponentModel.BackgroundWorker();
-            toolStripStatusLabel5 = new ToolStripStatusLabel();
             panel1.SuspendLayout();
             panel5.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numBoundOuter).BeginInit();
@@ -607,22 +607,22 @@
             // rb16
             // 
             rb16.AutoSize = true;
+            rb16.Checked = true;
             rb16.Location = new Point(79, 4);
             rb16.Name = "rb16";
             rb16.Size = new Size(68, 19);
             rb16.TabIndex = 0;
+            rb16.TabStop = true;
             rb16.Text = "16 slices";
             rb16.UseVisualStyleBackColor = true;
             // 
             // rb4
             // 
             rb4.AutoSize = true;
-            rb4.Checked = true;
             rb4.Location = new Point(11, 4);
             rb4.Name = "rb4";
             rb4.Size = new Size(62, 19);
             rb4.TabIndex = 0;
-            rb4.TabStop = true;
             rb4.Text = "4 slices";
             rb4.UseVisualStyleBackColor = true;
             // 
@@ -1691,6 +1691,12 @@
             toolStripProgressBar1.Size = new Size(467, 33);
             toolStripProgressBar1.Visible = false;
             // 
+            // toolStripStatusLabel5
+            // 
+            toolStripStatusLabel5.Name = "toolStripStatusLabel5";
+            toolStripStatusLabel5.Size = new Size(19, 34);
+            toolStripStatusLabel5.Text = "    ";
+            // 
             // toolStripStatusLabel4
             // 
             toolStripStatusLabel4.Font = new Font("Segoe UI", 16F);
@@ -1812,12 +1818,6 @@
             backgroundWorker4.DoWork += backgroundWorker4_DoWork;
             backgroundWorker4.ProgressChanged += backgroundWorker4_ProgressChanged;
             backgroundWorker4.RunWorkerCompleted += backgroundWorker4_RunWorkerCompleted;
-            // 
-            // toolStripStatusLabel5
-            // 
-            toolStripStatusLabel5.Name = "toolStripStatusLabel5";
-            toolStripStatusLabel5.Size = new Size(19, 34);
-            toolStripStatusLabel5.Text = "    ";
             // 
             // frmAvoidAGrabCutEasy
             // 

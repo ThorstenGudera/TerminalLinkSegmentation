@@ -7681,6 +7681,9 @@ namespace AvoidAGrabCutEasy
         {
             if (!this.IsDisposed)
             {
+                bool tf = this.helplineRulerCtrl2.Enabled;
+                this.helplineRulerCtrl2.Enabled = false;
+
                 Bitmap? bmp = null;
 
                 if (e.Result != null)
@@ -7787,6 +7790,8 @@ namespace AvoidAGrabCutEasy
                     double gamma = 2.0;
                     this.bgwDoAll4.RunWorkerAsync(gamma);
                 }
+
+                this.helplineRulerCtrl2.Enabled = tf;
             }
         }
 

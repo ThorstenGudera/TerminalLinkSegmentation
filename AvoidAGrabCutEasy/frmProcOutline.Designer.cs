@@ -157,6 +157,7 @@
             toolStripStatusLabel1 = new ToolStripStatusLabel();
             toolStripStatusLabel2 = new ToolStripStatusLabel();
             toolStripProgressBar1 = new ToolStripProgressBar();
+            toolStripStatusLabel5 = new ToolStripStatusLabel();
             toolStripStatusLabel4 = new ToolStripStatusLabel();
             toolStripDropDownButton1 = new ToolStripDropDownButton();
             saveFileDialog1 = new SaveFileDialog();
@@ -171,7 +172,6 @@
             backgroundWorker7 = new System.ComponentModel.BackgroundWorker();
             openFileDialog1 = new OpenFileDialog();
             backgroundWorker8 = new System.ComponentModel.BackgroundWorker();
-            toolStripStatusLabel5 = new ToolStripStatusLabel();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
             splitContainer1.Panel2.SuspendLayout();
@@ -282,7 +282,7 @@
             // 
             btnRedo.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             btnRedo.ForeColor = SystemColors.ControlText;
-            btnRedo.Location = new Point(104, 841);
+            btnRedo.Location = new Point(103, 841);
             btnRedo.Margin = new Padding(4, 3, 4, 3);
             btnRedo.Name = "btnRedo";
             btnRedo.Size = new Size(88, 27);
@@ -295,7 +295,7 @@
             // 
             btnUndo.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             btnUndo.ForeColor = SystemColors.ControlText;
-            btnUndo.Location = new Point(8, 841);
+            btnUndo.Location = new Point(7, 841);
             btnUndo.Margin = new Padding(4, 3, 4, 3);
             btnUndo.Name = "btnUndo";
             btnUndo.Size = new Size(88, 27);
@@ -317,7 +317,7 @@
             // 
             btnLoadBasePic.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             btnLoadBasePic.ForeColor = SystemColors.ControlText;
-            btnLoadBasePic.Location = new Point(95, 879);
+            btnLoadBasePic.Location = new Point(94, 879);
             btnLoadBasePic.Margin = new Padding(4, 3, 4, 3);
             btnLoadBasePic.Name = "btnLoadBasePic";
             btnLoadBasePic.Size = new Size(88, 27);
@@ -467,7 +467,7 @@
             cbBGColor.AutoSize = true;
             cbBGColor.Checked = true;
             cbBGColor.CheckState = CheckState.Checked;
-            cbBGColor.Location = new Point(176, 810);
+            cbBGColor.Location = new Point(175, 810);
             cbBGColor.Margin = new Padding(4, 3, 4, 3);
             cbBGColor.Name = "cbBGColor";
             cbBGColor.Size = new Size(67, 19);
@@ -493,7 +493,7 @@
             // 
             button10.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             button10.ForeColor = SystemColors.ControlText;
-            button10.Location = new Point(357, 841);
+            button10.Location = new Point(356, 841);
             button10.Margin = new Padding(4, 3, 4, 3);
             button10.Name = "button10";
             button10.Size = new Size(88, 27);
@@ -506,7 +506,7 @@
             // 
             button8.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             button8.ForeColor = SystemColors.ControlText;
-            button8.Location = new Point(262, 841);
+            button8.Location = new Point(261, 841);
             button8.Margin = new Padding(4, 3, 4, 3);
             button8.Name = "button8";
             button8.Size = new Size(88, 27);
@@ -520,7 +520,7 @@
             button2.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             button2.FlatStyle = FlatStyle.System;
             button2.ForeColor = SystemColors.ControlText;
-            button2.Location = new Point(390, 805);
+            button2.Location = new Point(389, 805);
             button2.Margin = new Padding(4, 3, 4, 3);
             button2.Name = "button2";
             button2.Size = new Size(88, 27);
@@ -533,7 +533,7 @@
             btnCancel.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             btnCancel.DialogResult = DialogResult.Cancel;
             btnCancel.ForeColor = SystemColors.ControlText;
-            btnCancel.Location = new Point(366, 882);
+            btnCancel.Location = new Point(365, 882);
             btnCancel.Margin = new Padding(4, 3, 4, 3);
             btnCancel.Name = "btnCancel";
             btnCancel.Size = new Size(88, 27);
@@ -546,7 +546,7 @@
             btnOK.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             btnOK.DialogResult = DialogResult.OK;
             btnOK.ForeColor = SystemColors.ControlText;
-            btnOK.Location = new Point(273, 882);
+            btnOK.Location = new Point(272, 882);
             btnOK.Margin = new Padding(4, 3, 4, 3);
             btnOK.Name = "btnOK";
             btnOK.Size = new Size(88, 27);
@@ -882,22 +882,22 @@
             // rb16
             // 
             rb16.AutoSize = true;
+            rb16.Checked = true;
             rb16.Location = new Point(138, 121);
             rb16.Name = "rb16";
             rb16.Size = new Size(37, 19);
             rb16.TabIndex = 572;
+            rb16.TabStop = true;
             rb16.Text = "16";
             rb16.UseVisualStyleBackColor = true;
             // 
             // rb4
             // 
             rb4.AutoSize = true;
-            rb4.Checked = true;
             rb4.Location = new Point(100, 121);
             rb4.Name = "rb4";
             rb4.Size = new Size(31, 19);
             rb4.TabIndex = 572;
-            rb4.TabStop = true;
             rb4.Text = "4";
             rb4.UseVisualStyleBackColor = true;
             // 
@@ -1763,6 +1763,12 @@
             toolStripProgressBar1.Name = "toolStripProgressBar1";
             toolStripProgressBar1.Size = new Size(467, 38);
             // 
+            // toolStripStatusLabel5
+            // 
+            toolStripStatusLabel5.Name = "toolStripStatusLabel5";
+            toolStripStatusLabel5.Size = new Size(19, 39);
+            toolStripStatusLabel5.Text = "    ";
+            // 
             // toolStripStatusLabel4
             // 
             toolStripStatusLabel4.Font = new Font("Segoe UI", 15.75F);
@@ -1858,12 +1864,6 @@
             backgroundWorker8.WorkerSupportsCancellation = true;
             backgroundWorker8.DoWork += backgroundWorker8_DoWork;
             backgroundWorker8.RunWorkerCompleted += backgroundWorker8_RunWorkerCompleted;
-            // 
-            // toolStripStatusLabel5
-            // 
-            toolStripStatusLabel5.Name = "toolStripStatusLabel5";
-            toolStripStatusLabel5.Size = new Size(19, 39);
-            toolStripStatusLabel5.Text = "    ";
             // 
             // frmProcOutline
             // 

@@ -33,6 +33,7 @@
             toolStripStatusLabel1 = new ToolStripStatusLabel();
             ToolStripStatusLabel2 = new ToolStripStatusLabel();
             toolStripProgressBar1 = new ToolStripProgressBar();
+            toolStripStatusLabel5 = new ToolStripStatusLabel();
             toolStripStatusLabel4 = new ToolStripStatusLabel();
             toolStripStatusLabel3 = new ToolStripStatusLabel();
             label15 = new Label();
@@ -123,7 +124,6 @@
             backgroundWorker5 = new System.ComponentModel.BackgroundWorker();
             backgroundWorker3 = new System.ComponentModel.BackgroundWorker();
             backgroundWorker4 = new System.ComponentModel.BackgroundWorker();
-            toolStripStatusLabel5 = new ToolStripStatusLabel();
             statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
@@ -176,6 +176,12 @@
             toolStripProgressBar1.Name = "toolStripProgressBar1";
             toolStripProgressBar1.Size = new Size(467, 33);
             toolStripProgressBar1.Visible = false;
+            // 
+            // toolStripStatusLabel5
+            // 
+            toolStripStatusLabel5.Name = "toolStripStatusLabel5";
+            toolStripStatusLabel5.Size = new Size(19, 34);
+            toolStripStatusLabel5.Text = "    ";
             // 
             // toolStripStatusLabel4
             // 
@@ -816,22 +822,22 @@
             // rb16
             // 
             rb16.AutoSize = true;
+            rb16.Checked = true;
             rb16.Location = new Point(125, 80);
             rb16.Name = "rb16";
             rb16.Size = new Size(37, 19);
             rb16.TabIndex = 700;
+            rb16.TabStop = true;
             rb16.Text = "16";
             rb16.UseVisualStyleBackColor = true;
             // 
             // rb4
             // 
             rb4.AutoSize = true;
-            rb4.Checked = true;
             rb4.Location = new Point(89, 80);
             rb4.Name = "rb4";
             rb4.Size = new Size(31, 19);
             rb4.TabIndex = 701;
-            rb4.TabStop = true;
             rb4.Text = "4";
             rb4.UseVisualStyleBackColor = true;
             // 
@@ -1217,12 +1223,6 @@
             backgroundWorker4.WorkerSupportsCancellation = true;
             backgroundWorker4.DoWork += backgroundWorker4_DoWork;
             backgroundWorker4.RunWorkerCompleted += backgroundWorker4_RunWorkerCompleted;
-            // 
-            // toolStripStatusLabel5
-            // 
-            toolStripStatusLabel5.Name = "toolStripStatusLabel5";
-            toolStripStatusLabel5.Size = new Size(19, 34);
-            toolStripStatusLabel5.Text = "    ";
             // 
             // frmAlphaMatte
             // 
