@@ -525,6 +525,13 @@ namespace AvoidAGrabCutEasy
 
             this.helplineRulerCtrl1.dbPanel1.Capture = true;
 
+            int ix2 = Math.Min(ix, this.helplineRulerCtrl1.Bmp.Width - 1);
+            int iy2 = Math.Min(iy, this.helplineRulerCtrl1.Bmp.Height - 1);
+
+            if (ix >= 0 && iy >= 0)
+                if (this.cbScribbleMode.Checked && !this.cbRefPtBG.Checked && !this.cbRefPtFG.Checked && e.Button == MouseButtons.Left && this.cbClickMode.Checked)
+                    this._points2.Add(new Point(ix, iy));
+
             if (ix >= 0 && ix < this.helplineRulerCtrl1.Bmp.Width && iy >= 0 && iy < this.helplineRulerCtrl1.Bmp.Height)
             {
                 if (!this.cbAllowRS.Checked)
@@ -541,9 +548,6 @@ namespace AvoidAGrabCutEasy
                     this._points2.Add(new Point(ix, iy));
                     this._tracking4 = true;
                 }
-
-                if (this.cbScribbleMode.Checked && !this.cbRefPtBG.Checked && !this.cbRefPtFG.Checked && e.Button == MouseButtons.Left && this.cbClickMode.Checked)
-                    this._points2.Add(new Point(ix, iy));
 
                 if (e.Button == MouseButtons.Left && this.cbRefPtBG.Checked)
                 {
