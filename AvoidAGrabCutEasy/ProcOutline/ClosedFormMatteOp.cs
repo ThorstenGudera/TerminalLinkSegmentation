@@ -1801,7 +1801,17 @@ namespace GetAlphaMatte
                     List<Bitmap> bmp = new List<Bitmap>();
                     List<Bitmap> bmp2 = new List<Bitmap>();
 
-                    GetTiles(bWork, trWork, bmp, bmp2, w, w2, h, h2, overlap, n);
+                    List<Rectangle> bmpR = new List<Rectangle>();
+                    List<Rectangle> bmp2R = new List<Rectangle>();
+
+                    bool useR = false;
+                    if (this.BlendParameters != null && AvailMem.AvailMem.checkAvailRam(w * h * bmp.Count * 20L) && !forceSerial)
+                        GetTiles(bWork, trWork, bmp, bmp2, w, w2, h, h2, overlap, n);
+                    else
+                    {
+                        GetTileSizesAndLocations(bWork, trWork, bmpR, bmp2R, w, w2, h, h2, overlap, n);
+                        useR = true;
+                    }
 
                     if (verifyTrimaps)
                         if (!CheckTrimaps(bmp2, w, h, n, id_envTickcnt, overlap))
@@ -1813,7 +1823,7 @@ namespace GetAlphaMatte
 
                     Bitmap[]? bmp4 = new Bitmap[bmp.Count];
 
-                    this.CfopArray = new ClosedFormMatteOp[bmp.Count];
+                    this.CfopArray = new ClosedFormMatteOp[useR ? bmpR.Count : bmp.Count];
 
                     if (this.BlendParameters != null && AvailMem.AvailMem.checkAvailRam(w * h * bmp.Count * 20L) && !forceSerial)
                         Parallel.For(0, bmp.Count, i =>
@@ -1853,10 +1863,11 @@ namespace GetAlphaMatte
                     else
                     {
                         if (this.BlendParameters != null)
-                            for (int i = 0; i < bmp.Count; i++)
+                            for (int i = 0; i < bmpR.Count; i++)
                             {
+                                Tuple<Bitmap, Bitmap> bmps = GetTiles(bWork, trWork, bmpR[i], bmp2R[i]);
                                 ShowInfo?.Invoke(this, "pic " + (i + 1).ToString());
-                                ClosedFormMatteOp cfop = new ClosedFormMatteOp(bmp[i], bmp2[i]);
+                                ClosedFormMatteOp cfop = new ClosedFormMatteOp(bmps.Item1, bmps.Item2);
                                 BlendParameters bParam = new BlendParameters();
                                 bParam.MaxIterations = this.BlendParameters.MaxIterations;
                                 bParam.InnerIterations = this.BlendParameters.InnerIterations;
@@ -1880,12 +1891,19 @@ namespace GetAlphaMatte
                                     b = cfop.SolveSystemGMRES();
 
                                 //save and draw out later serially
-                                if (b != null)
-                                    bmp4[i] = b;
+                                //if (b != null)
+                                //    bmp4[i] = b;
 
                                 cfop.ShowProgess -= Cfop_UpdateProgress;
                                 cfop.ShowInfo -= Cfop_ShowInfo;
                                 cfop.Dispose();
+
+                                DrawResult(result, b, i, n, w, h, overlap);
+
+                                Bitmap b1 = bmps.Item1;
+                                b1.Dispose();
+                                Bitmap b2 = bmps.Item2;
+                                b2.Dispose();
                             }
                     }
 
@@ -1903,14 +1921,15 @@ namespace GetAlphaMatte
                         return null;
                     }
 
-                    for (int i = 0; i < bmp.Count; i++)
-                    {
-                        int x = i % n;
-                        int y = i / n;
+                    if (!forceSerial)
+                        for (int i = 0; i < bmp.Count; i++)
+                        {
+                            int x = i % n;
+                            int y = i / n;
 
-                        using (Graphics gx = Graphics.FromImage(result))
-                            gx.DrawImage(bmp4[i], x * w - (x == 0 ? 0 : overlap), y * h - (y == 0 ? 0 : overlap));
-                    }
+                            using (Graphics gx = Graphics.FromImage(result))
+                                gx.DrawImage(bmp4[i], x * w - (x == 0 ? 0 : overlap), y * h - (y == 0 ? 0 : overlap));
+                        }
 
                     for (int i = bmp.Count - 1; i >= 0; i--)
                     {
@@ -2425,10 +2444,11 @@ namespace GetAlphaMatte
                     if (n2 == 1)
                         overlap = 0;
 
-                    List<Bitmap> bmpF = new List<Bitmap>();
-                    List<Bitmap> bmpF2 = new List<Bitmap>();
+                    List<Rectangle> bmpF = new List<Rectangle>();
+                    List<Rectangle> bmpF2 = new List<Rectangle>();
 
-                    GetTiles(bWork, trWork, bmpF, bmpF2, www, www2, hhh, hhh2, overlap, n);
+                    //outer pic array
+                    GetTileSizesAndLocations(bWork, trWork, bmpF, bmpF2, www, www2, hhh, hhh2, overlap, n);
 
                     Bitmap[] bmpF4 = new Bitmap[bmpF.Count];
 
@@ -2476,13 +2496,16 @@ namespace GetAlphaMatte
                         int w = bmpF[j].Width;
                         int h = bmpF[j].Height;
 
-                        Bitmap cfopBmp = bmpF[j];
-                        Bitmap cfopTrimap = bmpF2[j];
+                        Bitmap cfopBmp = GetTile(bWork, bmpF[j]);
+                        Bitmap cfopTrimap = GetTile(trWork, bmpF2[j]);
 
                         if (interpolated)
                         {
                             w = (int)(w * 1.41);
                             h = (int)(h * 1.41);
+
+                            Bitmap tmp = cfopBmp;
+                            Bitmap tmpF = cfopTrimap;
 
                             cfopBmp = new Bitmap(w, h);
                             cfopTrimap = new Bitmap(w, h);
@@ -2490,13 +2513,13 @@ namespace GetAlphaMatte
                             using (Graphics gx = Graphics.FromImage(cfopBmp))
                             {
                                 gx.InterpolationMode = InterpolationMode.HighQualityBilinear;
-                                gx.DrawImage(bmpF[j], 0, 0, w, h);
+                                gx.DrawImage(tmp, 0, 0, w, h);
                             }
 
                             using (Graphics gx = Graphics.FromImage(cfopTrimap))
                             {
                                 gx.InterpolationMode = InterpolationMode.HighQualityBilinear;
-                                gx.DrawImage(bmpF2[j], 0, 0, w, h);
+                                gx.DrawImage(tmpF, 0, 0, w, h);
                             }
                         }
 
@@ -2932,10 +2955,10 @@ namespace GetAlphaMatte
 
                     for (int i = bmpF.Count - 1; i >= 0; i--)
                     {
-                        if (bmpF[i] != null)
-                            bmpF[i].Dispose();
-                        if (bmpF2[i] != null)
-                            bmpF2[i].Dispose();
+                        //if (bmpF[i] != null)
+                        //    bmpF[i].Dispose();
+                        //if (bmpF2[i] != null)
+                        //    bmpF2[i].Dispose();
                         if (bmpF4[i] != null)
                             bmpF4[i].Dispose();
                     }
@@ -2943,6 +2966,41 @@ namespace GetAlphaMatte
                     return bmpResult;
                 }
             }
+        }
+
+        private Bitmap GetTile(Bitmap bmp, Rectangle rectangle)
+        {
+            Bitmap b1 = new Bitmap(rectangle.Size.Width, rectangle.Size.Height);
+            using Graphics g1 = Graphics.FromImage(b1);
+            g1.DrawImage(bmp, new Rectangle(0, 0, b1.Width, b1.Height),
+                new Rectangle(rectangle.X, rectangle.Y, b1.Width, b1.Height), GraphicsUnit.Pixel);
+
+            return b1;
+        }
+
+        private void DrawResult(Bitmap result, Bitmap? b, int i, int n, int w, int h, int overlap)
+        {
+            int x = i % n;
+            int y = i / n;
+
+            if (b != null)
+                using (Graphics gx = Graphics.FromImage(result))
+                    gx.DrawImage(b, x * w - (x == 0 ? 0 : overlap), y * h - (y == 0 ? 0 : overlap));
+        }
+
+        private Tuple<Bitmap, Bitmap> GetTiles(Bitmap bWork, Bitmap trWork, Rectangle rectangle1, Rectangle rectangle2)
+        {
+            Bitmap b1 = new Bitmap(rectangle1.Size.Width, rectangle1.Size.Height);
+            using Graphics g1 = Graphics.FromImage(b1);
+            g1.DrawImage(bWork, new Rectangle(0, 0, b1.Width, b1.Height),
+                new Rectangle(rectangle1.X, rectangle1.Y, b1.Width, b1.Height), GraphicsUnit.Pixel);
+
+            Bitmap b2 = new Bitmap(rectangle2.Size.Width, rectangle2.Size.Height);
+            using Graphics g2 = Graphics.FromImage(b2);
+            g2.DrawImage(trWork, new Rectangle(0, 0, b2.Width, b2.Height),
+                new Rectangle(rectangle2.X, rectangle2.Y, b2.Width, b2.Height), GraphicsUnit.Pixel);
+
+            return Tuple.Create(b1, b2);
         }
 
         private void Cfop_ShowInfo(object? sender, string e)
@@ -3131,6 +3189,58 @@ namespace GetAlphaMatte
 
                         bmp2.Add(b3);
                     }
+                }
+
+                ShowInfo?.Invoke(this, "outer pic-amount " + bmp.Count().ToString());
+            }
+        }
+
+        private void GetTileSizesAndLocations(Bitmap bWork, Bitmap trWork, List<Rectangle> bmp, List<Rectangle> bmp2,
+    int w, int w2, int h, int h2, int overlap, int n)
+        {
+            for (int y = 0; y < n; y++)
+            {
+                for (int x = 0; x < n; x++)
+                {
+                    Rectangle rc = new Rectangle();
+                    Rectangle rc2 = new Rectangle();
+
+                    if (x < n - 1 && y < n - 1)
+                    {
+                        rc.Size = new Size(w + overlap * (x == 0 ? 1 : 2), h + overlap * (y == 0 ? 1 : 2));
+                        rc.Location = new Point(x * w - (x == 0 ? 0 : overlap), y * h - (y == 0 ? 0 : overlap));
+
+                        rc2.Size = new Size(w + overlap * (x == 0 ? 1 : 2), h + overlap * (y == 0 ? 1 : 2));
+                        rc2.Location = new Point(x * w - (x == 0 ? 0 : overlap), y * h - (y == 0 ? 0 : overlap));
+                    }
+                    else if (x == n - 1 && y < n - 1)
+                    {
+                        rc.Size = new Size(w2 + overlap, h + overlap * (y == 0 ? 1 : 2));
+                        rc.Location = new Point(x * w - (x == 0 ? 0 : overlap), y * h - (y == 0 ? 0 : overlap));
+
+                        rc2.Size = new Size(w2 + overlap, h + overlap * (y == 0 ? 1 : 2));
+                        rc2.Location = new Point(x * w - (x == 0 ? 0 : overlap), y * h - (y == 0 ? 0 : overlap));
+                    }
+                    else if (x < n - 1 && y == n - 1)
+                    {
+                        rc.Size = new Size(w + overlap * (x == 0 ? 1 : 2), h2 + overlap);
+                        rc.Location = new Point(x * w - (x == 0 ? 0 : overlap), y * h - overlap);
+
+                        rc2.Size = new Size(w + overlap * (x == 0 ? 1 : 2), h2 + overlap);
+                        rc2.Location = new Point(x * w - (x == 0 ? 0 : overlap), y * h - overlap);
+
+                    }
+                    else
+                    {
+                        rc.Size = new Size(w2 + overlap, h2 + overlap);
+                        rc.Location = new Point(x * w - overlap, y * h - overlap);
+
+                        rc2.Size = new Size(w2 + overlap, h2 + overlap);
+                        rc2.Location = new Point(x * w - overlap, y * h - overlap);
+                    }
+
+                    bmp.Add(rc);
+                    bmp2.Add(rc2);
                 }
 
                 ShowInfo?.Invoke(this, "outer pic-amount " + bmp.Count().ToString());
