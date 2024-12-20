@@ -170,6 +170,7 @@
             bgwDoAll4 = new System.ComponentModel.BackgroundWorker();
             timer1 = new System.Windows.Forms.Timer(components);
             backgroundWorker4 = new System.ComponentModel.BackgroundWorker();
+            toolStripStatusLabel5 = new ToolStripStatusLabel();
             panel1.SuspendLayout();
             panel5.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numBoundOuter).BeginInit();
@@ -1661,7 +1662,7 @@
             // 
             // statusStrip1
             // 
-            statusStrip1.Items.AddRange(new ToolStripItem[] { toolStripStatusLabel1, ToolStripStatusLabel2, toolStripProgressBar1, toolStripStatusLabel4, toolStripStatusLabel3, toolStripDropDownButton1 });
+            statusStrip1.Items.AddRange(new ToolStripItem[] { toolStripStatusLabel1, ToolStripStatusLabel2, toolStripProgressBar1, toolStripStatusLabel5, toolStripStatusLabel4, toolStripStatusLabel3, toolStripDropDownButton1 });
             statusStrip1.Location = new Point(0, 902);
             statusStrip1.Name = "statusStrip1";
             statusStrip1.Padding = new Padding(1, 0, 16, 0);
@@ -1811,6 +1812,12 @@
             backgroundWorker4.DoWork += backgroundWorker4_DoWork;
             backgroundWorker4.ProgressChanged += backgroundWorker4_ProgressChanged;
             backgroundWorker4.RunWorkerCompleted += backgroundWorker4_RunWorkerCompleted;
+            // 
+            // toolStripStatusLabel5
+            // 
+            toolStripStatusLabel5.Name = "toolStripStatusLabel5";
+            toolStripStatusLabel5.Size = new Size(19, 34);
+            toolStripStatusLabel5.Text = "    ";
             // 
             // frmAvoidAGrabCutEasy
             // 
@@ -2002,5 +2009,6 @@
         private Button btnOrder;
         private Button btnInfo;
         private Button btnGetOutline;
+        private ToolStripStatusLabel toolStripStatusLabel5;
     }
 }

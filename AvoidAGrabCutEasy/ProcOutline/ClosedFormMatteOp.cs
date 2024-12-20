@@ -41,6 +41,7 @@ namespace GetAlphaMatte
         private const int PRE_OP_GSSOR = 20;
 
         public event EventHandler<string>? ShowInfo;
+        public event EventHandler<string>? ShowInfoOuter;
         public event EventHandler<GetAlphaMatte.ProgressEventArgs>? ShowProgess;
 
         private object _lockObject = new object();
@@ -1841,6 +1842,7 @@ namespace GetAlphaMatte
 
                             cfop.ShowProgess += Cfop_UpdateProgress;
                             cfop.ShowInfo += Cfop_ShowInfo;
+                            cfop.ShowInfoOuter += Cfop_ShowInfoOuter;
 
                             this.CfopArray[i] = cfop;
 
@@ -1858,6 +1860,7 @@ namespace GetAlphaMatte
 
                             cfop.ShowProgess -= Cfop_UpdateProgress;
                             cfop.ShowInfo -= Cfop_ShowInfo;
+                            cfop.ShowInfoOuter -= Cfop_ShowInfoOuter;
                             cfop.Dispose();
                         });
                     else
@@ -1879,6 +1882,7 @@ namespace GetAlphaMatte
 
                                 cfop.ShowProgess += Cfop_UpdateProgress;
                                 cfop.ShowInfo += Cfop_ShowInfo;
+                                cfop.ShowInfoOuter += Cfop_ShowInfoOuter;
 
                                 this.CfopArray[i] = cfop;
 
@@ -1896,6 +1900,7 @@ namespace GetAlphaMatte
 
                                 cfop.ShowProgess -= Cfop_UpdateProgress;
                                 cfop.ShowInfo -= Cfop_ShowInfo;
+                                cfop.ShowInfoOuter -= Cfop_ShowInfoOuter;
                                 cfop.Dispose();
 
                                 DrawResult(result, b, i, n, w, h, overlap);
@@ -2221,6 +2226,7 @@ namespace GetAlphaMatte
 
                             cfop.ShowProgess += Cfop_UpdateProgress;
                             cfop.ShowInfo += Cfop_ShowInfo;
+                            cfop.ShowInfoOuter += Cfop_ShowInfoOuter;
 
                             this.CfopArray[i] = cfop;
 
@@ -2238,6 +2244,7 @@ namespace GetAlphaMatte
 
                             cfop.ShowProgess -= Cfop_UpdateProgress;
                             cfop.ShowInfo -= Cfop_ShowInfo;
+                            cfop.ShowInfoOuter -= Cfop_ShowInfoOuter;
                             cfop.Dispose();
                         });
                     else
@@ -2257,6 +2264,7 @@ namespace GetAlphaMatte
 
                             cfop.ShowProgess += Cfop_UpdateProgress;
                             cfop.ShowInfo += Cfop_ShowInfo;
+                            cfop.ShowInfoOuter += Cfop_ShowInfoOuter;
 
                             this.CfopArray[i] = cfop;
 
@@ -2274,6 +2282,7 @@ namespace GetAlphaMatte
 
                             cfop.ShowProgess -= Cfop_UpdateProgress;
                             cfop.ShowInfo -= Cfop_ShowInfo;
+                            cfop.ShowInfoOuter -= Cfop_ShowInfoOuter;
                             cfop.Dispose();
                         }
 
@@ -2746,6 +2755,7 @@ namespace GetAlphaMatte
 
                                 cfop.ShowProgess += Cfop_UpdateProgress;
                                 cfop.ShowInfo += Cfop_ShowInfo;
+                                cfop.ShowInfoOuter += Cfop_ShowInfoOuter;
 
                                 this.CfopArray[i] = cfop;
 
@@ -2763,6 +2773,7 @@ namespace GetAlphaMatte
 
                                 cfop.ShowProgess -= Cfop_UpdateProgress;
                                 cfop.ShowInfo -= Cfop_ShowInfo;
+                                cfop.ShowInfoOuter -= Cfop_ShowInfoOuter;
                                 cfop.Dispose();
                             });
                         else
@@ -2782,6 +2793,7 @@ namespace GetAlphaMatte
 
                                 cfop.ShowProgess += Cfop_UpdateProgress;
                                 cfop.ShowInfo += Cfop_ShowInfo;
+                                cfop.ShowInfoOuter += Cfop_ShowInfoOuter;
 
                                 this.CfopArray[i] = cfop;
 
@@ -2799,6 +2811,7 @@ namespace GetAlphaMatte
 
                                 cfop.ShowProgess -= Cfop_UpdateProgress;
                                 cfop.ShowInfo -= Cfop_ShowInfo;
+                                cfop.ShowInfoOuter -= Cfop_ShowInfoOuter;
                                 cfop.Dispose();
                             }
 
@@ -2966,6 +2979,11 @@ namespace GetAlphaMatte
                     return bmpResult;
                 }
             }
+        }
+
+        private void Cfop_ShowInfoOuter(object? sender, string e)
+        {
+            ShowInfoOuter?.Invoke(sender, e);
         }
 
         private Bitmap GetTile(Bitmap bmp, Rectangle rectangle)

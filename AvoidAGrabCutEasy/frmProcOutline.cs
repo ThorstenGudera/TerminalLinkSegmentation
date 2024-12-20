@@ -429,9 +429,21 @@ namespace AvoidAGrabCutEasy
                 {
                     this._cfop.ShowProgess -= Cfop_UpdateProgress;
                     this._cfop.ShowInfo -= _cfop_ShowInfo;
+                    this._cfop.ShowInfoOuter -= Cfop_ShowInfoOuter;
                     this._cfop.Dispose();
                 }
             }
+        }
+
+        private void Cfop_ShowInfoOuter(object? sender, string e)
+        {
+            if (InvokeRequired)
+                this.Invoke(new Action(() =>
+                {
+                    this.toolStripStatusLabel1.Text = e;
+                }));
+            else
+                this.toolStripStatusLabel1.Text = e;
         }
 
         private void btnOK_Click(object sender, EventArgs e)
@@ -964,6 +976,7 @@ namespace AvoidAGrabCutEasy
 
                                 this._cfop.ShowProgess += Cfop_UpdateProgress;
                                 this._cfop.ShowInfo += _cfop_ShowInfo;
+                                this._cfop.ShowInfoOuter += Cfop_ShowInfoOuter;
 
                                 bool scalesPics = this.cbSlices.Checked;
                                 int scales = scalesPics ? rb4.Checked ? 4 : 16 : 0;
@@ -973,8 +986,8 @@ namespace AvoidAGrabCutEasy
                                 bool group = false;
                                 int groupAmountX = scalesPics ? 1 : 0; //we dont use grouping, so set it simply to 1
                                 int groupAmountY = scalesPics ? 1 : 0;
-                                int maxSize = bWork.Width * bWork.Height * 2;
-                                bool trySingleTile = scalesPics ? false : this.cbHalfSize.Checked ? true : false;
+                                int maxSize = 1440000; // bWork.Width * bWork.Height * 2;
+                                bool trySingleTile = /*scalesPics ? false : this.cbHalfSize.Checked ? true :*/ bWork.Width * bWork.Height < maxSize ? true : false;
                                 bool verifyTrimaps = false;
 
                                 Bitmap? tr = new Bitmap(trWork);
@@ -986,8 +999,8 @@ namespace AvoidAGrabCutEasy
                                 }
 
                                 this.backgroundWorker4.RunWorkerAsync(new object[] { 1 /*GMRES_r; 0 is GaussSeidel*/, scalesPics, scales, overlap,
-                                interpolated, forceSerial, group, groupAmountX, groupAmountY, maxSize, bWork, trWork,
-                                trySingleTile, verifyTrimaps });
+                                    interpolated, forceSerial, group, groupAmountX, groupAmountY, maxSize, bWork, trWork,
+                                    trySingleTile, verifyTrimaps });
                             }
                         }
                     }
@@ -1127,7 +1140,7 @@ namespace AvoidAGrabCutEasy
                 {
                     this.toolStripStatusLabel4.Text = e;
                     if (e.StartsWith("pic "))
-                        this.toolStripStatusLabel1.Text = e;
+                        this.toolStripStatusLabel5.Text = e;
                     //if (e.StartsWith("outer pic-amount"))
                     //    this.label13.Text = e;
                     if (e.StartsWith("picOuter "))
@@ -1137,7 +1150,7 @@ namespace AvoidAGrabCutEasy
             {
                 this.toolStripStatusLabel4.Text = e;
                 if (e.StartsWith("pic "))
-                    this.toolStripStatusLabel1.Text = e;
+                    this.toolStripStatusLabel5.Text = e;
                 //if (e.StartsWith("outer pic-amount"))
                 //    this.label13.Text = e;
                 if (e.StartsWith("picOuter "))
@@ -2631,6 +2644,7 @@ namespace AvoidAGrabCutEasy
                 {
                     this._cfop.ShowProgess -= Cfop_UpdateProgress;
                     this._cfop.ShowInfo -= _cfop_ShowInfo;
+                    this._cfop.ShowInfoOuter -= Cfop_ShowInfoOuter;
                     this._cfop.Dispose();
                 }
 

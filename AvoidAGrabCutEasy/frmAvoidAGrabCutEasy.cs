@@ -6184,7 +6184,7 @@ namespace AvoidAGrabCutEasy
                     if (!e.StartsWith("outer pic-") && !e.StartsWith("pic "))
                         this.toolStripStatusLabel4.Text = e;
                     if (e.StartsWith("pic "))
-                        this.toolStripStatusLabel1.Text = e;
+                        this.toolStripStatusLabel5.Text = e;
                     //if (e.StartsWith("outer pic-amount"))
                     //    this.label13.Text = e;
                     if (e.StartsWith("picOuter "))
@@ -6195,7 +6195,7 @@ namespace AvoidAGrabCutEasy
                 if (!e.StartsWith("outer pic-") && !e.StartsWith("pic "))
                     this.toolStripStatusLabel4.Text = e;
                 if (e.StartsWith("pic "))
-                    this.toolStripStatusLabel1.Text = e;
+                    this.toolStripStatusLabel5.Text = e;
                 //if (e.StartsWith("outer pic-amount"))
                 //    this.label13.Text = e;
                 if (e.StartsWith("picOuter "))
@@ -6919,6 +6919,7 @@ namespace AvoidAGrabCutEasy
 
                     this._cfop.ShowProgess += Cfop_UpdateProgress;
                     this._cfop.ShowInfo += _cfop_ShowInfo;
+                    this._cfop.ShowInfoOuter += Cfop_ShowInfoOuter;
 
                     //bool scalesPics = false;
                     //int scales = 0;
@@ -6940,8 +6941,8 @@ namespace AvoidAGrabCutEasy
                     bool group = false;
                     int groupAmountX = 1; //we dont use grouping, so set it simply to 1
                     int groupAmountY = 1;
-                    int maxSize = bWork.Width * bWork.Height;
-                    bool trySingleTile = false;
+                    int maxSize = 1440000; // bWork.Width * bWork.Height * 2;
+                    bool trySingleTile = /*scalesPics ? false : this.cbHalfSize.Checked ? true :*/ bWork.Width * bWork.Height < maxSize ? true : false;
                     bool verifyTrimaps = false;
 
                     //should already be stopped
@@ -7741,6 +7742,7 @@ namespace AvoidAGrabCutEasy
                 {
                     this._cfop.ShowProgess -= Cfop_UpdateProgress;
                     this._cfop.ShowInfo -= _cfop_ShowInfo;
+                    this._cfop.ShowInfoOuter -= Cfop_ShowInfoOuter;
                     this._cfop.Dispose();
                 }
 
@@ -7786,6 +7788,17 @@ namespace AvoidAGrabCutEasy
                     this.bgwDoAll4.RunWorkerAsync(gamma);
                 }
             }
+        }
+
+        private void Cfop_ShowInfoOuter(object? sender, string e)
+        {
+            if (InvokeRequired)
+                this.Invoke(new Action(() =>
+                {
+                    this.toolStripStatusLabel1.Text = e;
+                }));
+            else
+                this.toolStripStatusLabel1.Text = e;
         }
 
         #endregion DoAll
