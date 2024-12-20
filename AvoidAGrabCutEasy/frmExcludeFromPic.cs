@@ -19,7 +19,7 @@ namespace AvoidAGrabCutEasy
     {
         private UndoOPCache? _undoOPCache = null;
 
-        private bool _dontAskOnClosing;
+        //private bool _dontAskOnClosing;
 
         public string? CachePathAddition
         {
@@ -495,7 +495,7 @@ namespace AvoidAGrabCutEasy
 
         private void Button28_Click(object sender, EventArgs e)
         {
-            this._dontAskOnClosing = true;
+            //this._dontAskOnClosing = true;
 
             if (this.ExcludedBmpRegions == null)
                 this.ExcludedBmpRegions = new List<ExcludedBmpRegion>();
