@@ -43,6 +43,8 @@ namespace OutlineOperations
             }
         }
 
+        public List<PointF>? CurPath { get; private set; }
+
         private Bitmap? _bmpBU = null;
         private bool _pic_changed = false;
 
@@ -57,6 +59,10 @@ namespace OutlineOperations
         private List<Point>? _points;
         private List<Bitmap>? _excludedRegions;
         private List<Point>? _exclLocations;
+        private int _ix;
+        private int _iy;
+        private bool _dontDrawPath;
+        private Color _fColor = Color.Lime;
 
         public frnOutlineOperations(Bitmap bmp, string basePathAddition)
         {
@@ -128,6 +134,18 @@ namespace OutlineOperations
 
                         this._tracking = true;
                     }
+
+                    if (this.cbWipeAlpha.Checked && e.Button == MouseButtons.Left)
+                    {
+                        this._dontDrawPath = false;
+
+                        this._ix = ix;
+                        this._iy = iy;
+                        SetupCurPath();
+                        this.CurPath?.Add(new PointF(this._ix, this._iy));
+
+                        this._tracking = true;
+                    }
                 }
             }
         }
@@ -149,6 +167,15 @@ namespace OutlineOperations
                         if (this.cbDraw.Checked && this._bmpOrig != null)
                         {
                             this._points?.Add(new Point(ix, iy));
+                            this.helplineRulerCtrl1.dbPanel1.Invalidate();
+                        }
+
+                        if (this.cbWipeAlpha.Checked && e.Button == MouseButtons.Left && ix != this._ix && iy != this._iy)
+                        {
+                            this._ix = ix;
+                            this._iy = iy;
+                            SetupCurPath();
+                            this.CurPath?.Add(new PointF(this._ix, this._iy));
                             this.helplineRulerCtrl1.dbPanel1.Invalidate();
                         }
                     }
@@ -182,6 +209,21 @@ namespace OutlineOperations
                             DrawPointsToBitmap();
                         }
                     }
+
+                    if (ix == _ix && iy == _iy && this.cbWipeAlpha.Checked && e.Button == MouseButtons.Left)
+                    {
+                        this._ix = ix;
+                        this._iy = iy;
+
+                        if (this.CurPath != null && !ContainsPoint(this.CurPath, new PointF(this._ix, this._iy)))
+                        {
+                            SetupCurPath();
+                            this.CurPath.Add(new PointF(this._ix, this._iy));
+                        }
+                    }
+
+                    if (this._tracking && this.CurPath != null && this.CurPath.Count > 0)
+                        WipeAlpha();
                 }
             }
 
@@ -257,6 +299,31 @@ namespace OutlineOperations
                         this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y);
                     gP.Transform(mx);
                     e.Graphics.FillPath(tb, gP);
+                }
+            }
+
+            if (!this._dontDrawPath && this.cbWipeAlpha.Checked && this._tracking)
+            {
+                using (GraphicsPath gp = GetPath())
+                {
+                    float w = (float)this.numPenSize.Value;
+                    int x = this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X;
+                    int y = this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y;
+                    using (Matrix m = new Matrix(this.helplineRulerCtrl1.Zoom, 0, 0, this.helplineRulerCtrl1.Zoom, x, y))
+                    {
+                        gp.Transform(m);
+                        using (Pen pen = new Pen(new SolidBrush(this._fColor), Math.Max(w * this.helplineRulerCtrl1.Zoom, 1f)))
+                        {
+                            pen.LineJoin = LineJoin.Round;
+                            pen.StartCap = LineCap.Round;
+                            pen.EndCap = LineCap.Round;
+
+                            if (this.CurPath?.Count == 1)
+                                e.Graphics.FillPath(new SolidBrush(this._fColor), gp);
+                            else
+                                e.Graphics.DrawPath(pen, gp);
+                        }
+                    }
                 }
             }
         }
@@ -2057,6 +2124,139 @@ namespace OutlineOperations
             frmEdgePic frm4 = new frmEdgePic(this.pictureBox2.Image);
             frm4.Text = "Orig";
             frm4.ShowDialog();
+        }
+
+        private bool ContainsPoint(List<PointF> curPath, PointF pointF)
+        {
+            if (curPath != null)
+            {
+                for (int i = 0; i <= curPath.Count - 1; i++)
+                {
+                    if (curPath[i].X == pointF.X && curPath[i].Y == pointF.Y)
+                        return true;
+                }
+            }
+            return false;
+        }
+
+        private void SetupCurPath()
+        {
+            if (this.CurPath == null)
+                this.CurPath = new List<PointF>();
+        }
+
+        private void WipeAlpha()
+        {
+            if (this.IsDisposed == false && this.Visible)
+            {
+                SetControls(false);
+                this.Refresh();
+                using (GraphicsPath gp = GetPath())
+                {
+                    using (Graphics gx = Graphics.FromImage(this.helplineRulerCtrl1.Bmp))
+                    {
+                        gx.PixelOffsetMode = PixelOffsetMode.Half;
+                        gx.SmoothingMode = SmoothingMode.AntiAlias;
+                        gx.CompositingMode = CompositingMode.SourceCopy;
+
+                        float w = (float)this.numPenSize.Value;
+
+                        float[] f1 = new float[] { 1.0F, 0.0F, 0.0F, 0.0F, 0.0F };
+                        float[] f2 = new float[] { 0.0F, 1.0F, 0.0F, 0.0F, 0.0F };
+                        float[] f3 = new float[] { 0.0F, 0.0F, 1.0F, 0.0F, 0.0F };
+                        float[] f4 = new float[] { 0.0F, 0.0F, 0.0F, (float)this.numAlpha.Value, 0.0F };
+                        float[] f5 = new float[] { 0.0F, 0.0F, 0.0F, 0.0F, 1.0F };
+
+                        float[][] arr = new float[][] { f1, f2, f3, f4, f5 };
+
+                        ColorMatrix cm = new ColorMatrix(arr);
+                        RectangleF r2; // = gp.GetBounds()
+                        using (GraphicsPath gp2 = (GraphicsPath)gp.Clone()) // need a clone, else the path for drawing will be widened too and so being drawn too thick
+                        {
+                            using (Pen p2 = new Pen(Color.Black, w))
+                            {
+                                p2.LineJoin = LineJoin.Round;
+                                p2.StartCap = LineCap.Round;
+                                p2.EndCap = LineCap.Round;
+                                gp2.Widen(p2);
+                                r2 = gp2.GetBounds();
+                            }
+                        }
+
+                        int w2 = Convert.ToInt32(Math.Ceiling(r2.Width));
+                        int h2 = Convert.ToInt32(Math.Ceiling(r2.Height));
+
+                        if (AvailMem.AvailMem.checkAvailRam(w2 * h2 * 4L))
+                        {
+                            using (Bitmap bmp = new Bitmap(w2, h2))
+                            {
+                                using (var ia = new ImageAttributes())
+                                {
+                                    ia.SetColorMatrix(cm);
+
+                                    using (Graphics gx2 = Graphics.FromImage(bmp))
+                                    {
+                                        gx2.Clear(Color.Transparent);
+                                        gx2.DrawImage(this.helplineRulerCtrl1.Bmp, new Rectangle(0, 0, bmp.Width, bmp.Height), r2.X, r2.Y, bmp.Width, bmp.Height, GraphicsUnit.Pixel, ia);
+                                    }
+
+                                    using (TextureBrush t = new TextureBrush(bmp))
+                                    {
+                                        t.TranslateTransform(r2.X, r2.Y);
+                                        using (Pen p = new Pen(t, w))
+                                        {
+                                            p.LineJoin = LineJoin.Round;
+                                            p.StartCap = LineCap.Round;
+                                            p.EndCap = LineCap.Round;
+
+                                            if (this.CurPath?.Count == 1)
+                                                gx.FillPath(t, gp);
+                                            else
+                                                gx.DrawPath(p, gp);
+
+                                            this.CurPath = new List<PointF>();
+
+                                            _undoOPCache?.Add(this.helplineRulerCtrl1.Bmp);
+                                            this.btnUndo.Enabled = true;
+
+                                            CheckRedoButton();
+
+                                            this._pic_changed = true;
+
+                                            SetControls(true);
+                                            // Me.HelplineRulerCtrl1.CalculateZoom()
+
+                                            this.helplineRulerCtrl1.MakeBitmap(this.helplineRulerCtrl1.Bmp);
+
+                                            this.helplineRulerCtrl1.dbPanel1.AutoScrollMinSize = new Size(System.Convert.ToInt32(this.helplineRulerCtrl1.Bmp.Width * this.helplineRulerCtrl1.Zoom), System.Convert.ToInt32(this.helplineRulerCtrl1.Bmp.Height * this.helplineRulerCtrl1.Zoom));
+                                            this.helplineRulerCtrl1.dbPanel1.Invalidate();
+
+                                            this._dontDrawPath = true;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        private GraphicsPath GetPath()
+        {
+            GraphicsPath gp = new GraphicsPath();
+            if (this.CurPath != null && this.CurPath.Count > 0)
+            {
+                gp.StartFigure();
+                if (this.CurPath.Count > 1)
+                    gp.AddLines(this.CurPath.ToArray());
+                else
+                {
+                    float w = (float)((double)this.numPenSize.Value / (double)2.0);
+                    gp.AddEllipse(this.CurPath[0].X - w, this.CurPath[0].Y - w, w * 2, w * 2);
+                }
+            }
+            return gp;
         }
     }
 }

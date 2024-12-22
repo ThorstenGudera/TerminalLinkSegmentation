@@ -70,6 +70,7 @@
             openFileDialog1 = new OpenFileDialog();
             backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             panel1 = new Panel();
+            cbExcludeRegions = new CheckBox();
             panel2 = new Panel();
             label10 = new Label();
             cbDraw = new CheckBox();
@@ -101,7 +102,11 @@
             backgroundWorker5 = new System.ComponentModel.BackgroundWorker();
             backgroundWorker9 = new System.ComponentModel.BackgroundWorker();
             helplineRulerCtrl1 = new HelplineRulerControl.HelplineRulerCtrl();
-            cbExcludeRegions = new CheckBox();
+            cbWipeAlpha = new CheckBox();
+            label11 = new Label();
+            label12 = new Label();
+            numPenSize = new NumericUpDown();
+            numAlpha = new NumericUpDown();
             statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numEpsilon).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numKernel).BeginInit();
@@ -117,6 +122,8 @@
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numAlphaZAndGain).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numGamma).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)numPenSize).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)numAlpha).BeginInit();
             SuspendLayout();
             // 
             // panel3
@@ -517,6 +524,9 @@
             // 
             // panel1
             // 
+            panel1.Controls.Add(label12);
+            panel1.Controls.Add(label11);
+            panel1.Controls.Add(cbWipeAlpha);
             panel1.Controls.Add(cbExcludeRegions);
             panel1.Controls.Add(panel2);
             panel1.Controls.Add(label9);
@@ -546,6 +556,8 @@
             panel1.Controls.Add(numKernel);
             panel1.Controls.Add(numRMatteH);
             panel1.Controls.Add(numRMatteW);
+            panel1.Controls.Add(numAlpha);
+            panel1.Controls.Add(numPenSize);
             panel1.Controls.Add(numAlphaZAndGain);
             panel1.Controls.Add(btnSetGamma);
             panel1.Controls.Add(label4);
@@ -575,6 +587,16 @@
             panel1.TabIndex = 243;
             panel1.MouseDoubleClick += panel1_MouseDoubleClick;
             panel1.MouseDown += panel1_MouseDown;
+            // 
+            // cbExcludeRegions
+            // 
+            cbExcludeRegions.AutoSize = true;
+            cbExcludeRegions.Location = new Point(14, 46);
+            cbExcludeRegions.Name = "cbExcludeRegions";
+            cbExcludeRegions.Size = new Size(109, 19);
+            cbExcludeRegions.TabIndex = 741;
+            cbExcludeRegions.Text = "exclude regions";
+            cbExcludeRegions.UseVisualStyleBackColor = true;
             // 
             // panel2
             // 
@@ -923,15 +945,56 @@
             helplineRulerCtrl1.ZoomSetManually = false;
             helplineRulerCtrl1.DBPanelDblClicked += helplineRulerCtrl1_DBPanelDblClicked;
             // 
-            // cbExcludeRegions
+            // cbWipeAlpha
             // 
-            cbExcludeRegions.AutoSize = true;
-            cbExcludeRegions.Location = new Point(14, 46);
-            cbExcludeRegions.Name = "cbExcludeRegions";
-            cbExcludeRegions.Size = new Size(109, 19);
-            cbExcludeRegions.TabIndex = 741;
-            cbExcludeRegions.Text = "exclude regions";
-            cbExcludeRegions.UseVisualStyleBackColor = true;
+            cbWipeAlpha.AutoSize = true;
+            cbWipeAlpha.Location = new Point(384, 127);
+            cbWipeAlpha.Name = "cbWipeAlpha";
+            cbWipeAlpha.Size = new Size(82, 19);
+            cbWipeAlpha.TabIndex = 742;
+            cbWipeAlpha.Text = "wipeAlpha";
+            cbWipeAlpha.UseVisualStyleBackColor = true;
+            // 
+            // label11
+            // 
+            label11.AutoSize = true;
+            label11.Location = new Point(473, 127);
+            label11.Name = "label11";
+            label11.Size = new Size(47, 15);
+            label11.TabIndex = 743;
+            label11.Text = "PenSize";
+            // 
+            // label12
+            // 
+            label12.AutoSize = true;
+            label12.Location = new Point(564, 127);
+            label12.Name = "label12";
+            label12.Size = new Size(38, 15);
+            label12.TabIndex = 743;
+            label12.Text = "Alpha";
+            // 
+            // numPenSize
+            // 
+            numPenSize.Location = new Point(473, 148);
+            numPenSize.Margin = new Padding(4, 3, 4, 3);
+            numPenSize.Maximum = new decimal(new int[] { 255, 0, 0, 0 });
+            numPenSize.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
+            numPenSize.Name = "numPenSize";
+            numPenSize.Size = new Size(70, 23);
+            numPenSize.TabIndex = 724;
+            numPenSize.Value = new decimal(new int[] { 5, 0, 0, 0 });
+            // 
+            // numAlpha
+            // 
+            numAlpha.DecimalPlaces = 2;
+            numAlpha.Increment = new decimal(new int[] { 1, 0, 0, 65536 });
+            numAlpha.Location = new Point(564, 148);
+            numAlpha.Margin = new Padding(4, 3, 4, 3);
+            numAlpha.Maximum = new decimal(new int[] { 1, 0, 0, 0 });
+            numAlpha.Name = "numAlpha";
+            numAlpha.Size = new Size(70, 23);
+            numAlpha.TabIndex = 724;
+            numAlpha.Value = new decimal(new int[] { 7, 0, 0, 65536 });
             // 
             // frnOutlineOperations
             // 
@@ -965,6 +1028,8 @@
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             ((System.ComponentModel.ISupportInitialize)numAlphaZAndGain).EndInit();
             ((System.ComponentModel.ISupportInitialize)numGamma).EndInit();
+            ((System.ComponentModel.ISupportInitialize)numPenSize).EndInit();
+            ((System.ComponentModel.ISupportInitialize)numAlpha).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -1044,5 +1109,10 @@
         private NumericUpDown numDrawWidth;
         private Button btnMask;
         private CheckBox cbExcludeRegions;
+        private Label label12;
+        private Label label11;
+        private CheckBox cbWipeAlpha;
+        private NumericUpDown numAlpha;
+        private NumericUpDown numPenSize;
     }
 }
