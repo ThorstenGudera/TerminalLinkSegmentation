@@ -63,6 +63,8 @@ namespace OutlineOperations
         private int _iy;
         private bool _dontDrawPath;
         private Color _fColor = Color.Lime;
+        private int _eX;
+        private int _eY;
 
         public frnOutlineOperations(Bitmap bmp, string basePathAddition)
         {
@@ -157,26 +159,22 @@ namespace OutlineOperations
                 int ix = (int)((e.X - this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X) / (double)this.helplineRulerCtrl1.Zoom);
                 int iy = (int)((e.Y - this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y) / (double)this.helplineRulerCtrl1.Zoom);
 
-                int eX = e.X - this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X;
-                int eY = e.Y - this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y;
+                this._eX = e.X;
+                this._eY = e.Y;
 
                 if (ix >= 0 && ix < this.helplineRulerCtrl1.Bmp.Width && iy >= 0 && iy < this.helplineRulerCtrl1.Bmp.Height)
                 {
                     if (this._tracking)
                     {
                         if (this.cbDraw.Checked && this._bmpOrig != null)
-                        {
                             this._points?.Add(new Point(ix, iy));
-                            this.helplineRulerCtrl1.dbPanel1.Invalidate();
-                        }
 
-                        if (this.cbWipeAlpha.Checked && e.Button == MouseButtons.Left && ix != this._ix && iy != this._iy)
+                        if (this.cbWipeAlpha.Checked && e.Button == MouseButtons.Left && (ix != this._ix || iy != this._iy))
                         {
                             this._ix = ix;
                             this._iy = iy;
                             SetupCurPath();
                             this.CurPath?.Add(new PointF(this._ix, this._iy));
-                            this.helplineRulerCtrl1.dbPanel1.Invalidate();
                         }
                     }
 
@@ -185,6 +183,8 @@ namespace OutlineOperations
                     this.toolStripStatusLabel5.Text = c.ToString();
                     this.ToolStripStatusLabel2.BackColor = c;
                 }
+
+                this.helplineRulerCtrl1.dbPanel1.Invalidate();
             }
         }
 
@@ -325,6 +325,14 @@ namespace OutlineOperations
                         }
                     }
                 }
+            }
+
+            if (this.cbWipeAlpha.Checked)
+            {
+                float w = (float)this.numPenSize.Value;
+                float ww = Math.Max(w * this.helplineRulerCtrl1.Zoom, 1f);
+                using SolidBrush sb = new SolidBrush(Color.FromArgb(64, this._fColor));
+                e.Graphics.FillEllipse(sb, new RectangleF(_eX - ww / 2f, _eY - ww / 2f, ww, ww));
             }
         }
 

@@ -991,6 +991,9 @@ namespace OutlineOperations
 
             if (this._bmpBU != null)
                 this._bmpBU.Dispose();
+
+            if (this._remaining != null)
+                this._remaining.Dispose();
         }
 
         private void btnShow_Click(object sender, EventArgs e)
