@@ -8506,12 +8506,39 @@ namespace AvoidAGrabCutEasy
                 {
                     using frmPoissonDraw frm = new frmPoissonDraw(this.helplineRulerCtrl2.Bmp, s);
                     frm.SetupCache();
+                    frm.btnLoadOrig.Click += BtnLoadOrig_Click;
 
                     if (frm.ShowDialog() == DialogResult.OK)
                     {
-                        MessageBox.Show("Coming soon.");
+                        Bitmap b = new Bitmap(frm.FBitmap);
+
+                        this.SetBitmap(this.helplineRulerCtrl2.Bmp, b, this.helplineRulerCtrl2, "Bmp");
+
+                        Bitmap bC = new Bitmap(this.helplineRulerCtrl2.Bmp);
+                        this.SetBitmap(ref this._b4Copy, ref bC);
+
+                        this.helplineRulerCtrl2.SetZoom(this.helplineRulerCtrl1.Zoom.ToString());
+                        this.helplineRulerCtrl2.MakeBitmap(this.helplineRulerCtrl2.Bmp);
+                        this.helplineRulerCtrl2.dbPanel1.AutoScrollMinSize = new Size(
+                            (int)(this.helplineRulerCtrl2.Bmp.Width * this.helplineRulerCtrl2.Zoom),
+                            (int)(this.helplineRulerCtrl2.Bmp.Height * this.helplineRulerCtrl2.Zoom));
+
+                        _undoOPCache?.Add(b);
                     }
+
+                    frm.btnLoadOrig.Click -= BtnLoadOrig_Click;
                 }
+            }
+        }
+
+        private void BtnLoadOrig_Click(object? sender, EventArgs e)
+        {
+            if (this._bmpBU != null && sender != null)
+            {
+                frmPoissonDraw? frm = (frmPoissonDraw?)(((Control)sender).Parent?.Parent);
+
+                if (frm != null)
+                    frm.LoadOrigPic(this._bmpBU);
             }
         }
     }

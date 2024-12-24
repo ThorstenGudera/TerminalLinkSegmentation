@@ -78,6 +78,7 @@ namespace AvoidAGrabCutEasy
         private Bitmap? _bmpDraw;
         private int _ix2;
         private int _iy2;
+        private bool _overlaySrc;
 
         public frmPoissonDraw(Bitmap bmp, string basePathAddition)
         {
@@ -205,12 +206,12 @@ namespace AvoidAGrabCutEasy
             if (this._sourcePt.X >= 0 && this._sourcePt.Y >= 0 && this._sourcePt.X < this.helplineRulerCtrl1.Bmp.Width && this._sourcePt.Y < this.helplineRulerCtrl1.Bmp.Height)
             {
                 e.Graphics.DrawLine(Pens.Yellow, this._sourcePt.X * this.helplineRulerCtrl1.Zoom - 5 + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X,
-                    this._sourcePt.Y * this.helplineRulerCtrl1.Zoom - 5 + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y, 
-                    this._sourcePt.X * this.helplineRulerCtrl1.Zoom + 5 + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X, 
+                    this._sourcePt.Y * this.helplineRulerCtrl1.Zoom - 5 + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y,
+                    this._sourcePt.X * this.helplineRulerCtrl1.Zoom + 5 + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X,
                     this._sourcePt.Y * this.helplineRulerCtrl1.Zoom + 5 + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y);
-                e.Graphics.DrawLine(Pens.Yellow, this._sourcePt.X * this.helplineRulerCtrl1.Zoom + 5 + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X, 
-                    this._sourcePt.Y * this.helplineRulerCtrl1.Zoom - 5 + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y, 
-                    this._sourcePt.X * this.helplineRulerCtrl1.Zoom - 5 + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X, 
+                e.Graphics.DrawLine(Pens.Yellow, this._sourcePt.X * this.helplineRulerCtrl1.Zoom + 5 + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X,
+                    this._sourcePt.Y * this.helplineRulerCtrl1.Zoom - 5 + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y,
+                    this._sourcePt.X * this.helplineRulerCtrl1.Zoom - 5 + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X,
                     this._sourcePt.Y * this.helplineRulerCtrl1.Zoom + 5 + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y);
             }
         }
@@ -362,15 +363,40 @@ namespace AvoidAGrabCutEasy
                     }
                 }
 
+            if (this._overlaySrc)
+            {
+                HelplineRulerControl.DBPanel pz = this.helplineRulerCtrl1.dbPanel1;
+                HelplineRulerControl.DBPanel pz2 = this.helplineRulerCtrl2.dbPanel1;
+
+                ColorMatrix cm = new ColorMatrix();
+                cm.Matrix33 = (float)this.numOpacity.Value;
+
+                using (ImageAttributes ia = new ImageAttributes())
+                {
+                    ia.SetColorMatrix(cm);
+
+                    int x = (int)((this._destPt.X - this._sourcePt.X) * this.helplineRulerCtrl2.Zoom + pz2.AutoScrollPosition.X);
+                    int y = (int)((this._destPt.Y - this._sourcePt.Y) * this.helplineRulerCtrl2.Zoom + pz2.AutoScrollPosition.Y);
+
+                    e.Graphics.DrawImage(this.helplineRulerCtrl1.Bmp,
+                        new Rectangle(x, y,
+                            (int)(this.helplineRulerCtrl1.Bmp.Width * this.helplineRulerCtrl2.Zoom),
+                            (int)(this.helplineRulerCtrl1.Bmp.Height * this.helplineRulerCtrl2.Zoom)),
+                            0, 0,
+                            this.helplineRulerCtrl1.Bmp.Width,
+                            this.helplineRulerCtrl1.Bmp.Height, GraphicsUnit.Pixel, ia);
+                }
+            }
+
             if (this._destPt.X >= 0 && this._destPt.Y >= 0 && this._destPt.X < this.helplineRulerCtrl2.Bmp.Width && this._destPt.Y < this.helplineRulerCtrl2.Bmp.Height)
             {
-                e.Graphics.DrawLine(Pens.Red, this._destPt.X * this.helplineRulerCtrl2.Zoom - 5 + this.helplineRulerCtrl2.dbPanel1.AutoScrollPosition.X, 
-                    this._destPt.Y * this.helplineRulerCtrl2.Zoom - 5 + this.helplineRulerCtrl2.dbPanel1.AutoScrollPosition.Y, 
-                    this._destPt.X * this.helplineRulerCtrl2.Zoom + 5 + this.helplineRulerCtrl2.dbPanel1.AutoScrollPosition.X, 
+                e.Graphics.DrawLine(Pens.Red, this._destPt.X * this.helplineRulerCtrl2.Zoom - 5 + this.helplineRulerCtrl2.dbPanel1.AutoScrollPosition.X,
+                    this._destPt.Y * this.helplineRulerCtrl2.Zoom - 5 + this.helplineRulerCtrl2.dbPanel1.AutoScrollPosition.Y,
+                    this._destPt.X * this.helplineRulerCtrl2.Zoom + 5 + this.helplineRulerCtrl2.dbPanel1.AutoScrollPosition.X,
                     this._destPt.Y * this.helplineRulerCtrl2.Zoom + 5 + this.helplineRulerCtrl2.dbPanel1.AutoScrollPosition.Y);
-                e.Graphics.DrawLine(Pens.Red, this._destPt.X * this.helplineRulerCtrl2.Zoom + 5 + this.helplineRulerCtrl2.dbPanel1.AutoScrollPosition.X, 
-                    this._destPt.Y * this.helplineRulerCtrl2.Zoom - 5 + this.helplineRulerCtrl2.dbPanel1.AutoScrollPosition.Y, 
-                    this._destPt.X * this.helplineRulerCtrl2.Zoom - 5 + this.helplineRulerCtrl2.dbPanel1.AutoScrollPosition.X, 
+                e.Graphics.DrawLine(Pens.Red, this._destPt.X * this.helplineRulerCtrl2.Zoom + 5 + this.helplineRulerCtrl2.dbPanel1.AutoScrollPosition.X,
+                    this._destPt.Y * this.helplineRulerCtrl2.Zoom - 5 + this.helplineRulerCtrl2.dbPanel1.AutoScrollPosition.Y,
+                    this._destPt.X * this.helplineRulerCtrl2.Zoom - 5 + this.helplineRulerCtrl2.dbPanel1.AutoScrollPosition.X,
                     this._destPt.Y * this.helplineRulerCtrl2.Zoom + 5 + this.helplineRulerCtrl2.dbPanel1.AutoScrollPosition.Y);
             }
         }
@@ -1292,8 +1318,8 @@ namespace AvoidAGrabCutEasy
             this.helplineRulerCtrl1.dbPanel1.Invalidate();
 
             this._dontDoZoom = false;
-        }    
-        
+        }
+
         private void helplineRulerCtrl2_DBPanelDblClicked(object sender, HelplineRulerControl.ZoomEventArgs e)
         {
             this._dontDoZoom = true;
@@ -1322,8 +1348,8 @@ namespace AvoidAGrabCutEasy
                     this.helplineRulerCtrl1.ZoomSetManually = true;
 
                 this.helplineRulerCtrl1.dbPanel1.Invalidate();
-            }    
-            
+            }
+
             if (this.Visible && this.helplineRulerCtrl2.Bmp != null && !this._dontDoZoom)
             {
                 this.helplineRulerCtrl2.Enabled = false;
@@ -1643,7 +1669,7 @@ namespace AvoidAGrabCutEasy
                 Bitmap? bC = new Bitmap(bmpHLC1);
                 this.SetBitmap(ref this._bmpBU, ref bC);
 
-                Bitmap? bD = new Bitmap(this.helplineRulerCtrl1.Bmp.Width, this.helplineRulerCtrl1.Bmp.Height);      
+                Bitmap? bD = new Bitmap(this.helplineRulerCtrl1.Bmp.Width, this.helplineRulerCtrl1.Bmp.Height);
                 this.SetBitmap(ref this._bmpDraw, ref bD);
 
                 if (this._bmpBUZoomed != null)
@@ -1665,6 +1691,72 @@ namespace AvoidAGrabCutEasy
                 this._tb?.ResetTransform();
                 this._tb?.TranslateTransform(dx, dy);
             }
+        }
+
+        private void cbOverlay_CheckedChanged(object sender, EventArgs e)
+        {
+            this._overlaySrc = cbOverlay.Checked;
+            this.helplineRulerCtrl2.dbPanel1.Invalidate();
+        }
+
+        private void numOpacity_ValueChanged(object sender, EventArgs e)
+        {
+            if (this._overlaySrc)
+                this.helplineRulerCtrl2.dbPanel1.Invalidate();
+        }
+
+        internal void LoadOrigPic(Bitmap bmpBU)
+        {
+            Bitmap? bmp = new Bitmap(bmpBU);
+
+            Bitmap? bmpHLC1 = new Bitmap(this.helplineRulerCtrl2.Bmp.Width, this.helplineRulerCtrl2.Bmp.Height);
+            using TextureBrush tb = new TextureBrush(bmp);
+            tb.WrapMode = WrapMode.TileFlipXY;
+            using Graphics gx = Graphics.FromImage(bmpHLC1);
+            gx.FillRectangle(tb, new RectangleF(0, 0, bmpHLC1.Width, bmpHLC1.Height));
+            if (bmp != null)
+                bmp.Dispose();
+            bmp = null;
+
+            this.SetBitmap(this.helplineRulerCtrl1.Bmp, bmpHLC1, this.helplineRulerCtrl1, "Bmp");
+
+            double faktor = System.Convert.ToDouble(this.helplineRulerCtrl1.dbPanel1.Width) / System.Convert.ToDouble(this.helplineRulerCtrl1.dbPanel1.Height);
+            double multiplier = System.Convert.ToDouble(this.helplineRulerCtrl1.Bmp.Width) / System.Convert.ToDouble(this.helplineRulerCtrl1.Bmp.Height);
+            if (multiplier >= faktor)
+                this.helplineRulerCtrl1.Zoom = System.Convert.ToSingle(System.Convert.ToDouble(this.helplineRulerCtrl1.dbPanel1.Width) / System.Convert.ToDouble(this.helplineRulerCtrl1.Bmp.Width));
+            else
+                this.helplineRulerCtrl1.Zoom = System.Convert.ToSingle(System.Convert.ToDouble(this.helplineRulerCtrl1.dbPanel1.Height) / System.Convert.ToDouble(this.helplineRulerCtrl1.Bmp.Height));
+
+            this.helplineRulerCtrl1.dbPanel1.AutoScrollMinSize = new Size(System.Convert.ToInt32(this.helplineRulerCtrl1.Bmp.Width * this.helplineRulerCtrl1.Zoom), System.Convert.ToInt32(this.helplineRulerCtrl1.Bmp.Height * this.helplineRulerCtrl1.Zoom));
+
+            this.helplineRulerCtrl1.MakeBitmap(this.helplineRulerCtrl1.Bmp);
+
+            this.helplineRulerCtrl1.dbPanel1.Invalidate();
+
+            Bitmap? bC = new Bitmap(bmpHLC1);
+            this.SetBitmap(ref this._bmpBU, ref bC);
+
+            Bitmap? bD = new Bitmap(this.helplineRulerCtrl1.Bmp.Width, this.helplineRulerCtrl1.Bmp.Height);
+            this.SetBitmap(ref this._bmpDraw, ref bD);
+
+            if (this._bmpBUZoomed != null)
+                this._bmpBUZoomed.Dispose();
+            this._bmpBUZoomed = null;
+            if (this._bmpBUZoomed == null && this._bmpBU != null)
+                MakeBitmap(this._bmpBU, this.helplineRulerCtrl2.Zoom);
+
+            this._sourcePt = new Point(0, 0);
+
+            int dx = this._destPt.X - this._sourcePt.X;
+            int dy = this._destPt.Y - this._sourcePt.Y;
+
+            if (this._tb != null)
+                this._tb.Dispose();
+            this._tb = null;
+            SetupTB();
+
+            this._tb?.ResetTransform();
+            this._tb?.TranslateTransform(dx, dy);
         }
     }
 }

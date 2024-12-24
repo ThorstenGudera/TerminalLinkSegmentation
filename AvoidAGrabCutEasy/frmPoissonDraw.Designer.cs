@@ -107,6 +107,10 @@ namespace AvoidAGrabCutEasy
             toolStripStatusLabel3 = new ToolStripStatusLabel();
             panel3 = new Panel();
             panel1 = new Panel();
+            label5 = new Label();
+            cbOverlay = new CheckBox();
+            btnLoadOrig = new Button();
+            numOpacity = new NumericUpDown();
             button12 = new Button();
             numLowerWeight = new NumericUpDown();
             numUpperWeight = new NumericUpDown();
@@ -128,6 +132,7 @@ namespace AvoidAGrabCutEasy
             helplineRulerCtrl2 = new HelplineRulerCtrl();
             statusStrip1.SuspendLayout();
             panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)numOpacity).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numLowerWeight).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numUpperWeight).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numPenSize).BeginInit();
@@ -401,6 +406,10 @@ namespace AvoidAGrabCutEasy
             // 
             // panel1
             // 
+            panel1.Controls.Add(label5);
+            panel1.Controls.Add(cbOverlay);
+            panel1.Controls.Add(btnLoadOrig);
+            panel1.Controls.Add(numOpacity);
             panel1.Controls.Add(button12);
             panel1.Controls.Add(numLowerWeight);
             panel1.Controls.Add(numUpperWeight);
@@ -436,6 +445,47 @@ namespace AvoidAGrabCutEasy
             panel1.Name = "panel1";
             panel1.Size = new Size(1200, 189);
             panel1.TabIndex = 247;
+            // 
+            // label5
+            // 
+            label5.AutoSize = true;
+            label5.Location = new Point(744, 153);
+            label5.Name = "label5";
+            label5.Size = new Size(48, 15);
+            label5.TabIndex = 762;
+            label5.Text = "Opacity";
+            // 
+            // cbOverlay
+            // 
+            cbOverlay.AutoSize = true;
+            cbOverlay.Location = new Point(637, 152);
+            cbOverlay.Name = "cbOverlay";
+            cbOverlay.Size = new Size(101, 19);
+            cbOverlay.TabIndex = 761;
+            cbOverlay.Text = "overlay src pic";
+            cbOverlay.UseVisualStyleBackColor = true;
+            cbOverlay.CheckedChanged += cbOverlay_CheckedChanged;
+            // 
+            // btnLoadOrig
+            // 
+            btnLoadOrig.Location = new Point(156, 130);
+            btnLoadOrig.Name = "btnLoadOrig";
+            btnLoadOrig.Size = new Size(88, 28);
+            btnLoadOrig.TabIndex = 760;
+            btnLoadOrig.Text = "load Orig Pic";
+            btnLoadOrig.UseVisualStyleBackColor = true;
+            // 
+            // numOpacity
+            // 
+            numOpacity.DecimalPlaces = 2;
+            numOpacity.Increment = new decimal(new int[] { 1, 0, 0, 65536 });
+            numOpacity.Location = new Point(798, 151);
+            numOpacity.Maximum = new decimal(new int[] { 1, 0, 0, 0 });
+            numOpacity.Name = "numOpacity";
+            numOpacity.Size = new Size(61, 23);
+            numOpacity.TabIndex = 759;
+            numOpacity.Value = new decimal(new int[] { 5, 0, 0, 65536 });
+            numOpacity.ValueChanged += numOpacity_ValueChanged;
             // 
             // button12
             // 
@@ -660,6 +710,7 @@ namespace AvoidAGrabCutEasy
             statusStrip1.PerformLayout();
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)numOpacity).EndInit();
             ((System.ComponentModel.ISupportInitialize)numLowerWeight).EndInit();
             ((System.ComponentModel.ISupportInitialize)numUpperWeight).EndInit();
             ((System.ComponentModel.ISupportInitialize)numPenSize).EndInit();
@@ -718,5 +769,9 @@ namespace AvoidAGrabCutEasy
         private CheckBox cbDraw;
         private NumericUpDown numPenSize;
         private Button button12;
+        private Label label5;
+        private CheckBox cbOverlay;
+        internal Button btnLoadOrig;
+        private NumericUpDown numOpacity;
     }
 }
