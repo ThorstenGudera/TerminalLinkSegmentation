@@ -8496,5 +8496,23 @@ namespace AvoidAGrabCutEasy
                 }
             }
         }
+
+        private void btnPoissonDraw_Click(object sender, EventArgs e)
+        {
+            if (this.helplineRulerCtrl2.Bmp != null)
+            {
+                string? s = this.CachePathAddition;
+                if (s != null)
+                {
+                    using frmPoissonDraw frm = new frmPoissonDraw(this.helplineRulerCtrl2.Bmp, s);
+                    frm.SetupCache();
+
+                    if (frm.ShowDialog() == DialogResult.OK)
+                    {
+                        MessageBox.Show("Coming soon.");
+                    }
+                }
+            }
+        }
     }
 }

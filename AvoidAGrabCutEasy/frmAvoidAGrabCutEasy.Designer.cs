@@ -171,6 +171,7 @@
             bgwDoAll4 = new System.ComponentModel.BackgroundWorker();
             timer1 = new System.Windows.Forms.Timer(components);
             backgroundWorker4 = new System.ComponentModel.BackgroundWorker();
+            btnPoissonDraw = new Button();
             panel1.SuspendLayout();
             panel5.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numBoundOuter).BeginInit();
@@ -199,6 +200,7 @@
             // 
             // panel1
             // 
+            panel1.Controls.Add(btnPoissonDraw);
             panel1.Controls.Add(btnGetOutline);
             panel1.Controls.Add(btnInfo);
             panel1.Controls.Add(btnOrder);
@@ -1819,6 +1821,16 @@
             backgroundWorker4.ProgressChanged += backgroundWorker4_ProgressChanged;
             backgroundWorker4.RunWorkerCompleted += backgroundWorker4_RunWorkerCompleted;
             // 
+            // btnPoissonDraw
+            // 
+            btnPoissonDraw.Location = new Point(1187, 45);
+            btnPoissonDraw.Name = "btnPoissonDraw";
+            btnPoissonDraw.Size = new Size(88, 27);
+            btnPoissonDraw.TabIndex = 740;
+            btnPoissonDraw.Text = "PoissonDraw";
+            btnPoissonDraw.UseVisualStyleBackColor = true;
+            btnPoissonDraw.Click += btnPoissonDraw_Click;
+            // 
             // frmAvoidAGrabCutEasy
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -2010,5 +2022,6 @@
         private Button btnInfo;
         private Button btnGetOutline;
         private ToolStripStatusLabel toolStripStatusLabel5;
+        private Button btnPoissonDraw;
     }
 }
