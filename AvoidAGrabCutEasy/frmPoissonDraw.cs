@@ -58,7 +58,6 @@ namespace AvoidAGrabCutEasy
         public List<PointF>? CurPathTmp { get; set; }
         public List<PathInfo>? Paths { get; set; }
 
-        private bool _drawPathFromList;
         private bool _dontDrawPath;
 
         private static int[] CustomColors = new int[] { };
@@ -345,31 +344,6 @@ namespace AvoidAGrabCutEasy
                             int y = this.helplineRulerCtrl2.dbPanel1.AutoScrollPosition.Y;
                             tb.TranslateTransform(x, y);
                             using (Matrix m = new Matrix(1, 0, 0, 1, x, y))
-                            {
-                                gp.Transform(m);
-                                using (Pen pen = new Pen(tb, Math.Max(w * this.helplineRulerCtrl2.Zoom, 1.0f)))
-                                {
-                                    pen.LineJoin = LineJoin.Round;
-                                    pen.StartCap = LineCap.Round;
-                                    pen.EndCap = LineCap.Round;
-
-                                    if (this.CurPath?.Count == 1)
-                                        e.Graphics.FillPath(tb, gp);
-                                    else
-                                        e.Graphics.DrawPath(pen, gp);
-                                }
-                            }
-                        }
-                    }
-
-                    if (_drawPathFromList)
-                    {
-                        using (GraphicsPath gp = GetPathTmp())
-                        {
-                            float w = (float)this.numPenSize.Value;
-                            int x = this.helplineRulerCtrl2.dbPanel1.AutoScrollPosition.X;
-                            int y = this.helplineRulerCtrl2.dbPanel1.AutoScrollPosition.Y;
-                            using (Matrix m = new Matrix(this.helplineRulerCtrl2.Zoom, 0, 0, this.helplineRulerCtrl2.Zoom, x, y))
                             {
                                 gp.Transform(m);
                                 using (Pen pen = new Pen(tb, Math.Max(w * this.helplineRulerCtrl2.Zoom, 1.0f)))
@@ -1347,12 +1321,6 @@ namespace AvoidAGrabCutEasy
                 if (this.cmbZoom?.SelectedIndex < 2)
                     this.helplineRulerCtrl1.ZoomSetManually = true;
 
-                if (this._bmpBUZoomed != null)
-                    this._bmpBUZoomed.Dispose();
-                this._bmpBUZoomed = null;
-                if (this._bmpBUZoomed == null && this._bmpBU != null)
-                    MakeBitmap(this._bmpBU, this.helplineRulerCtrl2.Zoom);
-
                 this.helplineRulerCtrl1.dbPanel1.Invalidate();
             }    
             
@@ -1367,6 +1335,12 @@ namespace AvoidAGrabCutEasy
 
                 this.helplineRulerCtrl2.dbPanel1.Invalidate();
             }
+
+            if (this._bmpBUZoomed != null)
+                this._bmpBUZoomed.Dispose();
+            this._bmpBUZoomed = null;
+            if (this._bmpBUZoomed == null && this._bmpBU != null)
+                MakeBitmap(this._bmpBU, this.helplineRulerCtrl2.Zoom);
         }
 
         private void CheckBox12_CheckedChanged(System.Object sender, System.EventArgs e)
