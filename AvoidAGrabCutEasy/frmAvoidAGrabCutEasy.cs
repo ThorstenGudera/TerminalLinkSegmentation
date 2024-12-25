@@ -4415,6 +4415,12 @@ namespace AvoidAGrabCutEasy
                         using (PseudoShadow.frmComposePseudoShadow frm = new PseudoShadow.frmComposePseudoShadow(new Bitmap(this.helplineRulerCtrl2.Bmp), this.CachePathAddition))
                         {
                             frm.SetupCache();
+                            if (_undoOPCache != null && _undoOPCache.Cache.IsActive)
+                            {
+                                string folder = _undoOPCache.GetCachePath();
+                                frm.AvoidAGrabCutCache = folder;
+                                frm.btnFromCache.Enabled = true;
+                            }
                             if (frm.ShowDialog() == DialogResult.OK)
                             {
                                 if (frm.FBitmap != null)

@@ -59,6 +59,8 @@ namespace PseudoShadow
             saveFileDialog1 = new SaveFileDialog();
             splitContainer2 = new SplitContainer();
             luBitmapDesignerCtrl1 = new LUBitmapDesigner.LUBitmapDesignerCtrl();
+            btnFromCache = new Button();
+            cbExcludeRegions = new CheckBox();
             btnCloneColors = new Button();
             label14 = new Label();
             panel3 = new Panel();
@@ -110,7 +112,7 @@ namespace PseudoShadow
             colorDialog1 = new ColorDialog();
             backgroundWorker3 = new System.ComponentModel.BackgroundWorker();
             backgroundWorker4 = new System.ComponentModel.BackgroundWorker();
-            cbExcludeRegions = new CheckBox();
+            openFileDialog2 = new OpenFileDialog();
             statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer2).BeginInit();
             splitContainer2.Panel1.SuspendLayout();
@@ -273,6 +275,7 @@ namespace PseudoShadow
             // splitContainer2.Panel2
             // 
             splitContainer2.Panel2.AutoScroll = true;
+            splitContainer2.Panel2.Controls.Add(btnFromCache);
             splitContainer2.Panel2.Controls.Add(cbExcludeRegions);
             splitContainer2.Panel2.Controls.Add(btnCloneColors);
             splitContainer2.Panel2.Controls.Add(label14);
@@ -302,7 +305,7 @@ namespace PseudoShadow
             splitContainer2.Panel2.Controls.Add(button8);
             splitContainer2.Panel2.Controls.Add(button2);
             splitContainer2.Size = new Size(1486, 882);
-            splitContainer2.SplitterDistance = 1118;
+            splitContainer2.SplitterDistance = 1116;
             splitContainer2.SplitterWidth = 5;
             splitContainer2.TabIndex = 0;
             // 
@@ -315,8 +318,30 @@ namespace PseudoShadow
             luBitmapDesignerCtrl1.SelectedShape = null;
             luBitmapDesignerCtrl1.ShadowMode = false;
             luBitmapDesignerCtrl1.ShapeList = null;
-            luBitmapDesignerCtrl1.Size = new Size(1118, 882);
+            luBitmapDesignerCtrl1.Size = new Size(1116, 882);
             luBitmapDesignerCtrl1.TabIndex = 0;
+            // 
+            // btnFromCache
+            // 
+            btnFromCache.Enabled = false;
+            btnFromCache.Location = new Point(262, 15);
+            btnFromCache.Margin = new Padding(4, 3, 4, 3);
+            btnFromCache.Name = "btnFromCache";
+            btnFromCache.Size = new Size(88, 27);
+            btnFromCache.TabIndex = 725;
+            btnFromCache.Text = "FromCache";
+            btnFromCache.UseVisualStyleBackColor = true;
+            btnFromCache.Click += btnFromCache_Click;
+            // 
+            // cbExcludeRegions
+            // 
+            cbExcludeRegions.AutoSize = true;
+            cbExcludeRegions.Location = new Point(26, 460);
+            cbExcludeRegions.Name = "cbExcludeRegions";
+            cbExcludeRegions.Size = new Size(109, 19);
+            cbExcludeRegions.TabIndex = 724;
+            cbExcludeRegions.Text = "exclude regions";
+            cbExcludeRegions.UseVisualStyleBackColor = true;
             // 
             // btnCloneColors
             // 
@@ -872,15 +897,10 @@ namespace PseudoShadow
             backgroundWorker4.ProgressChanged += backgroundWorker4_ProgressChanged;
             backgroundWorker4.RunWorkerCompleted += backgroundWorker4_RunWorkerCompleted;
             // 
-            // cbExcludeRegions
+            // openFileDialog2
             // 
-            cbExcludeRegions.AutoSize = true;
-            cbExcludeRegions.Location = new Point(26, 460);
-            cbExcludeRegions.Name = "cbExcludeRegions";
-            cbExcludeRegions.Size = new Size(109, 19);
-            cbExcludeRegions.TabIndex = 724;
-            cbExcludeRegions.Text = "exclude regions";
-            cbExcludeRegions.UseVisualStyleBackColor = true;
+            openFileDialog2.FileName = "openFileDialog1";
+            openFileDialog2.Filter = "Images - (*.bmp;*.jpg;*.jpeg;*.jfif;*.png)|*.bmp;*.jpg;*.jpeg;*.jfif;*.png";
             // 
             // frmComposePseudoShadow
             // 
@@ -994,5 +1014,7 @@ namespace PseudoShadow
         private ToolStripStatusLabel toolStripStatusLabel3;
         private Button btnCloneColors;
         private CheckBox cbExcludeRegions;
+        public Button btnFromCache;
+        private OpenFileDialog openFileDialog2;
     }
 }

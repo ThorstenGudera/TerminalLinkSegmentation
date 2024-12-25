@@ -39,6 +39,8 @@ namespace PseudoShadow
             }
         }
 
+        public string? AvoidAGrabCutCache { get; set; }
+
         private string? m_CachePathAddition;
 
         private static int[] CustomColors = new int[] { };
@@ -1575,7 +1577,7 @@ namespace PseudoShadow
                                     bOld = null;
                                 }
 
-                                if(bOld != null && bOld.Equals(this.luBitmapDesignerCtrl1?.helplineRulerCtrl1.Bmp))
+                                if (bOld != null && bOld.Equals(this.luBitmapDesignerCtrl1?.helplineRulerCtrl1.Bmp))
                                 {
                                     this.SetBitmap(this.luBitmapDesignerCtrl1.helplineRulerCtrl1.Bmp, result, this.luBitmapDesignerCtrl1.helplineRulerCtrl1, "Bmp");
                                     this.luBitmapDesignerCtrl1.helplineRulerCtrl1.MakeBitmap(this.luBitmapDesignerCtrl1.helplineRulerCtrl1.Bmp);
@@ -1599,6 +1601,40 @@ namespace PseudoShadow
                         }
                     }
                 }
+            }
+        }
+
+        private void btnFromCache_Click(object sender, EventArgs e)
+        {
+            if (Directory.Exists(this.AvoidAGrabCutCache))
+            {
+                string? s = Path.GetDirectoryName(this.openFileDialog1.FileName);
+                this.openFileDialog2.InitialDirectory = this.AvoidAGrabCutCache;
+                if (this.openFileDialog2.ShowDialog() == DialogResult.OK)
+                {
+                    Bitmap? bmp = null;
+                    using (Image img = Image.FromFile(this.openFileDialog2.FileName))
+                        bmp = new Bitmap(img);
+
+                    if (this.luBitmapDesignerCtrl1.ShapeList != null && this.luBitmapDesignerCtrl1.ShapeList.Count > 0)
+                    {
+                        BitmapShape? b = this.luBitmapDesignerCtrl1.ShapeList[0];
+                        BitmapShape bNew = new BitmapShape() { Bmp = bmp, Bounds = new RectangleF(0, 0, bmp.Width, bmp.Height), Rotation = 0, Zoom = this.luBitmapDesignerCtrl1.helplineRulerCtrl1.Zoom };
+                        this.luBitmapDesignerCtrl1.ShapeList[0] = bNew;
+                        this.luBitmapDesignerCtrl1.helplineRulerCtrl1.Bmp = bNew.Bmp;
+
+                        if (b != null)
+                        {
+                            b.Dispose();
+                            b = null;
+                        }
+
+                        this.cmbZoom_SelectedIndexChanged(this.cmbZoom, new EventArgs());
+
+                        this.btnCloneColors.Enabled = this.luBitmapDesignerCtrl1.ShapeList.Count > 1;
+                    }
+                }
+                this.openFileDialog1.InitialDirectory = s;
             }
         }
     }

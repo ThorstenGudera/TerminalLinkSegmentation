@@ -365,7 +365,7 @@ namespace AvoidAGrabCutEasy
 
             if (this._overlaySrc)
             {
-                HelplineRulerControl.DBPanel pz = this.helplineRulerCtrl1.dbPanel1;
+                //HelplineRulerControl.DBPanel pz = this.helplineRulerCtrl1.dbPanel1;
                 HelplineRulerControl.DBPanel pz2 = this.helplineRulerCtrl2.dbPanel1;
 
                 ColorMatrix cm = new ColorMatrix();
