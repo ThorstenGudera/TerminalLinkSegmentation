@@ -1846,5 +1846,55 @@ namespace AvoidAGrabCutEasy
 
             b.UnlockBits(bmD);
         }
+
+        private void btnSaveStrokes_Click(object sender, EventArgs e)
+        {
+            if (this.helplineRulerCtrl2.Bmp != null && this.helplineRulerCtrl1.Bmp != null && this.Paths != null)
+            {
+                using Bitmap bmp = new(this.helplineRulerCtrl2.Bmp.Width, this.helplineRulerCtrl2.Bmp.Height);
+                using Graphics gx = Graphics.FromImage(bmp);
+                using TextureBrush tb = new TextureBrush(this.helplineRulerCtrl1.Bmp);
+
+                for (int i = 0; i < this.Paths.Count; i++)
+                {
+                    float w = this.Paths[i].DrawWidth;
+                    tb?.ResetTransform();
+                    tb?.TranslateTransform(this.Paths[i].Offset.X, this.Paths[i].Offset.Y);
+
+                    // Me.ComboBox1.SelectedIndex = Me.Paths(i).BVAlg
+                    // Me.NumericUpDown2.Value = CDec(Me.Paths(i).UpperWeight)
+                    // Me.NumericUpDown3.Value = CDec(Me.Paths(i).LowerWeight)
+
+                    if (tb != null)
+                        using (Pen pen = new Pen(tb, w))
+                        {
+                            pen.LineJoin = LineJoin.Round;
+
+                            if (this.Paths[i].RoundCaps)
+                            {
+                                pen.StartCap = LineCap.Round;
+                                pen.EndCap = LineCap.Round;
+                            }
+
+                            using (GraphicsPath gp = new GraphicsPath())
+                            {
+                                if (this.Paths[i]?.Count() == 1)
+                                {
+                                    gp.AddEllipse(this.Paths[i].Points[0].X - w, this.Paths[i].Points[0].Y - w, w * 2, w * 2);
+                                    gx.FillPath(tb, gp);
+                                }
+                                else
+                                {
+                                    gp.AddLines(this.Paths[i].ToArray());
+                                    gx.DrawPath(pen, gp);
+                                }
+                            }
+                        }
+                }
+
+                if (this.saveFileDialog1.ShowDialog() == DialogResult.OK)
+                    bmp.Save(this.saveFileDialog1.FileName, ImageFormat.Png);
+            }
+        }
     }
 }
