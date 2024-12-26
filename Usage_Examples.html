@@ -172,5 +172,97 @@
 			in this case is already a bit too much. Increasing the threshold value will lead to more pixels 
 			being classified as background. Play around with the parameters a bit to get some feeling for it.</p>
 		<img src="images/Bild1_58.png" width="800" /><br />
+
+		<p>&nbsp;</p><hr /></p>
+		<h3>A scenario when the GrabCutALike algorithm doesn't produce the desired results and just creating a Matte
+			is not enough, because the hard extracted feature picture has to be saved</h3>
+		<p>Consider a Photography where this algorithm doesnt work well</p>
+		<img src="images/Bild2.png" width="800" /><br />
+		<p>Click onto the preBlur button</p>
+		<img src="images/Bild2_1.png" width="800" /><br />
+		<p>First we stretch the lower colors a bit and ok out of this form</p>
+		<img src="images/Bild2_2.png" width="800" /><br />
+		<p>Then we click the outline button</p>
+		<img src="images/Bild2_3.png" width="800" /><br />
+		<p>In this form we repeatedly click near the boundary of the object to extract, and so, surround the object once</p>
+		<img src="images/Bild2_4.png" width="800" /><br />
+		<p>If the underlying algorithm dont follow the outline correctly, you could change the parameters, or, simply, click 
+			the remSeg button to remove the last segment, check the addLine checkbox and simply add some lines by clicking.
+			When you think the algorithm could take over again, uncheck the addLine checkbox and proceed clicking the boundary</p>
+		<img src="images/Bild2_5.png" width="800" /><br />
+		<p>When you are close to closing the path, click the closePath button</p>
+		<img src="images/Bild2_6.png" width="800" /><br />
+		<p>Now click the crop button</p>
+		<img src="images/Bild2_7.png" width="800" /><br />
+		<p>You could add a set of unknown scribbles to the picture in the left pane of the main extracting form,
+			but we here want to get the extracted object in the right pane of the main extracting form.
+			So we simply click ok button, since the correct option is preselected</p>
+		<img src="images/Bild2_8.png" width="800" /><br />
+		<p>In this form we now will process the outline of the extracted object</p>
+		<img src="images/Bild2_9.png" width="800" /><br />
+		<p>In the process outline form, click the res vals button and increase the inner processing range a bit.
+			Then check the edit trimap checkbox and click onto create Trimap</p>
+		<img src="images/Bild2_10.png" width="800" /><br />
+		<p>This will show the auto created trimap. Check the overly orig image checkbox and ...</p>
+		<img src="images/Bild2_11.png" width="800" /><br />
+		<p>... draw the whiskers part as unknown. Remeber: White is foreground, black background 
+			and the unknown parts are coded in gray. Ok out of thhis form</p>
+		<img src="images/Bild2_12.png" width="800" /><br />
+		<p>Now uncheck the edit trimap button and click onto Go</p>
+		<img src="images/Bild2_13.png" width="800" /><br />
+		<p>After computing the matte, the program will show it to you. Maybe save it now and click close</p>
+		<img src="images/Bild2_14.png" width="800" /><br />
+		<p>Inspecting the result will show some problems: By using the reduced size option in matte creating, the whole
+			alpha ranges are a bit too wide. See the back of the cat. Some false portions are computed as partly 
+			foreground and the whiskers are not extracted correctly. The last appears because of the photo's composition.
+			Usually the closed form matte is very good at extracting wispy parts like hairs and so on, but here the
+			whiskers are not always drawn really continuous and the background is changing a lot. So the whiskers are
+			sometimes lighter than the BG but also sometimes darker. This makes it impossible for the algorithm
+			to extract these parts correctly</p>
+		<img src="images/Bild2_15.png" width="800" /><br />
+		<p>So we ok out of the form and in the main extracting form we click the OutlineOPs button</p>
+		<img src="images/Bild2_16.png" width="800" /><br />
+		<p>Here we check the wipeAlpha checkbox and chose a somewhat bigger pen. Then we wipe the incorrectly
+			extracted parts</p>
+		<img src="images/Bild2_17.png" width="800" /><br />
+		<p>Keep the pen's Alpha value at around 0.7 to do so softly</p>
+		<img src="images/Bild2_18.png" width="800" /><br />
+		<p>When done, ok out of the form and in the main extracing form click onto the compose button. Load the 
+			desired background and look at the picture to see that the whiskers are really missing in this composition</p>
+		<img src="images/Bild2_19.png" width="800" /><br />
+		<p>We now can solve the wide alpha range problem by changing the gamma (power function) of the alpha channel</p>
+		<img src="images/Bild2_20.png" width="800" /><br />
+		<p>Return to the main extracting form and click onto PoissonDraw. We now will use Poisson blending for pen strokes
+			to add the whiskers to the picture. This is a technique of derivative based image editing. I.e.: We want to
+			use the colors of the lower image at the boundary of our pen strokes, but the Change (= structure) of the
+			newly drawn parts (usually of the upper image in Poisson blending)</p>
+		<img src="images/Bild2_21.png" width="800" /><br />
+		<p>In the Poisson drawing form first load the original image to the left pane from which we will copy the whiskers</p>
+		<img src="images/Bild2_22.png" width="800" /><br />
+		<p>Now define a src point in the left pane and a dest point in the right pane. These points are mapped/synchronized to
+			virtually overlay the left picture onto the right one at the correct coordinate. Use points that are easy to find
+			in both images, to get enough of precision for overlaying the images</p>
+		<img src="images/Bild2_23.png" width="800" /><br />
+		<p>You can check, if your points are good enough by switching on and off the overlay src pic checkbox.</p>
+		<img src="images/Bild2_24.png" width="800" /><br />
+		<p>Now check the Draw checkbox, chose a relatively small pen and follow the whiskers with the left mouse button 
+			pressed in the right pane. Do one whisker at a time for keeping the copied parts slim, to not copy too much 
+			of the undesired background. Check the result by unchecking the overlay src pic checkbox</p>
+		<img src="images/Bild2_25.png" width="800" /><br />
+		<p>Do so for the ones over the cats eye</p>
+		<img src="images/Bild2_26.png" width="800" /><br />
+		<p>Ok back to the main extracting form. Save the picture</p>
+		<img src="images/Bild2_27.png" width="800" /><br />
+		<p>Here's a screenshot of the result</p>
+		<img src="images/Bild2_28.png" width="800" /><br />
+		<p>Some notes if this procedure produces too much src pic background in the result. Since we are using a changing and
+			colorly close src pic, poisson blending with the unedited src will produce nice results. This usually is not the case.
+			For this you can expose the lighter parts of the src image by screen blending it to itself, then do the poisson
+			drawn pen strokes. Then go back to the main extracting form and chose compose again. Now click onto the From cache
+			button and select the previously composed picture (cat at correct place but missing whiskers) as new background.
+			Now you have the same scene twice, one (BG) without the whiskers and one (FG) with the Poisson blended result.
+			Click onto the foreground picture and reduce the opacity of it until you like the results. Pictures for this 
+			procedure will follow
+			</p>
 	</body>
 </html>
