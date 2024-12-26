@@ -358,20 +358,20 @@ namespace AvoidAGrabCutEasy
                                     else
                                         e.Graphics.DrawPath(pen, gp);
                                 }
-                            }
 
-                            //test
-                            using (Pen pen = new Pen(new SolidBrush(Color.FromArgb(this.cbOverlay.Checked ? 127 : 64, Color.Lime)),
-                                Math.Max(w * this.helplineRulerCtrl2.Zoom, 1.0f)))
-                            {
-                                pen.LineJoin = LineJoin.Round;
-                                pen.StartCap = LineCap.Round;
-                                pen.EndCap = LineCap.Round;
+                                //test
+                                using (Pen pen = new Pen(new SolidBrush(Color.FromArgb(this.cbOverlay.Checked ? 127 : 64, Color.Lime)),
+                                    Math.Max(w * this.helplineRulerCtrl2.Zoom, 1.0f)))
+                                {
+                                    pen.LineJoin = LineJoin.Round;
+                                    pen.StartCap = LineCap.Round;
+                                    pen.EndCap = LineCap.Round;
 
-                                if (this.CurPath?.Count == 1)
-                                    e.Graphics.FillPath(tb, gp);
-                                else
-                                    e.Graphics.DrawPath(pen, gp);
+                                    if (this.CurPath?.Count == 1)
+                                        e.Graphics.FillPath(tb, gp);
+                                    else
+                                        e.Graphics.DrawPath(pen, gp);
+                                }
                             }
                         }
                     }
