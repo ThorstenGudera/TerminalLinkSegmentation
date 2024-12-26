@@ -55,4 +55,4 @@ Info: I removed the usage_guide from the project, since the filesize simply gets
 
 https://1drv.ms/u/c/d5e5bd21dbf5e4e9/ESvgrQptooFFtpqwyufU7tEBBGs8MuHHhuCKlk1W6qb2uw?e=aUf89Z
 
-(one drive, link shared with anyone, no log in needed - at least thats what in the create_link_dialog was stated.)
+(onedrive, link shared with anyone, no log in needed - at least thats what in the create_link_dialog was stated. If you get to a page with a big unauthenticated in the middle, you still can download the file from the button at left_top of the page.)
