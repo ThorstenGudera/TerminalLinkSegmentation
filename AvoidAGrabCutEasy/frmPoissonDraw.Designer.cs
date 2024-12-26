@@ -130,6 +130,7 @@ namespace AvoidAGrabCutEasy
             Timer3 = new System.Windows.Forms.Timer(components);
             splitContainer1 = new SplitContainer();
             helplineRulerCtrl2 = new HelplineRulerCtrl();
+            btnScreenBlend = new Button();
             statusStrip1.SuspendLayout();
             panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numOpacity).BeginInit();
@@ -406,6 +407,7 @@ namespace AvoidAGrabCutEasy
             // 
             // panel1
             // 
+            panel1.Controls.Add(btnScreenBlend);
             panel1.Controls.Add(label5);
             panel1.Controls.Add(cbOverlay);
             panel1.Controls.Add(btnLoadOrig);
@@ -693,6 +695,16 @@ namespace AvoidAGrabCutEasy
             helplineRulerCtrl2.ZoomSetManually = false;
             helplineRulerCtrl2.DBPanelDblClicked += helplineRulerCtrl2_DBPanelDblClicked;
             // 
+            // btnScreenBlend
+            // 
+            btnScreenBlend.Location = new Point(274, 130);
+            btnScreenBlend.Name = "btnScreenBlend";
+            btnScreenBlend.Size = new Size(88, 28);
+            btnScreenBlend.TabIndex = 763;
+            btnScreenBlend.Text = "ScreenBlend";
+            btnScreenBlend.UseVisualStyleBackColor = true;
+            btnScreenBlend.Click += btnScreenBlend_Click;
+            // 
             // frmPoissonDraw
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -773,5 +785,6 @@ namespace AvoidAGrabCutEasy
         private CheckBox cbOverlay;
         internal Button btnLoadOrig;
         private NumericUpDown numOpacity;
+        private Button btnScreenBlend;
     }
 }

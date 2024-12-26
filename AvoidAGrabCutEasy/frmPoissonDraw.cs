@@ -1758,5 +1758,79 @@ namespace AvoidAGrabCutEasy
             this._tb?.ResetTransform();
             this._tb?.TranslateTransform(dx, dy);
         }
+
+        private void btnScreenBlend_Click(object sender, EventArgs e)
+        {
+            if (this.helplineRulerCtrl1.Bmp != null)
+            {
+                Bitmap b = new Bitmap(this.helplineRulerCtrl1.Bmp);
+                ScreenBlend(b);
+
+                this.SetBitmap(this.helplineRulerCtrl1.Bmp, b, this.helplineRulerCtrl1, "Bmp");
+
+                double faktor = System.Convert.ToDouble(this.helplineRulerCtrl1.dbPanel1.Width) / System.Convert.ToDouble(this.helplineRulerCtrl1.dbPanel1.Height);
+                double multiplier = System.Convert.ToDouble(this.helplineRulerCtrl1.Bmp.Width) / System.Convert.ToDouble(this.helplineRulerCtrl1.Bmp.Height);
+                if (multiplier >= faktor)
+                    this.helplineRulerCtrl1.Zoom = System.Convert.ToSingle(System.Convert.ToDouble(this.helplineRulerCtrl1.dbPanel1.Width) / System.Convert.ToDouble(this.helplineRulerCtrl1.Bmp.Width));
+                else
+                    this.helplineRulerCtrl1.Zoom = System.Convert.ToSingle(System.Convert.ToDouble(this.helplineRulerCtrl1.dbPanel1.Height) / System.Convert.ToDouble(this.helplineRulerCtrl1.Bmp.Height));
+
+                this.helplineRulerCtrl1.dbPanel1.AutoScrollMinSize = new Size(System.Convert.ToInt32(this.helplineRulerCtrl1.Bmp.Width * this.helplineRulerCtrl1.Zoom), System.Convert.ToInt32(this.helplineRulerCtrl1.Bmp.Height * this.helplineRulerCtrl1.Zoom));
+
+                this.helplineRulerCtrl1.MakeBitmap(this.helplineRulerCtrl1.Bmp);
+
+                this.helplineRulerCtrl1.dbPanel1.Invalidate();
+
+                Bitmap? bC = new Bitmap(b);
+                this.SetBitmap(ref this._bmpBU, ref bC);
+
+                Bitmap? bD = new Bitmap(this.helplineRulerCtrl1.Bmp.Width, this.helplineRulerCtrl1.Bmp.Height);
+                this.SetBitmap(ref this._bmpDraw, ref bD);
+
+                if (this._bmpBUZoomed != null)
+                    this._bmpBUZoomed.Dispose();
+                this._bmpBUZoomed = null;
+                if (this._bmpBUZoomed == null && this._bmpBU != null)
+                    MakeBitmap(this._bmpBU, this.helplineRulerCtrl2.Zoom);
+
+                this._sourcePt = new Point(0, 0);
+
+                int dx = this._destPt.X - this._sourcePt.X;
+                int dy = this._destPt.Y - this._sourcePt.Y;
+
+                if (this._tb != null)
+                    this._tb.Dispose();
+                this._tb = null;
+                SetupTB();
+
+                this._tb?.ResetTransform();
+                this._tb?.TranslateTransform(dx, dy);
+            }
+        }
+
+        private unsafe void ScreenBlend(Bitmap b)
+        {
+            int w = b.Width;
+            int h = b.Height;
+            BitmapData bmD = b.LockBits(new Rectangle(0, 0, w, h), ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
+            int stride = bmD.Stride;
+
+            Parallel.For(0, h, y =>
+            {
+                byte* p = (byte*)bmD.Scan0;
+                p += y * stride;
+
+                for (int x = 0; x < w; x++)
+                {
+                    p[0] = (byte)Math.Max(Math.Min(Math.Sqrt((double)p[0] * (double)p[0] + (double)p[0] * (double)p[0]), 255), 0);
+                    p[1] = (byte)Math.Max(Math.Min(Math.Sqrt((double)p[1] * (double)p[1] + (double)p[1] * (double)p[1]), 255), 0);
+                    p[2] = (byte)Math.Max(Math.Min(Math.Sqrt((double)p[2] * (double)p[2] + (double)p[2] * (double)p[2]), 255), 0);
+
+                    p += 4;
+                }
+            });
+
+            b.UnlockBits(bmD);
+        }
     }
 }
