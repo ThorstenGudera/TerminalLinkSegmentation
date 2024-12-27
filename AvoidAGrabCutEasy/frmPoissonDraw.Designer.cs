@@ -107,6 +107,8 @@ namespace AvoidAGrabCutEasy
             toolStripStatusLabel3 = new ToolStripStatusLabel();
             panel3 = new Panel();
             panel1 = new Panel();
+            label6 = new Label();
+            btnSaveStrokes = new Button();
             btnScreenBlend = new Button();
             label5 = new Label();
             cbOverlay = new CheckBox();
@@ -131,8 +133,6 @@ namespace AvoidAGrabCutEasy
             Timer3 = new System.Windows.Forms.Timer(components);
             splitContainer1 = new SplitContainer();
             helplineRulerCtrl2 = new HelplineRulerCtrl();
-            label6 = new Label();
-            btnSaveStrokes = new Button();
             statusStrip1.SuspendLayout();
             panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numOpacity).BeginInit();
@@ -452,6 +452,25 @@ namespace AvoidAGrabCutEasy
             panel1.Size = new Size(1200, 189);
             panel1.TabIndex = 247;
             // 
+            // label6
+            // 
+            label6.AutoSize = true;
+            label6.Location = new Point(637, 114);
+            label6.Name = "label6";
+            label6.Size = new Size(175, 15);
+            label6.TabIndex = 765;
+            label6.Text = "save a pic with all drawn strokes";
+            // 
+            // btnSaveStrokes
+            // 
+            btnSaveStrokes.Location = new Point(824, 107);
+            btnSaveStrokes.Name = "btnSaveStrokes";
+            btnSaveStrokes.Size = new Size(88, 28);
+            btnSaveStrokes.TabIndex = 764;
+            btnSaveStrokes.Text = "Go";
+            btnSaveStrokes.UseVisualStyleBackColor = true;
+            btnSaveStrokes.Click += btnSaveStrokes_Click;
+            // 
             // btnScreenBlend
             // 
             btnScreenBlend.Location = new Point(274, 130);
@@ -708,25 +727,6 @@ namespace AvoidAGrabCutEasy
             helplineRulerCtrl2.Zoom = 1F;
             helplineRulerCtrl2.ZoomSetManually = false;
             helplineRulerCtrl2.DBPanelDblClicked += helplineRulerCtrl2_DBPanelDblClicked;
-            // 
-            // label6
-            // 
-            label6.AutoSize = true;
-            label6.Location = new Point(637, 114);
-            label6.Name = "label6";
-            label6.Size = new Size(178, 15);
-            label6.TabIndex = 765;
-            label6.Text = "save a pic with all drawn striokes";
-            // 
-            // btnSaveStrokes
-            // 
-            btnSaveStrokes.Location = new Point(824, 107);
-            btnSaveStrokes.Name = "btnSaveStrokes";
-            btnSaveStrokes.Size = new Size(88, 28);
-            btnSaveStrokes.TabIndex = 764;
-            btnSaveStrokes.Text = "Go";
-            btnSaveStrokes.UseVisualStyleBackColor = true;
-            btnSaveStrokes.Click += btnSaveStrokes_Click;
             // 
             // frmPoissonDraw
             // 

@@ -79,6 +79,8 @@ namespace AvoidAGrabCutEasy
         private int _ix2;
         private int _iy2;
         private bool _overlaySrc;
+        private int _eX;
+        private int _eY;
 
         public frmPoissonDraw(Bitmap bmp, string basePathAddition)
         {
@@ -193,7 +195,29 @@ namespace AvoidAGrabCutEasy
 
         private void helplineRulerCtrl1_MouseMove(object? sender, MouseEventArgs e)
         {
+            if (this.helplineRulerCtrl1.Bmp != null)
+            {
+                int ix = System.Convert.ToInt32((e.X - this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X) / (double)this.helplineRulerCtrl1.Zoom);
+                int iy = System.Convert.ToInt32((e.Y - this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y) / (double)this.helplineRulerCtrl1.Zoom);
 
+                if (ix < 0)
+                    ix = 0;
+
+                if (iy < 0)
+                    iy = 0;
+
+                if (ix > this.helplineRulerCtrl2.Bmp.Width - 1)
+                    ix = this.helplineRulerCtrl2.Bmp.Width - 1;
+
+                if (iy > this.helplineRulerCtrl2.Bmp.Height - 1)
+                    iy = this.helplineRulerCtrl2.Bmp.Height - 1;
+
+                Bitmap b = (Bitmap)this.helplineRulerCtrl1.Bmp;
+                Color c = b.GetPixel(ix, iy);
+
+                toolStripStatusLabel1.Text = "x: " + ix.ToString() + ", y: " + iy.ToString();
+                this.ToolStripStatusLabel2.BackColor = c;
+            }
         }
 
         private void helplineRulerCtrl1_MouseUp(object? sender, MouseEventArgs e)
@@ -267,6 +291,9 @@ namespace AvoidAGrabCutEasy
                 int ix = System.Convert.ToInt32((e.X - this.helplineRulerCtrl2.dbPanel1.AutoScrollPosition.X) / (double)this.helplineRulerCtrl2.Zoom);
                 int iy = System.Convert.ToInt32((e.Y - this.helplineRulerCtrl2.dbPanel1.AutoScrollPosition.Y) / (double)this.helplineRulerCtrl2.Zoom);
 
+                this._eX = e.X;
+                this._eY = e.Y;
+
                 if (ix != _ix || iy != _iy)
                 {
                     _ix = ix;
@@ -287,14 +314,17 @@ namespace AvoidAGrabCutEasy
                     Bitmap b = (Bitmap)this.helplineRulerCtrl2.Bmp;
                     Color c = b.GetPixel(_ix, _iy);
 
-                    toolStripStatusLabel4.Text = "x: " + _ix.ToString() + ", y: " + _iy.ToString() + " - " + "GrayValue (all channels): " + System.Convert.ToInt32(Math.Min(System.Convert.ToDouble(c.B) * 0.11 + System.Convert.ToDouble(c.G) * 0.59 + System.Convert.ToDouble(c.R) * 0.3, 255)).ToString() + " - RGB: " + c.R.ToString() + ";" + c.G.ToString() + ";" + c.B.ToString();
-
+                    toolStripStatusLabel4.Text = "x: " + _ix.ToString() + ", y: " + _iy.ToString();
                     this.toolStripStatusLabel3.BackColor = c;
 
-                    if (this.cbDraw.Checked && this._tracking && e.Button == MouseButtons.Left)
+                    if (this.cbDraw.Checked)
                     {
-                        SetupCurPath();
-                        this.CurPath?.Add(new PointF(this._ix, this._iy));
+                        if (this._tracking && e.Button == MouseButtons.Left)
+                        {
+                            SetupCurPath();
+                            this.CurPath?.Add(new PointF(this._ix, this._iy));
+                        }
+
                         this.helplineRulerCtrl2.dbPanel1.Invalidate();
                     }
                 }
@@ -327,6 +357,7 @@ namespace AvoidAGrabCutEasy
         private void helplineRulerCtrl2_Paint(object sender, PaintEventArgs e)
         {
             SetupTB();
+            float w = (float)this.numPenSize.Value;
 
             if (this._bmpBUZoomed != null)
                 using (TextureBrush tb = new TextureBrush(this._bmpBUZoomed))
@@ -334,17 +365,16 @@ namespace AvoidAGrabCutEasy
                     tb.WrapMode = WrapMode.TileFlipXY;
                     int dx = this._destPt.X - this._sourcePt.X;
                     int dy = this._destPt.Y - this._sourcePt.Y;
-                    tb.TranslateTransform(dx * this.helplineRulerCtrl2.Zoom, dy * this.helplineRulerCtrl2.Zoom);
+                    tb.TranslateTransform(dx * helplineRulerCtrl2.Zoom, dy * helplineRulerCtrl2.Zoom);
 
                     if (!this._dontDrawPath && this.cbDraw.Checked && this._tracking)
                     {
                         using (GraphicsPath gp = GetPath())
                         {
-                            float w = (float)this.numPenSize.Value;
                             int x = this.helplineRulerCtrl2.dbPanel1.AutoScrollPosition.X;
                             int y = this.helplineRulerCtrl2.dbPanel1.AutoScrollPosition.Y;
                             tb.TranslateTransform(x, y);
-                            using (Matrix m = new Matrix(1, 0, 0, 1, x, y))
+                            using (Matrix m = new Matrix(this.helplineRulerCtrl2.Zoom, 0, 0, this.helplineRulerCtrl2.Zoom, x, y)) //for drawing hlc2
                             {
                                 gp.Transform(m);
                                 using (Pen pen = new Pen(tb, Math.Max(w * this.helplineRulerCtrl2.Zoom, 1.0f)))
@@ -376,6 +406,12 @@ namespace AvoidAGrabCutEasy
                         }
                     }
                 }
+
+            if (this.cbDraw.Checked)
+            {
+                using (SolidBrush sb = new SolidBrush(Color.FromArgb(this.cbOverlay.Checked ? 127 : 64, Color.Lime)))
+                    e.Graphics.FillEllipse(sb, new RectangleF(_eX - w / 4f, _eY - w / 4f, w / 2f, w / 2f));
+            }
 
             if (this._overlaySrc)
             {
