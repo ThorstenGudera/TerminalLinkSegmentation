@@ -2080,13 +2080,13 @@ namespace AvoidAGrabCutEasy
                 conv.ProgressPlus += Conv_ProgressPlus;
 
                 //get an edge representation by convolving in log mode (positive) (grayscaled)
-                LoG_PositiveValues(bmpToFind, 7, false, conv, this.backgroundWorker2, 0.3, false, 1.0, 10.0, true);
+                LoG_PositiveValues(bmpToFind, 7, false, conv, this.backgroundWorker2, 0.3, false, 1.0, 1.0, true);
 
                 this.backgroundWorker2.ReportProgress(0);
                 conv.CancelLoops = false;
 
                 //get an edge representation by convolving in log mode (positive) (grayscaled)
-                LoG_PositiveValues(bmpToSearch, 7, false, conv, this.backgroundWorker2, 0.3, false, 1.0, 10.0, true);
+                LoG_PositiveValues(bmpToSearch, 7, false, conv, this.backgroundWorker2, 0.3, false, 1.0, 1.0, true);
                 conv.ProgressPlus -= Conv_ProgressPlus;
 
                 this.backgroundWorker2.ReportProgress(0);
