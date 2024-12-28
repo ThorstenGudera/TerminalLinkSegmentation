@@ -1,4 +1,5 @@
 ﻿using Cache;
+using ConvolutionLib;
 using PoissonBlend;
 using QuickExtract2;
 using System;
@@ -81,6 +82,8 @@ namespace AvoidAGrabCutEasy
         private bool _overlaySrc;
         private int _eX;
         private int _eY;
+
+        private object _lockObject = new object();
 
         public frmPoissonDraw(Bitmap bmp, string basePathAddition)
         {
@@ -237,6 +240,12 @@ namespace AvoidAGrabCutEasy
                     this._sourcePt.Y * this.helplineRulerCtrl1.Zoom - 5 + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y,
                     this._sourcePt.X * this.helplineRulerCtrl1.Zoom - 5 + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X,
                     this._sourcePt.Y * this.helplineRulerCtrl1.Zoom + 5 + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y);
+
+                if (this.cbFindDestPoint.Checked)
+                    e.Graphics.DrawRectangle(Pens.Red, (this._sourcePt.X - (int)this.numSrcPtSurround.Value) * this.helplineRulerCtrl1.Zoom + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X,
+                        (this._sourcePt.Y - (int)this.numSrcPtSurround.Value) * this.helplineRulerCtrl1.Zoom + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y,
+                        ((int)this.numSrcPtSurround.Value * 2 + 1) * this.helplineRulerCtrl1.Zoom,
+                        ((int)this.numSrcPtSurround.Value * 2 + 1) * this.helplineRulerCtrl1.Zoom);
             }
         }
 
@@ -1444,7 +1453,7 @@ namespace AvoidAGrabCutEasy
                             ct.Enabled = e;
                     }
 
-                    this.helplineRulerCtrl1.Enabled = e;
+                    this.helplineRulerCtrl1.Enabled = this.helplineRulerCtrl2.Enabled = e;
 
                     this.Cursor = e ? Cursors.Default : Cursors.WaitCursor;
                 }));
@@ -1457,7 +1466,7 @@ namespace AvoidAGrabCutEasy
                         ct.Enabled = e;
                 }
 
-                this.helplineRulerCtrl1.Enabled = e;
+                this.helplineRulerCtrl1.Enabled = this.helplineRulerCtrl2.Enabled = e;
 
                 this.Cursor = e ? Cursors.Default : Cursors.WaitCursor;
             }
@@ -1932,5 +1941,463 @@ namespace AvoidAGrabCutEasy
                     bmp.Save(this.saveFileDialog1.FileName, ImageFormat.Png);
             }
         }
+
+        private void numSrcPtSurround_ValueChanged(object sender, EventArgs e)
+        {
+            this.helplineRulerCtrl1.dbPanel1.Invalidate();
+        }
+
+        private void cbFindDestPoint_CheckedChanged(object sender, EventArgs e)
+        {
+            this.helplineRulerCtrl1.dbPanel1.Invalidate();
+        }
+
+        private void btnFindDestPoint_Click(object sender, EventArgs e)
+        {
+            if (this.helplineRulerCtrl1.Bmp != null && this.helplineRulerCtrl2.Bmp != null)
+            {
+                Bitmap? bmpToFind = null;
+                try
+                {
+                    bmpToFind = this.helplineRulerCtrl1.Bmp.Clone(new Rectangle(
+                       Math.Max(this._sourcePt.X - (int)this.numSrcPtSurround.Value, 0),
+                       Math.Max(this._sourcePt.Y - (int)this.numSrcPtSurround.Value, 0),
+                       Math.Min((int)this.numSrcPtSurround.Value * 2 + 1, this.helplineRulerCtrl1.Bmp.Width - 1 - this._sourcePt.X),
+                       Math.Min((int)this.numSrcPtSurround.Value * 2 + 1, this.helplineRulerCtrl1.Bmp.Height - 1 - this._sourcePt.Y)),
+                       this.helplineRulerCtrl1.Bmp.PixelFormat);
+
+                    if (bmpToFind.Width > 1 && (bmpToFind.Width & 0x01) != 1)
+                        bmpToFind = bmpToFind.Clone(new Rectangle(0, 0, bmpToFind.Width - 1, bmpToFind.Height), bmpToFind.PixelFormat);
+
+                    if (bmpToFind.Height > 1 && (bmpToFind.Height & 0x01) != 1)
+                        bmpToFind = bmpToFind.Clone(new Rectangle(0, 0, bmpToFind.Width, bmpToFind.Height - 1), bmpToFind.PixelFormat);
+
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.ToString());
+                    return;
+                }
+
+                if (bmpToFind != null && bmpToFind.Width > 18 && bmpToFind.Height > 18)
+                {
+                    this.SetControls(false);
+                    this.toolStripProgressBar1.Value = 0;
+                    this.toolStripProgressBar1.Visible = true;
+
+                    //pad image
+                    Bitmap bmpToSearch = new Bitmap(this.helplineRulerCtrl2.Bmp.Width + (int)this.numSrcPtSurround.Value * 2,
+                        this.helplineRulerCtrl2.Bmp.Height + (int)this.numSrcPtSurround.Value * 2);
+                    using Graphics gx = Graphics.FromImage(bmpToSearch);
+                    gx.DrawImage(this.helplineRulerCtrl2.Bmp, (int)this.numSrcPtSurround.Value, (int)this.numSrcPtSurround.Value);
+
+                    this.backgroundWorker2.RunWorkerAsync(new object[] { bmpToFind, bmpToSearch, (int)this.numSrcPtSurround.Value });
+                }
+            }
+        }
+
+        private bool LoG_PositiveValues(Bitmap b, int Length, bool doTransparency, Convolution conv,
+            System.ComponentModel.BackgroundWorker bgw, double stddev, bool f_auto, double f, double divisor, bool grayscale)
+        {
+            if (grayscale)
+                Grayscale(b);
+
+            double[,] Kernel = new double[Length - 1 + 1, Length - 1 + 1];
+            int Radius = Length / 2;
+
+            stddev *= Radius;
+            double stddev2 = stddev * stddev;
+            double stddev4 = stddev2 * stddev2;
+
+            double ff = f;
+            if (f_auto)
+                ff = -1.0 / (Math.PI * stddev4);
+
+            double a = (2.0 * stddev2);
+
+            double Sum = 0.0;
+
+            for (int y = 0; y <= Kernel.GetLength(1) - 1; y++)
+            {
+                for (int x = 0; x <= Kernel.GetLength(0) - 1; x++)
+                {
+                    double dist = Math.Sqrt((x - Radius) * (x - Radius) + (y - Radius) * (y - Radius));
+                    double nabla2 = 1.0 - (dist * dist / (2.0 * stddev2));
+                    Kernel[x, y] = ff * nabla2 * Math.Exp(-dist * dist / a);
+
+                    Sum += Kernel[x, y];
+                }
+            }
+
+            for (int y = 0; y <= Kernel.GetLength(1) - 1; y++)
+            {
+                for (int x = 0; x <= Kernel.GetLength(0) - 1; x++)
+                    Kernel[x, y] /= Sum;
+            }
+
+            double[,] AddVals = conv.CalculateStandardAddVals(Kernel);
+
+            ConvolutionLib.ProgressEventArgs pe = new ConvolutionLib.ProgressEventArgs(b.Height, 20, 1);
+
+            return conv.Convolve_par_Pos(b, Kernel, AddVals, 0, 255, false, true, pe, bgw, divisor);
+        }
+
+        private unsafe void Grayscale(Bitmap bmp)
+        {
+            BitmapData bmData = bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height), ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
+            int stride = bmData.Stride;
+            int nWidth = bmp.Width;
+            int nHeight = bmp.Height;
+
+            byte* p = (byte*)bmData.Scan0;
+
+            int pos = 0;
+            for (int y = 0; y < nHeight; y++)
+            {
+                pos = y * stride;
+                for (int x = 0; x < nWidth; x++)
+                {
+                    int v = (int)Math.Max(Math.Min((double)p[pos] * 0.11 + (double)p[pos + 1] * 0.59 + (double)p[pos + 2] * 0.3, 255), 0);
+                    p[pos] = p[pos + 1] = p[pos + 2] = (byte)v;
+
+                    pos += 4;
+                }
+            }
+
+            bmp.UnlockBits(bmData);
+        }
+
+        private void backgroundWorker2_DoWork(object? sender, DoWorkEventArgs e)
+        {
+            if (e.Argument != null)
+            {
+                object[] o = (object[])e.Argument;
+                Bitmap bmpToFind = (Bitmap)o[0];
+                Bitmap bmpToSearch = (Bitmap)o[1];
+                int wh = (int)o[2];
+                Convolution conv = new Convolution();
+                conv.CancelLoops = false;
+                conv.ProgressPlus += Conv_ProgressPlus;
+
+                //get an edge representation by convolving in log mode (positive) (grayscaled)
+                LoG_PositiveValues(bmpToFind, 7, false, conv, this.backgroundWorker2, 0.3, false, 1.0, 10.0, true);
+
+                this.backgroundWorker2.ReportProgress(0);
+                conv.CancelLoops = false;
+
+                //get an edge representation by convolving in log mode (positive) (grayscaled)
+                LoG_PositiveValues(bmpToSearch, 7, false, conv, this.backgroundWorker2, 0.3, false, 1.0, 10.0, true);
+                conv.ProgressPlus -= Conv_ProgressPlus;
+
+                this.backgroundWorker2.ReportProgress(0);
+
+                //read in bmpToFind (just one channel) as kernel
+                double[,] kernel = ReadInBitmap(bmpToFind);
+
+                if (kernel.GetLength(0) < 15 || FFT_related.CheckWH(new Size(kernel.GetLength(0), kernel.GetLength(1))) > 4096) //restrict size a bit
+                {
+                    ConvolutionLib.ProgressEventArgs pe = new ConvolutionLib.ProgressEventArgs(bmpToSearch.Height, 20, 1);
+                    Correlate(bmpToSearch, kernel, pe, this.backgroundWorker2);
+                }
+                else
+                {
+                    using Bitmap bmpToSearchTmp = bmpToSearch;
+                    bmpToSearch = FFT_related.Convolve(bmpToSearchTmp, MakeKernelSumOne(kernel), 0, this.backgroundWorker2);
+                }
+
+                e.Result = FindPoint(bmpToSearch, wh);
+            }
+        }
+
+        private double[,] MakeKernelSumOne(double[,] kernel)
+        {
+            double sum = kernel.Cast<double>().Sum();
+
+            for (int y = 0; y < kernel.GetLength(1); y++)
+                for (int x = 0; x < kernel.GetLength(0); x++)
+                    kernel[x, y] /= sum;
+
+            double[,] d = new double[kernel.GetLength(0), kernel.GetLength(1)];
+
+            //rotate by 180°
+            for (int y = 0; y < kernel.GetLength(1); y++)
+                for (int x = 0; x < kernel.GetLength(0); x++)
+                    d[x, y] = kernel[kernel.GetLength(0) - 1 - x, kernel.GetLength(1) - 1 - y];
+
+            return d;
+        }
+
+        private unsafe double[,] ReadInBitmap(Bitmap bmp)
+        {
+            int xAdd = 0;
+            int yAdd = 0;
+
+            if ((bmp.Width & 0x1) != 1)
+                xAdd = -1;
+            if ((bmp.Height & 0x1) != 1)
+                yAdd = -1;
+
+            using (Bitmap bWork = new Bitmap(bmp.Width + xAdd, bmp.Height + yAdd))
+            {
+                using (Graphics gx = Graphics.FromImage(bWork))
+                    gx.DrawImage(bmp, 0, 0);
+
+                double[,] kernel = new double[bWork.Width, bWork.Height];
+
+                BitmapData bmData = bWork.LockBits(new Rectangle(0, 0, bWork.Width, bWork.Height), ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
+                int stride = bmData.Stride;
+                int nWidth = bWork.Width;
+                int nHeight = bWork.Height;
+
+                Parallel.For(0, nHeight, y =>
+                {
+                    byte* p = (byte*)bmData.Scan0;
+                    for (int x = 0; x < nWidth; x++)
+                        kernel[x, y] = p[y * stride + x * 4];
+                });
+
+                bWork.UnlockBits(bmData);
+
+                return kernel;
+            }
+        }
+
+        private unsafe Point FindPoint(Bitmap bmpToSearch, int wh)
+        {
+            int w = bmpToSearch.Width;
+            int h = bmpToSearch.Height;
+            int maxVal = 0;
+            int xx = 0;
+            int yy = 0;
+
+            BitmapData bmData = bmpToSearch.LockBits(new Rectangle(0, 0, w, h), ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
+            int stride = bmData.Stride;
+
+            byte* p = (byte*)bmData.Scan0;
+
+            for (int y = 0; y < h; y++)
+            {
+                p = (byte*)bmData.Scan0;
+                p += y * stride;
+
+                for (int x = 0; x < w; x++)
+                {
+                    if (p[0] > maxVal)
+                    {
+                        maxVal = p[0];
+                        xx = x;
+                        yy = y;
+                    }
+
+                    p += 4;
+                }
+            }
+
+            bmpToSearch.UnlockBits(bmData);
+
+            return new Point(xx - wh, yy - wh);
+        }
+
+        private void Conv_ProgressPlus(object sender, ConvolutionLib.ProgressEventArgs e)
+        {
+            this.backgroundWorker2.ReportProgress(Math.Min((int)e.CurrentProgress, 100));
+        }
+
+        private void backgroundWorker2_ProgressChanged(object? sender, ProgressChangedEventArgs e)
+        {
+            if (InvokeRequired)
+                this.Invoke(new Action(() => { this.toolStripProgressBar1.Value = Math.Min(e.ProgressPercentage, this.toolStripProgressBar1.Maximum); }));
+            else
+                this.toolStripProgressBar1.Value = Math.Min(e.ProgressPercentage, this.toolStripProgressBar1.Maximum);
+        }
+
+        private void backgroundWorker2_RunWorkerCompleted(object? sender, RunWorkerCompletedEventArgs e)
+        {
+            if (e.Result != null)
+            {
+                Point pt = (Point)e.Result;
+                this._destPt = pt;
+                if (this.cbAuto.Checked)
+                    this.cbSetPts.Checked = false;
+
+                this.helplineRulerCtrl2.dbPanel1.Invalidate();
+            }
+
+            this.SetControls(true);
+
+            if (this.Timer3.Enabled)
+                this.Timer3.Stop();
+
+            this.Timer3.Start();
+
+            //re init the bgw
+            this.backgroundWorker2.Dispose();
+            this.backgroundWorker2 = new BackgroundWorker();
+            this.backgroundWorker2.WorkerReportsProgress = true;
+            this.backgroundWorker2.WorkerSupportsCancellation = true;
+            this.backgroundWorker2.DoWork += backgroundWorker2_DoWork;
+            this.backgroundWorker2.ProgressChanged += backgroundWorker2_ProgressChanged;
+            this.backgroundWorker2.RunWorkerCompleted += backgroundWorker2_RunWorkerCompleted;
+        }
+
+        // correlate, note: dont rotate bmpToFind
+        public unsafe bool Correlate(Bitmap b, double[,] Kernel, ConvolutionLib.ProgressEventArgs pe, System.ComponentModel.BackgroundWorker bgw)
+        {
+            if (!AvailMem.AvailMem.checkAvailRam(b.Width * b.Height * 12L))
+                throw new OutOfMemoryException("Not enough Memory.");
+            if (Kernel.GetLength(0) != Kernel.GetLength(1))
+                throw new Exception("Kernel must be quadratic.");
+            if ((Kernel.GetLength(0) & 0x1) != 1)
+                throw new Exception("Kernelrows Length must be Odd.");
+            if (Kernel.GetLength(0) < 3)
+                throw new Exception("Kernelrows Length must be in the range from 3 to" + (Math.Min(b.Width - 1, b.Height - 1)).ToString() + ".");
+            if (Kernel.GetLength(0) > Math.Min(b.Width - 1, b.Height - 1))
+                throw new Exception("Kernelrows Length must be in the range from 3 to" + (Math.Min(b.Width - 1, b.Height - 1)).ToString() + ".");
+
+            int h = Kernel.GetLength(0) / 2;
+
+            Bitmap? bSrc = null;
+            BitmapData? bmData = null;
+            BitmapData? bmSrc = null;
+
+            try
+            {
+                bSrc = (Bitmap)b.Clone();
+                bmData = b.LockBits(new Rectangle(0, 0, b.Width, b.Height), ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
+                bmSrc = bSrc.LockBits(new Rectangle(0, 0, bSrc.Width, bSrc.Height), ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
+                int stride = bmData.Stride;
+
+                System.IntPtr Scan0 = bmData.Scan0;
+                System.IntPtr SrcScan0 = bmSrc.Scan0;
+
+                int nWidth = b.Width;
+                int nHeight = b.Height;
+
+                int llh = h * stride;
+                int lh = h * 4;
+
+                // #Region "Main Body"
+                // For y As Integer = 0 To nHeight - Kernel.GetLength(1)
+                Parallel.For(0, nHeight - Kernel.GetLength(1) + 1, (y, loopState) =>
+                {
+                    try
+                    {
+                        if (bgw != null && bgw.WorkerSupportsCancellation && bgw.CancellationPending)
+                            loopState.Break();
+                    }
+                    catch
+                    {
+                    }
+
+                    double fSum = 0.0;
+                    double KfSum = 0.0;
+                    double fCount = 0.0;
+                    double z = 1.0 / (Kernel.GetLength(0) * Kernel.GetLength(1));
+
+                    int pos = 0;
+                    int posSrc = 0;
+
+                    // #Region "Standard"
+                    z = 1.0 / (Kernel.GetLength(0) * Kernel.GetLength(1));
+
+                    byte* p = (byte*)bmData.Scan0;
+                    byte* pSrc = (byte*)bmSrc.Scan0;
+
+                    for (int x = 0; x <= nWidth - Kernel.GetLength(0); x++)
+                    {
+                        fSum = 0.0;
+                        KfSum = 0.0;
+                        fCount = 0.0;
+
+                        pos = 0;
+                        pos += y * stride + x * 4;
+
+                        posSrc = 0;
+                        posSrc += y * stride + x * 4;
+
+                        for (int row = 0; row <= Kernel.GetLength(1) - 1; row++)
+                        {
+                            int llr = row * stride;
+
+                            for (int col = 0; col <= Kernel.GetLength(0) - 1; col++)
+                            {
+                                int lc = col * 4;
+
+                                fSum += (System.Convert.ToDouble(pSrc[posSrc + llr + lc]) * Kernel[col, row]);
+                                fCount += z;
+
+                                KfSum += Kernel[col, row];
+                            }
+                        }
+
+                        if (KfSum == 0.0)
+                            KfSum = 1.0;
+
+                        if (fCount == 0.0)
+                            fCount = 1.0;
+
+                        pos += llh + lh;
+                        p[pos] = System.Convert.ToByte(Math.Max(Math.Min(System.Convert.ToInt32(Math.Max(Math.Min((fSum / KfSum), Int32.MaxValue), Int32.MinValue) / System.Convert.ToDouble(fCount)), 255), 0));
+                        p[pos + 1] = System.Convert.ToByte(Math.Max(Math.Min(System.Convert.ToInt32(Math.Max(Math.Min((fSum / KfSum), Int32.MaxValue), Int32.MinValue) / System.Convert.ToDouble(fCount)), 255), 0));
+                        p[pos + 2] = System.Convert.ToByte(Math.Max(Math.Min(System.Convert.ToInt32(Math.Max(Math.Min((fSum / KfSum), Int32.MaxValue), Int32.MinValue) / System.Convert.ToDouble(fCount)), 255), 0));
+                    }
+                    // #End Region
+
+                    lock (this._lockObject)
+                    {
+                        if (pe != null)
+                        {
+                            if (pe.ImgWidthHeight < Int32.MaxValue)
+                                pe.CurrentProgress += 1;
+                            try
+                            {
+                                if (System.Convert.ToInt32(pe.CurrentProgress) % pe.PrgInterval == 0)
+                                    this.backgroundWorker2.ReportProgress(Math.Min(
+                                        (int)(((double)pe.CurrentProgress / (double)pe.ImgWidthHeight) * 100), 100));
+                            }
+                            catch
+                            {
+                            }
+                        }
+                    }
+                });
+                // Next
+                // #End Region
+
+                b.UnlockBits(bmData);
+                bSrc.UnlockBits(bmSrc);
+                bSrc.Dispose();
+
+                return true;
+            }
+            catch
+            {
+                try
+                {
+                    if (bmData != null)
+                        b.UnlockBits(bmData);
+                }
+                catch
+                {
+                }
+
+                try
+                {
+                    if (bSrc != null && bmSrc != null)
+                        bSrc.UnlockBits(bmSrc);
+                }
+                catch
+                {
+                }
+
+                if (bSrc != null)
+                {
+                    bSrc.Dispose();
+                    bSrc = null;
+                }
+            }
+            return false;
+        }
+
     }
 }

@@ -98,6 +98,8 @@ namespace AvoidAGrabCutEasy
             button2 = new Button();
             toolTip1 = new ToolTip(components);
             btnGo = new Button();
+            cbFindDestPoint = new CheckBox();
+            numSrcPtSurround = new NumericUpDown();
             toolStripStatusLabel5 = new ToolStripStatusLabel();
             statusStrip1 = new StatusStrip();
             toolStripStatusLabel1 = new ToolStripStatusLabel();
@@ -107,6 +109,7 @@ namespace AvoidAGrabCutEasy
             toolStripStatusLabel3 = new ToolStripStatusLabel();
             panel3 = new Panel();
             panel1 = new Panel();
+            btnFindDestPoint = new Button();
             label6 = new Label();
             btnSaveStrokes = new Button();
             btnScreenBlend = new Button();
@@ -133,6 +136,8 @@ namespace AvoidAGrabCutEasy
             Timer3 = new System.Windows.Forms.Timer(components);
             splitContainer1 = new SplitContainer();
             helplineRulerCtrl2 = new HelplineRulerCtrl();
+            backgroundWorker2 = new System.ComponentModel.BackgroundWorker();
+            ((System.ComponentModel.ISupportInitialize)numSrcPtSurround).BeginInit();
             statusStrip1.SuspendLayout();
             panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numOpacity).BeginInit();
@@ -347,6 +352,30 @@ namespace AvoidAGrabCutEasy
             toolTip1.SetToolTip(btnGo, "5");
             btnGo.UseVisualStyleBackColor = true;
             // 
+            // cbFindDestPoint
+            // 
+            cbFindDestPoint.AutoSize = true;
+            cbFindDestPoint.Location = new Point(63, 74);
+            cbFindDestPoint.Name = "cbFindDestPoint";
+            cbFindDestPoint.Size = new Size(234, 19);
+            cbFindDestPoint.TabIndex = 768;
+            cbFindDestPoint.Text = "find dest point - width around src point";
+            toolTip1.SetToolTip(cbFindDestPoint, "Please note, that all pixels of the rectangle around the Src point \r\nmust be contained in the Dest image.\r\nAlso make sure, there's enough color-change inside the rectangle.");
+            cbFindDestPoint.UseVisualStyleBackColor = true;
+            cbFindDestPoint.CheckedChanged += cbFindDestPoint_CheckedChanged;
+            // 
+            // numSrcPtSurround
+            // 
+            numSrcPtSurround.Location = new Point(300, 71);
+            numSrcPtSurround.Margin = new Padding(4, 3, 4, 3);
+            numSrcPtSurround.Minimum = new decimal(new int[] { 20, 0, 0, 0 });
+            numSrcPtSurround.Name = "numSrcPtSurround";
+            numSrcPtSurround.Size = new Size(56, 23);
+            numSrcPtSurround.TabIndex = 766;
+            toolTip1.SetToolTip(numSrcPtSurround, "Please note, that all pixels of the rectangle around the Src point \r\nmust be contained in the Dest image.\r\nAlso make sure, there's enough color-change inside the rectangle.");
+            numSrcPtSurround.Value = new decimal(new int[] { 50, 0, 0, 0 });
+            numSrcPtSurround.ValueChanged += numSrcPtSurround_ValueChanged;
+            // 
             // toolStripStatusLabel5
             // 
             toolStripStatusLabel5.Name = "toolStripStatusLabel5";
@@ -409,6 +438,9 @@ namespace AvoidAGrabCutEasy
             // 
             // panel1
             // 
+            panel1.Controls.Add(cbFindDestPoint);
+            panel1.Controls.Add(btnFindDestPoint);
+            panel1.Controls.Add(numSrcPtSurround);
             panel1.Controls.Add(label6);
             panel1.Controls.Add(btnSaveStrokes);
             panel1.Controls.Add(btnScreenBlend);
@@ -451,6 +483,16 @@ namespace AvoidAGrabCutEasy
             panel1.Name = "panel1";
             panel1.Size = new Size(1200, 189);
             panel1.TabIndex = 247;
+            // 
+            // btnFindDestPoint
+            // 
+            btnFindDestPoint.Location = new Point(367, 68);
+            btnFindDestPoint.Name = "btnFindDestPoint";
+            btnFindDestPoint.Size = new Size(88, 28);
+            btnFindDestPoint.TabIndex = 767;
+            btnFindDestPoint.Text = "Find";
+            btnFindDestPoint.UseVisualStyleBackColor = true;
+            btnFindDestPoint.Click += btnFindDestPoint_Click;
             // 
             // label6
             // 
@@ -664,7 +706,6 @@ namespace AvoidAGrabCutEasy
             // numPenSize
             // 
             numPenSize.DecimalPlaces = 2;
-            numPenSize.Increment = new decimal(new int[] { 1, 0, 0, 65536 });
             numPenSize.Location = new Point(77, 15);
             numPenSize.Margin = new Padding(4, 3, 4, 3);
             numPenSize.Maximum = new decimal(new int[] { 255, 0, 0, 0 });
@@ -728,6 +769,14 @@ namespace AvoidAGrabCutEasy
             helplineRulerCtrl2.ZoomSetManually = false;
             helplineRulerCtrl2.DBPanelDblClicked += helplineRulerCtrl2_DBPanelDblClicked;
             // 
+            // backgroundWorker2
+            // 
+            backgroundWorker2.WorkerReportsProgress = true;
+            backgroundWorker2.WorkerSupportsCancellation = true;
+            backgroundWorker2.DoWork += backgroundWorker2_DoWork;
+            backgroundWorker2.ProgressChanged += backgroundWorker2_ProgressChanged;
+            backgroundWorker2.RunWorkerCompleted += backgroundWorker2_RunWorkerCompleted;
+            // 
             // frmPoissonDraw
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -741,6 +790,7 @@ namespace AvoidAGrabCutEasy
             StartPosition = FormStartPosition.CenterParent;
             Text = "frmPoissonDraw";
             Load += frmPoissonDraw_Load;
+            ((System.ComponentModel.ISupportInitialize)numSrcPtSurround).EndInit();
             statusStrip1.ResumeLayout(false);
             statusStrip1.PerformLayout();
             panel1.ResumeLayout(false);
@@ -811,5 +861,9 @@ namespace AvoidAGrabCutEasy
         private Button btnScreenBlend;
         private Label label6;
         internal Button btnSaveStrokes;
+        private CheckBox cbFindDestPoint;
+        internal Button btnFindDestPoint;
+        private NumericUpDown numSrcPtSurround;
+        internal System.ComponentModel.BackgroundWorker backgroundWorker2;
     }
 }
