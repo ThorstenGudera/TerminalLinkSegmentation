@@ -62,7 +62,6 @@ namespace AvoidAGrabCutEasy
         private bool _dontDrawPath;
 
         private static int[] CustomColors = new int[] { };
-        private bool _dontClose;
 
         private IBlendAlgorithm? _cAlg;
         private PoissonBlender? _pb;
@@ -70,7 +69,7 @@ namespace AvoidAGrabCutEasy
         private TextureBrush? _tb = null;
         private Point _sourcePt;
         private Point _destPt;
-        private bool _drawAll;
+        //private bool _drawAll;
         private int _fp;
         private Bitmap? _bmpBUZoomed;
         private int _clicks;
@@ -508,48 +507,48 @@ namespace AvoidAGrabCutEasy
                         // you could always start from bmpOrg and process each step to be able to change
                         // the parameters for each path individually, but this may take a long time to run...
                         // see commented-out sections below
-                        if (this._drawAll)
-                        {
-                            if (this.Paths != null && this.Paths.Count > 0)
-                            {
-                                for (int i = 0; i <= this.Paths.Count - 1; i++)
-                                {
-                                    float w = this.Paths[i].DrawWidth;
-                                    this._tb?.ResetTransform();
-                                    this._tb?.TranslateTransform(this.Paths[i].Offset.X, this.Paths[i].Offset.Y);
+                        //if (this._drawAll)
+                        //{
+                        //    if (this.Paths != null && this.Paths.Count > 0)
+                        //    {
+                        //        for (int i = 0; i <= this.Paths.Count - 1; i++)
+                        //        {
+                        //            float w = this.Paths[i].DrawWidth;
+                        //            this._tb?.ResetTransform();
+                        //            this._tb?.TranslateTransform(this.Paths[i].Offset.X, this.Paths[i].Offset.Y);
 
-                                    // Me.ComboBox1.SelectedIndex = Me.Paths(i).BVAlg
-                                    // Me.NumericUpDown2.Value = CDec(Me.Paths(i).UpperWeight)
-                                    // Me.NumericUpDown3.Value = CDec(Me.Paths(i).LowerWeight)
+                        //            // Me.ComboBox1.SelectedIndex = Me.Paths(i).BVAlg
+                        //            // Me.NumericUpDown2.Value = CDec(Me.Paths(i).UpperWeight)
+                        //            // Me.NumericUpDown3.Value = CDec(Me.Paths(i).LowerWeight)
 
-                                    if (this._tb != null)
-                                        using (Pen pen = new Pen(this._tb, w))
-                                        {
-                                            pen.LineJoin = LineJoin.Round;
+                        //            if (this._tb != null)
+                        //                using (Pen pen = new Pen(this._tb, w))
+                        //                {
+                        //                    pen.LineJoin = LineJoin.Round;
 
-                                            if (this.Paths[i].RoundCaps)
-                                            {
-                                                pen.StartCap = LineCap.Round;
-                                                pen.EndCap = LineCap.Round;
-                                            }
+                        //                    if (this.Paths[i].RoundCaps)
+                        //                    {
+                        //                        pen.StartCap = LineCap.Round;
+                        //                        pen.EndCap = LineCap.Round;
+                        //                    }
 
-                                            using (GraphicsPath gp = new GraphicsPath())
-                                            {
-                                                if (this.Paths[i]?.Count() == 1)
-                                                {
-                                                    gp.AddEllipse(this.Paths[i].Points[0].X - w, this.Paths[i].Points[0].Y - w, w * 2, w * 2);
-                                                    gx.FillPath(this._tb, gp);
-                                                }
-                                                else
-                                                {
-                                                    gp.AddLines(this.Paths[i].ToArray());
-                                                    gx.DrawPath(pen, gp);
-                                                }
-                                            }
-                                        }
-                                }
-                            }
-                        }
+                        //                    using (GraphicsPath gp = new GraphicsPath())
+                        //                    {
+                        //                        if (this.Paths[i]?.Count() == 1)
+                        //                        {
+                        //                            gp.AddEllipse(this.Paths[i].Points[0].X - w, this.Paths[i].Points[0].Y - w, w * 2, w * 2);
+                        //                            gx.FillPath(this._tb, gp);
+                        //                        }
+                        //                        else
+                        //                        {
+                        //                            gp.AddLines(this.Paths[i].ToArray());
+                        //                            gx.DrawPath(pen, gp);
+                        //                        }
+                        //                    }
+                        //                }
+                        //        }
+                        //    }
+                        //}
 
                         using (GraphicsPath gp = GetPath())
                         {
@@ -1535,9 +1534,6 @@ namespace AvoidAGrabCutEasy
                 else if (dlg == DialogResult.Cancel)
                     e.Cancel = true;
             }
-
-            if (this._dontClose)
-                e.Cancel = true;
 
             if (!e.Cancel)
             {

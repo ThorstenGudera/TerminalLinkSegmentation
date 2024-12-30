@@ -50,9 +50,25 @@ namespace AvoidAGrabCutEasy
             }
         }
 
+        public frmPictures(Bitmap? bmpRef, Bitmap? bmpOrig)
+        {
+            InitializeComponent();
+
+            if (bmpRef != null)
+            {
+                this._bmpRef = bmpRef;
+                this.listBox1.Items.Add("Result");
+            }
+            if (bmpOrig != null)
+            {
+                this._bmpOrig = bmpOrig;
+                this.listBox1.Items.Add("Original");
+            }
+        }
+
         private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (listBox1.SelectedIndex > -1)
+            if (listBox1.SelectedIndex > -1 && this._bmpTrimap != null && this._bmpMatte != null && this._bmpWork != null)
                 switch (listBox1.SelectedIndex)
                 {
                     case 0:
@@ -72,6 +88,20 @@ namespace AvoidAGrabCutEasy
                         break;
 
                     case 4:
+                        this.pictureBox1.Image = _bmpOrig;
+                        break;
+
+                    default:
+                        break;
+                }
+            else if (listBox1.SelectedIndex > -1 && this._bmpRef != null && this._bmpOrig != null)
+                switch (listBox1.SelectedIndex)
+                {
+                    case 0:
+                        this.pictureBox1.Image = _bmpRef;
+                        break;
+
+                    case 1:
                         this.pictureBox1.Image = _bmpOrig;
                         break;
 
