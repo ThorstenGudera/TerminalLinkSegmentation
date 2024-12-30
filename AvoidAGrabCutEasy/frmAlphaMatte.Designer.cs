@@ -38,11 +38,6 @@
             toolStripStatusLabel3 = new ToolStripStatusLabel();
             label15 = new Label();
             btnChaincode = new Button();
-            cbRefPtFG = new CheckBox();
-            cbRefPtBG = new CheckBox();
-            label14 = new Label();
-            btnFloodFG = new Button();
-            btnFloodBG = new Button();
             rbUnknown = new RadioButton();
             btnSaveScribbles = new Button();
             btnLoadScribbles = new Button();
@@ -216,64 +211,6 @@
             btnChaincode.Text = "Chaincode";
             btnChaincode.UseVisualStyleBackColor = true;
             btnChaincode.Click += btnChaincode_Click;
-            // 
-            // cbRefPtFG
-            // 
-            cbRefPtFG.AutoSize = true;
-            cbRefPtFG.Location = new Point(1062, 198);
-            cbRefPtFG.Name = "cbRefPtFG";
-            cbRefPtFG.Size = new Size(86, 19);
-            cbRefPtFG.TabIndex = 684;
-            cbRefPtFG.Text = "set ref pt fg";
-            cbRefPtFG.UseVisualStyleBackColor = true;
-            cbRefPtFG.Visible = false;
-            cbRefPtFG.CheckedChanged += cbRefPtFG_CheckedChanged;
-            // 
-            // cbRefPtBG
-            // 
-            cbRefPtBG.AutoSize = true;
-            cbRefPtBG.Location = new Point(968, 198);
-            cbRefPtBG.Name = "cbRefPtBG";
-            cbRefPtBG.Size = new Size(89, 19);
-            cbRefPtBG.TabIndex = 684;
-            cbRefPtBG.Text = "set ref pt bg";
-            cbRefPtBG.UseVisualStyleBackColor = true;
-            cbRefPtBG.Visible = false;
-            cbRefPtBG.CheckedChanged += cbRefPtBG_CheckedChanged;
-            // 
-            // label14
-            // 
-            label14.AutoSize = true;
-            label14.Location = new Point(1152, 200);
-            label14.Name = "label14";
-            label14.Size = new Size(37, 15);
-            label14.TabIndex = 682;
-            label14.Text = "Flood";
-            label14.Visible = false;
-            // 
-            // btnFloodFG
-            // 
-            btnFloodFG.Enabled = false;
-            btnFloodFG.Location = new Point(1233, 195);
-            btnFloodFG.Name = "btnFloodFG";
-            btnFloodFG.Size = new Size(32, 23);
-            btnFloodFG.TabIndex = 681;
-            btnFloodFG.Text = "FG";
-            btnFloodFG.UseVisualStyleBackColor = true;
-            btnFloodFG.Visible = false;
-            btnFloodFG.Click += btnFloodFG_Click;
-            // 
-            // btnFloodBG
-            // 
-            btnFloodBG.Enabled = false;
-            btnFloodBG.Location = new Point(1195, 195);
-            btnFloodBG.Name = "btnFloodBG";
-            btnFloodBG.Size = new Size(32, 23);
-            btnFloodBG.TabIndex = 681;
-            btnFloodBG.Text = "BG";
-            btnFloodBG.UseVisualStyleBackColor = true;
-            btnFloodBG.Visible = false;
-            btnFloodBG.Click += btnFloodBG_Click;
             // 
             // rbUnknown
             // 
@@ -564,11 +501,6 @@
             panel1.Controls.Add(pictureBox1);
             panel1.Controls.Add(label15);
             panel1.Controls.Add(btnChaincode);
-            panel1.Controls.Add(cbRefPtFG);
-            panel1.Controls.Add(cbRefPtBG);
-            panel1.Controls.Add(label14);
-            panel1.Controls.Add(btnFloodFG);
-            panel1.Controls.Add(btnFloodBG);
             panel1.Controls.Add(rbUnknown);
             panel1.Controls.Add(btnSaveScribbles);
             panel1.Controls.Add(btnGenerateTrimap);
@@ -1276,11 +1208,6 @@
         internal ToolStripStatusLabel toolStripStatusLabel3;
         private Label label15;
         private Button btnChaincode;
-        private CheckBox cbRefPtFG;
-        private CheckBox cbRefPtBG;
-        private Label label14;
-        private Button btnFloodFG;
-        private Button btnFloodBG;
         private RadioButton rbUnknown;
         private Button btnSaveScribbles;
         private Button btnLoadScribbles;

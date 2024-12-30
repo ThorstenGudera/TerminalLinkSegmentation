@@ -83,9 +83,8 @@ namespace AvoidAGrabCutEasy
 
         private Dictionary<int, Dictionary<int, List<List<Point>>>>? _scribbles;
 
-        private Point _ptHLC1BG = new Point(-1, -1);
+        private Point _ptHLC1FGBG = new Point(-1, -1);
         private Bitmap? _scribblesBitmap;
-        private Point _ptHLC1FG = new Point(-1, -1);
         private BitArray? _bitsBG;
         private BitArray? _bitsFG;
         private Stopwatch? _sw;
@@ -94,7 +93,6 @@ namespace AvoidAGrabCutEasy
         private List<TrimapProblemInfo> _trimapProblemInfos = new List<TrimapProblemInfo>();
         private Bitmap? _bWork;
         private List<Tuple<int, int, int, bool, List<List<Point>>>> _scribbleSeq = new List<Tuple<int, int, int, bool, List<List<Point>>>>();
-        private Point _ptHLC1FGBG;
         private bool _hs;
         private Point? _ptSt;
         private List<Point>? _ptPrev;
@@ -195,7 +193,7 @@ namespace AvoidAGrabCutEasy
             int iy2 = Math.Min(iy, this.helplineRulerCtrl1.Bmp.Height - 1);
 
             if (ix >= 0 && iy >= 0)
-                if (!this.cbRefPtBG.Checked && !this.cbRefPtFG.Checked && e.Button == MouseButtons.Left && this.cbClickMode.Checked)
+                if (e.Button == MouseButtons.Left && this.cbClickMode.Checked)
                     this._points2.Add(new Point(ix, iy));
 
             if (ix >= 0 && ix < this.helplineRulerCtrl1.Bmp.Width && iy >= 0 && iy < this.helplineRulerCtrl1.Bmp.Height)
@@ -206,25 +204,14 @@ namespace AvoidAGrabCutEasy
                 this._eX = eX;
                 this._eY = eY;
 
-                if (!this.cbRefPtBG.Checked && !this.cbRefPtFG.Checked && e.Button == MouseButtons.Left && !this.cbClickMode.Checked)
+                if (e.Button == MouseButtons.Left && !this.cbClickMode.Checked)
                 {
                     this._points2.Add(new Point(ix, iy));
                     this._tracking4 = true;
                 }
 
-                if (e.Button == MouseButtons.Left && this.cbRefPtBG.Checked)
-                {
-                    this._ptHLC1BG = new Point(ix, iy);
-                    this.btnFloodBG.Enabled = true;
-                    this.cbRefPtBG.Checked = false;
-                }
-
-                if (e.Button == MouseButtons.Left && this.cbRefPtFG.Checked)
-                {
-                    this._ptHLC1FG = new Point(ix, iy);
-                    this.btnFloodFG.Enabled = true;
-                    this.cbRefPtFG.Checked = false;
-                }
+                if (e.Button == MouseButtons.Left)
+                    this._ptHLC1FGBG = new Point(ix, iy);
 
                 if (e.Button == MouseButtons.Right)
                 {
@@ -658,28 +645,16 @@ namespace AvoidAGrabCutEasy
                     (float)(wh2 * this.helplineRulerCtrl1.Zoom),
                     (float)(wh2 * this.helplineRulerCtrl1.Zoom)));
 
-            if (this._ptHLC1BG.X > -1 && this._ptHLC1BG.Y > -1)
+            if (this._ptHLC1FGBG.X > -1 && this._ptHLC1FGBG.Y > -1)
             {
-                e.Graphics.DrawLine(Pens.Cyan, ((this._ptHLC1BG.X * this.helplineRulerCtrl1.Zoom - 5)) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X,
-                    ((this._ptHLC1BG.Y * this.helplineRulerCtrl1.Zoom - 5)) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y,
-                    ((this._ptHLC1BG.X * this.helplineRulerCtrl1.Zoom + 5)) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X,
-                    ((this._ptHLC1BG.Y * this.helplineRulerCtrl1.Zoom + 5)) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y);
-                e.Graphics.DrawLine(Pens.Cyan, ((this._ptHLC1BG.X * this.helplineRulerCtrl1.Zoom + 5)) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X,
-                    ((this._ptHLC1BG.Y * this.helplineRulerCtrl1.Zoom - 5)) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y,
-                    ((this._ptHLC1BG.X * this.helplineRulerCtrl1.Zoom - 5)) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X,
-                    ((this._ptHLC1BG.Y * this.helplineRulerCtrl1.Zoom + 5)) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y);
-            }
-
-            if (this._ptHLC1FG.X > -1 && this._ptHLC1FG.Y > -1)
-            {
-                e.Graphics.DrawLine(Pens.Red, ((this._ptHLC1FG.X * this.helplineRulerCtrl1.Zoom - 5)) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X,
-                    ((this._ptHLC1FG.Y * this.helplineRulerCtrl1.Zoom - 5)) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y,
-                    ((this._ptHLC1FG.X * this.helplineRulerCtrl1.Zoom + 5)) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X,
-                    ((this._ptHLC1FG.Y * this.helplineRulerCtrl1.Zoom + 5)) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y);
-                e.Graphics.DrawLine(Pens.Red, ((this._ptHLC1FG.X * this.helplineRulerCtrl1.Zoom + 5)) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X,
-                    ((this._ptHLC1FG.Y * this.helplineRulerCtrl1.Zoom - 5)) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y,
-                    ((this._ptHLC1FG.X * this.helplineRulerCtrl1.Zoom - 5)) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X,
-                    ((this._ptHLC1FG.Y * this.helplineRulerCtrl1.Zoom + 5)) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y);
+                e.Graphics.DrawLine(Pens.Red, ((this._ptHLC1FGBG.X * this.helplineRulerCtrl1.Zoom - 5)) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X,
+                    ((this._ptHLC1FGBG.Y * this.helplineRulerCtrl1.Zoom - 5)) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y,
+                    ((this._ptHLC1FGBG.X * this.helplineRulerCtrl1.Zoom + 5)) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X,
+                    ((this._ptHLC1FGBG.Y * this.helplineRulerCtrl1.Zoom + 5)) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y);
+                e.Graphics.DrawLine(Pens.Red, ((this._ptHLC1FGBG.X * this.helplineRulerCtrl1.Zoom + 5)) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X,
+                    ((this._ptHLC1FGBG.Y * this.helplineRulerCtrl1.Zoom - 5)) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y,
+                    ((this._ptHLC1FGBG.X * this.helplineRulerCtrl1.Zoom - 5)) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X,
+                    ((this._ptHLC1FGBG.Y * this.helplineRulerCtrl1.Zoom + 5)) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y);
             }
         }
 
@@ -1636,7 +1611,7 @@ namespace AvoidAGrabCutEasy
         }
 
 
-        private unsafe void btnFloodBG_Click(object sender, EventArgs e)
+        private unsafe void FloodBG()
         {
             if (this.helplineRulerCtrl1.Bmp != null)
             {
@@ -1656,7 +1631,7 @@ namespace AvoidAGrabCutEasy
 
                 Bitmap? b = this._scribblesBitmap;
 
-                Point ptSt = this._ptHLC1BG;
+                Point ptSt = this._ptHLC1FGBG;
 
                 if (ptSt.X != -1 && ptSt.Y != -1)
                 {
@@ -1815,7 +1790,7 @@ namespace AvoidAGrabCutEasy
             return l;
         }
 
-        private unsafe void btnFloodFG_Click(object sender, EventArgs e)
+        private unsafe void FloodFG()
         {
             if (this.helplineRulerCtrl1.Bmp != null)
             {
@@ -1835,7 +1810,7 @@ namespace AvoidAGrabCutEasy
 
                 Bitmap? b = this._scribblesBitmap;
 
-                Point ptSt = this._ptHLC1FG;
+                Point ptSt = this._ptHLC1FGBG;
                 if (ptSt.X != -1 && ptSt.Y != -1)
                 {
                     Color startColor = b.GetPixel(ptSt.X, ptSt.Y);
@@ -1948,16 +1923,6 @@ namespace AvoidAGrabCutEasy
                     this.helplineRulerCtrl1.dbPanel1.Invalidate();
                 }
             }
-        }
-
-        private void cbRefPtBG_CheckedChanged(object sender, EventArgs e)
-        {
-            this.cbRefPtFG.Checked = false;
-        }
-
-        private void cbRefPtFG_CheckedChanged(object sender, EventArgs e)
-        {
-            this.cbRefPtBG.Checked = false;
         }
 
         private void btnChaincode_Click(object sender, EventArgs e)
@@ -2633,20 +2598,14 @@ namespace AvoidAGrabCutEasy
 
         private void floodBGToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Point pt = this._ptHLC1BG;
-            this._ptHLC1BG = this._ptHLC1FGBG;
-            this.btnFloodBG.Enabled = true;
-            this.btnFloodBG_Click(this.btnFloodBG, new EventArgs());
-            this._ptHLC1BG = pt;
+            Point pt = this._ptHLC1FGBG;
+            this.FloodBG();
         }
 
         private void floodFGToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Point pt = this._ptHLC1FG;
-            this._ptHLC1FG = this._ptHLC1FGBG; //!
-            this.btnFloodFG.Enabled = true;
-            this.btnFloodFG_Click(this.btnFloodFG, new EventArgs());
-            this._ptHLC1FG = pt;
+            Point pt = this._ptHLC1FGBG;
+            this.FloodFG();
         }
 
         private void cbOverlay_CheckedChanged(object sender, EventArgs e)

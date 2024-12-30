@@ -278,7 +278,7 @@
             // 
             // btnPoissonDraw
             // 
-            btnPoissonDraw.Location = new Point(1171, 79);
+            btnPoissonDraw.Location = new Point(1171, 117);
             btnPoissonDraw.Name = "btnPoissonDraw";
             btnPoissonDraw.Size = new Size(88, 27);
             btnPoissonDraw.TabIndex = 740;
@@ -436,7 +436,7 @@
             // btnOutlineOperations
             // 
             btnOutlineOperations.ForeColor = SystemColors.ControlText;
-            btnOutlineOperations.Location = new Point(1171, 117);
+            btnOutlineOperations.Location = new Point(1171, 79);
             btnOutlineOperations.Margin = new Padding(4, 3, 4, 3);
             btnOutlineOperations.Name = "btnOutlineOperations";
             btnOutlineOperations.Size = new Size(88, 27);
