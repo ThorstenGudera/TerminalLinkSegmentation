@@ -2072,8 +2072,8 @@ namespace AvoidAGrabCutEasy
             if (e.Argument != null)
             {
                 object[] o = (object[])e.Argument;
-                Bitmap bmpToFind = (Bitmap)o[0];
-                Bitmap bmpToSearch = (Bitmap)o[1];
+                Bitmap? bmpToFind = (Bitmap)o[0];
+                Bitmap? bmpToSearch = (Bitmap)o[1];
                 int wh = (int)o[2];
                 Convolution conv = new Convolution();
                 conv.CancelLoops = false;
@@ -2105,7 +2105,15 @@ namespace AvoidAGrabCutEasy
                     bmpToSearch = FFT_related.Convolve(bmpToSearchTmp, MakeKernelSumOne(kernel), 0, this.backgroundWorker2);
                 }
 
+                if (bmpToFind != null)
+                    bmpToFind.Dispose();
+                bmpToFind = null;
+
                 e.Result = FindPoint(bmpToSearch, wh);
+
+                if (bmpToSearch != null)
+                    bmpToSearch.Dispose();
+                bmpToSearch = null;
             }
         }
 
