@@ -355,16 +355,24 @@ namespace AvoidAGrabCutEasy
                     this.CurPath?.Add(new PointF(this._ix, this._iy));
                 }
 
-                if (this.CurPath != null && this.cbDraw.Checked && this.cbClickMode.Checked)
+                if (this.cbDraw.Checked && this.cbClickMode.Checked && e.Button == MouseButtons.Left)
+                {
+                    SetupCurList();
+                    this.CurList?.Add(new PointF(this._ix, this._iy));
+                }
+
+                if (this.cbDraw.Checked && this.cbClickMode.Checked && e.Button == MouseButtons.Right)
                 {
                     SetupCurList();
                     this.CurList?.Add(new PointF(this._ix, this._iy));
 
-                    if (this.CurList?.Count == 2)
+                    if (this.CurList?.Count > 0)
                     {
-                        SetupCurPath();
                         this.CurPath?.AddRange(this.CurList.ToArray());
                         this.CurList.Clear();
+
+                        DrawPath();
+                        this.helplineRulerCtrl2.dbPanel1.Invalidate();
                     }
                 }
             }
@@ -435,6 +443,29 @@ namespace AvoidAGrabCutEasy
             {
                 using (SolidBrush sb = new SolidBrush(Color.FromArgb(this.cbOverlay.Checked ? 127 : 64, Color.Lime)))
                     e.Graphics.FillEllipse(sb, new RectangleF(_eX - w / 2f, _eY - w / 2f, w, w));
+            }
+
+            if (this.cbDraw.Checked && this.cbClickMode.Checked && this.CurList != null && this.CurList.Count > 0)
+            {
+                using GraphicsPath gPath = new GraphicsPath();
+                gPath.AddLines(this.CurList.ToArray());
+
+                using (Matrix m = new Matrix(this.helplineRulerCtrl2.Zoom, 0, 0, this.helplineRulerCtrl2.Zoom, this.helplineRulerCtrl2.dbPanel1.AutoScrollPosition.X, this.helplineRulerCtrl2.dbPanel1.AutoScrollPosition.Y))
+                {
+                    gPath.Transform(m);
+
+                    using (Pen pen = new Pen(new SolidBrush(Color.FromArgb(this.cbOverlay.Checked ? 127 : 64, Color.Red)),
+                        Math.Max(w * this.helplineRulerCtrl2.Zoom, 1.0f)))
+                    {
+                        pen.LineJoin = LineJoin.Round;
+                        pen.StartCap = LineCap.Round;
+                        pen.EndCap = LineCap.Round;
+
+                        e.Graphics.DrawPath(pen, gPath);
+                        if (gPath.PointCount > 0)
+                            e.Graphics.DrawLine(pen, gPath.PathPoints[gPath.PathPoints.Length - 1], new PointF(_eX, _eY));
+                    }
+                }
             }
 
             if (this._overlaySrc)
@@ -2431,7 +2462,12 @@ namespace AvoidAGrabCutEasy
 
         private void cbDraw_CheckedChanged(object sender, EventArgs e)
         {
-            this.cbClickMode.Enabled = cbDraw.Checked;
+            this.cbClickMode.Enabled = this.cbDraw.Checked;
+        }
+
+        private void cbClickMode_CheckedChanged(object sender, EventArgs e)
+        {
+            this.panel2.Visible = this.cbClickMode.Checked;
         }
     }
 }
