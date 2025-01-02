@@ -418,7 +418,7 @@ namespace AvoidAGrabCutEasy
             if (this.cbDraw.Checked)
             {
                 using (SolidBrush sb = new SolidBrush(Color.FromArgb(this.cbOverlay.Checked ? 127 : 64, Color.Lime)))
-                    e.Graphics.FillEllipse(sb, new RectangleF(_eX - w / 4f, _eY - w / 4f, w / 2f, w / 2f));
+                    e.Graphics.FillEllipse(sb, new RectangleF(_eX - w / 2f, _eY - w / 2f, w, w));
             }
 
             if (this._overlaySrc)
@@ -1823,12 +1823,12 @@ namespace AvoidAGrabCutEasy
 
                 this.SetBitmap(this.helplineRulerCtrl1.Bmp, b, this.helplineRulerCtrl1, "Bmp");
 
-                double faktor = System.Convert.ToDouble(this.helplineRulerCtrl1.dbPanel1.Width) / System.Convert.ToDouble(this.helplineRulerCtrl1.dbPanel1.Height);
-                double multiplier = System.Convert.ToDouble(this.helplineRulerCtrl1.Bmp.Width) / System.Convert.ToDouble(this.helplineRulerCtrl1.Bmp.Height);
-                if (multiplier >= faktor)
-                    this.helplineRulerCtrl1.Zoom = System.Convert.ToSingle(System.Convert.ToDouble(this.helplineRulerCtrl1.dbPanel1.Width) / System.Convert.ToDouble(this.helplineRulerCtrl1.Bmp.Width));
-                else
-                    this.helplineRulerCtrl1.Zoom = System.Convert.ToSingle(System.Convert.ToDouble(this.helplineRulerCtrl1.dbPanel1.Height) / System.Convert.ToDouble(this.helplineRulerCtrl1.Bmp.Height));
+                //double faktor = System.Convert.ToDouble(this.helplineRulerCtrl1.dbPanel1.Width) / System.Convert.ToDouble(this.helplineRulerCtrl1.dbPanel1.Height);
+                //double multiplier = System.Convert.ToDouble(this.helplineRulerCtrl1.Bmp.Width) / System.Convert.ToDouble(this.helplineRulerCtrl1.Bmp.Height);
+                //if (multiplier >= faktor)
+                //    this.helplineRulerCtrl1.Zoom = System.Convert.ToSingle(System.Convert.ToDouble(this.helplineRulerCtrl1.dbPanel1.Width) / System.Convert.ToDouble(this.helplineRulerCtrl1.Bmp.Width));
+                //else
+                //    this.helplineRulerCtrl1.Zoom = System.Convert.ToSingle(System.Convert.ToDouble(this.helplineRulerCtrl1.dbPanel1.Height) / System.Convert.ToDouble(this.helplineRulerCtrl1.Bmp.Height));
 
                 this.helplineRulerCtrl1.dbPanel1.AutoScrollMinSize = new Size(System.Convert.ToInt32(this.helplineRulerCtrl1.Bmp.Width * this.helplineRulerCtrl1.Zoom), System.Convert.ToInt32(this.helplineRulerCtrl1.Bmp.Height * this.helplineRulerCtrl1.Zoom));
 
@@ -1848,7 +1848,7 @@ namespace AvoidAGrabCutEasy
                 if (this._bmpBUZoomed == null && this._bmpBU != null)
                     MakeBitmap(this._bmpBU, this.helplineRulerCtrl2.Zoom);
 
-                this._sourcePt = new Point(0, 0);
+                //this._sourcePt = new Point(0, 0);
 
                 int dx = this._destPt.X - this._sourcePt.X;
                 int dy = this._destPt.Y - this._sourcePt.Y;
