@@ -58,6 +58,7 @@ namespace AvoidAGrabCutEasy
         public List<PointF>? CurPath { get; set; }
         public List<PointF>? CurPathTmp { get; set; }
         public List<PathInfo>? Paths { get; set; }
+        public List<PointF>? CurList { get; private set; }
 
         private bool _dontDrawPath;
 
@@ -287,7 +288,8 @@ namespace AvoidAGrabCutEasy
                 this._dontDrawPath = false;
                 SetupCurPath();
                 this._tracking = true;
-                this.CurPath?.Add(new PointF(this._ix, this._iy));
+                if (!this.cbClickMode.Checked)
+                    this.CurPath?.Add(new PointF(this._ix, this._iy));
                 this.helplineRulerCtrl2.dbPanel1.Invalidate();
             }
         }
@@ -330,7 +332,8 @@ namespace AvoidAGrabCutEasy
                         if (this._tracking && e.Button == MouseButtons.Left)
                         {
                             SetupCurPath();
-                            this.CurPath?.Add(new PointF(this._ix, this._iy));
+                            if (!this.cbClickMode.Checked)
+                                this.CurPath?.Add(new PointF(this._ix, this._iy));
                         }
 
                         this.helplineRulerCtrl2.dbPanel1.Invalidate();
@@ -346,10 +349,23 @@ namespace AvoidAGrabCutEasy
 
             if (ix == _ix && iy == _iy)
             {
-                if (this.CurPath != null && this.cbDraw.Checked && !ContainsPoint(this.CurPath, new PointF(this._ix, this._iy)))
+                if (this.CurPath != null && this.cbDraw.Checked && !this.cbClickMode.Checked && !ContainsPoint(this.CurPath, new PointF(this._ix, this._iy)))
                 {
                     SetupCurPath();
                     this.CurPath?.Add(new PointF(this._ix, this._iy));
+                }
+
+                if (this.CurPath != null && this.cbDraw.Checked && this.cbClickMode.Checked)
+                {
+                    SetupCurList();
+                    this.CurList?.Add(new PointF(this._ix, this._iy));
+
+                    if (this.CurList?.Count == 2)
+                    {
+                        SetupCurPath();
+                        this.CurPath?.AddRange(this.CurList.ToArray());
+                        this.CurList.Clear();
+                    }
                 }
             }
 
@@ -487,6 +503,12 @@ namespace AvoidAGrabCutEasy
         {
             if (this.CurPath == null)
                 this.CurPath = new List<PointF>();
+        }
+
+        private void SetupCurList()
+        {
+            if (this.CurList == null)
+                this.CurList = new List<PointF>();
         }
 
         private void DrawPath()
@@ -1110,12 +1132,12 @@ namespace AvoidAGrabCutEasy
 
                 if (bOut != null)
                 {
-                    this.SetBitmap(this.helplineRulerCtrl1.Bmp, bOut, this.helplineRulerCtrl1, "Bmp");
+                    this.SetBitmap(this.helplineRulerCtrl2.Bmp, bOut, this.helplineRulerCtrl2, "Bmp");
                     this._pic_changed = false;
-                    this.helplineRulerCtrl1.MakeBitmap(this.helplineRulerCtrl1.Bmp);
+                    this.helplineRulerCtrl2.MakeBitmap(this.helplineRulerCtrl2.Bmp);
 
-                    this.helplineRulerCtrl1.dbPanel1.AutoScrollMinSize = new Size(System.Convert.ToInt32(this.helplineRulerCtrl1.Bmp.Width * this.helplineRulerCtrl1.Zoom), System.Convert.ToInt32(this.helplineRulerCtrl1.Bmp.Height * this.helplineRulerCtrl1.Zoom));
-                    this.helplineRulerCtrl1.dbPanel1.Invalidate();
+                    this.helplineRulerCtrl2.dbPanel1.AutoScrollMinSize = new Size(System.Convert.ToInt32(this.helplineRulerCtrl2.Bmp.Width * this.helplineRulerCtrl2.Zoom), System.Convert.ToInt32(this.helplineRulerCtrl2.Bmp.Height * this.helplineRulerCtrl2.Zoom));
+                    this.helplineRulerCtrl2.dbPanel1.Invalidate();
 
                     if (_undoOPCache.CurrentPosition > 1)
                     {
@@ -1142,11 +1164,11 @@ namespace AvoidAGrabCutEasy
 
                 if (bOut != null)
                 {
-                    this.SetBitmap(this.helplineRulerCtrl1.Bmp, bOut, this.helplineRulerCtrl1, "Bmp");
+                    this.SetBitmap(this.helplineRulerCtrl2.Bmp, bOut, this.helplineRulerCtrl2, "Bmp");
                     this._pic_changed = true;
-                    this.helplineRulerCtrl1.MakeBitmap(this.helplineRulerCtrl1.Bmp);
+                    this.helplineRulerCtrl2.MakeBitmap(this.helplineRulerCtrl2.Bmp);
 
-                    this.helplineRulerCtrl1.dbPanel1.AutoScrollMinSize = new Size(System.Convert.ToInt32(this.helplineRulerCtrl1.Bmp.Width * this.helplineRulerCtrl1.Zoom), System.Convert.ToInt32(this.helplineRulerCtrl1.Bmp.Height * this.helplineRulerCtrl1.Zoom));
+                    this.helplineRulerCtrl2.dbPanel1.AutoScrollMinSize = new Size(System.Convert.ToInt32(this.helplineRulerCtrl2.Bmp.Width * this.helplineRulerCtrl2.Zoom), System.Convert.ToInt32(this.helplineRulerCtrl2.Bmp.Height * this.helplineRulerCtrl2.Zoom));
 
                     if (_undoOPCache.CurrentPosition > 1)
                     {
@@ -1160,7 +1182,7 @@ namespace AvoidAGrabCutEasy
                     else
                         this.btnRedo.Enabled = false;
                 }
-                this.helplineRulerCtrl1.dbPanel1.Invalidate();
+                this.helplineRulerCtrl2.dbPanel1.Invalidate();
             }
         }
 
@@ -1587,6 +1609,8 @@ namespace AvoidAGrabCutEasy
                 this.SetBitmap(this.helplineRulerCtrl2.Bmp, bmp, this.helplineRulerCtrl2, "Bmp");
 
                 this.SetControls(true);
+                this.cmbAlg_SelectedIndexChanged(this.cmbAlg, new EventArgs());
+                this.cbDraw_CheckedChanged(this.cbDraw, new EventArgs());
 
                 this._pic_changed = true;
 
@@ -1708,12 +1732,12 @@ namespace AvoidAGrabCutEasy
 
                 this.SetBitmap(this.helplineRulerCtrl1.Bmp, bmpHLC1, this.helplineRulerCtrl1, "Bmp");
 
-                double faktor = System.Convert.ToDouble(this.helplineRulerCtrl1.dbPanel1.Width) / System.Convert.ToDouble(this.helplineRulerCtrl1.dbPanel1.Height);
-                double multiplier = System.Convert.ToDouble(this.helplineRulerCtrl1.Bmp.Width) / System.Convert.ToDouble(this.helplineRulerCtrl1.Bmp.Height);
-                if (multiplier >= faktor)
-                    this.helplineRulerCtrl1.Zoom = System.Convert.ToSingle(System.Convert.ToDouble(this.helplineRulerCtrl1.dbPanel1.Width) / System.Convert.ToDouble(this.helplineRulerCtrl1.Bmp.Width));
-                else
-                    this.helplineRulerCtrl1.Zoom = System.Convert.ToSingle(System.Convert.ToDouble(this.helplineRulerCtrl1.dbPanel1.Height) / System.Convert.ToDouble(this.helplineRulerCtrl1.Bmp.Height));
+                //double faktor = System.Convert.ToDouble(this.helplineRulerCtrl1.dbPanel1.Width) / System.Convert.ToDouble(this.helplineRulerCtrl1.dbPanel1.Height);
+                //double multiplier = System.Convert.ToDouble(this.helplineRulerCtrl1.Bmp.Width) / System.Convert.ToDouble(this.helplineRulerCtrl1.Bmp.Height);
+                //if (multiplier >= faktor)
+                //    this.helplineRulerCtrl1.Zoom = System.Convert.ToSingle(System.Convert.ToDouble(this.helplineRulerCtrl1.dbPanel1.Width) / System.Convert.ToDouble(this.helplineRulerCtrl1.Bmp.Width));
+                //else
+                //    this.helplineRulerCtrl1.Zoom = System.Convert.ToSingle(System.Convert.ToDouble(this.helplineRulerCtrl1.dbPanel1.Height) / System.Convert.ToDouble(this.helplineRulerCtrl1.Bmp.Height));
 
                 this.helplineRulerCtrl1.dbPanel1.AutoScrollMinSize = new Size(System.Convert.ToInt32(this.helplineRulerCtrl1.Bmp.Width * this.helplineRulerCtrl1.Zoom), System.Convert.ToInt32(this.helplineRulerCtrl1.Bmp.Height * this.helplineRulerCtrl1.Zoom));
 
@@ -1733,7 +1757,7 @@ namespace AvoidAGrabCutEasy
                 if (this._bmpBUZoomed == null && this._bmpBU != null)
                     MakeBitmap(this._bmpBU, this.helplineRulerCtrl2.Zoom);
 
-                this._sourcePt = new Point(0, 0);
+                //this._sourcePt = new Point(0, 0);
 
                 int dx = this._destPt.X - this._sourcePt.X;
                 int dy = this._destPt.Y - this._sourcePt.Y;
@@ -1775,12 +1799,12 @@ namespace AvoidAGrabCutEasy
 
             this.SetBitmap(this.helplineRulerCtrl1.Bmp, bmpHLC1, this.helplineRulerCtrl1, "Bmp");
 
-            double faktor = System.Convert.ToDouble(this.helplineRulerCtrl1.dbPanel1.Width) / System.Convert.ToDouble(this.helplineRulerCtrl1.dbPanel1.Height);
-            double multiplier = System.Convert.ToDouble(this.helplineRulerCtrl1.Bmp.Width) / System.Convert.ToDouble(this.helplineRulerCtrl1.Bmp.Height);
-            if (multiplier >= faktor)
-                this.helplineRulerCtrl1.Zoom = System.Convert.ToSingle(System.Convert.ToDouble(this.helplineRulerCtrl1.dbPanel1.Width) / System.Convert.ToDouble(this.helplineRulerCtrl1.Bmp.Width));
-            else
-                this.helplineRulerCtrl1.Zoom = System.Convert.ToSingle(System.Convert.ToDouble(this.helplineRulerCtrl1.dbPanel1.Height) / System.Convert.ToDouble(this.helplineRulerCtrl1.Bmp.Height));
+            //double faktor = System.Convert.ToDouble(this.helplineRulerCtrl1.dbPanel1.Width) / System.Convert.ToDouble(this.helplineRulerCtrl1.dbPanel1.Height);
+            //double multiplier = System.Convert.ToDouble(this.helplineRulerCtrl1.Bmp.Width) / System.Convert.ToDouble(this.helplineRulerCtrl1.Bmp.Height);
+            //if (multiplier >= faktor)
+            //    this.helplineRulerCtrl1.Zoom = System.Convert.ToSingle(System.Convert.ToDouble(this.helplineRulerCtrl1.dbPanel1.Width) / System.Convert.ToDouble(this.helplineRulerCtrl1.Bmp.Width));
+            //else
+            //    this.helplineRulerCtrl1.Zoom = System.Convert.ToSingle(System.Convert.ToDouble(this.helplineRulerCtrl1.dbPanel1.Height) / System.Convert.ToDouble(this.helplineRulerCtrl1.Bmp.Height));
 
             this.helplineRulerCtrl1.dbPanel1.AutoScrollMinSize = new Size(System.Convert.ToInt32(this.helplineRulerCtrl1.Bmp.Width * this.helplineRulerCtrl1.Zoom), System.Convert.ToInt32(this.helplineRulerCtrl1.Bmp.Height * this.helplineRulerCtrl1.Zoom));
 
@@ -1800,7 +1824,7 @@ namespace AvoidAGrabCutEasy
             if (this._bmpBUZoomed == null && this._bmpBU != null)
                 MakeBitmap(this._bmpBU, this.helplineRulerCtrl2.Zoom);
 
-            this._sourcePt = new Point(0, 0);
+            //this._sourcePt = new Point(0, 0);
 
             int dx = this._destPt.X - this._sourcePt.X;
             int dy = this._destPt.Y - this._sourcePt.Y;
@@ -2228,6 +2252,8 @@ namespace AvoidAGrabCutEasy
             }
 
             this.SetControls(true);
+            this.cmbAlg_SelectedIndexChanged(this.cmbAlg, new EventArgs());
+            this.cbDraw_CheckedChanged(this.cbDraw, new EventArgs());
 
             if (this.Timer3.Enabled)
                 this.Timer3.Stop();
@@ -2403,5 +2429,9 @@ namespace AvoidAGrabCutEasy
             return false;
         }
 
+        private void cbDraw_CheckedChanged(object sender, EventArgs e)
+        {
+            this.cbClickMode.Enabled = cbDraw.Checked;
+        }
     }
 }

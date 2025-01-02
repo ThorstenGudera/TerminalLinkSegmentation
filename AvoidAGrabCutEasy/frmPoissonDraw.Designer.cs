@@ -109,6 +109,7 @@ namespace AvoidAGrabCutEasy
             toolStripStatusLabel3 = new ToolStripStatusLabel();
             panel3 = new Panel();
             panel1 = new Panel();
+            cbClickMode = new CheckBox();
             btnFindDestPoint = new Button();
             label6 = new Label();
             btnSaveStrokes = new Button();
@@ -438,6 +439,7 @@ namespace AvoidAGrabCutEasy
             // 
             // panel1
             // 
+            panel1.Controls.Add(cbClickMode);
             panel1.Controls.Add(cbFindDestPoint);
             panel1.Controls.Add(btnFindDestPoint);
             panel1.Controls.Add(numSrcPtSurround);
@@ -483,6 +485,17 @@ namespace AvoidAGrabCutEasy
             panel1.Name = "panel1";
             panel1.Size = new Size(1200, 189);
             panel1.TabIndex = 247;
+            // 
+            // cbClickMode
+            // 
+            cbClickMode.AutoSize = true;
+            cbClickMode.Enabled = false;
+            cbClickMode.Location = new Point(225, 18);
+            cbClickMode.Name = "cbClickMode";
+            cbClickMode.Size = new Size(79, 19);
+            cbClickMode.TabIndex = 769;
+            cbClickMode.Text = "ClickDraw";
+            cbClickMode.UseVisualStyleBackColor = true;
             // 
             // btnFindDestPoint
             // 
@@ -702,6 +715,7 @@ namespace AvoidAGrabCutEasy
             cbDraw.TabIndex = 746;
             cbDraw.Text = "Draw";
             cbDraw.UseVisualStyleBackColor = true;
+            cbDraw.CheckedChanged += cbDraw_CheckedChanged;
             // 
             // numPenSize
             // 
@@ -865,5 +879,6 @@ namespace AvoidAGrabCutEasy
         internal Button btnFindDestPoint;
         private NumericUpDown numSrcPtSurround;
         internal System.ComponentModel.BackgroundWorker backgroundWorker2;
+        private CheckBox cbClickMode;
     }
 }
