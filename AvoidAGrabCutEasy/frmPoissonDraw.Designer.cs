@@ -109,6 +109,9 @@ namespace AvoidAGrabCutEasy
             toolStripStatusLabel3 = new ToolStripStatusLabel();
             panel3 = new Panel();
             panel1 = new Panel();
+            panel2 = new Panel();
+            label8 = new Label();
+            label7 = new Label();
             cbClickMode = new CheckBox();
             btnFindDestPoint = new Button();
             label6 = new Label();
@@ -138,12 +141,10 @@ namespace AvoidAGrabCutEasy
             splitContainer1 = new SplitContainer();
             helplineRulerCtrl2 = new HelplineRulerCtrl();
             backgroundWorker2 = new System.ComponentModel.BackgroundWorker();
-            panel2 = new Panel();
-            label8 = new Label();
-            label7 = new Label();
             ((System.ComponentModel.ISupportInitialize)numSrcPtSurround).BeginInit();
             statusStrip1.SuspendLayout();
             panel1.SuspendLayout();
+            panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numOpacity).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numLowerWeight).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numUpperWeight).BeginInit();
@@ -152,7 +153,6 @@ namespace AvoidAGrabCutEasy
             splitContainer1.Panel1.SuspendLayout();
             splitContainer1.Panel2.SuspendLayout();
             splitContainer1.SuspendLayout();
-            panel2.SuspendLayout();
             SuspendLayout();
             // 
             // openFileDialog1
@@ -491,6 +491,34 @@ namespace AvoidAGrabCutEasy
             panel1.Size = new Size(1200, 189);
             panel1.TabIndex = 247;
             // 
+            // panel2
+            // 
+            panel2.Controls.Add(label8);
+            panel2.Controls.Add(label7);
+            panel2.Location = new Point(390, 107);
+            panel2.Name = "panel2";
+            panel2.Size = new Size(216, 64);
+            panel2.TabIndex = 770;
+            panel2.Visible = false;
+            // 
+            // label8
+            // 
+            label8.AutoSize = true;
+            label8.Location = new Point(5, 22);
+            label8.Name = "label8";
+            label8.Size = new Size(169, 30);
+            label8.TabIndex = 0;
+            label8.Text = "right MouseButton: Add point \r\nand draw path";
+            // 
+            // label7
+            // 
+            label7.AutoSize = true;
+            label7.Location = new Point(5, 2);
+            label7.Name = "label7";
+            label7.Size = new Size(199, 15);
+            label7.TabIndex = 0;
+            label7.Text = "left MouseButton: Add point to path";
+            // 
             // cbClickMode
             // 
             cbClickMode.AutoSize = true;
@@ -797,34 +825,6 @@ namespace AvoidAGrabCutEasy
             backgroundWorker2.ProgressChanged += backgroundWorker2_ProgressChanged;
             backgroundWorker2.RunWorkerCompleted += backgroundWorker2_RunWorkerCompleted;
             // 
-            // panel2
-            // 
-            panel2.Controls.Add(label8);
-            panel2.Controls.Add(label7);
-            panel2.Location = new Point(390, 107);
-            panel2.Name = "panel2";
-            panel2.Size = new Size(216, 64);
-            panel2.TabIndex = 770;
-            panel2.Visible = false;
-            // 
-            // label8
-            // 
-            label8.AutoSize = true;
-            label8.Location = new Point(5, 22);
-            label8.Name = "label8";
-            label8.Size = new Size(169, 30);
-            label8.TabIndex = 0;
-            label8.Text = "right MouseButton: Add point \r\nand draw path";
-            // 
-            // label7
-            // 
-            label7.AutoSize = true;
-            label7.Location = new Point(5, 2);
-            label7.Name = "label7";
-            label7.Size = new Size(199, 15);
-            label7.TabIndex = 0;
-            label7.Text = "left MouseButton: Add point to path";
-            // 
             // frmPoissonDraw
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -837,12 +837,15 @@ namespace AvoidAGrabCutEasy
             Name = "frmPoissonDraw";
             StartPosition = FormStartPosition.CenterParent;
             Text = "frmPoissonDraw";
+            FormClosing += Form1_FormClosing;
             Load += frmPoissonDraw_Load;
             ((System.ComponentModel.ISupportInitialize)numSrcPtSurround).EndInit();
             statusStrip1.ResumeLayout(false);
             statusStrip1.PerformLayout();
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
+            panel2.ResumeLayout(false);
+            panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)numOpacity).EndInit();
             ((System.ComponentModel.ISupportInitialize)numLowerWeight).EndInit();
             ((System.ComponentModel.ISupportInitialize)numUpperWeight).EndInit();
@@ -851,8 +854,6 @@ namespace AvoidAGrabCutEasy
             splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)splitContainer1).EndInit();
             splitContainer1.ResumeLayout(false);
-            panel2.ResumeLayout(false);
-            panel2.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }

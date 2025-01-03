@@ -84,6 +84,9 @@ namespace AvoidAGrabCutEasy
         private int _eY;
 
         private object _lockObject = new object();
+        private bool _penStrokesDone;
+
+        private Bitmap? _bmpOrigHLC1;
 
         public frmPoissonDraw(Bitmap bmp, string basePathAddition)
         {
@@ -105,6 +108,7 @@ namespace AvoidAGrabCutEasy
                 this._bmpDraw = new Bitmap(this.helplineRulerCtrl1.Bmp.Width, this.helplineRulerCtrl1.Bmp.Height);
                 this._tb = new TextureBrush(this._bmpBU);
                 this._tb.WrapMode = WrapMode.TileFlipXY;
+                this._bmpOrigHLC1 = new Bitmap(bmp);
             }
             else
             {
@@ -373,6 +377,8 @@ namespace AvoidAGrabCutEasy
 
                         DrawPath();
                         this.helplineRulerCtrl2.dbPanel1.Invalidate();
+
+                        this._penStrokesDone = true;
                     }
                 }
             }
@@ -1020,6 +1026,8 @@ namespace AvoidAGrabCutEasy
                                     this.SetBitmap(this.helplineRulerCtrl1.Bmp, b1, this.helplineRulerCtrl1, "Bmp");
                                     b2 = new Bitmap((Bitmap)img.Clone());
                                     this.SetBitmap(ref this._bmpBU, ref b2);
+                                    Bitmap? bC2 = new Bitmap(b1);
+                                    this.SetBitmap(ref this._bmpOrigHLC1, ref bC2);
                                 }
                                 else
                                     throw new Exception();
@@ -1588,6 +1596,16 @@ namespace AvoidAGrabCutEasy
                     e.Cancel = true;
             }
 
+            if (this._penStrokesDone)
+            {
+                DialogResult dlg = MessageBox.Show("Save penStrokes image?", "Unsaved data", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Exclamation);
+
+                if (dlg == DialogResult.Yes)
+                    this.btnSaveStrokes.PerformClick();
+                else if (dlg == DialogResult.Cancel)
+                    e.Cancel = true;
+            }
+
             if (!e.Cancel)
             {
                 if (this._cAlg != null)
@@ -1596,6 +1614,12 @@ namespace AvoidAGrabCutEasy
                     this.backgroundWorker1.CancelAsync();
                 if (this._bmpBU != null)
                     this._bmpBU.Dispose();
+                if (this._bmpOrigHLC1 != null)
+                    this._bmpOrigHLC1.Dispose();
+                //if (this._bmpOrg != null)
+                //    this._bmpOrg.Dispose();    
+                //if (this._bmpDraw != null)
+                //    this._bmpDraw.Dispose();  //disposed in the designer file
             }
         }
 
@@ -1709,8 +1733,10 @@ namespace AvoidAGrabCutEasy
                 if (bOld != null)
                 {
                     bOld.Dispose();
-                    bOld = null/* TODO Change to default(_) if this is not a reference type */;
+                    bOld = null;
                 }
+
+                this._penStrokesDone = false;
             }
 
             this.helplineRulerCtrl2.MakeBitmap(this.helplineRulerCtrl2.Bmp);
@@ -1782,6 +1808,9 @@ namespace AvoidAGrabCutEasy
                 Bitmap? bD = new Bitmap(this.helplineRulerCtrl1.Bmp.Width, this.helplineRulerCtrl1.Bmp.Height);
                 this.SetBitmap(ref this._bmpDraw, ref bD);
 
+                Bitmap? bC2 = new Bitmap(bmpHLC1);
+                this.SetBitmap(ref this._bmpOrigHLC1, ref bC2);
+
                 if (this._bmpBUZoomed != null)
                     this._bmpBUZoomed.Dispose();
                 this._bmpBUZoomed = null;
@@ -1848,6 +1877,9 @@ namespace AvoidAGrabCutEasy
 
             Bitmap? bD = new Bitmap(this.helplineRulerCtrl1.Bmp.Width, this.helplineRulerCtrl1.Bmp.Height);
             this.SetBitmap(ref this._bmpDraw, ref bD);
+
+            Bitmap? bC2 = new Bitmap(bmpHLC1);
+            this.SetBitmap(ref this._bmpOrigHLC1, ref bC2);
 
             if (this._bmpBUZoomed != null)
                 this._bmpBUZoomed.Dispose();
@@ -2005,17 +2037,17 @@ namespace AvoidAGrabCutEasy
 
         private void btnFindDestPoint_Click(object sender, EventArgs e)
         {
-            if (this.helplineRulerCtrl1.Bmp != null && this.helplineRulerCtrl2.Bmp != null)
+            if (this.helplineRulerCtrl1.Bmp != null && this.helplineRulerCtrl2.Bmp != null && this._bmpOrigHLC1 != null)
             {
                 Bitmap? bmpToFind = null;
                 try
                 {
-                    bmpToFind = this.helplineRulerCtrl1.Bmp.Clone(new Rectangle(
+                    bmpToFind = this._bmpOrigHLC1.Clone(new Rectangle(
                        Math.Max(this._sourcePt.X - (int)this.numSrcPtSurround.Value, 0),
                        Math.Max(this._sourcePt.Y - (int)this.numSrcPtSurround.Value, 0),
-                       Math.Min((int)this.numSrcPtSurround.Value * 2 + 1, this.helplineRulerCtrl1.Bmp.Width - 1 - this._sourcePt.X),
-                       Math.Min((int)this.numSrcPtSurround.Value * 2 + 1, this.helplineRulerCtrl1.Bmp.Height - 1 - this._sourcePt.Y)),
-                       this.helplineRulerCtrl1.Bmp.PixelFormat);
+                       Math.Min((int)this.numSrcPtSurround.Value * 2 + 1, this._bmpOrigHLC1.Width - 1 - this._sourcePt.X),
+                       Math.Min((int)this.numSrcPtSurround.Value * 2 + 1, this._bmpOrigHLC1.Height - 1 - this._sourcePt.Y)),
+                       this._bmpOrigHLC1.PixelFormat);
 
                     if (bmpToFind.Width > 1 && (bmpToFind.Width & 0x01) != 1)
                         bmpToFind = bmpToFind.Clone(new Rectangle(0, 0, bmpToFind.Width - 1, bmpToFind.Height), bmpToFind.PixelFormat);
