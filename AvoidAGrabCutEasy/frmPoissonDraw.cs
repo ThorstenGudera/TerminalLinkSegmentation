@@ -87,6 +87,7 @@ namespace AvoidAGrabCutEasy
         private bool _penStrokesDone;
 
         private Bitmap? _bmpOrigHLC1;
+        private Bitmap? _bmpPenStrokes;
 
         public frmPoissonDraw(Bitmap bmp, string basePathAddition)
         {
@@ -649,13 +650,7 @@ namespace AvoidAGrabCutEasy
         {
             this.SetControls(false);
             object[] o = new object[] { bmpDrawTo, bmpDrawFrom, this.cmbAlg.SelectedIndex, this.numUpperWeight.Value, this.numLowerWeight.Value };
-            //                Form fff = new Form();
-            //                fff.BackgroundImage = bmpDrawTo;
-            //                fff.BackgroundImageLayout = ImageLayout.Zoom;
-            //                fff.ShowDialog();  
-            //fff.BackgroundImage = bmpDrawFrom;
-            //                fff.BackgroundImageLayout = ImageLayout.Zoom;
-            //                fff.ShowDialog();
+
             this.backgroundWorker1.RunWorkerAsync(o);
         }
 
@@ -1616,6 +1611,8 @@ namespace AvoidAGrabCutEasy
                     this._bmpBU.Dispose();
                 if (this._bmpOrigHLC1 != null)
                     this._bmpOrigHLC1.Dispose();
+                if (this._bmpPenStrokes != null)
+                    this._bmpPenStrokes.Dispose();
                 //if (this._bmpOrg != null)
                 //    this._bmpOrg.Dispose();    
                 //if (this._bmpDraw != null)
@@ -2500,6 +2497,97 @@ namespace AvoidAGrabCutEasy
         private void cbClickMode_CheckedChanged(object sender, EventArgs e)
         {
             this.panel2.Visible = this.cbClickMode.Checked;
+        }
+
+        private void btnReBlend_Click(object sender, EventArgs e)
+        {
+            Bitmap? bmpBlend = null;
+
+            if (this.cbUseCustomReBlendPic.Checked)
+            {
+                if (this._bmpPenStrokes != null)
+                {
+                    Bitmap? bmp = new Bitmap(this._bmpPenStrokes);
+
+                    Bitmap bmpDrawTo = new Bitmap(this.helplineRulerCtrl2.Bmp);
+
+                    this.SetControls(false);
+                    object[] o = new object[] { bmpDrawTo, bmp, this.cmbAlg.SelectedIndex, this.numUpperWeight.Value, this.numLowerWeight.Value };
+
+                    if (!this.backgroundWorker1.IsBusy)
+                        this.backgroundWorker1.RunWorkerAsync(o);
+                }
+            }
+            else
+            {
+                if (this.helplineRulerCtrl2.Bmp != null && this.helplineRulerCtrl1.Bmp != null && this.Paths != null)
+                {
+                    using Bitmap bmp = new(this.helplineRulerCtrl2.Bmp.Width, this.helplineRulerCtrl2.Bmp.Height);
+                    using Graphics gx = Graphics.FromImage(bmp);
+                    using TextureBrush tb = new TextureBrush(this.helplineRulerCtrl1.Bmp);
+
+                    for (int i = 0; i < this.Paths.Count; i++)
+                    {
+                        float w = this.Paths[i].DrawWidth;
+                        tb?.ResetTransform();
+                        tb?.TranslateTransform(this.Paths[i].Offset.X, this.Paths[i].Offset.Y);
+
+                        if (tb != null)
+                            using (Pen pen = new Pen(tb, w))
+                            {
+                                pen.LineJoin = LineJoin.Round;
+
+                                if (this.Paths[i].RoundCaps)
+                                {
+                                    pen.StartCap = LineCap.Round;
+                                    pen.EndCap = LineCap.Round;
+                                }
+
+                                using (GraphicsPath gp = new GraphicsPath())
+                                {
+                                    if (this.Paths[i]?.Count() == 1)
+                                    {
+                                        gp.AddEllipse(this.Paths[i].Points[0].X - w, this.Paths[i].Points[0].Y - w, w * 2, w * 2);
+                                        gx.FillPath(tb, gp);
+                                    }
+                                    else
+                                    {
+                                        gp.AddLines(this.Paths[i].ToArray());
+                                        gx.DrawPath(pen, gp);
+                                    }
+                                }
+                            }
+                    }
+
+                    bmpBlend = bmp;
+
+                    Bitmap bmpDrawTo = new Bitmap(this.helplineRulerCtrl2.Bmp);
+
+                    this.SetControls(false);
+                    object[] o = new object[] { bmpDrawTo, bmpBlend, this.cmbAlg.SelectedIndex, this.numUpperWeight.Value, this.numLowerWeight.Value };
+
+                    if (!this.backgroundWorker1.IsBusy)
+                        this.backgroundWorker1.RunWorkerAsync(o);
+                }
+            }
+
+            if (bmpBlend != null)
+                bmpBlend.Dispose();
+            bmpBlend = null;
+        }
+
+        private void btnLoadCustomPenStrokesPic_Click(object sender, EventArgs e)
+        {
+            if (this.openFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                Bitmap? bmp = null;
+                using Image img = Image.FromFile(this.openFileDialog1.FileName);
+                bmp = new Bitmap(img);
+
+                this.SetBitmap(ref this._bmpPenStrokes, ref bmp);
+
+                this.toolStripStatusLabel4.Text = "Custom Pic loaded";
+            }
         }
     }
 }

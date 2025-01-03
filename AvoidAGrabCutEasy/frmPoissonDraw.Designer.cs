@@ -141,6 +141,11 @@ namespace AvoidAGrabCutEasy
             splitContainer1 = new SplitContainer();
             helplineRulerCtrl2 = new HelplineRulerCtrl();
             backgroundWorker2 = new System.ComponentModel.BackgroundWorker();
+            panel5 = new Panel();
+            cbUseCustomReBlendPic = new CheckBox();
+            label9 = new Label();
+            btnReBlend = new Button();
+            btnLoadCustomPenStrokesPic = new Button();
             ((System.ComponentModel.ISupportInitialize)numSrcPtSurround).BeginInit();
             statusStrip1.SuspendLayout();
             panel1.SuspendLayout();
@@ -153,6 +158,7 @@ namespace AvoidAGrabCutEasy
             splitContainer1.Panel1.SuspendLayout();
             splitContainer1.Panel2.SuspendLayout();
             splitContainer1.SuspendLayout();
+            panel5.SuspendLayout();
             SuspendLayout();
             // 
             // openFileDialog1
@@ -443,6 +449,7 @@ namespace AvoidAGrabCutEasy
             // 
             // panel1
             // 
+            panel1.Controls.Add(panel5);
             panel1.Controls.Add(panel2);
             panel1.Controls.Add(cbClickMode);
             panel1.Controls.Add(cbFindDestPoint);
@@ -493,9 +500,10 @@ namespace AvoidAGrabCutEasy
             // 
             // panel2
             // 
+            panel2.BorderStyle = BorderStyle.FixedSingle;
             panel2.Controls.Add(label8);
             panel2.Controls.Add(label7);
-            panel2.Location = new Point(390, 107);
+            panel2.Location = new Point(390, 111);
             panel2.Name = "panel2";
             panel2.Size = new Size(216, 64);
             panel2.TabIndex = 770;
@@ -625,7 +633,7 @@ namespace AvoidAGrabCutEasy
             // 
             numLowerWeight.DecimalPlaces = 2;
             numLowerWeight.Increment = new decimal(new int[] { 1, 0, 0, 65536 });
-            numLowerWeight.Location = new Point(771, 54);
+            numLowerWeight.Location = new Point(583, 77);
             numLowerWeight.Name = "numLowerWeight";
             numLowerWeight.Size = new Size(61, 23);
             numLowerWeight.TabIndex = 755;
@@ -635,7 +643,7 @@ namespace AvoidAGrabCutEasy
             // 
             numUpperWeight.DecimalPlaces = 2;
             numUpperWeight.Increment = new decimal(new int[] { 1, 0, 0, 65536 });
-            numUpperWeight.Location = new Point(583, 54);
+            numUpperWeight.Location = new Point(583, 46);
             numUpperWeight.Name = "numUpperWeight";
             numUpperWeight.Size = new Size(61, 23);
             numUpperWeight.TabIndex = 755;
@@ -644,7 +652,7 @@ namespace AvoidAGrabCutEasy
             // label4
             // 
             label4.AutoSize = true;
-            label4.Location = new Point(664, 56);
+            label4.Location = new Point(473, 79);
             label4.Name = "label4";
             label4.Size = new Size(101, 15);
             label4.TabIndex = 754;
@@ -653,7 +661,7 @@ namespace AvoidAGrabCutEasy
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(473, 56);
+            label3.Location = new Point(473, 48);
             label3.Name = "label3";
             label3.Size = new Size(103, 15);
             label3.TabIndex = 754;
@@ -825,6 +833,57 @@ namespace AvoidAGrabCutEasy
             backgroundWorker2.ProgressChanged += backgroundWorker2_ProgressChanged;
             backgroundWorker2.RunWorkerCompleted += backgroundWorker2_RunWorkerCompleted;
             // 
+            // panel5
+            // 
+            panel5.BorderStyle = BorderStyle.FixedSingle;
+            panel5.Controls.Add(cbUseCustomReBlendPic);
+            panel5.Controls.Add(label9);
+            panel5.Controls.Add(btnReBlend);
+            panel5.Controls.Add(btnLoadCustomPenStrokesPic);
+            panel5.Location = new Point(683, 15);
+            panel5.Name = "panel5";
+            panel5.Size = new Size(239, 86);
+            panel5.TabIndex = 771;
+            // 
+            // cbUseCustomReBlendPic
+            // 
+            cbUseCustomReBlendPic.AutoSize = true;
+            cbUseCustomReBlendPic.Location = new Point(7, 32);
+            cbUseCustomReBlendPic.Name = "cbUseCustomReBlendPic";
+            cbUseCustomReBlendPic.Size = new Size(162, 19);
+            cbUseCustomReBlendPic.TabIndex = 765;
+            cbUseCustomReBlendPic.Text = "use custon Penstrokes pic";
+            cbUseCustomReBlendPic.UseVisualStyleBackColor = true;
+            // 
+            // label9
+            // 
+            label9.AutoSize = true;
+            label9.Location = new Point(3, 9);
+            label9.Name = "label9";
+            label9.Size = new Size(130, 15);
+            label9.TabIndex = 764;
+            label9.Text = "Re-Blend all Penstrokes";
+            // 
+            // btnReBlend
+            // 
+            btnReBlend.Location = new Point(139, 2);
+            btnReBlend.Name = "btnReBlend";
+            btnReBlend.Size = new Size(88, 28);
+            btnReBlend.TabIndex = 756;
+            btnReBlend.Text = "Go";
+            btnReBlend.UseVisualStyleBackColor = true;
+            btnReBlend.Click += btnReBlend_Click;
+            // 
+            // btnLoadCustomPenStrokesPic
+            // 
+            btnLoadCustomPenStrokesPic.Location = new Point(139, 52);
+            btnLoadCustomPenStrokesPic.Name = "btnLoadCustomPenStrokesPic";
+            btnLoadCustomPenStrokesPic.Size = new Size(88, 28);
+            btnLoadCustomPenStrokesPic.TabIndex = 756;
+            btnLoadCustomPenStrokesPic.Text = "load";
+            btnLoadCustomPenStrokesPic.UseVisualStyleBackColor = true;
+            btnLoadCustomPenStrokesPic.Click += btnLoadCustomPenStrokesPic_Click;
+            // 
             // frmPoissonDraw
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -854,6 +913,8 @@ namespace AvoidAGrabCutEasy
             splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)splitContainer1).EndInit();
             splitContainer1.ResumeLayout(false);
+            panel5.ResumeLayout(false);
+            panel5.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -920,5 +981,10 @@ namespace AvoidAGrabCutEasy
         private Panel panel2;
         private Label label8;
         private Label label7;
+        private Panel panel5;
+        private CheckBox cbUseCustomReBlendPic;
+        private Label label9;
+        internal Button btnReBlend;
+        internal Button btnLoadCustomPenStrokesPic;
     }
 }
