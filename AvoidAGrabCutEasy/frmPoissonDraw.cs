@@ -2559,7 +2559,7 @@ namespace AvoidAGrabCutEasy
                             }
                     }
 
-                    bmpBlend = bmp;
+                    bmpBlend = new Bitmap(bmp);
 
                     Bitmap bmpDrawTo = new Bitmap(this.helplineRulerCtrl2.Bmp);
 
@@ -2570,10 +2570,6 @@ namespace AvoidAGrabCutEasy
                         this.backgroundWorker1.RunWorkerAsync(o);
                 }
             }
-
-            if (bmpBlend != null)
-                bmpBlend.Dispose();
-            bmpBlend = null;
         }
 
         private void btnLoadCustomPenStrokesPic_Click(object sender, EventArgs e)
