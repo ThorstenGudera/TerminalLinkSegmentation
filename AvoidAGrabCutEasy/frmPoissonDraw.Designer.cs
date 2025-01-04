@@ -108,6 +108,7 @@ namespace AvoidAGrabCutEasy
             toolStripStatusLabel3 = new ToolStripStatusLabel();
             panel3 = new Panel();
             panel1 = new Panel();
+            pictureBox1 = new PictureBox();
             numGamma = new NumericUpDown();
             numMaxPixelDist = new NumericUpDown();
             label12 = new Label();
@@ -150,10 +151,10 @@ namespace AvoidAGrabCutEasy
             splitContainer1 = new SplitContainer();
             helplineRulerCtrl2 = new HelplineRulerCtrl();
             backgroundWorker2 = new System.ComponentModel.BackgroundWorker();
-            pictureBox1 = new PictureBox();
             ((System.ComponentModel.ISupportInitialize)numSrcPtSurround).BeginInit();
             statusStrip1.SuspendLayout();
             panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numGamma).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numMaxPixelDist).BeginInit();
             panel5.SuspendLayout();
@@ -166,7 +167,6 @@ namespace AvoidAGrabCutEasy
             splitContainer1.Panel1.SuspendLayout();
             splitContainer1.Panel2.SuspendLayout();
             splitContainer1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             SuspendLayout();
             // 
             // openFileDialog1
@@ -497,6 +497,16 @@ namespace AvoidAGrabCutEasy
             panel1.Name = "panel1";
             panel1.Size = new Size(1400, 209);
             panel1.TabIndex = 247;
+            // 
+            // pictureBox1
+            // 
+            pictureBox1.BorderStyle = BorderStyle.FixedSingle;
+            pictureBox1.Location = new Point(1092, 108);
+            pictureBox1.Name = "pictureBox1";
+            pictureBox1.Size = new Size(80, 80);
+            pictureBox1.TabIndex = 776;
+            pictureBox1.TabStop = false;
+            pictureBox1.DoubleClick += pictureBox1_DoubleClick;
             // 
             // numGamma
             // 
@@ -934,15 +944,6 @@ namespace AvoidAGrabCutEasy
             backgroundWorker2.ProgressChanged += backgroundWorker2_ProgressChanged;
             backgroundWorker2.RunWorkerCompleted += backgroundWorker2_RunWorkerCompleted;
             // 
-            // pictureBox1
-            // 
-            pictureBox1.BorderStyle = BorderStyle.FixedSingle;
-            pictureBox1.Location = new Point(1092, 108);
-            pictureBox1.Name = "pictureBox1";
-            pictureBox1.Size = new Size(80, 80);
-            pictureBox1.TabIndex = 776;
-            pictureBox1.TabStop = false;
-            // 
             // frmPoissonDraw
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -962,6 +963,7 @@ namespace AvoidAGrabCutEasy
             statusStrip1.PerformLayout();
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             ((System.ComponentModel.ISupportInitialize)numGamma).EndInit();
             ((System.ComponentModel.ISupportInitialize)numMaxPixelDist).EndInit();
             panel5.ResumeLayout(false);
@@ -976,7 +978,6 @@ namespace AvoidAGrabCutEasy
             splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)splitContainer1).EndInit();
             splitContainer1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
