@@ -649,9 +649,12 @@ namespace AvoidAGrabCutEasy
         private void ProcessImage(Bitmap bmpDrawTo, Bitmap bmpDrawFrom)
         {
             this.SetControls(false);
-            object[] o = new object[] { bmpDrawTo, bmpDrawFrom, this.cmbAlg.SelectedIndex, this.numUpperWeight.Value, this.numLowerWeight.Value };
+            object[] o = new object[] { bmpDrawTo, bmpDrawFrom, this.cmbAlg.SelectedIndex,
+                (double)this.numUpperWeight.Value, (double)this.numLowerWeight.Value,
+                (int)this.numMaxPixelDist.Value, (double)this.numGamma.Value};
 
-            this.backgroundWorker1.RunWorkerAsync(o);
+            if (!this.backgroundWorker1.IsBusy)
+                this.backgroundWorker1.RunWorkerAsync(o);
         }
 
         private void backgroundWorker1_DoWork(object? sender, System.ComponentModel.DoWorkEventArgs e)
@@ -686,12 +689,22 @@ namespace AvoidAGrabCutEasy
                                     int bVAlg = System.Convert.ToInt32(o[2]);
                                     double upperWeight = System.Convert.ToDouble(o[3]);
                                     double lowerWeight = System.Convert.ToDouble(o[4]);
+                                    int maxPixelDist = (int)o[5];
+                                    double gamma = (double)o[6];
 
                                     PoissonBlender pb = new PoissonBlender(new Bitmap(bmpLw), new Bitmap(bmpU));
                                     PoissonBlend.ProgressEventArgs pe = new PoissonBlend.ProgressEventArgs(mI * 3, 0);
                                     pe.PrgInterval = mI / 20;
 
                                     IBVectorComputingAlgorithm bAlg = pb.BlendParameters.GetBVectorAlg(bVAlg); // addb etc
+
+                                    if (bAlg.GetType().GetInterfaces().Contains(typeof(IExtendedBVectorComputingAlgorithm)))
+                                    {
+                                        IExtendedBVectorComputingAlgorithm iExtAlg = (IExtendedBVectorComputingAlgorithm)bAlg;
+                                        using Bitmap bC = new Bitmap(bmpU);
+                                        iExtAlg.Setup(bC, maxPixelDist, gamma);
+                                    }
+
                                     IBlendAlgorithm cAlg = pb.BlendParameters.GetCalcAlg(1); // GMRES_r
                                     cAlg.ShowProgess += ShowProgress;
                                     this._cAlg = cAlg;
@@ -1613,6 +1626,8 @@ namespace AvoidAGrabCutEasy
                     this._bmpOrigHLC1.Dispose();
                 if (this._bmpPenStrokes != null)
                     this._bmpPenStrokes.Dispose();
+                if (this.pictureBox1.Image != null)
+                    this.pictureBox1.Image.Dispose();
                 //if (this._bmpOrg != null)
                 //    this._bmpOrg.Dispose();    
                 //if (this._bmpDraw != null)
@@ -1755,15 +1770,27 @@ namespace AvoidAGrabCutEasy
         {
             this.label3.Enabled = false;
             this.label4.Enabled = false;
+            this.label10.Enabled = false;
+            this.label12.Enabled = false;
             this.numUpperWeight.Enabled = false;
             this.numLowerWeight.Enabled = false;
+            this.numMaxPixelDist.Enabled = false;
+            this.numGamma.Enabled = false;
 
-            if (this.cmbAlg.SelectedIndex == 3)
+            if (this.cmbAlg.SelectedIndex > 2)
             {
                 this.label3.Enabled = true;
                 this.label4.Enabled = true;
                 this.numUpperWeight.Enabled = true;
                 this.numLowerWeight.Enabled = true;
+
+                if (this.cmbAlg.SelectedIndex > 3)
+                {
+                    this.label10.Enabled = true;
+                    this.label12.Enabled = true;
+                    this.numMaxPixelDist.Enabled = true;
+                    this.numGamma.Enabled = true;
+                }
             }
         }
 
@@ -2509,10 +2536,14 @@ namespace AvoidAGrabCutEasy
                 {
                     Bitmap? bmp = new Bitmap(this._bmpPenStrokes);
 
+                    SetPicToPB(bmp);
+
                     Bitmap bmpDrawTo = new Bitmap(this.helplineRulerCtrl2.Bmp);
 
                     this.SetControls(false);
-                    object[] o = new object[] { bmpDrawTo, bmp, this.cmbAlg.SelectedIndex, this.numUpperWeight.Value, this.numLowerWeight.Value };
+                    object[] o = new object[] { bmpDrawTo, bmp, this.cmbAlg.SelectedIndex,
+                            (double)this.numUpperWeight.Value, (double)this.numLowerWeight.Value,
+                            (int)this.numMaxPixelDist.Value, (double)this.numGamma.Value};
 
                     if (!this.backgroundWorker1.IsBusy)
                         this.backgroundWorker1.RunWorkerAsync(o);
@@ -2561,10 +2592,14 @@ namespace AvoidAGrabCutEasy
 
                     bmpBlend = new Bitmap(bmp);
 
+                    SetPicToPB(bmpBlend);
+
                     Bitmap bmpDrawTo = new Bitmap(this.helplineRulerCtrl2.Bmp);
 
                     this.SetControls(false);
-                    object[] o = new object[] { bmpDrawTo, bmpBlend, this.cmbAlg.SelectedIndex, this.numUpperWeight.Value, this.numLowerWeight.Value };
+                    object[] o = new object[] { bmpDrawTo, bmpBlend, this.cmbAlg.SelectedIndex,
+                        (double)this.numUpperWeight.Value, (double)this.numLowerWeight.Value,
+                        (int)this.numMaxPixelDist.Value, (double)this.numGamma.Value};
 
                     if (!this.backgroundWorker1.IsBusy)
                         this.backgroundWorker1.RunWorkerAsync(o);
@@ -2572,17 +2607,219 @@ namespace AvoidAGrabCutEasy
             }
         }
 
+        private void SetPicToPB(Bitmap bmp)
+        {
+            Image? iOld = this.pictureBox1.Image;
+            this.pictureBox1.Image = new Bitmap(bmp);
+            this.pictureBox1.Refresh();
+
+            if (iOld != null)
+                iOld.Dispose();
+            iOld = null;
+        }
+
         private void btnLoadCustomPenStrokesPic_Click(object sender, EventArgs e)
         {
-            if (this.openFileDialog1.ShowDialog() == DialogResult.OK)
+            if (!this.cbUseCustomReBlendPic.Checked && this.cbWholeRegionPic.Checked)
+            {
+                Bitmap? bmpBlend = null;
+
+                if (this.helplineRulerCtrl2.Bmp != null && this.helplineRulerCtrl1.Bmp != null && this.Paths != null)
+                {
+                    using Bitmap bmp = new(this.helplineRulerCtrl2.Bmp.Width, this.helplineRulerCtrl2.Bmp.Height);
+                    using Graphics gx = Graphics.FromImage(bmp);
+                    using TextureBrush tb = new TextureBrush(this.helplineRulerCtrl1.Bmp);
+
+                    for (int i = 0; i < this.Paths.Count; i++)
+                    {
+                        float w = this.Paths[i].DrawWidth;
+                        tb?.ResetTransform();
+                        tb?.TranslateTransform(this.Paths[i].Offset.X, this.Paths[i].Offset.Y);
+
+                        if (tb != null)
+                            using (Pen pen = new Pen(tb, w))
+                            {
+                                pen.LineJoin = LineJoin.Round;
+
+                                if (this.Paths[i].RoundCaps)
+                                {
+                                    pen.StartCap = LineCap.Round;
+                                    pen.EndCap = LineCap.Round;
+                                }
+
+                                using (GraphicsPath gp = new GraphicsPath())
+                                {
+                                    if (this.Paths[i]?.Count() == 1)
+                                    {
+                                        gp.AddEllipse(this.Paths[i].Points[0].X - w, this.Paths[i].Points[0].Y - w, w * 2, w * 2);
+                                        gx.FillPath(tb, gp);
+                                    }
+                                    else
+                                    {
+                                        gp.AddLines(this.Paths[i].ToArray());
+                                        gx.DrawPath(pen, gp);
+                                    }
+                                }
+                            }
+                    }
+
+                    using Bitmap bSrc = new Bitmap(this.helplineRulerCtrl1.Bmp);
+                    bmpBlend = GetSurroundingRegion(bmp, bSrc);
+
+                    if (bmpBlend != null)
+                    {
+                        SetPicToPB(bmpBlend);
+
+                        Bitmap bmpDrawTo = new Bitmap(this.helplineRulerCtrl2.Bmp);
+
+                        this.SetControls(false);
+                        object[] o = new object[] { bmpDrawTo, bmpBlend, this.cmbAlg.SelectedIndex,
+                            (double)this.numUpperWeight.Value, (double)this.numLowerWeight.Value,
+                            (int)this.numMaxPixelDist.Value, (double)this.numGamma.Value};
+
+                        if (!this.backgroundWorker1.IsBusy)
+                            this.backgroundWorker1.RunWorkerAsync(o);
+                    }
+                }
+            }
+            else if (this.cbUseCustomReBlendPic.Checked && this.openFileDialog1.ShowDialog() == DialogResult.OK)
             {
                 Bitmap? bmp = null;
                 using Image img = Image.FromFile(this.openFileDialog1.FileName);
                 bmp = new Bitmap(img);
 
-                this.SetBitmap(ref this._bmpPenStrokes, ref bmp);
+                SetPicToPB(bmp);
 
+                this.SetBitmap(ref this._bmpPenStrokes, ref bmp);
                 this.toolStripStatusLabel4.Text = "Custom Pic loaded";
+
+                if (this.cbWholeRegionPic.Checked)
+                {
+                    using Bitmap bSrc = new Bitmap(this.helplineRulerCtrl1.Bmp);
+                    Bitmap? bmpBlend = GetSurroundingRegion(bmp, bSrc);
+
+                    if (bmpBlend != null)
+                    {
+                        Bitmap bmpBlend2 = new Bitmap(bmpBlend);
+                        this.SetBitmap(ref this._bmpPenStrokes, ref bmpBlend2);
+                        this.toolStripStatusLabel4.Text = "Custom Pic loaded";
+
+                        SetPicToPB(bmpBlend);
+
+                        Bitmap bmpDrawTo = new Bitmap(this.helplineRulerCtrl2.Bmp);
+
+                        this.SetControls(false);
+                        object[] o = new object[] { bmpDrawTo, bmpBlend, this.cmbAlg.SelectedIndex,
+                            (double)this.numUpperWeight.Value, (double)this.numLowerWeight.Value,
+                            (int)this.numMaxPixelDist.Value, (double)this.numGamma.Value};
+
+                        if (!this.backgroundWorker1.IsBusy)
+                            this.backgroundWorker1.RunWorkerAsync(o);
+                    }
+
+                    if (bmp != null)
+                        bmp.Dispose();
+                    bmp = null;
+                }
+
+            }
+        }
+
+        private unsafe Bitmap? GetSurroundingRegion(Bitmap b, Bitmap bSrc)
+        {
+            Bitmap? bResult = null;
+
+            if (b != null)
+            {
+                int w = b.Width;
+                int h = b.Height;
+                PrepareBWPic(b);
+
+                MorphologicalProcessing2.IMorphologicalOperation alg = new MorphologicalProcessing2.Algorithms.ConvexHull();
+                alg.BGW = null;
+                alg.ApplyGrayscale(b);
+                alg.Dispose();
+
+                bResult = new Bitmap(w, h);
+
+                BitmapData bmSrc = bSrc.LockBits(new Rectangle(0, 0, w, h), ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
+                BitmapData bmMask = b.LockBits(new Rectangle(0, 0, w, h), ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
+                BitmapData bW = bResult.LockBits(new Rectangle(0, 0, w, h), ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
+                int stride = bmMask.Stride;
+
+                Parallel.For(0, h, y =>
+                {
+                    byte* pMask = (byte*)bmMask.Scan0;
+                    pMask += y * stride;
+                    byte* p = (byte*)bW.Scan0;
+                    p += y * stride;
+                    byte* pRead = (byte*)bmSrc.Scan0;
+                    pRead += y * stride;
+
+                    for (int x = 0; x < w; x++)
+                    {
+                        if (pMask[0] >= 250 && pMask[1] >= 250 && pMask[2] >= 250)
+                        {
+                            p[0] = pRead[0];
+                            p[1] = pRead[1];
+                            p[2] = pRead[2];
+
+                            p[3] = pRead[3];
+                        }
+
+                        pMask += 4;
+                        p += 4;
+                        pRead += 4;
+                    }
+                });
+
+                b.UnlockBits(bmMask);
+                bResult.UnlockBits(bW);
+                bSrc.UnlockBits(bmSrc);
+            }
+
+            return bResult;
+        }
+
+        private unsafe void PrepareBWPic(Bitmap b)
+        {
+            int w = b.Width;
+            int h = b.Height;
+
+            BitmapData bD = b.LockBits(new Rectangle(0, 0, w, h), ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
+            int stride = bD.Stride;
+
+            Parallel.For(0, h, y =>
+            {
+                byte* p = (byte*)bD.Scan0;
+                p += y * stride;
+
+                for (int x = 0; x < w; x++)
+                {
+                    if (p[3] == 0)
+                    {
+                        p[1] = p[2] = p[3] = 0;
+                        p[3] = 255;
+                    }
+                    else
+                    {
+                        p[0] = p[1] = p[2] = 255;
+                        p[3] = 255;
+                    }
+                    p += 4;
+                }
+            });
+
+            b.UnlockBits(bD);
+        }
+
+        private void pictureBox1_DoubleClick(object sender, EventArgs e)
+        {
+            if (this.pictureBox1.Image != null)
+            {
+                GetAlphaMatte.frmEdgePic frm4 = new GetAlphaMatte.frmEdgePic(this.pictureBox1.Image, this.helplineRulerCtrl1.Bmp.Size);
+                frm4.Text = "Blending Src";
+                frm4.ShowDialog();
             }
         }
     }

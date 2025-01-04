@@ -97,7 +97,6 @@ namespace AvoidAGrabCutEasy
             button3 = new Button();
             button2 = new Button();
             toolTip1 = new ToolTip(components);
-            btnGo = new Button();
             cbFindDestPoint = new CheckBox();
             numSrcPtSurround = new NumericUpDown();
             toolStripStatusLabel5 = new ToolStripStatusLabel();
@@ -109,6 +108,16 @@ namespace AvoidAGrabCutEasy
             toolStripStatusLabel3 = new ToolStripStatusLabel();
             panel3 = new Panel();
             panel1 = new Panel();
+            numGamma = new NumericUpDown();
+            numMaxPixelDist = new NumericUpDown();
+            label12 = new Label();
+            label10 = new Label();
+            panel5 = new Panel();
+            cbWholeRegionPic = new CheckBox();
+            cbUseCustomReBlendPic = new CheckBox();
+            label9 = new Label();
+            btnReBlend = new Button();
+            btnLoadCustomPenStrokesPic = new Button();
             panel2 = new Panel();
             label8 = new Label();
             label7 = new Label();
@@ -141,14 +150,13 @@ namespace AvoidAGrabCutEasy
             splitContainer1 = new SplitContainer();
             helplineRulerCtrl2 = new HelplineRulerCtrl();
             backgroundWorker2 = new System.ComponentModel.BackgroundWorker();
-            panel5 = new Panel();
-            cbUseCustomReBlendPic = new CheckBox();
-            label9 = new Label();
-            btnReBlend = new Button();
-            btnLoadCustomPenStrokesPic = new Button();
+            pictureBox1 = new PictureBox();
             ((System.ComponentModel.ISupportInitialize)numSrcPtSurround).BeginInit();
             statusStrip1.SuspendLayout();
             panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)numGamma).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)numMaxPixelDist).BeginInit();
+            panel5.SuspendLayout();
             panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numOpacity).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numLowerWeight).BeginInit();
@@ -158,7 +166,7 @@ namespace AvoidAGrabCutEasy
             splitContainer1.Panel1.SuspendLayout();
             splitContainer1.Panel2.SuspendLayout();
             splitContainer1.SuspendLayout();
-            panel5.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             SuspendLayout();
             // 
             // openFileDialog1
@@ -182,7 +190,7 @@ namespace AvoidAGrabCutEasy
             helplineRulerCtrl1.MoveHelpLinesOnResize = false;
             helplineRulerCtrl1.Name = "helplineRulerCtrl1";
             helplineRulerCtrl1.SetZoomOnlyByMethodCall = false;
-            helplineRulerCtrl1.Size = new Size(606, 622);
+            helplineRulerCtrl1.Size = new Size(707, 602);
             helplineRulerCtrl1.TabIndex = 249;
             helplineRulerCtrl1.Zoom = 1F;
             helplineRulerCtrl1.ZoomSetManually = false;
@@ -204,7 +212,7 @@ namespace AvoidAGrabCutEasy
             // Panel4
             // 
             Panel4.BackColor = SystemColors.ActiveCaptionText;
-            Panel4.Location = new Point(1150, 180);
+            Panel4.Location = new Point(1150, 200);
             Panel4.Margin = new Padding(4, 3, 4, 3);
             Panel4.Name = "Panel4";
             Panel4.Size = new Size(197, 2);
@@ -213,7 +221,7 @@ namespace AvoidAGrabCutEasy
             // Panel8
             // 
             Panel8.BackColor = SystemColors.ActiveCaptionText;
-            Panel8.Location = new Point(13, 180);
+            Panel8.Location = new Point(13, 200);
             Panel8.Margin = new Padding(4, 3, 4, 3);
             Panel8.Name = "Panel8";
             Panel8.Size = new Size(1107, 2);
@@ -224,7 +232,7 @@ namespace AvoidAGrabCutEasy
             cmbZoom.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbZoom.FormattingEnabled = true;
             cmbZoom.Items.AddRange(new object[] { "4", "2", "1", "Fit_Width", "Fit" });
-            cmbZoom.Location = new Point(1098, 82);
+            cmbZoom.Location = new Point(1297, 79);
             cmbZoom.Margin = new Padding(4, 3, 4, 3);
             cmbZoom.Name = "cmbZoom";
             cmbZoom.Size = new Size(87, 23);
@@ -237,7 +245,7 @@ namespace AvoidAGrabCutEasy
             cbBGColor.AutoSize = true;
             cbBGColor.Checked = true;
             cbBGColor.CheckState = CheckState.Checked;
-            cbBGColor.Location = new Point(1003, 12);
+            cbBGColor.Location = new Point(1203, 12);
             cbBGColor.Margin = new Padding(4, 3, 4, 3);
             cbBGColor.Name = "cbBGColor";
             cbBGColor.Size = new Size(67, 19);
@@ -250,7 +258,7 @@ namespace AvoidAGrabCutEasy
             // 
             button10.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             button10.ForeColor = SystemColors.ControlText;
-            button10.Location = new Point(1097, 44);
+            button10.Location = new Point(1297, 44);
             button10.Margin = new Padding(4, 3, 4, 3);
             button10.Name = "button10";
             button10.Size = new Size(88, 27);
@@ -263,7 +271,7 @@ namespace AvoidAGrabCutEasy
             // 
             button8.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             button8.ForeColor = SystemColors.ControlText;
-            button8.Location = new Point(1000, 44);
+            button8.Location = new Point(1200, 44);
             button8.Margin = new Padding(4, 3, 4, 3);
             button8.Name = "button8";
             button8.Size = new Size(88, 27);
@@ -276,7 +284,7 @@ namespace AvoidAGrabCutEasy
             // 
             btnUndo.Enabled = false;
             btnUndo.ForeColor = SystemColors.ControlText;
-            btnUndo.Location = new Point(1000, 114);
+            btnUndo.Location = new Point(1199, 111);
             btnUndo.Margin = new Padding(4, 3, 4, 3);
             btnUndo.Name = "btnUndo";
             btnUndo.Size = new Size(88, 27);
@@ -289,7 +297,7 @@ namespace AvoidAGrabCutEasy
             // 
             btnRedo.Enabled = false;
             btnRedo.ForeColor = SystemColors.ControlText;
-            btnRedo.Location = new Point(1099, 114);
+            btnRedo.Location = new Point(1298, 111);
             btnRedo.Margin = new Padding(4, 3, 4, 3);
             btnRedo.Name = "btnRedo";
             btnRedo.Size = new Size(88, 27);
@@ -303,7 +311,7 @@ namespace AvoidAGrabCutEasy
             btnCancel.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             btnCancel.DialogResult = DialogResult.Cancel;
             btnCancel.ForeColor = SystemColors.ControlText;
-            btnCancel.Location = new Point(1097, 147);
+            btnCancel.Location = new Point(1297, 167);
             btnCancel.Margin = new Padding(4, 3, 4, 3);
             btnCancel.Name = "btnCancel";
             btnCancel.Size = new Size(88, 27);
@@ -316,7 +324,7 @@ namespace AvoidAGrabCutEasy
             btnOK.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             btnOK.DialogResult = DialogResult.OK;
             btnOK.ForeColor = SystemColors.ControlText;
-            btnOK.Location = new Point(1003, 147);
+            btnOK.Location = new Point(1203, 167);
             btnOK.Margin = new Padding(4, 3, 4, 3);
             btnOK.Name = "btnOK";
             btnOK.Size = new Size(88, 27);
@@ -330,7 +338,7 @@ namespace AvoidAGrabCutEasy
             button3.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             button3.FlatStyle = FlatStyle.System;
             button3.ForeColor = SystemColors.ControlText;
-            button3.Location = new Point(2400, 13);
+            button3.Location = new Point(2600, 13);
             button3.Margin = new Padding(4, 3, 4, 3);
             button3.Name = "button3";
             button3.Size = new Size(88, 27);
@@ -343,25 +351,13 @@ namespace AvoidAGrabCutEasy
             button2.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             button2.FlatStyle = FlatStyle.System;
             button2.ForeColor = SystemColors.ControlText;
-            button2.Location = new Point(1097, 10);
+            button2.Location = new Point(1297, 10);
             button2.Margin = new Padding(4, 3, 4, 3);
             button2.Name = "button2";
             button2.Size = new Size(88, 27);
             button2.TabIndex = 91;
             button2.Text = "Save";
             button2.Click += button2_Click;
-            // 
-            // btnGo
-            // 
-            btnGo.Font = new Font("Microsoft Sans Serif", 8.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            btnGo.Location = new Point(878, 147);
-            btnGo.Margin = new Padding(4, 3, 4, 3);
-            btnGo.Name = "btnGo";
-            btnGo.Size = new Size(88, 27);
-            btnGo.TabIndex = 522;
-            btnGo.Text = "Go";
-            toolTip1.SetToolTip(btnGo, "5");
-            btnGo.UseVisualStyleBackColor = true;
             // 
             // cbFindDestPoint
             // 
@@ -399,7 +395,7 @@ namespace AvoidAGrabCutEasy
             statusStrip1.Location = new Point(0, 811);
             statusStrip1.Name = "statusStrip1";
             statusStrip1.Padding = new Padding(1, 0, 16, 0);
-            statusStrip1.Size = new Size(1200, 39);
+            statusStrip1.Size = new Size(1400, 39);
             statusStrip1.TabIndex = 246;
             statusStrip1.Text = "statusStrip1";
             // 
@@ -449,6 +445,11 @@ namespace AvoidAGrabCutEasy
             // 
             // panel1
             // 
+            panel1.Controls.Add(pictureBox1);
+            panel1.Controls.Add(numGamma);
+            panel1.Controls.Add(numMaxPixelDist);
+            panel1.Controls.Add(label12);
+            panel1.Controls.Add(label10);
             panel1.Controls.Add(panel5);
             panel1.Controls.Add(panel2);
             panel1.Controls.Add(cbClickMode);
@@ -478,7 +479,6 @@ namespace AvoidAGrabCutEasy
             panel1.Controls.Add(cbDraw);
             panel1.Controls.Add(numPenSize);
             panel1.Controls.Add(label1);
-            panel1.Controls.Add(btnGo);
             panel1.Controls.Add(Panel4);
             panel1.Controls.Add(Panel8);
             panel1.Controls.Add(cmbZoom);
@@ -495,15 +495,116 @@ namespace AvoidAGrabCutEasy
             panel1.Location = new Point(0, 0);
             panel1.Margin = new Padding(4, 3, 4, 3);
             panel1.Name = "panel1";
-            panel1.Size = new Size(1200, 189);
+            panel1.Size = new Size(1400, 209);
             panel1.TabIndex = 247;
+            // 
+            // numGamma
+            // 
+            numGamma.DecimalPlaces = 2;
+            numGamma.Increment = new decimal(new int[] { 1, 0, 0, 65536 });
+            numGamma.Location = new Point(741, 75);
+            numGamma.Minimum = new decimal(new int[] { 1, 0, 0, 131072 });
+            numGamma.Name = "numGamma";
+            numGamma.Size = new Size(61, 23);
+            numGamma.TabIndex = 774;
+            numGamma.Value = new decimal(new int[] { 1, 0, 0, 0 });
+            // 
+            // numMaxPixelDist
+            // 
+            numMaxPixelDist.Location = new Point(741, 46);
+            numMaxPixelDist.Maximum = new decimal(new int[] { 10000, 0, 0, 0 });
+            numMaxPixelDist.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
+            numMaxPixelDist.Name = "numMaxPixelDist";
+            numMaxPixelDist.Size = new Size(61, 23);
+            numMaxPixelDist.TabIndex = 775;
+            numMaxPixelDist.Value = new decimal(new int[] { 127, 0, 0, 0 });
+            // 
+            // label12
+            // 
+            label12.AutoSize = true;
+            label12.Location = new Point(660, 77);
+            label12.Name = "label12";
+            label12.Size = new Size(48, 15);
+            label12.TabIndex = 772;
+            label12.Text = "gamma";
+            // 
+            // label10
+            // 
+            label10.AutoSize = true;
+            label10.Location = new Point(660, 48);
+            label10.Name = "label10";
+            label10.Size = new Size(75, 15);
+            label10.TabIndex = 773;
+            label10.Text = "maxPixelDist";
+            // 
+            // panel5
+            // 
+            panel5.BorderStyle = BorderStyle.FixedSingle;
+            panel5.Controls.Add(cbWholeRegionPic);
+            panel5.Controls.Add(cbUseCustomReBlendPic);
+            panel5.Controls.Add(label9);
+            panel5.Controls.Add(btnReBlend);
+            panel5.Controls.Add(btnLoadCustomPenStrokesPic);
+            panel5.Location = new Point(822, 16);
+            panel5.Name = "panel5";
+            panel5.Size = new Size(350, 86);
+            panel5.TabIndex = 771;
+            // 
+            // cbWholeRegionPic
+            // 
+            cbWholeRegionPic.AutoSize = true;
+            cbWholeRegionPic.Location = new Point(25, 54);
+            cbWholeRegionPic.Name = "cbWholeRegionPic";
+            cbWholeRegionPic.Size = new Size(188, 19);
+            cbWholeRegionPic.TabIndex = 767;
+            cbWholeRegionPic.Text = "region surrounding penstrokes";
+            cbWholeRegionPic.UseVisualStyleBackColor = true;
+            // 
+            // cbUseCustomReBlendPic
+            // 
+            cbUseCustomReBlendPic.AutoSize = true;
+            cbUseCustomReBlendPic.Location = new Point(7, 32);
+            cbUseCustomReBlendPic.Name = "cbUseCustomReBlendPic";
+            cbUseCustomReBlendPic.Size = new Size(162, 19);
+            cbUseCustomReBlendPic.TabIndex = 765;
+            cbUseCustomReBlendPic.Text = "use custon Penstrokes pic";
+            cbUseCustomReBlendPic.UseVisualStyleBackColor = true;
+            // 
+            // label9
+            // 
+            label9.AutoSize = true;
+            label9.Location = new Point(3, 9);
+            label9.Name = "label9";
+            label9.Size = new Size(130, 15);
+            label9.TabIndex = 764;
+            label9.Text = "Re-Blend all Penstrokes";
+            // 
+            // btnReBlend
+            // 
+            btnReBlend.Location = new Point(244, 3);
+            btnReBlend.Name = "btnReBlend";
+            btnReBlend.Size = new Size(88, 28);
+            btnReBlend.TabIndex = 756;
+            btnReBlend.Text = "Go";
+            btnReBlend.UseVisualStyleBackColor = true;
+            btnReBlend.Click += btnReBlend_Click;
+            // 
+            // btnLoadCustomPenStrokesPic
+            // 
+            btnLoadCustomPenStrokesPic.Location = new Point(244, 48);
+            btnLoadCustomPenStrokesPic.Name = "btnLoadCustomPenStrokesPic";
+            btnLoadCustomPenStrokesPic.Size = new Size(88, 28);
+            btnLoadCustomPenStrokesPic.TabIndex = 756;
+            btnLoadCustomPenStrokesPic.Text = "load";
+            btnLoadCustomPenStrokesPic.UseVisualStyleBackColor = true;
+            btnLoadCustomPenStrokesPic.Click += btnLoadCustomPenStrokesPic_Click;
             // 
             // panel2
             // 
             panel2.BorderStyle = BorderStyle.FixedSingle;
             panel2.Controls.Add(label8);
             panel2.Controls.Add(label7);
-            panel2.Location = new Point(390, 111);
+            panel2.Location = new Point(239, 99);
             panel2.Name = "panel2";
             panel2.Size = new Size(216, 64);
             panel2.TabIndex = 770;
@@ -552,7 +653,7 @@ namespace AvoidAGrabCutEasy
             // label6
             // 
             label6.AutoSize = true;
-            label6.Location = new Point(637, 114);
+            label6.Location = new Point(473, 123);
             label6.Name = "label6";
             label6.Size = new Size(175, 15);
             label6.TabIndex = 765;
@@ -560,7 +661,7 @@ namespace AvoidAGrabCutEasy
             // 
             // btnSaveStrokes
             // 
-            btnSaveStrokes.Location = new Point(824, 107);
+            btnSaveStrokes.Location = new Point(660, 116);
             btnSaveStrokes.Name = "btnSaveStrokes";
             btnSaveStrokes.Size = new Size(88, 28);
             btnSaveStrokes.TabIndex = 764;
@@ -570,7 +671,7 @@ namespace AvoidAGrabCutEasy
             // 
             // btnScreenBlend
             // 
-            btnScreenBlend.Location = new Point(274, 130);
+            btnScreenBlend.Location = new Point(274, 166);
             btnScreenBlend.Name = "btnScreenBlend";
             btnScreenBlend.Size = new Size(88, 28);
             btnScreenBlend.TabIndex = 763;
@@ -581,7 +682,7 @@ namespace AvoidAGrabCutEasy
             // label5
             // 
             label5.AutoSize = true;
-            label5.Location = new Point(744, 153);
+            label5.Location = new Point(838, 173);
             label5.Name = "label5";
             label5.Size = new Size(48, 15);
             label5.TabIndex = 762;
@@ -590,7 +691,7 @@ namespace AvoidAGrabCutEasy
             // cbOverlay
             // 
             cbOverlay.AutoSize = true;
-            cbOverlay.Location = new Point(637, 152);
+            cbOverlay.Location = new Point(731, 172);
             cbOverlay.Name = "cbOverlay";
             cbOverlay.Size = new Size(101, 19);
             cbOverlay.TabIndex = 761;
@@ -600,7 +701,7 @@ namespace AvoidAGrabCutEasy
             // 
             // btnLoadOrig
             // 
-            btnLoadOrig.Location = new Point(156, 130);
+            btnLoadOrig.Location = new Point(156, 166);
             btnLoadOrig.Name = "btnLoadOrig";
             btnLoadOrig.Size = new Size(88, 28);
             btnLoadOrig.TabIndex = 760;
@@ -611,7 +712,7 @@ namespace AvoidAGrabCutEasy
             // 
             numOpacity.DecimalPlaces = 2;
             numOpacity.Increment = new decimal(new int[] { 1, 0, 0, 65536 });
-            numOpacity.Location = new Point(798, 151);
+            numOpacity.Location = new Point(892, 171);
             numOpacity.Maximum = new decimal(new int[] { 1, 0, 0, 0 });
             numOpacity.Name = "numOpacity";
             numOpacity.Size = new Size(61, 23);
@@ -621,7 +722,7 @@ namespace AvoidAGrabCutEasy
             // 
             // button12
             // 
-            button12.Location = new Point(13, 130);
+            button12.Location = new Point(13, 166);
             button12.Name = "button12";
             button12.Size = new Size(88, 28);
             button12.TabIndex = 756;
@@ -671,7 +772,7 @@ namespace AvoidAGrabCutEasy
             // 
             cmbAlg.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbAlg.FormattingEnabled = true;
-            cmbAlg.Items.AddRange(new object[] { "AddB", "NormalB", "MaxB", "FixedWeightB" });
+            cmbAlg.Items.AddRange(new object[] { "AddB", "NormalB", "MaxB", "FixedWeightB", "NormalDynamicWeightB" });
             cmbAlg.Location = new Point(540, 15);
             cmbAlg.Name = "cmbAlg";
             cmbAlg.Size = new Size(121, 23);
@@ -774,7 +875,7 @@ namespace AvoidAGrabCutEasy
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(1030, 85);
+            label1.Location = new Point(1229, 82);
             label1.Margin = new Padding(4, 0, 4, 0);
             label1.Name = "label1";
             label1.Size = new Size(58, 15);
@@ -789,7 +890,7 @@ namespace AvoidAGrabCutEasy
             // splitContainer1
             // 
             splitContainer1.Dock = DockStyle.Fill;
-            splitContainer1.Location = new Point(0, 189);
+            splitContainer1.Location = new Point(0, 209);
             splitContainer1.Name = "splitContainer1";
             // 
             // splitContainer1.Panel1
@@ -799,8 +900,8 @@ namespace AvoidAGrabCutEasy
             // splitContainer1.Panel2
             // 
             splitContainer1.Panel2.Controls.Add(helplineRulerCtrl2);
-            splitContainer1.Size = new Size(1200, 622);
-            splitContainer1.SplitterDistance = 606;
+            splitContainer1.Size = new Size(1400, 602);
+            splitContainer1.SplitterDistance = 707;
             splitContainer1.TabIndex = 250;
             // 
             // helplineRulerCtrl2
@@ -819,7 +920,7 @@ namespace AvoidAGrabCutEasy
             helplineRulerCtrl2.MoveHelpLinesOnResize = false;
             helplineRulerCtrl2.Name = "helplineRulerCtrl2";
             helplineRulerCtrl2.SetZoomOnlyByMethodCall = false;
-            helplineRulerCtrl2.Size = new Size(590, 622);
+            helplineRulerCtrl2.Size = new Size(689, 602);
             helplineRulerCtrl2.TabIndex = 249;
             helplineRulerCtrl2.Zoom = 1F;
             helplineRulerCtrl2.ZoomSetManually = false;
@@ -833,62 +934,20 @@ namespace AvoidAGrabCutEasy
             backgroundWorker2.ProgressChanged += backgroundWorker2_ProgressChanged;
             backgroundWorker2.RunWorkerCompleted += backgroundWorker2_RunWorkerCompleted;
             // 
-            // panel5
+            // pictureBox1
             // 
-            panel5.BorderStyle = BorderStyle.FixedSingle;
-            panel5.Controls.Add(cbUseCustomReBlendPic);
-            panel5.Controls.Add(label9);
-            panel5.Controls.Add(btnReBlend);
-            panel5.Controls.Add(btnLoadCustomPenStrokesPic);
-            panel5.Location = new Point(683, 15);
-            panel5.Name = "panel5";
-            panel5.Size = new Size(239, 86);
-            panel5.TabIndex = 771;
-            // 
-            // cbUseCustomReBlendPic
-            // 
-            cbUseCustomReBlendPic.AutoSize = true;
-            cbUseCustomReBlendPic.Location = new Point(7, 32);
-            cbUseCustomReBlendPic.Name = "cbUseCustomReBlendPic";
-            cbUseCustomReBlendPic.Size = new Size(162, 19);
-            cbUseCustomReBlendPic.TabIndex = 765;
-            cbUseCustomReBlendPic.Text = "use custon Penstrokes pic";
-            cbUseCustomReBlendPic.UseVisualStyleBackColor = true;
-            // 
-            // label9
-            // 
-            label9.AutoSize = true;
-            label9.Location = new Point(3, 9);
-            label9.Name = "label9";
-            label9.Size = new Size(130, 15);
-            label9.TabIndex = 764;
-            label9.Text = "Re-Blend all Penstrokes";
-            // 
-            // btnReBlend
-            // 
-            btnReBlend.Location = new Point(139, 2);
-            btnReBlend.Name = "btnReBlend";
-            btnReBlend.Size = new Size(88, 28);
-            btnReBlend.TabIndex = 756;
-            btnReBlend.Text = "Go";
-            btnReBlend.UseVisualStyleBackColor = true;
-            btnReBlend.Click += btnReBlend_Click;
-            // 
-            // btnLoadCustomPenStrokesPic
-            // 
-            btnLoadCustomPenStrokesPic.Location = new Point(139, 52);
-            btnLoadCustomPenStrokesPic.Name = "btnLoadCustomPenStrokesPic";
-            btnLoadCustomPenStrokesPic.Size = new Size(88, 28);
-            btnLoadCustomPenStrokesPic.TabIndex = 756;
-            btnLoadCustomPenStrokesPic.Text = "load";
-            btnLoadCustomPenStrokesPic.UseVisualStyleBackColor = true;
-            btnLoadCustomPenStrokesPic.Click += btnLoadCustomPenStrokesPic_Click;
+            pictureBox1.BorderStyle = BorderStyle.FixedSingle;
+            pictureBox1.Location = new Point(1092, 108);
+            pictureBox1.Name = "pictureBox1";
+            pictureBox1.Size = new Size(80, 80);
+            pictureBox1.TabIndex = 776;
+            pictureBox1.TabStop = false;
             // 
             // frmPoissonDraw
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1200, 850);
+            ClientSize = new Size(1400, 850);
             Controls.Add(splitContainer1);
             Controls.Add(panel1);
             Controls.Add(panel3);
@@ -903,6 +962,10 @@ namespace AvoidAGrabCutEasy
             statusStrip1.PerformLayout();
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)numGamma).EndInit();
+            ((System.ComponentModel.ISupportInitialize)numMaxPixelDist).EndInit();
+            panel5.ResumeLayout(false);
+            panel5.PerformLayout();
             panel2.ResumeLayout(false);
             panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)numOpacity).EndInit();
@@ -913,8 +976,7 @@ namespace AvoidAGrabCutEasy
             splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)splitContainer1).EndInit();
             splitContainer1.ResumeLayout(false);
-            panel5.ResumeLayout(false);
-            panel5.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -937,7 +999,6 @@ namespace AvoidAGrabCutEasy
         internal Button button3;
         internal Button button2;
         private ToolTip toolTip1;
-        internal Button btnGo;
         private ToolStripStatusLabel toolStripStatusLabel5;
         private StatusStrip statusStrip1;
         private ToolStripStatusLabel toolStripStatusLabel1;
@@ -986,5 +1047,11 @@ namespace AvoidAGrabCutEasy
         private Label label9;
         internal Button btnReBlend;
         internal Button btnLoadCustomPenStrokesPic;
+        private NumericUpDown numGamma;
+        private NumericUpDown numMaxPixelDist;
+        private Label label12;
+        private Label label10;
+        private CheckBox cbWholeRegionPic;
+        private PictureBox pictureBox1;
     }
 }
