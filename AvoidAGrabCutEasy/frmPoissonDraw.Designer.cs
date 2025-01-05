@@ -504,6 +504,7 @@ namespace AvoidAGrabCutEasy
             pictureBox1.Location = new Point(1092, 108);
             pictureBox1.Name = "pictureBox1";
             pictureBox1.Size = new Size(80, 80);
+            pictureBox1.SizeMode = PictureBoxSizeMode.Zoom;
             pictureBox1.TabIndex = 776;
             pictureBox1.TabStop = false;
             pictureBox1.DoubleClick += pictureBox1_DoubleClick;

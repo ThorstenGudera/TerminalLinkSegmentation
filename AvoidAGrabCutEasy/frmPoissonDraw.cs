@@ -2597,12 +2597,47 @@ namespace AvoidAGrabCutEasy
                     Bitmap bmpDrawTo = new Bitmap(this.helplineRulerCtrl2.Bmp);
 
                     this.SetControls(false);
-                    object[] o = new object[] { bmpDrawTo, bmpBlend, this.cmbAlg.SelectedIndex,
+
+                    if (this.cbWholeRegionPic.Checked)
+                    {
+                        using Bitmap bSrc = new Bitmap(this.helplineRulerCtrl1.Bmp);
+
+                        if (bSrc.Width != bmpBlend.Width || bSrc.Height != bmpBlend.Height)
+                        {
+                            Bitmap? bOld = bmpBlend;
+                            bmpBlend = new Bitmap(bSrc.Width, bSrc.Height);
+                            using Graphics g = Graphics.FromImage(bmpBlend);
+                            g.DrawImage(bOld, 0, 0, bSrc.Width, bSrc.Height);
+
+                            if (bOld != null)
+                                bOld.Dispose();
+                            bOld = null;
+                        }
+
+                        bmpBlend = GetSurroundingRegion(bmp, bSrc);
+
+                        if (bmpBlend != null)
+                        {
+                            SetPicToPB(bmpBlend);
+
+                            this.SetControls(false);
+                            object[] o = new object[] { bmpDrawTo, bmpBlend, this.cmbAlg.SelectedIndex,
+                            (double)this.numUpperWeight.Value, (double)this.numLowerWeight.Value,
+                            (int)this.numMaxPixelDist.Value, (double)this.numGamma.Value};
+
+                            if (!this.backgroundWorker1.IsBusy)
+                                this.backgroundWorker1.RunWorkerAsync(o);
+                        }
+                    }
+                    else
+                    {
+                        object[] o = new object[] { bmpDrawTo, bmpBlend, this.cmbAlg.SelectedIndex,
                         (double)this.numUpperWeight.Value, (double)this.numLowerWeight.Value,
                         (int)this.numMaxPixelDist.Value, (double)this.numGamma.Value};
 
-                    if (!this.backgroundWorker1.IsBusy)
-                        this.backgroundWorker1.RunWorkerAsync(o);
+                        if (!this.backgroundWorker1.IsBusy)
+                            this.backgroundWorker1.RunWorkerAsync(o);
+                    }
                 }
             }
         }
@@ -2626,7 +2661,7 @@ namespace AvoidAGrabCutEasy
 
                 if (this.helplineRulerCtrl2.Bmp != null && this.helplineRulerCtrl1.Bmp != null && this.Paths != null)
                 {
-                    using Bitmap bmp = new(this.helplineRulerCtrl2.Bmp.Width, this.helplineRulerCtrl2.Bmp.Height);
+                    Bitmap? bmp = new(this.helplineRulerCtrl2.Bmp.Width, this.helplineRulerCtrl2.Bmp.Height);
                     using Graphics gx = Graphics.FromImage(bmp);
                     using TextureBrush tb = new TextureBrush(this.helplineRulerCtrl1.Bmp);
 
@@ -2664,7 +2699,24 @@ namespace AvoidAGrabCutEasy
                     }
 
                     using Bitmap bSrc = new Bitmap(this.helplineRulerCtrl1.Bmp);
+
+                    if (bSrc.Width != bmp.Width || bSrc.Height != bmp.Height)
+                    {
+                        Bitmap? bOld = bmp;
+                        bmp = new Bitmap(bSrc.Width, bSrc.Height);
+                        using Graphics g = Graphics.FromImage(bmp);
+                        g.DrawImage(bOld, 0, 0, bSrc.Width, bSrc.Height);
+
+                        if (bOld != null)
+                            bOld.Dispose();
+                        bOld = null;
+                    }
+
                     bmpBlend = GetSurroundingRegion(bmp, bSrc);
+
+                    if (bmp != null)
+                        bmp.Dispose();
+                    bmp = null;
 
                     if (bmpBlend != null)
                     {
@@ -2696,6 +2748,19 @@ namespace AvoidAGrabCutEasy
                 if (this.cbWholeRegionPic.Checked)
                 {
                     using Bitmap bSrc = new Bitmap(this.helplineRulerCtrl1.Bmp);
+
+                    if (bSrc.Width != bmp.Width || bSrc.Height != bmp.Height)
+                    {
+                        Bitmap? bOld = bmp;
+                        bmp = new Bitmap(bSrc.Width, bSrc.Height);
+                        using Graphics g = Graphics.FromImage(bmp);
+                        g.DrawImage(bOld, 0, 0, bSrc.Width, bSrc.Height);
+
+                        if (bOld != null)
+                            bOld.Dispose();
+                        bOld = null;
+
+                    }
                     Bitmap? bmpBlend = GetSurroundingRegion(bmp, bSrc);
 
                     if (bmpBlend != null)
