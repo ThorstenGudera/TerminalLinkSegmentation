@@ -2563,7 +2563,8 @@ namespace AvoidAGrabCutEasy
                             Bitmap? bOld = bmp;
                             bmp = new Bitmap(bSrc.Width, bSrc.Height);
                             using Graphics g = Graphics.FromImage(bmp);
-                            g.DrawImage(bOld, 0, 0, bSrc.Width, bSrc.Height);
+                            //g.DrawImage(bOld, 0, 0, bSrc.Width, bSrc.Height);
+                            g.DrawImage(bOld, 0, 0);
 
                             if (bOld != null)
                                 bOld.Dispose();
@@ -2651,7 +2652,8 @@ namespace AvoidAGrabCutEasy
                                 Bitmap? bOld = bmpBlend;
                                 bmpBlend = new Bitmap(bSrc.Width, bSrc.Height);
                                 using Graphics g = Graphics.FromImage(bmpBlend);
-                                g.DrawImage(bOld, 0, 0, bSrc.Width, bSrc.Height);
+                                //g.DrawImage(bOld, 0, 0, bSrc.Width, bSrc.Height);
+                                g.DrawImage(bOld, 0, 0);
 
                                 if (bOld != null)
                                     bOld.Dispose();
@@ -2749,7 +2751,8 @@ namespace AvoidAGrabCutEasy
                         Bitmap? bOld = bmp;
                         bmp = new Bitmap(bSrc.Width, bSrc.Height);
                         using Graphics g = Graphics.FromImage(bmp);
-                        g.DrawImage(bOld, 0, 0, bSrc.Width, bSrc.Height);
+                        //g.DrawImage(bOld, 0, 0, bSrc.Width, bSrc.Height);
+                        g.DrawImage(bOld, 0, 0);
 
                         if (bOld != null)
                             bOld.Dispose();
@@ -2799,7 +2802,8 @@ namespace AvoidAGrabCutEasy
                         Bitmap? bOld = bmp;
                         bmp = new Bitmap(bSrc.Width, bSrc.Height);
                         using Graphics g = Graphics.FromImage(bmp);
-                        g.DrawImage(bOld, 0, 0, bSrc.Width, bSrc.Height);
+                        //g.DrawImage(bOld, 0, 0, bSrc.Width, bSrc.Height);
+                        g.DrawImage(bOld, 0, 0);
 
                         if (bOld != null)
                             bOld.Dispose();
