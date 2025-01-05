@@ -2781,12 +2781,11 @@ namespace AvoidAGrabCutEasy
                         if (!this.backgroundWorker1.IsBusy)
                             this.backgroundWorker1.RunWorkerAsync(o);
                     }
-
-                    if (bmp != null)
-                        bmp.Dispose();
-                    bmp = null;
                 }
 
+                if (bmp != null)
+                    bmp.Dispose();
+                bmp = null;
             }
         }
 
