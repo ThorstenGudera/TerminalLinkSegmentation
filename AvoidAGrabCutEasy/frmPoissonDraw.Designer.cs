@@ -564,7 +564,7 @@ namespace AvoidAGrabCutEasy
             // cbWholeRegionPic
             // 
             cbWholeRegionPic.AutoSize = true;
-            cbWholeRegionPic.Location = new Point(25, 54);
+            cbWholeRegionPic.Location = new Point(7, 30);
             cbWholeRegionPic.Name = "cbWholeRegionPic";
             cbWholeRegionPic.Size = new Size(188, 19);
             cbWholeRegionPic.TabIndex = 767;
@@ -574,7 +574,7 @@ namespace AvoidAGrabCutEasy
             // cbUseCustomReBlendPic
             // 
             cbUseCustomReBlendPic.AutoSize = true;
-            cbUseCustomReBlendPic.Location = new Point(7, 32);
+            cbUseCustomReBlendPic.Location = new Point(7, 54);
             cbUseCustomReBlendPic.Name = "cbUseCustomReBlendPic";
             cbUseCustomReBlendPic.Size = new Size(162, 19);
             cbUseCustomReBlendPic.TabIndex = 765;
