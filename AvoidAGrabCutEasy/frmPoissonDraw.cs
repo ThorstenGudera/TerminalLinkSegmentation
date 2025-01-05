@@ -2572,7 +2572,7 @@ namespace AvoidAGrabCutEasy
                             bOld = null;
                         }
 
-                        bmpBlend = GetSurroundingRegion(bmp, bSrc);
+                        bmpBlend = GetSurroundingRegion(bmp, bSrc, (int)this.numExtendRegion.Value);
 
                         if (bmpBlend != null)
                         {
@@ -2661,7 +2661,7 @@ namespace AvoidAGrabCutEasy
                                 bOld = null;
                             }
 
-                            bmpBlend = GetSurroundingRegion(bmp, bSrc);
+                            bmpBlend = GetSurroundingRegion(bmp, bSrc, (int)this.numExtendRegion.Value);
 
                             if (bmpBlend != null)
                             {
@@ -2752,7 +2752,7 @@ namespace AvoidAGrabCutEasy
                         }
 
                         using Bitmap bCopy = new Bitmap(bmp);
-                        bmpBlend = GetSurroundingRegion(bmp, bSrc);
+                        bmpBlend = GetSurroundingRegion(bmp, bSrc, (int)this.numExtendRegion.Value);
 
                         if (bmpBlend != null)
                         {
@@ -2845,7 +2845,7 @@ namespace AvoidAGrabCutEasy
                         bOld = null;
                     }
 
-                    bmpBlend = GetSurroundingRegion(bmp, bSrc);
+                    bmpBlend = GetSurroundingRegion(bmp, bSrc, (int)this.numExtendRegion.Value);
 
                     if (bmp != null)
                         bmp.Dispose();
@@ -2920,7 +2920,7 @@ namespace AvoidAGrabCutEasy
                     }
 
                     using Bitmap bCopy = new Bitmap(bmp);
-                    bmpBlend = GetSurroundingRegion(bmp, bSrc);
+                    bmpBlend = GetSurroundingRegion(bmp, bSrc, (int)this.numExtendRegion.Value);
 
                     if (bmpBlend != null)
                     {
@@ -2967,7 +2967,7 @@ namespace AvoidAGrabCutEasy
                         bOld = null;
 
                     }
-                    Bitmap? bmpBlend = GetSurroundingRegion(bmp, bSrc);
+                    Bitmap? bmpBlend = GetSurroundingRegion(bmp, bSrc, (int)this.numExtendRegion.Value);
 
                     if (bmpBlend != null)
                     {
@@ -3006,7 +3006,7 @@ namespace AvoidAGrabCutEasy
                     }
 
                     using Bitmap bCopy = new Bitmap(bmp);
-                    Bitmap? bmpBlend = GetSurroundingRegion(bmp, bSrc);
+                    Bitmap? bmpBlend = GetSurroundingRegion(bmp, bSrc, (int)this.numExtendRegion.Value);
 
                     if (bmpBlend != null)
                     {
@@ -3155,7 +3155,97 @@ namespace AvoidAGrabCutEasy
                 }
         }
 
-        private unsafe Bitmap? GetSurroundingRegion(Bitmap b, Bitmap bSrc)
+        private void ExtendOutlineEx(Bitmap bmp, Bitmap bSrc, int outerW, bool dontFill, bool drawPath)
+        {
+            List<ChainCode>? lInner = GetBoundary(bmp);
+
+            //using Bitmap? bSrc = new Bitmap(bmp.Width, bmp.Height);
+            //using Graphics g = Graphics.FromImage(bSrc);
+            //g.Clear(Color.Black);
+
+            if (lInner?.Count > 0)
+            {
+                lInner = lInner.OrderByDescending(a => a.Coord.Count).ToList();
+
+                for (int i = 0; i < lInner.Count; i++)
+                {
+                    List<PointF> pts = lInner[i].Coord.Select(a => new PointF(a.X, a.Y)).ToList();
+
+                    if (pts.Count > 2)
+                    {
+                        using (GraphicsPath gp = new GraphicsPath())
+                        {
+                            gp.AddLines(pts.ToArray());
+
+                            if (gp.PointCount > 0)
+                            {
+                                using (Graphics gx = Graphics.FromImage(bmp))
+                                {
+                                    gx.SmoothingMode = SmoothingMode.None;
+                                    gx.InterpolationMode = InterpolationMode.NearestNeighbor;
+
+                                    using TextureBrush tb = new(bSrc);
+                                    using Pen pen = new(tb, 1);
+                                    gx.FillPath(tb, gp);
+                                    gx.DrawPath(pen, gp);
+
+                                    if (drawPath && outerW > 0)
+                                    {
+                                        try
+                                        {
+                                            using (Pen pen2 = new Pen(tb, outerW))
+                                            {
+                                                pen2.LineJoin = LineJoin.Round;
+                                                gp.Widen(pen2);
+                                                gx.DrawPath(pen2, gp);
+                                            }
+                                        }
+                                        catch (Exception exc)
+                                        {
+                                            Console.WriteLine(exc.ToString());
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (dontFill)
+                if (lInner?.Count > 0)
+                {
+                    for (int i = 0; i < lInner.Count; i++)
+                    {
+                        if (ChainFinder.IsInnerOutline(lInner[i]))
+                        {
+                            List<PointF> pts = lInner[i].Coord.Select(a => new PointF(a.X, a.Y)).ToList();
+
+                            if (pts.Count > 2)
+                            {
+                                using (GraphicsPath gp = new GraphicsPath())
+                                {
+                                    gp.AddLines(pts.ToArray());
+
+                                    if (gp.PointCount > 0)
+                                    {
+                                        using (Graphics gx = Graphics.FromImage(bmp))
+                                        {
+                                            gx.SmoothingMode = SmoothingMode.None;
+                                            gx.InterpolationMode = InterpolationMode.NearestNeighbor;
+                                            gx.CompositingMode = CompositingMode.SourceCopy;
+                                            gx.FillPath(Brushes.Transparent, gp);
+                                            gx.DrawPath(Pens.Transparent, gp);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+        }
+
+        private unsafe Bitmap? GetSurroundingRegion(Bitmap b, Bitmap bSrc, int extend)
         {
             Bitmap? bResult = null;
 
@@ -3208,6 +3298,9 @@ namespace AvoidAGrabCutEasy
                 bSrc.UnlockBits(bmSrc);
             }
 
+            if (extend > 0 && bResult != null)
+                ExtendOutlineEx(bResult, bSrc, extend, true, true);
+
             return bResult;
         }
 
@@ -3255,12 +3348,22 @@ namespace AvoidAGrabCutEasy
 
         private void cbWholeRegionPic_CheckedChanged(object sender, EventArgs e)
         {
+            if (this.cbWholeRegionPic.Checked)
+                this.cbBlackBG.Checked = false;
+
             this.cbBlackBG.Enabled = !this.cbWholeRegionPic.Checked;
+
+            this.label13.Enabled = this.numExtendRegion.Enabled = this.cbWholeRegionPic.Checked;
         }
 
         private void cbBlackBG_CheckedChanged(object sender, EventArgs e)
         {
+            if (this.cbBlackBG.Checked)
+                this.cbWholeRegionPic.Checked = false;
+
             this.cbWholeRegionPic.Enabled = !this.cbBlackBG.Checked;
+
+            this.label13.Enabled = this.numExtendRegion.Enabled = this.cbWholeRegionPic.Checked;
         }
     }
 }

@@ -152,6 +152,8 @@ namespace AvoidAGrabCutEasy
             splitContainer1 = new SplitContainer();
             helplineRulerCtrl2 = new HelplineRulerCtrl();
             backgroundWorker2 = new System.ComponentModel.BackgroundWorker();
+            label13 = new Label();
+            numExtendRegion = new NumericUpDown();
             ((System.ComponentModel.ISupportInitialize)numSrcPtSurround).BeginInit();
             statusStrip1.SuspendLayout();
             panel1.SuspendLayout();
@@ -168,6 +170,7 @@ namespace AvoidAGrabCutEasy
             splitContainer1.Panel1.SuspendLayout();
             splitContainer1.Panel2.SuspendLayout();
             splitContainer1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)numExtendRegion).BeginInit();
             SuspendLayout();
             // 
             // openFileDialog1
@@ -552,6 +555,8 @@ namespace AvoidAGrabCutEasy
             // panel5
             // 
             panel5.BorderStyle = BorderStyle.FixedSingle;
+            panel5.Controls.Add(label13);
+            panel5.Controls.Add(numExtendRegion);
             panel5.Controls.Add(cbBlackBG);
             panel5.Controls.Add(cbWholeRegionPic);
             panel5.Controls.Add(cbUseCustomReBlendPic);
@@ -959,6 +964,25 @@ namespace AvoidAGrabCutEasy
             backgroundWorker2.ProgressChanged += backgroundWorker2_ProgressChanged;
             backgroundWorker2.RunWorkerCompleted += backgroundWorker2_RunWorkerCompleted;
             // 
+            // label13
+            // 
+            label13.AutoSize = true;
+            label13.Enabled = false;
+            label13.Location = new Point(224, 36);
+            label13.Name = "label13";
+            label13.Size = new Size(43, 15);
+            label13.TabIndex = 770;
+            label13.Text = "extend";
+            // 
+            // numExtendRegion
+            // 
+            numExtendRegion.Enabled = false;
+            numExtendRegion.Increment = new decimal(new int[] { 1, 0, 0, 65536 });
+            numExtendRegion.Location = new Point(271, 34);
+            numExtendRegion.Name = "numExtendRegion";
+            numExtendRegion.Size = new Size(61, 23);
+            numExtendRegion.TabIndex = 769;
+            // 
             // frmPoissonDraw
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -993,6 +1017,7 @@ namespace AvoidAGrabCutEasy
             splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)splitContainer1).EndInit();
             splitContainer1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)numExtendRegion).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -1070,5 +1095,7 @@ namespace AvoidAGrabCutEasy
         private CheckBox cbWholeRegionPic;
         private PictureBox pictureBox1;
         private CheckBox cbBlackBG;
+        private Label label13;
+        private NumericUpDown numExtendRegion;
     }
 }
