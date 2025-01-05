@@ -3349,21 +3349,23 @@ namespace AvoidAGrabCutEasy
         private void cbWholeRegionPic_CheckedChanged(object sender, EventArgs e)
         {
             if (this.cbWholeRegionPic.Checked)
+            {
                 this.cbBlackBG.Checked = false;
+                this.label13.Enabled = this.numExtendRegion.Enabled = true;
+            }
 
             this.cbBlackBG.Enabled = !this.cbWholeRegionPic.Checked;
-
-            this.label13.Enabled = this.numExtendRegion.Enabled = this.cbWholeRegionPic.Checked;
         }
 
         private void cbBlackBG_CheckedChanged(object sender, EventArgs e)
         {
             if (this.cbBlackBG.Checked)
+            {
                 this.cbWholeRegionPic.Checked = false;
+                this.label13.Enabled = this.numExtendRegion.Enabled = true;
+            }
 
             this.cbWholeRegionPic.Enabled = !this.cbBlackBG.Checked;
-
-            this.label13.Enabled = this.numExtendRegion.Enabled = this.cbWholeRegionPic.Checked;
         }
     }
 }

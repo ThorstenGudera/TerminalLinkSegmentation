@@ -150,6 +150,7 @@
             floodFGToolStripMenuItem = new ToolStripMenuItem();
             timer1 = new System.Windows.Forms.Timer(components);
             backgroundWorker4 = new System.ComponentModel.BackgroundWorker();
+            cbSCF = new CheckBox();
             panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numComponents2).BeginInit();
             panel2.SuspendLayout();
@@ -174,6 +175,7 @@
             // 
             // panel1
             // 
+            panel1.Controls.Add(cbSCF);
             panel1.Controls.Add(btnPoissonDraw);
             panel1.Controls.Add(btnGetOutline);
             panel1.Controls.Add(btnInfo);
@@ -1566,6 +1568,18 @@
             backgroundWorker4.ProgressChanged += backgroundWorker4_ProgressChanged;
             backgroundWorker4.RunWorkerCompleted += backgroundWorker4_RunWorkerCompleted;
             // 
+            // cbSCF
+            // 
+            cbSCF.AutoSize = true;
+            cbSCF.Checked = true;
+            cbSCF.CheckState = CheckState.Checked;
+            cbSCF.Location = new Point(1127, 158);
+            cbSCF.Name = "cbSCF";
+            cbSCF.Size = new Size(132, 19);
+            cbSCF.TabIndex = 741;
+            cbSCF.Text = "remove empty parts";
+            cbSCF.UseVisualStyleBackColor = true;
+            // 
             // frmAvoidAGrabCutEasy
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -1730,5 +1744,6 @@
         private Button btnGetOutline;
         private ToolStripStatusLabel toolStripStatusLabel5;
         private Button btnPoissonDraw;
+        private CheckBox cbSCF;
     }
 }

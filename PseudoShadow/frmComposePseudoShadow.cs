@@ -47,7 +47,7 @@ namespace PseudoShadow
         private List<Bitmap>? _excludedRegions;
         private List<Point>? _exclLocations;
 
-        public frmComposePseudoShadow(Bitmap? bUpperTmp, string basePathAddition)
+        public frmComposePseudoShadow(Bitmap? bUpperTmp, bool scf, string basePathAddition)
         {
             InitializeComponent();
 
@@ -59,7 +59,7 @@ namespace PseudoShadow
 
             if (bUpperTmp != null)
             {
-                bUpper = ScanForPic(bUpperTmp, 0);
+                bUpper = scf ? ScanForPic(bUpperTmp, 0) : new Bitmap(bUpperTmp);
                 bUpperTmp.Dispose();
                 bUpperTmp = null;
 

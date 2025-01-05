@@ -4376,7 +4376,8 @@ namespace AvoidAGrabCutEasy
                     bool test = true;
                     if (test)
                     {
-                        using (PseudoShadow.frmComposePseudoShadow frm = new PseudoShadow.frmComposePseudoShadow(new Bitmap(this.helplineRulerCtrl2.Bmp), this.CachePathAddition))
+                        using (PseudoShadow.frmComposePseudoShadow frm = 
+                            new PseudoShadow.frmComposePseudoShadow(new Bitmap(this.helplineRulerCtrl2.Bmp), this.cbSCF.Checked, this.CachePathAddition))
                         {
                             frm.SetupCache();
                             if (_undoOPCache != null && _undoOPCache.Cache.IsActive)
