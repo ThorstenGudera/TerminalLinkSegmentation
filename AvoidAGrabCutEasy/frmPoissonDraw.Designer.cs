@@ -114,6 +114,7 @@ namespace AvoidAGrabCutEasy
             label12 = new Label();
             label10 = new Label();
             panel5 = new Panel();
+            cbBlackBG = new CheckBox();
             cbWholeRegionPic = new CheckBox();
             cbUseCustomReBlendPic = new CheckBox();
             label9 = new Label();
@@ -190,7 +191,7 @@ namespace AvoidAGrabCutEasy
             helplineRulerCtrl1.MoveHelpLinesOnResize = false;
             helplineRulerCtrl1.Name = "helplineRulerCtrl1";
             helplineRulerCtrl1.SetZoomOnlyByMethodCall = false;
-            helplineRulerCtrl1.Size = new Size(707, 602);
+            helplineRulerCtrl1.Size = new Size(707, 663);
             helplineRulerCtrl1.TabIndex = 249;
             helplineRulerCtrl1.Zoom = 1F;
             helplineRulerCtrl1.ZoomSetManually = false;
@@ -392,7 +393,7 @@ namespace AvoidAGrabCutEasy
             // statusStrip1
             // 
             statusStrip1.Items.AddRange(new ToolStripItem[] { toolStripStatusLabel1, ToolStripStatusLabel2, toolStripStatusLabel5, toolStripProgressBar1, toolStripStatusLabel4, toolStripStatusLabel3 });
-            statusStrip1.Location = new Point(0, 811);
+            statusStrip1.Location = new Point(0, 872);
             statusStrip1.Name = "statusStrip1";
             statusStrip1.Padding = new Padding(1, 0, 16, 0);
             statusStrip1.Size = new Size(1400, 39);
@@ -501,7 +502,7 @@ namespace AvoidAGrabCutEasy
             // pictureBox1
             // 
             pictureBox1.BorderStyle = BorderStyle.FixedSingle;
-            pictureBox1.Location = new Point(1092, 108);
+            pictureBox1.Location = new Point(1092, 116);
             pictureBox1.Name = "pictureBox1";
             pictureBox1.Size = new Size(80, 80);
             pictureBox1.SizeMode = PictureBoxSizeMode.Zoom;
@@ -551,15 +552,27 @@ namespace AvoidAGrabCutEasy
             // panel5
             // 
             panel5.BorderStyle = BorderStyle.FixedSingle;
+            panel5.Controls.Add(cbBlackBG);
             panel5.Controls.Add(cbWholeRegionPic);
             panel5.Controls.Add(cbUseCustomReBlendPic);
             panel5.Controls.Add(label9);
             panel5.Controls.Add(btnReBlend);
             panel5.Controls.Add(btnLoadCustomPenStrokesPic);
-            panel5.Location = new Point(822, 16);
+            panel5.Location = new Point(822, 11);
             panel5.Name = "panel5";
-            panel5.Size = new Size(350, 86);
+            panel5.Size = new Size(350, 100);
             panel5.TabIndex = 771;
+            // 
+            // cbBlackBG
+            // 
+            cbBlackBG.AutoSize = true;
+            cbBlackBG.Location = new Point(7, 52);
+            cbBlackBG.Name = "cbBlackBG";
+            cbBlackBG.Size = new Size(181, 19);
+            cbBlackBG.TabIndex = 768;
+            cbBlackBG.Text = "redraw om black background";
+            cbBlackBG.UseVisualStyleBackColor = true;
+            cbBlackBG.CheckedChanged += cbBlackBG_CheckedChanged;
             // 
             // cbWholeRegionPic
             // 
@@ -570,11 +583,12 @@ namespace AvoidAGrabCutEasy
             cbWholeRegionPic.TabIndex = 767;
             cbWholeRegionPic.Text = "region surrounding penstrokes";
             cbWholeRegionPic.UseVisualStyleBackColor = true;
+            cbWholeRegionPic.CheckedChanged += cbWholeRegionPic_CheckedChanged;
             // 
             // cbUseCustomReBlendPic
             // 
             cbUseCustomReBlendPic.AutoSize = true;
-            cbUseCustomReBlendPic.Location = new Point(7, 54);
+            cbUseCustomReBlendPic.Location = new Point(7, 74);
             cbUseCustomReBlendPic.Name = "cbUseCustomReBlendPic";
             cbUseCustomReBlendPic.Size = new Size(162, 19);
             cbUseCustomReBlendPic.TabIndex = 765;
@@ -602,7 +616,7 @@ namespace AvoidAGrabCutEasy
             // 
             // btnLoadCustomPenStrokesPic
             // 
-            btnLoadCustomPenStrokesPic.Location = new Point(244, 48);
+            btnLoadCustomPenStrokesPic.Location = new Point(244, 68);
             btnLoadCustomPenStrokesPic.Name = "btnLoadCustomPenStrokesPic";
             btnLoadCustomPenStrokesPic.Size = new Size(88, 28);
             btnLoadCustomPenStrokesPic.TabIndex = 756;
@@ -749,7 +763,7 @@ namespace AvoidAGrabCutEasy
             numLowerWeight.Name = "numLowerWeight";
             numLowerWeight.Size = new Size(61, 23);
             numLowerWeight.TabIndex = 755;
-            numLowerWeight.Value = new decimal(new int[] { 1, 0, 0, 0 });
+            numLowerWeight.Value = new decimal(new int[] { 5, 0, 0, 65536 });
             // 
             // numUpperWeight
             // 
@@ -759,7 +773,7 @@ namespace AvoidAGrabCutEasy
             numUpperWeight.Name = "numUpperWeight";
             numUpperWeight.Size = new Size(61, 23);
             numUpperWeight.TabIndex = 755;
-            numUpperWeight.Value = new decimal(new int[] { 1, 0, 0, 0 });
+            numUpperWeight.Value = new decimal(new int[] { 5, 0, 0, 65536 });
             // 
             // label4
             // 
@@ -783,7 +797,7 @@ namespace AvoidAGrabCutEasy
             // 
             cmbAlg.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbAlg.FormattingEnabled = true;
-            cmbAlg.Items.AddRange(new object[] { "AddB", "NormalB", "MaxB", "FixedWeightB", "NormalDynamicWeightB" });
+            cmbAlg.Items.AddRange(new object[] { "AddB", "NormalB", "MaxB", "FixedWeightB", "NormalDynamicWeightB", "AddDynamicWeightB" });
             cmbAlg.Location = new Point(540, 15);
             cmbAlg.Name = "cmbAlg";
             cmbAlg.Size = new Size(121, 23);
@@ -911,7 +925,7 @@ namespace AvoidAGrabCutEasy
             // splitContainer1.Panel2
             // 
             splitContainer1.Panel2.Controls.Add(helplineRulerCtrl2);
-            splitContainer1.Size = new Size(1400, 602);
+            splitContainer1.Size = new Size(1400, 663);
             splitContainer1.SplitterDistance = 707;
             splitContainer1.TabIndex = 250;
             // 
@@ -931,7 +945,7 @@ namespace AvoidAGrabCutEasy
             helplineRulerCtrl2.MoveHelpLinesOnResize = false;
             helplineRulerCtrl2.Name = "helplineRulerCtrl2";
             helplineRulerCtrl2.SetZoomOnlyByMethodCall = false;
-            helplineRulerCtrl2.Size = new Size(689, 602);
+            helplineRulerCtrl2.Size = new Size(689, 663);
             helplineRulerCtrl2.TabIndex = 249;
             helplineRulerCtrl2.Zoom = 1F;
             helplineRulerCtrl2.ZoomSetManually = false;
@@ -949,7 +963,7 @@ namespace AvoidAGrabCutEasy
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1400, 850);
+            ClientSize = new Size(1400, 911);
             Controls.Add(splitContainer1);
             Controls.Add(panel1);
             Controls.Add(panel3);
@@ -1055,5 +1069,6 @@ namespace AvoidAGrabCutEasy
         private Label label10;
         private CheckBox cbWholeRegionPic;
         private PictureBox pictureBox1;
+        private CheckBox cbBlackBG;
     }
 }

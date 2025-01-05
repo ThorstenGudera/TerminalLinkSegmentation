@@ -1,4 +1,5 @@
 ﻿using Cache;
+using ChainCodeFinder;
 using ConvolutionLib;
 using PoissonBlend;
 using QuickExtract2;
@@ -2581,8 +2582,8 @@ namespace AvoidAGrabCutEasy
 
                             this.SetControls(false);
                             object[] o = new object[] { bmpDrawTo, bmpBlend, this.cmbAlg.SelectedIndex,
-                            (double)this.numUpperWeight.Value, (double)this.numLowerWeight.Value,
-                            (int)this.numMaxPixelDist.Value, (double)this.numGamma.Value};
+                                (double)this.numUpperWeight.Value, (double)this.numLowerWeight.Value,
+                                (int)this.numMaxPixelDist.Value, (double)this.numGamma.Value};
 
                             if (!this.backgroundWorker1.IsBusy)
                                 this.backgroundWorker1.RunWorkerAsync(o);
@@ -2593,7 +2594,7 @@ namespace AvoidAGrabCutEasy
                         bmp = null;
                     }
                     else if (this.helplineRulerCtrl2.Bmp != null && this.helplineRulerCtrl1.Bmp != null && this.Paths != null &&
-                        ((!this.cbWholeRegionPic.Checked && !this.cbWholeRegionPic.Checked) || this._bmpPenStrokes == null))
+                        ((!this.cbWholeRegionPic.Checked && !this.cbWholeRegionPic.Checked && !this.cbBlackBG.Checked) || (this._bmpPenStrokes == null && !this.cbBlackBG.Checked)))
                     {
                         using Bitmap bmp = new(this.helplineRulerCtrl2.Bmp.Width, this.helplineRulerCtrl2.Bmp.Height);
                         using Graphics gx = Graphics.FromImage(bmp);
@@ -2684,6 +2685,91 @@ namespace AvoidAGrabCutEasy
                                 this.backgroundWorker1.RunWorkerAsync(o);
                         }
                     }
+                    else if (this.helplineRulerCtrl2.Bmp != null && this.helplineRulerCtrl1.Bmp != null && this.Paths != null &&
+                        ((!this.cbWholeRegionPic.Checked && !this.cbWholeRegionPic.Checked && this.cbBlackBG.Checked) || (this._bmpPenStrokes == null && this.cbBlackBG.Checked)))
+                    {
+                        using Bitmap bmp = new(this.helplineRulerCtrl2.Bmp.Width, this.helplineRulerCtrl2.Bmp.Height);
+                        using Graphics gx = Graphics.FromImage(bmp);
+                        using TextureBrush tb = new TextureBrush(this.helplineRulerCtrl1.Bmp);
+
+                        for (int i = 0; i < this.Paths.Count; i++)
+                        {
+                            float w = this.Paths[i].DrawWidth;
+                            tb?.ResetTransform();
+                            tb?.TranslateTransform(this.Paths[i].Offset.X, this.Paths[i].Offset.Y);
+
+                            if (tb != null)
+                                using (Pen pen = new Pen(tb, w))
+                                {
+                                    pen.LineJoin = LineJoin.Round;
+
+                                    if (this.Paths[i].RoundCaps)
+                                    {
+                                        pen.StartCap = LineCap.Round;
+                                        pen.EndCap = LineCap.Round;
+                                    }
+
+                                    using (GraphicsPath gp = new GraphicsPath())
+                                    {
+                                        if (this.Paths[i]?.Count() == 1)
+                                        {
+                                            gp.AddEllipse(this.Paths[i].Points[0].X - w, this.Paths[i].Points[0].Y - w, w * 2, w * 2);
+                                            gx.FillPath(tb, gp);
+                                        }
+                                        else
+                                        {
+                                            gp.AddLines(this.Paths[i].ToArray());
+                                            gx.DrawPath(pen, gp);
+                                        }
+                                    }
+                                }
+                        }
+
+                        bmpBlend = new Bitmap(bmp);
+
+                        SetPicToPB(bmpBlend);
+
+                        Bitmap bmpBlend2 = new Bitmap(bmpBlend);
+                        this.SetBitmap(ref this._bmpPenStrokes, ref bmpBlend2);
+
+                        Bitmap bmpDrawTo = new Bitmap(this.helplineRulerCtrl2.Bmp);
+
+                        this.SetControls(false);
+
+                        using Bitmap bSrc = new Bitmap(this.helplineRulerCtrl1.Bmp);
+
+                        if (bSrc.Width != bmpBlend.Width || bSrc.Height != bmpBlend.Height)
+                        {
+                            Bitmap? bOld = bmpBlend;
+                            bmpBlend = new Bitmap(bSrc.Width, bSrc.Height);
+                            using Graphics g = Graphics.FromImage(bmpBlend);
+                            //g.DrawImage(bOld, 0, 0, bSrc.Width, bSrc.Height);
+                            g.DrawImage(bOld, 0, 0);
+
+                            if (bOld != null)
+                                bOld.Dispose();
+                            bOld = null;
+                        }
+
+                        using Bitmap bCopy = new Bitmap(bmp);
+                        bmpBlend = GetSurroundingRegion(bmp, bSrc);
+
+                        if (bmpBlend != null)
+                        {
+                            if (this.cbBlackBG.Checked)
+                                GetBlackShapeBGBmp(bmpBlend, bCopy);
+
+                            SetPicToPB(bmpBlend);
+
+                            object[] o = new object[] { bmpDrawTo, bmpBlend, this.cmbAlg.SelectedIndex,
+                                        (double)this.numUpperWeight.Value, (double)this.numLowerWeight.Value,
+                                        (int)this.numMaxPixelDist.Value, (double)this.numGamma.Value};
+
+                            if (!this.backgroundWorker1.IsBusy)
+                                this.backgroundWorker1.RunWorkerAsync(o);
+
+                        }
+                    }
                 }
             }
         }
@@ -2767,18 +2853,89 @@ namespace AvoidAGrabCutEasy
 
                     if (bmpBlend != null)
                     {
+                        Bitmap bmpBlend2 = new Bitmap(bmpBlend);
+                        this.SetBitmap(ref this._bmpPenStrokes, ref bmpBlend2);
+                        this.toolStripStatusLabel4.Text = "Custom Pic loaded";
+
                         SetPicToPB(bmpBlend);
-
-                        Bitmap bmpDrawTo = new Bitmap(this.helplineRulerCtrl2.Bmp);
-
-                        this.SetControls(false);
-                        object[] o = new object[] { bmpDrawTo, bmpBlend, this.cmbAlg.SelectedIndex,
-                            (double)this.numUpperWeight.Value, (double)this.numLowerWeight.Value,
-                            (int)this.numMaxPixelDist.Value, (double)this.numGamma.Value};
-
-                        if (!this.backgroundWorker1.IsBusy)
-                            this.backgroundWorker1.RunWorkerAsync(o);
                     }
+                }
+            }
+            else if (!this.cbUseCustomReBlendPic.Checked && this.cbBlackBG.Checked)
+            {
+                Bitmap? bmpBlend = null;
+
+                if (this.helplineRulerCtrl2.Bmp != null && this.helplineRulerCtrl1.Bmp != null && this.Paths != null)
+                {
+                    Bitmap? bmp = new(this.helplineRulerCtrl2.Bmp.Width, this.helplineRulerCtrl2.Bmp.Height);
+                    using Graphics gx = Graphics.FromImage(bmp);
+                    using TextureBrush tb = new TextureBrush(this.helplineRulerCtrl1.Bmp);
+
+                    for (int i = 0; i < this.Paths.Count; i++)
+                    {
+                        float w = this.Paths[i].DrawWidth;
+                        tb?.ResetTransform();
+                        tb?.TranslateTransform(this.Paths[i].Offset.X, this.Paths[i].Offset.Y);
+
+                        if (tb != null)
+                            using (Pen pen = new Pen(tb, w))
+                            {
+                                pen.LineJoin = LineJoin.Round;
+
+                                if (this.Paths[i].RoundCaps)
+                                {
+                                    pen.StartCap = LineCap.Round;
+                                    pen.EndCap = LineCap.Round;
+                                }
+
+                                using (GraphicsPath gp = new GraphicsPath())
+                                {
+                                    if (this.Paths[i]?.Count() == 1)
+                                    {
+                                        gp.AddEllipse(this.Paths[i].Points[0].X - w, this.Paths[i].Points[0].Y - w, w * 2, w * 2);
+                                        gx.FillPath(tb, gp);
+                                    }
+                                    else
+                                    {
+                                        gp.AddLines(this.Paths[i].ToArray());
+                                        gx.DrawPath(pen, gp);
+                                    }
+                                }
+                            }
+                    }
+
+                    using Bitmap bSrc = new Bitmap(this.helplineRulerCtrl1.Bmp);
+
+                    if (bSrc.Width != bmp.Width || bSrc.Height != bmp.Height)
+                    {
+                        Bitmap? bOld = bmp;
+                        bmp = new Bitmap(bSrc.Width, bSrc.Height);
+                        using Graphics g = Graphics.FromImage(bmp);
+                        //g.DrawImage(bOld, 0, 0, bSrc.Width, bSrc.Height);
+                        g.DrawImage(bOld, 0, 0);
+
+                        if (bOld != null)
+                            bOld.Dispose();
+                        bOld = null;
+                    }
+
+                    using Bitmap bCopy = new Bitmap(bmp);
+                    bmpBlend = GetSurroundingRegion(bmp, bSrc);
+
+                    if (bmpBlend != null)
+                    {
+                        GetBlackShapeBGBmp(bmpBlend, bCopy);
+
+                        Bitmap bmpBlend2 = new Bitmap(bmpBlend);
+                        this.SetBitmap(ref this._bmpPenStrokes, ref bmpBlend2);
+                        this.toolStripStatusLabel4.Text = "Custom Pic loaded";
+
+                        SetPicToPB(bmpBlend);
+                    }
+
+                    if (bmp != null)
+                        bmp.Dispose();
+                    bmp = null;
                 }
             }
             else if (this.cbUseCustomReBlendPic.Checked && this.openFileDialog1.ShowDialog() == DialogResult.OK)
@@ -2820,15 +2977,46 @@ namespace AvoidAGrabCutEasy
 
                         SetPicToPB(bmpBlend);
 
-                        Bitmap bmpDrawTo = new Bitmap(this.helplineRulerCtrl2.Bmp);
+                        //Bitmap bmpDrawTo = new Bitmap(this.helplineRulerCtrl2.Bmp);
 
-                        this.SetControls(false);
-                        object[] o = new object[] { bmpDrawTo, bmpBlend, this.cmbAlg.SelectedIndex,
-                            (double)this.numUpperWeight.Value, (double)this.numLowerWeight.Value,
-                            (int)this.numMaxPixelDist.Value, (double)this.numGamma.Value};
+                        //this.SetControls(false);
+                        //object[] o = new object[] { bmpDrawTo, bmpBlend, this.cmbAlg.SelectedIndex,
+                        //    (double)this.numUpperWeight.Value, (double)this.numLowerWeight.Value,
+                        //    (int)this.numMaxPixelDist.Value, (double)this.numGamma.Value};
 
-                        if (!this.backgroundWorker1.IsBusy)
-                            this.backgroundWorker1.RunWorkerAsync(o);
+                        //if (!this.backgroundWorker1.IsBusy)
+                        //    this.backgroundWorker1.RunWorkerAsync(o);
+                    }
+                }
+                else if (this.cbBlackBG.Checked)
+                {
+                    using Bitmap bSrc = new Bitmap(this.helplineRulerCtrl1.Bmp);
+
+                    if (bSrc.Width != bmp.Width || bSrc.Height != bmp.Height)
+                    {
+                        Bitmap? bOld = bmp;
+                        bmp = new Bitmap(bSrc.Width, bSrc.Height);
+                        using Graphics g = Graphics.FromImage(bmp);
+                        //g.DrawImage(bOld, 0, 0, bSrc.Width, bSrc.Height);
+                        g.DrawImage(bOld, 0, 0);
+
+                        if (bOld != null)
+                            bOld.Dispose();
+                        bOld = null;
+                    }
+
+                    using Bitmap bCopy = new Bitmap(bmp);
+                    Bitmap? bmpBlend = GetSurroundingRegion(bmp, bSrc);
+
+                    if (bmpBlend != null)
+                    {
+                        GetBlackShapeBGBmp(bmpBlend, bCopy);
+
+                        Bitmap bmpBlend2 = new Bitmap(bmpBlend);
+                        this.SetBitmap(ref this._bmpPenStrokes, ref bmpBlend2);
+                        this.toolStripStatusLabel4.Text = "Custom Pic loaded";
+
+                        SetPicToPB(bmpBlend);
                     }
                 }
 
@@ -2836,6 +3024,135 @@ namespace AvoidAGrabCutEasy
                     bmp.Dispose();
                 bmp = null;
             }
+        }
+
+        private unsafe void GetBlackShapeBGBmp(Bitmap bmpBlend, Bitmap bmp)
+        {
+            int w = bmpBlend.Width;
+            int h = bmpBlend.Height;
+
+            BitmapData bmD = bmpBlend.LockBits(new Rectangle(0, 0, w, h), ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
+            int stride = bmD.Stride;
+
+            Parallel.For(0, h, y =>
+            {
+                byte* p = (byte*)bmD.Scan0;
+                p += y * stride;
+
+                for (int x = 0; x < w; x++)
+                {
+                    if (p[3] > 0)
+                        p[0] = p[1] = p[2] = 0;
+
+                    p += 4;
+                }
+            });
+
+            bmpBlend.UnlockBits(bmD);
+
+            //maybe use this too
+            //ExtendOutlineEx(bmpBlend, 12, true, true);
+
+            using Graphics gx = Graphics.FromImage(bmpBlend);
+            gx.DrawImage(bmp, 0, 0);
+        }
+
+        private List<ChainCode> GetBoundary(Bitmap bmp)
+        {
+            ChainFinder cf = new ChainFinder();
+            cf.AllowNullCells = true;
+            List<ChainCode> l = cf.GetOutline(bmp, 0, false, 0, false, 0, false);
+            return l;
+        }
+
+        private void ExtendOutlineEx(Bitmap bmp, int outerW, bool dontFill, bool drawPath)
+        {
+            List<ChainCode>? lInner = GetBoundary(bmp);
+
+            using Bitmap? bSrc = new Bitmap(bmp.Width, bmp.Height);
+            using Graphics g = Graphics.FromImage(bSrc);
+            g.Clear(Color.Black);
+
+            if (lInner?.Count > 0)
+            {
+                lInner = lInner.OrderByDescending(a => a.Coord.Count).ToList();
+
+                for (int i = 0; i < lInner.Count; i++)
+                {
+                    List<PointF> pts = lInner[i].Coord.Select(a => new PointF(a.X, a.Y)).ToList();
+
+                    if (pts.Count > 2)
+                    {
+                        using (GraphicsPath gp = new GraphicsPath())
+                        {
+                            gp.AddLines(pts.ToArray());
+
+                            if (gp.PointCount > 0)
+                            {
+                                using (Graphics gx = Graphics.FromImage(bmp))
+                                {
+                                    gx.SmoothingMode = SmoothingMode.None;
+                                    gx.InterpolationMode = InterpolationMode.NearestNeighbor;
+
+                                    using TextureBrush tb = new(bSrc);
+                                    using Pen pen = new(tb, 1);
+                                    gx.FillPath(tb, gp);
+                                    gx.DrawPath(pen, gp);
+
+                                    if (drawPath && outerW > 0)
+                                    {
+                                        try
+                                        {
+                                            using (Pen pen2 = new Pen(tb, outerW))
+                                            {
+                                                pen2.LineJoin = LineJoin.Round;
+                                                gp.Widen(pen2);
+                                                gx.DrawPath(pen2, gp);
+                                            }
+                                        }
+                                        catch (Exception exc)
+                                        {
+                                            Console.WriteLine(exc.ToString());
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (dontFill)
+                if (lInner?.Count > 0)
+                {
+                    for (int i = 0; i < lInner.Count; i++)
+                    {
+                        if (ChainFinder.IsInnerOutline(lInner[i]))
+                        {
+                            List<PointF> pts = lInner[i].Coord.Select(a => new PointF(a.X, a.Y)).ToList();
+
+                            if (pts.Count > 2)
+                            {
+                                using (GraphicsPath gp = new GraphicsPath())
+                                {
+                                    gp.AddLines(pts.ToArray());
+
+                                    if (gp.PointCount > 0)
+                                    {
+                                        using (Graphics gx = Graphics.FromImage(bmp))
+                                        {
+                                            gx.SmoothingMode = SmoothingMode.None;
+                                            gx.InterpolationMode = InterpolationMode.NearestNeighbor;
+                                            gx.CompositingMode = CompositingMode.SourceCopy;
+                                            gx.FillPath(Brushes.Transparent, gp);
+                                            gx.DrawPath(Pens.Transparent, gp);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
         }
 
         private unsafe Bitmap? GetSurroundingRegion(Bitmap b, Bitmap bSrc)
@@ -2934,6 +3251,16 @@ namespace AvoidAGrabCutEasy
                 frm4.Text = "Blending Src";
                 frm4.ShowDialog();
             }
+        }
+
+        private void cbWholeRegionPic_CheckedChanged(object sender, EventArgs e)
+        {
+            this.cbBlackBG.Enabled = !this.cbWholeRegionPic.Checked;
+        }
+
+        private void cbBlackBG_CheckedChanged(object sender, EventArgs e)
+        {
+            this.cbWholeRegionPic.Enabled = !this.cbBlackBG.Checked;
         }
     }
 }
