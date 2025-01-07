@@ -55,4 +55,8 @@ Info: I removed the usage_guide from the project, since the filesize simply gets
 
 https://1drv.ms/u/c/d5e5bd21dbf5e4e9/ESvgrQptooFFtpqwyufU7tEBBGs8MuHHhuCKlk1W6qb2uw?e=aUf89Z
 
-(onedrive, link shared with anyone, no log in needed - at least thats what in the create_link_dialog was stated. If you get to a page with a big unauthenticated in the middle, you still can download the file from the button at left_top of the page.)
+(onedrive, link shared with anyone, no log in needed - at least thats what in the create_link_dialog was stated. If you get to a page with a big unauthenticated in the middle, you still can download the file from the button at left_top of the page.
+Ok, I sometimes get a "something didn't work" error page, when clicking the link. 
+If you do so either, here's what helps me in this situation. Simply click the "back" button in your browser.
+After a phase of flashing and blinking, the correct file should be displayed. At least this works for me.
+This really should be fixed, its exactly the link they provided [that] I added to the readme file.)
