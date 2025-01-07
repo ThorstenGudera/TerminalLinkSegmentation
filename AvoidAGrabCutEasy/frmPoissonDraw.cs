@@ -2757,7 +2757,18 @@ namespace AvoidAGrabCutEasy
                         if (bmpBlend != null)
                         {
                             if (this.cbBlackBG.Checked)
-                                GetBlackShapeBGBmp(bmpBlend, bCopy);
+                            {
+                                this.colorDialog1.CustomColors = CustomColors;
+                                if (this.cbDiffCol.Checked && this.colorDialog1.ShowDialog() == DialogResult.OK)
+                                {
+                                    Color c = this.colorDialog1.Color;
+                                    CustomColors = this.colorDialog1.CustomColors;
+
+                                    GetColoredShapeBGBmp(bmpBlend, bCopy, c);
+                                }
+                                else
+                                    GetBlackShapeBGBmp(bmpBlend, bCopy);
+                            }
 
                             SetPicToPB(bmpBlend);
 
@@ -2924,7 +2935,16 @@ namespace AvoidAGrabCutEasy
 
                     if (bmpBlend != null)
                     {
-                        GetBlackShapeBGBmp(bmpBlend, bCopy);
+                        this.colorDialog1.CustomColors = CustomColors;
+                        if (this.cbDiffCol.Checked && this.colorDialog1.ShowDialog() == DialogResult.OK)
+                        {
+                            Color c = this.colorDialog1.Color;
+                            CustomColors = this.colorDialog1.CustomColors;
+
+                            GetColoredShapeBGBmp(bmpBlend, bCopy, c);
+                        }
+                        else
+                            GetBlackShapeBGBmp(bmpBlend, bCopy);
 
                         Bitmap bmpBlend2 = new Bitmap(bmpBlend);
                         this.SetBitmap(ref this._bmpPenStrokes, ref bmpBlend2);
@@ -3010,7 +3030,16 @@ namespace AvoidAGrabCutEasy
 
                     if (bmpBlend != null)
                     {
-                        GetBlackShapeBGBmp(bmpBlend, bCopy);
+                        this.colorDialog1.CustomColors = CustomColors;
+                        if (this.cbDiffCol.Checked && this.colorDialog1.ShowDialog() == DialogResult.OK)
+                        {
+                            Color c = this.colorDialog1.Color;
+                            CustomColors = this.colorDialog1.CustomColors;
+
+                            GetColoredShapeBGBmp(bmpBlend, bCopy, c);
+                        }
+                        else
+                            GetBlackShapeBGBmp(bmpBlend, bCopy);
 
                         Bitmap bmpBlend2 = new Bitmap(bmpBlend);
                         this.SetBitmap(ref this._bmpPenStrokes, ref bmpBlend2);
@@ -3052,6 +3081,41 @@ namespace AvoidAGrabCutEasy
 
             //maybe use this too
             //ExtendOutlineEx(bmpBlend, 12, true, true);
+
+            using Graphics gx = Graphics.FromImage(bmpBlend);
+            gx.DrawImage(bmp, 0, 0);
+        }
+
+        private unsafe void GetColoredShapeBGBmp(Bitmap bmpBlend, Bitmap bmp, Color c)
+        {
+            int w = bmpBlend.Width;
+            int h = bmpBlend.Height;
+
+            BitmapData bmD = bmpBlend.LockBits(new Rectangle(0, 0, w, h), ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
+            int stride = bmD.Stride;
+
+            Parallel.For(0, h, y =>
+            {
+                byte* p = (byte*)bmD.Scan0;
+                p += y * stride;
+
+                for (int x = 0; x < w; x++)
+                {
+                    if (p[3] > 0)
+                    {
+                        p[0] = c.B;
+                        p[1] = c.G;
+                        p[2] = c.R;
+                    }
+
+                    p += 4;
+                }
+            });
+
+            bmpBlend.UnlockBits(bmD);
+
+            //if(extend > 0)
+            //    ExtendOutlineEx(bmpBlend, extend, true, true);
 
             using Graphics gx = Graphics.FromImage(bmpBlend);
             gx.DrawImage(bmp, 0, 0);
@@ -3352,6 +3416,7 @@ namespace AvoidAGrabCutEasy
             {
                 this.cbBlackBG.Checked = false;
                 this.label13.Enabled = this.numExtendRegion.Enabled = true;
+                this.cbDiffCol.Enabled = false;
             }
 
             this.cbBlackBG.Enabled = !this.cbWholeRegionPic.Checked;
@@ -3363,6 +3428,7 @@ namespace AvoidAGrabCutEasy
             {
                 this.cbWholeRegionPic.Checked = false;
                 this.label13.Enabled = this.numExtendRegion.Enabled = true;
+                this.cbDiffCol.Enabled = true;
             }
 
             this.cbWholeRegionPic.Enabled = !this.cbBlackBG.Checked;

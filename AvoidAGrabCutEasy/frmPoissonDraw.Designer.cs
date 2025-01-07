@@ -114,6 +114,8 @@ namespace AvoidAGrabCutEasy
             label12 = new Label();
             label10 = new Label();
             panel5 = new Panel();
+            label13 = new Label();
+            numExtendRegion = new NumericUpDown();
             cbBlackBG = new CheckBox();
             cbWholeRegionPic = new CheckBox();
             cbUseCustomReBlendPic = new CheckBox();
@@ -152,8 +154,8 @@ namespace AvoidAGrabCutEasy
             splitContainer1 = new SplitContainer();
             helplineRulerCtrl2 = new HelplineRulerCtrl();
             backgroundWorker2 = new System.ComponentModel.BackgroundWorker();
-            label13 = new Label();
-            numExtendRegion = new NumericUpDown();
+            cbDiffCol = new CheckBox();
+            colorDialog1 = new ColorDialog();
             ((System.ComponentModel.ISupportInitialize)numSrcPtSurround).BeginInit();
             statusStrip1.SuspendLayout();
             panel1.SuspendLayout();
@@ -161,6 +163,7 @@ namespace AvoidAGrabCutEasy
             ((System.ComponentModel.ISupportInitialize)numGamma).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numMaxPixelDist).BeginInit();
             panel5.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)numExtendRegion).BeginInit();
             panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numOpacity).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numLowerWeight).BeginInit();
@@ -170,7 +173,6 @@ namespace AvoidAGrabCutEasy
             splitContainer1.Panel1.SuspendLayout();
             splitContainer1.Panel2.SuspendLayout();
             splitContainer1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)numExtendRegion).BeginInit();
             SuspendLayout();
             // 
             // openFileDialog1
@@ -505,9 +507,9 @@ namespace AvoidAGrabCutEasy
             // pictureBox1
             // 
             pictureBox1.BorderStyle = BorderStyle.FixedSingle;
-            pictureBox1.Location = new Point(1092, 116);
+            pictureBox1.Location = new Point(1092, 136);
             pictureBox1.Name = "pictureBox1";
-            pictureBox1.Size = new Size(80, 80);
+            pictureBox1.Size = new Size(80, 60);
             pictureBox1.SizeMode = PictureBoxSizeMode.Zoom;
             pictureBox1.TabIndex = 776;
             pictureBox1.TabStop = false;
@@ -555,6 +557,7 @@ namespace AvoidAGrabCutEasy
             // panel5
             // 
             panel5.BorderStyle = BorderStyle.FixedSingle;
+            panel5.Controls.Add(cbDiffCol);
             panel5.Controls.Add(label13);
             panel5.Controls.Add(numExtendRegion);
             panel5.Controls.Add(cbBlackBG);
@@ -565,13 +568,32 @@ namespace AvoidAGrabCutEasy
             panel5.Controls.Add(btnLoadCustomPenStrokesPic);
             panel5.Location = new Point(822, 11);
             panel5.Name = "panel5";
-            panel5.Size = new Size(350, 100);
+            panel5.Size = new Size(350, 119);
             panel5.TabIndex = 771;
+            // 
+            // label13
+            // 
+            label13.AutoSize = true;
+            label13.Enabled = false;
+            label13.Location = new Point(224, 36);
+            label13.Name = "label13";
+            label13.Size = new Size(43, 15);
+            label13.TabIndex = 770;
+            label13.Text = "extend";
+            // 
+            // numExtendRegion
+            // 
+            numExtendRegion.Enabled = false;
+            numExtendRegion.Increment = new decimal(new int[] { 1, 0, 0, 65536 });
+            numExtendRegion.Location = new Point(271, 34);
+            numExtendRegion.Name = "numExtendRegion";
+            numExtendRegion.Size = new Size(61, 23);
+            numExtendRegion.TabIndex = 769;
             // 
             // cbBlackBG
             // 
             cbBlackBG.AutoSize = true;
-            cbBlackBG.Location = new Point(7, 52);
+            cbBlackBG.Location = new Point(7, 60);
             cbBlackBG.Name = "cbBlackBG";
             cbBlackBG.Size = new Size(181, 19);
             cbBlackBG.TabIndex = 768;
@@ -593,7 +615,7 @@ namespace AvoidAGrabCutEasy
             // cbUseCustomReBlendPic
             // 
             cbUseCustomReBlendPic.AutoSize = true;
-            cbUseCustomReBlendPic.Location = new Point(7, 74);
+            cbUseCustomReBlendPic.Location = new Point(7, 90);
             cbUseCustomReBlendPic.Name = "cbUseCustomReBlendPic";
             cbUseCustomReBlendPic.Size = new Size(162, 19);
             cbUseCustomReBlendPic.TabIndex = 765;
@@ -621,7 +643,7 @@ namespace AvoidAGrabCutEasy
             // 
             // btnLoadCustomPenStrokesPic
             // 
-            btnLoadCustomPenStrokesPic.Location = new Point(244, 68);
+            btnLoadCustomPenStrokesPic.Location = new Point(244, 84);
             btnLoadCustomPenStrokesPic.Name = "btnLoadCustomPenStrokesPic";
             btnLoadCustomPenStrokesPic.Size = new Size(88, 28);
             btnLoadCustomPenStrokesPic.TabIndex = 756;
@@ -964,24 +986,20 @@ namespace AvoidAGrabCutEasy
             backgroundWorker2.ProgressChanged += backgroundWorker2_ProgressChanged;
             backgroundWorker2.RunWorkerCompleted += backgroundWorker2_RunWorkerCompleted;
             // 
-            // label13
+            // cbDiffCol
             // 
-            label13.AutoSize = true;
-            label13.Enabled = false;
-            label13.Location = new Point(224, 36);
-            label13.Name = "label13";
-            label13.Size = new Size(43, 15);
-            label13.TabIndex = 770;
-            label13.Text = "extend";
+            cbDiffCol.AutoSize = true;
+            cbDiffCol.Location = new Point(194, 60);
+            cbDiffCol.Name = "cbDiffCol";
+            cbDiffCol.Size = new Size(103, 19);
+            cbDiffCol.TabIndex = 771;
+            cbDiffCol.Text = "different Color";
+            cbDiffCol.UseVisualStyleBackColor = true;
             // 
-            // numExtendRegion
+            // colorDialog1
             // 
-            numExtendRegion.Enabled = false;
-            numExtendRegion.Increment = new decimal(new int[] { 1, 0, 0, 65536 });
-            numExtendRegion.Location = new Point(271, 34);
-            numExtendRegion.Name = "numExtendRegion";
-            numExtendRegion.Size = new Size(61, 23);
-            numExtendRegion.TabIndex = 769;
+            colorDialog1.AnyColor = true;
+            colorDialog1.FullOpen = true;
             // 
             // frmPoissonDraw
             // 
@@ -1007,6 +1025,7 @@ namespace AvoidAGrabCutEasy
             ((System.ComponentModel.ISupportInitialize)numMaxPixelDist).EndInit();
             panel5.ResumeLayout(false);
             panel5.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)numExtendRegion).EndInit();
             panel2.ResumeLayout(false);
             panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)numOpacity).EndInit();
@@ -1017,7 +1036,6 @@ namespace AvoidAGrabCutEasy
             splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)splitContainer1).EndInit();
             splitContainer1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)numExtendRegion).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -1097,5 +1115,7 @@ namespace AvoidAGrabCutEasy
         private CheckBox cbBlackBG;
         private Label label13;
         private NumericUpDown numExtendRegion;
+        private CheckBox cbDiffCol;
+        internal ColorDialog colorDialog1;
     }
 }
