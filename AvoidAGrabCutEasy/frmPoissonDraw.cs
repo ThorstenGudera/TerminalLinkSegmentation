@@ -2049,19 +2049,36 @@ namespace AvoidAGrabCutEasy
                 Bitmap? bmpToFind = null;
                 try
                 {
-                    bmpToFind = this._bmpOrigHLC1.Clone(new Rectangle(
-                       Math.Max(this._sourcePt.X - (int)this.numSrcPtSurround.Value, 0),
-                       Math.Max(this._sourcePt.Y - (int)this.numSrcPtSurround.Value, 0),
-                       Math.Min((int)this.numSrcPtSurround.Value * 2 + 1, this._bmpOrigHLC1.Width - 1 - this._sourcePt.X),
-                       Math.Min((int)this.numSrcPtSurround.Value * 2 + 1, this._bmpOrigHLC1.Height - 1 - this._sourcePt.Y)),
-                       this._bmpOrigHLC1.PixelFormat);
+                    if (this.cbFindInOrig.Checked)
+                    {
+                        bmpToFind = this._bmpOrigHLC1.Clone(new Rectangle(
+                           Math.Max(this._sourcePt.X - (int)this.numSrcPtSurround.Value, 0),
+                           Math.Max(this._sourcePt.Y - (int)this.numSrcPtSurround.Value, 0),
+                           Math.Min((int)this.numSrcPtSurround.Value * 2 + 1, this._bmpOrigHLC1.Width - 1 - this._sourcePt.X),
+                           Math.Min((int)this.numSrcPtSurround.Value * 2 + 1, this._bmpOrigHLC1.Height - 1 - this._sourcePt.Y)),
+                           this._bmpOrigHLC1.PixelFormat);
 
-                    if (bmpToFind.Width > 1 && (bmpToFind.Width & 0x01) != 1)
-                        bmpToFind = bmpToFind.Clone(new Rectangle(0, 0, bmpToFind.Width - 1, bmpToFind.Height), bmpToFind.PixelFormat);
+                        if (bmpToFind.Width > 1 && (bmpToFind.Width & 0x01) != 1)
+                            bmpToFind = bmpToFind.Clone(new Rectangle(0, 0, bmpToFind.Width - 1, bmpToFind.Height), bmpToFind.PixelFormat);
 
-                    if (bmpToFind.Height > 1 && (bmpToFind.Height & 0x01) != 1)
-                        bmpToFind = bmpToFind.Clone(new Rectangle(0, 0, bmpToFind.Width, bmpToFind.Height - 1), bmpToFind.PixelFormat);
+                        if (bmpToFind.Height > 1 && (bmpToFind.Height & 0x01) != 1)
+                            bmpToFind = bmpToFind.Clone(new Rectangle(0, 0, bmpToFind.Width, bmpToFind.Height - 1), bmpToFind.PixelFormat);
+                    }
+                    else
+                    {
+                        bmpToFind = this.helplineRulerCtrl1.Bmp.Clone(new Rectangle(
+                           Math.Max(this._sourcePt.X - (int)this.numSrcPtSurround.Value, 0),
+                           Math.Max(this._sourcePt.Y - (int)this.numSrcPtSurround.Value, 0),
+                           Math.Min((int)this.numSrcPtSurround.Value * 2 + 1, this.helplineRulerCtrl1.Bmp.Width - 1 - this._sourcePt.X),
+                           Math.Min((int)this.numSrcPtSurround.Value * 2 + 1, this.helplineRulerCtrl1.Bmp.Height - 1 - this._sourcePt.Y)),
+                           this.helplineRulerCtrl1.Bmp.PixelFormat);
 
+                        if (bmpToFind.Width > 1 && (bmpToFind.Width & 0x01) != 1)
+                            bmpToFind = bmpToFind.Clone(new Rectangle(0, 0, bmpToFind.Width - 1, bmpToFind.Height), bmpToFind.PixelFormat);
+
+                        if (bmpToFind.Height > 1 && (bmpToFind.Height & 0x01) != 1)
+                            bmpToFind = bmpToFind.Clone(new Rectangle(0, 0, bmpToFind.Width, bmpToFind.Height - 1), bmpToFind.PixelFormat);
+                    }
                 }
                 catch (Exception ex)
                 {

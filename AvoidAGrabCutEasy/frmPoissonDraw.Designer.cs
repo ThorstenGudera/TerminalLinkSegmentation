@@ -108,6 +108,8 @@ namespace AvoidAGrabCutEasy
             toolStripStatusLabel3 = new ToolStripStatusLabel();
             panel3 = new Panel();
             panel1 = new Panel();
+            btnColorsHSL = new Button();
+            btnColorsRGB = new Button();
             pictureBox1 = new PictureBox();
             numGamma = new NumericUpDown();
             numMaxPixelDist = new NumericUpDown();
@@ -156,8 +158,7 @@ namespace AvoidAGrabCutEasy
             helplineRulerCtrl2 = new HelplineRulerCtrl();
             backgroundWorker2 = new System.ComponentModel.BackgroundWorker();
             colorDialog1 = new ColorDialog();
-            btnColorsHSL = new Button();
-            btnColorsRGB = new Button();
+            cbFindInOrig = new CheckBox();
             ((System.ComponentModel.ISupportInitialize)numSrcPtSurround).BeginInit();
             statusStrip1.SuspendLayout();
             panel1.SuspendLayout();
@@ -453,6 +454,7 @@ namespace AvoidAGrabCutEasy
             // 
             // panel1
             // 
+            panel1.Controls.Add(cbFindInOrig);
             panel1.Controls.Add(btnColorsHSL);
             panel1.Controls.Add(btnColorsRGB);
             panel1.Controls.Add(pictureBox1);
@@ -507,6 +509,26 @@ namespace AvoidAGrabCutEasy
             panel1.Name = "panel1";
             panel1.Size = new Size(1400, 209);
             panel1.TabIndex = 247;
+            // 
+            // btnColorsHSL
+            // 
+            btnColorsHSL.Location = new Point(367, 167);
+            btnColorsHSL.Name = "btnColorsHSL";
+            btnColorsHSL.Size = new Size(88, 28);
+            btnColorsHSL.TabIndex = 777;
+            btnColorsHSL.Text = "HSL";
+            btnColorsHSL.UseVisualStyleBackColor = true;
+            btnColorsHSL.Click += btnColorsHSL_Click;
+            // 
+            // btnColorsRGB
+            // 
+            btnColorsRGB.Location = new Point(273, 167);
+            btnColorsRGB.Name = "btnColorsRGB";
+            btnColorsRGB.Size = new Size(88, 28);
+            btnColorsRGB.TabIndex = 778;
+            btnColorsRGB.Text = "RGB";
+            btnColorsRGB.UseVisualStyleBackColor = true;
+            btnColorsRGB.Click += btnColorsRGB_Click;
             // 
             // pictureBox1
             // 
@@ -670,7 +692,7 @@ namespace AvoidAGrabCutEasy
             panel2.BorderStyle = BorderStyle.FixedSingle;
             panel2.Controls.Add(label8);
             panel2.Controls.Add(label7);
-            panel2.Location = new Point(239, 99);
+            panel2.Location = new Point(41, 99);
             panel2.Name = "panel2";
             panel2.Size = new Size(216, 64);
             panel2.TabIndex = 770;
@@ -1005,25 +1027,15 @@ namespace AvoidAGrabCutEasy
             colorDialog1.AnyColor = true;
             colorDialog1.FullOpen = true;
             // 
-            // btnColorsHSL
+            // cbFindInOrig
             // 
-            btnColorsHSL.Location = new Point(367, 167);
-            btnColorsHSL.Name = "btnColorsHSL";
-            btnColorsHSL.Size = new Size(88, 28);
-            btnColorsHSL.TabIndex = 777;
-            btnColorsHSL.Text = "HSL";
-            btnColorsHSL.UseVisualStyleBackColor = true;
-            btnColorsHSL.Click += btnColorsHSL_Click;
-            // 
-            // btnColorsRGB
-            // 
-            btnColorsRGB.Location = new Point(273, 167);
-            btnColorsRGB.Name = "btnColorsRGB";
-            btnColorsRGB.Size = new Size(88, 28);
-            btnColorsRGB.TabIndex = 778;
-            btnColorsRGB.Text = "RGB";
-            btnColorsRGB.UseVisualStyleBackColor = true;
-            btnColorsRGB.Click += btnColorsRGB_Click;
+            cbFindInOrig.AutoSize = true;
+            cbFindInOrig.Location = new Point(382, 101);
+            cbFindInOrig.Name = "cbFindInOrig";
+            cbFindInOrig.Size = new Size(122, 19);
+            cbFindInOrig.TabIndex = 779;
+            cbFindInOrig.Text = "find in Orig Image";
+            cbFindInOrig.UseVisualStyleBackColor = true;
             // 
             // frmPoissonDraw
             // 
@@ -1143,5 +1155,6 @@ namespace AvoidAGrabCutEasy
         internal ColorDialog colorDialog1;
         private Button btnColorsHSL;
         private Button btnColorsRGB;
+        private CheckBox cbFindInOrig;
     }
 }
