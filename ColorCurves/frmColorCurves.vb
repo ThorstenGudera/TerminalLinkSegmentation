@@ -153,7 +153,7 @@ Public Class frmColorCurves
 
     Private Sub Panel3_Paint(ByVal sender As System.Object, ByVal e As System.Windows.Forms.PaintEventArgs) Handles panel3.Paint
         Using _fPen As New Pen(SystemColors.ControlText, 1)
-            Dim mx As Matrix = New Matrix(1, 0, 0, -1, 0, panel3.ClientSize.Height)
+            Dim mx As Matrix = New Matrix(1, 0, 0, -1, 0, 304)
             e.Graphics.Transform = mx
 
             e.Graphics.DrawLine(_fPen, 30, 50, 285, 50)

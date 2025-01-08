@@ -114,6 +114,7 @@ namespace AvoidAGrabCutEasy
             label12 = new Label();
             label10 = new Label();
             panel5 = new Panel();
+            cbDiffCol = new CheckBox();
             label13 = new Label();
             numExtendRegion = new NumericUpDown();
             cbBlackBG = new CheckBox();
@@ -154,8 +155,9 @@ namespace AvoidAGrabCutEasy
             splitContainer1 = new SplitContainer();
             helplineRulerCtrl2 = new HelplineRulerCtrl();
             backgroundWorker2 = new System.ComponentModel.BackgroundWorker();
-            cbDiffCol = new CheckBox();
             colorDialog1 = new ColorDialog();
+            btnColorsHSL = new Button();
+            btnColorsRGB = new Button();
             ((System.ComponentModel.ISupportInitialize)numSrcPtSurround).BeginInit();
             statusStrip1.SuspendLayout();
             panel1.SuspendLayout();
@@ -451,6 +453,8 @@ namespace AvoidAGrabCutEasy
             // 
             // panel1
             // 
+            panel1.Controls.Add(btnColorsHSL);
+            panel1.Controls.Add(btnColorsRGB);
             panel1.Controls.Add(pictureBox1);
             panel1.Controls.Add(numGamma);
             panel1.Controls.Add(numMaxPixelDist);
@@ -570,6 +574,16 @@ namespace AvoidAGrabCutEasy
             panel5.Name = "panel5";
             panel5.Size = new Size(350, 119);
             panel5.TabIndex = 771;
+            // 
+            // cbDiffCol
+            // 
+            cbDiffCol.AutoSize = true;
+            cbDiffCol.Location = new Point(194, 60);
+            cbDiffCol.Name = "cbDiffCol";
+            cbDiffCol.Size = new Size(103, 19);
+            cbDiffCol.TabIndex = 771;
+            cbDiffCol.Text = "different Color";
+            cbDiffCol.UseVisualStyleBackColor = true;
             // 
             // label13
             // 
@@ -723,7 +737,7 @@ namespace AvoidAGrabCutEasy
             // 
             // btnScreenBlend
             // 
-            btnScreenBlend.Location = new Point(274, 166);
+            btnScreenBlend.Location = new Point(473, 166);
             btnScreenBlend.Name = "btnScreenBlend";
             btnScreenBlend.Size = new Size(88, 28);
             btnScreenBlend.TabIndex = 763;
@@ -753,7 +767,7 @@ namespace AvoidAGrabCutEasy
             // 
             // btnLoadOrig
             // 
-            btnLoadOrig.Location = new Point(156, 166);
+            btnLoadOrig.Location = new Point(117, 166);
             btnLoadOrig.Name = "btnLoadOrig";
             btnLoadOrig.Size = new Size(88, 28);
             btnLoadOrig.TabIndex = 760;
@@ -986,20 +1000,30 @@ namespace AvoidAGrabCutEasy
             backgroundWorker2.ProgressChanged += backgroundWorker2_ProgressChanged;
             backgroundWorker2.RunWorkerCompleted += backgroundWorker2_RunWorkerCompleted;
             // 
-            // cbDiffCol
-            // 
-            cbDiffCol.AutoSize = true;
-            cbDiffCol.Location = new Point(194, 60);
-            cbDiffCol.Name = "cbDiffCol";
-            cbDiffCol.Size = new Size(103, 19);
-            cbDiffCol.TabIndex = 771;
-            cbDiffCol.Text = "different Color";
-            cbDiffCol.UseVisualStyleBackColor = true;
-            // 
             // colorDialog1
             // 
             colorDialog1.AnyColor = true;
             colorDialog1.FullOpen = true;
+            // 
+            // btnColorsHSL
+            // 
+            btnColorsHSL.Location = new Point(367, 167);
+            btnColorsHSL.Name = "btnColorsHSL";
+            btnColorsHSL.Size = new Size(88, 28);
+            btnColorsHSL.TabIndex = 777;
+            btnColorsHSL.Text = "HSL";
+            btnColorsHSL.UseVisualStyleBackColor = true;
+            btnColorsHSL.Click += btnColorsHSL_Click;
+            // 
+            // btnColorsRGB
+            // 
+            btnColorsRGB.Location = new Point(273, 167);
+            btnColorsRGB.Name = "btnColorsRGB";
+            btnColorsRGB.Size = new Size(88, 28);
+            btnColorsRGB.TabIndex = 778;
+            btnColorsRGB.Text = "RGB";
+            btnColorsRGB.UseVisualStyleBackColor = true;
+            btnColorsRGB.Click += btnColorsRGB_Click;
             // 
             // frmPoissonDraw
             // 
@@ -1117,5 +1141,7 @@ namespace AvoidAGrabCutEasy
         private NumericUpDown numExtendRegion;
         private CheckBox cbDiffCol;
         internal ColorDialog colorDialog1;
+        private Button btnColorsHSL;
+        private Button btnColorsRGB;
     }
 }

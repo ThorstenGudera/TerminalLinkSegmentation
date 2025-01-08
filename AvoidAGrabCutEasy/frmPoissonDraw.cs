@@ -449,8 +449,9 @@ namespace AvoidAGrabCutEasy
 
             if (this.cbDraw.Checked)
             {
+                float ww = Math.Max(w * this.helplineRulerCtrl2.Zoom, 1.0f);
                 using (SolidBrush sb = new SolidBrush(Color.FromArgb(this.cbOverlay.Checked ? 127 : 64, Color.Lime)))
-                    e.Graphics.FillEllipse(sb, new RectangleF(_eX - w / 2f, _eY - w / 2f, w, w));
+                    e.Graphics.FillEllipse(sb, new RectangleF(_eX - ww / 2f, _eY - ww / 2f, ww, ww));
             }
 
             if (this.cbDraw.Checked && this.cbClickMode.Checked && this.CurList != null && this.CurList.Count > 0)
@@ -1269,40 +1270,26 @@ namespace AvoidAGrabCutEasy
 
                 if (!_pic_changed)
                 {
-                    string f = this.Text.Split(new String[] { " - " }, StringSplitOptions.None)[0];
-                    Bitmap? b1 = null;
+                    Bitmap? bmpHLC1 = null;
 
                     try
                     {
-                        if (this._bmpBU != null && AvailMem.AvailMem.checkAvailRam(this._bmpBU.Width * this._bmpBU.Height * 12L))
-                            b1 = (Bitmap)this._bmpBU.Clone();
+                        if (this._bmpOrigHLC1 != null && AvailMem.AvailMem.checkAvailRam(this._bmpOrigHLC1.Width * this._bmpOrigHLC1.Height * 12L))
+                            bmpHLC1 = new Bitmap(this._bmpOrigHLC1);
                         else
                             throw new Exception();
 
-                        this.SetBitmap(this.helplineRulerCtrl1.Bmp, b1, this.helplineRulerCtrl1, "Bmp");
-
-                        this._pic_changed = false;
+                        this.SetBitmap(this.helplineRulerCtrl1.Bmp, bmpHLC1, this.helplineRulerCtrl1, "Bmp");
 
                         this.helplineRulerCtrl1.CalculateZoom();
-
                         this.helplineRulerCtrl1.MakeBitmap(this.helplineRulerCtrl1.Bmp);
-
-                        // SetHRControlVars();
-
                         this.helplineRulerCtrl1.dbPanel1.AutoScrollMinSize = new Size(System.Convert.ToInt32(this.helplineRulerCtrl1.Bmp.Width * this.helplineRulerCtrl1.Zoom), System.Convert.ToInt32(this.helplineRulerCtrl1.Bmp.Height * this.helplineRulerCtrl1.Zoom));
                         this.helplineRulerCtrl1.dbPanel1.Invalidate();
-
-                        _undoOPCache?.Reset(false);
-
-                        if (_undoOPCache?.Count > 1)
-                            this.btnRedo.Enabled = true;
-                        else
-                            this.btnRedo.Enabled = false;
                     }
                     catch
                     {
-                        if (b1 != null)
-                            b1.Dispose();
+                        if (bmpHLC1 != null)
+                            bmpHLC1.Dispose();
                     }
                 }
             }
@@ -1728,9 +1715,6 @@ namespace AvoidAGrabCutEasy
         {
             if (this.CurPath != null)
                 this.CurPath.Clear();
-            // If Me.Paths IsNot Nothing Then
-            // Me.Paths.Clear()
-            // End If
 
             if (this._bmpOrg != null)
             {
@@ -1822,9 +1806,7 @@ namespace AvoidAGrabCutEasy
                 //    this.helplineRulerCtrl1.Zoom = System.Convert.ToSingle(System.Convert.ToDouble(this.helplineRulerCtrl1.dbPanel1.Height) / System.Convert.ToDouble(this.helplineRulerCtrl1.Bmp.Height));
 
                 this.helplineRulerCtrl1.dbPanel1.AutoScrollMinSize = new Size(System.Convert.ToInt32(this.helplineRulerCtrl1.Bmp.Width * this.helplineRulerCtrl1.Zoom), System.Convert.ToInt32(this.helplineRulerCtrl1.Bmp.Height * this.helplineRulerCtrl1.Zoom));
-
                 this.helplineRulerCtrl1.MakeBitmap(this.helplineRulerCtrl1.Bmp);
-
                 this.helplineRulerCtrl1.dbPanel1.Invalidate();
 
                 Bitmap? bC = new Bitmap(bmpHLC1);
@@ -3432,6 +3414,129 @@ namespace AvoidAGrabCutEasy
             }
 
             this.cbWholeRegionPic.Enabled = !this.cbBlackBG.Checked;
+        }
+
+        private void btnColorsRGB_Click(object sender, EventArgs e)
+        {
+            if (this.helplineRulerCtrl1.Bmp != null)
+            {
+                Bitmap b = new Bitmap(this.helplineRulerCtrl1.Bmp);
+                ColorCurves.frmColorCurves frm = new(this.helplineRulerCtrl1.Bmp, "", 0);
+                this.SetControls(false);
+
+                if (frm.ShowDialog() == DialogResult.OK)
+                {
+                    byte[] rr = frm.MappingsRed;
+                    byte[] gg = frm.MappingsGreen;
+                    byte[] bb = frm.MappingsBlue;
+
+                    ColorCurves.fipbmp.GradColors(b, rr, gg, bb);
+
+                    this.SetBitmap(this.helplineRulerCtrl1.Bmp, b, this.helplineRulerCtrl1, "Bmp");
+
+                    //double faktor = System.Convert.ToDouble(this.helplineRulerCtrl1.dbPanel1.Width) / System.Convert.ToDouble(this.helplineRulerCtrl1.dbPanel1.Height);
+                    //double multiplier = System.Convert.ToDouble(this.helplineRulerCtrl1.Bmp.Width) / System.Convert.ToDouble(this.helplineRulerCtrl1.Bmp.Height);
+                    //if (multiplier >= faktor)
+                    //    this.helplineRulerCtrl1.Zoom = System.Convert.ToSingle(System.Convert.ToDouble(this.helplineRulerCtrl1.dbPanel1.Width) / System.Convert.ToDouble(this.helplineRulerCtrl1.Bmp.Width));
+                    //else
+                    //    this.helplineRulerCtrl1.Zoom = System.Convert.ToSingle(System.Convert.ToDouble(this.helplineRulerCtrl1.dbPanel1.Height) / System.Convert.ToDouble(this.helplineRulerCtrl1.Bmp.Height));
+
+                    this.helplineRulerCtrl1.dbPanel1.AutoScrollMinSize = new Size(System.Convert.ToInt32(this.helplineRulerCtrl1.Bmp.Width * this.helplineRulerCtrl1.Zoom), System.Convert.ToInt32(this.helplineRulerCtrl1.Bmp.Height * this.helplineRulerCtrl1.Zoom));
+
+                    this.helplineRulerCtrl1.MakeBitmap(this.helplineRulerCtrl1.Bmp);
+
+                    this.helplineRulerCtrl1.dbPanel1.Invalidate();
+
+                    Bitmap? bC = new Bitmap(b);
+                    this.SetBitmap(ref this._bmpBU, ref bC);
+
+                    Bitmap? bD = new Bitmap(this.helplineRulerCtrl1.Bmp.Width, this.helplineRulerCtrl1.Bmp.Height);
+                    this.SetBitmap(ref this._bmpDraw, ref bD);
+
+                    if (this._bmpBUZoomed != null)
+                        this._bmpBUZoomed.Dispose();
+                    this._bmpBUZoomed = null;
+                    if (this._bmpBUZoomed == null && this._bmpBU != null)
+                        MakeBitmap(this._bmpBU, this.helplineRulerCtrl2.Zoom);
+
+                    //this._sourcePt = new Point(0, 0);
+
+                    int dx = this._destPt.X - this._sourcePt.X;
+                    int dy = this._destPt.Y - this._sourcePt.Y;
+
+                    if (this._tb != null)
+                        this._tb.Dispose();
+                    this._tb = null;
+                    SetupTB();
+
+                    this._tb?.ResetTransform();
+                    this._tb?.TranslateTransform(dx, dy);
+                }
+
+                this.SetControls(true);
+            }
+        }
+
+        private void btnColorsHSL_Click(object sender, EventArgs e)
+        {
+            if (this.helplineRulerCtrl1.Bmp != null)
+            {
+                Bitmap b = new Bitmap(this.helplineRulerCtrl1.Bmp);
+                ColorCurves.frmHSLRange frm = new(b);
+                this.SetControls(false);
+
+                if (frm.ShowDialog() == DialogResult.OK)
+                {
+                    ColorCurves.HSLValues vals = frm.Vals;
+
+                    ColorCurves.fipbmp.Bereich(b, vals.HueMin, vals.HueMax, vals.Hue, vals.Saturation, vals.Luminance,
+                                        vals.AddSaturation, vals.AddLuminance, vals.SaturationMin, vals.SaturationMax,
+                                        vals.LuminanceMin, vals.LuminanceMax, vals.DoAlpha, vals.Alpha, vals.AddAlpha,
+                                                                  vals.UseRamp, vals.RampGamma);
+
+                    this.SetBitmap(this.helplineRulerCtrl1.Bmp, b, this.helplineRulerCtrl1, "Bmp");
+
+                    //double faktor = System.Convert.ToDouble(this.helplineRulerCtrl1.dbPanel1.Width) / System.Convert.ToDouble(this.helplineRulerCtrl1.dbPanel1.Height);
+                    //double multiplier = System.Convert.ToDouble(this.helplineRulerCtrl1.Bmp.Width) / System.Convert.ToDouble(this.helplineRulerCtrl1.Bmp.Height);
+                    //if (multiplier >= faktor)
+                    //    this.helplineRulerCtrl1.Zoom = System.Convert.ToSingle(System.Convert.ToDouble(this.helplineRulerCtrl1.dbPanel1.Width) / System.Convert.ToDouble(this.helplineRulerCtrl1.Bmp.Width));
+                    //else
+                    //    this.helplineRulerCtrl1.Zoom = System.Convert.ToSingle(System.Convert.ToDouble(this.helplineRulerCtrl1.dbPanel1.Height) / System.Convert.ToDouble(this.helplineRulerCtrl1.Bmp.Height));
+
+                    this.helplineRulerCtrl1.dbPanel1.AutoScrollMinSize = new Size(System.Convert.ToInt32(this.helplineRulerCtrl1.Bmp.Width * this.helplineRulerCtrl1.Zoom), System.Convert.ToInt32(this.helplineRulerCtrl1.Bmp.Height * this.helplineRulerCtrl1.Zoom));
+
+                    this.helplineRulerCtrl1.MakeBitmap(this.helplineRulerCtrl1.Bmp);
+
+                    this.helplineRulerCtrl1.dbPanel1.Invalidate();
+
+                    Bitmap? bC = new Bitmap(b);
+                    this.SetBitmap(ref this._bmpBU, ref bC);
+
+                    Bitmap? bD = new Bitmap(this.helplineRulerCtrl1.Bmp.Width, this.helplineRulerCtrl1.Bmp.Height);
+                    this.SetBitmap(ref this._bmpDraw, ref bD);
+
+                    if (this._bmpBUZoomed != null)
+                        this._bmpBUZoomed.Dispose();
+                    this._bmpBUZoomed = null;
+                    if (this._bmpBUZoomed == null && this._bmpBU != null)
+                        MakeBitmap(this._bmpBU, this.helplineRulerCtrl2.Zoom);
+
+                    //this._sourcePt = new Point(0, 0);
+
+                    int dx = this._destPt.X - this._sourcePt.X;
+                    int dy = this._destPt.Y - this._sourcePt.Y;
+
+                    if (this._tb != null)
+                        this._tb.Dispose();
+                    this._tb = null;
+                    SetupTB();
+
+                    this._tb?.ResetTransform();
+                    this._tb?.TranslateTransform(dx, dy);
+                }
+
+                this.SetControls(true);
+            }
         }
     }
 }
