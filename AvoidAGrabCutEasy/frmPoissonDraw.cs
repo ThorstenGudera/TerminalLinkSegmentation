@@ -3555,5 +3555,45 @@ namespace AvoidAGrabCutEasy
                 this.SetControls(true);
             }
         }
+
+        private void btnHSL2_Click(object sender, EventArgs e)
+        {
+            if (this.helplineRulerCtrl2.Bmp != null)
+            {
+                Bitmap b = new Bitmap(this.helplineRulerCtrl2.Bmp);
+                ColorCurves.frmHSLRange frm = new(b);
+                this.SetControls(false);
+
+                if (frm.ShowDialog() == DialogResult.OK)
+                {
+                    ColorCurves.HSLValues vals = frm.Vals;
+
+                    ColorCurves.fipbmp.Bereich(b, vals.HueMin, vals.HueMax, vals.Hue, vals.Saturation, vals.Luminance,
+                                        vals.AddSaturation, vals.AddLuminance, vals.SaturationMin, vals.SaturationMax,
+                                        vals.LuminanceMin, vals.LuminanceMax, vals.DoAlpha, vals.Alpha, vals.AddAlpha,
+                                                                  vals.UseRamp, vals.RampGamma);
+
+                    this.SetBitmap(this.helplineRulerCtrl2.Bmp, b, this.helplineRulerCtrl2, "Bmp");
+
+                    this._pic_changed = true;
+
+                    this.helplineRulerCtrl2.MakeBitmap(this.helplineRulerCtrl2.Bmp);
+                    this.helplineRulerCtrl2.dbPanel1.AutoScrollMinSize = new Size(System.Convert.ToInt32(this.helplineRulerCtrl2.Bmp.Width * this.helplineRulerCtrl2.Zoom), System.Convert.ToInt32(this.helplineRulerCtrl2.Bmp.Height * this.helplineRulerCtrl2.Zoom));
+                    this.helplineRulerCtrl2.dbPanel1.Invalidate();
+
+                    _undoOPCache?.Add(this.helplineRulerCtrl2.Bmp);
+
+                    this.btnUndo.Enabled = _undoOPCache?.CurrentPosition > 1;
+                    CheckRedoButton();
+
+                    this.CurPath = new List<PointF>();
+
+                    this.cmbAlg_SelectedIndexChanged(this.cmbAlg, new EventArgs());
+                    this.cbDraw_CheckedChanged(this.cbDraw, new EventArgs());
+                }
+
+                this.SetControls(true);
+            }
+        }
     }
 }

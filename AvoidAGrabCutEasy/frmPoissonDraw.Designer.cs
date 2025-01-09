@@ -108,6 +108,7 @@ namespace AvoidAGrabCutEasy
             toolStripStatusLabel3 = new ToolStripStatusLabel();
             panel3 = new Panel();
             panel1 = new Panel();
+            cbFindInOrig = new CheckBox();
             btnColorsHSL = new Button();
             btnColorsRGB = new Button();
             pictureBox1 = new PictureBox();
@@ -158,7 +159,7 @@ namespace AvoidAGrabCutEasy
             helplineRulerCtrl2 = new HelplineRulerCtrl();
             backgroundWorker2 = new System.ComponentModel.BackgroundWorker();
             colorDialog1 = new ColorDialog();
-            cbFindInOrig = new CheckBox();
+            btnHSL2 = new Button();
             ((System.ComponentModel.ISupportInitialize)numSrcPtSurround).BeginInit();
             statusStrip1.SuspendLayout();
             panel1.SuspendLayout();
@@ -454,6 +455,7 @@ namespace AvoidAGrabCutEasy
             // 
             // panel1
             // 
+            panel1.Controls.Add(btnHSL2);
             panel1.Controls.Add(cbFindInOrig);
             panel1.Controls.Add(btnColorsHSL);
             panel1.Controls.Add(btnColorsRGB);
@@ -509,6 +511,16 @@ namespace AvoidAGrabCutEasy
             panel1.Name = "panel1";
             panel1.Size = new Size(1400, 209);
             panel1.TabIndex = 247;
+            // 
+            // cbFindInOrig
+            // 
+            cbFindInOrig.AutoSize = true;
+            cbFindInOrig.Location = new Point(382, 101);
+            cbFindInOrig.Name = "cbFindInOrig";
+            cbFindInOrig.Size = new Size(122, 19);
+            cbFindInOrig.TabIndex = 779;
+            cbFindInOrig.Text = "find in Orig Image";
+            cbFindInOrig.UseVisualStyleBackColor = true;
             // 
             // btnColorsHSL
             // 
@@ -1027,15 +1039,15 @@ namespace AvoidAGrabCutEasy
             colorDialog1.AnyColor = true;
             colorDialog1.FullOpen = true;
             // 
-            // cbFindInOrig
+            // btnHSL2
             // 
-            cbFindInOrig.AutoSize = true;
-            cbFindInOrig.Location = new Point(382, 101);
-            cbFindInOrig.Name = "cbFindInOrig";
-            cbFindInOrig.Size = new Size(122, 19);
-            cbFindInOrig.TabIndex = 779;
-            cbFindInOrig.Text = "find in Orig Image";
-            cbFindInOrig.UseVisualStyleBackColor = true;
+            btnHSL2.Location = new Point(976, 167);
+            btnHSL2.Name = "btnHSL2";
+            btnHSL2.Size = new Size(88, 28);
+            btnHSL2.TabIndex = 780;
+            btnHSL2.Text = "HSL";
+            btnHSL2.UseVisualStyleBackColor = true;
+            btnHSL2.Click += btnHSL2_Click;
             // 
             // frmPoissonDraw
             // 
@@ -1156,5 +1168,6 @@ namespace AvoidAGrabCutEasy
         private Button btnColorsHSL;
         private Button btnColorsRGB;
         private CheckBox cbFindInOrig;
+        private Button btnHSL2;
     }
 }
