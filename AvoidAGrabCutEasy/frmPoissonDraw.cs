@@ -89,6 +89,7 @@ namespace AvoidAGrabCutEasy
 
         private Bitmap? _bmpOrigHLC1;
         private Bitmap? _bmpPenStrokes;
+        private bool _customPicLoaded;
 
         public frmPoissonDraw(Bitmap bmp, string basePathAddition)
         {
@@ -2804,6 +2805,13 @@ namespace AvoidAGrabCutEasy
                             this.cbDraw_CheckedChanged(this.cbDraw, new EventArgs());
                         }
                     }
+                    else if (this.helplineRulerCtrl2.Bmp != null && this.helplineRulerCtrl1.Bmp != null && this.Paths == null)
+                    {
+                        MessageBox.Show("No penstrokes done so far.");
+                        this.SetControls(true);
+                        this.cmbAlg_SelectedIndexChanged(this.cmbAlg, new EventArgs());
+                        this.cbDraw_CheckedChanged(this.cbDraw, new EventArgs());
+                    }
                 }
             }
         }
@@ -3033,16 +3041,6 @@ namespace AvoidAGrabCutEasy
                         this.toolStripStatusLabel4.Text = "Custom Pic loaded";
 
                         SetPicToPB(bmpBlend);
-
-                        //Bitmap bmpDrawTo = new Bitmap(this.helplineRulerCtrl2.Bmp);
-
-                        //this.SetControls(false);
-                        //object[] o = new object[] { bmpDrawTo, bmpBlend, this.cmbAlg.SelectedIndex,
-                        //    (double)this.numUpperWeight.Value, (double)this.numLowerWeight.Value,
-                        //    (int)this.numMaxPixelDist.Value, (double)this.numGamma.Value};
-
-                        //if (!this.backgroundWorker1.IsBusy)
-                        //    this.backgroundWorker1.RunWorkerAsync(o);
                     }
                     else
                     {
@@ -3104,6 +3102,8 @@ namespace AvoidAGrabCutEasy
                     bmp.Dispose();
                 bmp = null;
             }
+
+            this._customPicLoaded = this.btnReBlend.Enabled = true;
         }
 
         private unsafe void GetBlackShapeBGBmp(Bitmap bmpBlend, Bitmap bmp)
@@ -3471,6 +3471,9 @@ namespace AvoidAGrabCutEasy
             }
 
             this.cbBlackBG.Enabled = !this.cbWholeRegionPic.Checked;
+
+            if (this._customPicLoaded)
+                this.btnReBlend.Enabled = this._customPicLoaded = false;
         }
 
         private void cbBlackBG_CheckedChanged(object sender, EventArgs e)
@@ -3483,6 +3486,9 @@ namespace AvoidAGrabCutEasy
             }
 
             this.cbWholeRegionPic.Enabled = !this.cbBlackBG.Checked;
+
+            if (this._customPicLoaded)
+                this.btnReBlend.Enabled = this._customPicLoaded = false;
         }
 
         private void btnColorsRGB_Click(object sender, EventArgs e)
@@ -3645,6 +3651,27 @@ namespace AvoidAGrabCutEasy
                 }
 
                 this.SetControls(true);
+            }
+        }
+
+        private void cbDiffCol_CheckedChanged(object sender, EventArgs e)
+        {
+            if (this._customPicLoaded)
+                this.btnReBlend.Enabled = this._customPicLoaded = false;
+        }
+
+        private void numExtendRegion_ValueChanged(object sender, EventArgs e)
+        {
+            if (this._customPicLoaded)
+                this.btnReBlend.Enabled = this._customPicLoaded = false;
+        }
+
+        private void cbUseCustomReBlendPic_CheckedChanged(object sender, EventArgs e)
+        {
+            if (!this.cbUseCustomReBlendPic.Checked)
+            {
+                this.btnReBlend.Enabled = true;
+                this._customPicLoaded = false;
             }
         }
     }

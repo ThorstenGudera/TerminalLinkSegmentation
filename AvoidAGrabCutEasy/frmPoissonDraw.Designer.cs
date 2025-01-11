@@ -108,6 +108,7 @@ namespace AvoidAGrabCutEasy
             toolStripStatusLabel3 = new ToolStripStatusLabel();
             panel3 = new Panel();
             panel1 = new Panel();
+            btnHSL2 = new Button();
             cbFindInOrig = new CheckBox();
             btnColorsHSL = new Button();
             btnColorsRGB = new Button();
@@ -159,7 +160,6 @@ namespace AvoidAGrabCutEasy
             helplineRulerCtrl2 = new HelplineRulerCtrl();
             backgroundWorker2 = new System.ComponentModel.BackgroundWorker();
             colorDialog1 = new ColorDialog();
-            btnHSL2 = new Button();
             ((System.ComponentModel.ISupportInitialize)numSrcPtSurround).BeginInit();
             statusStrip1.SuspendLayout();
             panel1.SuspendLayout();
@@ -512,6 +512,16 @@ namespace AvoidAGrabCutEasy
             panel1.Size = new Size(1400, 209);
             panel1.TabIndex = 247;
             // 
+            // btnHSL2
+            // 
+            btnHSL2.Location = new Point(976, 167);
+            btnHSL2.Name = "btnHSL2";
+            btnHSL2.Size = new Size(88, 28);
+            btnHSL2.TabIndex = 780;
+            btnHSL2.Text = "HSL";
+            btnHSL2.UseVisualStyleBackColor = true;
+            btnHSL2.Click += btnHSL2_Click;
+            // 
             // cbFindInOrig
             // 
             cbFindInOrig.AutoSize = true;
@@ -618,6 +628,7 @@ namespace AvoidAGrabCutEasy
             cbDiffCol.TabIndex = 771;
             cbDiffCol.Text = "different Color";
             cbDiffCol.UseVisualStyleBackColor = true;
+            cbDiffCol.CheckedChanged += cbDiffCol_CheckedChanged;
             // 
             // label13
             // 
@@ -637,6 +648,7 @@ namespace AvoidAGrabCutEasy
             numExtendRegion.Name = "numExtendRegion";
             numExtendRegion.Size = new Size(61, 23);
             numExtendRegion.TabIndex = 769;
+            numExtendRegion.ValueChanged += numExtendRegion_ValueChanged;
             // 
             // cbBlackBG
             // 
@@ -669,6 +681,7 @@ namespace AvoidAGrabCutEasy
             cbUseCustomReBlendPic.TabIndex = 765;
             cbUseCustomReBlendPic.Text = "use custon Penstrokes pic";
             cbUseCustomReBlendPic.UseVisualStyleBackColor = true;
+            cbUseCustomReBlendPic.CheckedChanged += cbUseCustomReBlendPic_CheckedChanged;
             // 
             // label9
             // 
@@ -1038,16 +1051,6 @@ namespace AvoidAGrabCutEasy
             // 
             colorDialog1.AnyColor = true;
             colorDialog1.FullOpen = true;
-            // 
-            // btnHSL2
-            // 
-            btnHSL2.Location = new Point(976, 167);
-            btnHSL2.Name = "btnHSL2";
-            btnHSL2.Size = new Size(88, 28);
-            btnHSL2.TabIndex = 780;
-            btnHSL2.Text = "HSL";
-            btnHSL2.UseVisualStyleBackColor = true;
-            btnHSL2.Click += btnHSL2_Click;
             // 
             // frmPoissonDraw
             // 
