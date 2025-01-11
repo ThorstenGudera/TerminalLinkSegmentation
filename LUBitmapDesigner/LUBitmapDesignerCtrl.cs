@@ -603,11 +603,13 @@ namespace LUBitmapDesigner
 
         private void helplineRulerCtrl1_DBPanelDblClicked(object sender, HelplineRulerControl.ZoomEventArgs e)
         {
-            for (int i = 1; i < this.ShapeList?.Count; i++)
+            for (int i = 0; i < this.ShapeList?.Count; i++)
             {
                 if (this.ShapeList[i].Zoom != e.Zoom)
                     SetZoom(e.Zoom.ToString());
             }
+
+            SetupBGImage();
         }
 
         public void DisposeBGImage()

@@ -4373,69 +4373,40 @@ namespace AvoidAGrabCutEasy
             {
                 if (this.CachePathAddition != null)
                 {
-                    bool test = true;
-                    if (test)
+                    using (PseudoShadow.frmComposePseudoShadow frm =
+                        new PseudoShadow.frmComposePseudoShadow(new Bitmap(this.helplineRulerCtrl2.Bmp), this.cbSCF.Checked, this.CachePathAddition))
                     {
-                        using (PseudoShadow.frmComposePseudoShadow frm = 
-                            new PseudoShadow.frmComposePseudoShadow(new Bitmap(this.helplineRulerCtrl2.Bmp), this.cbSCF.Checked, this.CachePathAddition))
+                        frm.SetupCache();
+                        if (_undoOPCache != null && _undoOPCache.Cache.IsActive)
                         {
-                            frm.SetupCache();
-                            if (_undoOPCache != null && _undoOPCache.Cache.IsActive)
+                            string folder = _undoOPCache.GetCachePath();
+                            frm.AvoidAGrabCutCache = folder;
+                            frm.btnFromCache.Enabled = true;
+                        }
+                        if (frm.ShowDialog() == DialogResult.OK)
+                        {
+                            if (frm.FBitmap != null)
                             {
-                                string folder = _undoOPCache.GetCachePath();
-                                frm.AvoidAGrabCutCache = folder;
-                                frm.btnFromCache.Enabled = true;
-                            }
-                            if (frm.ShowDialog() == DialogResult.OK)
-                            {
-                                if (frm.FBitmap != null)
-                                {
-                                    Bitmap? bmp = new Bitmap(frm.FBitmap);
+                                Bitmap? bmp = new Bitmap(frm.FBitmap);
 
-                                    this.SetBitmap(this.helplineRulerCtrl2.Bmp, bmp, this.helplineRulerCtrl2, "Bmp");
-                                    _undoOPCache?.Add(bmp);
+                                this.SetBitmap(this.helplineRulerCtrl2.Bmp, bmp, this.helplineRulerCtrl2, "Bmp");
+                                _undoOPCache?.Add(bmp);
 
-                                    if (this.cmbZoom.SelectedItem != null)
-                                        this.helplineRulerCtrl2.SetZoom(this.cmbZoom.SelectedItem.ToString());
-                                    this.helplineRulerCtrl2.MakeBitmap(this.helplineRulerCtrl2.Bmp);
-                                    this.helplineRulerCtrl2.dbPanel1.AutoScrollMinSize = new Size(
-                                        (int)(this.helplineRulerCtrl2.Bmp.Width * this.helplineRulerCtrl2.Zoom),
-                                        (int)(this.helplineRulerCtrl2.Bmp.Height * this.helplineRulerCtrl2.Zoom));
+                                if (this.cmbZoom.SelectedItem != null)
+                                    this.helplineRulerCtrl2.SetZoom(this.cmbZoom.SelectedItem.ToString());
+                                this.helplineRulerCtrl2.MakeBitmap(this.helplineRulerCtrl2.Bmp);
+                                this.helplineRulerCtrl2.dbPanel1.AutoScrollMinSize = new Size(
+                                    (int)(this.helplineRulerCtrl2.Bmp.Width * this.helplineRulerCtrl2.Zoom),
+                                    (int)(this.helplineRulerCtrl2.Bmp.Height * this.helplineRulerCtrl2.Zoom));
 
-                                    //Bitmap bC = new Bitmap(bmp);
-                                    //this.SetBitmap(ref this._bmpBU, ref bC);
+                                //Bitmap bC = new Bitmap(bmp);
+                                //this.SetBitmap(ref this._bmpBU, ref bC);
 
-                                    this._pic_changed = true;
-                                    this.btnOK.Enabled = true;
-                                }
+                                this._pic_changed = true;
+                                this.btnOK.Enabled = true;
                             }
                         }
                     }
-                    else
-                        using (frmCompose frm = new frmCompose(this.helplineRulerCtrl2.Bmp, this.CachePathAddition))
-                        {
-                            frm.SetupCache();
-                            if (frm.ShowDialog() == DialogResult.OK)
-                            {
-                                if (frm.FBitmap != null)
-                                {
-                                    Bitmap? bmp = new Bitmap(frm.FBitmap);
-
-                                    this.SetBitmap(this.helplineRulerCtrl2.Bmp, bmp, this.helplineRulerCtrl2, "Bmp");
-                                    _undoOPCache?.Add(bmp);
-
-                                    if (this.cmbZoom.SelectedItem != null)
-                                        this.helplineRulerCtrl2.SetZoom(this.cmbZoom.SelectedItem.ToString());
-                                    this.helplineRulerCtrl2.MakeBitmap(this.helplineRulerCtrl2.Bmp);
-                                    this.helplineRulerCtrl2.dbPanel1.AutoScrollMinSize = new Size(
-                                        (int)(this.helplineRulerCtrl2.Bmp.Width * this.helplineRulerCtrl2.Zoom),
-                                        (int)(this.helplineRulerCtrl2.Bmp.Height * this.helplineRulerCtrl2.Zoom));
-
-                                    //Bitmap bC = new Bitmap(bmp);
-                                    //this.SetBitmap(ref this._bmpBU, ref bC);
-                                }
-                            }
-                        }
                 }
             }
 
