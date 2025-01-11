@@ -2548,6 +2548,12 @@ namespace AvoidAGrabCutEasy
                     if (!this.backgroundWorker1.IsBusy)
                         this.backgroundWorker1.RunWorkerAsync(o);
                 }
+                else
+                {
+                    this.SetControls(true);
+                    this.cmbAlg_SelectedIndexChanged(this.cmbAlg, new EventArgs());
+                    this.cbDraw_CheckedChanged(this.cbDraw, new EventArgs());
+                }
             }
             else
             {
@@ -2586,6 +2592,12 @@ namespace AvoidAGrabCutEasy
 
                             if (!this.backgroundWorker1.IsBusy)
                                 this.backgroundWorker1.RunWorkerAsync(o);
+                        }
+                        else
+                        {
+                            this.SetControls(true);
+                            this.cmbAlg_SelectedIndexChanged(this.cmbAlg, new EventArgs());
+                            this.cbDraw_CheckedChanged(this.cbDraw, new EventArgs());
                         }
 
                         if (bmp != null)
@@ -2672,6 +2684,12 @@ namespace AvoidAGrabCutEasy
 
                                 if (!this.backgroundWorker1.IsBusy)
                                     this.backgroundWorker1.RunWorkerAsync(o);
+                            }
+                            else
+                            {
+                                this.SetControls(true);
+                                this.cmbAlg_SelectedIndexChanged(this.cmbAlg, new EventArgs());
+                                this.cbDraw_CheckedChanged(this.cbDraw, new EventArgs());
                             }
                         }
                         else
@@ -2779,6 +2797,12 @@ namespace AvoidAGrabCutEasy
                                 this.backgroundWorker1.RunWorkerAsync(o);
 
                         }
+                        else
+                        {
+                            this.SetControls(true);
+                            this.cmbAlg_SelectedIndexChanged(this.cmbAlg, new EventArgs());
+                            this.cbDraw_CheckedChanged(this.cbDraw, new EventArgs());
+                        }
                     }
                 }
             }
@@ -2869,6 +2893,13 @@ namespace AvoidAGrabCutEasy
 
                         SetPicToPB(bmpBlend);
                     }
+                    else
+                    {
+                        MessageBox.Show("No surrounding region found");
+                        this.SetControls(true);
+                        this.cmbAlg_SelectedIndexChanged(this.cmbAlg, new EventArgs());
+                        this.cbDraw_CheckedChanged(this.cbDraw, new EventArgs());
+                    }
                 }
             }
             else if (!this.cbUseCustomReBlendPic.Checked && this.cbBlackBG.Checked)
@@ -2951,6 +2982,13 @@ namespace AvoidAGrabCutEasy
 
                         SetPicToPB(bmpBlend);
                     }
+                    else
+                    {
+                        MessageBox.Show("No surrounding region found");
+                        this.SetControls(true);
+                        this.cmbAlg_SelectedIndexChanged(this.cmbAlg, new EventArgs());
+                        this.cbDraw_CheckedChanged(this.cbDraw, new EventArgs());
+                    }
 
                     if (bmp != null)
                         bmp.Dispose();
@@ -3006,6 +3044,13 @@ namespace AvoidAGrabCutEasy
                         //if (!this.backgroundWorker1.IsBusy)
                         //    this.backgroundWorker1.RunWorkerAsync(o);
                     }
+                    else
+                    {
+                        MessageBox.Show("No surrounding region found");
+                        this.SetControls(true);
+                        this.cmbAlg_SelectedIndexChanged(this.cmbAlg, new EventArgs());
+                        this.cbDraw_CheckedChanged(this.cbDraw, new EventArgs());
+                    }
                 }
                 else if (this.cbBlackBG.Checked)
                 {
@@ -3045,6 +3090,13 @@ namespace AvoidAGrabCutEasy
                         this.toolStripStatusLabel4.Text = "Custom Pic loaded";
 
                         SetPicToPB(bmpBlend);
+                    }
+                    else
+                    {
+                        MessageBox.Show("No surrounding region found");
+                        this.SetControls(true);
+                        this.cmbAlg_SelectedIndexChanged(this.cmbAlg, new EventArgs());
+                        this.cbDraw_CheckedChanged(this.cbDraw, new EventArgs());
                     }
                 }
 
