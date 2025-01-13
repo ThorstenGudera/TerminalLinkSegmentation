@@ -1837,6 +1837,8 @@ namespace AvoidAGrabCutEasy
 
                 this._tb?.ResetTransform();
                 this._tb?.TranslateTransform(dx, dy);
+
+                this.btnLoadEdited.Enabled = true;
             }
         }
 
@@ -1907,6 +1909,8 @@ namespace AvoidAGrabCutEasy
 
             this._tb?.ResetTransform();
             this._tb?.TranslateTransform(dx, dy);
+
+            this.btnLoadEdited.Enabled = true;
         }
 
         private void btnScreenBlend_Click(object sender, EventArgs e)
@@ -3672,6 +3676,56 @@ namespace AvoidAGrabCutEasy
             {
                 this.btnReBlend.Enabled = true;
                 this._customPicLoaded = false;
+            }
+        }
+
+        private void btnLoadEdited_Click(object sender, EventArgs e)
+        {
+            if (this.openFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                Bitmap? bmp = null;
+                using (Image img = Image.FromFile(this.openFileDialog1.FileName))
+                    bmp = new Bitmap(img);
+
+                Bitmap? b = new Bitmap(this.helplineRulerCtrl2.Bmp.Width, this.helplineRulerCtrl2.Bmp.Height);
+                using TextureBrush tb = new TextureBrush(bmp);
+                tb.WrapMode = WrapMode.TileFlipXY;
+                using Graphics gx = Graphics.FromImage(b);
+                gx.FillRectangle(tb, new RectangleF(0, 0, b.Width, b.Height));
+                if (bmp != null)
+                    bmp.Dispose();
+                bmp = null;
+
+                this.SetBitmap(this.helplineRulerCtrl1.Bmp, b, this.helplineRulerCtrl1, "Bmp");
+
+                this.helplineRulerCtrl1.dbPanel1.AutoScrollMinSize = new Size(System.Convert.ToInt32(this.helplineRulerCtrl1.Bmp.Width * this.helplineRulerCtrl1.Zoom), System.Convert.ToInt32(this.helplineRulerCtrl1.Bmp.Height * this.helplineRulerCtrl1.Zoom));
+                this.helplineRulerCtrl1.MakeBitmap(this.helplineRulerCtrl1.Bmp);
+                this.helplineRulerCtrl1.dbPanel1.Invalidate();
+
+                Bitmap? bC = new Bitmap(b);
+                this.SetBitmap(ref this._bmpBU, ref bC);
+
+                Bitmap? bD = new Bitmap(this.helplineRulerCtrl1.Bmp.Width, this.helplineRulerCtrl1.Bmp.Height);
+                this.SetBitmap(ref this._bmpDraw, ref bD);
+
+                if (this._bmpBUZoomed != null)
+                    this._bmpBUZoomed.Dispose();
+                this._bmpBUZoomed = null;
+                if (this._bmpBUZoomed == null && this._bmpBU != null)
+                    MakeBitmap(this._bmpBU, this.helplineRulerCtrl2.Zoom);
+
+                //this._sourcePt = new Point(0, 0);
+
+                int dx = this._destPt.X - this._sourcePt.X;
+                int dy = this._destPt.Y - this._sourcePt.Y;
+
+                if (this._tb != null)
+                    this._tb.Dispose();
+                this._tb = null;
+                SetupTB();
+
+                this._tb?.ResetTransform();
+                this._tb?.TranslateTransform(dx, dy);
             }
         }
     }

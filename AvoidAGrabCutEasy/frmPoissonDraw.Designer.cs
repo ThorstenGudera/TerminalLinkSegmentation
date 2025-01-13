@@ -160,6 +160,7 @@ namespace AvoidAGrabCutEasy
             helplineRulerCtrl2 = new HelplineRulerCtrl();
             backgroundWorker2 = new System.ComponentModel.BackgroundWorker();
             colorDialog1 = new ColorDialog();
+            btnLoadEdited = new Button();
             ((System.ComponentModel.ISupportInitialize)numSrcPtSurround).BeginInit();
             statusStrip1.SuspendLayout();
             panel1.SuspendLayout();
@@ -455,6 +456,7 @@ namespace AvoidAGrabCutEasy
             // 
             // panel1
             // 
+            panel1.Controls.Add(btnLoadEdited);
             panel1.Controls.Add(btnHSL2);
             panel1.Controls.Add(cbFindInOrig);
             panel1.Controls.Add(btnColorsHSL);
@@ -1052,6 +1054,17 @@ namespace AvoidAGrabCutEasy
             colorDialog1.AnyColor = true;
             colorDialog1.FullOpen = true;
             // 
+            // btnLoadEdited
+            // 
+            btnLoadEdited.Enabled = false;
+            btnLoadEdited.Location = new Point(273, 126);
+            btnLoadEdited.Name = "btnLoadEdited";
+            btnLoadEdited.Size = new Size(121, 28);
+            btnLoadEdited.TabIndex = 781;
+            btnLoadEdited.Text = "load edited Src Pic";
+            btnLoadEdited.UseVisualStyleBackColor = true;
+            btnLoadEdited.Click += btnLoadEdited_Click;
+            // 
             // frmPoissonDraw
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -1172,5 +1185,6 @@ namespace AvoidAGrabCutEasy
         private Button btnColorsRGB;
         private CheckBox cbFindInOrig;
         private Button btnHSL2;
+        private Button btnLoadEdited;
     }
 }
