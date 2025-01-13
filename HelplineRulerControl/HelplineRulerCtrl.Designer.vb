@@ -13,7 +13,7 @@ Partial Class HelplineRulerCtrl
 
         End Try
         Try
-            DisposeBitmapData()
+            DisposeBitmapData(True)
             If disposing AndAlso components IsNot Nothing Then
                 components.Dispose()
             End If

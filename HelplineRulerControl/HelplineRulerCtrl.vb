@@ -882,6 +882,7 @@ Partial Public Class HelplineRulerCtrl
                 Else
                     g.InterpolationMode = InterpolationMode.HighQualityBicubic
                 End If
+
                 g.PixelOffsetMode = PixelOffsetMode.Half
                 g.DrawImage(_bmp, New RectangleF(0, 0, pz.ClientRectangle.Width, pz.ClientRectangle.Height), New RectangleF(-pz.AutoScrollPosition.X / Me.Zoom, -pz.AutoScrollPosition.Y / Me.Zoom, pz.ClientRectangle.Width / Me.Zoom, pz.ClientRectangle.Height / Me.Zoom), GraphicsUnit.Pixel)
                 SetHRControlVars()
@@ -898,7 +899,7 @@ Partial Public Class HelplineRulerCtrl
         Me.AutoScrollPosition = New Point(-pt.X, -pt.Y)
     End Sub
 
-    Private Sub DisposeBitmapData()
+    Private Sub DisposeBitmapData(DisposeHelplines As Boolean)
         If Me._bmpTmp IsNot Nothing Then
             Me._bmpTmp.Dispose()
             Me._bmpTmp = Nothing
@@ -909,7 +910,7 @@ Partial Public Class HelplineRulerCtrl
             Me._bmp = Nothing
         End If
 
-        If Me._helpLines IsNot Nothing AndAlso Me._helpLines.Count > 0 Then
+        If DisposeHelplines AndAlso Me._helpLines IsNot Nothing AndAlso Me._helpLines.Count > 0 Then
             'Testing
             'For Each h As HelpLineControl In Me._helpLines
             '    h.Dispose()
@@ -1081,7 +1082,7 @@ Partial Public Class HelplineRulerCtrl
     End Sub
 
     Public Sub Reset()
-        Me.DisposeBitmapData()
+        Me.DisposeBitmapData(False)
         Me.dbPanel1.Invalidate()
     End Sub
 End Class
