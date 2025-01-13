@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Text.Json.Serialization;
 using System.Text.Json;
+using System.Net.Http.Json;
 
 namespace QuickExtract2
 {
@@ -418,11 +419,14 @@ namespace QuickExtract2
                                 AllowTrailingCommas = true,
                             };
 
-                            object[] o = new object[] { gPath.PathPoints, gPath.PathTypes };
+                            SavedPath sp = new SavedPath();
+                            sp.PathPoints = gPath.PathPoints;
+                            sp.PathTypes = gPath.PathTypes;
+
                             string FileName = this.SaveFileDialog2.FileName;
 
                             using FileStream createStream = File.Create(FileName);
-                            JsonSerializer.Serialize(createStream, o, options);
+                            JsonSerializer.Serialize(createStream, sp, options);
                         }
                         catch (Exception ex)
                         {
@@ -459,7 +463,7 @@ namespace QuickExtract2
                 this.Cursor = Cursors.WaitCursor;
                 this.Enabled = false;
                 this.Refresh();
-                object[]? o = null;
+                SavedPath? sp = null;
                 bool bError = false;
                 Stream? stream = null;
 
@@ -468,17 +472,15 @@ namespace QuickExtract2
                     JsonSerializerOptions options = new()
                     {
                         NumberHandling =
-                            JsonNumberHandling.AllowReadingFromString |
-                            JsonNumberHandling.WriteAsString,
+                        JsonNumberHandling.AllowReadingFromString |
+                        JsonNumberHandling.WriteAsString,
                         WriteIndented = true,
                         ReadCommentHandling = JsonCommentHandling.Skip,
                         AllowTrailingCommas = true,
                     };
 
                     stream = new FileStream(fileName, FileMode.Open, FileAccess.Read, FileShare.Read);
-                    o = JsonSerializer.Deserialize<object[]>(stream, options);
-
-
+                    sp = JsonSerializer.Deserialize<SavedPath>(stream, options);
                 }
                 catch (Exception ex)
                 {
@@ -495,47 +497,50 @@ namespace QuickExtract2
                 catch
                 { }
 
-                if (o != null && o.Length == 2)
+                if (sp != null)
                 {
                     try
                     {
-                        PointF[] pts2 = (PointF[])o[0];
-                        byte[] tps = (byte[])o[1];
+                        PointF[]? pts2 = sp.PathPoints; //(PointF[])o[0];
+                        byte[]? tps = sp.PathTypes; //(byte[])o[1];
 
-                        GraphicsPath? gp = new GraphicsPath(pts2, tps);
-
-                        if (this.PathList == null)
-                            this.PathList = new List<List<List<PointF>>>();
-
-                        if (gp.PointCount > 1)
+                        if (pts2 != null && tps != null)
                         {
-                            byte[] types = gp.PathTypes;
-                            for (int i = 0; i <= types.Length - 1; i++)
+                            GraphicsPath? gp = new GraphicsPath(pts2, tps);
+
+                            if (this.PathList == null)
+                                this.PathList = new List<List<List<PointF>>>();
+
+                            if (gp.PointCount > 1)
                             {
-                                int j = i;
-                                List<List<PointF>> l = new List<List<PointF>>();
-                                List<PointF> p = new List<PointF>();
+                                byte[] types = gp.PathTypes;
+                                for (int i = 0; i <= types.Length - 1; i++)
+                                {
+                                    int j = i;
+                                    List<List<PointF>> l = new List<List<PointF>>();
+                                    List<PointF> p = new List<PointF>();
 
-                                while ((j < types.Length) && ((types[j] & 0x80) != 0x80))
-                                    // p.Add(gp.PathPoints(j))
-                                    j += 1;
-                                p.AddRange(gp.PathPoints.Skip(i).Take(j - i));
+                                    while ((j < types.Length) && ((types[j] & 0x80) != 0x80))
+                                        // p.Add(gp.PathPoints(j))
+                                        j += 1;
+                                    p.AddRange(gp.PathPoints.Skip(i).Take(j - i));
 
-                                if (j < gp.PathPoints.Length)
-                                    p.Add(gp.PathPoints[j]);
-                                l.Add(p);
-                                i = j;
+                                    if (j < gp.PathPoints.Length)
+                                        p.Add(gp.PathPoints[j]);
+                                    l.Add(p);
+                                    i = j;
 
-                                this.PathList.Add(l);
-                                this.ListBox1.Items.Add("savedPath_" + (this.PathList.Count - 1).ToString());
+                                    this.PathList.Add(l);
+                                    this.ListBox1.Items.Add("savedPath_" + (this.PathList.Count - 1).ToString());
 
-                                this.ListBox1.SelectedIndex = this.ListBox1.Items.Count - 1;
+                                    this.ListBox1.SelectedIndex = this.ListBox1.Items.Count - 1;
+                                }
                             }
-                        }
-                        else
-                        {
-                            gp.Dispose();
-                            gp = null;
+                            else
+                            {
+                                gp.Dispose();
+                                gp = null;
+                            }
                         }
                     }
                     catch
