@@ -649,12 +649,14 @@ namespace AvoidAGrabCutEasy
             }
         }
 
+
         private void ProcessImage(Bitmap bmpDrawTo, Bitmap bmpDrawFrom)
         {
             this.SetControls(false);
             object[] o = new object[] { bmpDrawTo, bmpDrawFrom, this.cmbAlg.SelectedIndex,
                 (double)this.numUpperWeight.Value, (double)this.numLowerWeight.Value,
-                (int)this.numMaxPixelDist.Value, (double)this.numGamma.Value};
+                (int)this.numMaxPixelDist.Value, (double)this.numGamma.Value,
+                this.cbOrdinaryDraw.Checked, (float)this.numOpacityOrdDraw.Value};
 
             if (!this.backgroundWorker1.IsBusy)
                 this.backgroundWorker1.RunWorkerAsync(o);
@@ -666,80 +668,111 @@ namespace AvoidAGrabCutEasy
             {
                 object[] o = (object[])e.Argument;
 
+                bool ordinaryDraw = (bool)o[7];
+                float opacity = (float)o[8];
+
                 Bitmap bmpDrawTo = (Bitmap)o[0]; // bmpbu
                 using (Bitmap bmpDrawFrom = (Bitmap)o[1]) //_bmpDraw
                 {
                     if (AvailMem.AvailMem.checkAvailRam(bmpDrawTo.Width * bmpDrawTo.Height * 5L))
                     {
-                        Rectangle rc = new Rectangle();
-                        using (Bitmap? bmpU = ScanForPic(bmpDrawFrom, 0, ref rc))
+                        if (ordinaryDraw)
                         {
-                            if (bmpU != null)
-                                using (Bitmap bmpLw = bmpDrawTo.Clone(rc, bmpDrawTo.PixelFormat))
+                            using (Graphics gx = Graphics.FromImage(bmpDrawTo))
+                            {
+                                ColorMatrix cm = new ColorMatrix();
+                                cm.Matrix33 = opacity;
+
+                                using (ImageAttributes ia = new ImageAttributes())
                                 {
-                                    SetSolid(bmpLw, bmpU);
+                                    ia.SetColorMatrix(cm);
 
-                                    int mI = 5000;
-                                    bool preRel = true;
-                                    int maxRstrs = 500;
-                                    double desError = 0.0001;
-                                    int minAlpha = 254;
-                                    int innerItrts = 5;
-                                    bool autoSOR = true;
-                                    AutoSORMode autoSORMode = AutoSORMode.WidthRelated;
-                                    //bool postProc = false;
-                                    //double postProcMultiplier = 1.0;
-                                    int bVAlg = System.Convert.ToInt32(o[2]);
-                                    double upperWeight = System.Convert.ToDouble(o[3]);
-                                    double lowerWeight = System.Convert.ToDouble(o[4]);
-                                    int maxPixelDist = (int)o[5];
-                                    double gamma = (double)o[6];
-
-                                    PoissonBlender pb = new PoissonBlender(new Bitmap(bmpLw), new Bitmap(bmpU));
-                                    PoissonBlend.ProgressEventArgs pe = new PoissonBlend.ProgressEventArgs(mI * 3, 0);
-                                    pe.PrgInterval = mI / 20;
-
-                                    IBVectorComputingAlgorithm bAlg = pb.BlendParameters.GetBVectorAlg(bVAlg); // addb etc
-
-                                    if (bAlg.GetType().GetInterfaces().Contains(typeof(IExtendedBVectorComputingAlgorithm)))
-                                    {
-                                        IExtendedBVectorComputingAlgorithm iExtAlg = (IExtendedBVectorComputingAlgorithm)bAlg;
-                                        using Bitmap bC = new Bitmap(bmpU);
-                                        iExtAlg.Setup(bC, maxPixelDist, gamma);
-                                    }
-
-                                    IBlendAlgorithm cAlg = pb.BlendParameters.GetCalcAlg(1); // GMRES_r
-                                    cAlg.ShowProgess += ShowProgress;
-                                    this._cAlg = cAlg;
-                                    this._pb = pb;
-
-                                    Rectangle rcSmall = new Rectangle(0, 0, bmpU.Width, bmpU.Height);
-
-                                    pb.SetParameters(minAlpha, mI, desError, innerItrts, preRel, new Rectangle(0, 0, rcSmall.Width, rcSmall.Height), maxRstrs, autoSOR, autoSORMode, 12, upperWeight, lowerWeight, cAlg, bAlg, true, pe);
-
-                                    Bitmap? bmpRes = null;
-                                    try
-                                    {
-                                        if (pb != null)
-                                            bmpRes = pb.Apply();
-                                    }
-                                    catch (OutOfMemoryException exc)
-                                    {
-                                        MessageBox.Show(exc.Message);
-                                    }
-                                    catch (Exception exc)
-                                    {
-                                        Console.WriteLine(exc.Message);
-                                    }
-
-                                    cAlg.ShowProgess -= ShowProgress;
-
-                                    using (Graphics gx = Graphics.FromImage(bmpDrawTo))
-                                        if (bmpRes != null)
-                                            gx.DrawImage(bmpRes, rc);
-
-                                    e.Result = bmpDrawTo;
+                                    gx.DrawImage(bmpDrawFrom,
+                                        new Rectangle(0, 0,
+                                            bmpDrawTo.Width,
+                                            bmpDrawTo.Height),
+                                            0, 0,
+                                            bmpDrawFrom.Width,
+                                            bmpDrawFrom.Height, GraphicsUnit.Pixel, ia);
                                 }
+                            }
+
+                            e.Result = bmpDrawTo;
+                        }
+                        else
+                        {
+                            Rectangle rc = new Rectangle();
+                            using (Bitmap? bmpU = ScanForPic(bmpDrawFrom, 0, ref rc))
+                            {
+                                if (bmpU != null)
+                                    using (Bitmap bmpLw = bmpDrawTo.Clone(rc, bmpDrawTo.PixelFormat))
+                                    {
+                                        SetSolid(bmpLw, bmpU);
+
+                                        int mI = 5000;
+                                        bool preRel = true;
+                                        int maxRstrs = 500;
+                                        double desError = 0.0001;
+                                        int minAlpha = 254;
+                                        int innerItrts = 5;
+                                        bool autoSOR = true;
+                                        AutoSORMode autoSORMode = AutoSORMode.WidthRelated;
+                                        //bool postProc = false;
+                                        //double postProcMultiplier = 1.0;
+                                        int bVAlg = System.Convert.ToInt32(o[2]);
+                                        double upperWeight = System.Convert.ToDouble(o[3]);
+                                        double lowerWeight = System.Convert.ToDouble(o[4]);
+                                        int maxPixelDist = (int)o[5];
+                                        double gamma = (double)o[6];
+
+                                        PoissonBlender pb = new PoissonBlender(new Bitmap(bmpLw), new Bitmap(bmpU));
+                                        PoissonBlend.ProgressEventArgs pe = new PoissonBlend.ProgressEventArgs(mI * 3, 0);
+                                        pe.PrgInterval = mI / 20;
+                                        //pb.BlendParameters.Gamma = ;
+                                        //pb.BlendParameters.MaxPixelDist = ;
+
+                                        IBVectorComputingAlgorithm bAlg = pb.BlendParameters.GetBVectorAlg(bVAlg); // addb etc
+
+                                        if (bAlg.GetType().GetInterfaces().Contains(typeof(IExtendedBVectorComputingAlgorithm)))
+                                        {
+                                            IExtendedBVectorComputingAlgorithm iExtAlg = (IExtendedBVectorComputingAlgorithm)bAlg;
+                                            using Bitmap bC = new Bitmap(bmpU);
+                                            iExtAlg.Setup(bC, maxPixelDist, gamma);
+                                        }
+
+                                        IBlendAlgorithm cAlg = pb.BlendParameters.GetCalcAlg(1); // GMRES_r
+                                        cAlg.ShowProgess += ShowProgress;
+                                        this._cAlg = cAlg;
+                                        this._pb = pb;
+
+                                        Rectangle rcSmall = new Rectangle(0, 0, bmpU.Width, bmpU.Height);
+
+                                        pb.SetParameters(minAlpha, mI, desError, innerItrts, preRel, new Rectangle(0, 0, rcSmall.Width, rcSmall.Height), maxRstrs, autoSOR, autoSORMode, 12, upperWeight, lowerWeight, cAlg, bAlg, true, pe);
+
+                                        Bitmap? bmpRes = null;
+                                        try
+                                        {
+                                            if (pb != null)
+                                                bmpRes = pb.Apply();
+                                        }
+                                        catch (OutOfMemoryException exc)
+                                        {
+                                            MessageBox.Show(exc.Message);
+                                        }
+                                        catch (Exception exc)
+                                        {
+                                            Console.WriteLine(exc.Message);
+                                        }
+
+                                        cAlg.ShowProgess -= ShowProgress;
+
+                                        using (Graphics gx = Graphics.FromImage(bmpDrawTo))
+                                            if (bmpRes != null)
+                                                gx.DrawImage(bmpRes, rc);
+
+                                        e.Result = bmpDrawTo;
+                                    }
+                            }
                         }
                     }
                 }
@@ -2524,6 +2557,7 @@ namespace AvoidAGrabCutEasy
         private void cbDraw_CheckedChanged(object sender, EventArgs e)
         {
             this.cbClickMode.Enabled = this.cbDraw.Checked;
+            this.cbOrdinaryDraw.Enabled = this.label14.Enabled = this.numOpacityOrdDraw.Enabled = this.cbDraw.Checked;
         }
 
         private void cbClickMode_CheckedChanged(object sender, EventArgs e)

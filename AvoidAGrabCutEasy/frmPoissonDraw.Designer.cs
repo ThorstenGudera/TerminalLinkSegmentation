@@ -99,6 +99,7 @@ namespace AvoidAGrabCutEasy
             toolTip1 = new ToolTip(components);
             cbFindDestPoint = new CheckBox();
             numSrcPtSurround = new NumericUpDown();
+            cbOrdinaryDraw = new CheckBox();
             toolStripStatusLabel5 = new ToolStripStatusLabel();
             statusStrip1 = new StatusStrip();
             toolStripStatusLabel1 = new ToolStripStatusLabel();
@@ -108,6 +109,9 @@ namespace AvoidAGrabCutEasy
             toolStripStatusLabel3 = new ToolStripStatusLabel();
             panel3 = new Panel();
             panel1 = new Panel();
+            label14 = new Label();
+            numOpacityOrdDraw = new NumericUpDown();
+            btnLoadEdited = new Button();
             btnHSL2 = new Button();
             cbFindInOrig = new CheckBox();
             btnColorsHSL = new Button();
@@ -160,10 +164,10 @@ namespace AvoidAGrabCutEasy
             helplineRulerCtrl2 = new HelplineRulerCtrl();
             backgroundWorker2 = new System.ComponentModel.BackgroundWorker();
             colorDialog1 = new ColorDialog();
-            btnLoadEdited = new Button();
             ((System.ComponentModel.ISupportInitialize)numSrcPtSurround).BeginInit();
             statusStrip1.SuspendLayout();
             panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)numOpacityOrdDraw).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numGamma).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numMaxPixelDist).BeginInit();
@@ -201,7 +205,7 @@ namespace AvoidAGrabCutEasy
             helplineRulerCtrl1.MoveHelpLinesOnResize = false;
             helplineRulerCtrl1.Name = "helplineRulerCtrl1";
             helplineRulerCtrl1.SetZoomOnlyByMethodCall = false;
-            helplineRulerCtrl1.Size = new Size(707, 663);
+            helplineRulerCtrl1.Size = new Size(707, 664);
             helplineRulerCtrl1.TabIndex = 249;
             helplineRulerCtrl1.Zoom = 1F;
             helplineRulerCtrl1.ZoomSetManually = false;
@@ -223,7 +227,7 @@ namespace AvoidAGrabCutEasy
             // Panel4
             // 
             Panel4.BackColor = SystemColors.ActiveCaptionText;
-            Panel4.Location = new Point(1150, 200);
+            Panel4.Location = new Point(1150, 220);
             Panel4.Margin = new Padding(4, 3, 4, 3);
             Panel4.Name = "Panel4";
             Panel4.Size = new Size(197, 2);
@@ -232,7 +236,7 @@ namespace AvoidAGrabCutEasy
             // Panel8
             // 
             Panel8.BackColor = SystemColors.ActiveCaptionText;
-            Panel8.Location = new Point(13, 200);
+            Panel8.Location = new Point(13, 220);
             Panel8.Margin = new Padding(4, 3, 4, 3);
             Panel8.Name = "Panel8";
             Panel8.Size = new Size(1107, 2);
@@ -322,7 +326,7 @@ namespace AvoidAGrabCutEasy
             btnCancel.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             btnCancel.DialogResult = DialogResult.Cancel;
             btnCancel.ForeColor = SystemColors.ControlText;
-            btnCancel.Location = new Point(1297, 167);
+            btnCancel.Location = new Point(1297, 187);
             btnCancel.Margin = new Padding(4, 3, 4, 3);
             btnCancel.Name = "btnCancel";
             btnCancel.Size = new Size(88, 27);
@@ -335,7 +339,7 @@ namespace AvoidAGrabCutEasy
             btnOK.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             btnOK.DialogResult = DialogResult.OK;
             btnOK.ForeColor = SystemColors.ControlText;
-            btnOK.Location = new Point(1203, 167);
+            btnOK.Location = new Point(1203, 187);
             btnOK.Margin = new Padding(4, 3, 4, 3);
             btnOK.Name = "btnOK";
             btnOK.Size = new Size(88, 27);
@@ -373,7 +377,7 @@ namespace AvoidAGrabCutEasy
             // cbFindDestPoint
             // 
             cbFindDestPoint.AutoSize = true;
-            cbFindDestPoint.Location = new Point(63, 74);
+            cbFindDestPoint.Location = new Point(63, 94);
             cbFindDestPoint.Name = "cbFindDestPoint";
             cbFindDestPoint.Size = new Size(234, 19);
             cbFindDestPoint.TabIndex = 768;
@@ -384,7 +388,7 @@ namespace AvoidAGrabCutEasy
             // 
             // numSrcPtSurround
             // 
-            numSrcPtSurround.Location = new Point(300, 71);
+            numSrcPtSurround.Location = new Point(300, 91);
             numSrcPtSurround.Margin = new Padding(4, 3, 4, 3);
             numSrcPtSurround.Minimum = new decimal(new int[] { 20, 0, 0, 0 });
             numSrcPtSurround.Name = "numSrcPtSurround";
@@ -393,6 +397,18 @@ namespace AvoidAGrabCutEasy
             toolTip1.SetToolTip(numSrcPtSurround, "Please note, that all pixels of the rectangle around the Src point \r\nmust be contained in the Dest image.\r\nAlso make sure, there's enough color-change inside the rectangle.");
             numSrcPtSurround.Value = new decimal(new int[] { 50, 0, 0, 0 });
             numSrcPtSurround.ValueChanged += numSrcPtSurround_ValueChanged;
+            // 
+            // cbOrdinaryDraw
+            // 
+            cbOrdinaryDraw.AutoSize = true;
+            cbOrdinaryDraw.Enabled = false;
+            cbOrdinaryDraw.Location = new Point(181, 44);
+            cbOrdinaryDraw.Name = "cbOrdinaryDraw";
+            cbOrdinaryDraw.Size = new Size(99, 19);
+            cbOrdinaryDraw.TabIndex = 784;
+            cbOrdinaryDraw.Text = "OrdinaryDraw";
+            toolTip1.SetToolTip(cbOrdinaryDraw, "just draw the src, no poisson drawing");
+            cbOrdinaryDraw.UseVisualStyleBackColor = true;
             // 
             // toolStripStatusLabel5
             // 
@@ -403,7 +419,7 @@ namespace AvoidAGrabCutEasy
             // statusStrip1
             // 
             statusStrip1.Items.AddRange(new ToolStripItem[] { toolStripStatusLabel1, ToolStripStatusLabel2, toolStripStatusLabel5, toolStripProgressBar1, toolStripStatusLabel4, toolStripStatusLabel3 });
-            statusStrip1.Location = new Point(0, 872);
+            statusStrip1.Location = new Point(0, 893);
             statusStrip1.Name = "statusStrip1";
             statusStrip1.Padding = new Padding(1, 0, 16, 0);
             statusStrip1.Size = new Size(1400, 39);
@@ -456,6 +472,9 @@ namespace AvoidAGrabCutEasy
             // 
             // panel1
             // 
+            panel1.Controls.Add(cbOrdinaryDraw);
+            panel1.Controls.Add(label14);
+            panel1.Controls.Add(numOpacityOrdDraw);
             panel1.Controls.Add(btnLoadEdited);
             panel1.Controls.Add(btnHSL2);
             panel1.Controls.Add(cbFindInOrig);
@@ -511,12 +530,45 @@ namespace AvoidAGrabCutEasy
             panel1.Location = new Point(0, 0);
             panel1.Margin = new Padding(4, 3, 4, 3);
             panel1.Name = "panel1";
-            panel1.Size = new Size(1400, 209);
+            panel1.Size = new Size(1400, 229);
             panel1.TabIndex = 247;
+            // 
+            // label14
+            // 
+            label14.AutoSize = true;
+            label14.Enabled = false;
+            label14.Location = new Point(282, 45);
+            label14.Name = "label14";
+            label14.Size = new Size(48, 15);
+            label14.TabIndex = 783;
+            label14.Text = "Opacity";
+            // 
+            // numOpacityOrdDraw
+            // 
+            numOpacityOrdDraw.DecimalPlaces = 2;
+            numOpacityOrdDraw.Enabled = false;
+            numOpacityOrdDraw.Increment = new decimal(new int[] { 1, 0, 0, 65536 });
+            numOpacityOrdDraw.Location = new Point(336, 43);
+            numOpacityOrdDraw.Maximum = new decimal(new int[] { 1, 0, 0, 0 });
+            numOpacityOrdDraw.Name = "numOpacityOrdDraw";
+            numOpacityOrdDraw.Size = new Size(61, 23);
+            numOpacityOrdDraw.TabIndex = 782;
+            numOpacityOrdDraw.Value = new decimal(new int[] { 5, 0, 0, 65536 });
+            // 
+            // btnLoadEdited
+            // 
+            btnLoadEdited.Enabled = false;
+            btnLoadEdited.Location = new Point(273, 146);
+            btnLoadEdited.Name = "btnLoadEdited";
+            btnLoadEdited.Size = new Size(121, 28);
+            btnLoadEdited.TabIndex = 781;
+            btnLoadEdited.Text = "load edited Src Pic";
+            btnLoadEdited.UseVisualStyleBackColor = true;
+            btnLoadEdited.Click += btnLoadEdited_Click;
             // 
             // btnHSL2
             // 
-            btnHSL2.Location = new Point(976, 167);
+            btnHSL2.Location = new Point(976, 187);
             btnHSL2.Name = "btnHSL2";
             btnHSL2.Size = new Size(88, 28);
             btnHSL2.TabIndex = 780;
@@ -527,7 +579,7 @@ namespace AvoidAGrabCutEasy
             // cbFindInOrig
             // 
             cbFindInOrig.AutoSize = true;
-            cbFindInOrig.Location = new Point(382, 101);
+            cbFindInOrig.Location = new Point(382, 121);
             cbFindInOrig.Name = "cbFindInOrig";
             cbFindInOrig.Size = new Size(122, 19);
             cbFindInOrig.TabIndex = 779;
@@ -536,7 +588,7 @@ namespace AvoidAGrabCutEasy
             // 
             // btnColorsHSL
             // 
-            btnColorsHSL.Location = new Point(367, 167);
+            btnColorsHSL.Location = new Point(367, 187);
             btnColorsHSL.Name = "btnColorsHSL";
             btnColorsHSL.Size = new Size(88, 28);
             btnColorsHSL.TabIndex = 777;
@@ -546,7 +598,7 @@ namespace AvoidAGrabCutEasy
             // 
             // btnColorsRGB
             // 
-            btnColorsRGB.Location = new Point(273, 167);
+            btnColorsRGB.Location = new Point(273, 187);
             btnColorsRGB.Name = "btnColorsRGB";
             btnColorsRGB.Size = new Size(88, 28);
             btnColorsRGB.TabIndex = 778;
@@ -719,7 +771,7 @@ namespace AvoidAGrabCutEasy
             panel2.BorderStyle = BorderStyle.FixedSingle;
             panel2.Controls.Add(label8);
             panel2.Controls.Add(label7);
-            panel2.Location = new Point(41, 99);
+            panel2.Location = new Point(41, 119);
             panel2.Name = "panel2";
             panel2.Size = new Size(216, 64);
             panel2.TabIndex = 770;
@@ -757,7 +809,7 @@ namespace AvoidAGrabCutEasy
             // 
             // btnFindDestPoint
             // 
-            btnFindDestPoint.Location = new Point(367, 68);
+            btnFindDestPoint.Location = new Point(367, 88);
             btnFindDestPoint.Name = "btnFindDestPoint";
             btnFindDestPoint.Size = new Size(88, 28);
             btnFindDestPoint.TabIndex = 767;
@@ -768,7 +820,7 @@ namespace AvoidAGrabCutEasy
             // label6
             // 
             label6.AutoSize = true;
-            label6.Location = new Point(473, 123);
+            label6.Location = new Point(473, 153);
             label6.Name = "label6";
             label6.Size = new Size(175, 15);
             label6.TabIndex = 765;
@@ -776,7 +828,7 @@ namespace AvoidAGrabCutEasy
             // 
             // btnSaveStrokes
             // 
-            btnSaveStrokes.Location = new Point(660, 116);
+            btnSaveStrokes.Location = new Point(660, 146);
             btnSaveStrokes.Name = "btnSaveStrokes";
             btnSaveStrokes.Size = new Size(88, 28);
             btnSaveStrokes.TabIndex = 764;
@@ -786,7 +838,7 @@ namespace AvoidAGrabCutEasy
             // 
             // btnScreenBlend
             // 
-            btnScreenBlend.Location = new Point(473, 166);
+            btnScreenBlend.Location = new Point(473, 186);
             btnScreenBlend.Name = "btnScreenBlend";
             btnScreenBlend.Size = new Size(88, 28);
             btnScreenBlend.TabIndex = 763;
@@ -797,7 +849,7 @@ namespace AvoidAGrabCutEasy
             // label5
             // 
             label5.AutoSize = true;
-            label5.Location = new Point(838, 173);
+            label5.Location = new Point(838, 193);
             label5.Name = "label5";
             label5.Size = new Size(48, 15);
             label5.TabIndex = 762;
@@ -806,7 +858,7 @@ namespace AvoidAGrabCutEasy
             // cbOverlay
             // 
             cbOverlay.AutoSize = true;
-            cbOverlay.Location = new Point(731, 172);
+            cbOverlay.Location = new Point(731, 192);
             cbOverlay.Name = "cbOverlay";
             cbOverlay.Size = new Size(101, 19);
             cbOverlay.TabIndex = 761;
@@ -816,7 +868,7 @@ namespace AvoidAGrabCutEasy
             // 
             // btnLoadOrig
             // 
-            btnLoadOrig.Location = new Point(117, 166);
+            btnLoadOrig.Location = new Point(117, 186);
             btnLoadOrig.Name = "btnLoadOrig";
             btnLoadOrig.Size = new Size(88, 28);
             btnLoadOrig.TabIndex = 760;
@@ -827,7 +879,7 @@ namespace AvoidAGrabCutEasy
             // 
             numOpacity.DecimalPlaces = 2;
             numOpacity.Increment = new decimal(new int[] { 1, 0, 0, 65536 });
-            numOpacity.Location = new Point(892, 171);
+            numOpacity.Location = new Point(892, 191);
             numOpacity.Maximum = new decimal(new int[] { 1, 0, 0, 0 });
             numOpacity.Name = "numOpacity";
             numOpacity.Size = new Size(61, 23);
@@ -837,7 +889,7 @@ namespace AvoidAGrabCutEasy
             // 
             // button12
             // 
-            button12.Location = new Point(13, 166);
+            button12.Location = new Point(13, 186);
             button12.Name = "button12";
             button12.Size = new Size(88, 28);
             button12.TabIndex = 756;
@@ -916,7 +968,7 @@ namespace AvoidAGrabCutEasy
             // rbDest
             // 
             rbDest.AutoSize = true;
-            rbDest.Location = new Point(250, 48);
+            rbDest.Location = new Point(250, 68);
             rbDest.Name = "rbDest";
             rbDest.Size = new Size(59, 19);
             rbDest.TabIndex = 750;
@@ -927,7 +979,7 @@ namespace AvoidAGrabCutEasy
             // 
             rbSrc.AutoSize = true;
             rbSrc.Checked = true;
-            rbSrc.Location = new Point(192, 48);
+            rbSrc.Location = new Point(192, 68);
             rbSrc.Name = "rbSrc";
             rbSrc.Size = new Size(52, 19);
             rbSrc.TabIndex = 750;
@@ -938,7 +990,7 @@ namespace AvoidAGrabCutEasy
             // cbAuto
             // 
             cbAuto.AutoSize = true;
-            cbAuto.Location = new Point(124, 49);
+            cbAuto.Location = new Point(124, 69);
             cbAuto.Name = "cbAuto";
             cbAuto.Size = new Size(52, 19);
             cbAuto.TabIndex = 749;
@@ -948,7 +1000,7 @@ namespace AvoidAGrabCutEasy
             // cbSetPts
             // 
             cbSetPts.AutoSize = true;
-            cbSetPts.Location = new Point(41, 49);
+            cbSetPts.Location = new Point(41, 69);
             cbSetPts.Name = "cbSetPts";
             cbSetPts.Size = new Size(77, 19);
             cbSetPts.TabIndex = 749;
@@ -1005,7 +1057,7 @@ namespace AvoidAGrabCutEasy
             // splitContainer1
             // 
             splitContainer1.Dock = DockStyle.Fill;
-            splitContainer1.Location = new Point(0, 209);
+            splitContainer1.Location = new Point(0, 229);
             splitContainer1.Name = "splitContainer1";
             // 
             // splitContainer1.Panel1
@@ -1015,7 +1067,7 @@ namespace AvoidAGrabCutEasy
             // splitContainer1.Panel2
             // 
             splitContainer1.Panel2.Controls.Add(helplineRulerCtrl2);
-            splitContainer1.Size = new Size(1400, 663);
+            splitContainer1.Size = new Size(1400, 664);
             splitContainer1.SplitterDistance = 707;
             splitContainer1.TabIndex = 250;
             // 
@@ -1035,7 +1087,7 @@ namespace AvoidAGrabCutEasy
             helplineRulerCtrl2.MoveHelpLinesOnResize = false;
             helplineRulerCtrl2.Name = "helplineRulerCtrl2";
             helplineRulerCtrl2.SetZoomOnlyByMethodCall = false;
-            helplineRulerCtrl2.Size = new Size(689, 663);
+            helplineRulerCtrl2.Size = new Size(689, 664);
             helplineRulerCtrl2.TabIndex = 249;
             helplineRulerCtrl2.Zoom = 1F;
             helplineRulerCtrl2.ZoomSetManually = false;
@@ -1054,22 +1106,11 @@ namespace AvoidAGrabCutEasy
             colorDialog1.AnyColor = true;
             colorDialog1.FullOpen = true;
             // 
-            // btnLoadEdited
-            // 
-            btnLoadEdited.Enabled = false;
-            btnLoadEdited.Location = new Point(273, 126);
-            btnLoadEdited.Name = "btnLoadEdited";
-            btnLoadEdited.Size = new Size(121, 28);
-            btnLoadEdited.TabIndex = 781;
-            btnLoadEdited.Text = "load edited Src Pic";
-            btnLoadEdited.UseVisualStyleBackColor = true;
-            btnLoadEdited.Click += btnLoadEdited_Click;
-            // 
             // frmPoissonDraw
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1400, 911);
+            ClientSize = new Size(1400, 932);
             Controls.Add(splitContainer1);
             Controls.Add(panel1);
             Controls.Add(panel3);
@@ -1084,6 +1125,7 @@ namespace AvoidAGrabCutEasy
             statusStrip1.PerformLayout();
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)numOpacityOrdDraw).EndInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             ((System.ComponentModel.ISupportInitialize)numGamma).EndInit();
             ((System.ComponentModel.ISupportInitialize)numMaxPixelDist).EndInit();
@@ -1186,5 +1228,8 @@ namespace AvoidAGrabCutEasy
         private CheckBox cbFindInOrig;
         private Button btnHSL2;
         private Button btnLoadEdited;
+        private CheckBox cbOrdinaryDraw;
+        private Label label14;
+        private NumericUpDown numOpacityOrdDraw;
     }
 }
