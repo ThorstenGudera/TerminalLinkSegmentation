@@ -31,6 +31,7 @@
             components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmAvoidAGrabCutEasy));
             panel1 = new Panel();
+            cbSCF = new CheckBox();
             btnPoissonDraw = new Button();
             btnGetOutline = new Button();
             btnInfo = new Button();
@@ -150,7 +151,7 @@
             floodFGToolStripMenuItem = new ToolStripMenuItem();
             timer1 = new System.Windows.Forms.Timer(components);
             backgroundWorker4 = new System.ComponentModel.BackgroundWorker();
-            cbSCF = new CheckBox();
+            btnLoadToHLC2 = new Button();
             panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numComponents2).BeginInit();
             panel2.SuspendLayout();
@@ -175,6 +176,7 @@
             // 
             // panel1
             // 
+            panel1.Controls.Add(btnLoadToHLC2);
             panel1.Controls.Add(cbSCF);
             panel1.Controls.Add(btnPoissonDraw);
             panel1.Controls.Add(btnGetOutline);
@@ -277,6 +279,18 @@
             panel1.TabIndex = 0;
             panel1.MouseDoubleClick += panel1_MouseDoubleClick;
             panel1.MouseDown += panel1_MouseDown;
+            // 
+            // cbSCF
+            // 
+            cbSCF.AutoSize = true;
+            cbSCF.Checked = true;
+            cbSCF.CheckState = CheckState.Checked;
+            cbSCF.Location = new Point(1127, 158);
+            cbSCF.Name = "cbSCF";
+            cbSCF.Size = new Size(132, 19);
+            cbSCF.TabIndex = 741;
+            cbSCF.Text = "remove empty parts";
+            cbSCF.UseVisualStyleBackColor = true;
             // 
             // btnPoissonDraw
             // 
@@ -1568,17 +1582,15 @@
             backgroundWorker4.ProgressChanged += backgroundWorker4_ProgressChanged;
             backgroundWorker4.RunWorkerCompleted += backgroundWorker4_RunWorkerCompleted;
             // 
-            // cbSCF
+            // btnLoadToHLC2
             // 
-            cbSCF.AutoSize = true;
-            cbSCF.Checked = true;
-            cbSCF.CheckState = CheckState.Checked;
-            cbSCF.Location = new Point(1127, 158);
-            cbSCF.Name = "cbSCF";
-            cbSCF.Size = new Size(132, 19);
-            cbSCF.TabIndex = 741;
-            cbSCF.Text = "remove empty parts";
-            cbSCF.UseVisualStyleBackColor = true;
+            btnLoadToHLC2.Location = new Point(1307, 119);
+            btnLoadToHLC2.Name = "btnLoadToHLC2";
+            btnLoadToHLC2.Size = new Size(113, 23);
+            btnLoadToHLC2.TabIndex = 742;
+            btnLoadToHLC2.Text = "Load pic to HLC2";
+            btnLoadToHLC2.UseVisualStyleBackColor = true;
+            btnLoadToHLC2.Click += btnLoadToHLC2_Click;
             // 
             // frmAvoidAGrabCutEasy
             // 
@@ -1745,5 +1757,6 @@
         private ToolStripStatusLabel toolStripStatusLabel5;
         private Button btnPoissonDraw;
         private CheckBox cbSCF;
+        private Button btnLoadToHLC2;
     }
 }

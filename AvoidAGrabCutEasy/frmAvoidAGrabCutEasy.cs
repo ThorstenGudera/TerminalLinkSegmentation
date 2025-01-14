@@ -5874,5 +5874,28 @@ namespace AvoidAGrabCutEasy
                     frm.LoadOrigPic(this._bmpBU);
             }
         }
+
+        private void btnLoadToHLC2_Click(object sender, EventArgs e)
+        {
+            if (this.openFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                Bitmap? bmp = null;
+
+                using (Image img = Image.FromFile(this.openFileDialog1.FileName))
+                    bmp = new Bitmap(img);
+
+                this.SetBitmap(this.helplineRulerCtrl2.Bmp, bmp, this.helplineRulerCtrl2, "Bmp");
+
+                this.helplineRulerCtrl2.SetZoom(this.helplineRulerCtrl1.Zoom.ToString());
+                this.helplineRulerCtrl2.MakeBitmap(this.helplineRulerCtrl2.Bmp);
+                this.helplineRulerCtrl2.dbPanel1.AutoScrollMinSize = new Size(
+                    (int)(this.helplineRulerCtrl2.Bmp.Width * this.helplineRulerCtrl2.Zoom),
+                    (int)(this.helplineRulerCtrl2.Bmp.Height * this.helplineRulerCtrl2.Zoom));
+
+                //Bitmap bC = new Bitmap(bmp);
+                //this.SetBitmap(ref this._b4Copy, ref bC);
+
+            }
+        }
     }
 }

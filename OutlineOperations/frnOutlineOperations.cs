@@ -2266,5 +2266,21 @@ namespace OutlineOperations
             }
             return gp;
         }
+
+        private void btnSetAsMatte_Click(object sender, EventArgs e)
+        {
+            if (this.helplineRulerCtrl1.Bmp != null)
+            {
+                Bitmap? bmp = new Bitmap(this.helplineRulerCtrl1.Bmp);
+
+                this.SetBitmap(ref this._bmpMatte, ref bmp);
+                this.pictureBox1.Image = this._bmpMatte;
+                this.pictureBox1.Refresh();
+
+                _undoOPCache?.Add(bmp);
+
+                this._pic_changed = true;
+            }
+        }
     }
 }

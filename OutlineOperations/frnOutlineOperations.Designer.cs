@@ -70,6 +70,9 @@
             openFileDialog1 = new OpenFileDialog();
             backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             panel1 = new Panel();
+            label12 = new Label();
+            label11 = new Label();
+            cbWipeAlpha = new CheckBox();
             cbExcludeRegions = new CheckBox();
             panel2 = new Panel();
             label10 = new Label();
@@ -80,6 +83,8 @@
             label6 = new Label();
             label5 = new Label();
             btnAlphaZAndGain = new Button();
+            numAlpha = new NumericUpDown();
+            numPenSize = new NumericUpDown();
             numAlphaZAndGain = new NumericUpDown();
             btnSetGamma = new Button();
             label4 = new Label();
@@ -102,11 +107,7 @@
             backgroundWorker5 = new System.ComponentModel.BackgroundWorker();
             backgroundWorker9 = new System.ComponentModel.BackgroundWorker();
             helplineRulerCtrl1 = new HelplineRulerControl.HelplineRulerCtrl();
-            cbWipeAlpha = new CheckBox();
-            label11 = new Label();
-            label12 = new Label();
-            numPenSize = new NumericUpDown();
-            numAlpha = new NumericUpDown();
+            btnSetAsMatte = new Button();
             statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numEpsilon).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numKernel).BeginInit();
@@ -120,10 +121,10 @@
             ((System.ComponentModel.ISupportInitialize)numDrawWidth).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox2).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)numAlpha).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)numPenSize).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numAlphaZAndGain).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numGamma).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)numPenSize).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)numAlpha).BeginInit();
             SuspendLayout();
             // 
             // panel3
@@ -524,6 +525,7 @@
             // 
             // panel1
             // 
+            panel1.Controls.Add(btnSetAsMatte);
             panel1.Controls.Add(label12);
             panel1.Controls.Add(label11);
             panel1.Controls.Add(cbWipeAlpha);
@@ -587,6 +589,34 @@
             panel1.TabIndex = 243;
             panel1.MouseDoubleClick += panel1_MouseDoubleClick;
             panel1.MouseDown += panel1_MouseDown;
+            // 
+            // label12
+            // 
+            label12.AutoSize = true;
+            label12.Location = new Point(564, 127);
+            label12.Name = "label12";
+            label12.Size = new Size(38, 15);
+            label12.TabIndex = 743;
+            label12.Text = "Alpha";
+            // 
+            // label11
+            // 
+            label11.AutoSize = true;
+            label11.Location = new Point(473, 127);
+            label11.Name = "label11";
+            label11.Size = new Size(47, 15);
+            label11.TabIndex = 743;
+            label11.Text = "PenSize";
+            // 
+            // cbWipeAlpha
+            // 
+            cbWipeAlpha.AutoSize = true;
+            cbWipeAlpha.Location = new Point(384, 127);
+            cbWipeAlpha.Name = "cbWipeAlpha";
+            cbWipeAlpha.Size = new Size(82, 19);
+            cbWipeAlpha.TabIndex = 742;
+            cbWipeAlpha.Text = "wipeAlpha";
+            cbWipeAlpha.UseVisualStyleBackColor = true;
             // 
             // cbExcludeRegions
             // 
@@ -692,6 +722,29 @@
             btnAlphaZAndGain.Text = "Go";
             btnAlphaZAndGain.UseVisualStyleBackColor = true;
             btnAlphaZAndGain.Click += btnAlphaZAndGain_Click;
+            // 
+            // numAlpha
+            // 
+            numAlpha.DecimalPlaces = 2;
+            numAlpha.Increment = new decimal(new int[] { 1, 0, 0, 65536 });
+            numAlpha.Location = new Point(564, 148);
+            numAlpha.Margin = new Padding(4, 3, 4, 3);
+            numAlpha.Maximum = new decimal(new int[] { 1, 0, 0, 0 });
+            numAlpha.Name = "numAlpha";
+            numAlpha.Size = new Size(70, 23);
+            numAlpha.TabIndex = 724;
+            numAlpha.Value = new decimal(new int[] { 7, 0, 0, 65536 });
+            // 
+            // numPenSize
+            // 
+            numPenSize.Location = new Point(473, 148);
+            numPenSize.Margin = new Padding(4, 3, 4, 3);
+            numPenSize.Maximum = new decimal(new int[] { 255, 0, 0, 0 });
+            numPenSize.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
+            numPenSize.Name = "numPenSize";
+            numPenSize.Size = new Size(70, 23);
+            numPenSize.TabIndex = 724;
+            numPenSize.Value = new decimal(new int[] { 5, 0, 0, 0 });
             // 
             // numAlphaZAndGain
             // 
@@ -945,56 +998,16 @@
             helplineRulerCtrl1.ZoomSetManually = false;
             helplineRulerCtrl1.DBPanelDblClicked += helplineRulerCtrl1_DBPanelDblClicked;
             // 
-            // cbWipeAlpha
+            // btnSetAsMatte
             // 
-            cbWipeAlpha.AutoSize = true;
-            cbWipeAlpha.Location = new Point(384, 127);
-            cbWipeAlpha.Name = "cbWipeAlpha";
-            cbWipeAlpha.Size = new Size(82, 19);
-            cbWipeAlpha.TabIndex = 742;
-            cbWipeAlpha.Text = "wipeAlpha";
-            cbWipeAlpha.UseVisualStyleBackColor = true;
-            // 
-            // label11
-            // 
-            label11.AutoSize = true;
-            label11.Location = new Point(473, 127);
-            label11.Name = "label11";
-            label11.Size = new Size(47, 15);
-            label11.TabIndex = 743;
-            label11.Text = "PenSize";
-            // 
-            // label12
-            // 
-            label12.AutoSize = true;
-            label12.Location = new Point(564, 127);
-            label12.Name = "label12";
-            label12.Size = new Size(38, 15);
-            label12.TabIndex = 743;
-            label12.Text = "Alpha";
-            // 
-            // numPenSize
-            // 
-            numPenSize.Location = new Point(473, 148);
-            numPenSize.Margin = new Padding(4, 3, 4, 3);
-            numPenSize.Maximum = new decimal(new int[] { 255, 0, 0, 0 });
-            numPenSize.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
-            numPenSize.Name = "numPenSize";
-            numPenSize.Size = new Size(70, 23);
-            numPenSize.TabIndex = 724;
-            numPenSize.Value = new decimal(new int[] { 5, 0, 0, 0 });
-            // 
-            // numAlpha
-            // 
-            numAlpha.DecimalPlaces = 2;
-            numAlpha.Increment = new decimal(new int[] { 1, 0, 0, 65536 });
-            numAlpha.Location = new Point(564, 148);
-            numAlpha.Margin = new Padding(4, 3, 4, 3);
-            numAlpha.Maximum = new decimal(new int[] { 1, 0, 0, 0 });
-            numAlpha.Name = "numAlpha";
-            numAlpha.Size = new Size(70, 23);
-            numAlpha.TabIndex = 724;
-            numAlpha.Value = new decimal(new int[] { 7, 0, 0, 65536 });
+            btnSetAsMatte.Location = new Point(14, 139);
+            btnSetAsMatte.Margin = new Padding(4, 3, 4, 3);
+            btnSetAsMatte.Name = "btnSetAsMatte";
+            btnSetAsMatte.Size = new Size(114, 27);
+            btnSetAsMatte.TabIndex = 744;
+            btnSetAsMatte.Text = "Set cur as Matte";
+            btnSetAsMatte.UseVisualStyleBackColor = true;
+            btnSetAsMatte.Click += btnSetAsMatte_Click;
             // 
             // frnOutlineOperations
             // 
@@ -1026,10 +1039,10 @@
             ((System.ComponentModel.ISupportInitialize)numDrawWidth).EndInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox2).EndInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
+            ((System.ComponentModel.ISupportInitialize)numAlpha).EndInit();
+            ((System.ComponentModel.ISupportInitialize)numPenSize).EndInit();
             ((System.ComponentModel.ISupportInitialize)numAlphaZAndGain).EndInit();
             ((System.ComponentModel.ISupportInitialize)numGamma).EndInit();
-            ((System.ComponentModel.ISupportInitialize)numPenSize).EndInit();
-            ((System.ComponentModel.ISupportInitialize)numAlpha).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -1114,5 +1127,6 @@
         private CheckBox cbWipeAlpha;
         private NumericUpDown numAlpha;
         private NumericUpDown numPenSize;
+        internal Button btnSetAsMatte;
     }
 }
