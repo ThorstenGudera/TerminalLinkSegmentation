@@ -2569,6 +2569,11 @@ namespace AvoidAGrabCutEasy
         {
             Bitmap? bmpBlend = null;
 
+            if (this.cbOrdinaryDraw.Checked)
+                if (MessageBox.Show("Ordinary draw checkBox is checked. Maybe you want to uncheck it first, since else normal drawing will be done, no poisson blending.",
+                    "", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) == DialogResult.Yes)
+                    return;
+
             if (this.cbUseCustomReBlendPic.Checked)
             {
                 if (this._bmpPenStrokes != null)
@@ -2580,13 +2585,8 @@ namespace AvoidAGrabCutEasy
                     Bitmap bmpDrawTo = new Bitmap(this.helplineRulerCtrl2.Bmp);
 
                     this.SetControls(false);
-                    object[] o = new object[] { bmpDrawTo, bmp, this.cmbAlg.SelectedIndex,
-                            (double)this.numUpperWeight.Value, (double)this.numLowerWeight.Value,
-                            (int)this.numMaxPixelDist.Value, (double)this.numGamma.Value,
-                            this.cbOrdinaryDraw.Checked, (float)this.numOpacityOrdDraw.Value};
 
-                    if (!this.backgroundWorker1.IsBusy)
-                        this.backgroundWorker1.RunWorkerAsync(o);
+                    ProcessImage(bmpDrawTo, bmp);
                 }
                 else
                 {
@@ -2626,13 +2626,7 @@ namespace AvoidAGrabCutEasy
                             Bitmap bmpDrawTo = new Bitmap(this.helplineRulerCtrl2.Bmp);
 
                             this.SetControls(false);
-                            object[] o = new object[] { bmpDrawTo, bmpBlend, this.cmbAlg.SelectedIndex,
-                                (double)this.numUpperWeight.Value, (double)this.numLowerWeight.Value,
-                                (int)this.numMaxPixelDist.Value, (double)this.numGamma.Value,
-                                this.cbOrdinaryDraw.Checked, (float)this.numOpacityOrdDraw.Value};
-
-                            if (!this.backgroundWorker1.IsBusy)
-                                this.backgroundWorker1.RunWorkerAsync(o);
+                            ProcessImage(bmpDrawTo, bmpBlend);
                         }
                         else
                         {
@@ -2719,13 +2713,7 @@ namespace AvoidAGrabCutEasy
                             {
                                 SetPicToPB(bmpBlend);
 
-                                object[] o = new object[] { bmpDrawTo, bmpBlend, this.cmbAlg.SelectedIndex,
-                                    (double)this.numUpperWeight.Value, (double)this.numLowerWeight.Value,
-                                    (int)this.numMaxPixelDist.Value, (double)this.numGamma.Value,
-                                    this.cbOrdinaryDraw.Checked, (float)this.numOpacityOrdDraw.Value};
-
-                                if (!this.backgroundWorker1.IsBusy)
-                                    this.backgroundWorker1.RunWorkerAsync(o);
+                                ProcessImage(bmpDrawTo, bmpBlend);
                             }
                             else
                             {
@@ -2736,13 +2724,7 @@ namespace AvoidAGrabCutEasy
                         }
                         else
                         {
-                            object[] o = new object[] { bmpDrawTo, bmpBlend, this.cmbAlg.SelectedIndex,
-                            (double)this.numUpperWeight.Value, (double)this.numLowerWeight.Value,
-                            (int)this.numMaxPixelDist.Value, (double)this.numGamma.Value,
-                            this.cbOrdinaryDraw.Checked, (float)this.numOpacityOrdDraw.Value};
-
-                            if (!this.backgroundWorker1.IsBusy)
-                                this.backgroundWorker1.RunWorkerAsync(o);
+                            ProcessImage(bmpDrawTo, bmpBlend);
                         }
                     }
                     else if (this.helplineRulerCtrl2.Bmp != null && this.helplineRulerCtrl1.Bmp != null && this.Paths != null &&
@@ -2832,13 +2814,7 @@ namespace AvoidAGrabCutEasy
 
                             SetPicToPB(bmpBlend);
 
-                            object[] o = new object[] { bmpDrawTo, bmpBlend, this.cmbAlg.SelectedIndex,
-                                        (double)this.numUpperWeight.Value, (double)this.numLowerWeight.Value,
-                                        (int)this.numMaxPixelDist.Value, (double)this.numGamma.Value,
-                                        this.cbOrdinaryDraw.Checked, (float)this.numOpacityOrdDraw.Value};
-
-                            if (!this.backgroundWorker1.IsBusy)
-                                this.backgroundWorker1.RunWorkerAsync(o);
+                            ProcessImage(bmpDrawTo, bmpBlend);
 
                         }
                         else
