@@ -2582,7 +2582,8 @@ namespace AvoidAGrabCutEasy
                     this.SetControls(false);
                     object[] o = new object[] { bmpDrawTo, bmp, this.cmbAlg.SelectedIndex,
                             (double)this.numUpperWeight.Value, (double)this.numLowerWeight.Value,
-                            (int)this.numMaxPixelDist.Value, (double)this.numGamma.Value};
+                            (int)this.numMaxPixelDist.Value, (double)this.numGamma.Value,
+                            this.cbOrdinaryDraw.Checked, (float)this.numOpacityOrdDraw.Value};
 
                     if (!this.backgroundWorker1.IsBusy)
                         this.backgroundWorker1.RunWorkerAsync(o);
@@ -2627,7 +2628,8 @@ namespace AvoidAGrabCutEasy
                             this.SetControls(false);
                             object[] o = new object[] { bmpDrawTo, bmpBlend, this.cmbAlg.SelectedIndex,
                                 (double)this.numUpperWeight.Value, (double)this.numLowerWeight.Value,
-                                (int)this.numMaxPixelDist.Value, (double)this.numGamma.Value};
+                                (int)this.numMaxPixelDist.Value, (double)this.numGamma.Value,
+                                this.cbOrdinaryDraw.Checked, (float)this.numOpacityOrdDraw.Value};
 
                             if (!this.backgroundWorker1.IsBusy)
                                 this.backgroundWorker1.RunWorkerAsync(o);
@@ -2719,7 +2721,8 @@ namespace AvoidAGrabCutEasy
 
                                 object[] o = new object[] { bmpDrawTo, bmpBlend, this.cmbAlg.SelectedIndex,
                                     (double)this.numUpperWeight.Value, (double)this.numLowerWeight.Value,
-                                    (int)this.numMaxPixelDist.Value, (double)this.numGamma.Value};
+                                    (int)this.numMaxPixelDist.Value, (double)this.numGamma.Value,
+                                    this.cbOrdinaryDraw.Checked, (float)this.numOpacityOrdDraw.Value};
 
                                 if (!this.backgroundWorker1.IsBusy)
                                     this.backgroundWorker1.RunWorkerAsync(o);
@@ -2735,7 +2738,8 @@ namespace AvoidAGrabCutEasy
                         {
                             object[] o = new object[] { bmpDrawTo, bmpBlend, this.cmbAlg.SelectedIndex,
                             (double)this.numUpperWeight.Value, (double)this.numLowerWeight.Value,
-                            (int)this.numMaxPixelDist.Value, (double)this.numGamma.Value};
+                            (int)this.numMaxPixelDist.Value, (double)this.numGamma.Value,
+                            this.cbOrdinaryDraw.Checked, (float)this.numOpacityOrdDraw.Value};
 
                             if (!this.backgroundWorker1.IsBusy)
                                 this.backgroundWorker1.RunWorkerAsync(o);
@@ -2830,7 +2834,8 @@ namespace AvoidAGrabCutEasy
 
                             object[] o = new object[] { bmpDrawTo, bmpBlend, this.cmbAlg.SelectedIndex,
                                         (double)this.numUpperWeight.Value, (double)this.numLowerWeight.Value,
-                                        (int)this.numMaxPixelDist.Value, (double)this.numGamma.Value};
+                                        (int)this.numMaxPixelDist.Value, (double)this.numGamma.Value,
+                                        this.cbOrdinaryDraw.Checked, (float)this.numOpacityOrdDraw.Value};
 
                             if (!this.backgroundWorker1.IsBusy)
                                 this.backgroundWorker1.RunWorkerAsync(o);
