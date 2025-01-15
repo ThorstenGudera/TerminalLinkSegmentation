@@ -1271,20 +1271,17 @@ namespace AvoidAGrabCutEasy
 
         private void button2_Click(object sender, EventArgs e)
         {
-            if (this.helplineRulerCtrl1.Bmp != null)
+            try
             {
-                try
+                if (this.helplineRulerCtrl2.Bmp != null && this.saveFileDialog1.ShowDialog() == DialogResult.OK)
                 {
-                    if (this.helplineRulerCtrl1.Bmp != null && this.saveFileDialog1.ShowDialog() == DialogResult.OK)
-                    {
-                        this.helplineRulerCtrl1.Bmp.Save(this.saveFileDialog1.FileName, System.Drawing.Imaging.ImageFormat.Png);
-                        _pic_changed = false;
-                    }
+                    this.helplineRulerCtrl2.Bmp.Save(this.saveFileDialog1.FileName, System.Drawing.Imaging.ImageFormat.Png);
+                    _pic_changed = false;
                 }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.Message);
-                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
             }
         }
 
@@ -3741,6 +3738,19 @@ namespace AvoidAGrabCutEasy
 
                 this._tb?.ResetTransform();
                 this._tb?.TranslateTransform(dx, dy);
+            }
+        }
+
+        private void btnSaveHLC1_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (this.helplineRulerCtrl1.Bmp != null && this.saveFileDialog1.ShowDialog() == DialogResult.OK)
+                    this.helplineRulerCtrl1.Bmp.Save(this.saveFileDialog1.FileName, System.Drawing.Imaging.ImageFormat.Png);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
             }
         }
     }

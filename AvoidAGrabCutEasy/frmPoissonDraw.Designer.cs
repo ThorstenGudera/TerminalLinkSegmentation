@@ -164,6 +164,7 @@ namespace AvoidAGrabCutEasy
             helplineRulerCtrl2 = new HelplineRulerCtrl();
             backgroundWorker2 = new System.ComponentModel.BackgroundWorker();
             colorDialog1 = new ColorDialog();
+            btnSaveHLC1 = new Button();
             ((System.ComponentModel.ISupportInitialize)numSrcPtSurround).BeginInit();
             statusStrip1.SuspendLayout();
             panel1.SuspendLayout();
@@ -472,6 +473,7 @@ namespace AvoidAGrabCutEasy
             // 
             // panel1
             // 
+            panel1.Controls.Add(btnSaveHLC1);
             panel1.Controls.Add(cbOrdinaryDraw);
             panel1.Controls.Add(label14);
             panel1.Controls.Add(numOpacityOrdDraw);
@@ -820,7 +822,7 @@ namespace AvoidAGrabCutEasy
             // label6
             // 
             label6.AutoSize = true;
-            label6.Location = new Point(473, 153);
+            label6.Location = new Point(527, 153);
             label6.Name = "label6";
             label6.Size = new Size(175, 15);
             label6.TabIndex = 765;
@@ -828,7 +830,7 @@ namespace AvoidAGrabCutEasy
             // 
             // btnSaveStrokes
             // 
-            btnSaveStrokes.Location = new Point(660, 146);
+            btnSaveStrokes.Location = new Point(714, 146);
             btnSaveStrokes.Name = "btnSaveStrokes";
             btnSaveStrokes.Size = new Size(88, 28);
             btnSaveStrokes.TabIndex = 764;
@@ -1106,6 +1108,16 @@ namespace AvoidAGrabCutEasy
             colorDialog1.AnyColor = true;
             colorDialog1.FullOpen = true;
             // 
+            // btnSaveHLC1
+            // 
+            btnSaveHLC1.Location = new Point(400, 146);
+            btnSaveHLC1.Name = "btnSaveHLC1";
+            btnSaveHLC1.Size = new Size(88, 28);
+            btnSaveHLC1.TabIndex = 785;
+            btnSaveHLC1.Text = "save HLC1";
+            btnSaveHLC1.UseVisualStyleBackColor = true;
+            btnSaveHLC1.Click += btnSaveHLC1_Click;
+            // 
             // frmPoissonDraw
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -1231,5 +1243,6 @@ namespace AvoidAGrabCutEasy
         private CheckBox cbOrdinaryDraw;
         private Label label14;
         private NumericUpDown numOpacityOrdDraw;
+        private Button btnSaveHLC1;
     }
 }
