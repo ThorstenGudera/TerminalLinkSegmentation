@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\AvailMem\AvailMem.vbproj" />
+    <ProjectReference Include="..\Cache\Cache.vbproj" />
+    <ProjectReference Include="..\ChainCodeFinder\ChainCodeFinder.vbproj" />
+    <ProjectReference Include="..\ColorCurves\ColorCurves.vbproj" />
+    <ProjectReference Include="..\ConvolutionLib\ConvolutionLib.vbproj" />
+    <ProjectReference Include="..\HelplineRulerControl\HelplineRulerControl.vbproj" />
+    <ProjectReference Include="..\LUBitmapDesigner\LUBitmapDesigner.csproj" />
+    <ProjectReference Include="..\OutlineOperations\OutlineOperations.csproj" />
+    <ProjectReference Include="..\PoissonBlend\PoissonBlend.vbproj" />
+    <ProjectReference Include="..\PseudoShadow\PseudoShadow.csproj" />
+    <ProjectReference Include="..\QuickExtract2\QuickExtract2.csproj" />
+  </ItemGroup>
+
+</Project>

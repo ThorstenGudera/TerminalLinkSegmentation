@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\AvailMem\AvailMem.vbproj" />
+    <ProjectReference Include="..\Cache\Cache.vbproj" />
+    <ProjectReference Include="..\ChainCodeFinder\ChainCodeFinder.vbproj" />
+    <ProjectReference Include="..\HelperFunctions\HelperFunctions.vbproj" />
+    <ProjectReference Include="..\HelplineRulerControl\HelplineRulerControl.vbproj" />
+    <ProjectReference Include="..\QuickExtractingLib2\QuickExtractingLib2.csproj" />
+  </ItemGroup>
+
+</Project>
