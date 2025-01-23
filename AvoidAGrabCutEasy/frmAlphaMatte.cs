@@ -2044,7 +2044,7 @@ namespace AvoidAGrabCutEasy
                 bool group = false;
                 int groupAmountX = scalesPics ? 1 : 0; //we dont use grouping, so set it simply to 1
                 int groupAmountY = scalesPics ? 1 : 0;
-                int maxSize = bWork.Width * bWork.Height * 2;
+                int maxSize = this.cbInterpolated.Checked ? (int)this.numMaxSize.Value * 2 : (int)this.numMaxSize.Value;
                 bool trySingleTile = /*scalesPics ? false : this.cbHalfSize.Checked ? true :*/ bWork.Width * bWork.Height < maxSize ? true : false;
                 bool verifyTrimaps = false;
 
