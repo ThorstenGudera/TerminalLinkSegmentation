@@ -62,6 +62,7 @@
             cbLSBmp = new CheckBox();
             Label20 = new Label();
             panel1 = new Panel();
+            btnTScribbles = new Button();
             cbExcludeRegions = new CheckBox();
             btnOutlineOperations = new Button();
             label11 = new Label();
@@ -119,7 +120,6 @@
             backgroundWorker5 = new System.ComponentModel.BackgroundWorker();
             backgroundWorker3 = new System.ComponentModel.BackgroundWorker();
             backgroundWorker4 = new System.ComponentModel.BackgroundWorker();
-            btnTScribbles = new Button();
             statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
@@ -533,6 +533,16 @@
             panel1.Size = new Size(1479, 227);
             panel1.TabIndex = 226;
             // 
+            // btnTScribbles
+            // 
+            btnTScribbles.Location = new Point(355, 185);
+            btnTScribbles.Name = "btnTScribbles";
+            btnTScribbles.Size = new Size(113, 23);
+            btnTScribbles.TabIndex = 724;
+            btnTScribbles.Text = "translate scribbles";
+            btnTScribbles.UseVisualStyleBackColor = true;
+            btnTScribbles.Click += btnTScribbles_Click;
+            // 
             // cbExcludeRegions
             // 
             cbExcludeRegions.AutoSize = true;
@@ -812,14 +822,14 @@
             // 
             // numError
             // 
-            numError.DecimalPlaces = 4;
+            numError.DecimalPlaces = 7;
             numError.Increment = new decimal(new int[] { 1, 0, 0, 65536 });
-            numError.Location = new Point(58, 25);
+            numError.Location = new Point(47, 25);
             numError.Margin = new Padding(4, 3, 4, 3);
             numError.Maximum = new decimal(new int[] { 1, 0, 0, 0 });
-            numError.Minimum = new decimal(new int[] { 1, 0, 0, 262144 });
+            numError.Minimum = new decimal(new int[] { 1, 0, 0, 458752 });
             numError.Name = "numError";
-            numError.Size = new Size(70, 23);
+            numError.Size = new Size(81, 23);
             numError.TabIndex = 690;
             numError.Value = new decimal(new int[] { 1, 0, 0, 131072 });
             numError.ValueChanged += numError_ValueChanged;
@@ -1157,16 +1167,6 @@
             backgroundWorker4.WorkerSupportsCancellation = true;
             backgroundWorker4.DoWork += backgroundWorker4_DoWork;
             backgroundWorker4.RunWorkerCompleted += backgroundWorker4_RunWorkerCompleted;
-            // 
-            // btnTScribbles
-            // 
-            btnTScribbles.Location = new Point(355, 185);
-            btnTScribbles.Name = "btnTScribbles";
-            btnTScribbles.Size = new Size(113, 23);
-            btnTScribbles.TabIndex = 724;
-            btnTScribbles.Text = "translate scribbles";
-            btnTScribbles.UseVisualStyleBackColor = true;
-            btnTScribbles.Click += btnTScribbles_Click;
             // 
             // frmAlphaMatte
             // 
