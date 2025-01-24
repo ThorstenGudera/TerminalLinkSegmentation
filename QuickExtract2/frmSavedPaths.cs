@@ -14,6 +14,7 @@ using System.Windows.Forms;
 using System.Text.Json.Serialization;
 using System.Text.Json;
 using System.Net.Http.Json;
+using ChainCodeFinder;
 
 namespace QuickExtract2
 {
@@ -31,28 +32,32 @@ namespace QuickExtract2
         public List<List<List<PointF>>>? PathList { get; set; }
         public List<List<PointF>>? CurPath { get; set; }
 
+        private object _lockObject = new object();
+
+        public event EventHandler<string>? BoundaryError;
+
         public frmSavedPaths(Bitmap bmp, List<List<PointF>> curPath, List<List<List<PointF>>>? pathList)
         {
             InitializeComponent();
 
-            this.HelplineRulerCtrl1.Bmp = new Bitmap(bmp);
+            this.helplineRulerCtrl1.Bmp = new Bitmap(bmp);
 
             // Me.HelplineRulerCtrl1.SetZoomOnlyByMethodCall = True
 
-            double faktor = System.Convert.ToDouble(HelplineRulerCtrl1.dbPanel1.Width) / System.Convert.ToDouble(HelplineRulerCtrl1.dbPanel1.Height);
-            double multiplier = System.Convert.ToDouble(this.HelplineRulerCtrl1.Bmp.Width) / System.Convert.ToDouble(this.HelplineRulerCtrl1.Bmp.Height);
+            double faktor = System.Convert.ToDouble(helplineRulerCtrl1.dbPanel1.Width) / System.Convert.ToDouble(helplineRulerCtrl1.dbPanel1.Height);
+            double multiplier = System.Convert.ToDouble(this.helplineRulerCtrl1.Bmp.Width) / System.Convert.ToDouble(this.helplineRulerCtrl1.Bmp.Height);
             if (multiplier >= faktor)
-                this.HelplineRulerCtrl1.Zoom = System.Convert.ToSingle(System.Convert.ToDouble(HelplineRulerCtrl1.dbPanel1.Width) / System.Convert.ToDouble(this.HelplineRulerCtrl1.Bmp.Width));
+                this.helplineRulerCtrl1.Zoom = System.Convert.ToSingle(System.Convert.ToDouble(helplineRulerCtrl1.dbPanel1.Width) / System.Convert.ToDouble(this.helplineRulerCtrl1.Bmp.Width));
             else
-                this.HelplineRulerCtrl1.Zoom = System.Convert.ToSingle(System.Convert.ToDouble(HelplineRulerCtrl1.dbPanel1.Height) / System.Convert.ToDouble(this.HelplineRulerCtrl1.Bmp.Height));
+                this.helplineRulerCtrl1.Zoom = System.Convert.ToSingle(System.Convert.ToDouble(helplineRulerCtrl1.dbPanel1.Height) / System.Convert.ToDouble(this.helplineRulerCtrl1.Bmp.Height));
 
-            this.HelplineRulerCtrl1.dbPanel1.AutoScrollMinSize = new Size(System.Convert.ToInt32(this.HelplineRulerCtrl1.Bmp.Width * this.HelplineRulerCtrl1.Zoom), System.Convert.ToInt32(this.HelplineRulerCtrl1.Bmp.Height * this.HelplineRulerCtrl1.Zoom));
-            this.HelplineRulerCtrl1.MakeBitmap(this.HelplineRulerCtrl1.Bmp);
+            this.helplineRulerCtrl1.dbPanel1.AutoScrollMinSize = new Size(System.Convert.ToInt32(this.helplineRulerCtrl1.Bmp.Width * this.helplineRulerCtrl1.Zoom), System.Convert.ToInt32(this.helplineRulerCtrl1.Bmp.Height * this.helplineRulerCtrl1.Zoom));
+            this.helplineRulerCtrl1.MakeBitmap(this.helplineRulerCtrl1.Bmp);
 
-            this.HelplineRulerCtrl1.AddDefaultHelplines();
-            this.HelplineRulerCtrl1.ResetAllHelpLineLabelsColor();
+            this.helplineRulerCtrl1.AddDefaultHelplines();
+            this.helplineRulerCtrl1.ResetAllHelpLineLabelsColor();
 
-            this.HelplineRulerCtrl1.PostPaint += Helplinerulerctrl1_Paint;
+            this.helplineRulerCtrl1.PostPaint += Helplinerulerctrl1_Paint;
 
             if (pathList != null && pathList.Count > 0)
             {
@@ -88,9 +93,9 @@ namespace QuickExtract2
                         }
 
                         float w = System.Convert.ToSingle(this.NumericUpDown1.Value);
-                        int x = this.HelplineRulerCtrl1.dbPanel1.AutoScrollPosition.X;
-                        int y = this.HelplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y;
-                        using (Matrix m = new Matrix(this.HelplineRulerCtrl1.Zoom, 0, 0, this.HelplineRulerCtrl1.Zoom, x, y))
+                        int x = this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X;
+                        int y = this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y;
+                        using (Matrix m = new Matrix(this.helplineRulerCtrl1.Zoom, 0, 0, this.helplineRulerCtrl1.Zoom, x, y))
                         {
                             gp.Transform(m);
                             using (Pen pen = new Pen(new SolidBrush(this._cpColor), w))
@@ -115,9 +120,9 @@ namespace QuickExtract2
                         }
 
                         float w = System.Convert.ToSingle(this.NumericUpDown1.Value);
-                        int x = this.HelplineRulerCtrl1.dbPanel1.AutoScrollPosition.X;
-                        int y = this.HelplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y;
-                        using (Matrix m = new Matrix(this.HelplineRulerCtrl1.Zoom, 0, 0, this.HelplineRulerCtrl1.Zoom, x, y))
+                        int x = this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X;
+                        int y = this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y;
+                        using (Matrix m = new Matrix(this.helplineRulerCtrl1.Zoom, 0, 0, this.helplineRulerCtrl1.Zoom, x, y))
                         {
                             gp.Transform(m);
                             using (Pen pen = new Pen(new SolidBrush(this._highlightColor), w))
@@ -149,9 +154,9 @@ namespace QuickExtract2
                             }
 
                             float w = System.Convert.ToSingle(this.NumericUpDown1.Value);
-                            int x = this.HelplineRulerCtrl1.dbPanel1.AutoScrollPosition.X;
-                            int y = this.HelplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y;
-                            using (Matrix m = new Matrix(this.HelplineRulerCtrl1.Zoom, 0, 0, this.HelplineRulerCtrl1.Zoom, x, y))
+                            int x = this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X;
+                            int y = this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y;
+                            using (Matrix m = new Matrix(this.helplineRulerCtrl1.Zoom, 0, 0, this.helplineRulerCtrl1.Zoom, x, y))
                             {
                                 gp.Transform(m);
                                 using (Pen pen = new Pen(new SolidBrush(this._highlightColor), w))
@@ -178,9 +183,9 @@ namespace QuickExtract2
                             }
 
                             float w = System.Convert.ToSingle(this.NumericUpDown1.Value);
-                            int x = this.HelplineRulerCtrl1.dbPanel1.AutoScrollPosition.X;
-                            int y = this.HelplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y;
-                            using (Matrix m = new Matrix(this.HelplineRulerCtrl1.Zoom, 0, 0, this.HelplineRulerCtrl1.Zoom, x, y))
+                            int x = this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X;
+                            int y = this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y;
+                            using (Matrix m = new Matrix(this.helplineRulerCtrl1.Zoom, 0, 0, this.helplineRulerCtrl1.Zoom, x, y))
                             {
                                 gp.Transform(m);
                                 using (Pen pen = new Pen(new SolidBrush(this._highlightColor), w))
@@ -199,12 +204,12 @@ namespace QuickExtract2
             if (this.ListBox1.SelectedIndex > -1 && this.PathList != null)
             {
                 this._selectedPath = this.PathList[this.ListBox1.SelectedIndex];
-                this.HelplineRulerCtrl1.dbPanel1.Invalidate();
+                this.helplineRulerCtrl1.dbPanel1.Invalidate();
             }
             else
             {
                 this._selectedPath = null;
-                this.HelplineRulerCtrl1.dbPanel1.Invalidate();
+                this.helplineRulerCtrl1.dbPanel1.Invalidate();
             }
         }
 
@@ -220,14 +225,14 @@ namespace QuickExtract2
 
                 this.Button13.BackColor = this._highlightColor;
                 this.CheckBox4.BackColor = this._cpColor;
-                this.HelplineRulerCtrl1.dbPanel1.Invalidate();
+                this.helplineRulerCtrl1.dbPanel1.Invalidate();
             }
         }
 
         private void NumericUpDown1_ValueChanged(object sender, EventArgs e)
         {
-            if (this.HelplineRulerCtrl1.Bmp != null)
-                this.HelplineRulerCtrl1.dbPanel1.Invalidate();
+            if (this.helplineRulerCtrl1.Bmp != null)
+                this.helplineRulerCtrl1.dbPanel1.Invalidate();
         }
 
         private void Button5_Click(object sender, EventArgs e)
@@ -240,7 +245,7 @@ namespace QuickExtract2
                     this.CurPath = this.PathList[this.ListBox1.SelectedIndex];
                     this.PathList[this.ListBox1.SelectedIndex] = tmp;
                     ListBox1_SelectedIndexChanged(this.ListBox1, new EventArgs());
-                    this.HelplineRulerCtrl1.dbPanel1.Invalidate();
+                    this.helplineRulerCtrl1.dbPanel1.Invalidate();
 
                     if (this.CheckBox3.Checked)
                     {
@@ -257,7 +262,7 @@ namespace QuickExtract2
         {
             this.Label4.Enabled = this.CheckBox2.Checked;
             this.Button8.Enabled = this.CheckBox2.Checked;
-            this.HelplineRulerCtrl1.dbPanel1.Invalidate();
+            this.helplineRulerCtrl1.dbPanel1.Invalidate();
         }
 
         private void Button3_Click(object sender, EventArgs e)
@@ -315,9 +320,9 @@ namespace QuickExtract2
         private void CheckBox12_CheckedChanged(object sender, EventArgs e)
         {
             if (this.CheckBox12.Checked)
-                this.HelplineRulerCtrl1.dbPanel1.BackColor = SystemColors.ControlDarkDark;
+                this.helplineRulerCtrl1.dbPanel1.BackColor = SystemColors.ControlDarkDark;
             else
-                this.HelplineRulerCtrl1.dbPanel1.BackColor = SystemColors.Control;
+                this.helplineRulerCtrl1.dbPanel1.BackColor = SystemColors.Control;
         }
 
         private void Form8_Load(object sender, EventArgs e)
@@ -451,7 +456,7 @@ namespace QuickExtract2
                     for (int i = 0; i <= f.CheckedListBox1.CheckedIndices.Count - 1; i++)
                         this._checkedPaths.Add(f.CheckedListBox1.CheckedIndices[i]);
                 }
-                this.HelplineRulerCtrl1.dbPanel1.Invalidate();
+                this.helplineRulerCtrl1.dbPanel1.Invalidate();
             }
         }
 
@@ -575,6 +580,236 @@ namespace QuickExtract2
         {
             this.ListBox1.SelectedIndex = -1;
             this.ListBox1_SelectedIndexChanged(this.ListBox1, new EventArgs());
+        }
+
+        private void btnReadPath_Click(object sender, EventArgs e)
+        {
+            if (this.IsDisposed == false && this.Visible && this.helplineRulerCtrl1.Bmp != null)
+            {
+                if (AvailMem.AvailMem.checkAvailRam(this.helplineRulerCtrl1.Bmp.Width * this.helplineRulerCtrl1.Bmp.Height * 5L))
+                {
+                    if (this.backgroundWorker2.IsBusy)
+                        this.backgroundWorker2.CancelAsync();
+
+                    SetControls(false);
+
+                    if (MessageBox.Show("Clear list?", "", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) == DialogResult.Yes)
+                    {
+                        this.ListBox1.Items.Clear();
+                        if (this.PathList == null)
+                            this.PathList = new List<List<List<PointF>>>();
+                        this.PathList.Clear();
+                    }
+
+                    Bitmap bmp = new Bitmap(this.helplineRulerCtrl1.Bmp);
+                    int mOpacity = (int)this.numChainTolerance.Value;
+
+                    this.backgroundWorker2.RunWorkerAsync(new object[] { bmp, mOpacity });
+                }
+            }
+        }
+
+        private void backgroundWorker2_DoWork(object? sender, DoWorkEventArgs e)
+        {
+            if (e.Argument != null)
+            {
+                object[] o = (object[])e.Argument;
+
+                if (o == null)
+                    return;
+
+                List<ChainCode>? l = new List<ChainCode>();
+
+                using (Bitmap bmp = (Bitmap)o[0])
+                {
+                    bool transpMode = true;
+                    int minOpacity = (int)o[1];
+                    l = GetBoundary(bmp, minOpacity, transpMode);
+
+                    if (l != null)
+                    {
+                        foreach (ChainCode c in l)
+                            c.SetId();
+                    }
+                }
+
+                e.Result = l;
+            }
+        }
+
+        private void backgroundWorker2_RunWorkerCompleted(object? sender, RunWorkerCompletedEventArgs e)
+        {
+            if (e.Result != null)
+            {
+                if (AvailMem.AvailMem.checkAvailRam(this.helplineRulerCtrl1.Bmp.Width * this.helplineRulerCtrl1.Bmp.Height * 5L))
+                {
+                    Bitmap bmp = new Bitmap(this.helplineRulerCtrl1.Bmp.Width, this.helplineRulerCtrl1.Bmp.Height);
+                    List<ChainCode> l = (List<ChainCode>)e.Result;
+
+                    ChainFinder cf = new ChainFinder();
+                    cf.DrawOutlineToBmp(bmp, this.helplineRulerCtrl1.Bmp, l);
+
+                    if (l != null)
+                    {
+                        if (this.PathList == null)
+                            this.PathList = new List<List<List<PointF>>>();
+
+                    l = l.OrderByDescending((a) => a.Chain.Count).ToList();
+
+                        int cnt = l.Count;
+                        if (this.cbRestrict.Checked)
+                            cnt = Math.Min(l.Count, (int)this.numRestrict.Value);
+
+                        for (int i = 0; i < cnt; i++)
+                        {
+                            this.ListBox1.Items.Add("savedPath_" + this.ListBox1.Items.Count.ToString());
+                            List<List<PointF>> list = new List<List<PointF>>();
+                            List<PointF> inner = new List<PointF>();
+                            inner.AddRange(l[i].Coord.Select(a => new PointF(a.X, a.Y)));
+                            list.Add(inner);
+                            this.PathList.Add(list);
+                        }
+                    }
+                }
+
+                this.SetControls(true);
+
+                this.backgroundWorker2.Dispose();
+                this.backgroundWorker2 = new BackgroundWorker();
+                this.backgroundWorker2.WorkerReportsProgress = true;
+                this.backgroundWorker2.WorkerSupportsCancellation = true;
+                this.backgroundWorker2.DoWork += backgroundWorker2_DoWork;
+                //this.backgroundWorker2.ProgressChanged += backgroundWorker2_ProgressChanged;
+                this.backgroundWorker2.RunWorkerCompleted += backgroundWorker2_RunWorkerCompleted;
+
+                this.helplineRulerCtrl1.dbPanel1.Invalidate();
+            }
+        }
+
+        private List<ChainCode>? GetBoundary(Bitmap upperImg, int minAlpha, bool transpMode)
+        {
+            List<ChainCode>? l = null;
+            Bitmap? bmpTmp = null;
+            try
+            {
+                if (AvailMem.AvailMem.checkAvailRam(upperImg.Width * upperImg.Height * 4L))
+                    bmpTmp = new Bitmap(upperImg);
+                else
+                    throw new Exception("Not enough memory.");
+                int nWidth = bmpTmp.Width;
+                int nHeight = bmpTmp.Height;
+                ChainFinder cf = new ChainFinder();
+
+                if (transpMode)
+                    lock (this._lockObject)
+                        l = cf.GetOutline(bmpTmp, nWidth, nHeight, minAlpha, false, 0, false, 0, false);
+                else
+                    lock (this._lockObject)
+                        l = cf.GetOutline(bmpTmp, nWidth, nHeight, minAlpha, true, 0, false, 0, false);
+            }
+            catch (Exception exc)
+            {
+                OnBoundaryError(exc.Message);
+            }
+            finally
+            {
+                if (bmpTmp != null)
+                {
+                    bmpTmp.Dispose();
+                    bmpTmp = null;
+                }
+            }
+
+            if (l != null)
+                return l;
+            else
+                return null;
+        }
+
+        private void OnBoundaryError(string message)
+        {
+            BoundaryError?.Invoke(this, message);
+        }
+
+        private void SetControls(bool e)
+        {
+            if (InvokeRequired)
+            {
+                this.Invoke(new Action(() =>
+                {
+                    foreach (Control ct in this.Panel1.Controls)
+                    {
+                        if (ct.Name != "btnCancel")
+                            ct.Enabled = e;
+
+                        if (ct is Panel)
+                        {
+                            ct.Enabled = true;
+                            foreach (Control ct2 in ct.Controls)
+                                ct2.Enabled = e;
+                        }
+                    }
+
+                    foreach (Control ct in this.Panel2.Controls)
+                    {
+                        if (ct.Name != "btnCancel")
+                            ct.Enabled = e;
+
+                        if (ct is Panel)
+                        {
+                            ct.Enabled = true;
+                            foreach (Control ct2 in ct.Controls)
+                                ct2.Enabled = e;
+                        }
+                    }
+
+                    this.helplineRulerCtrl1.Enabled = e;
+
+                    this.Cursor = e ? Cursors.Default : Cursors.WaitCursor;
+                }));
+            }
+            else
+            {
+                foreach (Control ct in this.Panel1.Controls)
+                {
+                    if (ct.Name != "btnCancel")
+                        ct.Enabled = e;
+
+                    if (ct is Panel)
+                    {
+                        ct.Enabled = true;
+                        foreach (Control ct2 in ct.Controls)
+                            ct2.Enabled = e;
+                    }
+                }
+
+                foreach (Control ct in this.Panel2.Controls)
+                {
+                    if (ct.Name != "btnCancel")
+                        ct.Enabled = e;
+
+                    if (ct is Panel)
+                    {
+                        ct.Enabled = true;
+                        foreach (Control ct2 in ct.Controls)
+                            ct2.Enabled = e;
+                    }
+                }
+
+                this.helplineRulerCtrl1.Enabled = e;
+
+                this.Cursor = e ? Cursors.Default : Cursors.WaitCursor;
+            }
+        }
+
+        private void SetBitmap(ref Bitmap? bitmapToSet, ref Bitmap bitmapToBeSet)
+        {
+            Bitmap? bOld = bitmapToSet;
+
+            bitmapToSet = bitmapToBeSet;
+
+            if (bOld != null && bOld.Equals(bitmapToBeSet) == false)
+                bOld.Dispose();
         }
     }
 }

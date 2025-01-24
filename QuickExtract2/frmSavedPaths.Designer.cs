@@ -28,364 +28,465 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.OpenFileDialog2 = new System.Windows.Forms.OpenFileDialog();
-            this.ColorDialog1 = new System.Windows.Forms.ColorDialog();
-            this.SaveFileDialog2 = new System.Windows.Forms.SaveFileDialog();
-            this.Button9 = new System.Windows.Forms.Button();
-            this.Label4 = new System.Windows.Forms.Label();
-            this.CheckBox3 = new System.Windows.Forms.CheckBox();
-            this.Panel2 = new System.Windows.Forms.Panel();
-            this.Label2 = new System.Windows.Forms.Label();
-            this.Button7 = new System.Windows.Forms.Button();
-            this.Button6 = new System.Windows.Forms.Button();
-            this.CheckBox2 = new System.Windows.Forms.CheckBox();
-            this.Button8 = new System.Windows.Forms.Button();
-            this.Button5 = new System.Windows.Forms.Button();
-            this.Label1 = new System.Windows.Forms.Label();
-            this.CheckBox1 = new System.Windows.Forms.CheckBox();
-            this.Button4 = new System.Windows.Forms.Button();
-            this.Button3 = new System.Windows.Forms.Button();
-            this.ListBox1 = new System.Windows.Forms.ListBox();
-            this.NumericUpDown1 = new System.Windows.Forms.NumericUpDown();
-            this.HelplineRulerCtrl1 = new HelplineRulerControl.HelplineRulerCtrl();
-            this.Label3 = new System.Windows.Forms.Label();
-            this.Button2 = new System.Windows.Forms.Button();
-            this.Panel1 = new System.Windows.Forms.Panel();
-            this.CheckBox4 = new System.Windows.Forms.CheckBox();
-            this.CheckBox12 = new System.Windows.Forms.CheckBox();
-            this.Button13 = new System.Windows.Forms.Button();
-            this.Button1 = new System.Windows.Forms.Button();
-            this.Panel2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.NumericUpDown1)).BeginInit();
-            this.Panel1.SuspendLayout();
-            this.SuspendLayout();
+            components = new System.ComponentModel.Container();
+            OpenFileDialog2 = new OpenFileDialog();
+            ColorDialog1 = new ColorDialog();
+            SaveFileDialog2 = new SaveFileDialog();
+            Button9 = new Button();
+            Label4 = new Label();
+            CheckBox3 = new CheckBox();
+            Panel2 = new Panel();
+            Label2 = new Label();
+            Button7 = new Button();
+            Button6 = new Button();
+            CheckBox2 = new CheckBox();
+            Button8 = new Button();
+            Button5 = new Button();
+            Label1 = new Label();
+            CheckBox1 = new CheckBox();
+            Button4 = new Button();
+            Button3 = new Button();
+            ListBox1 = new ListBox();
+            NumericUpDown1 = new NumericUpDown();
+            helplineRulerCtrl1 = new HelplineRulerControl.HelplineRulerCtrl();
+            Label3 = new Label();
+            Button2 = new Button();
+            Panel1 = new Panel();
+            cbRestrict = new CheckBox();
+            numRestrict = new NumericUpDown();
+            btnReadPath = new Button();
+            numChainTolerance = new NumericUpDown();
+            label5 = new Label();
+            label6 = new Label();
+            CheckBox4 = new CheckBox();
+            CheckBox12 = new CheckBox();
+            Button13 = new Button();
+            Button1 = new Button();
+            toolTip1 = new ToolTip(components);
+            backgroundWorker2 = new System.ComponentModel.BackgroundWorker();
+            Panel2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)NumericUpDown1).BeginInit();
+            Panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)numRestrict).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)numChainTolerance).BeginInit();
+            SuspendLayout();
             // 
             // OpenFileDialog2
             // 
-            this.OpenFileDialog2.FileName = "File1";
-            this.OpenFileDialog2.Filter = "GraphicsPath-Files (*.tggrp)|*.tggrp";
+            OpenFileDialog2.FileName = "File1";
+            OpenFileDialog2.Filter = "GraphicsPath-Files (*.tggrp)|*.tggrp";
             // 
             // ColorDialog1
             // 
-            this.ColorDialog1.AnyColor = true;
-            this.ColorDialog1.FullOpen = true;
+            ColorDialog1.AnyColor = true;
+            ColorDialog1.FullOpen = true;
             // 
             // SaveFileDialog2
             // 
-            this.SaveFileDialog2.DefaultExt = "tggrp";
-            this.SaveFileDialog2.FileName = "File1.tggrp";
-            this.SaveFileDialog2.Filter = "GraphicsPath files (*.tggrp)|*.tggrp";
-            this.SaveFileDialog2.RestoreDirectory = true;
+            SaveFileDialog2.DefaultExt = "tggrp";
+            SaveFileDialog2.FileName = "File1.tggrp";
+            SaveFileDialog2.Filter = "GraphicsPath files (*.tggrp)|*.tggrp";
+            SaveFileDialog2.RestoreDirectory = true;
             // 
             // Button9
             // 
-            this.Button9.Location = new System.Drawing.Point(98, 8);
-            this.Button9.Name = "Button9";
-            this.Button9.Size = new System.Drawing.Size(94, 23);
-            this.Button9.TabIndex = 11;
-            this.Button9.Text = "unselect ListBox";
-            this.Button9.UseVisualStyleBackColor = true;
-            this.Button9.Click += new System.EventHandler(this.Button9_Click);
+            Button9.Location = new Point(114, 9);
+            Button9.Margin = new Padding(4, 3, 4, 3);
+            Button9.Name = "Button9";
+            Button9.Size = new Size(110, 27);
+            Button9.TabIndex = 11;
+            Button9.Text = "unselect ListBox";
+            Button9.UseVisualStyleBackColor = true;
+            Button9.Click += Button9_Click;
             // 
             // Label4
             // 
-            this.Label4.AutoSize = true;
-            this.Label4.Enabled = false;
-            this.Label4.Location = new System.Drawing.Point(13, 143);
-            this.Label4.Name = "Label4";
-            this.Label4.Size = new System.Drawing.Size(98, 13);
-            this.Label4.TabIndex = 10;
-            this.Label4.Text = "Add CurPath to List";
+            Label4.AutoSize = true;
+            Label4.Enabled = false;
+            Label4.Location = new Point(15, 165);
+            Label4.Margin = new Padding(4, 0, 4, 0);
+            Label4.Name = "Label4";
+            Label4.Size = new Size(110, 15);
+            Label4.TabIndex = 10;
+            Label4.Text = "Add CurPath to List";
             // 
             // CheckBox3
             // 
-            this.CheckBox3.AutoSize = true;
-            this.CheckBox3.Checked = true;
-            this.CheckBox3.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.CheckBox3.Location = new System.Drawing.Point(119, 289);
-            this.CheckBox3.Name = "CheckBox3";
-            this.CheckBox3.Size = new System.Drawing.Size(75, 17);
-            this.CheckBox3.TabIndex = 9;
-            this.CheckBox3.Text = "save copy";
-            this.CheckBox3.UseVisualStyleBackColor = true;
+            CheckBox3.AutoSize = true;
+            CheckBox3.Checked = true;
+            CheckBox3.CheckState = CheckState.Checked;
+            CheckBox3.Location = new Point(139, 333);
+            CheckBox3.Margin = new Padding(4, 3, 4, 3);
+            CheckBox3.Name = "CheckBox3";
+            CheckBox3.Size = new Size(78, 19);
+            CheckBox3.TabIndex = 9;
+            CheckBox3.Text = "save copy";
+            CheckBox3.UseVisualStyleBackColor = true;
             // 
             // Panel2
             // 
-            this.Panel2.Controls.Add(this.Button9);
-            this.Panel2.Controls.Add(this.Label4);
-            this.Panel2.Controls.Add(this.CheckBox3);
-            this.Panel2.Controls.Add(this.Label2);
-            this.Panel2.Controls.Add(this.Button7);
-            this.Panel2.Controls.Add(this.Button6);
-            this.Panel2.Controls.Add(this.CheckBox2);
-            this.Panel2.Controls.Add(this.Button8);
-            this.Panel2.Controls.Add(this.Button5);
-            this.Panel2.Controls.Add(this.Label1);
-            this.Panel2.Controls.Add(this.CheckBox1);
-            this.Panel2.Controls.Add(this.Button4);
-            this.Panel2.Controls.Add(this.Button3);
-            this.Panel2.Controls.Add(this.ListBox1);
-            this.Panel2.Dock = System.Windows.Forms.DockStyle.Right;
-            this.Panel2.Location = new System.Drawing.Point(727, 0);
-            this.Panel2.Name = "Panel2";
-            this.Panel2.Size = new System.Drawing.Size(200, 487);
-            this.Panel2.TabIndex = 14;
+            Panel2.Controls.Add(Button9);
+            Panel2.Controls.Add(Label4);
+            Panel2.Controls.Add(CheckBox3);
+            Panel2.Controls.Add(Label2);
+            Panel2.Controls.Add(Button7);
+            Panel2.Controls.Add(Button6);
+            Panel2.Controls.Add(CheckBox2);
+            Panel2.Controls.Add(Button8);
+            Panel2.Controls.Add(Button5);
+            Panel2.Controls.Add(Label1);
+            Panel2.Controls.Add(CheckBox1);
+            Panel2.Controls.Add(Button4);
+            Panel2.Controls.Add(Button3);
+            Panel2.Controls.Add(ListBox1);
+            Panel2.Dock = DockStyle.Right;
+            Panel2.Location = new Point(849, 0);
+            Panel2.Margin = new Padding(4, 3, 4, 3);
+            Panel2.Name = "Panel2";
+            Panel2.Size = new Size(233, 576);
+            Panel2.TabIndex = 14;
             // 
             // Label2
             // 
-            this.Label2.AutoSize = true;
-            this.Label2.Location = new System.Drawing.Point(37, 333);
-            this.Label2.Name = "Label2";
-            this.Label2.Size = new System.Drawing.Size(147, 52);
-            this.Label2.TabIndex = 8;
-            this.Label2.Text = "You need to set the path you \r\nwant to work with to CurPath\r\nCurPath will be disp" +
-    "layed in \r\nthe Parent form. ";
+            Label2.AutoSize = true;
+            Label2.Location = new Point(43, 384);
+            Label2.Margin = new Padding(4, 0, 4, 0);
+            Label2.Name = "Label2";
+            Label2.Size = new Size(162, 60);
+            Label2.TabIndex = 8;
+            Label2.Text = "You need to set the path you \r\nwant to work with to CurPath\r\nCurPath will be displayed in \r\nthe Parent form. ";
             // 
             // Button7
             // 
-            this.Button7.Location = new System.Drawing.Point(37, 422);
-            this.Button7.Name = "Button7";
-            this.Button7.Size = new System.Drawing.Size(75, 23);
-            this.Button7.TabIndex = 7;
-            this.Button7.Text = "Load Path";
-            this.Button7.UseVisualStyleBackColor = true;
-            this.Button7.Click += new System.EventHandler(this.Button7_Click);
+            Button7.Location = new Point(43, 487);
+            Button7.Margin = new Padding(4, 3, 4, 3);
+            Button7.Name = "Button7";
+            Button7.Size = new Size(88, 27);
+            Button7.TabIndex = 7;
+            Button7.Text = "Load Path";
+            Button7.UseVisualStyleBackColor = true;
+            Button7.Click += Button7_Click;
             // 
             // Button6
             // 
-            this.Button6.Location = new System.Drawing.Point(117, 422);
-            this.Button6.Name = "Button6";
-            this.Button6.Size = new System.Drawing.Size(75, 23);
-            this.Button6.TabIndex = 7;
-            this.Button6.Text = "Save Path";
-            this.Button6.UseVisualStyleBackColor = true;
-            this.Button6.Click += new System.EventHandler(this.Button6_Click);
+            Button6.Location = new Point(136, 487);
+            Button6.Margin = new Padding(4, 3, 4, 3);
+            Button6.Name = "Button6";
+            Button6.Size = new Size(88, 27);
+            Button6.TabIndex = 7;
+            Button6.Text = "Save Path";
+            Button6.UseVisualStyleBackColor = true;
+            Button6.Click += Button6_Click;
             // 
             // CheckBox2
             // 
-            this.CheckBox2.AutoSize = true;
-            this.CheckBox2.Location = new System.Drawing.Point(37, 13);
-            this.CheckBox2.Name = "CheckBox2";
-            this.CheckBox2.Size = new System.Drawing.Size(64, 17);
-            this.CheckBox2.TabIndex = 6;
-            this.CheckBox2.Text = "CurPath";
-            this.CheckBox2.UseVisualStyleBackColor = true;
-            this.CheckBox2.CheckedChanged += new System.EventHandler(this.CheckBox2_CheckedChanged);
+            CheckBox2.AutoSize = true;
+            CheckBox2.Location = new Point(43, 15);
+            CheckBox2.Margin = new Padding(4, 3, 4, 3);
+            CheckBox2.Name = "CheckBox2";
+            CheckBox2.Size = new Size(69, 19);
+            CheckBox2.TabIndex = 6;
+            CheckBox2.Text = "CurPath";
+            CheckBox2.UseVisualStyleBackColor = true;
+            CheckBox2.CheckedChanged += CheckBox2_CheckedChanged;
             // 
             // Button8
             // 
-            this.Button8.Enabled = false;
-            this.Button8.Location = new System.Drawing.Point(117, 138);
-            this.Button8.Name = "Button8";
-            this.Button8.Size = new System.Drawing.Size(75, 23);
-            this.Button8.TabIndex = 5;
-            this.Button8.Text = "Add";
-            this.Button8.UseVisualStyleBackColor = true;
-            this.Button8.Click += new System.EventHandler(this.Button8_Click);
+            Button8.Enabled = false;
+            Button8.Location = new Point(136, 159);
+            Button8.Margin = new Padding(4, 3, 4, 3);
+            Button8.Name = "Button8";
+            Button8.Size = new Size(88, 27);
+            Button8.TabIndex = 5;
+            Button8.Text = "Add";
+            Button8.UseVisualStyleBackColor = true;
+            Button8.Click += Button8_Click;
             // 
             // Button5
             // 
-            this.Button5.Location = new System.Drawing.Point(37, 284);
-            this.Button5.Name = "Button5";
-            this.Button5.Size = new System.Drawing.Size(75, 23);
-            this.Button5.TabIndex = 5;
-            this.Button5.Text = "go";
-            this.Button5.UseVisualStyleBackColor = true;
-            this.Button5.Click += new System.EventHandler(this.Button5_Click);
+            Button5.Location = new Point(43, 328);
+            Button5.Margin = new Padding(4, 3, 4, 3);
+            Button5.Name = "Button5";
+            Button5.Size = new Size(88, 27);
+            Button5.TabIndex = 5;
+            Button5.Text = "go";
+            Button5.UseVisualStyleBackColor = true;
+            Button5.Click += Button5_Click;
             // 
             // Label1
             // 
-            this.Label1.AutoSize = true;
-            this.Label1.Location = new System.Drawing.Point(62, 310);
-            this.Label1.Name = "Label1";
-            this.Label1.Size = new System.Drawing.Size(95, 13);
-            this.Label1.TabIndex = 4;
-            this.Label1.Text = "swap with CurPath";
+            Label1.AutoSize = true;
+            Label1.Location = new Point(72, 358);
+            Label1.Margin = new Padding(4, 0, 4, 0);
+            Label1.Name = "Label1";
+            Label1.Size = new Size(106, 15);
+            Label1.TabIndex = 4;
+            Label1.Text = "swap with CurPath";
             // 
             // CheckBox1
             // 
-            this.CheckBox1.AutoSize = true;
-            this.CheckBox1.Checked = true;
-            this.CheckBox1.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.CheckBox1.Location = new System.Drawing.Point(118, 226);
-            this.CheckBox1.Name = "CheckBox1";
-            this.CheckBox1.Size = new System.Drawing.Size(74, 17);
-            this.CheckBox1.TabIndex = 3;
-            this.CheckBox1.Text = "shift 50 px";
-            this.CheckBox1.UseVisualStyleBackColor = true;
+            CheckBox1.AutoSize = true;
+            CheckBox1.Checked = true;
+            CheckBox1.CheckState = CheckState.Checked;
+            CheckBox1.Location = new Point(138, 261);
+            CheckBox1.Margin = new Padding(4, 3, 4, 3);
+            CheckBox1.Name = "CheckBox1";
+            CheckBox1.Size = new Size(80, 19);
+            CheckBox1.TabIndex = 3;
+            CheckBox1.Text = "shift 50 px";
+            CheckBox1.UseVisualStyleBackColor = true;
             // 
             // Button4
             // 
-            this.Button4.Location = new System.Drawing.Point(37, 222);
-            this.Button4.Name = "Button4";
-            this.Button4.Size = new System.Drawing.Size(75, 23);
-            this.Button4.TabIndex = 2;
-            this.Button4.Text = "Clone";
-            this.Button4.UseVisualStyleBackColor = true;
-            this.Button4.Click += new System.EventHandler(this.Button4_Click);
+            Button4.Location = new Point(43, 256);
+            Button4.Margin = new Padding(4, 3, 4, 3);
+            Button4.Name = "Button4";
+            Button4.Size = new Size(88, 27);
+            Button4.TabIndex = 2;
+            Button4.Text = "Clone";
+            Button4.UseVisualStyleBackColor = true;
+            Button4.Click += Button4_Click;
             // 
             // Button3
             // 
-            this.Button3.Location = new System.Drawing.Point(37, 183);
-            this.Button3.Name = "Button3";
-            this.Button3.Size = new System.Drawing.Size(75, 23);
-            this.Button3.TabIndex = 1;
-            this.Button3.Text = "Delete";
-            this.Button3.UseVisualStyleBackColor = true;
-            this.Button3.Click += new System.EventHandler(this.Button3_Click);
+            Button3.Location = new Point(43, 211);
+            Button3.Margin = new Padding(4, 3, 4, 3);
+            Button3.Name = "Button3";
+            Button3.Size = new Size(88, 27);
+            Button3.TabIndex = 1;
+            Button3.Text = "Delete";
+            Button3.UseVisualStyleBackColor = true;
+            Button3.Click += Button3_Click;
             // 
             // ListBox1
             // 
-            this.ListBox1.FormattingEnabled = true;
-            this.ListBox1.Location = new System.Drawing.Point(37, 37);
-            this.ListBox1.Name = "ListBox1";
-            this.ListBox1.Size = new System.Drawing.Size(120, 95);
-            this.ListBox1.TabIndex = 0;
-            this.ListBox1.SelectedIndexChanged += new System.EventHandler(this.ListBox1_SelectedIndexChanged);
+            ListBox1.FormattingEnabled = true;
+            ListBox1.ItemHeight = 15;
+            ListBox1.Location = new Point(43, 43);
+            ListBox1.Margin = new Padding(4, 3, 4, 3);
+            ListBox1.Name = "ListBox1";
+            ListBox1.Size = new Size(139, 109);
+            ListBox1.TabIndex = 0;
+            ListBox1.SelectedIndexChanged += ListBox1_SelectedIndexChanged;
             // 
             // NumericUpDown1
             // 
-            this.NumericUpDown1.DecimalPlaces = 2;
-            this.NumericUpDown1.Location = new System.Drawing.Point(466, 17);
-            this.NumericUpDown1.Maximum = new decimal(new int[] {
-            255,
-            0,
-            0,
-            0});
-            this.NumericUpDown1.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.NumericUpDown1.Name = "NumericUpDown1";
-            this.NumericUpDown1.Size = new System.Drawing.Size(50, 20);
-            this.NumericUpDown1.TabIndex = 246;
-            this.NumericUpDown1.Value = new decimal(new int[] {
-            2,
-            0,
-            0,
-            0});
-            this.NumericUpDown1.ValueChanged += new System.EventHandler(this.NumericUpDown1_ValueChanged);
+            NumericUpDown1.DecimalPlaces = 2;
+            NumericUpDown1.Location = new Point(544, 20);
+            NumericUpDown1.Margin = new Padding(4, 3, 4, 3);
+            NumericUpDown1.Maximum = new decimal(new int[] { 255, 0, 0, 0 });
+            NumericUpDown1.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
+            NumericUpDown1.Name = "NumericUpDown1";
+            NumericUpDown1.Size = new Size(58, 23);
+            NumericUpDown1.TabIndex = 246;
+            NumericUpDown1.Value = new decimal(new int[] { 2, 0, 0, 0 });
+            NumericUpDown1.ValueChanged += NumericUpDown1_ValueChanged;
             // 
-            // HelplineRulerCtrl1
+            // helplineRulerCtrl1
             // 
-            this.HelplineRulerCtrl1.Bmp = null;
-            this.HelplineRulerCtrl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.HelplineRulerCtrl1.DontDoLayout = false;
-            this.HelplineRulerCtrl1.DontHandleDoubleClick = false;
-            this.HelplineRulerCtrl1.DontPaintBaseImg = false;
-            this.HelplineRulerCtrl1.DontProcDoubleClick = false;
-            this.HelplineRulerCtrl1.DrawModeClipped = false;
-            this.HelplineRulerCtrl1.DrawPixelated = false;
-            this.HelplineRulerCtrl1.IgnoreZoom = false;
-            this.HelplineRulerCtrl1.Location = new System.Drawing.Point(0, 0);
-            this.HelplineRulerCtrl1.MoveHelpLinesOnResize = false;
-            this.HelplineRulerCtrl1.Name = "HelplineRulerCtrl1";
-            this.HelplineRulerCtrl1.SetZoomOnlyByMethodCall = false;
-            this.HelplineRulerCtrl1.Size = new System.Drawing.Size(927, 487);
-            this.HelplineRulerCtrl1.TabIndex = 15;
-            this.HelplineRulerCtrl1.Zoom = 1F;
-            this.HelplineRulerCtrl1.ZoomSetManually = false;
+            helplineRulerCtrl1.Bmp = null;
+            helplineRulerCtrl1.Dock = DockStyle.Fill;
+            helplineRulerCtrl1.DontDoLayout = false;
+            helplineRulerCtrl1.DontHandleDoubleClick = false;
+            helplineRulerCtrl1.DontPaintBaseImg = false;
+            helplineRulerCtrl1.DontProcDoubleClick = false;
+            helplineRulerCtrl1.DrawModeClipped = false;
+            helplineRulerCtrl1.DrawPixelated = false;
+            helplineRulerCtrl1.IgnoreZoom = false;
+            helplineRulerCtrl1.Location = new Point(0, 0);
+            helplineRulerCtrl1.Margin = new Padding(5, 3, 5, 3);
+            helplineRulerCtrl1.MoveHelpLinesOnResize = false;
+            helplineRulerCtrl1.Name = "helplineRulerCtrl1";
+            helplineRulerCtrl1.SetZoomOnlyByMethodCall = false;
+            helplineRulerCtrl1.Size = new Size(1082, 576);
+            helplineRulerCtrl1.TabIndex = 15;
+            helplineRulerCtrl1.Zoom = 1F;
+            helplineRulerCtrl1.ZoomSetManually = false;
             // 
             // Label3
             // 
-            this.Label3.AutoSize = true;
-            this.Label3.Location = new System.Drawing.Point(406, 20);
-            this.Label3.Name = "Label3";
-            this.Label3.Size = new System.Drawing.Size(57, 13);
-            this.Label3.TabIndex = 247;
-            this.Label3.Text = "Pen width:";
+            Label3.AutoSize = true;
+            Label3.Location = new Point(474, 23);
+            Label3.Margin = new Padding(4, 0, 4, 0);
+            Label3.Name = "Label3";
+            Label3.Size = new Size(63, 15);
+            Label3.TabIndex = 247;
+            Label3.Text = "Pen width:";
             // 
             // Button2
             // 
-            this.Button2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.Button2.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.Button2.Location = new System.Drawing.Point(835, 15);
-            this.Button2.Name = "Button2";
-            this.Button2.Size = new System.Drawing.Size(75, 23);
-            this.Button2.TabIndex = 9;
-            this.Button2.Text = "Cancel";
-            this.Button2.UseVisualStyleBackColor = true;
+            Button2.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            Button2.DialogResult = DialogResult.Cancel;
+            Button2.Location = new Point(974, 43);
+            Button2.Margin = new Padding(4, 3, 4, 3);
+            Button2.Name = "Button2";
+            Button2.Size = new Size(88, 27);
+            Button2.TabIndex = 9;
+            Button2.Text = "Cancel";
+            Button2.UseVisualStyleBackColor = true;
             // 
             // Panel1
             // 
-            this.Panel1.Controls.Add(this.CheckBox4);
-            this.Panel1.Controls.Add(this.CheckBox12);
-            this.Panel1.Controls.Add(this.Button13);
-            this.Panel1.Controls.Add(this.Label3);
-            this.Panel1.Controls.Add(this.NumericUpDown1);
-            this.Panel1.Controls.Add(this.Button1);
-            this.Panel1.Controls.Add(this.Button2);
-            this.Panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.Panel1.Location = new System.Drawing.Point(0, 487);
-            this.Panel1.Name = "Panel1";
-            this.Panel1.Size = new System.Drawing.Size(927, 50);
-            this.Panel1.TabIndex = 13;
+            Panel1.Controls.Add(cbRestrict);
+            Panel1.Controls.Add(numRestrict);
+            Panel1.Controls.Add(btnReadPath);
+            Panel1.Controls.Add(numChainTolerance);
+            Panel1.Controls.Add(label5);
+            Panel1.Controls.Add(label6);
+            Panel1.Controls.Add(CheckBox4);
+            Panel1.Controls.Add(CheckBox12);
+            Panel1.Controls.Add(Button13);
+            Panel1.Controls.Add(Label3);
+            Panel1.Controls.Add(NumericUpDown1);
+            Panel1.Controls.Add(Button1);
+            Panel1.Controls.Add(Button2);
+            Panel1.Dock = DockStyle.Bottom;
+            Panel1.Location = new Point(0, 576);
+            Panel1.Margin = new Padding(4, 3, 4, 3);
+            Panel1.Name = "Panel1";
+            Panel1.Size = new Size(1082, 84);
+            Panel1.TabIndex = 13;
+            // 
+            // cbRestrict
+            // 
+            cbRestrict.AutoSize = true;
+            cbRestrict.Checked = true;
+            cbRestrict.CheckState = CheckState.Checked;
+            cbRestrict.Location = new Point(42, 53);
+            cbRestrict.Name = "cbRestrict";
+            cbRestrict.Size = new Size(158, 19);
+            cbRestrict.TabIndex = 655;
+            cbRestrict.Text = "restrict amount chains to";
+            cbRestrict.UseVisualStyleBackColor = true;
+            // 
+            // numRestrict
+            // 
+            numRestrict.Location = new Point(207, 52);
+            numRestrict.Maximum = new decimal(new int[] { 32767, 0, 0, 0 });
+            numRestrict.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
+            numRestrict.Name = "numRestrict";
+            numRestrict.Size = new Size(52, 23);
+            numRestrict.TabIndex = 656;
+            numRestrict.Value = new decimal(new int[] { 10, 0, 0, 0 });
+            // 
+            // btnReadPath
+            // 
+            btnReadPath.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            btnReadPath.ForeColor = SystemColors.ControlText;
+            btnReadPath.Location = new Point(207, 17);
+            btnReadPath.Margin = new Padding(4, 3, 4, 3);
+            btnReadPath.Name = "btnReadPath";
+            btnReadPath.Size = new Size(88, 27);
+            btnReadPath.TabIndex = 654;
+            btnReadPath.Text = "Go";
+            btnReadPath.UseVisualStyleBackColor = true;
+            btnReadPath.Click += btnReadPath_Click;
+            // 
+            // numChainTolerance
+            // 
+            numChainTolerance.Location = new Point(148, 20);
+            numChainTolerance.Maximum = new decimal(new int[] { 255, 0, 0, 0 });
+            numChainTolerance.Name = "numChainTolerance";
+            numChainTolerance.Size = new Size(52, 23);
+            numChainTolerance.TabIndex = 653;
+            numChainTolerance.Value = new decimal(new int[] { 254, 0, 0, 0 });
+            // 
+            // label5
+            // 
+            label5.AutoSize = true;
+            label5.Location = new Point(85, 22);
+            label5.Name = "label5";
+            label5.Size = new Size(57, 15);
+            label5.TabIndex = 652;
+            label5.Text = "Tolerance";
+            // 
+            // label6
+            // 
+            label6.AutoSize = true;
+            label6.Location = new Point(22, 22);
+            label6.Name = "label6";
+            label6.Size = new Size(57, 15);
+            label6.TabIndex = 651;
+            label6.Text = "ReadPath";
+            toolTip1.SetToolTip(label6, "ReadPathFromPicture");
             // 
             // CheckBox4
             // 
-            this.CheckBox4.AutoSize = true;
-            this.CheckBox4.Location = new System.Drawing.Point(608, 20);
-            this.CheckBox4.Name = "CheckBox4";
-            this.CheckBox4.Size = new System.Drawing.Size(104, 17);
-            this.CheckBox4.TabIndex = 250;
-            this.CheckBox4.Text = "color for Curpath";
-            this.CheckBox4.UseVisualStyleBackColor = true;
+            CheckBox4.AutoSize = true;
+            CheckBox4.Location = new Point(709, 23);
+            CheckBox4.Margin = new Padding(4, 3, 4, 3);
+            CheckBox4.Name = "CheckBox4";
+            CheckBox4.Size = new Size(117, 19);
+            CheckBox4.TabIndex = 250;
+            CheckBox4.Text = "color for Curpath";
+            CheckBox4.UseVisualStyleBackColor = true;
             // 
             // CheckBox12
             // 
-            this.CheckBox12.AutoSize = true;
-            this.CheckBox12.Checked = true;
-            this.CheckBox12.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.CheckBox12.Location = new System.Drawing.Point(319, 18);
-            this.CheckBox12.Name = "CheckBox12";
-            this.CheckBox12.Size = new System.Drawing.Size(65, 17);
-            this.CheckBox12.TabIndex = 249;
-            this.CheckBox12.Text = "BG dark";
-            this.CheckBox12.UseVisualStyleBackColor = true;
-            this.CheckBox12.CheckedChanged += new System.EventHandler(this.CheckBox12_CheckedChanged);
+            CheckBox12.AutoSize = true;
+            CheckBox12.Checked = true;
+            CheckBox12.CheckState = CheckState.Checked;
+            CheckBox12.Location = new Point(372, 21);
+            CheckBox12.Margin = new Padding(4, 3, 4, 3);
+            CheckBox12.Name = "CheckBox12";
+            CheckBox12.Size = new Size(67, 19);
+            CheckBox12.TabIndex = 249;
+            CheckBox12.Text = "BG dark";
+            CheckBox12.UseVisualStyleBackColor = true;
+            CheckBox12.CheckedChanged += CheckBox12_CheckedChanged;
             // 
             // Button13
             // 
-            this.Button13.Location = new System.Drawing.Point(526, 15);
-            this.Button13.Name = "Button13";
-            this.Button13.Size = new System.Drawing.Size(75, 23);
-            this.Button13.TabIndex = 248;
-            this.Button13.Text = "Pen color";
-            this.Button13.UseVisualStyleBackColor = true;
-            this.Button13.Click += new System.EventHandler(this.Button13_Click);
+            Button13.Location = new Point(614, 17);
+            Button13.Margin = new Padding(4, 3, 4, 3);
+            Button13.Name = "Button13";
+            Button13.Size = new Size(88, 27);
+            Button13.TabIndex = 248;
+            Button13.Text = "Pen color";
+            Button13.UseVisualStyleBackColor = true;
+            Button13.Click += Button13_Click;
             // 
             // Button1
             // 
-            this.Button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.Button1.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.Button1.Location = new System.Drawing.Point(754, 15);
-            this.Button1.Name = "Button1";
-            this.Button1.Size = new System.Drawing.Size(75, 23);
-            this.Button1.TabIndex = 8;
-            this.Button1.Text = "OK";
-            this.Button1.UseVisualStyleBackColor = true;
+            Button1.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            Button1.DialogResult = DialogResult.OK;
+            Button1.Location = new Point(880, 43);
+            Button1.Margin = new Padding(4, 3, 4, 3);
+            Button1.Name = "Button1";
+            Button1.Size = new Size(88, 27);
+            Button1.TabIndex = 8;
+            Button1.Text = "OK";
+            Button1.UseVisualStyleBackColor = true;
+            // 
+            // backgroundWorker2
+            // 
+            backgroundWorker2.WorkerReportsProgress = true;
+            backgroundWorker2.WorkerSupportsCancellation = true;
+            backgroundWorker2.DoWork += backgroundWorker2_DoWork;
+            backgroundWorker2.RunWorkerCompleted += backgroundWorker2_RunWorkerCompleted;
             // 
             // frmSavedPaths
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(927, 537);
-            this.Controls.Add(this.Panel2);
-            this.Controls.Add(this.HelplineRulerCtrl1);
-            this.Controls.Add(this.Panel1);
-            this.MaximizeBox = false;
-            this.Name = "frmSavedPaths";
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "frmSavedPaths";
-            this.Load += new System.EventHandler(this.Form8_Load);
-            this.Panel2.ResumeLayout(false);
-            this.Panel2.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.NumericUpDown1)).EndInit();
-            this.Panel1.ResumeLayout(false);
-            this.Panel1.PerformLayout();
-            this.ResumeLayout(false);
-
+            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleMode = AutoScaleMode.Font;
+            ClientSize = new Size(1082, 660);
+            Controls.Add(Panel2);
+            Controls.Add(helplineRulerCtrl1);
+            Controls.Add(Panel1);
+            Margin = new Padding(4, 3, 4, 3);
+            MaximizeBox = false;
+            Name = "frmSavedPaths";
+            StartPosition = FormStartPosition.CenterParent;
+            Text = "frmSavedPaths";
+            Load += Form8_Load;
+            Panel2.ResumeLayout(false);
+            Panel2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)NumericUpDown1).EndInit();
+            Panel1.ResumeLayout(false);
+            Panel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)numRestrict).EndInit();
+            ((System.ComponentModel.ISupportInitialize)numChainTolerance).EndInit();
+            ResumeLayout(false);
         }
 
         #endregion
@@ -409,7 +510,7 @@
         internal System.Windows.Forms.Button Button3;
         internal System.Windows.Forms.ListBox ListBox1;
         internal System.Windows.Forms.NumericUpDown NumericUpDown1;
-        internal HelplineRulerControl.HelplineRulerCtrl HelplineRulerCtrl1;
+        internal HelplineRulerControl.HelplineRulerCtrl helplineRulerCtrl1;
         internal System.Windows.Forms.Label Label3;
         internal System.Windows.Forms.Button Button2;
         internal System.Windows.Forms.Panel Panel1;
@@ -417,5 +518,13 @@
         internal System.Windows.Forms.CheckBox CheckBox12;
         internal System.Windows.Forms.Button Button13;
         internal System.Windows.Forms.Button Button1;
+        private NumericUpDown numChainTolerance;
+        private Label label5;
+        private Label label6;
+        private Button btnReadPath;
+        private ToolTip toolTip1;
+        private System.ComponentModel.BackgroundWorker backgroundWorker2;
+        private CheckBox cbRestrict;
+        private NumericUpDown numRestrict;
     }
 }

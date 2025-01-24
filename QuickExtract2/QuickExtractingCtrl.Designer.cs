@@ -158,7 +158,7 @@
             btnSavedPaths.Size = new Size(31, 27);
             btnSavedPaths.TabIndex = 309;
             btnSavedPaths.Text = "sp";
-            toolTip1.SetToolTip(btnSavedPaths, "SSave and Load paths");
+            toolTip1.SetToolTip(btnSavedPaths, "Save and Load paths");
             btnSavedPaths.UseVisualStyleBackColor = true;
             // 
             // btnRS
