@@ -422,13 +422,21 @@ namespace AvoidAGrabCutEasy
             // MsgBox(s2) 'should be 1
             ProgressEventArgs pe = new ProgressEventArgs(b.Height + b.Width, 20, 1);
 
-            conv.ConvolveH_par_SigmaAsDistance(b, KernelVector, AddValVector, DistanceWeights, 0, Sigma, doTransparency, Math.Min(255, b.Width - 1), SrcOnSigma, pe, this.BGW, logarithmic);
+            try
+            {
+                conv.ConvolveH_par_SigmaAsDistance(b, KernelVector, AddValVector, DistanceWeights, 0, Sigma, doTransparency, Math.Min(255, b.Width - 1), SrcOnSigma, pe, this.BGW, logarithmic);
 
-            b.RotateFlip(RotateFlipType.Rotate270FlipNone);
+                b.RotateFlip(RotateFlipType.Rotate270FlipNone);
 
-            conv.ConvolveH_par_SigmaAsDistance(b, KernelVector, AddValVector, DistanceWeights, 0, Sigma, doTransparency, Math.Min(255, b.Width - 1), SrcOnSigma, pe, this.BGW, logarithmic);
+                conv.ConvolveH_par_SigmaAsDistance(b, KernelVector, AddValVector, DistanceWeights, 0, Sigma, doTransparency, Math.Min(255, b.Width - 1), SrcOnSigma, pe, this.BGW, logarithmic);
 
-            b.RotateFlip(RotateFlipType.Rotate90FlipNone);
+                b.RotateFlip(RotateFlipType.Rotate90FlipNone);
+            }
+            catch (Exception exc)
+            {
+                MessageBox.Show(exc.ToString());
+                return false;
+            }
 
             return true;
         }
@@ -464,13 +472,21 @@ namespace AvoidAGrabCutEasy
 
             ProgressEventArgs pe = new ProgressEventArgs(b.Height + b.Width, 20, 1);
 
-            conv.ConvolveH_par_SigmaAsDistance(b, KernelVector, AddValVector, 0, Sigma, doTransparency, Math.Min(255, b.Width - 1), SrcOnSigma, pe, this.BGW, logarithmic);
+            try
+            {
+                conv.ConvolveH_par_SigmaAsDistance(b, KernelVector, AddValVector, 0, Sigma, doTransparency, Math.Min(255, b.Width - 1), SrcOnSigma, pe, this.BGW, logarithmic);
 
-            b.RotateFlip(RotateFlipType.Rotate270FlipNone);
+                b.RotateFlip(RotateFlipType.Rotate270FlipNone);
 
-            conv.ConvolveH_par_SigmaAsDistance(b, KernelVector, AddValVector, 0, Sigma, doTransparency, Math.Min(255, b.Width - 1), SrcOnSigma, pe, this.BGW, logarithmic);
+                conv.ConvolveH_par_SigmaAsDistance(b, KernelVector, AddValVector, 0, Sigma, doTransparency, Math.Min(255, b.Width - 1), SrcOnSigma, pe, this.BGW, logarithmic);
 
-            b.RotateFlip(RotateFlipType.Rotate90FlipNone);
+                b.RotateFlip(RotateFlipType.Rotate90FlipNone);
+            }
+            catch (Exception exc)
+            {
+                MessageBox.Show(exc.ToString());
+                return false;
+            }
 
             conv.ProgressPlus -= Conv_ProgressPlus;
 
@@ -503,13 +519,21 @@ namespace AvoidAGrabCutEasy
 
             ProgressEventArgs pe = new ProgressEventArgs(b.Height + b.Width, 20, 1);
 
-            conv.ConvolveH_par_SigmaAsDistance(b, KernelVector, AddValVector, 0, Sigma, doTransparency, Math.Min(255, b.Width - 1), SrcOnSigma, pe, this.BGW, logarithmic);
+            try
+            {
+                conv.ConvolveH_par_SigmaAsDistance(b, KernelVector, AddValVector, 0, Sigma, doTransparency, Math.Min(255, b.Width - 1), SrcOnSigma, pe, this.BGW, logarithmic);
 
-            b.RotateFlip(RotateFlipType.Rotate270FlipNone);
+                b.RotateFlip(RotateFlipType.Rotate270FlipNone);
 
-            conv.ConvolveH_par_SigmaAsDistance(b, KernelVector, AddValVector, 0, Sigma, doTransparency, Math.Min(255, b.Width - 1), SrcOnSigma, pe, this.BGW, logarithmic);
+                conv.ConvolveH_par_SigmaAsDistance(b, KernelVector, AddValVector, 0, Sigma, doTransparency, Math.Min(255, b.Width - 1), SrcOnSigma, pe, this.BGW, logarithmic);
 
-            b.RotateFlip(RotateFlipType.Rotate90FlipNone);
+                b.RotateFlip(RotateFlipType.Rotate90FlipNone);
+            }
+            catch (Exception exc)
+            {
+                MessageBox.Show(exc.ToString());
+                return false;
+            }
 
             return true;
         }

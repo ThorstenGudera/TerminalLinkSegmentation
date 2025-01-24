@@ -1,5 +1,6 @@
 ﻿using AvailMem;
 using Cache;
+using ChainCodeFinder;
 using QuickExtractingLib2;
 using System;
 using System.Collections.Generic;
@@ -7,6 +8,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -92,6 +94,9 @@ namespace QuickExtract2
 
         private object _lockObject = new object();
         private RectangleF[]? _tempDataZA;
+        private Dictionary<int, Dictionary<int, List<List<Point>>>>? _scribbles;
+        private List<Tuple<int, int, int, bool, List<List<Point>>>>? _scribbleSeq;
+        private List<Point>? _ptPrev;
 
         public frmQuickExtract(Bitmap bmp)
         {
@@ -184,6 +189,217 @@ namespace QuickExtract2
 
         private void Helplinerulerctrl1_Paint(object sender, PaintEventArgs e)
         {
+            if (this.cbOutline.Checked)
+            {
+                if (this._scribbles == null)
+                    this._scribbles = new Dictionary<int, Dictionary<int, List<List<Point>>>>();
+
+                if (this._scribbleSeq != null && this._scribbleSeq.Count > 0)
+                {
+                    foreach (Tuple<int, int, int, bool, List<List<Point>>> f in this._scribbleSeq)
+                    {
+                        int l = f.Item1;
+                        int wh = f.Item2;
+                        int listNo = f.Item3;
+
+                        if (this._scribbles.ContainsKey(l) && this._scribbles[l].ContainsKey(wh))
+                        {
+                            List<List<Point>> ptsList = this._scribbles[l][wh];
+
+                            if (ptsList != null && ptsList.Count > 0 && ptsList.Count > listNo)
+                            {
+                                bool doRect = ptsList[listNo].Count > 1;
+
+                                Color c = l == 0 ? Color.Black : l == 1 ? Color.White : Color.Gray;
+
+                                //if (l == 3 && this.cbHighlight.Checked)
+                                    c = Color.Cyan;
+
+                                if (doRect)
+                                {
+                                    if (f.Item4 && f.Item5 != null && f.Item5.Count > 0)
+                                    {
+                                        List<List<Point>> pts = f.Item5;
+                                        using GraphicsPath gP = new GraphicsPath();
+                                        foreach (List<Point> lPt in pts)
+                                        {
+                                            gP.StartFigure();
+                                            gP.AddLines(lPt.Select(a => new PointF(a.X, a.Y)).ToArray());
+                                            gP.CloseFigure();
+                                        }
+
+                                        using Matrix mx = new Matrix(this.helplineRulerCtrl1.Zoom, 0, 0, this.helplineRulerCtrl1.Zoom,
+                                            this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X,
+                                            this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y);
+                                        gP.Transform(mx);
+
+                                        using SolidBrush sb = new SolidBrush(c);
+                                        e.Graphics.FillPath(sb, gP);
+                                    }
+                                    else
+                                        foreach (Point pt in ptsList[listNo])
+                                        {
+                                            using (SolidBrush sb = new SolidBrush(c))
+                                                e.Graphics.FillRectangle(sb, new Rectangle(
+                                                    (int)((int)(pt.X - wh / 2) * this.helplineRulerCtrl1.Zoom) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X,
+                                                    (int)((int)(pt.Y - wh / 2) * this.helplineRulerCtrl1.Zoom) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y,
+                                                    (int)Math.Max(wh * this.helplineRulerCtrl1.Zoom, 1),
+                                                    (int)Math.Max(wh * this.helplineRulerCtrl1.Zoom, 1)));
+                                        }
+                                }
+                                else
+                                {
+                                    if (ptsList[listNo].Count > 0)
+                                    {
+                                        Point pt = ptsList[listNo][0];
+                                        using (SolidBrush sb = new SolidBrush(c))
+                                            e.Graphics.FillRectangle(sb, new Rectangle(
+                                                (int)((int)(pt.X - wh / 2) * this.helplineRulerCtrl1.Zoom) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X,
+                                                (int)((int)(pt.Y - wh / 2) * this.helplineRulerCtrl1.Zoom) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y,
+                                                (int)Math.Max(wh * this.helplineRulerCtrl1.Zoom, 1),
+                                                (int)Math.Max(wh * this.helplineRulerCtrl1.Zoom, 1)));
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    if (this._scribbles.ContainsKey(0)) //BG
+                    {
+                        if (this._scribbles[0] != null)
+                        {
+                            foreach (int wh in this._scribbles[0].Keys)
+                            {
+                                List<List<Point>> whPts = this._scribbles[0][wh];
+
+                                foreach (List<Point> pts in whPts)
+                                {
+                                    bool doRect = pts.Count > 1;
+                                    Color c = Color.Black;
+
+                                    if (doRect)
+                                    {
+                                        foreach (Point pt in pts)
+                                        {
+                                            using (SolidBrush sb = new SolidBrush(c))
+                                                e.Graphics.FillRectangle(sb, new Rectangle(
+                                                    (int)((int)(pt.X - wh / 2) * this.helplineRulerCtrl1.Zoom) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X,
+                                                    (int)((int)(pt.Y - wh / 2) * this.helplineRulerCtrl1.Zoom) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y,
+                                                    (int)Math.Max(wh * this.helplineRulerCtrl1.Zoom, 1),
+                                                    (int)Math.Max(wh * this.helplineRulerCtrl1.Zoom, 1)));
+                                        }
+                                    }
+                                    else
+                                    {
+                                        if (pts.Count > 0)
+                                        {
+                                            Point pt = pts[0];
+                                            using (SolidBrush sb = new SolidBrush(c))
+                                                e.Graphics.FillRectangle(sb, new Rectangle(
+                                                    (int)((int)(pt.X - wh / 2) * this.helplineRulerCtrl1.Zoom) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X,
+                                                    (int)((int)(pt.Y - wh / 2) * this.helplineRulerCtrl1.Zoom) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y,
+                                                    (int)Math.Max(wh * this.helplineRulerCtrl1.Zoom, 1),
+                                                    (int)Math.Max(wh * this.helplineRulerCtrl1.Zoom, 1)));
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    if (this._scribbles.ContainsKey(1)) //FG
+                    {
+                        if (this._scribbles[1] != null)
+                        {
+                            foreach (int wh in this._scribbles[1].Keys)
+                            {
+                                List<List<Point>> whPts = this._scribbles[1][wh];
+
+                                foreach (List<Point> pts in whPts)
+                                {
+                                    bool doRect = pts.Count > 1;
+                                    Color c = Color.White;
+
+                                    if (doRect)
+                                    {
+                                        foreach (Point pt in pts)
+                                        {
+                                            using (SolidBrush sb = new SolidBrush(c))
+                                                e.Graphics.FillRectangle(sb, new Rectangle(
+                                                    (int)((int)(pt.X - wh / 2) * this.helplineRulerCtrl1.Zoom) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X,
+                                                    (int)((int)(pt.Y - wh / 2) * this.helplineRulerCtrl1.Zoom) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y,
+                                                    (int)Math.Max(wh * this.helplineRulerCtrl1.Zoom, 1),
+                                                    (int)Math.Max(wh * this.helplineRulerCtrl1.Zoom, 1)));
+                                        }
+                                    }
+                                    else
+                                    {
+                                        if (pts.Count > 0)
+                                        {
+                                            Point pt = pts[0];
+                                            using (SolidBrush sb = new SolidBrush(c))
+                                                e.Graphics.FillRectangle(sb, new Rectangle(
+                                                    (int)((int)(pt.X - wh / 2) * this.helplineRulerCtrl1.Zoom) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X,
+                                                    (int)((int)(pt.Y - wh / 2) * this.helplineRulerCtrl1.Zoom) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y,
+                                                    (int)Math.Max(wh * this.helplineRulerCtrl1.Zoom, 1),
+                                                    (int)Math.Max(wh * this.helplineRulerCtrl1.Zoom, 1)));
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    if (this._scribbles.ContainsKey(3)) //Unknown
+                    {
+                        if (this._scribbles[3] != null)
+                        {
+                            foreach (int wh in this._scribbles[3].Keys)
+                            {
+                                List<List<Point>> whPts = this._scribbles[3][wh];
+
+                                foreach (List<Point> pts in whPts)
+                                {
+                                    bool doRect = pts.Count > 1;
+                                    Color c = Color.Gray;
+
+                                    //if (this.cbHighlight.Checked)
+                                        c = Color.Cyan;
+
+                                    if (doRect)
+                                    {
+                                        foreach (Point pt in pts)
+                                        {
+                                            using (SolidBrush sb = new SolidBrush(c))
+                                                e.Graphics.FillRectangle(sb, new Rectangle(
+                                                    (int)((int)(pt.X - wh / 2) * this.helplineRulerCtrl1.Zoom) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X,
+                                                    (int)((int)(pt.Y - wh / 2) * this.helplineRulerCtrl1.Zoom) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y,
+                                                    (int)Math.Max(wh * this.helplineRulerCtrl1.Zoom, 1),
+                                                    (int)Math.Max(wh * this.helplineRulerCtrl1.Zoom, 1)));
+                                        }
+                                    }
+                                    else
+                                    {
+                                        if (pts.Count > 0)
+                                        {
+                                            Point pt = pts[0];
+                                            using (SolidBrush sb = new SolidBrush(c))
+                                                e.Graphics.FillRectangle(sb, new Rectangle(
+                                                    (int)((int)(pt.X - wh / 2) * this.helplineRulerCtrl1.Zoom) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X,
+                                                    (int)((int)(pt.Y - wh / 2) * this.helplineRulerCtrl1.Zoom) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y,
+                                                    (int)Math.Max(wh * this.helplineRulerCtrl1.Zoom, 1),
+                                                    (int)Math.Max(wh * this.helplineRulerCtrl1.Zoom, 1)));
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
             //if (!this._dontDrawPath)
             {
                 int count = 0;
@@ -240,9 +456,9 @@ namespace QuickExtract2
                             e.Graphics.FillRectangles(Brushes.Lime, this._tempDataZA);
                             e.Graphics.ResetTransform();
                         }
-                        catch //(Exception ex)
+                        catch (Exception ex)
                         {
-                            //MessageBox.Show(ex.ToString());
+                            MessageBox.Show(ex.ToString());
                         }
                     }
                 }
@@ -1790,16 +2006,19 @@ namespace QuickExtract2
         {
             if (tempData != null && tempData.Count > 0)
             {
-                if (tempDataZ == null)
-                    tempDataZ = new List<RectangleF>();
-                this.tempDataZ.Clear();
+                //lock (this._lockObject)
+                {
+                    if (tempDataZ == null)
+                        tempDataZ = new List<RectangleF>();
+                    this.tempDataZ.Clear();
 
-                int n = System.Convert.ToInt32(this.quickExtractingCtrl1.numDisplayEdgeAt.Value);
+                    int n = System.Convert.ToInt32(this.quickExtractingCtrl1.numDisplayEdgeAt.Value);
 
-                for (int i = 0; i <= tempData.Count - 1; i += n) // 200
-                    if (this.tempData != null)
-                        this.tempDataZ.Add(new RectangleF(this.tempData[i].X * this.helplineRulerCtrl1.Zoom - 1,
-                            this.tempData[i].Y * this.helplineRulerCtrl1.Zoom - 1, 2, 2));
+                    for (int i = 0; i <= tempData.Count - 1; i += n) // 200
+                        if (this.tempData != null)
+                            this.tempDataZ.Add(new RectangleF(this.tempData[i].X * this.helplineRulerCtrl1.Zoom - 1,
+                                this.tempData[i].Y * this.helplineRulerCtrl1.Zoom - 1, 2, 2));
+                }
             }
         }
 
@@ -3033,7 +3252,7 @@ namespace QuickExtract2
 
         private void Button30_Click(object? sender, EventArgs e)
         {
-            if (this.helplineRulerCtrl1.Bmp != null && this.backgroundWorker1.IsBusy == false && this.quickExtractingCtrl1.PathList != null)
+            if (this.helplineRulerCtrl1.Bmp != null && this.backgroundWorker1.IsBusy == false)
             {
                 using (frmSavedPaths frm8 = new frmSavedPaths(this.helplineRulerCtrl1.Bmp, this.quickExtractingCtrl1.ClonePath(this.quickExtractingCtrl1.CurPath), CloneList(this.quickExtractingCtrl1.PathList)))
                 {
@@ -3342,6 +3561,106 @@ namespace QuickExtract2
                 this._tempDataZA = this.tempDataZ.ToArray();
             this.helplineRulerCtrl1.dbPanel1.Invalidate();
             this._dontUpdateTempData = false;
+        }
+
+        private void cbOutline_CheckedChanged(object sender, EventArgs e)
+        {
+            if (this.cbOutline.Checked && this.helplineRulerCtrl1.Bmp != null)
+            {
+                using Bitmap bmp = new Bitmap(this.helplineRulerCtrl1.Bmp);
+                List<ChainCode>? c = GetBoundary(bmp, 0, false);
+                c = c?.OrderByDescending(x => x.Coord.Count).ToList();
+
+                int wh = (int)this.numWH.Value;
+
+                AddPointsToScribblePathFromFrmQuickExtract(c, wh);
+
+                this._pic_changed = true;
+            }           
+            
+            this.helplineRulerCtrl1.dbPanel1.Invalidate();
+        }
+
+        private List<ChainCode>? GetBoundary(Bitmap? upperImg, int minAlpha, bool grayScale)
+        {
+            List<ChainCode>? l = null;
+            Bitmap? bmpTmp = null;
+            try
+            {
+                if (upperImg != null)
+                    if (AvailMem.AvailMem.checkAvailRam(upperImg.Width * upperImg.Height * 4L))
+                        bmpTmp = new Bitmap(upperImg);
+                    else
+                        throw new Exception("Not enough memory.");
+                if (bmpTmp != null)
+                {
+                    int nWidth = bmpTmp.Width;
+                    int nHeight = bmpTmp.Height;
+                    ChainFinder cf = new ChainFinder();
+                    lock (this._lockObject)
+                        l = cf.GetOutline(bmpTmp, nWidth, nHeight, minAlpha, grayScale, 0, false, 0, false);
+                }
+            }
+            catch (Exception exc)
+            {
+                Console.WriteLine(exc.Message);
+            }
+            finally
+            {
+                if (bmpTmp != null)
+                {
+                    bmpTmp.Dispose();
+                    bmpTmp = null;
+                }
+            }
+            return l;
+        }
+
+        private void AddPointsToScribblePathFromFrmQuickExtract(List<ChainCode>? c, int wh)
+        {
+            if (this._scribbles == null)
+                this._scribbles = new Dictionary<int, Dictionary<int, List<List<Point>>>>();
+
+            if (this._scribbles != null)
+            {
+                int fgbg = 3;
+
+                if (!this._scribbles.ContainsKey(fgbg))
+                    this._scribbles.Add(fgbg, new Dictionary<int, List<List<Point>>>());
+
+                if (!this._scribbles[fgbg].ContainsKey(wh))
+                    this._scribbles[fgbg].Add(wh, new List<List<Point>>());
+
+                if (this._scribbleSeq == null)
+                    this._scribbleSeq = new List<Tuple<int, int, int, bool, List<List<Point>>>>();
+
+                if (c != null)
+                {
+                    for (int j = 0; j < c.Count; j++)
+                    {
+                        if (c[j].Coord.Count > 4)
+                        {
+                            List<Point> pts = c[j].Coord;
+
+                            if (pts != null)
+                            {
+                                if (this._ptPrev == null)
+                                    this._ptPrev = new List<Point>();
+
+                                if (pts.Count > 0)
+                                {
+                                    List<List<Point>> whPts = this._scribbles[fgbg][wh];
+                                    whPts.Add(new List<Point>());
+                                    whPts[whPts.Count - 1].AddRange(pts.ToArray());
+                                    this._scribbleSeq.Add(Tuple.Create(fgbg, wh, this._scribbles[fgbg][wh].Count - 1, false, new List<List<Point>>()));
+                                }
+                            }
+                        }
+                    }
+
+                    this.helplineRulerCtrl1.dbPanel1.Invalidate();
+                }
+            }
         }
     }
 }

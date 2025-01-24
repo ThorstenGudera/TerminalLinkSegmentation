@@ -328,7 +328,7 @@ namespace QuickExtract2
         {
             if (this.btnSavedPaths != null)
             {
-                for (int i = 0; i <= this.PathList?.Count - 1; i++)
+                for (int i = 0; i < this.PathList?.Count; i++)
                 {
                     if (curPath.Count != this.PathList?[i].Count)
                         continue;

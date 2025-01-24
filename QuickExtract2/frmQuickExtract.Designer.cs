@@ -118,7 +118,7 @@
             // 
             // Timer3
             // 
-            Timer3.Interval = 500;
+            Timer3.Interval = 1;
             // 
             // timer1
             // 
@@ -256,6 +256,7 @@
             cbOutline.TabIndex = 285;
             cbOutline.Text = "compute outline to helplineRulerCtrl1 width";
             cbOutline.UseVisualStyleBackColor = true;
+            cbOutline.CheckedChanged += cbOutline_CheckedChanged;
             // 
             // cbLoadTo
             // 

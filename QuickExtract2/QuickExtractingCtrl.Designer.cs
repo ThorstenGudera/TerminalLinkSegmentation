@@ -152,13 +152,13 @@
             // 
             // btnSavedPaths
             // 
-            btnSavedPaths.Enabled = false;
             btnSavedPaths.Location = new Point(218, 22);
             btnSavedPaths.Margin = new Padding(4, 3, 4, 3);
             btnSavedPaths.Name = "btnSavedPaths";
             btnSavedPaths.Size = new Size(31, 27);
             btnSavedPaths.TabIndex = 309;
             btnSavedPaths.Text = "sp";
+            toolTip1.SetToolTip(btnSavedPaths, "SSave and Load paths");
             btnSavedPaths.UseVisualStyleBackColor = true;
             // 
             // btnRS

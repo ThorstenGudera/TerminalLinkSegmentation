@@ -1220,8 +1220,9 @@ namespace AvoidAGrabCutEasy
                     SetControls(false);
 
                     Bitmap bmp = new Bitmap(this.helplineRulerCtrl1.Bmp);
+                    int mOpacity = (int)this.numChainTolerance.Value;
 
-                    this.backgroundWorker2.RunWorkerAsync(new object[] { bmp });
+                    this.backgroundWorker2.RunWorkerAsync(new object[] { bmp, mOpacity });
                 }
             }
         }
@@ -1240,7 +1241,8 @@ namespace AvoidAGrabCutEasy
                 using (Bitmap bmp = (Bitmap)o[0])
                 {
                     bool transpMode = true;
-                    l = GetBoundary(bmp, 254, transpMode);
+                    int minOpacity = (int)o[1];
+                    l = GetBoundary(bmp, minOpacity, transpMode);
 
                     if (l != null)
                     {
