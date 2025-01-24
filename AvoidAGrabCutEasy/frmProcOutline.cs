@@ -987,7 +987,10 @@ namespace AvoidAGrabCutEasy
                                 int groupAmountX = scalesPics ? 1 : 0; //we dont use grouping, so set it simply to 1
                                 int groupAmountY = scalesPics ? 1 : 0;
                                 int maxSize = this.cbInterpolated.Checked ? (int)Math.Pow((double)this.numMaxSize.Value, 2) * 2 : (int)Math.Pow((double)this.numMaxSize.Value, 2);
-                                bool trySingleTile = /*scalesPics ? false : this.cbHalfSize.Checked ? true :*/ bWork.Width * bWork.Height < maxSize ? true : false;
+                                Size origSize = new Size(this.helplineRulerCtrl1.Bmp.Width, this.helplineRulerCtrl1.Bmp.Height);
+                                if (this.cbHalfSize.Checked)
+                                    origSize = new Size(origSize.Width / 2, origSize.Height / 2);
+                                bool trySingleTile = /*scalesPics ? false : this.cbHalfSize.Checked ? true :*/ origSize.Width * origSize.Height < maxSize ? true : false;
                                 bool verifyTrimaps = false;
 
                                 Bitmap? tr = new Bitmap(trWork);
@@ -1000,7 +1003,7 @@ namespace AvoidAGrabCutEasy
 
                                 this.backgroundWorker4.RunWorkerAsync(new object[] { 1 /*GMRES_r; 0 is GaussSeidel*/, scalesPics, scales, overlap,
                                     interpolated, forceSerial, group, groupAmountX, groupAmountY, maxSize, bWork, trWork,
-                                    trySingleTile, verifyTrimaps });
+                                    trySingleTile, verifyTrimaps, origSize });
                             }
                         }
                     }
@@ -2553,11 +2556,13 @@ namespace AvoidAGrabCutEasy
                 bool trySingleTile = (bool)o[12];
                 bool verifyTrimaps = (bool)o[13];
 
+                Size origSize = (Size)o[14];
+
                 int id = Environment.TickCount;
                 this._lastRunNumber = id;
 
                 e.Result = this._cfop.ProcessPicture(mode, scalesPics, scales, overlap, interpolated, forceSerial, group, groupAmountX,
-                    groupAmountY, maxSize, bWork, trWork, trySingleTile, verifyTrimaps, Environment.TickCount, this.backgroundWorker4);
+                    groupAmountY, maxSize, bWork, trWork, trySingleTile, verifyTrimaps, Environment.TickCount, origSize, this.backgroundWorker4);
             }
             else
                 e.Result = null;

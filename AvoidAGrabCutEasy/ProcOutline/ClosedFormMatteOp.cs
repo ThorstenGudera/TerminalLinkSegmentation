@@ -1729,7 +1729,7 @@ namespace GetAlphaMatte
 
         public Bitmap? ProcessPicture(int mode, bool scalesPics, int scales, int overlap, bool interpolated, bool forceSerial, bool group,
             int groupAmountX, int groupAmountY, int maxSize, Bitmap bWork, Bitmap trWork, bool trySingleTile, bool verifyTrimaps,
-            int id_envTickcnt, BackgroundWorker? bgw)
+            int id_envTickcnt, Size origSize, BackgroundWorker? bgw)
         {
             ShowInfo?.Invoke(this, "outer pic-amount " + "...");
 
@@ -1778,21 +1778,21 @@ namespace GetAlphaMatte
                 {
                     Bitmap result = new Bitmap(bWork.Width, bWork.Height);
 
-                    int wh = bWork.Width * bWork.Height;
+                    int wh = origSize.Width * origSize.Height;
                     int n = 1;
 
                     while (wh > maxSize)
                     {
                         n += 1;
-                        wh = bWork.Width / n * bWork.Height / n;
+                        wh = origSize.Width / n * origSize.Height / n;
                     }
                     int n2 = n * n;
 
-                    int h = bWork.Height / n;
-                    int h2 = bWork.Height - h * (n - 1);
+                    int h = origSize.Height / n;
+                    int h2 = origSize.Height - h * (n - 1);
 
-                    int w = bWork.Width / n;
-                    int w2 = bWork.Width - w * (n - 1);
+                    int w = origSize.Width / n;
+                    int w2 = origSize.Width - w * (n - 1);
 
                     overlap = Math.Max(overlap, 1);
 
@@ -2434,21 +2434,21 @@ namespace GetAlphaMatte
                 }
                 else
                 {
-                    int wh = bWork.Width * bWork.Height;
+                    int wh = origSize.Width * origSize.Height;
                     int n = 1;
 
                     while (wh > maxSize)
                     {
                         n += 1;
-                        wh = bWork.Width / n * bWork.Height / n;
+                        wh = origSize.Width / n * origSize.Height / n;
                     }
                     int n2 = n * n;
 
-                    int hhh = bWork.Height / n;
-                    int hhh2 = bWork.Height - hhh * (n - 1);
+                    int hhh = origSize.Height / n;
+                    int hhh2 = origSize.Height - hhh * (n - 1);
 
-                    int www = bWork.Width / n;
-                    int www2 = bWork.Width - www * (n - 1);
+                    int www = origSize.Width / n;
+                    int www2 = origSize.Width - www * (n - 1);
 
                     overlap = Math.Max(overlap, 1);
 
@@ -2471,7 +2471,7 @@ namespace GetAlphaMatte
                         int xP = 2;
                         int yP = 2;
 
-                        ShowInfo?.Invoke(this, "picOuter " + (j + 1).ToString());
+                        ShowInfoOuter?.Invoke(this, "picOuter " + (j + 1).ToString());
 
                         if (scales == 8)
                         {
@@ -3247,7 +3247,7 @@ namespace GetAlphaMatte
         }
 
         private void GetTileSizesAndLocations(Bitmap bWork, Bitmap trWork, List<Rectangle> bmp, List<Rectangle> bmp2,
-    int w, int w2, int h, int h2, int overlap, int n)
+            int w, int w2, int h, int h2, int overlap, int n)
         {
             for (int y = 0; y < n; y++)
             {

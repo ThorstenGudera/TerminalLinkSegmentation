@@ -120,6 +120,7 @@
             backgroundWorker5 = new System.ComponentModel.BackgroundWorker();
             backgroundWorker3 = new System.ComponentModel.BackgroundWorker();
             backgroundWorker4 = new System.ComponentModel.BackgroundWorker();
+            btnCheckArray = new Button();
             statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
@@ -476,6 +477,7 @@
             // 
             // panel1
             // 
+            panel1.Controls.Add(btnCheckArray);
             panel1.Controls.Add(btnTScribbles);
             panel1.Controls.Add(cbExcludeRegions);
             panel1.Controls.Add(btnOutlineOperations);
@@ -1168,6 +1170,16 @@
             backgroundWorker4.DoWork += backgroundWorker4_DoWork;
             backgroundWorker4.RunWorkerCompleted += backgroundWorker4_RunWorkerCompleted;
             // 
+            // btnCheckArray
+            // 
+            btnCheckArray.Location = new Point(224, 123);
+            btnCheckArray.Name = "btnCheckArray";
+            btnCheckArray.Size = new Size(75, 23);
+            btnCheckArray.TabIndex = 725;
+            btnCheckArray.Text = "chk array";
+            btnCheckArray.UseVisualStyleBackColor = true;
+            btnCheckArray.Click += btnCheckArray_Click;
+            // 
             // frmAlphaMatte
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -1303,5 +1315,6 @@
         private CheckBox cbExcludeRegions;
         private ToolStripStatusLabel toolStripStatusLabel5;
         private Button btnTScribbles;
+        private Button btnCheckArray;
     }
 }

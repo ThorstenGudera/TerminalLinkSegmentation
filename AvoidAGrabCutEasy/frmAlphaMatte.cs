@@ -2045,12 +2045,15 @@ namespace AvoidAGrabCutEasy
                 int groupAmountX = scalesPics ? 1 : 0; //we dont use grouping, so set it simply to 1
                 int groupAmountY = scalesPics ? 1 : 0;
                 int maxSize = this.cbInterpolated.Checked ? (int)Math.Pow((double)this.numMaxSize.Value, 2) * 2 : (int)Math.Pow((double)this.numMaxSize.Value, 2);
-                bool trySingleTile = /*scalesPics ? false : this.cbHalfSize.Checked ? true :*/ bWork.Width * bWork.Height < maxSize ? true : false;
+                Size origSize = new Size(this.helplineRulerCtrl1.Bmp.Width, this.helplineRulerCtrl1.Bmp.Height);
+                if (this.cbHalfSize.Checked)
+                    origSize = new Size(origSize.Width / 2, origSize.Height / 2);
+                bool trySingleTile = /*scalesPics ? false : this.cbHalfSize.Checked ? true :*/ origSize.Width * origSize.Height < maxSize ? true : false;
                 bool verifyTrimaps = false;
 
                 this.backgroundWorker1.RunWorkerAsync(new object[] { 1 /* GMRES_r; 0 is GaussSeidel */, scalesPics, scales, overlap,
                                 interpolated, forceSerial, group, groupAmountX, groupAmountY, maxSize, bWork, trWork,
-                                trySingleTile, verifyTrimaps });
+                                trySingleTile, verifyTrimaps, origSize });
             }
         }
 
@@ -2357,11 +2360,13 @@ namespace AvoidAGrabCutEasy
                 bool trySingleTile = (bool)o[12];
                 bool verifyTrimaps = (bool)o[13];
 
+                Size origSize = (Size)o[14];
+
                 int id = Environment.TickCount;
                 this._lastRunNumber = id;
 
                 e.Result = this._cfop.ProcessPicture(mode, scalesPics, scales, overlap, interpolated, forceSerial, group, groupAmountX,
-                    groupAmountY, maxSize, bWork, trWork, trySingleTile, verifyTrimaps, Environment.TickCount, this.backgroundWorker1);
+                    groupAmountY, maxSize, bWork, trWork, trySingleTile, verifyTrimaps, Environment.TickCount, origSize, this.backgroundWorker1);
             }
             else
                 e.Result = null;
@@ -3160,15 +3165,15 @@ namespace AvoidAGrabCutEasy
                                                         gx.FillRectangle(sb, new Rectangle(
                                                             (int)((int)(pt.X - wh / 2) / factor),
                                                             (int)((int)(pt.Y - wh / 2) / factor),
-                                                            (int)(wh / factor),
-                                                            (int)(wh / factor)));
+                                                            (int)Math.Max(wh / factor, 1),
+                                                            (int)Math.Max(wh / factor, 1)));
                                                     if (l == 1)
                                                         using (Pen pen = new Pen(c, (factor > 1) ? 2 : 1))
                                                             gx.DrawRectangle(pen, new Rectangle(
                                                                 (int)((int)(pt.X - wh / 2) / factor),
                                                                 (int)((int)(pt.Y - wh / 2) / factor),
-                                                                (int)(wh / factor),
-                                                                (int)(wh / factor)));
+                                                                (int)Math.Max(wh / factor, 1),
+                                                                (int)Math.Max(wh / factor, 1)));
                                                 }
 
                                                 if (drawPaths && !f.Item4)
@@ -3192,15 +3197,15 @@ namespace AvoidAGrabCutEasy
                                                         gx.FillRectangle(sb, new Rectangle(
                                                             (int)((int)(pt.X - wh / 2) / factor),
                                                             (int)((int)(pt.Y - wh / 2) / factor),
-                                                            (int)(wh / factor),
-                                                            (int)(wh / factor)));
+                                                            (int)Math.Max(wh / factor, 1),
+                                                            (int)Math.Max(wh / factor, 1)));
                                                     if (l == 1)
                                                         using (Pen pen = new Pen(c, (factor > 1) ? 2 : 1))
                                                             gx.DrawRectangle(pen, new Rectangle(
                                                                 (int)((int)(pt.X - wh / 2) / factor),
                                                                 (int)((int)(pt.Y - wh / 2) / factor),
-                                                                (int)(wh / factor),
-                                                                (int)(wh / factor)));
+                                                                (int)Math.Max(wh / factor, 1),
+                                                                (int)Math.Max(wh / factor, 1)));
                                                 }
 
                                                 if (drawPaths && !f.Item4)
@@ -3617,5 +3622,34 @@ namespace AvoidAGrabCutEasy
             return result;
         }
 
+        private void btnCheckArray_Click(object sender, EventArgs e)
+        {
+            if (this.helplineRulerCtrl1.Bmp != null)
+            {
+                int w = this.helplineRulerCtrl1.Bmp.Width;
+                int h = this.helplineRulerCtrl1.Bmp.Height;
+
+                if (this.cbHalfSize.Checked)
+                {
+                    w /= 2;
+                    h /= 2;
+                }
+
+                int wh = w * h;
+                int n = 1;
+
+                int maxSize = this.cbInterpolated.Checked ? (int)Math.Pow((double)this.numMaxSize.Value, 2) * 2 : (int)Math.Pow((double)this.numMaxSize.Value, 2);
+
+                while (wh > maxSize)
+                {
+                    n += 1;
+                    wh = this.helplineRulerCtrl1.Bmp.Width / n * this.helplineRulerCtrl1.Bmp.Height / n;
+                }
+
+                int n2 = n * n;
+
+                MessageBox.Show(n2.ToString());
+            }
+        }
     }
 }
