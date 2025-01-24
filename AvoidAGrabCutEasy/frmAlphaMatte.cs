@@ -3643,7 +3643,7 @@ namespace AvoidAGrabCutEasy
                 while (wh > maxSize)
                 {
                     n += 1;
-                    wh = this.helplineRulerCtrl1.Bmp.Width / n * this.helplineRulerCtrl1.Bmp.Height / n;
+                    wh = w / n * h / n;
                 }
 
                 int n2 = n * n;

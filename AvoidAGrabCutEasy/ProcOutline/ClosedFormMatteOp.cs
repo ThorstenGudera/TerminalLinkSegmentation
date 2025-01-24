@@ -1788,11 +1788,11 @@ namespace GetAlphaMatte
                     }
                     int n2 = n * n;
 
-                    int h = origSize.Height / n;
-                    int h2 = origSize.Height - h * (n - 1);
+                    int h = bWork.Height / n;
+                    int h2 = bWork.Height - h * (n - 1);
 
-                    int w = origSize.Width / n;
-                    int w2 = origSize.Width - w * (n - 1);
+                    int w = bWork.Width / n;
+                    int w2 = bWork.Width - w * (n - 1);
 
                     overlap = Math.Max(overlap, 1);
 
@@ -2444,11 +2444,11 @@ namespace GetAlphaMatte
                     }
                     int n2 = n * n;
 
-                    int hhh = origSize.Height / n;
-                    int hhh2 = origSize.Height - hhh * (n - 1);
+                    int hhh = bWork.Height / n;
+                    int hhh2 = bWork.Height - hhh * (n - 1);
 
-                    int www = origSize.Width / n;
-                    int www2 = origSize.Width - www * (n - 1);
+                    int www = bWork.Width / n;
+                    int www2 = bWork.Width - www * (n - 1);
 
                     overlap = Math.Max(overlap, 1);
 
