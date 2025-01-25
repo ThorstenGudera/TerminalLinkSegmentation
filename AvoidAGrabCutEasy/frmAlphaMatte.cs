@@ -2045,15 +2045,12 @@ namespace AvoidAGrabCutEasy
                 int groupAmountX = scalesPics ? 1 : 0; //we dont use grouping, so set it simply to 1
                 int groupAmountY = scalesPics ? 1 : 0;
                 int maxSize = this.cbInterpolated.Checked ? (int)Math.Pow((double)this.numMaxSize.Value, 2) * 2 : (int)Math.Pow((double)this.numMaxSize.Value, 2);
-                Size origSize = new Size(this.helplineRulerCtrl1.Bmp.Width, this.helplineRulerCtrl1.Bmp.Height);
-                if (this.cbHalfSize.Checked)
-                    origSize = new Size(origSize.Width / 2, origSize.Height / 2);
-                bool trySingleTile = /*scalesPics ? false : this.cbHalfSize.Checked ? true :*/ origSize.Width * origSize.Height < maxSize ? true : false;
+                bool trySingleTile = /*scalesPics ? false : this.cbHalfSize.Checked ? true :*/ bWork.Width * bWork.Height < maxSize ? true : false;
                 bool verifyTrimaps = false;
 
                 this.backgroundWorker1.RunWorkerAsync(new object[] { 1 /* GMRES_r; 0 is GaussSeidel */, scalesPics, scales, overlap,
                                 interpolated, forceSerial, group, groupAmountX, groupAmountY, maxSize, bWork, trWork,
-                                trySingleTile, verifyTrimaps, origSize });
+                                trySingleTile, verifyTrimaps });
             }
         }
 
@@ -2204,20 +2201,6 @@ namespace AvoidAGrabCutEasy
 
                 Bitmap bWork = new Bitmap(this.helplineRulerCtrl1.Bmp);
 
-                double res = CheckWidthHeight(bWork, true, (double)this.numMaxSize.Value);
-                this.toolStripStatusLabel1.Text = "resFactor: " + Math.Max(res, 1).ToString("N2");
-
-                if (res > 1)
-                {
-                    Bitmap? bOld = bWork;
-                    bWork = ResampleDown(bWork, res);
-                    if (bOld != null)
-                    {
-                        bOld.Dispose();
-                        bOld = null;
-                    }
-                }
-
                 if (cbHalfSize.Checked && rbClosedForm.Checked)
                 {
                     Bitmap bWork2 = ResampleBmp(bWork, 2);
@@ -2229,7 +2212,6 @@ namespace AvoidAGrabCutEasy
                 }
 
                 double factor = (this.cbHalfSize.Checked && this.rbClosedForm.Checked) ? 2.0 : 1.0;
-                factor *= (res > 1) ? res : 1.0;
 
                 Bitmap bTrimap = new Bitmap(bWork.Width, bWork.Height);
                 this.SetBitmap(ref _bWork, ref bWork);
@@ -2360,13 +2342,11 @@ namespace AvoidAGrabCutEasy
                 bool trySingleTile = (bool)o[12];
                 bool verifyTrimaps = (bool)o[13];
 
-                Size origSize = (Size)o[14];
-
                 int id = Environment.TickCount;
                 this._lastRunNumber = id;
 
                 e.Result = this._cfop.ProcessPicture(mode, scalesPics, scales, overlap, interpolated, forceSerial, group, groupAmountX,
-                    groupAmountY, maxSize, bWork, trWork, trySingleTile, verifyTrimaps, Environment.TickCount, origSize, this.backgroundWorker1);
+                    groupAmountY, maxSize, bWork, trWork, trySingleTile, verifyTrimaps, Environment.TickCount, this.backgroundWorker1);
             }
             else
                 e.Result = null;

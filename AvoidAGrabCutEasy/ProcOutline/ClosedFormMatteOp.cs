@@ -1729,7 +1729,7 @@ namespace GetAlphaMatte
 
         public Bitmap? ProcessPicture(int mode, bool scalesPics, int scales, int overlap, bool interpolated, bool forceSerial, bool group,
             int groupAmountX, int groupAmountY, int maxSize, Bitmap bWork, Bitmap trWork, bool trySingleTile, bool verifyTrimaps,
-            int id_envTickcnt, Size origSize, BackgroundWorker? bgw)
+            int id_envTickcnt, BackgroundWorker? bgw)
         {
             ShowInfo?.Invoke(this, "outer pic-amount " + "...");
 
@@ -1778,13 +1778,13 @@ namespace GetAlphaMatte
                 {
                     Bitmap result = new Bitmap(bWork.Width, bWork.Height);
 
-                    int wh = origSize.Width * origSize.Height;
+                    int wh = bWork.Width * bWork.Height;
                     int n = 1;
 
                     while (wh > maxSize)
                     {
                         n += 1;
-                        wh = origSize.Width / n * origSize.Height / n;
+                        wh = bWork.Width / n * bWork.Height / n;
                     }
                     int n2 = n * n;
 
@@ -2434,13 +2434,13 @@ namespace GetAlphaMatte
                 }
                 else
                 {
-                    int wh = origSize.Width * origSize.Height;
+                    int wh = bWork.Width * bWork.Height;
                     int n = 1;
 
                     while (wh > maxSize)
                     {
                         n += 1;
-                        wh = origSize.Width / n * origSize.Height / n;
+                        wh = bWork.Width / n * bWork.Height / n;
                     }
                     int n2 = n * n;
 
