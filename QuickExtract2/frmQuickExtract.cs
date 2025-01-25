@@ -186,7 +186,6 @@ namespace QuickExtract2
             this.quickExtractingCtrl1.btnResetTrain.Click += Button15_Click;
         }
 
-
         private void Helplinerulerctrl1_Paint(object sender, PaintEventArgs e)
         {
             if (this.cbOutline.Checked)
@@ -213,7 +212,7 @@ namespace QuickExtract2
                                 Color c = l == 0 ? Color.Black : l == 1 ? Color.White : Color.Gray;
 
                                 //if (l == 3 && this.cbHighlight.Checked)
-                                    c = Color.Cyan;
+                                c = Color.Cyan;
 
                                 if (doRect)
                                 {
@@ -366,7 +365,7 @@ namespace QuickExtract2
                                     Color c = Color.Gray;
 
                                     //if (this.cbHighlight.Checked)
-                                        c = Color.Cyan;
+                                    c = Color.Cyan;
 
                                     if (doRect)
                                     {
@@ -3576,8 +3575,8 @@ namespace QuickExtract2
                 AddPointsToScribblePathFromFrmQuickExtract(c, wh);
 
                 this._pic_changed = true;
-            }           
-            
+            }
+
             this.helplineRulerCtrl1.dbPanel1.Invalidate();
         }
 
@@ -3621,6 +3620,8 @@ namespace QuickExtract2
             if (this._scribbles == null)
                 this._scribbles = new Dictionary<int, Dictionary<int, List<List<Point>>>>();
 
+            this._scribbles.Clear();
+
             if (this._scribbles != null)
             {
                 int fgbg = 3;
@@ -3633,6 +3634,8 @@ namespace QuickExtract2
 
                 if (this._scribbleSeq == null)
                     this._scribbleSeq = new List<Tuple<int, int, int, bool, List<List<Point>>>>();
+
+                this._scribbleSeq.Clear();
 
                 if (c != null)
                 {
@@ -3661,6 +3664,11 @@ namespace QuickExtract2
                     this.helplineRulerCtrl1.dbPanel1.Invalidate();
                 }
             }
+        }
+
+        private void numWH_ValueChanged(object sender, EventArgs e)
+        {
+            this.cbOutline_CheckedChanged(this.cbOutline, new EventArgs());
         }
     }
 }

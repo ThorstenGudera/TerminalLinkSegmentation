@@ -246,6 +246,7 @@
             numWH.Size = new Size(50, 23);
             numWH.TabIndex = 286;
             numWH.Value = new decimal(new int[] { 15, 0, 0, 0 });
+            numWH.ValueChanged += numWH_ValueChanged;
             // 
             // cbOutline
             // 
