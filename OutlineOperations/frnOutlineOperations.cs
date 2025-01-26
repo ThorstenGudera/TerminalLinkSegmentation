@@ -2164,7 +2164,7 @@ namespace OutlineOperations
                     using (Graphics gx = Graphics.FromImage(this.helplineRulerCtrl1.Bmp))
                     {
                         gx.PixelOffsetMode = PixelOffsetMode.Half;
-                        gx.SmoothingMode = SmoothingMode.AntiAlias;
+                        gx.SmoothingMode = SmoothingMode.None;
                         gx.CompositingMode = CompositingMode.SourceCopy;
 
                         float w = (float)this.numPenSize.Value;

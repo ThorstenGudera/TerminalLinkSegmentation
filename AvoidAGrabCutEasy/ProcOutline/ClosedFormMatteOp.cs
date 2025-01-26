@@ -2967,7 +2967,14 @@ namespace GetAlphaMatte
                         int y = i / n;
 
                         using (Graphics gx = Graphics.FromImage(bmpResult))
-                            gx.DrawImage(bmpF4[i], x * www - (x == 0 ? 0 : overlap), y * hhh - (y == 0 ? 0 : overlap));
+                        {
+                            gx.InterpolationMode = InterpolationMode.NearestNeighbor;
+                            gx.DrawImage(bmpF4[i], new Rectangle(x * www - (x == 0 ? 0 : overlap / 2), y * hhh - (y == 0 ? 0 : overlap / 2),
+                                                        bmpF4[i].Width - (x == 0 ? overlap / 2 : overlap), bmpF4[i].Height - (x == 0 ? overlap / 2 : overlap)),
+                                                    new Rectangle(x == 0 ? 0 : overlap / 2, y == 0 ? 0 : overlap / 2,
+                                                        bmpF4[i].Width - (x == 0 ? overlap / 2 : overlap), bmpF4[i].Height - (x == 0 ? overlap / 2 : overlap)),
+                                                    GraphicsUnit.Pixel);
+                        }
                     }
 
                     for (int i = bmpF.Count - 1; i >= 0; i--)
