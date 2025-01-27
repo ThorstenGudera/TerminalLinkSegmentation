@@ -92,7 +92,7 @@ namespace AvoidAGrabCutEasy
                         iG = bOut;
                     }
 
-                    if (iG != null)
+                    if (iG != null && AvailMem.AvailMem.checkAvailRam(bmp.Width * bmp.Height * 12L))
                     {
                         //3 PostBlur
                         igg.FastZGaussian_Blur_NxN_SigmaAsDistance(iG, pBKrnl, 0.01,

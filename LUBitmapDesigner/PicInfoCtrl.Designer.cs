@@ -47,6 +47,9 @@
             numY = new NumericUpDown();
             numRot = new NumericUpDown();
             numOpacity = new NumericUpDown();
+            btnBGSettings = new Button();
+            label6 = new Label();
+            groupBox2 = new GroupBox();
             GroupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numX).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numH).BeginInit();
@@ -54,13 +57,15 @@
             ((System.ComponentModel.ISupportInitialize)numY).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numRot).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numOpacity).BeginInit();
+            groupBox2.SuspendLayout();
             SuspendLayout();
             // 
             // GroupBox1
             // 
+            GroupBox1.Controls.Add(cbIntVals);
+            GroupBox1.Controls.Add(groupBox2);
             GroupBox1.Controls.Add(cmbMergeOP);
             GroupBox1.Controls.Add(label5);
-            GroupBox1.Controls.Add(cbIntVals);
             GroupBox1.Controls.Add(Button3);
             GroupBox1.Controls.Add(Button1);
             GroupBox1.Controls.Add(Label1);
@@ -108,7 +113,7 @@
             // cbIntVals
             // 
             cbIntVals.AutoSize = true;
-            cbIntVals.Location = new Point(141, 123);
+            cbIntVals.Location = new Point(141, 119);
             cbIntVals.Margin = new Padding(4, 3, 4, 3);
             cbIntVals.Name = "cbIntVals";
             cbIntVals.Size = new Size(63, 19);
@@ -162,7 +167,7 @@
             // Label2
             // 
             Label2.AutoSize = true;
-            Label2.Location = new Point(20, 71);
+            Label2.Location = new Point(20, 67);
             Label2.Margin = new Padding(4, 0, 4, 0);
             Label2.Name = "Label2";
             Label2.Size = new Size(30, 15);
@@ -205,7 +210,7 @@
             cbAspect.AutoSize = true;
             cbAspect.Checked = true;
             cbAspect.CheckState = CheckState.Checked;
-            cbAspect.Location = new Point(21, 123);
+            cbAspect.Location = new Point(21, 119);
             cbAspect.Margin = new Padding(4, 3, 4, 3);
             cbAspect.Name = "cbAspect";
             cbAspect.Size = new Size(88, 19);
@@ -216,7 +221,7 @@
             // numX
             // 
             numX.DecimalPlaces = 2;
-            numX.Location = new Point(20, 40);
+            numX.Location = new Point(20, 37);
             numX.Margin = new Padding(4, 3, 4, 3);
             numX.Maximum = new decimal(new int[] { 32767, 0, 0, 0 });
             numX.Minimum = new decimal(new int[] { 32768, 0, 0, int.MinValue });
@@ -228,7 +233,7 @@
             // numH
             // 
             numH.DecimalPlaces = 2;
-            numH.Location = new Point(141, 93);
+            numH.Location = new Point(141, 86);
             numH.Margin = new Padding(4, 3, 4, 3);
             numH.Maximum = new decimal(new int[] { 32767, 0, 0, 0 });
             numH.Name = "numH";
@@ -239,7 +244,7 @@
             // numW
             // 
             numW.DecimalPlaces = 2;
-            numW.Location = new Point(21, 93);
+            numW.Location = new Point(21, 86);
             numW.Margin = new Padding(4, 3, 4, 3);
             numW.Maximum = new decimal(new int[] { 32767, 0, 0, 0 });
             numW.Name = "numW";
@@ -250,7 +255,7 @@
             // numY
             // 
             numY.DecimalPlaces = 2;
-            numY.Location = new Point(140, 40);
+            numY.Location = new Point(140, 37);
             numY.Margin = new Padding(4, 3, 4, 3);
             numY.Maximum = new decimal(new int[] { 32767, 0, 0, 0 });
             numY.Minimum = new decimal(new int[] { 32768, 0, 0, int.MinValue });
@@ -284,6 +289,35 @@
             numOpacity.Value = new decimal(new int[] { 1, 0, 0, 0 });
             numOpacity.ValueChanged += numOpacity_ValueChanged;
             // 
+            // btnBGSettings
+            // 
+            btnBGSettings.Location = new Point(6, 38);
+            btnBGSettings.Margin = new Padding(4, 3, 4, 3);
+            btnBGSettings.Name = "btnBGSettings";
+            btnBGSettings.Size = new Size(88, 27);
+            btnBGSettings.TabIndex = 31;
+            btnBGSettings.Text = "BGPic set";
+            btnBGSettings.UseVisualStyleBackColor = true;
+            // 
+            // label6
+            // 
+            label6.AutoSize = true;
+            label6.Location = new Point(6, 16);
+            label6.Name = "label6";
+            label6.Size = new Size(85, 15);
+            label6.TabIndex = 48;
+            label6.Text = "BG pic settings";
+            // 
+            // groupBox2
+            // 
+            groupBox2.Controls.Add(label6);
+            groupBox2.Controls.Add(btnBGSettings);
+            groupBox2.Location = new Point(135, 135);
+            groupBox2.Name = "groupBox2";
+            groupBox2.Size = new Size(110, 73);
+            groupBox2.TabIndex = 49;
+            groupBox2.TabStop = false;
+            // 
             // PicInfoCtrl
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -300,6 +334,8 @@
             ((System.ComponentModel.ISupportInitialize)numY).EndInit();
             ((System.ComponentModel.ISupportInitialize)numRot).EndInit();
             ((System.ComponentModel.ISupportInitialize)numOpacity).EndInit();
+            groupBox2.ResumeLayout(false);
+            groupBox2.PerformLayout();
             ResumeLayout(false);
         }
 
@@ -324,5 +360,8 @@
         public CheckBox cbIntVals;
         private Label label5;
         public ComboBox cmbMergeOP;
+        public Button btnBGSettings;
+        private GroupBox groupBox2;
+        private Label label6;
     }
 }

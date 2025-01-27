@@ -38,7 +38,18 @@ namespace AvoidAGrabCutEasy
 
             ConvolutionLib.ProgressEventArgs pe = new ConvolutionLib.ProgressEventArgs(b.Height, 20, 1, bgw);
 
-            return conv.Convolve_par(b, Kernel, AddVals, Bias, 255, false, true, pe, bgw, divisor);
+            bool res = false;
+
+            try
+            {
+                res = conv.Convolve_par(b, Kernel, AddVals, Bias, 255, false, true, pe, bgw, divisor);
+            }
+            catch(Exception exc)
+            {
+                MessageBox.Show(exc.ToString());
+            }
+
+            return res;
         }
 
         private bool EdgeDetection_Sobel_Vert(Bitmap b, double divisor, int nWeight, bool doTransparency, int Bias, Convolution conv, System.ComponentModel.BackgroundWorker bgw)
@@ -62,7 +73,18 @@ namespace AvoidAGrabCutEasy
 
             ConvolutionLib.ProgressEventArgs pe = new ConvolutionLib.ProgressEventArgs(b.Height, 20, 1, bgw);
 
-            return conv.Convolve_par(b, Kernel, AddVals, Bias, 255, false, true, pe, bgw, divisor);
+            bool res = false;
+
+            try
+            {
+                res = conv.Convolve_par(b, Kernel, AddVals, Bias, 255, false, true, pe, bgw, divisor);
+            }
+            catch (Exception exc)
+            {
+                MessageBox.Show(exc.ToString());
+            }
+
+            return res;
         }
 
         private bool EdgeDetection_Scharr_Horz(Bitmap b, double divisor, int nWeight, bool doTransparency, int Bias, Convolution conv, System.ComponentModel.BackgroundWorker bgw)
@@ -86,7 +108,18 @@ namespace AvoidAGrabCutEasy
 
             ConvolutionLib.ProgressEventArgs pe = new ConvolutionLib.ProgressEventArgs(b.Height, 20, 1, bgw);
 
-            return conv.Convolve_par(b, Kernel, AddVals, Bias, 255, false, true, pe, bgw, divisor);
+            bool res = false;
+
+            try
+            {
+                res = conv.Convolve_par(b, Kernel, AddVals, Bias, 255, false, true, pe, bgw, divisor);
+            }
+            catch (Exception exc)
+            {
+                MessageBox.Show(exc.ToString());
+            }
+
+            return res;
         }
 
         private bool EdgeDetection_Scharr_Vert(Bitmap b, double divisor, int nWeight, bool doTransparency, int Bias, Convolution conv, System.ComponentModel.BackgroundWorker bgw)
@@ -110,7 +143,18 @@ namespace AvoidAGrabCutEasy
 
             ConvolutionLib.ProgressEventArgs pe = new ConvolutionLib.ProgressEventArgs(b.Height, 20, 1, bgw);
 
-            return conv.Convolve_par(b, Kernel, AddVals, Bias, 255, false, true, pe, bgw, divisor);
+            bool res = false;
+
+            try
+            {
+                res = conv.Convolve_par(b, Kernel, AddVals, Bias, 255, false, true, pe, bgw, divisor);
+            }
+            catch (Exception exc)
+            {
+                MessageBox.Show(exc.ToString());
+            }
+
+            return res;
         }
 
         private bool EdgeDetection_Scharr_Horz2(Bitmap b, double divisor, int nWeight, bool doTransparency, int Bias, Convolution conv, System.ComponentModel.BackgroundWorker bgw)
@@ -134,7 +178,18 @@ namespace AvoidAGrabCutEasy
 
             ConvolutionLib.ProgressEventArgs pe = new ConvolutionLib.ProgressEventArgs(b.Height, 20, 1, bgw);
 
-            return conv.Convolve_par(b, Kernel, AddVals, Bias, 255, false, true, pe, bgw, divisor);
+            bool res = false;
+
+            try
+            {
+                res = conv.Convolve_par(b, Kernel, AddVals, Bias, 255, false, true, pe, bgw, divisor);
+            }
+            catch (Exception exc)
+            {
+                MessageBox.Show(exc.ToString());
+            }
+
+            return res;
         }
 
         private bool EdgeDetection_Scharr_Vert2(Bitmap b, double divisor, int nWeight, bool doTransparency, int Bias, Convolution conv, System.ComponentModel.BackgroundWorker bgw)
@@ -158,7 +213,18 @@ namespace AvoidAGrabCutEasy
 
             ConvolutionLib.ProgressEventArgs pe = new ConvolutionLib.ProgressEventArgs(b.Height, 20, 1, bgw);
 
-            return conv.Convolve_par(b, Kernel, AddVals, Bias, 255, false, true, pe, bgw, divisor);
+            bool res = false;
+
+            try
+            {
+                res = conv.Convolve_par(b, Kernel, AddVals, Bias, 255, false, true, pe, bgw, divisor);
+            }
+            catch (Exception exc)
+            {
+                MessageBox.Show(exc.ToString());
+            }
+
+            return res;
         }
 
         public unsafe bool MergeBitmaps(Bitmap b, Bitmap f, Bitmap z, byte nThreshold, int bias)

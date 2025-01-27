@@ -26,6 +26,8 @@ namespace PseudoShadow
         private UndoOPCache? _undoOPCache = null;
         private UndoOPCache? _undoOPCache2 = null;
 
+        private Bitmap? _bmpBGOrig;
+
         public string? CachePathAddition
         {
             get
@@ -76,11 +78,45 @@ namespace PseudoShadow
                 this.picInfoCtrl1.ShapeChanged += PicInfoCtrl1_ShapeChanged;
                 this.luBitmapDesignerCtrl1.ShapeRemoved += LuBitmapDesignerCtrl1_ShapeRemoved;
                 this.luBitmapDesignerCtrl1.SPC += LuBitmapDesignerCtrl1_SPC;
+                this.picInfoCtrl1.btnBGSettings.Click += BtnBGSettings_Click;
 
                 this.luBitmapDesignerCtrl1.helplineRulerCtrl1.dbPanel1.MouseMove += DbPanel1_MouseMove;
 
                 if (this.luBitmapDesignerCtrl1.ShapeList != null && this.luBitmapDesignerCtrl1.ShapeList.Count > 0)
                     this.LuBitmapDesignerCtrl1_ShapeChanged(this, this.luBitmapDesignerCtrl1.ShapeList[this.luBitmapDesignerCtrl1.ShapeList.Count - 1]);
+            }
+        }
+
+        private void BtnBGSettings_Click(object? sender, EventArgs e)
+        {
+            if (this.luBitmapDesignerCtrl1.ShapeList != null && this.luBitmapDesignerCtrl1.ShapeList.Count > 0 &&
+                this.luBitmapDesignerCtrl1.helplineRulerCtrl1.Bmp != null && this._bmpBGOrig != null)
+            {
+                Bitmap? bOrig = new Bitmap(this._bmpBGOrig);
+
+                frmBGSettings frm = new frmBGSettings(bOrig.Size,
+                    new Size((int)this.luBitmapDesignerCtrl1.ShapeList[0].Bounds.Width,
+                    (int)this.luBitmapDesignerCtrl1.ShapeList[0].Bounds.Height));
+                if (frm.ShowDialog() == DialogResult.OK)
+                {
+                    Bitmap? bmp = new Bitmap((int)frm.numWidth.Value, (int)frm.numHeight.Value);
+                    using Graphics gx = Graphics.FromImage(bmp);
+                    gx.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                    gx.DrawImage(bOrig, 0, 0, bmp.Width, bmp.Height);
+
+                    BitmapShape? b = this.luBitmapDesignerCtrl1.ShapeList[0];
+                    BitmapShape bNew = new BitmapShape() { Bmp = bmp, Bounds = new RectangleF(0, 0, bmp.Width, bmp.Height), Rotation = 0, Zoom = this.luBitmapDesignerCtrl1.helplineRulerCtrl1.Zoom };
+                    this.luBitmapDesignerCtrl1.ShapeList[0] = bNew;
+                    this.luBitmapDesignerCtrl1.helplineRulerCtrl1.Bmp = bNew.Bmp;
+
+                    if (b != null)
+                    {
+                        b.Dispose();
+                        b = null;
+                    }
+
+                    this.cmbZoom_SelectedIndexChanged(this.cmbZoom, new EventArgs());
+                }
             }
         }
 
@@ -422,9 +458,9 @@ namespace PseudoShadow
             }
         }
 
-        private void SetBitmap(ref Bitmap bitmapToSet, ref Bitmap bitmapToBeSet)
+        private void SetBitmap(ref Bitmap? bitmapToSet, ref Bitmap bitmapToBeSet)
         {
-            Bitmap bOld = bitmapToSet;
+            Bitmap? bOld = bitmapToSet;
 
             bitmapToSet = bitmapToBeSet;
 
@@ -467,6 +503,9 @@ namespace PseudoShadow
                     this.cmbZoom_SelectedIndexChanged(this.cmbZoom, new EventArgs());
 
                     this.btnCloneColors.Enabled = this.luBitmapDesignerCtrl1.ShapeList.Count > 1;
+
+                    Bitmap bC = new Bitmap(bmp);
+                    this.SetBitmap(ref this._bmpBGOrig, ref bC);
                 }
             }
         }
@@ -1632,6 +1671,9 @@ namespace PseudoShadow
                         this.cmbZoom_SelectedIndexChanged(this.cmbZoom, new EventArgs());
 
                         this.btnCloneColors.Enabled = this.luBitmapDesignerCtrl1.ShapeList.Count > 1;
+
+                        Bitmap bC = new Bitmap(bmp);
+                        this.SetBitmap(ref this._bmpBGOrig, ref bC);
                     }
                 }
                 this.openFileDialog1.InitialDirectory = s;
