@@ -27,6 +27,11 @@ namespace PseudoShadow
                 this._bmpBU.Dispose();
                 this._bmpBU = null;
             }
+            if (this._bmpBGOrig != null)
+            {
+                this._bmpBGOrig.Dispose();
+                this._bmpBGOrig = null;
+            }
             if (disposing && (components != null))
             {
                 components.Dispose();

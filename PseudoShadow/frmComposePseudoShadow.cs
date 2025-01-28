@@ -522,6 +522,7 @@ namespace PseudoShadow
                 this._undoOPCache.Dispose();
             if (this._undoOPCache2 != null)
                 this._undoOPCache2.Dispose();
+            //bitmaps disposed in designer file
 
             this.luBitmapDesignerCtrl1.DisposeBGImage();
         }
