@@ -395,6 +395,47 @@ namespace AvoidAGrabCutEasy
                     int wh = f.Item2;
                     int listNo = f.Item3;
 
+                    //test
+                    if (!this.DesignMode && listNo < 0)
+                    {
+                        //MessageBox.Show("listNo is -1, hlc1_paint");
+
+                        if (this._scribbles.ContainsKey(l) && this._scribbles[l].ContainsKey(wh))
+                        {
+                            List<List<Point>> j = this._scribbles[l][wh];
+
+                            if (j != null && j.Count > 0)
+                                j.RemoveAt(j.Count - 1);
+
+                            if (this._scribbleSeq != null && j != null)
+                            {
+                                IEnumerable<Tuple<int, int, int, bool, List<List<Point>>>> ll = this._scribbleSeq.Where(a => a.Item1 == l);
+                                if (ll != null && ll.Count() > 0)
+                                {
+                                    IEnumerable<Tuple<int, int, int, bool, List<List<Point>>>> whL = ll.Where(a => a.Item2 == wh);
+
+                                    if (whL != null && whL.Count() > 0)
+                                    {
+                                        IEnumerable<Tuple<int, int, int, bool, List<List<Point>>>> listL = whL.Where(a => a.Item3 == j.Count);
+
+                                        if (listL != null && listL.Count() > 0)
+                                        {
+                                            int indxt = this._scribbleSeq.IndexOf(listL.First());
+
+                                            for (int j4 = indxt + 1; j4 < this._scribbleSeq.Count; j4++)
+                                            {
+                                                if (this._scribbleSeq[j4].Item1 == l && this._scribbleSeq[j4].Item2 == wh)
+                                                    this._scribbleSeq[j4] = Tuple.Create(l, wh, this._scribbleSeq[j4].Item3 - 1, false, new List<List<Point>>());
+                                            }
+
+                                            this._scribbleSeq.Remove(listL.First());
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+
                     if (this._scribbles.ContainsKey(l) && this._scribbles[l].ContainsKey(wh))
                     {
                         List<List<Point>> ptsList = this._scribbles[l][wh];

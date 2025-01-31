@@ -3299,7 +3299,8 @@ namespace QuickExtract2
             {
                 if (this._bmpBU != null && AvailMem.AvailMem.checkAvailRam(this.helplineRulerCtrl1.Bmp.Width * this.helplineRulerCtrl1.Bmp.Height * 4L))
                 {
-                    this.SetBitmap(this.helplineRulerCtrl1.Bmp, this._bmpBU, this.helplineRulerCtrl1, "Bmp");
+                    Bitmap? bC = new Bitmap(this.helplineRulerCtrl1.Bmp);
+                    this.SetBitmap(ref this._bmpBU, ref bC);
                     this.CheckBox18.Checked = true;
                     SetNewPath();
                 }
