@@ -335,7 +335,8 @@ namespace AvoidAGrabCutEasy
                         List<List<Point>> whPts = this._scribbles[fgbg][wh];
                         whPts.Add(new List<Point>());
                         whPts[whPts.Count - 1].AddRange(this._points2.ToArray());
-                        this._scribbleSeq.Add(Tuple.Create(fgbg, wh, this._scribbles[fgbg][wh].Count - 1, false, new List<List<Point>>()));
+                        if (this._scribbles[fgbg][wh].Count > 0)
+                            this._scribbleSeq.Add(Tuple.Create(fgbg, wh, this._scribbles[fgbg][wh].Count - 1, false, new List<List<Point>>()));
                     }
                 }
             }
@@ -1780,7 +1781,8 @@ namespace AvoidAGrabCutEasy
                         this._scribbleSeq = new List<Tuple<int, int, int, bool, List<List<Point>>>>();
 
                     this._scribbles[0][3].Add(ll.Distinct().ToList());
-                    this._scribbleSeq.Add(Tuple.Create(0, 3, this._scribbles[0][3].Count - 1, true, GetBoundariesForScribbleFill(this._scribbles[0][3][this._scribbles[0][3].Count - 1], w, h)));
+                    if (this._scribbles[0][3].Count > 0)
+                        this._scribbleSeq.Add(Tuple.Create(0, 3, this._scribbles[0][3].Count - 1, true, GetBoundariesForScribbleFill(this._scribbles[0][3][this._scribbles[0][3].Count - 1], w, h)));
 
                     this.helplineRulerCtrl1.dbPanel1.Invalidate();
                 }
@@ -1959,7 +1961,8 @@ namespace AvoidAGrabCutEasy
                         this._scribbleSeq = new List<Tuple<int, int, int, bool, List<List<Point>>>>();
 
                     this._scribbles[1][3].Add(ll.Distinct().ToList());
-                    this._scribbleSeq.Add(Tuple.Create(1, 3, this._scribbles[1][3].Count - 1, true, GetBoundariesForScribbleFill(this._scribbles[1][3][this._scribbles[1][3].Count - 1], w, h)));
+                    if (this._scribbles[1][3].Count > 0)
+                        this._scribbleSeq.Add(Tuple.Create(1, 3, this._scribbles[1][3].Count - 1, true, GetBoundariesForScribbleFill(this._scribbles[1][3][this._scribbles[1][3].Count - 1], w, h)));
 
                     this.helplineRulerCtrl1.dbPanel1.Invalidate();
                 }

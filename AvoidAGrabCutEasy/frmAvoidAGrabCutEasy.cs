@@ -668,7 +668,8 @@ namespace AvoidAGrabCutEasy
                         List<List<Point>> whPts = this._scribbles[fgbg][wh];
                         whPts.Add(new List<Point>());
                         whPts[whPts.Count - 1].AddRange(this._points2.ToArray());
-                        this._scribbleSeq.Add(Tuple.Create(fgbg, wh, this._scribbles[fgbg][wh].Count - 1, false, new List<List<Point>>()));
+                        if (this._scribbles[fgbg][wh].Count > 0)
+                            this._scribbleSeq.Add(Tuple.Create(fgbg, wh, this._scribbles[fgbg][wh].Count - 1, false, new List<List<Point>>()));
                     }
                 }
             }
@@ -736,6 +737,47 @@ namespace AvoidAGrabCutEasy
                         int l = f.Item1;
                         int wh = f.Item2;
                         int listNo = f.Item3;
+
+                        //test
+                        if (!this.DesignMode && listNo < 0)
+                        {
+                            //MessageBox.Show("listNo is -1, hlc1_paint");
+
+                            if (this._scribbles.ContainsKey(l) && this._scribbles[l].ContainsKey(wh))
+                            {
+                                List<List<Point>> j = this._scribbles[l][wh];
+
+                                if (j != null && j.Count > 0)
+                                    j.RemoveAt(j.Count - 1);
+
+                                if (this._scribbleSeq != null && j != null)
+                                {
+                                    IEnumerable<Tuple<int, int, int, bool, List<List<Point>>>> ll = this._scribbleSeq.Where(a => a.Item1 == l);
+                                    if (ll != null && ll.Count() > 0)
+                                    {
+                                        IEnumerable<Tuple<int, int, int, bool, List<List<Point>>>> whL = ll.Where(a => a.Item2 == wh);
+
+                                        if (whL != null && whL.Count() > 0)
+                                        {
+                                            IEnumerable<Tuple<int, int, int, bool, List<List<Point>>>> listL = whL.Where(a => a.Item3 == j.Count);
+
+                                            if (listL != null && listL.Count() > 0)
+                                            {
+                                                int indxt = this._scribbleSeq.IndexOf(listL.First());
+
+                                                for (int j4 = indxt + 1; j4 < this._scribbleSeq.Count; j4++)
+                                                {
+                                                    if (this._scribbleSeq[j4].Item1 == l && this._scribbleSeq[j4].Item2 == wh)
+                                                        this._scribbleSeq[j4] = Tuple.Create(l, wh, this._scribbleSeq[j4].Item3 - 1, false, new List<List<Point>>());
+                                                }
+
+                                                this._scribbleSeq.Remove(listL.First());
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
 
                         if (this._scribbles.ContainsKey(l) && this._scribbles[l].ContainsKey(wh))
                         {
@@ -4576,7 +4618,8 @@ namespace AvoidAGrabCutEasy
                         this._scribbleSeq = new List<Tuple<int, int, int, bool, List<List<Point>>>>();
 
                     this._scribbles[0][3].Add(ll.Distinct().ToList());
-                    this._scribbleSeq.Add(Tuple.Create(0, 3, this._scribbles[0][3].Count - 1, true, GetBoundariesForScribbleFill(this._scribbles[0][3][this._scribbles[0][3].Count - 1], w, h)));
+                    if (this._scribbles[0][3].Count > 0)
+                        this._scribbleSeq.Add(Tuple.Create(0, 3, this._scribbles[0][3].Count - 1, true, GetBoundariesForScribbleFill(this._scribbles[0][3][this._scribbles[0][3].Count - 1], w, h)));
 
                     this.helplineRulerCtrl1.dbPanel1.Invalidate();
                 }
@@ -4751,7 +4794,8 @@ namespace AvoidAGrabCutEasy
                         this._scribbleSeq = new List<Tuple<int, int, int, bool, List<List<Point>>>>();
 
                     this._scribbles[1][3].Add(ll.Distinct().ToList());
-                    this._scribbleSeq.Add(Tuple.Create(1, 3, this._scribbles[1][3].Count - 1, true, GetBoundariesForScribbleFill(this._scribbles[1][3][this._scribbles[1][3].Count - 1], w, h)));
+                    if (this._scribbles[1][3].Count > 0)
+                        this._scribbleSeq.Add(Tuple.Create(1, 3, this._scribbles[1][3].Count - 1, true, GetBoundariesForScribbleFill(this._scribbles[1][3][this._scribbles[1][3].Count - 1], w, h)));
 
                     this.helplineRulerCtrl1.dbPanel1.Invalidate();
                 }
