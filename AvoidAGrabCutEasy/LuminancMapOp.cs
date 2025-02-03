@@ -95,32 +95,41 @@ namespace AvoidAGrabCutEasy
                     if (iG != null && AvailMem.AvailMem.checkAvailRam(bmp.Width * bmp.Height * 12L))
                     {
                         //3 PostBlur
-                        igg.FastZGaussian_Blur_NxN_SigmaAsDistance(iG, pBKrnl, 0.01,
-                                        255, true, true, false, conv);
-
-                        unsafe
+                        try
                         {
-                            int w = bmp.Width;
-                            int h = bmp.Height;
-                            BitmapData bmD = iG.LockBits(new Rectangle(0, 0, w, h), ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
-                            int stride = bmD.Stride;
+                            igg.FastZGaussian_Blur_NxN_SigmaAsDistance(iG, pBKrnl, 0.01,
+                                            255, true, true, false, conv);
 
-                            Parallel.For(0, h, y =>
+                            unsafe
                             {
-                                byte* p = (byte*)bmD.Scan0;
-                                p += y * stride;
+                                int w = bmp.Width;
+                                int h = bmp.Height;
+                                BitmapData bmD = iG.LockBits(new Rectangle(0, 0, w, h), ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
+                                int stride = bmD.Stride;
 
-                                for (int x = 0; x < w; x++)
+                                Parallel.For(0, h, y =>
                                 {
-                                    Color c = Color.FromArgb(255, p[2], p[1], p[0]);
-                                    result[x, y] = 1.0f - c.GetBrightness();
-                                    p += 4;
-                                }
-                            });
+                                    byte* p = (byte*)bmD.Scan0;
+                                    p += y * stride;
 
-                            iG.UnlockBits(bmD);
+                                    for (int x = 0; x < w; x++)
+                                    {
+                                        Color c = Color.FromArgb(255, p[2], p[1], p[0]);
+                                        result[x, y] = 1.0f - c.GetBrightness();
+                                        p += 4;
+                                    }
+                                });
+
+                                iG.UnlockBits(bmD);
+                            }
+                        }
+                        catch (Exception exc)
+                        {
+                            MessageBox.Show(exc.ToString());
                         }
                     }
+                    else
+                        MessageBox.Show("Not enough Memory.");
                 }
 
                 conv.ProgressPlus -= Conv_ProgressPlus;
