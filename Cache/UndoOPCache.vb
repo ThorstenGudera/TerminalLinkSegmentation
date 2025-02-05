@@ -69,6 +69,8 @@ Public Class UndoOPCache
     Private m_ImageBackupPointer As Integer
 
     Private _lockObject As New Object()
+    Public Property FPUsed As Boolean
+    Public Property CurrentResetMarker As Integer = 0
 
     Public Sub New(t As Type)
         _cache = New Cache(_controlMutex, t)
@@ -148,8 +150,6 @@ Public Class UndoOPCache
 
         Count = i
     End Sub
-
-    Public Property FPUsed As Boolean
 
     Public Sub Add(bmp As Bitmap)
         If _cache IsNot Nothing AndAlso _cache.IsActive Then
@@ -562,6 +562,14 @@ Public Class UndoOPCache
         Dim bOut As Bitmap = Nothing
         If _cache IsNot Nothing AndAlso _cache.IsActive Then
             bOut = _cache.LoadFromCache(fileNumber)
+        End If
+        Return bOut
+    End Function
+
+    Public Function LoadFromMarker() As Bitmap
+        Dim bOut As Bitmap = Nothing
+        If _cache IsNot Nothing AndAlso _cache.IsActive Then
+            bOut = _cache.LoadFromCache(CurrentResetMarker)
         End If
         Return bOut
     End Function
