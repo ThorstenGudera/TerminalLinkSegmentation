@@ -1767,6 +1767,12 @@ namespace AvoidAGrabCutEasy
 
         private void btnGo_Click(object sender, EventArgs e)
         {
+            if (!this.CheckLumMap(this.helplineRulerCtrl1.Bmp.Width, this.helplineRulerCtrl1.Bmp.Height))
+            {
+                MessageBox.Show("LumMap is of wrong size.");
+                return;
+            }
+
             //reset state
             if (this.backgroundWorker1.IsBusy || this.backgroundWorker2.IsBusy)
             {
@@ -4386,6 +4392,9 @@ namespace AvoidAGrabCutEasy
 
                                         //Bitmap bC = new Bitmap(bmp);
                                         //this.SetBitmap(ref this._bmpBU, ref bC);
+
+                                        this.numMaxSize.Value = (decimal)Math.Max(this.helplineRulerCtrl1.Bmp.Width, this.helplineRulerCtrl1.Bmp.Height);
+                                        this.CmpLMap();
                                     }
                                 }
                             }
@@ -4416,6 +4425,28 @@ namespace AvoidAGrabCutEasy
                         }
                     }
                 }
+            }
+        }
+
+        private async void CmpLMap()
+        {
+            if (this.helplineRulerCtrl1.Bmp != null)
+            {
+                this.lblLumMap.Text = "computing...";
+                this.btnGo.Enabled = this.btnGetOutline.Enabled = false;
+                this.btnGo.Refresh();
+                this.toolStripProgressBar1.Value = 0;
+                this.toolStripProgressBar1.Visible = true;
+                LuminancMapOp lop = new LuminancMapOp();
+                lop.ProgressPlus += lop_ProgressPlus;
+                using Bitmap bmp = new Bitmap(this.helplineRulerCtrl1.Bmp);
+                float[,]? lMap = await lop.ComputeInvLuminanceMap(bmp);
+                this._iggLuminanceMap = lMap;
+                lop.ProgressPlus -= lop_ProgressPlus;
+                this.btnGo.Enabled = this.btnGetOutline.Enabled = true;
+                this.lblLumMap.Text = "done";
+                this.toolStripProgressBar1.Value = this.toolStripProgressBar1.Maximum;
+                this.toolStripProgressBar1.Visible = false;
             }
         }
 
@@ -6093,6 +6124,17 @@ namespace AvoidAGrabCutEasy
                     btnCmpLMap_Click(this.btnCmpLMap, new EventArgs());
                 }
             }
+        }
+
+        private bool CheckLumMap(int w, int h)
+        {
+            if (this._iggLuminanceMap == null)
+                return true;
+
+            if (this._iggLuminanceMap?.GetLength(0) == w && this._iggLuminanceMap?.GetLength(1) == h)
+                return true;
+
+            return false;
         }
     }
 }
