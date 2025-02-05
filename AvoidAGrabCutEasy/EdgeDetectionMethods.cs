@@ -579,6 +579,12 @@ namespace AvoidAGrabCutEasy
 
         internal void GetGradMag(Bitmap bmp, GradientMode gradientMode, double divisor, Rectangle rc, BackgroundWorker bgw)
         {
+            if (rc.Width == 0 || rc.Height == 0)
+            {
+                MessageBox.Show("You need to specify a rectangle first.");
+                return;
+            }
+
             Convolution? conv = new Convolution();
             conv.CancelLoops = false;
 

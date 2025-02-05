@@ -889,56 +889,46 @@ namespace AvoidAGrabCutEasy
         {
             if (this.helplineRulerCtrl1.Bmp != null)
             {
-                if (_pic_changed)
-                {
-                    DialogResult dlg = MessageBox.Show("Save image?", "Unsaved data", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Exclamation);
+                //string f = this.Text.Split(new String[] { " - " }, StringSplitOptions.None)[0];
+                Bitmap? b1 = null;
 
-                    if (dlg == DialogResult.Yes)
-                        button2.PerformClick();
-                    else if (dlg == DialogResult.No)
-                        _pic_changed = false;
+                try
+                {
+                    if (this._bmpBU != null)
+                    {
+                        if (AvailMem.AvailMem.checkAvailRam(this._bmpBU.Width * this._bmpBU.Height * 12L))
+                            b1 = (Bitmap)this._bmpBU.Clone();
+                        else
+                            throw new Exception();
+
+                        Bitmap bC = new Bitmap(b1);
+                        this.SetBitmap(ref this._bmpBU, ref bC);
+
+                        this.SetBitmap(this.helplineRulerCtrl1.Bmp, b1, this.helplineRulerCtrl1, "Bmp");
+
+                        this._pic_changed = false;
+
+                        this.helplineRulerCtrl1.CalculateZoom();
+
+                        this.helplineRulerCtrl1.MakeBitmap(this.helplineRulerCtrl1.Bmp);
+
+                        // SetHRControlVars();
+
+                        this.helplineRulerCtrl1.dbPanel1.AutoScrollMinSize = new Size(System.Convert.ToInt32(this.helplineRulerCtrl1.Bmp.Width * this.helplineRulerCtrl1.Zoom), System.Convert.ToInt32(this.helplineRulerCtrl1.Bmp.Height * this.helplineRulerCtrl1.Zoom));
+                        this.helplineRulerCtrl1.dbPanel1.Invalidate();
+
+                        _undoOPCache?.Reset(false);
+
+                        //if (_undoOPCache?.Count > 1)
+                        //    this.btnRedo.Enabled = true;
+                        //else
+                        //    this.btnRedo.Enabled = false;
+                    }
                 }
-
-                if (!_pic_changed)
+                catch
                 {
-                    string f = this.Text.Split(new String[] { " - " }, StringSplitOptions.None)[0];
-                    Bitmap? b1 = null;
-
-                    try
-                    {
-                        if (this._bmpBU != null)
-                        {
-                            if (AvailMem.AvailMem.checkAvailRam(this._bmpBU.Width * this._bmpBU.Height * 12L))
-                                b1 = (Bitmap)this._bmpBU.Clone();
-                            else
-                                throw new Exception();
-
-                            this.SetBitmap(this.helplineRulerCtrl1.Bmp, b1, this.helplineRulerCtrl1, "Bmp");
-
-                            this._pic_changed = false;
-
-                            this.helplineRulerCtrl1.CalculateZoom();
-
-                            this.helplineRulerCtrl1.MakeBitmap(this.helplineRulerCtrl1.Bmp);
-
-                            // SetHRControlVars();
-
-                            this.helplineRulerCtrl1.dbPanel1.AutoScrollMinSize = new Size(System.Convert.ToInt32(this.helplineRulerCtrl1.Bmp.Width * this.helplineRulerCtrl1.Zoom), System.Convert.ToInt32(this.helplineRulerCtrl1.Bmp.Height * this.helplineRulerCtrl1.Zoom));
-                            this.helplineRulerCtrl1.dbPanel1.Invalidate();
-
-                            _undoOPCache?.Reset(false);
-
-                            //if (_undoOPCache?.Count > 1)
-                            //    this.btnRedo.Enabled = true;
-                            //else
-                            //    this.btnRedo.Enabled = false;
-                        }
-                    }
-                    catch
-                    {
-                        if (b1 != null)
-                            b1.Dispose();
-                    }
+                    if (b1 != null)
+                        b1.Dispose();
                 }
             }
         }
