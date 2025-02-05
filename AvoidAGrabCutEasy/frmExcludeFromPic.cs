@@ -286,9 +286,9 @@ namespace AvoidAGrabCutEasy
                                 {
                                     if (AvailMem.AvailMem.checkAvailRam(img.Width * img.Height * 16L))
                                     {
-                                        b1 = new Bitmap((Bitmap)img.Clone());
+                                        b1 = new Bitmap(img);
                                         this.SetBitmap(this.helplineRulerCtrl1.Bmp, b1, this.helplineRulerCtrl1, "Bmp");
-                                        b2 = new Bitmap((Bitmap)img.Clone());
+                                        b2 = new Bitmap(img);
                                         this.SetBitmap(ref this._bmpBU, ref b2);
                                     }
                                     else

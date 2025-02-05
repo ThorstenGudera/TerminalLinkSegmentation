@@ -31,6 +31,7 @@
             components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmAvoidAGrabCutEasy));
             panel1 = new Panel();
+            btnTScribbles = new Button();
             btnLoadToHLC2 = new Button();
             cbSCF = new CheckBox();
             btnPoissonDraw = new Button();
@@ -152,7 +153,8 @@
             floodFGToolStripMenuItem = new ToolStripMenuItem();
             timer1 = new System.Windows.Forms.Timer(components);
             backgroundWorker4 = new System.ComponentModel.BackgroundWorker();
-            btnTScribbles = new Button();
+            btnNewSrc = new Button();
+            label14 = new Label();
             panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numComponents2).BeginInit();
             panel2.SuspendLayout();
@@ -177,6 +179,8 @@
             // 
             // panel1
             // 
+            panel1.Controls.Add(btnNewSrc);
+            panel1.Controls.Add(label14);
             panel1.Controls.Add(btnTScribbles);
             panel1.Controls.Add(btnLoadToHLC2);
             panel1.Controls.Add(cbSCF);
@@ -281,6 +285,16 @@
             panel1.TabIndex = 0;
             panel1.MouseDoubleClick += panel1_MouseDoubleClick;
             panel1.MouseDown += panel1_MouseDown;
+            // 
+            // btnTScribbles
+            // 
+            btnTScribbles.Location = new Point(811, 64);
+            btnTScribbles.Name = "btnTScribbles";
+            btnTScribbles.Size = new Size(113, 23);
+            btnTScribbles.TabIndex = 743;
+            btnTScribbles.Text = "translate scribbles";
+            btnTScribbles.UseVisualStyleBackColor = true;
+            btnTScribbles.Click += btnTScribbles_Click;
             // 
             // btnLoadToHLC2
             // 
@@ -620,7 +634,7 @@
             // label15
             // 
             label15.AutoSize = true;
-            label15.Location = new Point(18, 182);
+            label15.Location = new Point(18, 186);
             label15.Name = "label15";
             label15.Size = new Size(64, 15);
             label15.TabIndex = 694;
@@ -628,7 +642,7 @@
             // 
             // btnChaincode
             // 
-            btnChaincode.Location = new Point(88, 179);
+            btnChaincode.Location = new Point(94, 184);
             btnChaincode.Name = "btnChaincode";
             btnChaincode.Size = new Size(87, 23);
             btnChaincode.TabIndex = 693;
@@ -884,10 +898,10 @@
             // 
             // btnMinCut
             // 
-            btnMinCut.Location = new Point(18, 131);
+            btnMinCut.Location = new Point(127, 96);
             btnMinCut.Margin = new Padding(4, 3, 4, 3);
             btnMinCut.Name = "btnMinCut";
-            btnMinCut.Size = new Size(88, 27);
+            btnMinCut.Size = new Size(50, 23);
             btnMinCut.TabIndex = 663;
             btnMinCut.Text = "Go";
             btnMinCut.UseVisualStyleBackColor = true;
@@ -1594,15 +1608,24 @@
             backgroundWorker4.ProgressChanged += backgroundWorker4_ProgressChanged;
             backgroundWorker4.RunWorkerCompleted += backgroundWorker4_RunWorkerCompleted;
             // 
-            // btnTScribbles
+            // btnNewSrc
             // 
-            btnTScribbles.Location = new Point(811, 64);
-            btnTScribbles.Name = "btnTScribbles";
-            btnTScribbles.Size = new Size(113, 23);
-            btnTScribbles.TabIndex = 743;
-            btnTScribbles.Text = "translate scribbles";
-            btnTScribbles.UseVisualStyleBackColor = true;
-            btnTScribbles.Click += btnTScribbles_Click;
+            btnNewSrc.Location = new Point(106, 151);
+            btnNewSrc.Name = "btnNewSrc";
+            btnNewSrc.Size = new Size(75, 23);
+            btnNewSrc.TabIndex = 745;
+            btnNewSrc.Text = "Open";
+            btnNewSrc.UseVisualStyleBackColor = true;
+            btnNewSrc.Click += btnNewSrc_Click;
+            // 
+            // label14
+            // 
+            label14.AutoSize = true;
+            label14.Location = new Point(18, 155);
+            label14.Name = "label14";
+            label14.Size = new Size(77, 15);
+            label14.TabIndex = 744;
+            label14.Text = "Load new Src";
             // 
             // frmAvoidAGrabCutEasy
             // 
@@ -1771,5 +1794,7 @@
         private CheckBox cbSCF;
         private Button btnLoadToHLC2;
         private Button btnTScribbles;
+        private Button btnNewSrc;
+        private Label label14;
     }
 }

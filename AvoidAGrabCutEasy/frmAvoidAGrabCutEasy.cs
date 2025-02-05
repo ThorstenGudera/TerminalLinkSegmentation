@@ -142,6 +142,7 @@ namespace AvoidAGrabCutEasy
         private bool _useLumMapBasePic;
         private List<(int, int)>? _bgRelatedPointsAdded;
         private List<ChainCode>? _removedChains;
+        private int _currentResetMarker;
 
         public event EventHandler<string>? ShowInfo;
         //public event EventHandler<string> BoundaryError;
@@ -1101,7 +1102,12 @@ namespace AvoidAGrabCutEasy
                                 {
                                     this.numMaxSize.Value = (decimal)Math.Max(this.helplineRulerCtrl1.Bmp.Width, this.helplineRulerCtrl1.Bmp.Height);
 
-                                    _undoOPCache?.Clear(this.helplineRulerCtrl1.Bmp);
+                                    //_undoOPCache?.Clear(this.helplineRulerCtrl1.Bmp);
+                                    this._undoOPCache?.Add(this.helplineRulerCtrl1.Bmp);
+
+                                    int? j = this._undoOPCache?.CurrentPosition - 1;
+                                    if (j != null)
+                                        this._currentResetMarker = j.Value;
 
                                     _pic_changed = false;
 
@@ -1120,6 +1126,10 @@ namespace AvoidAGrabCutEasy
                                     this.helplineRulerCtrl1.dbPanel1.Invalidate();
 
                                     this.Text = files[0] + " - frmQuickExtract";
+
+                                    this.cbRectMode.Enabled = this.cbRectMode.Checked = true;
+
+                                    btnCmpLMap_Click(this.btnCmpLMap, new EventArgs());
                                 }
                             }
                         }
@@ -1155,7 +1165,7 @@ namespace AvoidAGrabCutEasy
                 this.btnReset2.Enabled = false;
                 this.btnReset2.Refresh();
 
-                Bitmap? bOut = _undoOPCache?.DoUndoAll();
+                Bitmap? bOut = _undoOPCache?.Load(this._currentResetMarker);
 
                 if (bOut != null)
                 {
@@ -6022,5 +6032,67 @@ namespace AvoidAGrabCutEasy
             return result;
         }
 
+        private void btnNewSrc_Click(object sender, EventArgs e)
+        {
+            if (this.openFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                if (_pic_changed)
+                {
+                    DialogResult dlg = MessageBox.Show("Save image?", "Unsaved data", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Exclamation);
+
+                    if (dlg == DialogResult.Yes)
+                        button2.PerformClick();
+                    else if (dlg == DialogResult.No)
+                        _pic_changed = false;
+                }
+
+                using (Image img = Image.FromFile(this.openFileDialog1.FileName))
+                {
+                    if (AvailMem.AvailMem.checkAvailRam(img.Width * img.Height * 16L))
+                    {
+                        Bitmap b1 = new Bitmap(img);
+                        this.SetBitmap(this.helplineRulerCtrl1.Bmp, b1, this.helplineRulerCtrl1, "Bmp");
+                        Bitmap b2 = new Bitmap(img);
+                        this.SetBitmap(ref this._bmpBU, ref b2);
+                    }
+                    else
+                        throw new Exception();
+                }
+
+                if (this.helplineRulerCtrl1.Bmp != null)
+                {
+                    this.numMaxSize.Value = (decimal)Math.Max(this.helplineRulerCtrl1.Bmp.Width, this.helplineRulerCtrl1.Bmp.Height);
+
+                    //_undoOPCache?.Clear(this.helplineRulerCtrl1.Bmp);
+                    this._undoOPCache?.Add(this.helplineRulerCtrl1.Bmp);
+
+                    int? j = this._undoOPCache?.CurrentPosition - 1;
+                    if (j != null)
+                        this._currentResetMarker = j.Value;
+
+                    _pic_changed = false;
+
+                    double faktor = System.Convert.ToDouble(this.helplineRulerCtrl1.dbPanel1.Width) / System.Convert.ToDouble(this.helplineRulerCtrl1.dbPanel1.Height);
+                    double multiplier = System.Convert.ToDouble(this.helplineRulerCtrl1.Bmp.Width) / System.Convert.ToDouble(this.helplineRulerCtrl1.Bmp.Height);
+                    if (multiplier >= faktor)
+                        this.helplineRulerCtrl1.Zoom = System.Convert.ToSingle(System.Convert.ToDouble(this.helplineRulerCtrl1.dbPanel1.Width) / System.Convert.ToDouble(this.helplineRulerCtrl1.Bmp.Width));
+                    else
+                        this.helplineRulerCtrl1.Zoom = System.Convert.ToSingle(System.Convert.ToDouble(this.helplineRulerCtrl1.dbPanel1.Height) / System.Convert.ToDouble(this.helplineRulerCtrl1.Bmp.Height));
+
+                    this.helplineRulerCtrl1.dbPanel1.AutoScrollMinSize = new Size(System.Convert.ToInt32(this.helplineRulerCtrl1.Bmp.Width * this.helplineRulerCtrl1.Zoom), System.Convert.ToInt32(this.helplineRulerCtrl1.Bmp.Height * this.helplineRulerCtrl1.Zoom));
+                    this.btnReset2.Enabled = false;
+
+                    this.helplineRulerCtrl1.MakeBitmap(this.helplineRulerCtrl1.Bmp);
+
+                    this.helplineRulerCtrl1.dbPanel1.Invalidate();
+
+                    this.Text = this.openFileDialog1.FileName + " - frmQuickExtract";
+
+                    this.cbRectMode.Enabled = this.cbRectMode.Checked = true;
+
+                    btnCmpLMap_Click(this.btnCmpLMap, new EventArgs());
+                }
+            }
+        }
     }
 }
