@@ -56,6 +56,10 @@ namespace AvoidAGrabCutEasy
         private List<Point> _points2 = new List<Point>();
         private List<List<Point>>? _allPoints;
         private Rectangle _rc;
+        private bool _drawPath;
+        private Bitmap? _chainsBmp;
+        private GraphicsPath? _hChain;
+        private bool _drawChainsBmp;
 
         public frmExcludeFromPic(Bitmap bmp, string basePathAddition)
         {
@@ -214,7 +218,7 @@ namespace AvoidAGrabCutEasy
 
         private void helplineRulerCtrl1_Paint(object sender, PaintEventArgs e)
         {
-            if (this._allPoints != null)
+            if (this._drawChainsBmp == false && this._allPoints != null && this._drawPath)
             {
                 using GraphicsPath gP = new GraphicsPath();
 
@@ -229,7 +233,7 @@ namespace AvoidAGrabCutEasy
                 e.Graphics.DrawPath(pen, gP);
             }
 
-            if (this._points2.Count > 0)
+            if (this._points2.Count > 0 && this._drawPath)
             {
                 using GraphicsPath gP = new GraphicsPath();
                 gP.AddLines(this._points2.Select(a => new PointF(a.X, a.Y)).ToArray());
@@ -240,6 +244,64 @@ namespace AvoidAGrabCutEasy
                 using Pen pen = new Pen(Color.Cyan, Math.Max((float)((double)this.numPenWidth.Value * this.helplineRulerCtrl1.Zoom), 1f));
                 e.Graphics.DrawPath(pen, gP);
             }
+
+            if (this._drawChainsBmp && this.checkedListBox1.Items.Count > 0 && this._chainsBmp != null && this.checkedListBox1.SelectedItems.Count > 0)
+            {
+                HelplineRulerControl.DBPanel pz = this.helplineRulerCtrl1.dbPanel1;
+
+                ColorMatrix cm = new ColorMatrix(); //test draw opaque instead
+                cm.Matrix33 = 0.25F;
+
+                using (ImageAttributes ia = new ImageAttributes())
+                {
+                    ia.SetColorMatrix(cm);
+                    e.Graphics.DrawImage(this._chainsBmp,
+                        new Rectangle(0, 0, pz.ClientRectangle.Width, pz.ClientRectangle.Height),
+                        new RectangleF(-pz.AutoScrollPosition.X / this.helplineRulerCtrl1.Zoom,
+                            -pz.AutoScrollPosition.Y / this.helplineRulerCtrl1.Zoom,
+                            pz.ClientRectangle.Width / this.helplineRulerCtrl1.Zoom,
+                            pz.ClientRectangle.Height / this.helplineRulerCtrl1.Zoom), GraphicsUnit.Pixel);
+                }
+
+                if (this._hChain != null)
+                {
+                    RectangleF r = _hChain.GetBounds();
+
+                    if (this.checkedListBox1.CheckedItems.Count > 0)
+                    {
+                        using (GraphicsPath? gP = _hChain.Clone() as GraphicsPath)
+                        {
+                            if (gP != null)
+                            {
+                                using (Matrix mx2 = new Matrix(1, 0, 0, 1, -r.X, -r.Y))
+                                    gP.Transform(mx2);
+
+                                using (Matrix mx2 = new Matrix(this.helplineRulerCtrl1.Zoom, 0, 0, this.helplineRulerCtrl1.Zoom, 0, 0))
+                                    gP.Transform(mx2);
+
+                                using (Matrix mx2 = new Matrix(1, 0, 0, 1,
+                                    r.X * this.helplineRulerCtrl1.Zoom + pz.AutoScrollPosition.X,
+                                    r.Y * this.helplineRulerCtrl1.Zoom + pz.AutoScrollPosition.Y))
+                                    gP.Transform(mx2);
+
+                                using (SolidBrush sb = new SolidBrush(Color.FromArgb(64, Color.Blue)))
+                                    e.Graphics.FillPath(sb, gP);
+                            }
+                        }
+
+                        using (Pen p = new Pen(Color.DarkRed, 2))
+                        {
+                            if (this.cbBGColor.Checked)
+                                p.Color = Color.OrangeRed;
+
+                            e.Graphics.DrawRectangle(p, r.X * this.helplineRulerCtrl1.Zoom + pz.AutoScrollPosition.X,
+                                r.Y * this.helplineRulerCtrl1.Zoom + pz.AutoScrollPosition.Y,
+                                r.Width * this.helplineRulerCtrl1.Zoom, r.Height * this.helplineRulerCtrl1.Zoom);
+                        }
+                    }
+                }
+            }
+
         }
 
         public void SetupCache()
@@ -407,6 +469,11 @@ namespace AvoidAGrabCutEasy
                             this.helplineRulerCtrl1.dbPanel1.Invalidate();
 
                             _undoOPCache?.Reset(false);
+
+                            this.label1.Enabled = this.label2.Enabled = this.btnShow.Enabled = this.numExceptBounds.Enabled = true;
+                            this.Label3.Enabled = this.cbDraw.Enabled = this.btnClosePath.Enabled = this.btnNewPath.Enabled =
+                                this.btnRemSeg.Enabled = this.btnRemPoint.Enabled = this.numPenWidth.Enabled = true;
+                            this._drawPath = true;
 
                             //if (_undoOPCache?.Count > 1)
                             //    this.btnRedo.Enabled = true;
@@ -709,6 +776,11 @@ namespace AvoidAGrabCutEasy
                     this.helplineRulerCtrl1.dbPanel1.Invalidate();
 
                     this.CheckRedoButton();
+
+                    this.label1.Enabled = this.label2.Enabled = this.btnShow.Enabled = this.numExceptBounds.Enabled = true;
+                    this.Label3.Enabled = this.cbDraw.Enabled = this.btnClosePath.Enabled = this.btnNewPath.Enabled =
+                        this.btnRemSeg.Enabled = this.btnRemPoint.Enabled = this.numPenWidth.Enabled = true;
+                    this._drawPath = true;
                 }
                 else
                     MessageBox.Show("Error while undoing.");
@@ -924,7 +996,7 @@ namespace AvoidAGrabCutEasy
 
                         List<ChainCode> fList = cf.GetOutline(b, 0, false, 0, false);
 
-                        if(fList.Count > 0)
+                        if (fList.Count > 0)
                             cf.RemoveOutline(b, fList, true);
                     }
 
@@ -983,6 +1055,8 @@ namespace AvoidAGrabCutEasy
         {
             this.cbBGColor_CheckedChanged(this.cbBGColor, new EventArgs());
             this.cmbZoom.SelectedIndex = 4;
+            this._drawPath = this.cbDraw.Checked = true;
+            this.btnAdd.Enabled = this.btnAdd2.Enabled = false;
         }
 
         private void frmExcludeFromPic_FormClosing(object sender, FormClosingEventArgs e)
@@ -992,6 +1066,12 @@ namespace AvoidAGrabCutEasy
 
             if (this._bmpBU != null)
                 this._bmpBU.Dispose();
+            if (this._chainsBmp != null)
+                this._chainsBmp.Dispose();
+
+            if (this._hChain != null)
+                this._hChain.Dispose();
+            this._hChain = null;
         }
 
         private void btnShow_Click(object sender, EventArgs e)
@@ -1103,7 +1183,15 @@ namespace AvoidAGrabCutEasy
                 this._pic_changed = true;
                 this.CheckRedoButton();
 
-                this.btnAdd.Enabled = true;
+                this.btnAdd.Enabled = this.btnReload.Enabled = true;
+
+                this.label1.Enabled = this.label2.Enabled = this.btnShow.Enabled = this.numExceptBounds.Enabled = false;
+                this._drawPath = false;
+
+                if (this._allPoints != null)
+                    this._allPoints.Clear();
+
+                this.helplineRulerCtrl1.dbPanel1.Invalidate();
             }
 
             this.btnShow.Text = "show";
@@ -1149,6 +1237,20 @@ namespace AvoidAGrabCutEasy
             if (this._remaining != null)
             {
                 ExcludedBmpRegion r = new(this._remaining);
+                List<ChainCode>? c = this.GetBoundary(this._remaining);
+                if (c != null)
+                {
+                    foreach (ChainCode ch in c)
+                    {
+                        List<Point> pts = ch.Coord;
+                        for (int i = 0; i < pts.Count; i++)
+                        {
+                            pts[i] = new Point(pts[i].X + r.Location.X, pts[i].Y + r.Location.Y);
+                        }
+                        ch.Coord = pts;
+                        r.ChainCode = c;
+                    }
+                }
                 this.checkedListBox1.Items.Add(r, true);
                 this.btnAdd.Enabled = false;
             }
@@ -1232,17 +1334,28 @@ namespace AvoidAGrabCutEasy
                     RectangleF r = gP.GetBounds();
                     _rc = new Rectangle((int)Math.Floor(r.X), (int)Math.Floor(r.Y), (int)Math.Ceiling(r.Width), (int)Math.Ceiling(r.Height));
 
-                    using Bitmap bC = this._bmpBU.Clone(new RectangleF(_rc.X, _rc.Y, _rc.Width, _rc.Height), this._bmpBU.PixelFormat);
-                    bOrig = new Bitmap(_rc.Width, _rc.Height);
-                    using Graphics gx = Graphics.FromImage(bOrig);
-                    gx.SmoothingMode = SmoothingMode.None;
-                    using TextureBrush tb = new TextureBrush(bC);
-                    using Matrix mx = new(1, 0, 0, 1, -r.X, -r.Y);
-                    gP.Transform(mx);
-                    gx.FillPath(tb, gP);
-                    int width = (int)this.numExceptBounds2.Value;
-
-                    this.backgroundWorker2.RunWorkerAsync(new object[] { bOrig, width });
+                    if (_rc.Width > 0 && _rc.Height > 0)
+                    {
+                        using Bitmap bC = this._bmpBU.Clone(new RectangleF(_rc.X, _rc.Y, _rc.Width, _rc.Height), this._bmpBU.PixelFormat);
+                        bOrig = new Bitmap(_rc.Width, _rc.Height);
+                        using Graphics gx = Graphics.FromImage(bOrig);
+                        gx.SmoothingMode = SmoothingMode.None;
+                        using TextureBrush tb = new TextureBrush(bC);
+                        using Matrix mx = new(1, 0, 0, 1, -r.X, -r.Y);
+                        gP.Transform(mx);
+                        gx.FillPath(tb, gP);
+                        int width = (int)this.numExceptBounds2.Value;
+                        this.backgroundWorker2.RunWorkerAsync(new object[] { bOrig, width });
+                    }
+                    else 
+                    {
+                        this.Cursor = Cursors.Default;
+                        this.SetControls(true);
+                        this.btnShow2.Text = "show";
+                        this.btnShow2.Enabled = true;
+                        this.toolStripProgressBar1.Value = 0;
+                        this.toolStripProgressBar1.Visible = false;
+                    }
                 }
             }
         }
@@ -1303,7 +1416,16 @@ namespace AvoidAGrabCutEasy
                 this._pic_changed = true;
                 this.CheckRedoButton();
 
-                this.btnAdd2.Enabled = true;
+                this.btnAdd2.Enabled = this.btnReload2.Enabled = true;
+
+                this.Label3.Enabled = this.cbDraw.Enabled = this.btnClosePath.Enabled = this.btnNewPath.Enabled =
+                    this.btnRemSeg.Enabled = this.btnRemPoint.Enabled = this.numPenWidth.Enabled = false;
+                this._drawPath = false;
+
+                if (this._allPoints != null)
+                    this._allPoints.Clear();
+
+                this.helplineRulerCtrl1.dbPanel1.Invalidate();
             }
 
             this.btnShow2.Text = "show";
@@ -1335,9 +1457,165 @@ namespace AvoidAGrabCutEasy
             {
                 ExcludedBmpRegion r = new(this._remaining);
                 r.Location = _rc.Location;
+                List<ChainCode>? c = this.GetBoundary(this._remaining);
+                if (c != null)
+                {
+                    foreach (ChainCode ch in c)
+                    {
+                        List<Point> pts = ch.Coord;
+                        for (int i = 0; i < pts.Count; i++)
+                        {
+                            pts[i] = new Point(pts[i].X + r.Location.X, pts[i].Y + r.Location.Y);
+                        }
+                        ch.Coord = pts;
+                        r.ChainCode = c;
+                    }
+                }
                 this.checkedListBox1.Items.Add(r, true);
                 this.btnAdd2.Enabled = false;
             }
+        }
+
+        private void btnReload_Click(object sender, EventArgs e)
+        {
+            ReloadOrg();
+            this._drawPath = true;
+            this._drawChainsBmp = false;
+            this.label1.Enabled = this.label2.Enabled = this.btnShow.Enabled = this.numExceptBounds.Enabled = true;
+        }
+
+        private void btnReload2_Click(object sender, EventArgs e)
+        {
+            ReloadOrg();
+            this._drawPath = true;
+            this._drawChainsBmp = false;
+            this.Label3.Enabled = this.cbDraw.Enabled = this.btnClosePath.Enabled = this.btnNewPath.Enabled =
+                this.btnRemSeg.Enabled = this.btnRemPoint.Enabled = this.numPenWidth.Enabled = true;
+        }
+
+        private void ReloadOrg()
+        {
+            Bitmap? b1 = null;
+
+            if (this._bmpBU != null)
+            {
+                if (AvailMem.AvailMem.checkAvailRam(this._bmpBU.Width * this._bmpBU.Height * 12L))
+                    b1 = new Bitmap(this._bmpBU);
+                else
+                    throw new Exception();
+
+                this.SetBitmap(this.helplineRulerCtrl1.Bmp, b1, this.helplineRulerCtrl1, "Bmp");
+
+                this._pic_changed = false;
+
+                this.helplineRulerCtrl1.CalculateZoom();
+                this.helplineRulerCtrl1.MakeBitmap(this.helplineRulerCtrl1.Bmp);
+
+                // SetHRControlVars();
+
+                this.helplineRulerCtrl1.dbPanel1.AutoScrollMinSize = new Size(System.Convert.ToInt32(this.helplineRulerCtrl1.Bmp.Width * this.helplineRulerCtrl1.Zoom), System.Convert.ToInt32(this.helplineRulerCtrl1.Bmp.Height * this.helplineRulerCtrl1.Zoom));
+                this.helplineRulerCtrl1.dbPanel1.Invalidate();
+            }
+        }
+
+        private void checkedListBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            List<List<ChainCode>> fList = new List<List<ChainCode>>();
+            for (int i = 0; i < this.checkedListBox1.CheckedItems.Count; i++)
+                if (this.checkedListBox1.CheckedItems[i] != null)
+                {
+                    ExcludedBmpRegion? f = this.checkedListBox1.CheckedItems[i] as ExcludedBmpRegion;
+                    if (f != null)
+                    {
+                        List<ChainCode>? c = f.ChainCode;
+                        if (c != null)
+                            fList.Add(c);
+                    }
+                }
+
+            if (AvailMem.AvailMem.checkAvailRam(this.helplineRulerCtrl1.Bmp.Width * this.helplineRulerCtrl1.Bmp.Height * 5L) &&
+                this._bmpBU != null)
+            {
+                Bitmap bmp = new Bitmap(this._bmpBU.Width, this._bmpBU.Height);
+
+                ChainFinder cf = new ChainFinder();
+
+                foreach (List<ChainCode> c in fList)
+                {
+                    if (c != null)
+                    {
+                        cf.DrawOutlineToBmp(bmp, this._bmpBU, c);
+                        cf.HighLightOutlines(bmp, c, this.cbBGColor.Checked);
+                    }
+                }
+
+                SetBitmap(ref this._chainsBmp, ref bmp);
+                this._drawChainsBmp = true;
+            }
+
+            if (this.checkedListBox1.SelectedIndex > -1)
+            {
+                ExcludedBmpRegion? er = this.checkedListBox1.SelectedItem as ExcludedBmpRegion;
+                if (er != null)
+                {
+                    if (er.ChainCode != null)
+                    {
+                        GraphicsPath? pOld = this._hChain;
+                        _hChain = new GraphicsPath();
+                        foreach (ChainCode c in er.ChainCode)
+                        {
+                            if (c != null)
+                            {
+                                GraphicsPath gP = new GraphicsPath();
+                                gP.AddLines(c.Coord.ToArray());
+                                _hChain.AddPath(gP, false);
+                            }
+                            if (pOld != null)
+                                pOld.Dispose();
+                        }
+
+                        this.helplineRulerCtrl1.dbPanel1.Invalidate();
+                    }
+                }
+            }
+        }
+
+        private void cbSelSingleClick_CheckedChanged(object sender, EventArgs e)
+        {
+            this.checkedListBox1.CheckOnClick = this.cbSelSingleClick.Checked;
+        }
+
+        private void btnSelAll_Click(object sender, EventArgs e)
+        {
+            for (int i = 0; i < this.checkedListBox1.Items.Count; i++)
+                this.checkedListBox1.SetItemChecked(i, true);
+
+            checkedListBox1_SelectedIndexChanged(this.checkedListBox1, new EventArgs());
+        }
+
+        private void btnSelNone_Click(object sender, EventArgs e)
+        {
+            for (int i = 0; i < this.checkedListBox1.Items.Count; i++)
+                this.checkedListBox1.SetItemChecked(i, false);
+
+            checkedListBox1_SelectedIndexChanged(this.checkedListBox1, new EventArgs());
+        }
+
+        private void btnClearPaths_Click(object sender, EventArgs e)
+        {
+            ClearExistingPaths();
+            this.helplineRulerCtrl1.dbPanel1.Invalidate();
+        }
+
+        private void ClearExistingPaths()
+        {
+            this.checkedListBox1.Items.Clear();
+            if (this._chainsBmp != null)
+                this._chainsBmp.Dispose();
+            this._chainsBmp = null;
+            if (this._hChain != null)
+                this._hChain.Dispose();
+            this._hChain = null;
         }
     }
 }

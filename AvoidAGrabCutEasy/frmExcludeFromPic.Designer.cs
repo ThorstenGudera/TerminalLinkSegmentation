@@ -37,23 +37,27 @@
             components = new System.ComponentModel.Container();
             splitContainer1 = new SplitContainer();
             splitContainer2 = new SplitContainer();
-            Label3 = new Label();
-            numPenWidth = new NumericUpDown();
-            btnRemPoint = new Button();
-            btnRemSeg = new Button();
-            btnNewPath = new Button();
+            groupBox2 = new GroupBox();
+            cbDraw = new CheckBox();
             btnClosePath = new Button();
             btnAdd2 = new Button();
+            Label3 = new Label();
             btnShow2 = new Button();
-            btnShow = new Button();
-            btnAdd = new Button();
+            btnReload2 = new Button();
+            btnNewPath = new Button();
             label5 = new Label();
-            label2 = new Label();
+            numPenWidth = new NumericUpDown();
             numExceptBounds2 = new NumericUpDown();
-            numExceptBounds = new NumericUpDown();
+            btnRemSeg = new Button();
             label4 = new Label();
+            btnRemPoint = new Button();
+            groupBox1 = new GroupBox();
             label1 = new Label();
-            cbDraw = new CheckBox();
+            numExceptBounds = new NumericUpDown();
+            label2 = new Label();
+            btnAdd = new Button();
+            btnShow = new Button();
+            btnReload = new Button();
             Label20 = new Label();
             cmbZoom = new ComboBox();
             cbBGColor = new CheckBox();
@@ -64,6 +68,10 @@
             toolStripStatusLabel1 = new ToolStripStatusLabel();
             toolStripProgressBar1 = new ToolStripProgressBar();
             toolStripStatusLabel2 = new ToolStripStatusLabel();
+            cbSelSingleClick = new CheckBox();
+            btnSelNone = new Button();
+            btnClearPaths = new Button();
+            btnSelAll = new Button();
             checkedListBox1 = new CheckedListBox();
             Button29 = new Button();
             Button28 = new Button();
@@ -83,8 +91,10 @@
             splitContainer2.Panel1.SuspendLayout();
             splitContainer2.Panel2.SuspendLayout();
             splitContainer2.SuspendLayout();
+            groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numPenWidth).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numExceptBounds2).BeginInit();
+            groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numExceptBounds).BeginInit();
             statusStrip1.SuspendLayout();
             SuspendLayout();
@@ -101,6 +111,10 @@
             // 
             // splitContainer1.Panel2
             // 
+            splitContainer1.Panel2.Controls.Add(cbSelSingleClick);
+            splitContainer1.Panel2.Controls.Add(btnSelNone);
+            splitContainer1.Panel2.Controls.Add(btnClearPaths);
+            splitContainer1.Panel2.Controls.Add(btnSelAll);
             splitContainer1.Panel2.Controls.Add(checkedListBox1);
             splitContainer1.Panel2.Controls.Add(Button29);
             splitContainer1.Panel2.Controls.Add(Button28);
@@ -120,23 +134,8 @@
             // 
             // splitContainer2.Panel1
             // 
-            splitContainer2.Panel1.Controls.Add(Label3);
-            splitContainer2.Panel1.Controls.Add(numPenWidth);
-            splitContainer2.Panel1.Controls.Add(btnRemPoint);
-            splitContainer2.Panel1.Controls.Add(btnRemSeg);
-            splitContainer2.Panel1.Controls.Add(btnNewPath);
-            splitContainer2.Panel1.Controls.Add(btnClosePath);
-            splitContainer2.Panel1.Controls.Add(btnAdd2);
-            splitContainer2.Panel1.Controls.Add(btnShow2);
-            splitContainer2.Panel1.Controls.Add(btnShow);
-            splitContainer2.Panel1.Controls.Add(btnAdd);
-            splitContainer2.Panel1.Controls.Add(label5);
-            splitContainer2.Panel1.Controls.Add(label2);
-            splitContainer2.Panel1.Controls.Add(numExceptBounds2);
-            splitContainer2.Panel1.Controls.Add(numExceptBounds);
-            splitContainer2.Panel1.Controls.Add(label4);
-            splitContainer2.Panel1.Controls.Add(label1);
-            splitContainer2.Panel1.Controls.Add(cbDraw);
+            splitContainer2.Panel1.Controls.Add(groupBox2);
+            splitContainer2.Panel1.Controls.Add(groupBox1);
             splitContainer2.Panel1.Controls.Add(Label20);
             splitContainer2.Panel1.Controls.Add(cmbZoom);
             splitContainer2.Panel1.Controls.Add(cbBGColor);
@@ -151,64 +150,41 @@
             splitContainer2.SplitterDistance = 152;
             splitContainer2.TabIndex = 0;
             // 
-            // Label3
+            // groupBox2
             // 
-            Label3.AutoSize = true;
-            Label3.Location = new Point(511, 54);
-            Label3.Margin = new Padding(4, 0, 4, 0);
-            Label3.Name = "Label3";
-            Label3.Size = new Size(63, 15);
-            Label3.TabIndex = 310;
-            Label3.Text = "Pen width:";
+            groupBox2.Controls.Add(cbDraw);
+            groupBox2.Controls.Add(btnClosePath);
+            groupBox2.Controls.Add(btnAdd2);
+            groupBox2.Controls.Add(Label3);
+            groupBox2.Controls.Add(btnShow2);
+            groupBox2.Controls.Add(btnReload2);
+            groupBox2.Controls.Add(btnNewPath);
+            groupBox2.Controls.Add(label5);
+            groupBox2.Controls.Add(numPenWidth);
+            groupBox2.Controls.Add(numExceptBounds2);
+            groupBox2.Controls.Add(btnRemSeg);
+            groupBox2.Controls.Add(label4);
+            groupBox2.Controls.Add(btnRemPoint);
+            groupBox2.Location = new Point(12, 54);
+            groupBox2.Name = "groupBox2";
+            groupBox2.Size = new Size(727, 90);
+            groupBox2.TabIndex = 312;
+            groupBox2.TabStop = false;
+            groupBox2.Text = "selected path";
             // 
-            // numPenWidth
+            // cbDraw
             // 
-            numPenWidth.DecimalPlaces = 2;
-            numPenWidth.Location = new Point(581, 51);
-            numPenWidth.Margin = new Padding(4, 3, 4, 3);
-            numPenWidth.Maximum = new decimal(new int[] { 255, 0, 0, 0 });
-            numPenWidth.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
-            numPenWidth.Name = "numPenWidth";
-            numPenWidth.Size = new Size(58, 23);
-            numPenWidth.TabIndex = 309;
-            numPenWidth.Value = new decimal(new int[] { 1, 0, 0, 0 });
-            // 
-            // btnRemPoint
-            // 
-            btnRemPoint.Location = new Point(402, 48);
-            btnRemPoint.Margin = new Padding(4, 3, 4, 3);
-            btnRemPoint.Name = "btnRemPoint";
-            btnRemPoint.Size = new Size(88, 27);
-            btnRemPoint.TabIndex = 306;
-            btnRemPoint.Text = "remPt";
-            btnRemPoint.UseVisualStyleBackColor = true;
-            btnRemPoint.Click += btnRemPoint_Click;
-            // 
-            // btnRemSeg
-            // 
-            btnRemSeg.Location = new Point(306, 48);
-            btnRemSeg.Margin = new Padding(4, 3, 4, 3);
-            btnRemSeg.Name = "btnRemSeg";
-            btnRemSeg.Size = new Size(88, 27);
-            btnRemSeg.TabIndex = 308;
-            btnRemSeg.Text = "remSeg";
-            btnRemSeg.UseVisualStyleBackColor = true;
-            btnRemSeg.Click += btnRemSeg_Click;
-            // 
-            // btnNewPath
-            // 
-            btnNewPath.Location = new Point(199, 47);
-            btnNewPath.Margin = new Padding(4, 3, 4, 3);
-            btnNewPath.Name = "btnNewPath";
-            btnNewPath.Size = new Size(88, 27);
-            btnNewPath.TabIndex = 305;
-            btnNewPath.Text = "newPath";
-            btnNewPath.UseVisualStyleBackColor = true;
-            btnNewPath.Click += btnNewPath_Click;
+            cbDraw.AutoSize = true;
+            cbDraw.Location = new Point(9, 25);
+            cbDraw.Name = "cbDraw";
+            cbDraw.Size = new Size(77, 19);
+            cbDraw.TabIndex = 294;
+            cbDraw.Text = "DrawPath";
+            cbDraw.UseVisualStyleBackColor = true;
             // 
             // btnClosePath
             // 
-            btnClosePath.Location = new Point(103, 46);
+            btnClosePath.Location = new Point(100, 20);
             btnClosePath.Margin = new Padding(4, 3, 4, 3);
             btnClosePath.Name = "btnClosePath";
             btnClosePath.Size = new Size(88, 27);
@@ -219,7 +195,7 @@
             // 
             // btnAdd2
             // 
-            btnAdd2.Location = new Point(485, 83);
+            btnAdd2.Location = new Point(473, 57);
             btnAdd2.Name = "btnAdd2";
             btnAdd2.Size = new Size(75, 23);
             btnAdd2.TabIndex = 300;
@@ -227,9 +203,19 @@
             btnAdd2.UseVisualStyleBackColor = true;
             btnAdd2.Click += btnAdd2_Click;
             // 
+            // Label3
+            // 
+            Label3.AutoSize = true;
+            Label3.Location = new Point(507, 26);
+            Label3.Margin = new Padding(4, 0, 4, 0);
+            Label3.Name = "Label3";
+            Label3.Size = new Size(63, 15);
+            Label3.TabIndex = 310;
+            Label3.Text = "Pen width:";
+            // 
             // btnShow2
             // 
-            btnShow2.Location = new Point(372, 83);
+            btnShow2.Location = new Point(360, 57);
             btnShow2.Name = "btnShow2";
             btnShow2.Size = new Size(75, 23);
             btnShow2.TabIndex = 299;
@@ -237,20 +223,137 @@
             btnShow2.UseVisualStyleBackColor = true;
             btnShow2.Click += btnShow2_Click;
             // 
-            // btnShow
+            // btnReload2
             // 
-            btnShow.Location = new Point(372, 10);
-            btnShow.Name = "btnShow";
-            btnShow.Size = new Size(75, 23);
-            btnShow.TabIndex = 299;
-            btnShow.Text = "show";
-            btnShow.UseVisualStyleBackColor = true;
-            btnShow.Click += btnShow_Click;
+            btnReload2.Enabled = false;
+            btnReload2.ForeColor = SystemColors.ControlText;
+            btnReload2.Location = new Point(614, 55);
+            btnReload2.Margin = new Padding(4, 3, 4, 3);
+            btnReload2.Name = "btnReload2";
+            btnReload2.Size = new Size(88, 27);
+            btnReload2.TabIndex = 285;
+            btnReload2.Text = "reload image";
+            btnReload2.UseVisualStyleBackColor = true;
+            btnReload2.Click += btnReload2_Click;
+            // 
+            // btnNewPath
+            // 
+            btnNewPath.Location = new Point(196, 20);
+            btnNewPath.Margin = new Padding(4, 3, 4, 3);
+            btnNewPath.Name = "btnNewPath";
+            btnNewPath.Size = new Size(88, 27);
+            btnNewPath.TabIndex = 305;
+            btnNewPath.Text = "newPath";
+            btnNewPath.UseVisualStyleBackColor = true;
+            btnNewPath.Click += btnNewPath_Click;
+            // 
+            // label5
+            // 
+            label5.AutoSize = true;
+            label5.Location = new Point(234, 61);
+            label5.Name = "label5";
+            label5.Size = new Size(102, 15);
+            label5.TabIndex = 298;
+            label5.Text = "px wide boundary";
+            // 
+            // numPenWidth
+            // 
+            numPenWidth.DecimalPlaces = 2;
+            numPenWidth.Location = new Point(578, 24);
+            numPenWidth.Margin = new Padding(4, 3, 4, 3);
+            numPenWidth.Maximum = new decimal(new int[] { 255, 0, 0, 0 });
+            numPenWidth.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
+            numPenWidth.Name = "numPenWidth";
+            numPenWidth.Size = new Size(58, 23);
+            numPenWidth.TabIndex = 309;
+            numPenWidth.Value = new decimal(new int[] { 1, 0, 0, 0 });
+            // 
+            // numExceptBounds2
+            // 
+            numExceptBounds2.Location = new Point(137, 59);
+            numExceptBounds2.Maximum = new decimal(new int[] { 32767, 0, 0, 0 });
+            numExceptBounds2.Name = "numExceptBounds2";
+            numExceptBounds2.Size = new Size(88, 23);
+            numExceptBounds2.TabIndex = 297;
+            numExceptBounds2.Value = new decimal(new int[] { 15, 0, 0, 0 });
+            // 
+            // btnRemSeg
+            // 
+            btnRemSeg.Location = new Point(303, 20);
+            btnRemSeg.Margin = new Padding(4, 3, 4, 3);
+            btnRemSeg.Name = "btnRemSeg";
+            btnRemSeg.Size = new Size(88, 27);
+            btnRemSeg.TabIndex = 308;
+            btnRemSeg.Text = "remSeg";
+            btnRemSeg.UseVisualStyleBackColor = true;
+            btnRemSeg.Click += btnRemSeg_Click;
+            // 
+            // label4
+            // 
+            label4.AutoSize = true;
+            label4.Location = new Point(9, 61);
+            label4.Name = "label4";
+            label4.Size = new Size(69, 15);
+            label4.TabIndex = 296;
+            label4.Text = "from path a";
+            // 
+            // btnRemPoint
+            // 
+            btnRemPoint.Location = new Point(399, 20);
+            btnRemPoint.Margin = new Padding(4, 3, 4, 3);
+            btnRemPoint.Name = "btnRemPoint";
+            btnRemPoint.Size = new Size(88, 27);
+            btnRemPoint.TabIndex = 306;
+            btnRemPoint.Text = "remPt";
+            btnRemPoint.UseVisualStyleBackColor = true;
+            btnRemPoint.Click += btnRemPoint_Click;
+            // 
+            // groupBox1
+            // 
+            groupBox1.Controls.Add(label1);
+            groupBox1.Controls.Add(numExceptBounds);
+            groupBox1.Controls.Add(label2);
+            groupBox1.Controls.Add(btnAdd);
+            groupBox1.Controls.Add(btnShow);
+            groupBox1.Controls.Add(btnReload);
+            groupBox1.Location = new Point(12, 7);
+            groupBox1.Name = "groupBox1";
+            groupBox1.Size = new Size(727, 43);
+            groupBox1.TabIndex = 311;
+            groupBox1.TabStop = false;
+            groupBox1.Text = "whole pic";
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Location = new Point(9, 19);
+            label1.Name = "label1";
+            label1.Size = new Size(96, 15);
+            label1.TabIndex = 296;
+            label1.Text = "from whole pic a";
+            // 
+            // numExceptBounds
+            // 
+            numExceptBounds.Location = new Point(137, 16);
+            numExceptBounds.Maximum = new decimal(new int[] { 32767, 0, 0, 0 });
+            numExceptBounds.Name = "numExceptBounds";
+            numExceptBounds.Size = new Size(88, 23);
+            numExceptBounds.TabIndex = 297;
+            numExceptBounds.Value = new decimal(new int[] { 15, 0, 0, 0 });
+            // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Location = new Point(234, 19);
+            label2.Name = "label2";
+            label2.Size = new Size(102, 15);
+            label2.TabIndex = 298;
+            label2.Text = "px wide boundary";
             // 
             // btnAdd
             // 
             btnAdd.Enabled = false;
-            btnAdd.Location = new Point(485, 10);
+            btnAdd.Location = new Point(473, 14);
             btnAdd.Name = "btnAdd";
             btnAdd.Size = new Size(75, 23);
             btnAdd.TabIndex = 299;
@@ -258,69 +361,28 @@
             btnAdd.UseVisualStyleBackColor = true;
             btnAdd.Click += btnAdd_Click;
             // 
-            // label5
+            // btnShow
             // 
-            label5.AutoSize = true;
-            label5.Location = new Point(254, 87);
-            label5.Name = "label5";
-            label5.Size = new Size(102, 15);
-            label5.TabIndex = 298;
-            label5.Text = "px wide boundary";
+            btnShow.Location = new Point(360, 14);
+            btnShow.Name = "btnShow";
+            btnShow.Size = new Size(75, 23);
+            btnShow.TabIndex = 299;
+            btnShow.Text = "show";
+            btnShow.UseVisualStyleBackColor = true;
+            btnShow.Click += btnShow_Click;
             // 
-            // label2
+            // btnReload
             // 
-            label2.AutoSize = true;
-            label2.Location = new Point(254, 15);
-            label2.Name = "label2";
-            label2.Size = new Size(102, 15);
-            label2.TabIndex = 298;
-            label2.Text = "px wide boundary";
-            // 
-            // numExceptBounds2
-            // 
-            numExceptBounds2.Location = new Point(149, 85);
-            numExceptBounds2.Maximum = new decimal(new int[] { 32767, 0, 0, 0 });
-            numExceptBounds2.Name = "numExceptBounds2";
-            numExceptBounds2.Size = new Size(88, 23);
-            numExceptBounds2.TabIndex = 297;
-            numExceptBounds2.Value = new decimal(new int[] { 15, 0, 0, 0 });
-            // 
-            // numExceptBounds
-            // 
-            numExceptBounds.Location = new Point(149, 12);
-            numExceptBounds.Maximum = new decimal(new int[] { 32767, 0, 0, 0 });
-            numExceptBounds.Name = "numExceptBounds";
-            numExceptBounds.Size = new Size(88, 23);
-            numExceptBounds.TabIndex = 297;
-            numExceptBounds.Value = new decimal(new int[] { 15, 0, 0, 0 });
-            // 
-            // label4
-            // 
-            label4.AutoSize = true;
-            label4.Location = new Point(38, 87);
-            label4.Name = "label4";
-            label4.Size = new Size(69, 15);
-            label4.TabIndex = 296;
-            label4.Text = "from path a";
-            // 
-            // label1
-            // 
-            label1.AutoSize = true;
-            label1.Location = new Point(21, 15);
-            label1.Name = "label1";
-            label1.Size = new Size(96, 15);
-            label1.TabIndex = 296;
-            label1.Text = "from whole pic a";
-            // 
-            // cbDraw
-            // 
-            cbDraw.AutoSize = true;
-            cbDraw.Location = new Point(21, 53);
-            cbDraw.Name = "cbDraw";
-            cbDraw.Size = new Size(77, 19);
-            cbDraw.TabIndex = 294;
-            cbDraw.Text = "DrawPath";
-            cbDraw.UseVisualStyleBackColor = true;
+            btnReload.Enabled = false;
+            btnReload.ForeColor = SystemColors.ControlText;
+            btnReload.Location = new Point(614, 12);
+            btnReload.Margin = new Padding(4, 3, 4, 3);
+            btnReload.Name = "btnReload";
+            btnReload.Size = new Size(88, 27);
+            btnReload.TabIndex = 285;
+            btnReload.Text = "reload image";
+            btnReload.UseVisualStyleBackColor = true;
+            btnReload.Click += btnReload_Click;
             // 
             // Label20
             // 
@@ -434,13 +496,61 @@
             toolStripStatusLabel2.Size = new Size(215, 30);
             toolStripStatusLabel2.Text = "toolStripStatusLabel2";
             // 
+            // cbSelSingleClick
+            // 
+            cbSelSingleClick.AutoSize = true;
+            cbSelSingleClick.Location = new Point(23, 277);
+            cbSelSingleClick.Name = "cbSelSingleClick";
+            cbSelSingleClick.Size = new Size(131, 19);
+            cbSelSingleClick.TabIndex = 648;
+            cbSelSingleClick.Text = "SelectOnSingleClick";
+            cbSelSingleClick.UseVisualStyleBackColor = true;
+            cbSelSingleClick.CheckedChanged += cbSelSingleClick_CheckedChanged;
+            // 
+            // btnSelNone
+            // 
+            btnSelNone.ForeColor = SystemColors.ControlText;
+            btnSelNone.Location = new Point(121, 318);
+            btnSelNone.Margin = new Padding(4, 3, 4, 3);
+            btnSelNone.Name = "btnSelNone";
+            btnSelNone.Size = new Size(88, 27);
+            btnSelNone.TabIndex = 649;
+            btnSelNone.Text = "UnselectAll";
+            btnSelNone.UseVisualStyleBackColor = true;
+            btnSelNone.Click += btnSelNone_Click;
+            // 
+            // btnClearPaths
+            // 
+            btnClearPaths.ForeColor = SystemColors.ControlText;
+            btnClearPaths.Location = new Point(26, 351);
+            btnClearPaths.Margin = new Padding(4, 3, 4, 3);
+            btnClearPaths.Name = "btnClearPaths";
+            btnClearPaths.Size = new Size(88, 27);
+            btnClearPaths.TabIndex = 650;
+            btnClearPaths.Text = "ClearPaths";
+            btnClearPaths.UseVisualStyleBackColor = true;
+            btnClearPaths.Click += btnClearPaths_Click;
+            // 
+            // btnSelAll
+            // 
+            btnSelAll.ForeColor = SystemColors.ControlText;
+            btnSelAll.Location = new Point(25, 318);
+            btnSelAll.Margin = new Padding(4, 3, 4, 3);
+            btnSelAll.Name = "btnSelAll";
+            btnSelAll.Size = new Size(88, 27);
+            btnSelAll.TabIndex = 651;
+            btnSelAll.Text = "SelectAll";
+            btnSelAll.UseVisualStyleBackColor = true;
+            btnSelAll.Click += btnSelAll_Click;
+            // 
             // checkedListBox1
             // 
             checkedListBox1.FormattingEnabled = true;
             checkedListBox1.Location = new Point(23, 88);
             checkedListBox1.Name = "checkedListBox1";
-            checkedListBox1.Size = new Size(183, 130);
+            checkedListBox1.Size = new Size(183, 166);
             checkedListBox1.TabIndex = 292;
+            checkedListBox1.SelectedValueChanged += checkedListBox1_SelectedIndexChanged;
             // 
             // Button29
             // 
@@ -540,6 +650,7 @@
             Load += frmExcludeFromPic_Load;
             splitContainer1.Panel1.ResumeLayout(false);
             splitContainer1.Panel2.ResumeLayout(false);
+            splitContainer1.Panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).EndInit();
             splitContainer1.ResumeLayout(false);
             splitContainer2.Panel1.ResumeLayout(false);
@@ -548,8 +659,12 @@
             splitContainer2.Panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer2).EndInit();
             splitContainer2.ResumeLayout(false);
+            groupBox2.ResumeLayout(false);
+            groupBox2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)numPenWidth).EndInit();
             ((System.ComponentModel.ISupportInitialize)numExceptBounds2).EndInit();
+            groupBox1.ResumeLayout(false);
+            groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)numExceptBounds).EndInit();
             statusStrip1.ResumeLayout(false);
             statusStrip1.PerformLayout();
@@ -598,5 +713,13 @@
         private Label label4;
         private CheckedListBox checkedListBox1;
         private System.ComponentModel.BackgroundWorker backgroundWorker2;
+        private GroupBox groupBox2;
+        private GroupBox groupBox1;
+        private Button btnReload2;
+        private Button btnReload;
+        private CheckBox cbSelSingleClick;
+        private Button btnSelNone;
+        private Button btnClearPaths;
+        private Button btnSelAll;
     }
 }
