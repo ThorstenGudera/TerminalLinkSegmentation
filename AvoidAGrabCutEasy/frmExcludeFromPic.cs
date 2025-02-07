@@ -1188,10 +1188,8 @@ namespace AvoidAGrabCutEasy
                 this.label1.Enabled = this.label2.Enabled = this.btnShow.Enabled = this.numExceptBounds.Enabled = false;
                 this._drawPath = false;
 
-                if (this._allPoints != null)
-                    this._allPoints.Clear();
-
-                this.helplineRulerCtrl1.dbPanel1.Invalidate();
+                //if (this._allPoints != null)
+                //    this._allPoints.Clear();
             }
 
             this.btnShow.Text = "show";
@@ -1253,6 +1251,9 @@ namespace AvoidAGrabCutEasy
                 }
                 this.checkedListBox1.Items.Add(r, true);
                 this.btnAdd.Enabled = false;
+
+                if (this._allPoints != null)
+                    this._allPoints.Clear();
             }
         }
 
@@ -1422,10 +1423,8 @@ namespace AvoidAGrabCutEasy
                     this.btnRemSeg.Enabled = this.btnRemPoint.Enabled = this.numPenWidth.Enabled = false;
                 this._drawPath = false;
 
-                if (this._allPoints != null)
-                    this._allPoints.Clear();
-
-                this.helplineRulerCtrl1.dbPanel1.Invalidate();
+                //if (this._allPoints != null)
+                //    this._allPoints.Clear();
             }
 
             this.btnShow2.Text = "show";
@@ -1453,6 +1452,18 @@ namespace AvoidAGrabCutEasy
 
         private void btnAdd2_Click(object sender, EventArgs e)
         {
+            if (this._allPoints != null && this._allPoints.Count > 0)
+            {
+                List<Point> points = this._allPoints[this._allPoints.Count - 1];
+                if (this._allPoints[0].Count > 0)
+                {
+                    if (points[points.Count - 1].X != this._allPoints[0][0].X || points[points.Count - 1].Y != this._allPoints[0][0].Y)
+                        points.Add(this._allPoints[0][0]);
+                }
+                else
+                    this._allPoints.RemoveAt(this._allPoints.Count - 1);
+            }
+
             if (this._remaining != null)
             {
                 ExcludedBmpRegion r = new(this._remaining);
@@ -1473,6 +1484,9 @@ namespace AvoidAGrabCutEasy
                 }
                 this.checkedListBox1.Items.Add(r, true);
                 this.btnAdd2.Enabled = false;
+
+                if (this._allPoints != null)
+                    this._allPoints.Clear();
             }
         }
 
