@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ChainCodeFinder;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -18,6 +19,9 @@ namespace AvoidAGrabCutEasy
         private Rectangle? _rc;
         private List<PointF>? _displayPoints;
         private List<Point>? _currentList;
+        private bool _dynamic = true;
+        private int _divisor = 2;
+        private int _newWidth = 10;
 
         public frmLastScribbles(Bitmap bmp, Dictionary<int, Dictionary<int, List<List<Point>>>>? scribbles, List<Tuple<int, int, int, bool, List<List<Point>>>>? scribbleSeq)
         {
@@ -41,6 +45,8 @@ namespace AvoidAGrabCutEasy
         {
             if (this._scribbles != null && this.cmbScribblesType.SelectedIndex > -1)
             {
+                this.cbApproxLines.Enabled = this.btnSmothenSettings.Enabled = this.btnApproxLines.Enabled = false;
+
                 int fg = this.cmbScribblesType.SelectedIndex == 0 ? 0 : this.cmbScribblesType.SelectedIndex == 1 ? 1 : 3;
                 this.listBox1.Items.Clear();
                 this.listBox2.Items.Clear();
@@ -59,6 +65,9 @@ namespace AvoidAGrabCutEasy
 
                 if (this.listBox1.Items.Count > 0)
                     this.listBox1.SelectedIndex = 0;
+
+                if (fg == 3 && this.listBox1.Items.Count > 0)
+                    this.cbApproxLines.Enabled = this.btnSmothenSettings.Enabled = this.btnApproxLines.Enabled = true;
             }
         }
 
@@ -331,7 +340,7 @@ namespace AvoidAGrabCutEasy
                                 }
                             }
                         }
-                        else if(this.rbOne.Checked)
+                        else if (this.rbOne.Checked)
                         {
                             if (this._scribbles.ContainsKey(fg))
                             {
@@ -554,7 +563,7 @@ namespace AvoidAGrabCutEasy
                                                     if (whL != null && whL.Count() > 0)
                                                     {
                                                         IEnumerable<Tuple<int, int, int, bool, List<List<Point>>>> listL = whL.Where(a => a.Item3 == curL);
-                                                        if(listL != null && listL.Count() > 0)
+                                                        if (listL != null && listL.Count() > 0)
                                                         {
                                                             Tuple<int, int, int, bool, List<List<Point>>> jj = listL.First();
                                                             List<List<Point>>? readA = jj.Item5;
@@ -592,6 +601,69 @@ namespace AvoidAGrabCutEasy
             catch (Exception exc)
             {
                 MessageBox.Show(exc.ToString() + "\n\nBetter reload this form.");
+            }
+        }
+
+        private void btnSmothenSettings_Click(object sender, EventArgs e)
+        {
+            using frmLoadScribblesSettings frm = new frmLoadScribblesSettings();
+
+            frm.rbDynamic.Checked = this._dynamic;
+            frm.numDivisor.Value = (decimal)this._divisor;
+            frm.numNewWidth.Value = (decimal)this._newWidth;
+
+            if (frm.ShowDialog() == DialogResult.OK)
+            {
+                this._dynamic = frm.rbDynamic.Checked;
+                this._divisor = (int)frm.numDivisor.Value;
+                this._newWidth = (int)frm.numNewWidth.Value;
+            }
+        }
+
+        private void btnApproxLines_Click(object sender, EventArgs e)
+        {
+            //test, this might help for scribbles that come from frmQuickExtract
+            if (this._scribbles != null && this.cbApproxLines.Checked && this._scribbles.ContainsKey(3) && this.listBox2.SelectedIndex > -1)
+            {
+                Dictionary<int, List<List<Point>>> j = this._scribbles[3];
+
+                List<List<Point>> l = j.ElementAt(this.listBox2.SelectedIndex).Value;
+                int w = j.ElementAt(this.listBox2.SelectedIndex).Key;
+                ChainFinder cf = new ChainFinder();
+
+                for (int ii = 0; ii < l.Count; ii++)
+                {
+                    List<Point> pts = l[ii];
+                    if (this._dynamic)
+                        pts = cf.ApproximateLines(pts, Math.Max(w / this._divisor, 1));
+                    else
+                        pts = cf.ApproximateLines(pts, this._newWidth);
+
+                    List<Point> pts2 = new List<Point>();
+                    for (int ll = 1; ll < pts.Count; ll++)
+                    {
+                        double dx = pts[ll].X - pts[ll - 1].X;
+                        double dy = pts[ll].Y - pts[ll - 1].Y;
+                        double lngth = Math.Sqrt(dx * dx + dy * dy);
+                        dx /= lngth;
+                        dy /= lngth;
+
+                        for (int iii = 0; iii < (int)lngth; iii++)
+                        {
+                            Point pt = new Point(pts[ll - 1].X + (int)(iii * dx), pts[ll - 1].Y + (int)(iii * dy));
+
+                            if (pts[ll - 1].X != pt.X || pts[ll - 1].Y != pt.Y)
+                                pts2.Add(pt);
+                        }
+                    }
+
+                    l[ii] = pts2;
+                    j[w] = l;
+                    this._scribbles[3] = j;
+
+                    for (int ll = 1; ll < pts.Count; ll++)
+                        DisplayPointsInPic(this._scribbles[3][w][ii]);
+                }
             }
         }
     }

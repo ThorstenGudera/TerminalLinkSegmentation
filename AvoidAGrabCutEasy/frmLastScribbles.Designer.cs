@@ -43,20 +43,23 @@
             rbOne = new RadioButton();
             groupBox1 = new GroupBox();
             groupBox2 = new GroupBox();
-            rbTOne = new RadioButton();
             rbTAll = new RadioButton();
-            numTX = new NumericUpDown();
+            rbTOne = new RadioButton();
             btnSetPos = new Button();
+            label4 = new Label();
             label3 = new Label();
             numTY = new NumericUpDown();
-            label4 = new Label();
+            numTX = new NumericUpDown();
+            btnSmothenSettings = new Button();
+            cbApproxLines = new CheckBox();
+            btnApproxLines = new Button();
             panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numNewWidth).BeginInit();
             groupBox1.SuspendLayout();
             groupBox2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)numTX).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numTY).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)numTX).BeginInit();
             SuspendLayout();
             // 
             // cmbScribblesType
@@ -229,16 +232,6 @@
             groupBox2.TabStop = false;
             groupBox2.Text = "translate";
             // 
-            // rbTOne
-            // 
-            rbTOne.AutoSize = true;
-            rbTOne.Location = new Point(97, 22);
-            rbTOne.Name = "rbTOne";
-            rbTOne.Size = new Size(77, 19);
-            rbTOne.TabIndex = 655;
-            rbTOne.Text = "one in lb2";
-            rbTOne.UseVisualStyleBackColor = true;
-            // 
             // rbTAll
             // 
             rbTAll.AutoSize = true;
@@ -251,14 +244,15 @@
             rbTAll.Text = "all in lb2";
             rbTAll.UseVisualStyleBackColor = true;
             // 
-            // numTX
+            // rbTOne
             // 
-            numTX.Location = new Point(36, 59);
-            numTX.Maximum = new decimal(new int[] { 32767, 0, 0, 0 });
-            numTX.Minimum = new decimal(new int[] { 32768, 0, 0, int.MinValue });
-            numTX.Name = "numTX";
-            numTX.Size = new Size(58, 23);
-            numTX.TabIndex = 654;
+            rbTOne.AutoSize = true;
+            rbTOne.Location = new Point(97, 22);
+            rbTOne.Name = "rbTOne";
+            rbTOne.Size = new Size(77, 19);
+            rbTOne.TabIndex = 655;
+            rbTOne.Text = "one in lb2";
+            rbTOne.UseVisualStyleBackColor = true;
             // 
             // btnSetPos
             // 
@@ -269,6 +263,15 @@
             btnSetPos.Text = "Go";
             btnSetPos.UseVisualStyleBackColor = true;
             btnSetPos.Click += btnSetPos_Click;
+            // 
+            // label4
+            // 
+            label4.AutoSize = true;
+            label4.Location = new Point(106, 62);
+            label4.Name = "label4";
+            label4.Size = new Size(16, 15);
+            label4.TabIndex = 653;
+            label4.Text = "y:";
             // 
             // label3
             // 
@@ -288,20 +291,56 @@
             numTY.Size = new Size(58, 23);
             numTY.TabIndex = 654;
             // 
-            // label4
+            // numTX
             // 
-            label4.AutoSize = true;
-            label4.Location = new Point(106, 62);
-            label4.Name = "label4";
-            label4.Size = new Size(16, 15);
-            label4.TabIndex = 653;
-            label4.Text = "y:";
+            numTX.Location = new Point(36, 59);
+            numTX.Maximum = new decimal(new int[] { 32767, 0, 0, 0 });
+            numTX.Minimum = new decimal(new int[] { 32768, 0, 0, int.MinValue });
+            numTX.Name = "numTX";
+            numTX.Size = new Size(58, 23);
+            numTX.TabIndex = 654;
+            // 
+            // btnSmothenSettings
+            // 
+            btnSmothenSettings.Enabled = false;
+            btnSmothenSettings.Location = new Point(627, 393);
+            btnSmothenSettings.Name = "btnSmothenSettings";
+            btnSmothenSettings.Size = new Size(35, 23);
+            btnSmothenSettings.TabIndex = 730;
+            btnSmothenSettings.Text = "set";
+            btnSmothenSettings.UseVisualStyleBackColor = true;
+            btnSmothenSettings.Click += btnSmothenSettings_Click;
+            // 
+            // cbApproxLines
+            // 
+            cbApproxLines.AutoSize = true;
+            cbApproxLines.Enabled = false;
+            cbApproxLines.Location = new Point(552, 396);
+            cbApproxLines.Name = "cbApproxLines";
+            cbApproxLines.Size = new Size(80, 19);
+            cbApproxLines.TabIndex = 729;
+            cbApproxLines.Text = "smoothen";
+            cbApproxLines.UseVisualStyleBackColor = true;
+            // 
+            // btnApproxLines
+            // 
+            btnApproxLines.Enabled = false;
+            btnApproxLines.Location = new Point(668, 392);
+            btnApproxLines.Name = "btnApproxLines";
+            btnApproxLines.Size = new Size(58, 25);
+            btnApproxLines.TabIndex = 728;
+            btnApproxLines.Text = "Go";
+            btnApproxLines.UseVisualStyleBackColor = true;
+            btnApproxLines.Click += btnApproxLines_Click;
             // 
             // frmLastScribbles
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(841, 467);
+            Controls.Add(btnSmothenSettings);
+            Controls.Add(cbApproxLines);
+            Controls.Add(btnApproxLines);
             Controls.Add(groupBox2);
             Controls.Add(groupBox1);
             Controls.Add(panel1);
@@ -323,8 +362,8 @@
             groupBox1.PerformLayout();
             groupBox2.ResumeLayout(false);
             groupBox2.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)numTX).EndInit();
             ((System.ComponentModel.ISupportInitialize)numTY).EndInit();
+            ((System.ComponentModel.ISupportInitialize)numTX).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -353,5 +392,8 @@
         private Label label3;
         private NumericUpDown numTY;
         private NumericUpDown numTX;
+        private Button btnSmothenSettings;
+        private CheckBox cbApproxLines;
+        private Button btnApproxLines;
     }
 }
