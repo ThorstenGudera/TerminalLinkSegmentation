@@ -62,6 +62,7 @@
             cbLSBmp = new CheckBox();
             Label20 = new Label();
             panel1 = new Panel();
+            btnCheckArray = new Button();
             btnTScribbles = new Button();
             cbExcludeRegions = new CheckBox();
             btnOutlineOperations = new Button();
@@ -120,7 +121,9 @@
             backgroundWorker5 = new System.ComponentModel.BackgroundWorker();
             backgroundWorker3 = new System.ComponentModel.BackgroundWorker();
             backgroundWorker4 = new System.ComponentModel.BackgroundWorker();
-            btnCheckArray = new Button();
+            btnSmothenSettings = new Button();
+            panel9 = new Panel();
+            cbApproxLines = new CheckBox();
             statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
@@ -229,7 +232,7 @@
             // 
             // btnSaveScribbles
             // 
-            btnSaveScribbles.Location = new Point(425, 151);
+            btnSaveScribbles.Location = new Point(466, 127);
             btnSaveScribbles.Margin = new Padding(4, 3, 4, 3);
             btnSaveScribbles.Name = "btnSaveScribbles";
             btnSaveScribbles.Size = new Size(99, 27);
@@ -240,7 +243,7 @@
             // 
             // btnLoadScribbles
             // 
-            btnLoadScribbles.Location = new Point(316, 151);
+            btnLoadScribbles.Location = new Point(357, 127);
             btnLoadScribbles.Margin = new Padding(4, 3, 4, 3);
             btnLoadScribbles.Name = "btnLoadScribbles";
             btnLoadScribbles.Size = new Size(99, 27);
@@ -477,6 +480,9 @@
             // 
             // panel1
             // 
+            panel1.Controls.Add(btnSmothenSettings);
+            panel1.Controls.Add(panel9);
+            panel1.Controls.Add(cbApproxLines);
             panel1.Controls.Add(btnCheckArray);
             panel1.Controls.Add(btnTScribbles);
             panel1.Controls.Add(cbExcludeRegions);
@@ -534,6 +540,16 @@
             panel1.Name = "panel1";
             panel1.Size = new Size(1479, 227);
             panel1.TabIndex = 226;
+            // 
+            // btnCheckArray
+            // 
+            btnCheckArray.Location = new Point(224, 123);
+            btnCheckArray.Name = "btnCheckArray";
+            btnCheckArray.Size = new Size(75, 23);
+            btnCheckArray.TabIndex = 725;
+            btnCheckArray.Text = "chk array";
+            btnCheckArray.UseVisualStyleBackColor = true;
+            btnCheckArray.Click += btnCheckArray_Click;
             // 
             // btnTScribbles
             // 
@@ -1170,15 +1186,34 @@
             backgroundWorker4.DoWork += backgroundWorker4_DoWork;
             backgroundWorker4.RunWorkerCompleted += backgroundWorker4_RunWorkerCompleted;
             // 
-            // btnCheckArray
+            // btnSmothenSettings
             // 
-            btnCheckArray.Location = new Point(224, 123);
-            btnCheckArray.Name = "btnCheckArray";
-            btnCheckArray.Size = new Size(75, 23);
-            btnCheckArray.TabIndex = 725;
-            btnCheckArray.Text = "chk array";
-            btnCheckArray.UseVisualStyleBackColor = true;
-            btnCheckArray.Click += btnCheckArray_Click;
+            btnSmothenSettings.Location = new Point(463, 153);
+            btnSmothenSettings.Name = "btnSmothenSettings";
+            btnSmothenSettings.Size = new Size(35, 23);
+            btnSmothenSettings.TabIndex = 728;
+            btnSmothenSettings.Text = "set";
+            btnSmothenSettings.UseVisualStyleBackColor = true;
+            btnSmothenSettings.Click += btnSmothenSettings_Click;
+            // 
+            // panel9
+            // 
+            panel9.BackColor = SystemColors.ControlDark;
+            panel9.Location = new Point(504, 155);
+            panel9.Name = "panel9";
+            panel9.Size = new Size(2, 22);
+            panel9.TabIndex = 729;
+            // 
+            // cbApproxLines
+            // 
+            cbApproxLines.AutoSize = true;
+            cbApproxLines.Location = new Point(388, 156);
+            cbApproxLines.Name = "cbApproxLines";
+            cbApproxLines.Size = new Size(80, 19);
+            cbApproxLines.TabIndex = 727;
+            cbApproxLines.Text = "smoothen";
+            toolTip1.SetToolTip(cbApproxLines, "Smoothen Unknown scribbles.\r\nthis might help for scribbles \r\nthat come from frmQuickExtract");
+            cbApproxLines.UseVisualStyleBackColor = true;
             // 
             // frmAlphaMatte
             // 
@@ -1316,5 +1351,8 @@
         private ToolStripStatusLabel toolStripStatusLabel5;
         private Button btnTScribbles;
         private Button btnCheckArray;
+        private Button btnSmothenSettings;
+        private Panel panel9;
+        private CheckBox cbApproxLines;
     }
 }
