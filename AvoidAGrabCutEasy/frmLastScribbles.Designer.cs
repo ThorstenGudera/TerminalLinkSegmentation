@@ -53,6 +53,10 @@
             btnSmothenSettings = new Button();
             cbApproxLines = new CheckBox();
             btnApproxLines = new Button();
+            cmbRestore2 = new ComboBox();
+            btnRestore = new Button();
+            cmbRestore = new ComboBox();
+            btnDisplay = new Button();
             panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numNewWidth).BeginInit();
@@ -121,7 +125,7 @@
             btnOK.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             btnOK.DialogResult = DialogResult.OK;
             btnOK.ForeColor = SystemColors.ControlText;
-            btnOK.Location = new Point(740, 428);
+            btnOK.Location = new Point(740, 493);
             btnOK.Margin = new Padding(4, 3, 4, 3);
             btnOK.Name = "btnOK";
             btnOK.Size = new Size(88, 27);
@@ -136,7 +140,7 @@
             panel1.Controls.Add(pictureBox1);
             panel1.Location = new Point(12, 15);
             panel1.Name = "panel1";
-            panel1.Size = new Size(473, 440);
+            panel1.Size = new Size(473, 505);
             panel1.TabIndex = 651;
             // 
             // pictureBox1
@@ -144,7 +148,7 @@
             pictureBox1.Dock = DockStyle.Fill;
             pictureBox1.Location = new Point(0, 0);
             pictureBox1.Name = "pictureBox1";
-            pictureBox1.Size = new Size(473, 440);
+            pictureBox1.Size = new Size(473, 505);
             pictureBox1.SizeMode = PictureBoxSizeMode.Zoom;
             pictureBox1.TabIndex = 0;
             pictureBox1.TabStop = false;
@@ -303,10 +307,10 @@
             // btnSmothenSettings
             // 
             btnSmothenSettings.Enabled = false;
-            btnSmothenSettings.Location = new Point(627, 393);
+            btnSmothenSettings.Location = new Point(624, 396);
             btnSmothenSettings.Name = "btnSmothenSettings";
             btnSmothenSettings.Size = new Size(35, 23);
-            btnSmothenSettings.TabIndex = 730;
+            btnSmothenSettings.TabIndex = 727;
             btnSmothenSettings.Text = "set";
             btnSmothenSettings.UseVisualStyleBackColor = true;
             btnSmothenSettings.Click += btnSmothenSettings_Click;
@@ -315,29 +319,77 @@
             // 
             cbApproxLines.AutoSize = true;
             cbApproxLines.Enabled = false;
-            cbApproxLines.Location = new Point(552, 396);
+            cbApproxLines.Location = new Point(549, 399);
             cbApproxLines.Name = "cbApproxLines";
             cbApproxLines.Size = new Size(80, 19);
-            cbApproxLines.TabIndex = 729;
+            cbApproxLines.TabIndex = 726;
             cbApproxLines.Text = "smoothen";
             cbApproxLines.UseVisualStyleBackColor = true;
             // 
             // btnApproxLines
             // 
             btnApproxLines.Enabled = false;
-            btnApproxLines.Location = new Point(668, 392);
+            btnApproxLines.Location = new Point(665, 395);
             btnApproxLines.Name = "btnApproxLines";
             btnApproxLines.Size = new Size(58, 25);
-            btnApproxLines.TabIndex = 728;
+            btnApproxLines.TabIndex = 652;
             btnApproxLines.Text = "Go";
             btnApproxLines.UseVisualStyleBackColor = true;
             btnApproxLines.Click += btnApproxLines_Click;
+            // 
+            // cmbRestore2
+            // 
+            cmbRestore2.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbRestore2.Enabled = false;
+            cmbRestore2.FormattingEnabled = true;
+            cmbRestore2.Location = new Point(613, 426);
+            cmbRestore2.Name = "cmbRestore2";
+            cmbRestore2.Size = new Size(121, 23);
+            cmbRestore2.TabIndex = 728;
+            cmbRestore2.SelectedIndexChanged += cmbRestore2_SelectedIndexChanged;
+            // 
+            // btnRestore
+            // 
+            btnRestore.Enabled = false;
+            btnRestore.Location = new Point(658, 455);
+            btnRestore.Name = "btnRestore";
+            btnRestore.Size = new Size(75, 23);
+            btnRestore.TabIndex = 729;
+            btnRestore.Text = "restore";
+            btnRestore.UseVisualStyleBackColor = true;
+            btnRestore.Click += btnRestore_Click;
+            // 
+            // cmbRestore
+            // 
+            cmbRestore.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbRestore.Enabled = false;
+            cmbRestore.FormattingEnabled = true;
+            cmbRestore.Location = new Point(549, 426);
+            cmbRestore.Name = "cmbRestore";
+            cmbRestore.Size = new Size(56, 23);
+            cmbRestore.TabIndex = 728;
+            cmbRestore.SelectedIndexChanged += cmbRestore_SelectedIndexChanged;
+            // 
+            // btnDisplay
+            // 
+            btnDisplay.Enabled = false;
+            btnDisplay.Location = new Point(572, 455);
+            btnDisplay.Name = "btnDisplay";
+            btnDisplay.Size = new Size(75, 23);
+            btnDisplay.TabIndex = 729;
+            btnDisplay.Text = "display";
+            btnDisplay.UseVisualStyleBackColor = true;
+            btnDisplay.Click += btnDisplay_Click;
             // 
             // frmLastScribbles
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(841, 467);
+            ClientSize = new Size(841, 532);
+            Controls.Add(btnDisplay);
+            Controls.Add(btnRestore);
+            Controls.Add(cmbRestore);
+            Controls.Add(cmbRestore2);
             Controls.Add(btnSmothenSettings);
             Controls.Add(cbApproxLines);
             Controls.Add(btnApproxLines);
@@ -395,5 +447,9 @@
         private Button btnSmothenSettings;
         private CheckBox cbApproxLines;
         private Button btnApproxLines;
+        private ComboBox cmbRestore2;
+        private Button btnRestore;
+        private ComboBox cmbRestore;
+        private Button btnDisplay;
     }
 }

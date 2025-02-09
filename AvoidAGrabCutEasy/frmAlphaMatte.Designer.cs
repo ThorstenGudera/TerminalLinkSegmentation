@@ -56,12 +56,15 @@
             rbSparseScribble = new RadioButton();
             rbFullScribble = new RadioButton();
             cbDrawPaths = new CheckBox();
+            cbApproxLines = new CheckBox();
             saveFileDialog1 = new SaveFileDialog();
             Timer3 = new System.Windows.Forms.Timer(components);
             backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             cbLSBmp = new CheckBox();
             Label20 = new Label();
             panel1 = new Panel();
+            btnSmothenSettings = new Button();
+            panel9 = new Panel();
             btnCheckArray = new Button();
             btnTScribbles = new Button();
             cbExcludeRegions = new CheckBox();
@@ -121,9 +124,6 @@
             backgroundWorker5 = new System.ComponentModel.BackgroundWorker();
             backgroundWorker3 = new System.ComponentModel.BackgroundWorker();
             backgroundWorker4 = new System.ComponentModel.BackgroundWorker();
-            btnSmothenSettings = new Button();
-            panel9 = new Panel();
-            cbApproxLines = new CheckBox();
             statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
@@ -439,6 +439,17 @@
             toolTip1.SetToolTip(cbDrawPaths, "draw non-fill_In scriblles as smotth path");
             cbDrawPaths.UseVisualStyleBackColor = true;
             // 
+            // cbApproxLines
+            // 
+            cbApproxLines.AutoSize = true;
+            cbApproxLines.Location = new Point(388, 156);
+            cbApproxLines.Name = "cbApproxLines";
+            cbApproxLines.Size = new Size(80, 19);
+            cbApproxLines.TabIndex = 727;
+            cbApproxLines.Text = "smoothen";
+            toolTip1.SetToolTip(cbApproxLines, "Smoothen Unknown scribbles.\r\nthis might help for scribbles \r\nthat come from frmQuickExtract");
+            cbApproxLines.UseVisualStyleBackColor = true;
+            // 
             // saveFileDialog1
             // 
             saveFileDialog1.FileName = "Bild1.png";
@@ -540,6 +551,24 @@
             panel1.Name = "panel1";
             panel1.Size = new Size(1479, 227);
             panel1.TabIndex = 226;
+            // 
+            // btnSmothenSettings
+            // 
+            btnSmothenSettings.Location = new Point(463, 153);
+            btnSmothenSettings.Name = "btnSmothenSettings";
+            btnSmothenSettings.Size = new Size(35, 23);
+            btnSmothenSettings.TabIndex = 728;
+            btnSmothenSettings.Text = "set";
+            btnSmothenSettings.UseVisualStyleBackColor = true;
+            btnSmothenSettings.Click += btnSmothenSettings_Click;
+            // 
+            // panel9
+            // 
+            panel9.BackColor = SystemColors.ControlDark;
+            panel9.Location = new Point(504, 155);
+            panel9.Name = "panel9";
+            panel9.Size = new Size(2, 22);
+            panel9.TabIndex = 729;
             // 
             // btnCheckArray
             // 
@@ -921,9 +950,9 @@
             cbLastDrawn.CheckState = CheckState.Checked;
             cbLastDrawn.Location = new Point(141, 101);
             cbLastDrawn.Name = "cbLastDrawn";
-            cbLastDrawn.Size = new Size(80, 19);
+            cbLastDrawn.Size = new Size(104, 19);
             cbLastDrawn.TabIndex = 698;
-            cbLastDrawn.Text = "last drawn";
+            cbLastDrawn.Text = "rem last drawn";
             cbLastDrawn.UseVisualStyleBackColor = true;
             // 
             // pictureBox1
@@ -1141,7 +1170,8 @@
             btnRemLastScribbles.Name = "btnRemLastScribbles";
             btnRemLastScribbles.Size = new Size(63, 27);
             btnRemLastScribbles.TabIndex = 628;
-            btnRemLastScribbles.Text = "rem last";
+            btnRemLastScribbles.Text = "manage";
+            toolTip1.SetToolTip(btnRemLastScribbles, "manage scribbles or remove the\r\nlast segment of the specified width etc.");
             btnRemLastScribbles.UseVisualStyleBackColor = true;
             btnRemLastScribbles.Click += btnRemLastScribbles_Click;
             // 
@@ -1185,35 +1215,6 @@
             backgroundWorker4.WorkerSupportsCancellation = true;
             backgroundWorker4.DoWork += backgroundWorker4_DoWork;
             backgroundWorker4.RunWorkerCompleted += backgroundWorker4_RunWorkerCompleted;
-            // 
-            // btnSmothenSettings
-            // 
-            btnSmothenSettings.Location = new Point(463, 153);
-            btnSmothenSettings.Name = "btnSmothenSettings";
-            btnSmothenSettings.Size = new Size(35, 23);
-            btnSmothenSettings.TabIndex = 728;
-            btnSmothenSettings.Text = "set";
-            btnSmothenSettings.UseVisualStyleBackColor = true;
-            btnSmothenSettings.Click += btnSmothenSettings_Click;
-            // 
-            // panel9
-            // 
-            panel9.BackColor = SystemColors.ControlDark;
-            panel9.Location = new Point(504, 155);
-            panel9.Name = "panel9";
-            panel9.Size = new Size(2, 22);
-            panel9.TabIndex = 729;
-            // 
-            // cbApproxLines
-            // 
-            cbApproxLines.AutoSize = true;
-            cbApproxLines.Location = new Point(388, 156);
-            cbApproxLines.Name = "cbApproxLines";
-            cbApproxLines.Size = new Size(80, 19);
-            cbApproxLines.TabIndex = 727;
-            cbApproxLines.Text = "smoothen";
-            toolTip1.SetToolTip(cbApproxLines, "Smoothen Unknown scribbles.\r\nthis might help for scribbles \r\nthat come from frmQuickExtract");
-            cbApproxLines.UseVisualStyleBackColor = true;
             // 
             // frmAlphaMatte
             // 

@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -22,6 +23,9 @@ namespace AvoidAGrabCutEasy
         private bool _dynamic = true;
         private int _divisor = 2;
         private int _newWidth = 10;
+        private Dictionary<int, List<List<Point>>>? _unknownScribblesBU;
+        private List<Point>? _currentListRestore;
+        private List<PointF>? _displayPoints2;
 
         public frmLastScribbles(Bitmap bmp, Dictionary<int, Dictionary<int, List<List<Point>>>>? scribbles, List<Tuple<int, int, int, bool, List<List<Point>>>>? scribbleSeq)
         {
@@ -46,6 +50,7 @@ namespace AvoidAGrabCutEasy
             if (this._scribbles != null && this.cmbScribblesType.SelectedIndex > -1)
             {
                 this.cbApproxLines.Enabled = this.btnSmothenSettings.Enabled = this.btnApproxLines.Enabled = false;
+                this.cmbRestore.Enabled = this.cmbRestore2.Enabled = this.btnRestore.Enabled = false;
 
                 int fg = this.cmbScribblesType.SelectedIndex == 0 ? 0 : this.cmbScribblesType.SelectedIndex == 1 ? 1 : 3;
                 this.listBox1.Items.Clear();
@@ -57,9 +62,7 @@ namespace AvoidAGrabCutEasy
                     if (z.Keys.Count > 0)
                     {
                         foreach (int i in z.Keys)
-                        {
                             this.listBox1.Items.Add(i.ToString());
-                        }
                     }
                 }
 
@@ -67,7 +70,24 @@ namespace AvoidAGrabCutEasy
                     this.listBox1.SelectedIndex = 0;
 
                 if (fg == 3 && this.listBox1.Items.Count > 0)
+                {
                     this.cbApproxLines.Enabled = this.btnSmothenSettings.Enabled = this.btnApproxLines.Enabled = true;
+                    this.cmbRestore.Enabled = this.cmbRestore2.Enabled = this.btnRestore.Enabled = true;
+
+                    this.cmbRestore.Items.Clear();
+                    Dictionary<int, List<List<Point>>> j = this._scribbles[fg];
+                    if (j.Keys.Count > 0)
+                    {
+                        foreach (int i in j.Keys)
+                            this.cmbRestore.Items.Add(i.ToString());
+
+                        if (this.cmbRestore.Items.Count > 0)
+                            this.cmbRestore.SelectedIndex = 0;
+                    }
+                }
+
+                if (this._displayPoints2 != null)
+                    this._displayPoints2.Clear();
             }
         }
 
@@ -96,6 +116,9 @@ namespace AvoidAGrabCutEasy
                     }
                 }
             }
+
+            if (this._displayPoints2 != null)
+                this._displayPoints2.Clear();
         }
 
         private void DisplayPointsInPic(List<Point> points)
@@ -193,6 +216,9 @@ namespace AvoidAGrabCutEasy
                     }
                 }
             }
+
+            if (this._displayPoints2 != null)
+                this._displayPoints2.Clear();
         }
 
         private void pictureBox1_DoubleClick(object sender, EventArgs e)
@@ -256,6 +282,19 @@ namespace AvoidAGrabCutEasy
                         float xx = this._rc.Value.X;
                         float yy = this._rc.Value.Y;
                         e.Graphics.FillRectangle(Brushes.Yellow, new RectangleF(pt.X + xx - 1, pt.Y + yy - 1, 3, 3));
+                    }
+                }
+            }
+
+            if (this._displayPoints2 != null)
+            {
+                foreach (PointF pt in this._displayPoints2)
+                {
+                    if (this._rc != null)
+                    {
+                        float xx = this._rc.Value.X;
+                        float yy = this._rc.Value.Y;
+                        e.Graphics.FillRectangle(Brushes.DarkRed, new RectangleF(pt.X + xx - 1, pt.Y + yy - 1, 3, 3));
                     }
                 }
             }
@@ -627,15 +666,29 @@ namespace AvoidAGrabCutEasy
             {
                 Dictionary<int, List<List<Point>>> j = this._scribbles[3];
 
-                List<List<Point>> l = j.ElementAt(this.listBox2.SelectedIndex).Value;
-                int w = j.ElementAt(this.listBox2.SelectedIndex).Key;
-                ChainFinder cf = new ChainFinder();
+                int wh = -1;
 
-                for (int ii = 0; ii < l.Count; ii++)
+                if (Int32.TryParse(this.listBox1.SelectedItem?.ToString(), out wh))
                 {
-                    List<Point> pts = l[ii];
+                    List<List<Point>> l = j[wh];
+                    List<Point> pts = l[this.listBox2.SelectedIndex];
+                    ChainFinder cf = new ChainFinder();
+
+                    if (this._unknownScribblesBU == null)
+                        this._unknownScribblesBU = new Dictionary<int, List<List<Point>>>();
+                    if (!this._unknownScribblesBU.ContainsKey(wh))
+                        this._unknownScribblesBU[wh] = new List<List<Point>>();
+
+                    List<List<Point>> r = this._unknownScribblesBU[wh];
+
+                    //backup
+                    List<Point> ptsBU = new List<Point>();
+                    ptsBU.AddRange(pts.Select(a => new Point(a.X, a.Y)).ToArray());
+                    r.Add(ptsBU);
+                    this._unknownScribblesBU[wh] = r;
+
                     if (this._dynamic)
-                        pts = cf.ApproximateLines(pts, Math.Max(w / this._divisor, 1));
+                        pts = cf.ApproximateLines(pts, Math.Max(wh / this._divisor, 1));
                     else
                         pts = cf.ApproximateLines(pts, this._newWidth);
 
@@ -657,14 +710,106 @@ namespace AvoidAGrabCutEasy
                         }
                     }
 
-                    l[ii] = pts2;
-                    j[w] = l;
+                    l[this.listBox2.SelectedIndex] = pts2;
+                    j[wh] = l;
                     this._scribbles[3] = j;
 
-                    for (int ll = 1; ll < pts.Count; ll++)
-                        DisplayPointsInPic(this._scribbles[3][w][ii]);
+                    DisplayPointsInPic(this._scribbles[3][wh][this.listBox2.SelectedIndex]);
+
+                    this.cmbRestore_SelectedIndexChanged(cmbRestore, new EventArgs());
                 }
             }
+        }
+
+        private void cmbRestore_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (this._unknownScribblesBU != null && this.cmbScribblesType.SelectedIndex == 2)
+            {
+                if (this._unknownScribblesBU.Keys.Count > 0)
+                {
+                    this.cmbRestore2.Items.Clear();
+
+                    int j = -1;
+
+                    if (Int32.TryParse(this.cmbRestore.SelectedItem?.ToString(), out j))
+                    {
+                        List<List<Point>> wh = this._unknownScribblesBU[j];
+                        for (int i = 0; i < wh.Count; i++)
+                            this.cmbRestore2.Items.Add(wh[i].Count.ToString());
+                    }
+                }
+
+                if (this.cmbRestore2.Items.Count > 0)
+                    this.cmbRestore2.SelectedIndex = 0;
+
+                if (this._displayPoints2 != null)
+                    this._displayPoints2.Clear();
+            }
+        }
+
+        private void btnDisplay_Click(object sender, EventArgs e)
+        {
+            if (this._unknownScribblesBU != null)
+            {
+                int j = -1;
+
+                if (Int32.TryParse(this.cmbRestore.SelectedItem?.ToString(), out j))
+                {
+                    int wh = j;
+
+                    List<List<Point>> list = this._unknownScribblesBU[wh];
+                    int j2 = -1;
+
+                    if (Int32.TryParse(this.cmbRestore2.SelectedItem?.ToString(), out j2))
+                        if (list.Count > this.cmbRestore2.SelectedIndex && list[this.cmbRestore2.SelectedIndex].Count == j2)
+                        {
+                            this._currentListRestore = list[this.cmbRestore2.SelectedIndex];
+                            DisplayPointsInPic2(_currentListRestore);
+                        }
+                }
+            }
+        }
+
+        private void DisplayPointsInPic2(List<Point> points)
+        {
+            List<PointF> list = points.Select(a => new PointF(a.X * _zoom, a.Y * _zoom)).ToList();
+            this._displayPoints2 = list;
+            this.pictureBox1.Invalidate();
+        }
+
+        private void cmbRestore2_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (this._displayPoints2 != null)
+                this._displayPoints2.Clear();
+        }
+
+        private void btnRestore_Click(object sender, EventArgs e)
+        {
+            if (this._scribbles != null && this._unknownScribblesBU != null && 
+                this._scribbles.ContainsKey(3) && this.listBox2.SelectedIndex > -1)
+            {
+                Dictionary<int, List<List<Point>>> j = this._scribbles[3];
+
+                int wh = -1;
+                int whR = -1;
+
+                if (Int32.TryParse(this.listBox1.SelectedItem?.ToString(), out wh) &&
+                    Int32.TryParse(this.cmbRestore.SelectedItem?.ToString(), out whR))
+                {
+                    List<List<Point>> l = j[wh];
+                    List<List<Point>> ll = this._unknownScribblesBU[wh];
+                    List<Point> pts2 = new List<Point>();
+                    pts2.AddRange(ll[this.cmbRestore2.SelectedIndex]);
+
+                    l[this.listBox2.SelectedIndex] = pts2;
+                    j[wh] = l;
+                }
+
+                DisplayPointsInPic(this._scribbles[3][wh][this.listBox2.SelectedIndex]);
+            }
+
+            if (this._displayPoints2 != null)
+                this._displayPoints2.Clear();
         }
     }
 }
