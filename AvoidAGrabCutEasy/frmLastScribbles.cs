@@ -50,7 +50,7 @@ namespace AvoidAGrabCutEasy
             if (this._scribbles != null && this.cmbScribblesType.SelectedIndex > -1)
             {
                 this.cbApproxLines.Enabled = this.btnSmothenSettings.Enabled = this.btnApproxLines.Enabled = false;
-                this.cmbRestore.Enabled = this.cmbRestore2.Enabled = this.btnRestore.Enabled = false;
+                this.cmbRestore.Enabled = this.cmbRestore2.Enabled = this.btnRestore.Enabled = this.btnDisplay.Enabled = false;
 
                 int fg = this.cmbScribblesType.SelectedIndex == 0 ? 0 : this.cmbScribblesType.SelectedIndex == 1 ? 1 : 3;
                 this.listBox1.Items.Clear();
@@ -72,7 +72,7 @@ namespace AvoidAGrabCutEasy
                 if (fg == 3 && this.listBox1.Items.Count > 0)
                 {
                     this.cbApproxLines.Enabled = this.btnSmothenSettings.Enabled = this.btnApproxLines.Enabled = true;
-                    this.cmbRestore.Enabled = this.cmbRestore2.Enabled = this.btnRestore.Enabled = true;
+                    this.cmbRestore.Enabled = this.cmbRestore2.Enabled = this.btnRestore.Enabled = this.btnDisplay.Enabled = true;
 
                     this.cmbRestore.Items.Clear();
                     Dictionary<int, List<List<Point>>> j = this._scribbles[fg];
@@ -779,6 +779,9 @@ namespace AvoidAGrabCutEasy
 
         private void cmbRestore2_SelectedIndexChanged(object sender, EventArgs e)
         {
+            this.btnDisplay.Enabled = true;
+            this.btnRestore.Enabled = true;
+
             if (this._displayPoints2 != null)
                 this._displayPoints2.Clear();
         }
