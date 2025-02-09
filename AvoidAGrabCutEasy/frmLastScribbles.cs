@@ -800,7 +800,7 @@ namespace AvoidAGrabCutEasy
                     Int32.TryParse(this.cmbRestore.SelectedItem?.ToString(), out whR))
                 {
                     List<List<Point>> l = j[wh];
-                    List<List<Point>> ll = this._unknownScribblesBU[wh];
+                    List<List<Point>> ll = this._unknownScribblesBU[whR];
                     List<Point> pts2 = new List<Point>();
                     pts2.AddRange(ll[this.cmbRestore2.SelectedIndex]);
 
