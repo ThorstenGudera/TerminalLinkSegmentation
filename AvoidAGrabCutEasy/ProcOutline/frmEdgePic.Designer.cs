@@ -70,6 +70,7 @@
             helplineRulerCtrl1.DontPaintBaseImg = false;
             helplineRulerCtrl1.DontProcDoubleClick = false;
             helplineRulerCtrl1.DrawModeClipped = false;
+            helplineRulerCtrl1.DrawPixelated = false;
             helplineRulerCtrl1.IgnoreZoom = false;
             helplineRulerCtrl1.Location = new Point(0, 0);
             helplineRulerCtrl1.Margin = new Padding(5, 3, 5, 3);
@@ -119,6 +120,7 @@
             Controls.Add(splitContainer1);
             Margin = new Padding(4, 3, 4, 3);
             Name = "frmEdgePic";
+            StartPosition = FormStartPosition.CenterParent;
             Text = "frmEdgePic";
             Load += frmEdgePic_Load;
             splitContainer1.Panel1.ResumeLayout(false);

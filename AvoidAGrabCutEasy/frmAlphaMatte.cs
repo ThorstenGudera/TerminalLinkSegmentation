@@ -2291,15 +2291,13 @@ namespace AvoidAGrabCutEasy
                     bOld = null;
                 }
 
-                double factor = (this.cbHalfSize.Checked && this.rbClosedForm.Checked) ? 2.0 : 1.0;
-
-                Bitmap bTrimap = new Bitmap(bWork.Width, bWork.Height);
+                Bitmap bTrimap = new Bitmap(this.helplineRulerCtrl1.Bmp.Width, this.helplineRulerCtrl1.Bmp.Height);
                 this.SetBitmap(ref _bWork, ref bWork);
 
                 bool drawPaths = this.cbDrawPaths.Checked;
                 float wFactor = (float)this.numScribblesWFactor.Value;
 
-                this.backgroundWorker4.RunWorkerAsync(new object[] { factor, bTrimap, drawPaths, wFactor });
+                this.backgroundWorker4.RunWorkerAsync(new object[] { bTrimap, drawPaths, wFactor });
             }
         }
 
@@ -3183,10 +3181,9 @@ namespace AvoidAGrabCutEasy
             {
                 object[] o = (object[])e.Argument;
 
-                double factor = (double)o[0];
-                Bitmap bTrimap = (Bitmap)o[1];
-                bool drawPaths = (bool)o[2];
-                float wFactor = (float)o[3];
+                Bitmap bTrimap = (Bitmap)o[0];
+                bool drawPaths = (bool)o[1];
+                float wFactor = (float)o[2];
 
                 using (Graphics gx = Graphics.FromImage(bTrimap))
                 {
@@ -3223,27 +3220,27 @@ namespace AvoidAGrabCutEasy
                                                 {
                                                     using (SolidBrush sb = new SolidBrush(c))
                                                         gx.FillRectangle(sb, new Rectangle(
-                                                            (int)((int)(pt.X - wh / 2) / factor),
-                                                            (int)((int)(pt.Y - wh / 2) / factor),
-                                                            (int)Math.Max(wh / factor, 1),
-                                                            (int)Math.Max(wh / factor, 1)));
+                                                            (int)((int)(pt.X - wh / 2)),
+                                                            (int)((int)(pt.Y - wh / 2)),
+                                                            (int)Math.Max(wh, 1),
+                                                            (int)Math.Max(wh, 1)));
                                                     if (l == 1)
-                                                        using (Pen pen = new Pen(c, (factor > 1) ? 2 : 1))
+                                                        using (Pen pen = new Pen(c, 1))
                                                             gx.DrawRectangle(pen, new Rectangle(
-                                                                (int)((int)(pt.X - wh / 2) / factor),
-                                                                (int)((int)(pt.Y - wh / 2) / factor),
-                                                                (int)Math.Max(wh / factor, 1),
-                                                                (int)Math.Max(wh / factor, 1)));
+                                                                (int)((int)(pt.X - wh / 2)),
+                                                                (int)((int)(pt.Y - wh / 2)),
+                                                                (int)Math.Max(wh, 1),
+                                                                (int)Math.Max(wh, 1)));
                                                 }
 
                                                 if (drawPaths && !f.Item4)
                                                 {
                                                     using SolidBrush sb = new SolidBrush(c);
-                                                    using Pen pen = new Pen(c, (wh * wFactor) / (float)factor);
+                                                    using Pen pen = new Pen(c, (wh * wFactor));
                                                     pen.LineJoin = LineJoin.Round;
                                                     using GraphicsPath gP = new GraphicsPath();
                                                     gP.AddLines(ptsList[listNo].Select(a => new PointF(a.X, a.Y)).ToArray());
-                                                    using Matrix mx = new Matrix(1.0f / (float)factor, 0, 0, 1.0f / (float)factor, 0, 0);
+                                                    using Matrix mx = new Matrix(1.0f, 0, 0, 1.0f, 0, 0);
                                                     gP.Transform(mx);
                                                     gx.DrawPath(pen, gP);
                                                 }
@@ -3255,26 +3252,26 @@ namespace AvoidAGrabCutEasy
                                                     Point pt = ptsList[listNo][0];
                                                     using (SolidBrush sb = new SolidBrush(c))
                                                         gx.FillRectangle(sb, new Rectangle(
-                                                            (int)((int)(pt.X - wh / 2) / factor),
-                                                            (int)((int)(pt.Y - wh / 2) / factor),
-                                                            (int)Math.Max(wh / factor, 1),
-                                                            (int)Math.Max(wh / factor, 1)));
+                                                            (int)((int)(pt.X - wh / 2)),
+                                                            (int)((int)(pt.Y - wh / 2)),
+                                                            (int)Math.Max(wh, 1),
+                                                            (int)Math.Max(wh, 1)));
                                                     if (l == 1)
-                                                        using (Pen pen = new Pen(c, (factor > 1) ? 2 : 1))
+                                                        using (Pen pen = new Pen(c, 1))
                                                             gx.DrawRectangle(pen, new Rectangle(
-                                                                (int)((int)(pt.X - wh / 2) / factor),
-                                                                (int)((int)(pt.Y - wh / 2) / factor),
-                                                                (int)Math.Max(wh / factor, 1),
-                                                                (int)Math.Max(wh / factor, 1)));
+                                                                (int)((int)(pt.X - wh / 2)),
+                                                                (int)((int)(pt.Y - wh / 2)),
+                                                                (int)Math.Max(wh, 1),
+                                                                (int)Math.Max(wh, 1)));
                                                 }
 
                                                 if (drawPaths && !f.Item4)
                                                 {
                                                     using SolidBrush sb = new SolidBrush(c);
                                                     using GraphicsPath gP = new GraphicsPath();
-                                                    gP.AddEllipse(ptsList[listNo][0].X - wh / 2f / (float)factor,
-                                                        ptsList[listNo][0].Y - wh / 2f / (float)factor,
-                                                        wh / (float)factor, wh / (float)factor);
+                                                    gP.AddEllipse(ptsList[listNo][0].X - wh / 2f,
+                                                        ptsList[listNo][0].Y - wh / 2f,
+                                                        wh, wh);
                                                     gx.FillPath(sb, gP);
                                                 }
                                             }
@@ -3293,16 +3290,16 @@ namespace AvoidAGrabCutEasy
                                         foreach (int i in z.Keys)
                                         {
                                             List<List<Point>> list = z[i];
-                                            int wh = (int)Math.Max((i / (factor == 0 ? 1 : factor)), 3);
+                                            int wh = (int)Math.Max(i, 3);
 
                                             for (int j = 0; j < list.Count; j++)
                                             {
-                                                List<Point> pts = list[j].Select(a => new Point((int)(a.X / factor), (int)(a.Y / factor))).ToList();
+                                                List<Point> pts = list[j].Select(a => new Point((int)(a.X), (int)(a.Y))).ToList();
 
                                                 foreach (Point pt in pts)
                                                 {
                                                     gx.FillRectangle(Brushes.White, new Rectangle(pt.X - wh / 2, pt.Y - wh / 2, wh, wh));
-                                                    using Pen pen = new(Color.White, (factor > 1) ? 2 : 1);
+                                                    using Pen pen = new(Color.White, 1);
                                                     gx.DrawRectangle(pen, new Rectangle(pt.X - wh / 2, pt.Y - wh / 2, wh, wh));
                                                 }
                                             }
@@ -3320,11 +3317,11 @@ namespace AvoidAGrabCutEasy
                                         foreach (int i in z.Keys)
                                         {
                                             List<List<Point>> list = z[i];
-                                            int wh = (int)Math.Max((i / (factor == 0 ? 1 : factor)), 3);
+                                            int wh = (int)Math.Max(i, 3);
 
                                             for (int j = 0; j < list.Count; j++)
                                             {
-                                                List<Point> pts = list[j].Select(a => new Point((int)(a.X / factor), (int)(a.Y / factor))).ToList();
+                                                List<Point> pts = list[j].Select(a => new Point((int)(a.X), (int)(a.Y))).ToList();
 
                                                 foreach (Point pt in pts)
                                                     gx.FillRectangle(Brushes.Gray, new Rectangle(pt.X - wh / 2, pt.Y - wh / 2, wh, wh));
@@ -3362,27 +3359,27 @@ namespace AvoidAGrabCutEasy
                                                 {
                                                     using (SolidBrush sb = new SolidBrush(c))
                                                         gx.FillRectangle(sb, new Rectangle(
-                                                            (int)((int)(pt.X - wh / 2) / factor),
-                                                            (int)((int)(pt.Y - wh / 2) / factor),
-                                                        (int)(wh / factor),
-                                                            (int)(wh / factor)));
+                                                            (int)((int)(pt.X - wh / 2)),
+                                                            (int)((int)(pt.Y - wh / 2)),
+                                                        (int)(wh),
+                                                            (int)(wh)));
                                                     if (l == 1)
-                                                        using (Pen pen = new Pen(c, (factor > 1) ? 2 : 1))
+                                                        using (Pen pen = new Pen(c, 1))
                                                             gx.DrawRectangle(pen, new Rectangle(
-                                                                (int)((int)(pt.X - wh / 2) / factor),
-                                                                (int)((int)(pt.Y - wh / 2) / factor),
-                                                                (int)(wh / factor),
-                                                                (int)(wh / factor)));
+                                                                (int)((int)(pt.X - wh / 2)),
+                                                                (int)((int)(pt.Y - wh / 2)),
+                                                                (int)(wh),
+                                                                (int)(wh)));
                                                 }
 
                                                 if (drawPaths && !f.Item4)
                                                 {
                                                     using SolidBrush sb = new SolidBrush(c);
-                                                    using Pen pen = new Pen(c, (wh * wFactor) / (float)factor);
+                                                    using Pen pen = new Pen(c, (wh * wFactor));
                                                     pen.LineJoin = LineJoin.Round;
                                                     using GraphicsPath gP = new GraphicsPath();
                                                     gP.AddLines(ptsList[listNo].Select(a => new PointF(a.X, a.Y)).ToArray());
-                                                    using Matrix mx = new Matrix(1.0f / (float)factor, 0, 0, 1.0f / (float)factor, 0, 0);
+                                                    using Matrix mx = new Matrix(1.0f, 0, 0, 1.0f, 0, 0);
                                                     gP.Transform(mx);
                                                     gx.DrawPath(pen, gP);
                                                 }
@@ -3394,26 +3391,26 @@ namespace AvoidAGrabCutEasy
                                                     Point pt = ptsList[listNo][0];
                                                     using (SolidBrush sb = new SolidBrush(c))
                                                         gx.FillRectangle(sb, new Rectangle(
-                                                            (int)((int)(pt.X - wh / 2) / factor),
-                                                            (int)((int)(pt.Y - wh / 2) / factor),
-                                                            (int)(wh / factor),
-                                                            (int)(wh / factor)));
+                                                            (int)((int)(pt.X - wh / 2)),
+                                                            (int)((int)(pt.Y - wh / 2)),
+                                                            (int)(wh),
+                                                            (int)(wh)));
                                                     if (l == 1)
-                                                        using (Pen pen = new Pen(c, (factor > 1) ? 2 : 1))
+                                                        using (Pen pen = new Pen(c, 1))
                                                             gx.DrawRectangle(pen, new Rectangle(
-                                                                (int)((int)(pt.X - wh / 2) / factor),
-                                                                (int)((int)(pt.Y - wh / 2) / factor),
-                                                                (int)(wh / factor),
-                                                                (int)(wh / factor)));
+                                                                (int)((int)(pt.X - wh / 2)),
+                                                                (int)((int)(pt.Y - wh / 2)),
+                                                                (int)(wh),
+                                                                (int)(wh)));
                                                 }
 
                                                 if (drawPaths && !f.Item4)
                                                 {
                                                     using SolidBrush sb = new SolidBrush(c);
                                                     using GraphicsPath gP = new GraphicsPath();
-                                                    gP.AddEllipse(ptsList[listNo][0].X - wh / 2f / (float)factor,
-                                                        ptsList[listNo][0].Y - wh / 2f / (float)factor,
-                                                        wh / (float)factor, wh / (float)factor);
+                                                    gP.AddEllipse(ptsList[listNo][0].X - wh / 2f,
+                                                        ptsList[listNo][0].Y - wh / 2f,
+                                                        wh, wh);
                                                     gx.FillPath(sb, gP);
                                                 }
                                             }
@@ -3432,11 +3429,11 @@ namespace AvoidAGrabCutEasy
                                         foreach (int i in z.Keys)
                                         {
                                             List<List<Point>> list = z[i];
-                                            int wh = (int)Math.Max((i / (factor == 0 ? 1 : factor)), 3);
+                                            int wh = (int)Math.Max(i, 3);
 
                                             for (int j = 0; j < list.Count; j++)
                                             {
-                                                List<Point> pts = list[j].Select(a => new Point((int)(a.X / factor), (int)(a.Y / factor))).ToList();
+                                                List<Point> pts = list[j].Select(a => new Point((int)(a.X), (int)(a.Y))).ToList();
 
                                                 foreach (Point pt in pts)
                                                     gx.FillRectangle(Brushes.Black, new Rectangle(pt.X - wh / 2, pt.Y - wh / 2, wh, wh));
@@ -3455,16 +3452,16 @@ namespace AvoidAGrabCutEasy
                                         foreach (int i in z.Keys)
                                         {
                                             List<List<Point>> list = z[i];
-                                            int wh = (int)Math.Max((i / (factor == 0 ? 1 : factor)), 3);
+                                            int wh = (int)Math.Max(i, 3);
 
                                             for (int j = 0; j < list.Count; j++)
                                             {
-                                                List<Point> pts = list[j].Select(a => new Point((int)(a.X / factor), (int)(a.Y / factor))).ToList();
+                                                List<Point> pts = list[j].Select(a => new Point((int)(a.X), (int)(a.Y))).ToList();
 
                                                 foreach (Point pt in pts)
                                                 {
                                                     gx.FillRectangle(Brushes.White, new Rectangle(pt.X - wh / 2, pt.Y - wh / 2, wh, wh));
-                                                    using Pen pen = new(Color.White, (factor > 1) ? 2 : 1);
+                                                    using Pen pen = new(Color.White, 1);
                                                     gx.DrawRectangle(pen, new Rectangle(pt.X - wh / 2, pt.Y - wh / 2, wh, wh));
                                                 }
                                             }
@@ -3491,6 +3488,20 @@ namespace AvoidAGrabCutEasy
                 Bitmap bTrimap = (Bitmap)e.Result;
                 if (bTrimap != null)
                 {
+                    if ((this.cbHalfSize.Checked && this.rbClosedForm.Checked))
+                    {
+                        if (this._bWork != null)
+                        {
+                            Bitmap bTrimapNew = ResampleTrimap(bTrimap, this._bWork.Width, this._bWork.Height);
+
+                            Bitmap? tOld = bTrimap;
+                            bTrimap = bTrimapNew;
+                            if (tOld != null)
+                                tOld.Dispose();
+                            tOld = null;
+                        }
+                    }
+
                     Image? iOld = this.pictureBox1.Image;
                     this.pictureBox1.Image = bTrimap;
                     if (iOld != null)
@@ -3518,6 +3529,17 @@ namespace AvoidAGrabCutEasy
             this.backgroundWorker4.DoWork += backgroundWorker4_DoWork;
             //this.backgroundWorker4.ProgressChanged += backgroundWorker4_ProgressChanged;
             this.backgroundWorker4.RunWorkerCompleted += backgroundWorker4_RunWorkerCompleted;
+        }
+
+        private Bitmap ResampleTrimap(Bitmap trimap, int width, int height)
+        {
+            Bitmap bOut = new Bitmap(width, height);
+            using Graphics gx = Graphics.FromImage(bOut);
+            gx.SmoothingMode = SmoothingMode.None;
+            gx.InterpolationMode = InterpolationMode.NearestNeighbor;
+            gx.DrawImage(trimap, 0, 0, bOut.Width, bOut.Height);
+
+            return bOut;
         }
 
         private void cbHighlight_CheckedChanged(object sender, EventArgs e)
