@@ -57,6 +57,7 @@
             rbFullScribble = new RadioButton();
             cbDrawPaths = new CheckBox();
             cbApproxLines = new CheckBox();
+            btnRemLastScribbles = new Button();
             saveFileDialog1 = new SaveFileDialog();
             Timer3 = new System.Windows.Forms.Timer(components);
             backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
@@ -117,7 +118,6 @@
             rbFG = new RadioButton();
             rbBG = new RadioButton();
             btnClearScribbles = new Button();
-            btnRemLastScribbles = new Button();
             contextMenuStrip1 = new ContextMenuStrip(components);
             floodBGToolStripMenuItem = new ToolStripMenuItem();
             floodFGToolStripMenuItem = new ToolStripMenuItem();
@@ -450,6 +450,18 @@
             toolTip1.SetToolTip(cbApproxLines, "Smoothen Unknown scribbles.\r\nthis might help for scribbles \r\nthat come from frmQuickExtract");
             cbApproxLines.UseVisualStyleBackColor = true;
             // 
+            // btnRemLastScribbles
+            // 
+            btnRemLastScribbles.Location = new Point(123, 69);
+            btnRemLastScribbles.Margin = new Padding(4, 3, 4, 3);
+            btnRemLastScribbles.Name = "btnRemLastScribbles";
+            btnRemLastScribbles.Size = new Size(63, 27);
+            btnRemLastScribbles.TabIndex = 628;
+            btnRemLastScribbles.Text = "manage";
+            toolTip1.SetToolTip(btnRemLastScribbles, "manage scribbles or remove the\r\nlast segment of the specified width etc.");
+            btnRemLastScribbles.UseVisualStyleBackColor = true;
+            btnRemLastScribbles.Click += btnRemLastScribbles_Click;
+            // 
             // saveFileDialog1
             // 
             saveFileDialog1.FileName = "Bild1.png";
@@ -634,6 +646,7 @@
             numScribblesWFactor.Size = new Size(71, 23);
             numScribblesWFactor.TabIndex = 719;
             numScribblesWFactor.Value = new decimal(new int[] { 14142, 0, 0, 262144 });
+            numScribblesWFactor.ValueChanged += numScribblesWFactor_ValueChanged;
             // 
             // btnCMNew
             // 
@@ -1162,18 +1175,6 @@
             btnClearScribbles.Text = "clear";
             btnClearScribbles.UseVisualStyleBackColor = true;
             btnClearScribbles.Click += btnClearScribbles_Click;
-            // 
-            // btnRemLastScribbles
-            // 
-            btnRemLastScribbles.Location = new Point(123, 69);
-            btnRemLastScribbles.Margin = new Padding(4, 3, 4, 3);
-            btnRemLastScribbles.Name = "btnRemLastScribbles";
-            btnRemLastScribbles.Size = new Size(63, 27);
-            btnRemLastScribbles.TabIndex = 628;
-            btnRemLastScribbles.Text = "manage";
-            toolTip1.SetToolTip(btnRemLastScribbles, "manage scribbles or remove the\r\nlast segment of the specified width etc.");
-            btnRemLastScribbles.UseVisualStyleBackColor = true;
-            btnRemLastScribbles.Click += btnRemLastScribbles_Click;
             // 
             // contextMenuStrip1
             // 

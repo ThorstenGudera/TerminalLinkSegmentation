@@ -76,6 +76,8 @@ namespace GetAlphaMatte
                         {
                             Bitmap bmp = new Bitmap(this.BaseSize.Value.Width, this.BaseSize.Value.Height);
                             using Graphics graphics = Graphics.FromImage(bmp);
+                            graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.None;
+                            graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
                             graphics.DrawImage(this.helplineRulerCtrl1.Bmp, 0, 0, bmp.Width, bmp.Height);
                             if (this.saveFileDialog1.ShowDialog() == DialogResult.OK)
                                 bmp.Save(this.saveFileDialog1.FileName, System.Drawing.Imaging.ImageFormat.Png);

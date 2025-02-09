@@ -3727,5 +3727,10 @@ namespace AvoidAGrabCutEasy
                 this._newWidth = (int)frm.numNewWidth.Value;
             }
         }
+
+        private void numScribblesWFactor_ValueChanged(object sender, EventArgs e)
+        {
+            this.btnGo.Enabled = false;
+        }
     }
 }
