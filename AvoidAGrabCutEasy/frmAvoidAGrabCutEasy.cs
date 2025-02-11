@@ -5797,7 +5797,7 @@ namespace AvoidAGrabCutEasy
             info.Append("A normal GrabCut algorithm works with a Markov Random Field and a MinCut Algorithm. ");
             info.Append("Since we dont do a MinCut, we need to pass neighborhood information in a different way to our Algorithm. ");
             info.Append("So we create a Gradient related pic (InvGaussGrad, or Morphological Gradient), and create an inverted Luminance ");
-            info.Append("Map from it, which we then multiply with the EstimationMaximized probabilities or the GaussianMixtureModels (\"Likelihood\"). ");
+            info.Append("Map from it, which we then multiply with the EstimationMaximized probabilities of the GaussianMixtureModels (\"Likelihood\"). ");
             info.Append("\n");
             info.Append("\n");
             info.Append("So, how to use it?");

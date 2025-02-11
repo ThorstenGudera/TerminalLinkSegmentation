@@ -73,11 +73,11 @@ namespace GetAlphaMatte
             }
 
             // make perm[]
-            perm = new int[n - 1 + 1];
+            perm = new int[n];
             for (var i = 0; i < n; i++)
                 perm[i] = i;
 
-            for (var j = 0; j <= n - 2; j++) // process by column. note n-1
+            for (var j = 0; j < n - 1; j++) // process by column. note n-1
             {
                 double max = Math.Abs(lum[j][j]);
                 int piv = j;
@@ -124,13 +124,13 @@ namespace GetAlphaMatte
         private static double[] Helper(double[][] luMatrix, double[] b) // helper
         {
             int n = luMatrix.Length;
-            double[] x = new double[n - 1 + 1];
+            double[] x = new double[n];
             b.CopyTo(x, 0);
 
             for (var i = 1; i < n; i++)
             {
                 double sum = x[i];
-                for (var j = 0; j <= i - 1; j++)
+                for (var j = 0; j < i; j++)
                     sum -= luMatrix[i][j] * x[j];
                 x[i] = sum;
             }
@@ -162,7 +162,7 @@ namespace GetAlphaMatte
             int[]? perm = null;
             int toggle = MatrixDecompose(matrix, out lum, out perm);
             double result = toggle;
-            for (var i = 0; i <= lum.Length - 1; i++)
+            for (var i = 0; i < lum.Length; i++)
                 result *= lum[i][i];
             return result;
         }
@@ -179,20 +179,20 @@ namespace GetAlphaMatte
 
             double[][] result = MatrixCreate(aRows, bCols);
 
-            for (var i = 0; i <= aRows - 1; i++) // each row of A
+            for (var i = 0; i < aRows; i++) // each row of A
             {
-                for (var j = 0; j <= bCols - 1; j++) // each col of B
+                for (var j = 0; j < bCols; j++) // each col of B
                 {
-                    for (var k = 0; k <= aCols - 1; k++) // could use k < bRows
+                    for (var k = 0; k < aCols; k++) // could use k < bRows
                         result[i][j] += matrixA[i][k] * matrixB[k][j];
                 }
             }
 
             if (round)
             {
-                for (int i = 0; i <= result.Length - 1; i++)
+                for (int i = 0; i < result.Length; i++)
                 {
-                    for (int j = 0; j <= result[i].Length - 1; j++)
+                    for (int j = 0; j < result[i].Length; j++)
                         result[i][j] = Math.Round(result[i][j], 4);
                 }
             }
