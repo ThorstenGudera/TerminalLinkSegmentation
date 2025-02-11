@@ -78,11 +78,9 @@ namespace AvoidAGrabCutEasy
         private List<Point> _points2 = new List<Point>();
         private int _currentDraw;
         private Color[] _colors = new Color[4];
-        //private Dictionary<int, List<Tuple<List<Point>, int>>> _allPoints2;
         private Dictionary<int, List<Tuple<List<Point>, int>>>? _allPoints;
         private double _oldGamma;
         private double _oldXi;
-        //private double _oldBeta;
         private object _lockObject = new object();
         private bool _drawImgOverlay;
         private int _eX2f;
@@ -140,6 +138,7 @@ namespace AvoidAGrabCutEasy
         private bool _useLumMapBasePic;
         private List<(int, int)>? _bgRelatedPointsAdded;
         private List<ChainCode>? _removedChains;
+        private bool _dontAskOnClosing;
 
         public event EventHandler<string>? ShowInfo;
         //public event EventHandler<string> BoundaryError;
@@ -1452,7 +1451,7 @@ namespace AvoidAGrabCutEasy
 
         private void Button28_Click(object sender, EventArgs e)
         {
-            //this._dontAskOnClosing = true;
+            this._dontAskOnClosing = true;
         }
 
         private void SetControls(bool e)
@@ -1535,7 +1534,7 @@ namespace AvoidAGrabCutEasy
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (_pic_changed)
+            if (_pic_changed && !this._dontAskOnClosing)
             {
                 DialogResult dlg = MessageBox.Show("Save image?", "Unsaved data", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Exclamation);
 
