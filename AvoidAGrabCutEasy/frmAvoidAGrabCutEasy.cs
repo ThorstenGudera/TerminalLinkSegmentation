@@ -4311,6 +4311,9 @@ namespace AvoidAGrabCutEasy
                             (int)(this.helplineRulerCtrl2.Bmp.Height * this.helplineRulerCtrl2.Zoom));
 
                         _undoOPCache?.Add(b);
+
+                        this._pic_changed = true;
+                        this.btnOK.Enabled = true;
                     }
                 }
             }
@@ -4412,6 +4415,9 @@ namespace AvoidAGrabCutEasy
                                     this.cmbZoom_SelectedIndexChanged(this.cmbZoom, new EventArgs());
                                 }
                             }
+
+                            this._pic_changed = true;
+                            this.btnOK.Enabled = true;
                         }
                     }
                 }
@@ -5085,6 +5091,7 @@ namespace AvoidAGrabCutEasy
 
                             _undoOPCache?.Add(b);
 
+                            this._pic_changed = true;
                             this.btnOK.Enabled = true;
                         }
                     }
@@ -5267,6 +5274,7 @@ namespace AvoidAGrabCutEasy
 
                             _undoOPCache?.Add(b);
 
+                            this._pic_changed = true;
                             this.btnOK.Enabled = true;
                         }
                     }
@@ -5934,6 +5942,9 @@ namespace AvoidAGrabCutEasy
                             (int)(this.helplineRulerCtrl2.Bmp.Height * this.helplineRulerCtrl2.Zoom));
 
                         _undoOPCache?.Add(b);
+
+                        this._pic_changed = true;
+                        this.btnOK.Enabled = true;
                     }
 
                     frm.btnLoadOrig.Click -= BtnLoadOrig_Click;
