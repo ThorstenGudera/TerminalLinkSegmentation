@@ -31,6 +31,14 @@
             components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmAvoidAGrabCutEasy));
             panel1 = new Panel();
+            panel9 = new Panel();
+            panel6 = new Panel();
+            panel2 = new Panel();
+            panel5 = new Panel();
+            cbAssumeExpDist = new CheckBox();
+            btnNewSrc = new Button();
+            label14 = new Label();
+            cbAutoThreshold = new CheckBox();
             btnTScribbles = new Button();
             btnLoadToHLC2 = new Button();
             cbSCF = new CheckBox();
@@ -69,10 +77,6 @@
             rbUnknown = new RadioButton();
             cbAllowRS = new CheckBox();
             btnInitSettings = new Button();
-            panel2 = new Panel();
-            cbAssumeExpDist = new CheckBox();
-            label13 = new Label();
-            cbAutoThreshold = new CheckBox();
             btnCache = new Button();
             label11 = new Label();
             label10 = new Label();
@@ -153,11 +157,8 @@
             floodFGToolStripMenuItem = new ToolStripMenuItem();
             timer1 = new System.Windows.Forms.Timer(components);
             backgroundWorker4 = new System.ComponentModel.BackgroundWorker();
-            btnNewSrc = new Button();
-            label14 = new Label();
             panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numComponents2).BeginInit();
-            panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numWH).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numMultTLCap).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numMaxSize).BeginInit();
@@ -179,8 +180,15 @@
             // 
             // panel1
             // 
+            panel1.AutoScroll = true;
+            panel1.Controls.Add(panel9);
+            panel1.Controls.Add(panel6);
+            panel1.Controls.Add(panel2);
+            panel1.Controls.Add(panel5);
+            panel1.Controls.Add(cbAssumeExpDist);
             panel1.Controls.Add(btnNewSrc);
             panel1.Controls.Add(label14);
+            panel1.Controls.Add(cbAutoThreshold);
             panel1.Controls.Add(btnTScribbles);
             panel1.Controls.Add(btnLoadToHLC2);
             panel1.Controls.Add(cbSCF);
@@ -219,7 +227,6 @@
             panel1.Controls.Add(rbUnknown);
             panel1.Controls.Add(cbAllowRS);
             panel1.Controls.Add(btnInitSettings);
-            panel1.Controls.Add(panel2);
             panel1.Controls.Add(btnCache);
             panel1.Controls.Add(label11);
             panel1.Controls.Add(label10);
@@ -286,9 +293,86 @@
             panel1.MouseDoubleClick += panel1_MouseDoubleClick;
             panel1.MouseDown += panel1_MouseDown;
             // 
+            // panel9
+            // 
+            panel9.BackColor = SystemColors.ControlDark;
+            panel9.Location = new Point(208, 98);
+            panel9.Name = "panel9";
+            panel9.Size = new Size(2, 120);
+            panel9.TabIndex = 748;
+            // 
+            // panel6
+            // 
+            panel6.BackColor = SystemColors.ControlDarkDark;
+            panel6.Location = new Point(12, 125);
+            panel6.Name = "panel6";
+            panel6.Size = new Size(180, 2);
+            panel6.TabIndex = 747;
+            // 
+            // panel2
+            // 
+            panel2.BackColor = SystemColors.ControlDarkDark;
+            panel2.Location = new Point(12, 88);
+            panel2.Name = "panel2";
+            panel2.Size = new Size(180, 2);
+            panel2.TabIndex = 746;
+            // 
+            // panel5
+            // 
+            panel5.BackColor = SystemColors.ControlDark;
+            panel5.Location = new Point(197, 6);
+            panel5.Name = "panel5";
+            panel5.Size = new Size(2, 75);
+            panel5.TabIndex = 747;
+            // 
+            // cbAssumeExpDist
+            // 
+            cbAssumeExpDist.AutoSize = true;
+            cbAssumeExpDist.Checked = true;
+            cbAssumeExpDist.CheckState = CheckState.Checked;
+            cbAssumeExpDist.Location = new Point(348, 143);
+            cbAssumeExpDist.Name = "cbAssumeExpDist";
+            cbAssumeExpDist.Size = new Size(142, 19);
+            cbAssumeExpDist.TabIndex = 679;
+            cbAssumeExpDist.Text = "assume exp dist in dH";
+            toolTip1.SetToolTip(cbAssumeExpDist, "assume an exponential distribution in the histogram for the auto-threshold");
+            cbAssumeExpDist.UseVisualStyleBackColor = true;
+            // 
+            // btnNewSrc
+            // 
+            btnNewSrc.Location = new Point(100, 132);
+            btnNewSrc.Name = "btnNewSrc";
+            btnNewSrc.Size = new Size(75, 23);
+            btnNewSrc.TabIndex = 745;
+            btnNewSrc.Text = "Open";
+            btnNewSrc.UseVisualStyleBackColor = true;
+            btnNewSrc.Click += btnNewSrc_Click;
+            // 
+            // label14
+            // 
+            label14.AutoSize = true;
+            label14.Location = new Point(18, 136);
+            label14.Name = "label14";
+            label14.Size = new Size(77, 15);
+            label14.TabIndex = 744;
+            label14.Text = "Load new Src";
+            // 
+            // cbAutoThreshold
+            // 
+            cbAutoThreshold.AutoSize = true;
+            cbAutoThreshold.Checked = true;
+            cbAutoThreshold.CheckState = CheckState.Checked;
+            cbAutoThreshold.Location = new Point(241, 143);
+            cbAutoThreshold.Margin = new Padding(4, 3, 4, 3);
+            cbAutoThreshold.Name = "cbAutoThreshold";
+            cbAutoThreshold.Size = new Size(103, 19);
+            cbAutoThreshold.TabIndex = 676;
+            cbAutoThreshold.Text = "auto threshold";
+            cbAutoThreshold.UseVisualStyleBackColor = true;
+            // 
             // btnTScribbles
             // 
-            btnTScribbles.Location = new Point(811, 64);
+            btnTScribbles.Location = new Point(86, 191);
             btnTScribbles.Name = "btnTScribbles";
             btnTScribbles.Size = new Size(113, 23);
             btnTScribbles.TabIndex = 743;
@@ -298,7 +382,7 @@
             // 
             // btnLoadToHLC2
             // 
-            btnLoadToHLC2.Location = new Point(1307, 119);
+            btnLoadToHLC2.Location = new Point(1263, 190);
             btnLoadToHLC2.Name = "btnLoadToHLC2";
             btnLoadToHLC2.Size = new Size(113, 23);
             btnLoadToHLC2.TabIndex = 742;
@@ -311,7 +395,7 @@
             cbSCF.AutoSize = true;
             cbSCF.Checked = true;
             cbSCF.CheckState = CheckState.Checked;
-            cbSCF.Location = new Point(1127, 158);
+            cbSCF.Location = new Point(1127, 125);
             cbSCF.Name = "cbSCF";
             cbSCF.Size = new Size(132, 19);
             cbSCF.TabIndex = 741;
@@ -320,7 +404,7 @@
             // 
             // btnPoissonDraw
             // 
-            btnPoissonDraw.Location = new Point(1171, 117);
+            btnPoissonDraw.Location = new Point(1171, 84);
             btnPoissonDraw.Name = "btnPoissonDraw";
             btnPoissonDraw.Size = new Size(88, 27);
             btnPoissonDraw.TabIndex = 740;
@@ -331,9 +415,9 @@
             // btnGetOutline
             // 
             btnGetOutline.Enabled = false;
-            btnGetOutline.Location = new Point(88, 216);
+            btnGetOutline.Location = new Point(14, 191);
             btnGetOutline.Name = "btnGetOutline";
-            btnGetOutline.Size = new Size(87, 23);
+            btnGetOutline.Size = new Size(68, 23);
             btnGetOutline.TabIndex = 739;
             btnGetOutline.Text = "outline";
             btnGetOutline.UseVisualStyleBackColor = true;
@@ -342,7 +426,7 @@
             // btnInfo
             // 
             btnInfo.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            btnInfo.Location = new Point(868, 157);
+            btnInfo.Location = new Point(815, 115);
             btnInfo.Name = "btnInfo";
             btnInfo.Size = new Size(14, 23);
             btnInfo.TabIndex = 738;
@@ -368,7 +452,7 @@
             // 
             cbUseLumMapBasePic.AutoSize = true;
             cbUseLumMapBasePic.Enabled = false;
-            cbUseLumMapBasePic.Location = new Point(776, 136);
+            cbUseLumMapBasePic.Location = new Point(788, 93);
             cbUseLumMapBasePic.Name = "cbUseLumMapBasePic";
             cbUseLumMapBasePic.Size = new Size(102, 19);
             cbUseLumMapBasePic.TabIndex = 736;
@@ -379,7 +463,7 @@
             // 
             // btnLumMapSettings
             // 
-            btnLumMapSettings.Location = new Point(803, 157);
+            btnLumMapSettings.Location = new Point(750, 115);
             btnLumMapSettings.Name = "btnLumMapSettings";
             btnLumMapSettings.Size = new Size(57, 23);
             btnLumMapSettings.TabIndex = 735;
@@ -391,7 +475,7 @@
             // 
             lblLumMap.AutoSize = true;
             lblLumMap.BorderStyle = BorderStyle.FixedSingle;
-            lblLumMap.Location = new Point(693, 137);
+            lblLumMap.Location = new Point(723, 94);
             lblLumMap.Name = "lblLumMap";
             lblLumMap.Size = new Size(21, 17);
             lblLumMap.TabIndex = 734;
@@ -402,7 +486,7 @@
             cbCompLumMap.AutoSize = true;
             cbCompLumMap.Checked = true;
             cbCompLumMap.CheckState = CheckState.Checked;
-            cbCompLumMap.Location = new Point(598, 160);
+            cbCompLumMap.Location = new Point(622, 93);
             cbCompLumMap.Name = "cbCompLumMap";
             cbCompLumMap.Size = new Size(95, 19);
             cbCompLumMap.TabIndex = 733;
@@ -411,7 +495,7 @@
             // 
             // btnCmpLMap
             // 
-            btnCmpLMap.Location = new Point(692, 157);
+            btnCmpLMap.Location = new Point(639, 115);
             btnCmpLMap.Name = "btnCmpLMap";
             btnCmpLMap.Size = new Size(105, 23);
             btnCmpLMap.TabIndex = 732;
@@ -423,7 +507,7 @@
             // 
             lblTh.AutoSize = true;
             lblTh.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            lblTh.Location = new Point(605, 130);
+            lblTh.Location = new Point(584, 114);
             lblTh.Name = "lblTh";
             lblTh.Size = new Size(19, 21);
             lblTh.TabIndex = 731;
@@ -432,7 +516,7 @@
             // btnCropFromOrig
             // 
             btnCropFromOrig.Enabled = false;
-            btnCropFromOrig.Location = new Point(1307, 182);
+            btnCropFromOrig.Location = new Point(1154, 190);
             btnCropFromOrig.Name = "btnCropFromOrig";
             btnCropFromOrig.Size = new Size(93, 23);
             btnCropFromOrig.TabIndex = 728;
@@ -446,7 +530,7 @@
             cbAutoCropFromOrig.Checked = true;
             cbAutoCropFromOrig.CheckState = CheckState.Checked;
             cbAutoCropFromOrig.Enabled = false;
-            cbAutoCropFromOrig.Location = new Point(1171, 184);
+            cbAutoCropFromOrig.Location = new Point(1018, 192);
             cbAutoCropFromOrig.Name = "cbAutoCropFromOrig";
             cbAutoCropFromOrig.Size = new Size(130, 19);
             cbAutoCropFromOrig.TabIndex = 727;
@@ -456,9 +540,9 @@
             // 
             // btnPreBlur
             // 
-            btnPreBlur.Location = new Point(18, 216);
+            btnPreBlur.Location = new Point(14, 222);
             btnPreBlur.Name = "btnPreBlur";
-            btnPreBlur.Size = new Size(53, 23);
+            btnPreBlur.Size = new Size(68, 23);
             btnPreBlur.TabIndex = 726;
             btnPreBlur.Text = "preBlur ";
             toolTip1.SetToolTip(btnPreBlur, "add neighborhodd influence information to the picture");
@@ -478,7 +562,7 @@
             // btnOutlineOperations
             // 
             btnOutlineOperations.ForeColor = SystemColors.ControlText;
-            btnOutlineOperations.Location = new Point(1171, 79);
+            btnOutlineOperations.Location = new Point(1171, 46);
             btnOutlineOperations.Margin = new Padding(4, 3, 4, 3);
             btnOutlineOperations.Name = "btnOutlineOperations";
             btnOutlineOperations.Size = new Size(88, 27);
@@ -489,7 +573,7 @@
             // 
             // btnCMNew
             // 
-            btnCMNew.Location = new Point(575, 59);
+            btnCMNew.Location = new Point(815, 11);
             btnCMNew.Name = "btnCMNew";
             btnCMNew.Size = new Size(75, 23);
             btnCMNew.TabIndex = 716;
@@ -500,7 +584,7 @@
             // cbClickMode
             // 
             cbClickMode.AutoSize = true;
-            cbClickMode.Location = new Point(483, 62);
+            cbClickMode.Location = new Point(304, 61);
             cbClickMode.Name = "cbClickMode";
             cbClickMode.Size = new Size(81, 19);
             cbClickMode.TabIndex = 713;
@@ -510,7 +594,7 @@
             // label22
             // 
             label22.AutoSize = true;
-            label22.Location = new Point(810, 194);
+            label22.Location = new Point(829, 194);
             label22.Name = "label22";
             label22.Size = new Size(82, 15);
             label22.TabIndex = 712;
@@ -519,7 +603,7 @@
             // 
             // btnResScribbles
             // 
-            btnResScribbles.Location = new Point(898, 190);
+            btnResScribbles.Location = new Point(917, 190);
             btnResScribbles.Name = "btnResScribbles";
             btnResScribbles.Size = new Size(75, 23);
             btnResScribbles.TabIndex = 711;
@@ -531,9 +615,9 @@
             // panel7
             // 
             panel7.BackColor = SystemColors.ControlDark;
-            panel7.Location = new Point(898, 95);
+            panel7.Location = new Point(900, 13);
             panel7.Name = "panel7";
-            panel7.Size = new Size(2, 85);
+            panel7.Size = new Size(2, 165);
             panel7.TabIndex = 704;
             // 
             // cbHighlight
@@ -541,7 +625,7 @@
             cbHighlight.AutoSize = true;
             cbHighlight.Checked = true;
             cbHighlight.CheckState = CheckState.Checked;
-            cbHighlight.Location = new Point(294, 86);
+            cbHighlight.Location = new Point(391, 60);
             cbHighlight.Name = "cbHighlight";
             cbHighlight.Size = new Size(127, 19);
             cbHighlight.TabIndex = 702;
@@ -560,14 +644,14 @@
             // panel4
             // 
             panel4.BackColor = SystemColors.ControlDarkDark;
-            panel4.Location = new Point(209, 107);
+            panel4.Location = new Point(209, 84);
             panel4.Name = "panel4";
             panel4.Size = new Size(440, 2);
             panel4.TabIndex = 701;
             // 
             // btnCFM
             // 
-            btnCFM.Location = new Point(1018, 79);
+            btnCFM.Location = new Point(1018, 46);
             btnCFM.Name = "btnCFM";
             btnCFM.Size = new Size(88, 27);
             btnCFM.TabIndex = 700;
@@ -579,7 +663,7 @@
             // label16
             // 
             label16.AutoSize = true;
-            label16.Location = new Point(917, 85);
+            label16.Location = new Point(917, 52);
             label16.Name = "label16";
             label16.Size = new Size(98, 15);
             label16.TabIndex = 699;
@@ -613,7 +697,7 @@
             // cbOverlay
             // 
             cbOverlay.AutoSize = true;
-            cbOverlay.Location = new Point(304, 59);
+            cbOverlay.Location = new Point(209, 60);
             cbOverlay.Name = "cbOverlay";
             cbOverlay.Size = new Size(88, 19);
             cbOverlay.TabIndex = 696;
@@ -624,7 +708,7 @@
             // cbRedrawOnMD
             // 
             cbRedrawOnMD.AutoSize = true;
-            cbRedrawOnMD.Location = new Point(437, 86);
+            cbRedrawOnMD.Location = new Point(524, 60);
             cbRedrawOnMD.Name = "cbRedrawOnMD";
             cbRedrawOnMD.Size = new Size(175, 19);
             cbRedrawOnMD.TabIndex = 695;
@@ -634,7 +718,7 @@
             // label15
             // 
             label15.AutoSize = true;
-            label15.Location = new Point(18, 186);
+            label15.Location = new Point(18, 165);
             label15.Name = "label15";
             label15.Size = new Size(64, 15);
             label15.TabIndex = 694;
@@ -642,7 +726,7 @@
             // 
             // btnChaincode
             // 
-            btnChaincode.Location = new Point(94, 184);
+            btnChaincode.Location = new Point(88, 161);
             btnChaincode.Name = "btnChaincode";
             btnChaincode.Size = new Size(87, 23);
             btnChaincode.TabIndex = 693;
@@ -655,7 +739,7 @@
             cbLastDrawn.AutoSize = true;
             cbLastDrawn.Checked = true;
             cbLastDrawn.CheckState = CheckState.Checked;
-            cbLastDrawn.Location = new Point(673, 64);
+            cbLastDrawn.Location = new Point(689, 37);
             cbLastDrawn.Name = "cbLastDrawn";
             cbLastDrawn.Size = new Size(80, 19);
             cbLastDrawn.TabIndex = 692;
@@ -665,7 +749,7 @@
             // rbUnknown
             // 
             rbUnknown.AutoSize = true;
-            rbUnknown.Location = new Point(573, 37);
+            rbUnknown.Location = new Point(588, 37);
             rbUnknown.Margin = new Padding(4, 3, 4, 3);
             rbUnknown.Name = "rbUnknown";
             rbUnknown.Size = new Size(76, 19);
@@ -676,7 +760,7 @@
             // cbAllowRS
             // 
             cbAllowRS.AutoSize = true;
-            cbAllowRS.Location = new Point(195, 37);
+            cbAllowRS.Location = new Point(209, 37);
             cbAllowRS.Name = "cbAllowRS";
             cbAllowRS.Size = new Size(70, 19);
             cbAllowRS.TabIndex = 679;
@@ -686,7 +770,7 @@
             // 
             // btnInitSettings
             // 
-            btnInitSettings.Location = new Point(570, 7);
+            btnInitSettings.Location = new Point(363, 88);
             btnInitSettings.Margin = new Padding(4, 3, 4, 3);
             btnInitSettings.Name = "btnInitSettings";
             btnInitSettings.Size = new Size(88, 27);
@@ -695,59 +779,11 @@
             btnInitSettings.UseVisualStyleBackColor = true;
             btnInitSettings.Click += btnInitSettings_Click;
             // 
-            // panel2
-            // 
-            panel2.BorderStyle = BorderStyle.FixedSingle;
-            panel2.Controls.Add(cbAssumeExpDist);
-            panel2.Controls.Add(label13);
-            panel2.Controls.Add(cbAutoThreshold);
-            panel2.Location = new Point(662, 5);
-            panel2.Margin = new Padding(4, 3, 4, 3);
-            panel2.Name = "panel2";
-            panel2.Size = new Size(318, 27);
-            panel2.TabIndex = 677;
-            // 
-            // cbAssumeExpDist
-            // 
-            cbAssumeExpDist.AutoSize = true;
-            cbAssumeExpDist.Checked = true;
-            cbAssumeExpDist.CheckState = CheckState.Checked;
-            cbAssumeExpDist.Location = new Point(171, 3);
-            cbAssumeExpDist.Name = "cbAssumeExpDist";
-            cbAssumeExpDist.Size = new Size(142, 19);
-            cbAssumeExpDist.TabIndex = 679;
-            cbAssumeExpDist.Text = "assume exp dist in dH";
-            toolTip1.SetToolTip(cbAssumeExpDist, "assume an exponential distribution in the histogram for the auto-threshold");
-            cbAssumeExpDist.UseVisualStyleBackColor = true;
-            // 
-            // label13
-            // 
-            label13.AutoSize = true;
-            label13.Location = new Point(10, 4);
-            label13.Margin = new Padding(4, 0, 4, 0);
-            label13.Name = "label13";
-            label13.Size = new Size(49, 15);
-            label13.TabIndex = 677;
-            label13.Text = "testing: ";
-            // 
-            // cbAutoThreshold
-            // 
-            cbAutoThreshold.AutoSize = true;
-            cbAutoThreshold.Checked = true;
-            cbAutoThreshold.CheckState = CheckState.Checked;
-            cbAutoThreshold.Location = new Point(61, 3);
-            cbAutoThreshold.Margin = new Padding(4, 3, 4, 3);
-            cbAutoThreshold.Name = "cbAutoThreshold";
-            cbAutoThreshold.Size = new Size(103, 19);
-            cbAutoThreshold.TabIndex = 676;
-            cbAutoThreshold.Text = "auto threshold";
-            cbAutoThreshold.UseVisualStyleBackColor = true;
-            // 
             // btnCache
             // 
             btnCache.Enabled = false;
             btnCache.ForeColor = SystemColors.ControlText;
-            btnCache.Location = new Point(1006, 3);
+            btnCache.Location = new Point(927, 7);
             btnCache.Margin = new Padding(4, 3, 4, 3);
             btnCache.Name = "btnCache";
             btnCache.Size = new Size(88, 27);
@@ -759,7 +795,7 @@
             // label11
             // 
             label11.AutoSize = true;
-            label11.Location = new Point(811, 95);
+            label11.Location = new Point(1179, 13);
             label11.Margin = new Padding(4, 0, 4, 0);
             label11.Name = "label11";
             label11.Size = new Size(17, 15);
@@ -769,7 +805,7 @@
             // label10
             // 
             label10.AutoSize = true;
-            label10.Location = new Point(663, 95);
+            label10.Location = new Point(1031, 13);
             label10.Margin = new Padding(4, 0, 4, 0);
             label10.Name = "label10";
             label10.Size = new Size(75, 15);
@@ -800,7 +836,7 @@
             // label7
             // 
             label7.AutoSize = true;
-            label7.Location = new Point(413, 162);
+            label7.Location = new Point(413, 167);
             label7.Margin = new Padding(4, 0, 4, 0);
             label7.Name = "label7";
             label7.Size = new Size(110, 15);
@@ -811,7 +847,7 @@
             // label12
             // 
             label12.AutoSize = true;
-            label12.Location = new Point(953, 161);
+            label12.Location = new Point(953, 128);
             label12.Margin = new Padding(4, 0, 4, 0);
             label12.Name = "label12";
             label12.Size = new Size(56, 15);
@@ -821,7 +857,7 @@
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(917, 123);
+            label3.Location = new Point(917, 90);
             label3.Margin = new Padding(4, 0, 4, 0);
             label3.Name = "label3";
             label3.Size = new Size(89, 15);
@@ -830,7 +866,7 @@
             // 
             // btnCompose
             // 
-            btnCompose.Location = new Point(1018, 155);
+            btnCompose.Location = new Point(1018, 122);
             btnCompose.Margin = new Padding(4, 3, 4, 3);
             btnCompose.Name = "btnCompose";
             btnCompose.Size = new Size(88, 27);
@@ -841,7 +877,7 @@
             // 
             // btnOutline
             // 
-            btnOutline.Location = new Point(1018, 117);
+            btnOutline.Location = new Point(1018, 84);
             btnOutline.Margin = new Padding(4, 3, 4, 3);
             btnOutline.Name = "btnOutline";
             btnOutline.Size = new Size(88, 27);
@@ -854,7 +890,7 @@
             // cbLSBmp
             // 
             cbLSBmp.AutoSize = true;
-            cbLSBmp.Location = new Point(1021, 40);
+            cbLSBmp.Location = new Point(581, 12);
             cbLSBmp.Margin = new Padding(4, 3, 4, 3);
             cbLSBmp.Name = "cbLSBmp";
             cbLSBmp.Size = new Size(90, 19);
@@ -865,7 +901,7 @@
             // btnLoadScribbles
             // 
             btnLoadScribbles.Enabled = false;
-            btnLoadScribbles.Location = new Point(803, 36);
+            btnLoadScribbles.Location = new Point(363, 8);
             btnLoadScribbles.Margin = new Padding(4, 3, 4, 3);
             btnLoadScribbles.Name = "btnLoadScribbles";
             btnLoadScribbles.Size = new Size(99, 27);
@@ -877,7 +913,7 @@
             // btnSaveScribbles
             // 
             btnSaveScribbles.Enabled = false;
-            btnSaveScribbles.Location = new Point(916, 36);
+            btnSaveScribbles.Location = new Point(476, 8);
             btnSaveScribbles.Margin = new Padding(4, 3, 4, 3);
             btnSaveScribbles.Name = "btnSaveScribbles";
             btnSaveScribbles.Size = new Size(99, 27);
@@ -898,7 +934,7 @@
             // 
             // btnMinCut
             // 
-            btnMinCut.Location = new Point(127, 96);
+            btnMinCut.Location = new Point(132, 98);
             btnMinCut.Margin = new Padding(4, 3, 4, 3);
             btnMinCut.Name = "btnMinCut";
             btnMinCut.Size = new Size(50, 23);
@@ -910,7 +946,7 @@
             // cbEightAdj
             // 
             cbEightAdj.AutoSize = true;
-            cbEightAdj.Location = new Point(427, 12);
+            cbEightAdj.Location = new Point(459, 93);
             cbEightAdj.Margin = new Padding(4, 3, 4, 3);
             cbEightAdj.Name = "cbEightAdj";
             cbEightAdj.Size = new Size(113, 19);
@@ -989,7 +1025,7 @@
             // Label20
             // 
             Label20.AutoSize = true;
-            Label20.Location = new Point(1129, 16);
+            Label20.Location = new Point(1342, 83);
             Label20.Margin = new Padding(4, 0, 4, 0);
             Label20.Name = "Label20";
             Label20.Size = new Size(58, 15);
@@ -1001,7 +1037,7 @@
             cmbZoom.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbZoom.FormattingEnabled = true;
             cmbZoom.Items.AddRange(new object[] { "4", "2", "1", "Fit_Width", "Fit" });
-            cmbZoom.Location = new Point(1198, 13);
+            cmbZoom.Location = new Point(1411, 80);
             cmbZoom.Margin = new Padding(4, 3, 4, 3);
             cmbZoom.Name = "cmbZoom";
             cmbZoom.Size = new Size(87, 23);
@@ -1067,7 +1103,7 @@
             btnCancel.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             btnCancel.DialogResult = DialogResult.Cancel;
             btnCancel.ForeColor = SystemColors.ControlText;
-            btnCancel.Location = new Point(1408, 216);
+            btnCancel.Location = new Point(1408, 220);
             btnCancel.Margin = new Padding(4, 3, 4, 3);
             btnCancel.Name = "btnCancel";
             btnCancel.Size = new Size(88, 27);
@@ -1081,7 +1117,7 @@
             btnOK.DialogResult = DialogResult.OK;
             btnOK.Enabled = false;
             btnOK.ForeColor = SystemColors.ControlText;
-            btnOK.Location = new Point(1314, 216);
+            btnOK.Location = new Point(1314, 220);
             btnOK.Margin = new Padding(4, 3, 4, 3);
             btnOK.Name = "btnOK";
             btnOK.Size = new Size(88, 27);
@@ -1093,7 +1129,7 @@
             // btnGo
             // 
             btnGo.Font = new Font("Microsoft Sans Serif", 8.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            btnGo.Location = new Point(598, 186);
+            btnGo.Location = new Point(617, 190);
             btnGo.Margin = new Padding(4, 3, 4, 3);
             btnGo.Name = "btnGo";
             btnGo.Size = new Size(88, 27);
@@ -1106,7 +1142,7 @@
             // 
             btnReset2.Enabled = false;
             btnReset2.ForeColor = SystemColors.ControlText;
-            btnReset2.Location = new Point(693, 186);
+            btnReset2.Location = new Point(712, 190);
             btnReset2.Margin = new Padding(4, 3, 4, 3);
             btnReset2.Name = "btnReset2";
             btnReset2.Size = new Size(88, 27);
@@ -1120,7 +1156,7 @@
             cbCastTLInt.AutoSize = true;
             cbCastTLInt.Checked = true;
             cbCastTLInt.CheckState = CheckState.Checked;
-            cbCastTLInt.Location = new Point(378, 189);
+            cbCastTLInt.Location = new Point(378, 193);
             cbCastTLInt.Margin = new Padding(4, 3, 4, 3);
             cbCastTLInt.Name = "cbCastTLInt";
             cbCastTLInt.Size = new Size(86, 19);
@@ -1133,7 +1169,7 @@
             cbMultTLCap.AutoSize = true;
             cbMultTLCap.Checked = true;
             cbMultTLCap.CheckState = CheckState.Checked;
-            cbMultTLCap.Location = new Point(241, 189);
+            cbMultTLCap.Location = new Point(241, 193);
             cbMultTLCap.Margin = new Padding(4, 3, 4, 3);
             cbMultTLCap.Name = "cbMultTLCap";
             cbMultTLCap.Size = new Size(125, 19);
@@ -1146,7 +1182,7 @@
             // 
             numMultTLCap.DecimalPlaces = 2;
             numMultTLCap.Increment = new decimal(new int[] { 1, 0, 0, 65536 });
-            numMultTLCap.Location = new Point(477, 188);
+            numMultTLCap.Location = new Point(477, 192);
             numMultTLCap.Margin = new Padding(4, 3, 4, 3);
             numMultTLCap.Maximum = new decimal(new int[] { 1410065407, 2, 0, 0 });
             numMultTLCap.Minimum = new decimal(new int[] { 1, 0, 0, 131072 });
@@ -1158,7 +1194,7 @@
             // label4
             // 
             label4.AutoSize = true;
-            label4.Location = new Point(238, 162);
+            label4.Location = new Point(238, 167);
             label4.Margin = new Padding(4, 0, 4, 0);
             label4.Name = "label4";
             label4.Size = new Size(63, 15);
@@ -1181,7 +1217,7 @@
             // 
             numProbMult1.DecimalPlaces = 4;
             numProbMult1.Increment = new decimal(new int[] { 1, 0, 0, 65536 });
-            numProbMult1.Location = new Point(304, 160);
+            numProbMult1.Location = new Point(304, 165);
             numProbMult1.Margin = new Padding(4, 3, 4, 3);
             numProbMult1.Maximum = new decimal(new int[] { 1000, 0, 0, 0 });
             numProbMult1.Minimum = new decimal(new int[] { 1, 0, 0, 262144 });
@@ -1195,7 +1231,7 @@
             cbUseTh.AutoSize = true;
             cbUseTh.Checked = true;
             cbUseTh.CheckState = CheckState.Checked;
-            cbUseTh.Location = new Point(499, 134);
+            cbUseTh.Location = new Point(478, 118);
             cbUseTh.Margin = new Padding(4, 3, 4, 3);
             cbUseTh.Name = "cbUseTh";
             cbUseTh.Size = new Size(99, 19);
@@ -1206,7 +1242,7 @@
             // label5
             // 
             label5.AutoSize = true;
-            label5.Location = new Point(262, 136);
+            label5.Location = new Point(241, 120);
             label5.Margin = new Padding(4, 0, 4, 0);
             label5.Name = "label5";
             label5.Size = new Size(90, 15);
@@ -1216,7 +1252,7 @@
             // numDblMult
             // 
             numDblMult.DecimalPlaces = 6;
-            numDblMult.Location = new Point(365, 133);
+            numDblMult.Location = new Point(344, 117);
             numDblMult.Margin = new Padding(4, 3, 4, 3);
             numDblMult.Maximum = new decimal(new int[] { 1000000000, 0, 0, 0 });
             numDblMult.Name = "numDblMult";
@@ -1229,7 +1265,7 @@
             cbQuickEst.AutoSize = true;
             cbQuickEst.Checked = true;
             cbQuickEst.CheckState = CheckState.Checked;
-            cbQuickEst.Location = new Point(241, 113);
+            cbQuickEst.Location = new Point(241, 93);
             cbQuickEst.Margin = new Padding(4, 3, 4, 3);
             cbQuickEst.Name = "cbQuickEst";
             cbQuickEst.Size = new Size(114, 19);
@@ -1240,7 +1276,7 @@
             // 
             // btnRect
             // 
-            btnRect.Location = new Point(334, 7);
+            btnRect.Location = new Point(299, 7);
             btnRect.Margin = new Padding(4, 3, 4, 3);
             btnRect.Name = "btnRect";
             btnRect.Size = new Size(56, 27);
@@ -1251,7 +1287,7 @@
             // 
             // numShiftY
             // 
-            numShiftY.Location = new Point(838, 92);
+            numShiftY.Location = new Point(1206, 10);
             numShiftY.Margin = new Padding(4, 3, 4, 3);
             numShiftY.Maximum = new decimal(new int[] { 9999, 0, 0, 0 });
             numShiftY.Minimum = new decimal(new int[] { 9999, 0, 0, int.MinValue });
@@ -1263,7 +1299,7 @@
             // label19
             // 
             label19.AutoSize = true;
-            label19.Location = new Point(378, 38);
+            label19.Location = new Point(393, 38);
             label19.Margin = new Padding(4, 0, 4, 0);
             label19.Name = "label19";
             label19.Size = new Size(37, 15);
@@ -1272,7 +1308,7 @@
             // 
             // numShiftX
             // 
-            numShiftX.Location = new Point(751, 92);
+            numShiftX.Location = new Point(1119, 10);
             numShiftX.Margin = new Padding(4, 3, 4, 3);
             numShiftX.Maximum = new decimal(new int[] { 9999, 0, 0, 0 });
             numShiftX.Minimum = new decimal(new int[] { 9999, 0, 0, int.MinValue });
@@ -1295,7 +1331,7 @@
             // 
             // numMaxComponents
             // 
-            numMaxComponents.Location = new Point(533, 160);
+            numMaxComponents.Location = new Point(533, 165);
             numMaxComponents.Margin = new Padding(4, 3, 4, 3);
             numMaxComponents.Maximum = new decimal(new int[] { 9999, 0, 0, 0 });
             numMaxComponents.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
@@ -1306,7 +1342,7 @@
             // 
             // numWHScribbles
             // 
-            numWHScribbles.Location = new Point(423, 35);
+            numWHScribbles.Location = new Point(438, 35);
             numWHScribbles.Margin = new Padding(4, 3, 4, 3);
             numWHScribbles.Maximum = new decimal(new int[] { 255, 0, 0, 0 });
             numWHScribbles.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
@@ -1318,7 +1354,7 @@
             // cbScribbleMode
             // 
             cbScribbleMode.AutoSize = true;
-            cbScribbleMode.Location = new Point(272, 37);
+            cbScribbleMode.Location = new Point(286, 38);
             cbScribbleMode.Margin = new Padding(4, 3, 4, 3);
             cbScribbleMode.Name = "cbScribbleMode";
             cbScribbleMode.Size = new Size(98, 19);
@@ -1330,7 +1366,7 @@
             // rbFG
             // 
             rbFG.AutoSize = true;
-            rbFG.Location = new Point(529, 37);
+            rbFG.Location = new Point(544, 37);
             rbFG.Margin = new Padding(4, 3, 4, 3);
             rbFG.Name = "rbFG";
             rbFG.Size = new Size(39, 19);
@@ -1342,7 +1378,7 @@
             // 
             rbBG.AutoSize = true;
             rbBG.Checked = true;
-            rbBG.Location = new Point(484, 37);
+            rbBG.Location = new Point(499, 37);
             rbBG.Margin = new Padding(4, 3, 4, 3);
             rbBG.Name = "rbBG";
             rbBG.Size = new Size(40, 19);
@@ -1353,7 +1389,7 @@
             // 
             // btnClearScribbles
             // 
-            btnClearScribbles.Location = new Point(723, 35);
+            btnClearScribbles.Location = new Point(745, 8);
             btnClearScribbles.Margin = new Padding(4, 3, 4, 3);
             btnClearScribbles.Name = "btnClearScribbles";
             btnClearScribbles.Size = new Size(63, 27);
@@ -1364,7 +1400,7 @@
             // 
             // btnRemLastScribbles
             // 
-            btnRemLastScribbles.Location = new Point(653, 35);
+            btnRemLastScribbles.Location = new Point(675, 8);
             btnRemLastScribbles.Margin = new Padding(4, 3, 4, 3);
             btnRemLastScribbles.Name = "btnRemLastScribbles";
             btnRemLastScribbles.Size = new Size(63, 27);
@@ -1378,7 +1414,7 @@
             cbRectMode.AutoSize = true;
             cbRectMode.Checked = true;
             cbRectMode.CheckState = CheckState.Checked;
-            cbRectMode.Location = new Point(241, 12);
+            cbRectMode.Location = new Point(209, 11);
             cbRectMode.Margin = new Padding(4, 3, 4, 3);
             cbRectMode.Name = "cbRectMode";
             cbRectMode.Size = new Size(80, 19);
@@ -1608,25 +1644,6 @@
             backgroundWorker4.ProgressChanged += backgroundWorker4_ProgressChanged;
             backgroundWorker4.RunWorkerCompleted += backgroundWorker4_RunWorkerCompleted;
             // 
-            // btnNewSrc
-            // 
-            btnNewSrc.Location = new Point(106, 151);
-            btnNewSrc.Name = "btnNewSrc";
-            btnNewSrc.Size = new Size(75, 23);
-            btnNewSrc.TabIndex = 745;
-            btnNewSrc.Text = "Open";
-            btnNewSrc.UseVisualStyleBackColor = true;
-            btnNewSrc.Click += btnNewSrc_Click;
-            // 
-            // label14
-            // 
-            label14.AutoSize = true;
-            label14.Location = new Point(18, 155);
-            label14.Name = "label14";
-            label14.Size = new Size(77, 15);
-            label14.TabIndex = 744;
-            label14.Text = "Load new Src";
-            // 
             // frmAvoidAGrabCutEasy
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -1645,8 +1662,6 @@
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)numComponents2).EndInit();
-            panel2.ResumeLayout(false);
-            panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)numWH).EndInit();
             ((System.ComponentModel.ISupportInitialize)numMultTLCap).EndInit();
             ((System.ComponentModel.ISupportInitialize)numMaxSize).EndInit();
@@ -1745,8 +1760,6 @@
         private System.Windows.Forms.Button btnCache;
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.Button btnCompose;
-        private System.Windows.Forms.Panel panel2;
-        private System.Windows.Forms.Label label13;
         private System.Windows.Forms.CheckBox cbAutoThreshold;
         private System.Windows.Forms.Button btnInitSettings;
         private CheckBox cbAllowRS;
@@ -1796,5 +1809,9 @@
         private Button btnTScribbles;
         private Button btnNewSrc;
         private Label label14;
+        private Panel panel6;
+        private Panel panel2;
+        private Panel panel5;
+        private Panel panel9;
     }
 }

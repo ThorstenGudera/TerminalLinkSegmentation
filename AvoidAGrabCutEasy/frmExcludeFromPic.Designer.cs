@@ -134,6 +134,7 @@
             // 
             // splitContainer2.Panel1
             // 
+            splitContainer2.Panel1.AutoScroll = true;
             splitContainer2.Panel1.Controls.Add(groupBox2);
             splitContainer2.Panel1.Controls.Add(groupBox1);
             splitContainer2.Panel1.Controls.Add(Label20);

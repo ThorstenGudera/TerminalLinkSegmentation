@@ -27,6 +27,12 @@ namespace AvoidAGrabCutEasy
         private List<Point>? _currentListRestore;
         private List<PointF>? _displayPoints2;
 
+        public Dictionary<int, List<List<Point>>>? UnknownScibblesBU
+        {
+            get { return _unknownScribblesBU; }
+            set { _unknownScribblesBU = value; }
+        }
+
         public frmLastScribbles(Bitmap bmp, Dictionary<int, Dictionary<int, List<List<Point>>>>? scribbles, List<Tuple<int, int, int, bool, List<List<Point>>>>? scribbleSeq)
         {
             InitializeComponent();

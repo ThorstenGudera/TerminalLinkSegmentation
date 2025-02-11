@@ -49,6 +49,8 @@ namespace AvoidAGrabCutEasy
             }
         }
 
+        public Dictionary<int, List<List<Point>>>? UnknownScibblesBU { get; set; }
+
         private Bitmap? _bmpBU = null;
         private bool _pic_changed = false;
 
@@ -1301,7 +1303,11 @@ namespace AvoidAGrabCutEasy
                 }
                 else
                     using (frmLastScribbles frm = new frmLastScribbles(this.helplineRulerCtrl1.Bmp, this._scribbles, this._scribbleSeq))
+                    {
+                        frm.UnknownScibblesBU = this.UnknownScibblesBU;
                         frm.ShowDialog();
+                        this.UnknownScibblesBU = frm.UnknownScibblesBU;
+                    }
 
                 this.helplineRulerCtrl1.dbPanel1.Invalidate();
             }
@@ -3730,7 +3736,7 @@ namespace AvoidAGrabCutEasy
 
                 int n2 = n * n;
 
-                MessageBox.Show(n2.ToString());
+                MessageBox.Show("Outer-Pic-Array will be of size: " + n2.ToString());
             }
         }
 

@@ -52,6 +52,8 @@ namespace AvoidAGrabCutEasy
             }
         }
 
+        public Dictionary<int, List<List<Point>>>? UnknownScibblesBU { get; private set; }
+
         private Bitmap? _bmpBU = null;
         private bool _pic_changed = false;
 
@@ -2954,7 +2956,11 @@ namespace AvoidAGrabCutEasy
                 }
                 else
                     using (frmLastScribbles frm = new frmLastScribbles(this.helplineRulerCtrl1.Bmp, this._scribbles, this._scribbleSeq))
+                    {
+                        frm.UnknownScibblesBU = this.UnknownScibblesBU;
                         frm.ShowDialog();
+                        this.UnknownScibblesBU = frm.UnknownScibblesBU;
+                    }
 
                 this.helplineRulerCtrl1.dbPanel1.Invalidate();
             }
@@ -5064,6 +5070,8 @@ namespace AvoidAGrabCutEasy
                 using (frmAlphaMatte frm = new frmAlphaMatte(this.helplineRulerCtrl1.Bmp, this.CachePathAddition))
                 {
                     frm.SetupCache();
+                    frm.UnknownScibblesBU = this.UnknownScibblesBU;
+
                     if (this._scribbles != null)
                     {
                         Tuple<Dictionary<int, Dictionary<int, List<List<Point>>>>, List<Tuple<int, int, int, bool, List<List<Point>>>>> scr = this.CloneScribbles(this._scribbles, this._scribbleSeq);
@@ -5072,6 +5080,8 @@ namespace AvoidAGrabCutEasy
 
                     if (frm.ShowDialog() == DialogResult.OK)
                     {
+                        this.UnknownScibblesBU = frm.UnknownScibblesBU;
+
                         if (frm.FBitmap != null)
                         {
                             Bitmap b = new Bitmap(frm.FBitmap);

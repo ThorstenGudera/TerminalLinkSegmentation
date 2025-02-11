@@ -503,6 +503,7 @@
             // 
             // panel1
             // 
+            panel1.AutoScroll = true;
             panel1.Controls.Add(btnSmothenSettings);
             panel1.Controls.Add(panel9);
             panel1.Controls.Add(cbApproxLines);
