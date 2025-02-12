@@ -72,7 +72,7 @@ namespace GetAlphaMatte
                         double resPic = (double)Math.Max(this.helplineRulerCtrl1.Bmp.Width, this.helplineRulerCtrl1.Bmp.Height) /
                                 (double)Math.Max(this.BaseSize.Value.Width, this.BaseSize.Value.Height);
 
-                        if (resPic != 1.0 && MessageBox.Show("Resize Matte?", "", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                        if (resPic != 1.0 && MessageBox.Show("Resize Trimap?", "", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                         {
                             Bitmap bmp = new Bitmap(this.BaseSize.Value.Width, this.BaseSize.Value.Height);
                             using Graphics graphics = Graphics.FromImage(bmp);

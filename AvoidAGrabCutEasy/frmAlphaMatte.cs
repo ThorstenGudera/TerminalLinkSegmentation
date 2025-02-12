@@ -104,6 +104,7 @@ namespace AvoidAGrabCutEasy
         private bool _dynamic = true;
         private int _divisor = 2;
         private int _newWidth = 10;
+        private int _minSize = 84;
 
         public frmAlphaMatte()
         {
@@ -2134,10 +2135,53 @@ namespace AvoidAGrabCutEasy
                 bool trySingleTile = /*scalesPics ? false : this.cbHalfSize.Checked ? true :*/ bWork.Width * bWork.Height < maxSize ? true : false;
                 bool verifyTrimaps = false;
 
-                this.backgroundWorker1.RunWorkerAsync(new object[] { 1 /* GMRES_r; 0 is GaussSeidel */, scalesPics, scales, overlap,
+                int maxW = this.cbInterpolated.Checked ? (int)this.numMaxSize.Value * 2 : (int)this.numMaxSize.Value;
+
+                if (maxW >= this._minSize)
+                    this.backgroundWorker1.RunWorkerAsync(new object[] { 1 /* GMRES_r; 0 is GaussSeidel */, scalesPics, scales, overlap,
                                 interpolated, forceSerial, group, groupAmountX, groupAmountY, maxSize, bWork, trWork,
                                 trySingleTile, verifyTrimaps });
+                else
+                {
+                    MessageBox.Show("MaxSize is too small for creating tiles with an overlap. Minimum is " + this._minSize.ToString());
+                    Cleanup();
+                    return;
+                }
             }
+        }
+
+        private void Cleanup()
+        {
+            if (this._cfop != null)
+            {
+                this._cfop.ShowProgess -= Cfop_UpdateProgress;
+                this._cfop.ShowInfo -= _cfop_ShowInfo;
+                this._cfop.ShowInfoOuter -= Cfop_ShowInfoOuter;
+                this._cfop.Dispose();
+            }
+
+            this.btnGo.Text = "Go";
+
+            this.SetControls(true);
+            this.Cursor = Cursors.Default;
+
+            rbClosedForm_CheckedChanged(this.rbClosedForm, new EventArgs());
+
+            this.btnOK.Enabled = this.btnCancel.Enabled = true;
+
+            this._pic_changed = true;
+
+            this.helplineRulerCtrl2.dbPanel1.Invalidate();
+
+            if (this.Timer3.Enabled)
+                this.Timer3.Stop();
+
+            this.Timer3.Start();
+
+            this._sw?.Stop();
+            this.Text = "frmProcOutline";
+            if (this._sw != null)
+                this.Text += "        - ### -        " + TimeSpan.FromMilliseconds(this._sw.ElapsedMilliseconds).ToString();
         }
 
         private void _cfop_ShowInfo(object? sender, string e)
@@ -3714,29 +3758,41 @@ namespace AvoidAGrabCutEasy
         {
             if (this.helplineRulerCtrl1.Bmp != null)
             {
-                int w = this.helplineRulerCtrl1.Bmp.Width;
-                int h = this.helplineRulerCtrl1.Bmp.Height;
-
-                if (this.cbHalfSize.Checked)
+                if (this.rbClosedForm.Checked)
                 {
-                    w /= 2;
-                    h /= 2;
+                    int w = this.helplineRulerCtrl1.Bmp.Width;
+                    int h = this.helplineRulerCtrl1.Bmp.Height;
+
+                    if (this.cbHalfSize.Checked)
+                    {
+                        w /= 2;
+                        h /= 2;
+                    }
+
+                    int wh = w * h;
+                    int n = 1;
+
+                    int maxSize = this.cbInterpolated.Checked ? (int)Math.Pow((double)this.numMaxSize.Value, 2) * 2 : (int)Math.Pow((double)this.numMaxSize.Value, 2);
+                    int maxW = this.cbInterpolated.Checked ? (int)this.numMaxSize.Value * 2 : (int)this.numMaxSize.Value;
+
+                    if (maxW < this._minSize)
+                    {
+                        MessageBox.Show("MaxSize is too small for creating tiles with an overlap. Minimum is " + this._minSize.ToString());
+                        return;
+                    }
+
+                    while (wh > maxSize)
+                    {
+                        n += 1;
+                        wh = w / n * h / n;
+                    }
+
+                    int n2 = n * n;
+
+                    MessageBox.Show("Outer-Pic-Array will be of size: " + n2.ToString());
                 }
-
-                int wh = w * h;
-                int n = 1;
-
-                int maxSize = this.cbInterpolated.Checked ? (int)Math.Pow((double)this.numMaxSize.Value, 2) * 2 : (int)Math.Pow((double)this.numMaxSize.Value, 2);
-
-                while (wh > maxSize)
-                {
-                    n += 1;
-                    wh = w / n * h / n;
-                }
-
-                int n2 = n * n;
-
-                MessageBox.Show("Outer-Pic-Array will be of size: " + n2.ToString());
+                else
+                    MessageBox.Show("Array will be of size: 1; whole Pic will be resized.");
             }
         }
 
