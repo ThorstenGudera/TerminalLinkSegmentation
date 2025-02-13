@@ -20,15 +20,15 @@ namespace QuickExtract2
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public QuickExtractingAlg? Alg { get; set; } = null;
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public  List<double[]>? Ramps { get; set; } = null;
+        public List<double[]>? Ramps { get; set; } = null;
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public List<PointF>? SeedPoints { get; set; } = null;
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public List<PointF>? TempPath {  get; set; } = null;
+        public List<PointF>? TempPath { get; set; } = null;
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public List<List<PointF>>? CurPath {  get; set; } = null;
+        public List<List<PointF>>? CurPath { get; set; } = null;
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public List<List<PointF>>? EditedPath {  get; set; } = null;
+        public List<List<PointF>>? EditedPath { get; set; } = null;
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public List<List<List<PointF>>>? PathList { get; set; } = null;
 
@@ -66,7 +66,7 @@ namespace QuickExtract2
                     if (autoSeedPoints && this.SeedPoints != null)
                     {
                         if (addSeedPoint)
-                            this.SeedPoints.Add(new PointF(this.TempPath[minIndx].X, this.TempPath[minIndx] .Y));
+                            this.SeedPoints.Add(new PointF(this.TempPath[minIndx].X, this.TempPath[minIndx].Y));
                         else
                             this.SeedPoints[this.SeedPoints.Count - 1] = new PointF(this.TempPath[minIndx].X, this.TempPath[minIndx].Y);
                     }
@@ -364,6 +364,11 @@ namespace QuickExtract2
             }
 
             return false;
+        }
+
+        private void cbAutoAddLine_CheckedChanged(object sender, EventArgs e)
+        {
+            this.cbAddLine.Enabled = !cbAutoAddLine.Checked;
         }
     }
 }

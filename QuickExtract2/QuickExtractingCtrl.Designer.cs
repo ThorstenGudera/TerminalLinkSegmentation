@@ -51,6 +51,7 @@
             btnClosePath = new Button();
             Label43 = new Label();
             groupBox2 = new GroupBox();
+            cbAutoAddLine = new CheckBox();
             Label44 = new Label();
             numValC0l = new NumericUpDown();
             cbAddLine = new CheckBox();
@@ -87,7 +88,7 @@
             cbSmooth = new CheckBox();
             cbCropFromOrig = new CheckBox();
             btnCrop = new Button();
-            cbRunOnMouseDown = new CheckBox();
+            cbRunOnMouseMove = new CheckBox();
             cbAutoSeeds = new CheckBox();
             cbAutoClose = new CheckBox();
             cbRunAlg = new CheckBox();
@@ -373,6 +374,7 @@
             // 
             // groupBox2
             // 
+            groupBox2.Controls.Add(cbAutoAddLine);
             groupBox2.Controls.Add(Label44);
             groupBox2.Controls.Add(numValC0l);
             groupBox2.Controls.Add(cbAddLine);
@@ -410,6 +412,20 @@
             groupBox2.TabIndex = 0;
             groupBox2.TabStop = false;
             groupBox2.Text = "Alg Settings";
+            // 
+            // cbAutoAddLine
+            // 
+            cbAutoAddLine.AutoSize = true;
+            cbAutoAddLine.Checked = true;
+            cbAutoAddLine.CheckState = CheckState.Checked;
+            cbAutoAddLine.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            cbAutoAddLine.Location = new Point(616, 79);
+            cbAutoAddLine.Name = "cbAutoAddLine";
+            cbAutoAddLine.Size = new Size(96, 19);
+            cbAutoAddLine.TabIndex = 323;
+            cbAutoAddLine.Text = "autoAddLine";
+            cbAutoAddLine.UseVisualStyleBackColor = true;
+            cbAutoAddLine.CheckedChanged += cbAutoAddLine_CheckedChanged;
             // 
             // Label44
             // 
@@ -743,7 +759,7 @@
             groupBox3.Controls.Add(cbSmooth);
             groupBox3.Controls.Add(cbCropFromOrig);
             groupBox3.Controls.Add(btnCrop);
-            groupBox3.Controls.Add(cbRunOnMouseDown);
+            groupBox3.Controls.Add(cbRunOnMouseMove);
             groupBox3.Controls.Add(cbAutoSeeds);
             groupBox3.Controls.Add(cbAutoClose);
             groupBox3.Controls.Add(cbRunAlg);
@@ -822,17 +838,17 @@
             btnCrop.Text = "Crop";
             btnCrop.UseVisualStyleBackColor = true;
             // 
-            // cbRunOnMouseDown
+            // cbRunOnMouseMove
             // 
-            cbRunOnMouseDown.AutoSize = true;
-            cbRunOnMouseDown.Enabled = false;
-            cbRunOnMouseDown.Location = new Point(20, 53);
-            cbRunOnMouseDown.Margin = new Padding(4, 3, 4, 3);
-            cbRunOnMouseDown.Name = "cbRunOnMouseDown";
-            cbRunOnMouseDown.Size = new Size(149, 19);
-            cbRunOnMouseDown.TabIndex = 285;
-            cbRunOnMouseDown.Text = "run alg on mousemove";
-            cbRunOnMouseDown.UseVisualStyleBackColor = true;
+            cbRunOnMouseMove.AutoSize = true;
+            cbRunOnMouseMove.Enabled = false;
+            cbRunOnMouseMove.Location = new Point(20, 53);
+            cbRunOnMouseMove.Margin = new Padding(4, 3, 4, 3);
+            cbRunOnMouseMove.Name = "cbRunOnMouseMove";
+            cbRunOnMouseMove.Size = new Size(149, 19);
+            cbRunOnMouseMove.TabIndex = 285;
+            cbRunOnMouseMove.Text = "run alg on mousemove";
+            cbRunOnMouseMove.UseVisualStyleBackColor = true;
             // 
             // cbAutoSeeds
             // 
@@ -1045,7 +1061,7 @@
         internal System.Windows.Forms.CheckBox cbSmooth;
         internal System.Windows.Forms.CheckBox cbCropFromOrig;
         internal System.Windows.Forms.Button btnCrop;
-        internal System.Windows.Forms.CheckBox cbRunOnMouseDown;
+        internal System.Windows.Forms.CheckBox cbRunOnMouseMove;
         internal System.Windows.Forms.CheckBox cbAutoSeeds;
         internal System.Windows.Forms.CheckBox cbAutoClose;
         internal System.Windows.Forms.CheckBox cbRunAlg;
@@ -1060,5 +1076,6 @@
         internal System.Windows.Forms.NumericUpDown numDisplayIterations;
         internal System.Windows.Forms.Label Label34;
         private ToolTip toolTip1;
+        internal CheckBox cbAutoAddLine;
     }
 }

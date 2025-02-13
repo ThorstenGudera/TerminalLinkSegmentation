@@ -31,6 +31,7 @@ namespace QuickExtract2
         //private bool _dontDrawPath;
         private Color _zColor = Color.Yellow;
         private Color _fColor = Color.Orange;
+        private Color _ffColor = Color.Red;
         private List<List<PointF>>? _selectedPath;
         private List<RectangleF>? tempDataZ;
         private Color _highlightColor = Color.Lime;
@@ -97,6 +98,7 @@ namespace QuickExtract2
         private Dictionary<int, Dictionary<int, List<List<Point>>>>? _scribbles;
         private List<Tuple<int, int, int, bool, List<List<Point>>>>? _scribbleSeq;
         private List<Point>? _ptPrev;
+        private bool _reRunLineRunPrev;
 
         public frmQuickExtract(Bitmap bmp)
         {
@@ -163,7 +165,7 @@ namespace QuickExtract2
             this.quickExtractingCtrl1.numPenWidth.ValueChanged += NumericUpDown1_ValueChanged;
             this.quickExtractingCtrl1.btnPenCol.Click += Button13_Click;
             this.quickExtractingCtrl1.cbRunAlg.CheckedChanged += CheckBox4_CheckedChanged;
-            this.quickExtractingCtrl1.cbRunOnMouseDown.CheckedChanged += CheckBox5_CheckedChanged;
+            this.quickExtractingCtrl1.cbRunOnMouseMove.CheckedChanged += CheckBox5_CheckedChanged;
             this.quickExtractingCtrl1.btnCrop.Click += Button25_Click;
             this.quickExtractingCtrl1.btnGo1234.Click += Button31_Click;
 
@@ -421,15 +423,22 @@ namespace QuickExtract2
                 }
 
                 using (GraphicsPath gp = new GraphicsPath())
+                using (GraphicsPath gp2 = new GraphicsPath())
                 {
                     if (this.quickExtractingCtrl1.CurPath != null && this.quickExtractingCtrl1.CurPath.Count > 0)
                     {
-                        for (int i = 0; i <= this.quickExtractingCtrl1.CurPath.Count - 1; i++)
+                        for (int i = 0; i < this.quickExtractingCtrl1.CurPath.Count; i++)
                         {
                             List<PointF> p = this.quickExtractingCtrl1.CurPath[i];
                             if (p != null && p.Count > 1)
+                            {
                                 gp.AddLines(p.ToArray());
+                                if (this._reRunLineRunPrev && i == this.quickExtractingCtrl1.CurPath.Count - 1)
+                                    gp2.AddLines(p.ToArray());
+                            }
                         }
+
+
                     }
                     float w = System.Convert.ToSingle(this.quickExtractingCtrl1.numPenWidth.Value);
                     int x = this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X;
@@ -442,6 +451,10 @@ namespace QuickExtract2
                             e.Graphics.DrawPath(pen, gp);
                             this.quickExtractingCtrl1.Label43.Text = (count + gp.PointCount).ToString() + " - points";
                         }
+
+                        gp2.Transform(m);
+                        using (Pen pen = new Pen(new SolidBrush(this._ffColor), w))
+                            e.Graphics.DrawPath(pen, gp2);
                     }
                 }
 
@@ -564,8 +577,8 @@ namespace QuickExtract2
         private void Helplinerulerctrl1_MouseDown(object? sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Right)
-                this.quickExtractingCtrl1.cbRunOnMouseDown.Checked = !this.quickExtractingCtrl1.cbRunOnMouseDown.Checked;
-            if (this.quickExtractingCtrl1.cbRunOnMouseDown.Checked == false && this.backgroundWorker1.IsBusy)
+                this.quickExtractingCtrl1.cbRunOnMouseMove.Checked = !this.quickExtractingCtrl1.cbRunOnMouseMove.Checked;
+            if (this.quickExtractingCtrl1.cbRunOnMouseMove.Checked == false && this.backgroundWorker1.IsBusy)
                 this.backgroundWorker1.CancelAsync();
         }
 
@@ -602,7 +615,7 @@ namespace QuickExtract2
 
                     this.ToolStripStatusLabel2.BackColor = c;
 
-                    if (!_dontDoMouseMove && this.firstClick == false && this.quickExtractingCtrl1.cbRunOnMouseDown.Checked && this.quickExtractingCtrl1.cbRunAlg.Checked)
+                    if (!_dontDoMouseMove && this.firstClick == false && this.quickExtractingCtrl1.cbRunOnMouseMove.Checked && this.quickExtractingCtrl1.cbRunAlg.Checked)
                     {
                         if (this.timer1.Enabled)
                             this.timer1.Stop();
@@ -2189,6 +2202,48 @@ namespace QuickExtract2
             {
                 QuickExtractingParameters qe = (QuickExtractingParameters)e.Result;
 
+                bool reRunLine = false;
+
+                //check, if no new points have been found
+                if (qe != null && !this.quickExtractingCtrl1.cbRunOnMouseMove.Checked && this.quickExtractingCtrl1.cbAutoAddLine.Checked)
+                {
+                    int? l = qe.CurPath?.Count - 1;
+
+                    if (l.HasValue && l.Value > 0)
+                    {
+                        int? c = qe.CurPath?[l.Value].Count - 1;
+                        int? c2 = qe.CurPath?[l.Value - 1].Count - 1;
+
+                        if (c.HasValue && c2.HasValue)
+                        {
+                            PointF? pt = qe.CurPath?[l.Value][c.Value];
+
+                            if (pt.HasValue)
+                            {
+                                if (qe.CurPath?.Count - this.quickExtractingCtrl1.CurPath?.Count == 0)
+                                {
+                                    PointF? pt2 = qe.CurPath?[l.Value - 1][c2.Value];
+
+                                    if (pt2.HasValue && pt2.Value.X == pt.Value.X && pt2.Value.Y == pt.Value.Y)
+                                        reRunLine = true;
+
+                                    //test, if prev was line
+                                    PointF? pt3 = qe.CurPath?[l.Value][0];
+
+                                    if (qe.CurPath?[l.Value].Count == 2 && this._reRunLineRunPrev &&
+                                        pt2.HasValue && pt3.HasValue && pt3.Value.X == pt2.Value.X && pt3.Value.Y == pt2.Value.Y)
+                                        reRunLine = true;
+                                }
+                            }
+                        }
+                    }
+
+                    this.quickExtractingCtrl1.Ramps = qe.Ramps;
+                    this.quickExtractingCtrl1.SeedPoints = qe.SeedPoints;
+                    this.quickExtractingCtrl1.TempPath = qe.TempPath;
+                    this.quickExtractingCtrl1.CurPath = qe.CurPath;
+                }
+
                 if (qe != null)
                 {
                     this.quickExtractingCtrl1.Ramps = qe.Ramps;
@@ -2229,6 +2284,66 @@ namespace QuickExtract2
                 this.backgroundWorker1.DoWork += backgroundWorker1_DoWork;
                 //this.backgroundWorker1.ProgressChanged += backgroundWorker1_ProgressChanged;
                 this.backgroundWorker1.RunWorkerCompleted += backgroundWorker1_RunWorkerCompleted;
+
+                if (reRunLine && this.quickExtractingCtrl1.cbAutoAddLine.Checked)
+                {
+                    ReRunLine();
+                    this.toolStripStatusLabel1.Text = "Line added";
+                }
+                else
+                {
+                    this._reRunLineRunPrev = false;
+                    this.toolStripStatusLabel1.Text = "";
+                }
+            }
+        }
+
+        private void ReRunLine()
+        {
+            //remseg
+            this.Button6_Click(this.quickExtractingCtrl1.btnRemSeg, new EventArgs());
+            //addline_lastpoint
+            if (this.helplineRulerCtrl1.Bmp != null)
+            {
+                if (this.backgroundWorker1.IsBusy)
+                    this.backgroundWorker1.CancelAsync();
+
+                int ix = this._ix;
+                int iy = this._iy;
+
+                QuickExtractingParameters @params = new QuickExtractingParameters()
+                {
+                    msg = this.quickExtractingCtrl1.cmbAlgMode.SelectedIndex == 0 ? "run" : "run2",
+                    bmpDataForValueComputation = this.bmpForValueComputation,
+                    imgDataPic = this.imgDataPic,
+                    MouseClicked = true,
+                    Ramps = this.quickExtractingCtrl1.Ramps,
+                    SeedPoints = this.quickExtractingCtrl1.SeedPoints,
+                    TempPath = this.quickExtractingCtrl1.TempPath,
+                    CurPath = this.quickExtractingCtrl1.CurPath,
+                    valL = System.Convert.ToDouble(this.quickExtractingCtrl1.numValL.Value),
+                    valM = System.Convert.ToDouble(this.quickExtractingCtrl1.numValM.Value),
+                    valG = System.Convert.ToDouble(this.quickExtractingCtrl1.numValG.Value),
+                    valP = System.Convert.ToDouble(this.quickExtractingCtrl1.numValP.Value),
+                    valI = System.Convert.ToDouble(this.quickExtractingCtrl1.numVal_I.Value),
+                    valO = System.Convert.ToDouble(this.quickExtractingCtrl1.numValO.Value),
+                    valCl = System.Convert.ToDouble(this.quickExtractingCtrl1.numValCl.Value),
+                    valCol = System.Convert.ToDouble(this.quickExtractingCtrl1.numValC0l.Value),
+                    laplTh = System.Convert.ToInt32(this.quickExtractingCtrl1.numLapTh.Value),
+                    edgeWeight = System.Convert.ToDouble(this.quickExtractingCtrl1.numEdgeWeight.Value),
+                    doScale = this.quickExtractingCtrl1.cbScaleValues.Checked,
+                    doR = this.quickExtractingCtrl1.cbR.Checked,
+                    doG = this.quickExtractingCtrl1.cbG.Checked,
+                    doB = this.quickExtractingCtrl1.cbB.Checked,
+                    neighbors = this.quickExtractingCtrl1.cmbAmntNeighbors.SelectedIndex,
+                    dist = System.Convert.ToInt32(this.quickExtractingCtrl1.numTrainDist.Value),
+                    useCostMap = this.quickExtractingCtrl1.cbUseCostMaps.Checked,
+                    notifyEach = System.Convert.ToInt32(this.quickExtractingCtrl1.numDisplayEdgeAt.Value)
+                };
+
+                this._reRunLineRunPrev = true;
+
+                this.PrepareBGW(new object[] { 101, new Point(ix, iy), @params });
             }
         }
 
@@ -2308,9 +2423,9 @@ namespace QuickExtract2
             }
 
             this.quickExtractingCtrl1.cbRunAlg.Checked = false;
-            this.quickExtractingCtrl1.cbRunOnMouseDown.Checked = false;
+            this.quickExtractingCtrl1.cbRunOnMouseMove.Checked = false;
             this.quickExtractingCtrl1.cbRunAlg.Enabled = false;
-            this.quickExtractingCtrl1.cbRunOnMouseDown.Enabled = false;
+            this.quickExtractingCtrl1.cbRunOnMouseMove.Enabled = false;
 
             this.quickExtractingCtrl1.btnCrop.Enabled = true;
             this.quickExtractingCtrl1.cbCropFromOrig.Enabled = true;
@@ -2435,7 +2550,7 @@ namespace QuickExtract2
 
         private void CheckBox5_CheckedChanged(object? sender, EventArgs e)
         {
-            this.quickExtractingCtrl1.cbAutoSeeds.Enabled = this.quickExtractingCtrl1.cbRunOnMouseDown.Checked;
+            this.quickExtractingCtrl1.cbAutoSeeds.Enabled = this.quickExtractingCtrl1.cbRunOnMouseMove.Checked;
         }
 
         private void Timer2_Tick(object sender, EventArgs e)
@@ -2463,9 +2578,9 @@ namespace QuickExtract2
 
         private void CheckBox4_CheckedChanged(object? sender, EventArgs e)
         {
-            this.quickExtractingCtrl1.cbRunOnMouseDown.Enabled = this.quickExtractingCtrl1.cbRunAlg.Checked;
+            this.quickExtractingCtrl1.cbRunOnMouseMove.Enabled = this.quickExtractingCtrl1.cbRunAlg.Checked;
             this.quickExtractingCtrl1.cbAutoClose.Enabled = this.quickExtractingCtrl1.cbRunAlg.Checked;
-            this.quickExtractingCtrl1.cbAutoSeeds.Enabled = this.quickExtractingCtrl1.cbRunOnMouseDown.Checked;
+            this.quickExtractingCtrl1.cbAutoSeeds.Enabled = this.quickExtractingCtrl1.cbRunOnMouseMove.Checked;
         }
 
         private void Button3_Click(object? sender, EventArgs e)
@@ -2543,7 +2658,7 @@ namespace QuickExtract2
 
             if (this.quickExtractingCtrl1.CurPath != null)
             {
-                this.quickExtractingCtrl1.cbRunOnMouseDown.Checked = false;
+                this.quickExtractingCtrl1.cbRunOnMouseMove.Checked = false;
 
                 this.quickExtractingCtrl1.TempPath = new List<PointF>();
 
@@ -2735,7 +2850,7 @@ namespace QuickExtract2
         {
             if (this.backgroundWorker1.IsBusy)
                 this.backgroundWorker1.CancelAsync();
-            this.quickExtractingCtrl1.cbRunOnMouseDown.Checked = false;
+            this.quickExtractingCtrl1.cbRunOnMouseMove.Checked = false;
         }
 
         private void Button25_Click(object? sender, EventArgs e)
