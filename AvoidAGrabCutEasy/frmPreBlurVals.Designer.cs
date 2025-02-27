@@ -372,6 +372,7 @@
             numDistWeight.Location = new Point(243, 21);
             numDistWeight.Margin = new Padding(4, 3, 4, 3);
             numDistWeight.Maximum = new decimal(new int[] { 443, 0, 0, 0 });
+            numDistWeight.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
             numDistWeight.Name = "numDistWeight";
             numDistWeight.Size = new Size(52, 23);
             numDistWeight.TabIndex = 752;
