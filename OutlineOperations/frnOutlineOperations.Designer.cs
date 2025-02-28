@@ -70,6 +70,7 @@
             openFileDialog1 = new OpenFileDialog();
             backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             panel1 = new Panel();
+            btnSetAsMatte = new Button();
             label12 = new Label();
             label11 = new Label();
             cbWipeAlpha = new CheckBox();
@@ -107,7 +108,16 @@
             backgroundWorker5 = new System.ComponentModel.BackgroundWorker();
             backgroundWorker9 = new System.ComponentModel.BackgroundWorker();
             helplineRulerCtrl1 = new HelplineRulerControl.HelplineRulerCtrl();
-            btnSetAsMatte = new Button();
+            cbPicIsMatte = new CheckBox();
+            label13 = new Label();
+            label16 = new Label();
+            numKernel2 = new NumericUpDown();
+            numDistWeight2 = new NumericUpDown();
+            panel6 = new Panel();
+            panel5 = new Panel();
+            btnBlurMatte = new Button();
+            btnBlurResult = new Button();
+            backgroundWorker3 = new System.ComponentModel.BackgroundWorker();
             statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numEpsilon).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numKernel).BeginInit();
@@ -125,6 +135,8 @@
             ((System.ComponentModel.ISupportInitialize)numPenSize).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numAlphaZAndGain).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numGamma).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)numKernel2).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)numDistWeight2).BeginInit();
             SuspendLayout();
             // 
             // panel3
@@ -525,6 +537,15 @@
             // 
             // panel1
             // 
+            panel1.Controls.Add(cbPicIsMatte);
+            panel1.Controls.Add(label13);
+            panel1.Controls.Add(label16);
+            panel1.Controls.Add(numKernel2);
+            panel1.Controls.Add(numDistWeight2);
+            panel1.Controls.Add(panel6);
+            panel1.Controls.Add(panel5);
+            panel1.Controls.Add(btnBlurMatte);
+            panel1.Controls.Add(btnBlurResult);
             panel1.Controls.Add(btnSetAsMatte);
             panel1.Controls.Add(label12);
             panel1.Controls.Add(label11);
@@ -589,6 +610,17 @@
             panel1.TabIndex = 243;
             panel1.MouseDoubleClick += panel1_MouseDoubleClick;
             panel1.MouseDown += panel1_MouseDown;
+            // 
+            // btnSetAsMatte
+            // 
+            btnSetAsMatte.Location = new Point(14, 139);
+            btnSetAsMatte.Margin = new Padding(4, 3, 4, 3);
+            btnSetAsMatte.Name = "btnSetAsMatte";
+            btnSetAsMatte.Size = new Size(114, 27);
+            btnSetAsMatte.TabIndex = 744;
+            btnSetAsMatte.Text = "Set cur as Matte";
+            btnSetAsMatte.UseVisualStyleBackColor = true;
+            btnSetAsMatte.Click += btnSetAsMatte_Click;
             // 
             // label12
             // 
@@ -810,7 +842,7 @@
             // Label20
             // 
             Label20.AutoSize = true;
-            Label20.Location = new Point(1197, 61);
+            Label20.Location = new Point(1424, 94);
             Label20.Margin = new Padding(4, 0, 4, 0);
             Label20.Name = "Label20";
             Label20.Size = new Size(58, 15);
@@ -822,7 +854,7 @@
             cmbZoom.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbZoom.FormattingEnabled = true;
             cmbZoom.Items.AddRange(new object[] { "4", "2", "1", "Fit_Width", "Fit" });
-            cmbZoom.Location = new Point(1266, 58);
+            cmbZoom.Location = new Point(1493, 91);
             cmbZoom.Margin = new Padding(4, 3, 4, 3);
             cmbZoom.Name = "cmbZoom";
             cmbZoom.Size = new Size(87, 23);
@@ -835,7 +867,7 @@
             cbBGColor.AutoSize = true;
             cbBGColor.Checked = true;
             cbBGColor.CheckState = CheckState.Checked;
-            cbBGColor.Location = new Point(1275, 93);
+            cbBGColor.Location = new Point(1513, 120);
             cbBGColor.Margin = new Padding(4, 3, 4, 3);
             cbBGColor.Name = "cbBGColor";
             cbBGColor.Size = new Size(67, 19);
@@ -998,16 +1030,105 @@
             helplineRulerCtrl1.ZoomSetManually = false;
             helplineRulerCtrl1.DBPanelDblClicked += helplineRulerCtrl1_DBPanelDblClicked;
             // 
-            // btnSetAsMatte
+            // cbPicIsMatte
             // 
-            btnSetAsMatte.Location = new Point(14, 139);
-            btnSetAsMatte.Margin = new Padding(4, 3, 4, 3);
-            btnSetAsMatte.Name = "btnSetAsMatte";
-            btnSetAsMatte.Size = new Size(114, 27);
-            btnSetAsMatte.TabIndex = 744;
-            btnSetAsMatte.Text = "Set cur as Matte";
-            btnSetAsMatte.UseVisualStyleBackColor = true;
-            btnSetAsMatte.Click += btnSetAsMatte_Click;
+            cbPicIsMatte.AutoSize = true;
+            cbPicIsMatte.Location = new Point(1232, 148);
+            cbPicIsMatte.Name = "cbPicIsMatte";
+            cbPicIsMatte.Size = new Size(87, 19);
+            cbPicIsMatte.TabIndex = 769;
+            cbPicIsMatte.Text = "pic is matte";
+            cbPicIsMatte.UseVisualStyleBackColor = true;
+            // 
+            // label13
+            // 
+            label13.AutoSize = true;
+            label13.Location = new Point(1214, 55);
+            label13.Name = "label13";
+            label13.Size = new Size(64, 15);
+            label13.TabIndex = 768;
+            label13.Text = "Blur Kernel";
+            // 
+            // label16
+            // 
+            label16.AutoSize = true;
+            label16.Location = new Point(1257, 85);
+            label16.Name = "label16";
+            label16.Size = new Size(64, 15);
+            label16.TabIndex = 767;
+            label16.Text = "distWeight";
+            toolTip1.SetToolTip(label16, "max color dist to keep blurring.\r\n\"Edge weight\" - bigger blurs more edges\r\nvalue range from 0 to 443");
+            // 
+            // numKernel2
+            // 
+            numKernel2.Location = new Point(1294, 53);
+            numKernel2.Margin = new Padding(4, 3, 4, 3);
+            numKernel2.Maximum = new decimal(new int[] { 255, 0, 0, 0 });
+            numKernel2.Minimum = new decimal(new int[] { 3, 0, 0, 0 });
+            numKernel2.Name = "numKernel2";
+            numKernel2.Size = new Size(52, 23);
+            numKernel2.TabIndex = 766;
+            numKernel2.Value = new decimal(new int[] { 5, 0, 0, 0 });
+            // 
+            // numDistWeight2
+            // 
+            numDistWeight2.Location = new Point(1328, 83);
+            numDistWeight2.Margin = new Padding(4, 3, 4, 3);
+            numDistWeight2.Maximum = new decimal(new int[] { 444, 0, 0, 0 });
+            numDistWeight2.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
+            numDistWeight2.Name = "numDistWeight2";
+            numDistWeight2.Size = new Size(52, 23);
+            numDistWeight2.TabIndex = 765;
+            toolTip1.SetToolTip(numDistWeight2, "max color dist to keep blurring.\r\n\"Edge weight\" - bigger blurs more edges\r\nvalue range from 1 to 443, \r\n444 is blurs without efge test");
+            numDistWeight2.Value = new decimal(new int[] { 101, 0, 0, 0 });
+            // 
+            // panel6
+            // 
+            panel6.BackColor = SystemColors.ActiveCaptionText;
+            panel6.Location = new Point(1389, 49);
+            panel6.Margin = new Padding(4, 3, 4, 3);
+            panel6.Name = "panel6";
+            panel6.Size = new Size(2, 116);
+            panel6.TabIndex = 762;
+            // 
+            // panel5
+            // 
+            panel5.BackColor = SystemColors.ActiveCaptionText;
+            panel5.Location = new Point(1199, 49);
+            panel5.Margin = new Padding(4, 3, 4, 3);
+            panel5.Name = "panel5";
+            panel5.Size = new Size(2, 116);
+            panel5.TabIndex = 761;
+            // 
+            // btnBlurMatte
+            // 
+            btnBlurMatte.Location = new Point(1305, 115);
+            btnBlurMatte.Margin = new Padding(4, 3, 4, 3);
+            btnBlurMatte.Name = "btnBlurMatte";
+            btnBlurMatte.Size = new Size(75, 27);
+            btnBlurMatte.TabIndex = 763;
+            btnBlurMatte.Text = "BlurMatte";
+            btnBlurMatte.UseVisualStyleBackColor = true;
+            btnBlurMatte.Click += btnBlurMatte_Click;
+            // 
+            // btnBlurResult
+            // 
+            btnBlurResult.Location = new Point(1214, 115);
+            btnBlurResult.Margin = new Padding(4, 3, 4, 3);
+            btnBlurResult.Name = "btnBlurResult";
+            btnBlurResult.Size = new Size(75, 27);
+            btnBlurResult.TabIndex = 764;
+            btnBlurResult.Text = "BlurPic";
+            btnBlurResult.UseVisualStyleBackColor = true;
+            btnBlurResult.Click += btnBlurResult_Click;
+            // 
+            // backgroundWorker3
+            // 
+            backgroundWorker3.WorkerReportsProgress = true;
+            backgroundWorker3.WorkerSupportsCancellation = true;
+            backgroundWorker3.DoWork += backgroundWorker3_DoWork;
+            backgroundWorker3.ProgressChanged += backgroundWorker3_ProgressChanged;
+            backgroundWorker3.RunWorkerCompleted += backgroundWorker3_RunWorkerCompleted;
             // 
             // frnOutlineOperations
             // 
@@ -1043,6 +1164,8 @@
             ((System.ComponentModel.ISupportInitialize)numPenSize).EndInit();
             ((System.ComponentModel.ISupportInitialize)numAlphaZAndGain).EndInit();
             ((System.ComponentModel.ISupportInitialize)numGamma).EndInit();
+            ((System.ComponentModel.ISupportInitialize)numKernel2).EndInit();
+            ((System.ComponentModel.ISupportInitialize)numDistWeight2).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -1128,5 +1251,15 @@
         private NumericUpDown numAlpha;
         private NumericUpDown numPenSize;
         internal Button btnSetAsMatte;
+        private CheckBox cbPicIsMatte;
+        private Label label13;
+        private Label label16;
+        internal NumericUpDown numKernel2;
+        internal NumericUpDown numDistWeight2;
+        internal Panel panel6;
+        internal Panel panel5;
+        private Button btnBlurMatte;
+        private Button btnBlurResult;
+        internal System.ComponentModel.BackgroundWorker backgroundWorker3;
     }
 }

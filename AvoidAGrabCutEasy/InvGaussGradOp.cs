@@ -400,25 +400,32 @@ namespace AvoidAGrabCutEasy
 
             double[] AddValVector = conv.CalculateStandardAddVals(KernelVector, Math.Min(255, b.Width - 1));
 
-            double[] DistanceWeightsF = new double[System.Convert.ToInt32(255 * Math.Sqrt(3)) * 2 - 1 + 1];
+            double[] DistanceWeightsF = new double[System.Convert.ToInt32(255 * Math.Sqrt(3)) * 2];
 
             // Dim Radius2 As Integer = DistanceWeightsF.Length \ 2
             double a2 = -2.0 * Radius2 * Radius2 / Math.Log(steepness2);
             double Sum2 = 0.0;
 
-            for (int x = 0; x < DistanceWeightsF.Length; x++)
-            {
-                double dist = Math.Abs(x - DistanceWeightsF.Length / 2);
-                DistanceWeightsF[x] = Math.Exp(-dist * dist / a2);
-                if (x >= DistanceWeightsF.Length / 2)
-                    Sum2 += DistanceWeightsF[x];
-            }
+            if (Radius2 < 444)
+                for (int x = 0; x < DistanceWeightsF.Length; x++)
+                {
+                    double dist = Math.Abs(x - DistanceWeightsF.Length / 2);
+                    DistanceWeightsF[x] = Math.Exp(-dist * dist / a2);
+                    if (x >= DistanceWeightsF.Length / 2)
+                        Sum2 += DistanceWeightsF[x];
+                }
 
             double[] DistanceWeights = new double[DistanceWeightsF.Length / 2 + 1];
 
             // Dim s2 As Double = 0
             for (int x = DistanceWeightsF.Length / 2; x < DistanceWeightsF.Length; x++)
-                DistanceWeights[x - DistanceWeightsF.Length / 2] = DistanceWeightsF[x] / Sum2;
+            {
+                if (Radius2 == 444)
+                    DistanceWeights[x - DistanceWeightsF.Length / 2] = 1;
+                else
+                    DistanceWeights[x - DistanceWeightsF.Length / 2] = DistanceWeightsF[x]; // / Sum2;
+            }
+
             // MsgBox(s2) 'should be 1
             ProgressEventArgs pe = new ProgressEventArgs(b.Height + b.Width, 20, 1);
 

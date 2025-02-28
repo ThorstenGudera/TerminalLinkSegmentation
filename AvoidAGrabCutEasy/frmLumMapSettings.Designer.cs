@@ -704,12 +704,12 @@
             // 
             numDistWeight.Location = new Point(203, 22);
             numDistWeight.Margin = new Padding(4, 3, 4, 3);
-            numDistWeight.Maximum = new decimal(new int[] { 443, 0, 0, 0 });
+            numDistWeight.Maximum = new decimal(new int[] { 444, 0, 0, 0 });
             numDistWeight.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
             numDistWeight.Name = "numDistWeight";
             numDistWeight.Size = new Size(52, 23);
             numDistWeight.TabIndex = 687;
-            toolTip1.SetToolTip(numDistWeight, "Edge weight for blurring. \r\nIndicates, when to stop blurring.\r\nRange is 0 to 443. Greater values blur more on edges.");
+            toolTip1.SetToolTip(numDistWeight, "max color dist to keep blurring.\r\n\"Edge weight\" - bigger blurs more edges\r\nvalue range from 1 to 443, \r\n444 is blurs without efge test");
             numDistWeight.Value = new decimal(new int[] { 101, 0, 0, 0 });
             // 
             // btnBlur

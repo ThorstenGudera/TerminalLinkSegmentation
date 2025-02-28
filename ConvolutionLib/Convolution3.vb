@@ -6230,4 +6230,500 @@ Partial Public Class Convolution
         Return False
     End Function
 
+    Public Function ConvolveAlphaH_par_SigmaAsDistance(b As Bitmap, Kernel As Double(), AddVals As Double(), DistanceWeights As Double(), Bias As Integer, Sigma As Integer,
+        MaxVal As Integer, SrcOnSigma As Boolean, pe As ProgressEventArgs, bgw As System.ComponentModel.BackgroundWorker, logarithmic As Boolean) As Boolean
+        If Not AvailMem.AvailMem.checkAvailRam(b.Width * b.Height * 44L) Then
+            Throw New OutOfMemoryException("Not enough Memory.")
+        End If
+        If (Kernel.Length And &H1) <> 1 Then
+            Throw New Exception("Kernelrows Length must be Odd.")
+        End If
+        If AddVals.Length <> Kernel.Length Then
+            Throw New Exception("Kernel must be quadratic.")
+        End If
+        If Kernel.Length < 3 Then
+            Throw New Exception("Kernelrows Length must be in the range from 3 to " + MaxVal.ToString() + ".")
+        End If
+        If Kernel.Length > MaxVal Then
+            Throw New Exception("Kernelrows Length must be in the range from 3 to " + MaxVal.ToString() + ".")
+        End If
+
+        Dim h As Integer = Kernel.Length \ 2
+
+        Dim bSrc As Bitmap = Nothing
+        Dim bmData As BitmapData = Nothing
+        Dim bmSrc As BitmapData = Nothing
+
+        Try
+            bSrc = CType(b.Clone(), Bitmap)
+            bmData = b.LockBits(New Rectangle(0, 0, b.Width, b.Height), ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb)
+            bmSrc = bSrc.LockBits(New Rectangle(0, 0, bSrc.Width, bSrc.Height), ImageLockMode.[ReadOnly], PixelFormat.Format32bppArgb)
+            Dim stride As Integer = bmData.Stride
+
+            Dim Scan0 As System.IntPtr = bmData.Scan0
+            Dim SrcScan0 As System.IntPtr = bmSrc.Scan0
+
+            '#Region "Main Body"
+
+            Dim nWidth As Integer = b.Width
+            Dim nHeight As Integer = b.Height
+
+            If Not logarithmic Then
+                Dim p((bmData.Stride * bmData.Height) - 1) As Byte
+                Marshal.Copy(bmData.Scan0, p, 0, p.Length)
+
+                Dim pSrc((bmSrc.Stride * bmSrc.Height) - 1) As Byte
+                Marshal.Copy(bmSrc.Scan0, pSrc, 0, pSrc.Length)
+
+                'For y As Integer = 0 To nHeight - 1
+                Parallel.[For](0, nHeight, Sub(y, loopState)
+                                               Try
+                                                   If bgw IsNot Nothing AndAlso bgw.WorkerSupportsCancellation AndAlso bgw.CancellationPending Then
+                                                       loopState.Break()
+                                                   End If
+
+                                               Catch
+                                               End Try
+                                               Dim pos As Integer = 0
+                                               Dim posSrc As Integer = 0
+
+                                               Dim Sum4 As Double = 0.0, KSum As Double = 0.0
+                                               Dim count4 As Double = 0.0
+                                               Dim z As Double = 1.0 / Kernel.Length
+
+                                               '#Region "First Pixels"
+                                               For l As Integer = 0 To h - 1
+                                                   Sum4 = 0.0
+                                                   KSum = 0.0
+                                                   count4 = 0.0
+
+                                                   Dim ignore As Boolean = False
+
+                                                   pos = y * stride
+                                                   posSrc = y * stride
+
+                                                   Dim c As Integer = h - l, cc As Integer = 0
+                                                   While c < Kernel.Length
+                                                       z = 1.0 / (Kernel.Length - (h - l))
+
+                                                       Dim distance As Double = Math.Sqrt((CInt(pSrc(posSrc + (l * 4))) - CInt(pSrc(posSrc + (cc * 4)))) * (CInt(pSrc(posSrc + (l * 4))) - CInt(pSrc(posSrc + (cc * 4)))) +
+                                                                                          (CInt(pSrc(posSrc + 1 + (l * 4))) - CInt(pSrc(posSrc + 1 + (cc * 4)))) * (CInt(pSrc(posSrc + 1 + (l * 4))) - CInt(pSrc(posSrc + 1 + (cc * 4)))) +
+                                                                                          (CInt(pSrc(posSrc + 2 + (l * 4))) - CInt(pSrc(posSrc + 2 + (cc * 4)))) * (CInt(pSrc(posSrc + 2 + (l * 4))) - CInt(pSrc(posSrc + 2 + (cc * 4)))) +
+                                                                                          (CInt(pSrc(posSrc + 3 + (l * 4))) - CInt(pSrc(posSrc + 3 + (cc * 4)))) * (CInt(pSrc(posSrc + 3 + (l * 4))) - CInt(pSrc(posSrc + 3 + (cc * 4)))))
+
+                                                       Dim d As Integer = Math.Max(Math.Min(CInt(Fix(distance)), DistanceWeights.Length - 1), 0)
+
+                                                       If Not SrcOnSigma OrElse distance <= Sigma * Math.Sqrt(3) Then
+                                                           Sum4 += If((c = h), (CDbl(pSrc(posSrc + 3 + (cc * 4))) * (Kernel(c) + AddVals(l)) * DistanceWeights(d)), (CDbl(pSrc(posSrc + 3 + (cc * 4))) * Kernel(c) * DistanceWeights(d)))
+                                                           count4 += z
+                                                       Else
+                                                           ignore = True
+                                                       End If
+
+                                                       If c = h Then
+                                                           KSum += (Kernel(c) + AddVals(l)) * DistanceWeights(d)
+                                                       Else
+                                                           KSum += Kernel(c) * DistanceWeights(d)
+                                                       End If
+                                                       c += 1
+                                                       cc += 1
+                                                   End While
+
+                                                   If KSum = 0.0 Then
+                                                       KSum = 1.0
+                                                   End If
+                                                   If count4 = 0.0 Then
+                                                       count4 = 1.0
+                                                   End If
+
+                                                   pos += l * 4
+
+                                                   p(pos + 3) = CType(Math.Max(Math.Min(CInt(Math.Max(Math.Min((Sum4 / KSum), Int32.MaxValue), Int32.MinValue) / CDbl(count4)) + Bias, 255), 0), [Byte])
+
+                                                   If SrcOnSigma Then
+                                                       If ignore Then
+                                                           p(pos + 3) = pSrc(posSrc + 3 + (l * 4))
+                                                       End If
+                                                   End If
+                                               Next
+                                               '#End Region
+
+                                               '#Region "Standard"
+                                               z = 1.0 / Kernel.Length
+
+                                               For x As Integer = 0 To nWidth - Kernel.Length
+
+                                                   Sum4 = 0.0
+                                                   KSum = 0.0
+
+                                                   count4 = 0.0
+
+                                                   Dim ignore As Boolean = False
+
+                                                   pos = y * stride + x * 4
+                                                   posSrc = y * stride + x * 4
+
+                                                   For c As Integer = 0 To Kernel.Length - 1
+                                                       Dim distance As Double = Math.Sqrt((CInt(pSrc(posSrc + (h * 4))) - CInt(pSrc(posSrc + (c * 4)))) * (CInt(pSrc(posSrc + (h * 4))) - CInt(pSrc(posSrc + (c * 4)))) + (CInt(pSrc(posSrc + 1 + (h * 4))) - CInt(pSrc(posSrc + 1 + (c * 4)))) * (CInt(pSrc(posSrc + 1 + (h * 4))) - CInt(pSrc(posSrc + 1 + (c * 4)))) + (CInt(pSrc(posSrc + 2 + (h * 4))) - CInt(pSrc(posSrc + 2 + (c * 4)))) * (CInt(pSrc(posSrc + 2 + (h * 4))) - CInt(pSrc(posSrc + 2 + (c * 4)))) + (CInt(pSrc(posSrc + 3 + (h * 4))) - CInt(pSrc(posSrc + 3 + (c * 4)))) * (CInt(pSrc(posSrc + 3 + (h * 4))) - CInt(pSrc(posSrc + 3 + (c * 4)))))
+
+                                                       Dim d As Integer = Math.Max(Math.Min(CInt(Fix(distance)), DistanceWeights.Length - 1), 0)
+
+                                                       If Not SrcOnSigma OrElse distance <= Sigma * Math.Sqrt(3) Then
+                                                           Sum4 += (CDbl(pSrc(posSrc + 3 + (c * 4))) * Kernel(c) * DistanceWeights(d))
+                                                           count4 += z
+                                                       Else
+                                                           ignore = True
+                                                       End If
+
+                                                       KSum += Kernel(c) * DistanceWeights(d)
+                                                   Next
+
+                                                   If KSum = 0.0 Then
+                                                       KSum = 1.0
+                                                   End If
+                                                   If count4 = 0.0 Then
+                                                       count4 = 1.0
+                                                   End If
+
+                                                   pos += h * 4
+                                                   p(pos + 3) = CType(Math.Max(Math.Min(CInt(Math.Max(Math.Min((Sum4 / KSum), Int32.MaxValue), Int32.MinValue) / CDbl(count4)) + Bias, 255), 0), [Byte])
+
+                                                   If SrcOnSigma Then
+                                                       If ignore Then
+                                                           p(pos + 3) = pSrc(posSrc + 3 + (h * 4))
+                                                       End If
+                                                   End If
+                                               Next
+                                               '#End Region
+
+                                               '#Region "Last Pixels"
+                                               For l As Integer = nWidth - Kernel.GetLength(0) + 1 To nWidth - h - 1
+                                                   Sum4 = 0.0
+                                                   KSum = 0.0
+                                                   count4 = 0.0
+
+                                                   Dim ignore As Boolean = False
+
+                                                   pos = (y * stride) + (l * 4)
+                                                   posSrc = (y * stride) + (l * 4)
+
+                                                   Dim c As Integer = 0, cc As Integer = 0
+                                                   While c < nWidth - l
+                                                       z = 1.0 / (nWidth - l)
+
+                                                       Dim distance As Double = Math.Sqrt((CInt(pSrc(posSrc + (h * 4))) - CInt(pSrc(posSrc + (cc * 4)))) * (CInt(pSrc(posSrc + (h * 4))) - CInt(pSrc(posSrc + (cc * 4)))) + (CInt(pSrc(posSrc + 1 + (h * 4))) - CInt(pSrc(posSrc + 1 + (cc * 4)))) * (CInt(pSrc(posSrc + 1 + (h * 4))) - CInt(pSrc(posSrc + 1 + (cc * 4)))) + (CInt(pSrc(posSrc + 2 + (h * 4))) - CInt(pSrc(posSrc + 2 + (cc * 4)))) * (CInt(pSrc(posSrc + 2 + (h * 4))) - CInt(pSrc(posSrc + 2 + (cc * 4)))) + (CInt(pSrc(posSrc + 3 + (h * 4))) - CInt(pSrc(posSrc + 3 + (cc * 4)))) * (CInt(pSrc(posSrc + 3 + (h * 4))) - CInt(pSrc(posSrc + 3 + (cc * 4)))))
+
+                                                       Dim d As Integer = Math.Max(Math.Min(CInt(Fix(distance)), DistanceWeights.Length - 1), 0)
+
+                                                       If Not SrcOnSigma OrElse distance <= Sigma * Math.Sqrt(3) Then
+                                                           Sum4 += If((c = h), (CDbl(pSrc(posSrc + 3 + (cc * 4))) * (Kernel(c) + AddVals(Kernel.Length - (nWidth - l) + h)) * DistanceWeights(d)), (CDbl(pSrc(posSrc + 3 + (cc * 4))) * Kernel(c) * DistanceWeights(d)))
+                                                           count4 += z
+                                                       Else
+                                                           ignore = True
+                                                       End If
+
+                                                       If c = h Then
+                                                           KSum += (Kernel(c) + AddVals(Kernel.Length - (nWidth - l) + h)) * DistanceWeights(d)
+                                                       Else
+                                                           KSum += Kernel(c) * DistanceWeights(d)
+                                                       End If
+                                                       c += 1
+                                                       cc += 1
+                                                   End While
+
+                                                   If KSum = 0.0 Then
+                                                       KSum = 1.0
+                                                   End If
+                                                   If count4 = 0.0 Then
+                                                       count4 = 1.0
+                                                   End If
+
+                                                   pos += h * 4
+                                                   p(pos + 3) = CType(Math.Max(Math.Min(CInt(Math.Max(Math.Min((Sum4 / KSum), Int32.MaxValue), Int32.MinValue) / CDbl(count4)) + Bias, 255), 0), [Byte])
+
+                                                   If SrcOnSigma Then
+                                                       If ignore Then
+                                                           p(pos + 3) = pSrc(posSrc + 3 + (h * 4))
+                                                       End If
+                                                   End If
+                                               Next
+                                               '#End Region
+
+                                               'Dim handler As ProgressPlusEventHandler = Me.ProgressPlus
+                                               'If handler IsNot Nothing Then
+                                               SyncLock Me.lockObject
+                                                   If Not pe Is Nothing Then
+                                                       If pe.ImgWidthHeight < Int32.MaxValue Then
+                                                           pe.CurrentProgress += 1
+                                                       End If
+                                                       Try
+                                                           If CInt(pe.CurrentProgress) Mod pe.PrgInterval = 0 Then
+                                                               RaiseEvent ProgressPlus(Me, pe)
+                                                           End If
+
+                                                       Catch
+                                                       End Try
+                                                   End If
+                                               End SyncLock
+                                               'End If
+
+                                               '#End Region
+                                           End Sub)
+                'Next
+
+                Marshal.Copy(p, 0, bmData.Scan0, p.Length)
+
+                p = Nothing
+                pSrc = Nothing
+            Else
+                Dim p0((bmData.Stride * bmData.Height) - 1) As Byte
+                Dim nL As Integer = p0.Length
+                Marshal.Copy(bmData.Scan0, p0, 0, p0.Length)
+                Dim p((bmData.Stride * bmData.Height) - 1) As Single
+                Parallel.For(0, nL, Sub(i)
+                                        p(i) = CSng(p0(i))
+                                    End Sub)
+                p0 = Nothing
+
+                Dim pSrc0((bmSrc.Stride * bmSrc.Height) - 1) As Byte
+                Dim nLSrc As Integer = pSrc0.Length
+                Marshal.Copy(bmSrc.Scan0, pSrc0, 0, pSrc0.Length)
+                Dim pSrc((bmSrc.Stride * bmSrc.Height) - 1) As Single
+                Parallel.For(0, nLSrc, Sub(i)
+                                           pSrc(i) = CSng(pSrc0(i))
+                                       End Sub)
+                pSrc0 = Nothing
+
+                GetLogImage(p, pSrc)
+
+                Dim f As Double = (255.0 / Math.Log(1 + 255 * Math.Sqrt(2)))
+                Dim Sigma2 As Double = Math.Log(1 + Sigma * Math.Sqrt(3)) * f
+
+                'For y As Integer = 0 To nHeight - 1
+                Parallel.[For](0, nHeight, Sub(y, loopState)
+                                               Try
+                                                   If bgw IsNot Nothing AndAlso bgw.WorkerSupportsCancellation AndAlso bgw.CancellationPending Then
+                                                       loopState.Break()
+                                                   End If
+
+                                               Catch
+                                               End Try
+                                               Dim pos As Integer = 0
+                                               Dim posSrc As Integer = 0
+
+                                               Dim Sum4 As Double = 0.0, KSum As Double = 0.0
+                                               Dim count4 As Double = 0.0
+                                               Dim z As Double = 1.0 / Kernel.Length
+
+                                               '#Region "First Pixels"
+                                               For l As Integer = 0 To h - 1
+                                                   Sum4 = 0.0
+                                                   KSum = 0.0
+                                                   count4 = 0.0
+
+                                                   Dim ignore As Boolean = False
+
+                                                   pos = y * stride
+                                                   posSrc = y * stride
+
+                                                   Dim c As Integer = h - l, cc As Integer = 0
+                                                   While c < Kernel.Length
+                                                       z = 1.0 / (Kernel.Length - (h - l))
+
+                                                       Dim distance As Double = Math.Sqrt((CDbl(pSrc(posSrc + (l * 4))) - CDbl(pSrc(posSrc + (cc * 4)))) * (CDbl(pSrc(posSrc + (l * 4))) - CDbl(pSrc(posSrc + (cc * 4)))) + (CDbl(pSrc(posSrc + 1 + (l * 4))) - CDbl(pSrc(posSrc + 1 + (cc * 4)))) * (CDbl(pSrc(posSrc + 1 + (l * 4))) - CDbl(pSrc(posSrc + 1 + (cc * 4)))) + (CDbl(pSrc(posSrc + 2 + (l * 4))) - CDbl(pSrc(posSrc + 2 + (cc * 4)))) * (CDbl(pSrc(posSrc + 2 + (l * 4))) - CDbl(pSrc(posSrc + 2 + (cc * 4)))) + (CDbl(pSrc(posSrc + 3 + (l * 4))) - CDbl(pSrc(posSrc + 3 + (cc * 4)))) * (CDbl(pSrc(posSrc + 3 + (l * 4))) - CDbl(pSrc(posSrc + 3 + (cc * 4)))))
+
+                                                       Dim d As Integer = Math.Max(Math.Min(CInt(Fix(distance)), DistanceWeights.Length - 1), 0)
+
+                                                       If Not SrcOnSigma OrElse distance <= Sigma2 Then
+                                                           Sum4 += If((c = h), (CDbl(pSrc(posSrc + 3 + (cc * 4))) * (Kernel(c) + AddVals(l)) * DistanceWeights(d)), (CDbl(pSrc(posSrc + 3 + (cc * 4))) * Kernel(c) * DistanceWeights(d)))
+                                                           count4 += z
+                                                       Else
+                                                           ignore = True
+                                                       End If
+
+                                                       If c = h Then
+                                                           KSum += (Kernel(c) + AddVals(l)) * DistanceWeights(d)
+                                                       Else
+                                                           KSum += Kernel(c) * DistanceWeights(d)
+                                                       End If
+                                                       c += 1
+                                                       cc += 1
+                                                   End While
+
+                                                   If KSum = 0.0 Then
+                                                       KSum = 1.0
+                                                   End If
+                                                   If count4 = 0.0 Then
+                                                       count4 = 1.0
+                                                   End If
+
+                                                   pos += l * 4
+                                                   p(pos + 3) = CType((Sum4 / KSum) / CDbl(count4), Single)
+
+                                                   If SrcOnSigma Then
+                                                       If ignore Then
+                                                           p(pos + 3) = pSrc(posSrc + 3 + (l * 4))
+                                                       End If
+                                                   End If
+                                               Next
+                                               '#End Region
+
+                                               '#Region "Standard"
+                                               z = 1.0 / Kernel.Length
+
+                                               For x As Integer = 0 To nWidth - Kernel.Length
+                                                   Sum4 = 0.0
+                                                   KSum = 0.0
+                                                   count4 = 0.0
+
+                                                   Dim ignore As Boolean = False
+
+                                                   pos = y * stride + x * 4
+                                                   posSrc = y * stride + x * 4
+
+                                                   For c As Integer = 0 To Kernel.Length - 1
+                                                       Dim distance As Double = Math.Sqrt((CDbl(pSrc(posSrc + (h * 4))) - CDbl(pSrc(posSrc + (c * 4)))) * (CDbl(pSrc(posSrc + (h * 4))) - CDbl(pSrc(posSrc + (c * 4)))) + (CDbl(pSrc(posSrc + 1 + (h * 4))) - CDbl(pSrc(posSrc + 1 + (c * 4)))) * (CDbl(pSrc(posSrc + 1 + (h * 4))) - CDbl(pSrc(posSrc + 1 + (c * 4)))) + (CDbl(pSrc(posSrc + 2 + (h * 4))) - CDbl(pSrc(posSrc + 2 + (c * 4)))) * (CDbl(pSrc(posSrc + 2 + (h * 4))) - CDbl(pSrc(posSrc + 2 + (c * 4)))) + (CDbl(pSrc(posSrc + 3 + (h * 4))) - CDbl(pSrc(posSrc + 3 + (c * 4)))) * (CDbl(pSrc(posSrc + 3 + (h * 4))) - CDbl(pSrc(posSrc + 3 + (c * 4)))))
+
+                                                       Dim d As Integer = Math.Max(Math.Min(CInt(Fix(distance)), DistanceWeights.Length - 1), 0)
+
+                                                       If Not SrcOnSigma OrElse distance <= Sigma2 Then
+                                                           Sum4 += (CDbl(pSrc(posSrc + 3 + (c * 4))) * Kernel(c) * DistanceWeights(d))
+                                                           count4 += z
+                                                       Else
+                                                           ignore = True
+                                                       End If
+
+                                                       KSum += Kernel(c) * DistanceWeights(d)
+                                                   Next
+
+                                                   If KSum = 0.0 Then
+                                                       KSum = 1.0
+                                                   End If
+                                                   If count4 = 0.0 Then
+                                                       count4 = 1.0
+                                                   End If
+
+                                                   pos += h * 4
+                                                   p(pos + 3) = CType((Sum4 / KSum) / CDbl(count4), Single)
+
+                                                   If SrcOnSigma Then
+                                                       If ignore Then
+                                                           p(pos + 3) = pSrc(posSrc + 3 + (h * 4))
+                                                       End If
+                                                   End If
+                                               Next
+                                               '#End Region
+
+                                               '#Region "Last Pixels"
+                                               For l As Integer = nWidth - Kernel.GetLength(0) + 1 To nWidth - h - 1
+                                                   Sum4 = 0.0
+                                                   KSum = 0.0
+                                                   count4 = 0.0
+
+                                                   Dim ignore As Boolean = False
+
+                                                   pos = (y * stride) + (l * 4)
+                                                   posSrc = (y * stride) + (l * 4)
+
+                                                   Dim c As Integer = 0, cc As Integer = 0
+                                                   While c < nWidth - l
+                                                       z = 1.0 / (nWidth - l)
+
+                                                       Dim distance As Double = Math.Sqrt((CDbl(pSrc(posSrc + (h * 4))) - CDbl(pSrc(posSrc + (cc * 4)))) * (CDbl(pSrc(posSrc + (h * 4))) - CDbl(pSrc(posSrc + (cc * 4)))) + (CDbl(pSrc(posSrc + 1 + (h * 4))) - CDbl(pSrc(posSrc + 1 + (cc * 4)))) * (CDbl(pSrc(posSrc + 1 + (h * 4))) - CDbl(pSrc(posSrc + 1 + (cc * 4)))) + (CDbl(pSrc(posSrc + 2 + (h * 4))) - CDbl(pSrc(posSrc + 2 + (cc * 4)))) * (CDbl(pSrc(posSrc + 2 + (h * 4))) - CDbl(pSrc(posSrc + 2 + (cc * 4)))) + (CDbl(pSrc(posSrc + 3 + (h * 4))) - CDbl(pSrc(posSrc + 3 + (cc * 4)))) * (CDbl(pSrc(posSrc + 3 + (h * 4))) - CDbl(pSrc(posSrc + 3 + (cc * 4)))))
+
+                                                       Dim d As Integer = Math.Max(Math.Min(CInt(Fix(distance)), DistanceWeights.Length - 1), 0)
+
+                                                       If Not SrcOnSigma OrElse distance <= Sigma2 Then
+                                                           Sum4 += If((c = h), (CDbl(pSrc(posSrc + 3 + (cc * 4))) * (Kernel(c) + AddVals(Kernel.Length - (nWidth - l) + h)) * DistanceWeights(d)), (CDbl(pSrc(posSrc + 3 + (cc * 4))) * Kernel(c) * DistanceWeights(d)))
+                                                           count4 += z
+                                                       Else
+                                                           ignore = True
+                                                       End If
+
+                                                       If c = h Then
+                                                           KSum += (Kernel(c) + AddVals(Kernel.Length - (nWidth - l) + h)) * DistanceWeights(d)
+                                                       Else
+                                                           KSum += Kernel(c) * DistanceWeights(d)
+                                                       End If
+                                                       c += 1
+                                                       cc += 1
+                                                   End While
+
+                                                   If KSum = 0.0 Then
+                                                       KSum = 1.0
+                                                   End If
+                                                   If count4 = 0.0 Then
+                                                       count4 = 1.0
+                                                   End If
+
+                                                   pos += h * 4
+                                                   p(pos + 3) = CType((Sum4 / KSum) / CDbl(count4), Single)
+
+                                                   If SrcOnSigma Then
+                                                       If ignore Then
+                                                           p(pos + 3) = pSrc(posSrc + 3 + (h * 4))
+                                                       End If
+                                                   End If
+                                               Next
+                                               '#End Region
+
+                                               'Dim handler As ProgressPlusEventHandler = Me.ProgressPlus
+                                               'If handler IsNot Nothing Then
+                                               SyncLock Me.lockObject
+                                                   If Not pe Is Nothing Then
+                                                       If pe.ImgWidthHeight < Int32.MaxValue Then
+                                                           pe.CurrentProgress += 1
+                                                       End If
+                                                       Try
+                                                           If CInt(pe.CurrentProgress) Mod pe.PrgInterval = 0 Then
+                                                               RaiseEvent ProgressPlus(Me, pe)
+                                                           End If
+
+                                                       Catch
+                                                       End Try
+                                                   End If
+                                               End SyncLock
+                                               'End If
+
+                                               '#End Region
+                                           End Sub)
+                'Next
+
+                pSrc = Nothing
+                Dim p4() As Byte = GetExpImage(p, Bias)
+                p = Nothing
+
+                Marshal.Copy(p4, 0, bmData.Scan0, p4.Length)
+
+                p0 = Nothing
+                pSrc0 = Nothing
+            End If
+
+            b.UnlockBits(bmData)
+            bSrc.UnlockBits(bmSrc)
+            bSrc.Dispose()
+
+            Return True
+        Catch ex As Exception
+            System.Windows.Forms.MessageBox.Show(ex.Message)
+            Try
+                b.UnlockBits(bmData)
+
+            Catch
+            End Try
+
+            Try
+                bSrc.UnlockBits(bmSrc)
+
+            Catch
+            End Try
+
+            If bSrc IsNot Nothing Then
+                bSrc.Dispose()
+                bSrc = Nothing
+            End If
+        End Try
+        Return False
+    End Function
+
 End Class

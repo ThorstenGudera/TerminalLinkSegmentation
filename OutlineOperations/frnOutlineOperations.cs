@@ -1,5 +1,6 @@
 ﻿using Cache;
 using ChainCodeFinder;
+using ConvolutionLib;
 using MorphologicalProcessing2;
 using System;
 using System.Collections.Generic;
@@ -2280,6 +2281,232 @@ namespace OutlineOperations
                 _undoOPCache?.Add(bmp);
 
                 this._pic_changed = true;
+            }
+        }
+
+        private void backgroundWorker3_DoWork(object? sender, DoWorkEventArgs e)
+        {
+            if (e.Argument != null)
+            {
+                object[] o = (object[])e.Argument;
+
+                Bitmap b = (Bitmap)o[0];
+                int krnl = (int)o[1];
+                int maxVal = (int)o[2];
+                bool matte = (bool)o[3];
+                bool btnPic = (bool)o[4];
+
+                DoBlur(b, krnl, maxVal, matte);
+
+                e.Result = new object[] { b, matte, btnPic };
+            }
+        }
+
+        private void DoBlur(Bitmap b, int krnl, int maxVal, bool matte)
+        {
+            Convolution conv = new();
+            conv.ProgressPlus += Conv_ProgressPlus;
+            conv.CancelLoops = false;
+
+            FastZGaussian_Blur_NxN_SigmaAsDistance(b, krnl, 0.01, 255, false, conv, false, 1E-12, maxVal, matte, this.backgroundWorker3);
+            conv.ProgressPlus -= Conv_ProgressPlus;
+        }
+
+        public bool FastZGaussian_Blur_NxN_SigmaAsDistance(Bitmap b, int Length, double Weight, int Sigma,
+            bool SrcOnSigma, Convolution conv, bool logarithmic, double steepness2, int Radius2, bool matte, BackgroundWorker bgw)
+        {
+            int wh = Math.Min(b.Width, b.Height) - 1;
+            if (Length > wh)
+            {
+                Length = wh;
+                if ((Length & 0x1) != 1)
+                    Length -= 1;
+                Console.WriteLine("new length is: " + wh.ToString());
+            }
+            if ((Length & 0x1) != 1)
+                return false;
+
+            double[] KernelVector = new double[Length];
+
+            int Radius = Length / 2;
+
+            double a = -2.0 * Radius * Radius / Math.Log(Weight);
+            double Sum = 0.0;
+
+            for (int x = 0; x < KernelVector.Length; x++)
+            {
+                double dist = Math.Abs(x - Radius);
+                KernelVector[x] = Math.Exp(-dist * dist / a);
+                Sum += KernelVector[x];
+            }
+
+            for (int x = 0; x < KernelVector.Length; x++)
+                KernelVector[x] /= Sum;
+
+            double[] AddValVector = conv.CalculateStandardAddVals(KernelVector, Math.Min(255, b.Width - 1));
+
+            double[] DistanceWeightsF = new double[System.Convert.ToInt32(255 * Math.Sqrt(3)) * 2];
+
+            // Dim Radius2 As Integer = DistanceWeightsF.Length \ 2
+            double a2 = -2.0 * Radius2 * Radius2 / Math.Log(steepness2);
+            double Sum2 = 0.0;
+
+            if (Radius2 < 444)
+                for (int x = 0; x < DistanceWeightsF.Length; x++)
+                {
+                    double dist = Math.Abs(x - DistanceWeightsF.Length / 2);
+                    DistanceWeightsF[x] = Math.Exp(-dist * dist / a2);
+                    if (x >= DistanceWeightsF.Length / 2)
+                        Sum2 += DistanceWeightsF[x];
+                }
+
+            double[] DistanceWeights = new double[DistanceWeightsF.Length / 2 + 1];
+
+            // Dim s2 As Double = 0
+            for (int x = DistanceWeightsF.Length / 2; x < DistanceWeightsF.Length; x++)
+            {
+                if (Radius2 == 444)
+                    DistanceWeights[x - DistanceWeightsF.Length / 2] = 1;
+                else
+                    DistanceWeights[x - DistanceWeightsF.Length / 2] = DistanceWeightsF[x]; // / Sum2;
+            }
+
+            // MsgBox(s2) 'should be 1
+            ProgressEventArgs pe = new ProgressEventArgs(b.Height + b.Width, 20, 1);
+
+            try
+            {
+                if (matte)
+                    conv.ConvolveH_par_SigmaAsDistance(b, KernelVector, AddValVector, DistanceWeights, 0, Sigma, false, Math.Min(255, b.Width - 1), SrcOnSigma, pe, bgw, logarithmic);
+                else
+                    conv.ConvolveAlphaH_par_SigmaAsDistance(b, KernelVector, AddValVector, DistanceWeights, 0, Sigma, Math.Min(255, b.Width - 1), SrcOnSigma, pe, bgw, logarithmic);
+
+                b.RotateFlip(RotateFlipType.Rotate270FlipNone);
+
+                if (matte)
+                    conv.ConvolveH_par_SigmaAsDistance(b, KernelVector, AddValVector, DistanceWeights, 0, Sigma, false, Math.Min(255, b.Width - 1), SrcOnSigma, pe, bgw, logarithmic);
+                else
+                    conv.ConvolveAlphaH_par_SigmaAsDistance(b, KernelVector, AddValVector, DistanceWeights, 0, Sigma, Math.Min(255, b.Width - 1), SrcOnSigma, pe, bgw, logarithmic);
+
+                b.RotateFlip(RotateFlipType.Rotate90FlipNone);
+            }
+            catch (Exception exc)
+            {
+                MessageBox.Show(exc.ToString());
+                return false;
+            }
+
+            return true;
+        }
+
+        private void Conv_ProgressPlus(object sender, ProgressEventArgs e)
+        {
+            this.backgroundWorker3.ReportProgress((int)e.CurrentProgress);
+        }
+
+        private void backgroundWorker3_ProgressChanged(object? sender, ProgressChangedEventArgs e)
+        {
+            if (e.ProgressPercentage <= this.toolStripProgressBar1.Maximum)
+                this.toolStripProgressBar1.Value = e.ProgressPercentage;
+        }
+
+        private void backgroundWorker3_RunWorkerCompleted(object? sender, RunWorkerCompletedEventArgs e)
+        {
+            if (e.Result != null)
+            {
+                object[] o = (object[])e.Result;
+                Bitmap bmp = (Bitmap)o[0];
+                bool matte = (bool)o[1];
+                bool btnPic = (bool)o[2];
+
+                if (bmp != null)
+                {
+                    if (matte && !btnPic)
+                    {
+                        this.SetBitmap(ref this._bmpMatte, ref bmp);
+                        this.pictureBox1.Image = this._bmpMatte;
+                        this.pictureBox1.Refresh();
+                    }
+                    else
+                    {
+                        this.SetBitmap(this.helplineRulerCtrl1.Bmp, bmp, this.helplineRulerCtrl1, "Bmp");
+
+                        //Bitmap bC = new Bitmap(bmp);
+                        //this.SetBitmap(ref _bmpRef, ref bC);
+
+                        this.helplineRulerCtrl1.Zoom = this.helplineRulerCtrl1.Zoom;
+                        this.helplineRulerCtrl1.SetZoom(this.helplineRulerCtrl1.Zoom.ToString());
+                        this.helplineRulerCtrl1.MakeBitmap(this.helplineRulerCtrl1.Bmp);
+                        this.helplineRulerCtrl1.dbPanel1.AutoScrollMinSize = new Size(
+                            (int)(this.helplineRulerCtrl1.Bmp.Width * this.helplineRulerCtrl1.Zoom),
+                            (int)(this.helplineRulerCtrl1.Bmp.Height * this.helplineRulerCtrl1.Zoom));
+
+                        this.helplineRulerCtrl1.dbPanel1.Invalidate();
+                    }
+
+                    _undoOPCache?.Add(bmp);
+                    this._pic_changed = true;
+                    this.toolStripProgressBar1.Value = 0;
+
+                    this.btnUndo.Enabled = true;
+                    this.CheckRedoButton();
+                }
+
+                this.backgroundWorker3.Dispose();
+                this.backgroundWorker3 = new BackgroundWorker();
+                this.backgroundWorker3.WorkerReportsProgress = true;
+                this.backgroundWorker3.WorkerSupportsCancellation = true;
+                this.backgroundWorker3.DoWork += backgroundWorker3_DoWork;
+                this.backgroundWorker3.ProgressChanged += backgroundWorker3_ProgressChanged;
+                this.backgroundWorker3.RunWorkerCompleted += backgroundWorker3_RunWorkerCompleted;
+            }
+        }
+
+        private void btnBlurResult_Click(object sender, EventArgs e)
+        {
+            if (this.backgroundWorker3.IsBusy)
+            {
+                this.backgroundWorker3.CancelAsync();
+                return;
+            }
+
+            if (this.helplineRulerCtrl1.Bmp != null)
+            {
+                this.toolStripProgressBar1.Value = 0;
+                this.toolStripProgressBar1.Visible = true;
+
+                Bitmap b = new Bitmap(this.helplineRulerCtrl1.Bmp);
+
+                int krnl = (int)this.numKernel2.Value;
+                int maxVal = (int)this.numDistWeight2.Value;
+
+                object[] o = { b, krnl, maxVal, this.cbPicIsMatte.Checked ? true : false, true };
+
+                this.backgroundWorker3.RunWorkerAsync(o);
+            }
+        }
+
+        private void btnBlurMatte_Click(object sender, EventArgs e)
+        {
+            if (this.backgroundWorker3.IsBusy)
+            {
+                this.backgroundWorker3.CancelAsync();
+                return;
+            }
+
+            if (this._bmpMatte != null)
+            {
+                this.toolStripProgressBar1.Value = 0;
+                this.toolStripProgressBar1.Visible = true;
+
+                Bitmap b = new Bitmap(this._bmpMatte);
+
+                int krnl = (int)this.numKernel2.Value;
+                int maxVal = (int)this.numDistWeight2.Value;
+
+                object[] o = { b, krnl, maxVal, true, false };
+
+                this.backgroundWorker3.RunWorkerAsync(o);
             }
         }
     }
