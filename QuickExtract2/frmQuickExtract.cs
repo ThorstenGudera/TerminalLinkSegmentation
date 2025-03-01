@@ -3128,7 +3128,7 @@ namespace QuickExtract2
             if (this.quickExtractingCtrl1.CurPath != null)
                 if (this.quickExtractingCtrl1.CheckPaths(this.quickExtractingCtrl1.CurPath) == false)
                 {
-                    if (this.quickExtractingCtrl1.cbSmooth == null)
+                    if (this.quickExtractingCtrl1.PathList == null)
                         this.quickExtractingCtrl1.PathList = new List<List<List<PointF>>>();
                     this.quickExtractingCtrl1.PathList?.Add(this.quickExtractingCtrl1.ClonePath(this.quickExtractingCtrl1.CurPath));
                     this.quickExtractingCtrl1.btnSavedPaths.Enabled = true;
