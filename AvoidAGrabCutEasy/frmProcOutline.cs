@@ -4105,9 +4105,12 @@ namespace AvoidAGrabCutEasy
 
         private void pictureBox1_DoubleClick(object sender, EventArgs e)
         {
-            frmEdgePic frm4 = new frmEdgePic(this.pictureBox1.Image, this.helplineRulerCtrl1.Bmp.Size);
-            frm4.Text = "Orig";
-            frm4.ShowDialog();
+            if (this.pictureBox1.Image != null)
+            {
+                frmEdgePic frm4 = new frmEdgePic(this.pictureBox1.Image, this.helplineRulerCtrl1.Bmp.Size);
+                frm4.Text = "Orig";
+                frm4.ShowDialog();
+            }
         }
 
         private void btnUndo_Click(object sender, EventArgs e)

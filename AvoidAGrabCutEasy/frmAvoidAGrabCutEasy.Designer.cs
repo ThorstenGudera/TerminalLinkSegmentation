@@ -937,7 +937,7 @@
             btnMinCut.Location = new Point(132, 98);
             btnMinCut.Margin = new Padding(4, 3, 4, 3);
             btnMinCut.Name = "btnMinCut";
-            btnMinCut.Size = new Size(50, 23);
+            btnMinCut.Size = new Size(60, 23);
             btnMinCut.TabIndex = 663;
             btnMinCut.Text = "Go";
             btnMinCut.UseVisualStyleBackColor = true;

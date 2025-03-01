@@ -1495,6 +1495,33 @@ namespace OutlineOperations
                 this._pic_changed = true;
 
                 this.btnMask.Enabled = true;
+
+                if (MessageBox.Show("Also load to HLC1?", "", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) == DialogResult.Yes &&
+                    this._bmpOrig != null)
+                {
+                    Bitmap? bC = new Bitmap(this._bmpOrig);
+
+                    this.SetBitmap(this.helplineRulerCtrl1.Bmp, bC, this.helplineRulerCtrl1, "Bmp");
+                    this._pic_changed = true;
+                    this.helplineRulerCtrl1.MakeBitmap(this.helplineRulerCtrl1.Bmp);
+
+                    this.helplineRulerCtrl1.dbPanel1.AutoScrollMinSize = new Size(System.Convert.ToInt32(this.helplineRulerCtrl1.Bmp.Width * this.helplineRulerCtrl1.Zoom), System.Convert.ToInt32(this.helplineRulerCtrl1.Bmp.Height * this.helplineRulerCtrl1.Zoom));
+                    _undoOPCache?.Add(bC);
+
+                    if (_undoOPCache?.CurrentPosition > 1)
+                    {
+                        this.btnUndo.Enabled = true;
+                    }
+                    else
+                        this.btnUndo.Enabled = false;
+
+                    if (_undoOPCache?.CurrentPosition < _undoOPCache?.Count)
+                        this.btnRedo.Enabled = true;
+                    else
+                        this.btnRedo.Enabled = false;
+
+                    this.helplineRulerCtrl1.dbPanel1.Invalidate();
+                }
             }
         }
 

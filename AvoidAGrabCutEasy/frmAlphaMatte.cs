@@ -3599,9 +3599,12 @@ namespace AvoidAGrabCutEasy
 
         private void pictureBox1_DoubleClick(object sender, EventArgs e)
         {
-            GetAlphaMatte.frmEdgePic frm4 = new GetAlphaMatte.frmEdgePic(this.pictureBox1.Image, this.helplineRulerCtrl1.Bmp.Size);
-            frm4.Text = "Trimap";
-            frm4.ShowDialog();
+            if (this.pictureBox1.Image != null)
+            {
+                GetAlphaMatte.frmEdgePic frm4 = new GetAlphaMatte.frmEdgePic(this.pictureBox1.Image, this.helplineRulerCtrl1.Bmp.Size);
+                frm4.Text = "Trimap";
+                frm4.ShowDialog();
+            }
         }
 
         private void btnCMNew_Click(object sender, EventArgs e)
