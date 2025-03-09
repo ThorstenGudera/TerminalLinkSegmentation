@@ -141,6 +141,8 @@ namespace AvoidAGrabCutEasy
         private List<(int, int)>? _bgRelatedPointsAdded;
         private List<ChainCode>? _removedChains;
         private bool _dontAskOnClosing;
+        private bool _lumMapRunning;
+        private LuminancMapOp? _lop;
 
         public event EventHandler<string>? ShowInfo;
         //public event EventHandler<string> BoundaryError;
@@ -1614,8 +1616,8 @@ namespace AvoidAGrabCutEasy
 
             if (this.helplineRulerCtrl1.Bmp != null)
             {
+                this.timer2.Start();
                 this.numMaxSize.Value = (decimal)Math.Max(this.helplineRulerCtrl1.Bmp.Width, this.helplineRulerCtrl1.Bmp.Height);
-                btnCmpLMap_Click(this.btnCmpLMap, new EventArgs());
             }
 
             this.btnOK.Enabled = true;
@@ -5653,14 +5655,16 @@ namespace AvoidAGrabCutEasy
 
         private async void btnCmpLMap_Click(object sender, EventArgs e)
         {
-            if (this._bmpBU != null)
+            if (this._bmpBU != null && this.cbCompLumMap.Checked)
             {
+                this._lumMapRunning = true;
                 this.lblLumMap.Text = "computing...";
                 this.btnGo.Enabled = this.btnGetOutline.Enabled = false;
                 this.btnGo.Refresh();
                 this.toolStripProgressBar1.Value = 0;
                 this.toolStripProgressBar1.Visible = true;
                 LuminancMapOp lop = new LuminancMapOp();
+                this._lop = lop;
                 lop.ProgressPlus += lop_ProgressPlus;
                 using Bitmap bmp = new Bitmap(this._bmpBU);
                 float[,]? lMap = await lop.ComputeInvLuminanceMap(bmp);
@@ -5670,6 +5674,9 @@ namespace AvoidAGrabCutEasy
                 this.lblLumMap.Text = "done";
                 this.toolStripProgressBar1.Value = this.toolStripProgressBar1.Maximum;
                 this.toolStripProgressBar1.Visible = false;
+                this._lumMapRunning = false;
+                lop.Running = false;
+                this._lop = null;
             }
         }
 
@@ -6135,6 +6142,21 @@ namespace AvoidAGrabCutEasy
                 return true;
 
             return false;
+        }
+
+        private void timer2_Tick(object sender, EventArgs e)
+        {
+            this.timer2.Stop();
+            if (!this._lumMapRunning)
+                btnCmpLMap_Click(this.btnCmpLMap, new EventArgs());
+        }
+
+        private void cbCompLumMap_CheckedChanged(object sender, EventArgs e)
+        {
+            if (!this.cbCompLumMap.Checked)
+                this._lumMapRunning = false;
+            if (this._lop != null && !this.cbCompLumMap.Checked)
+                this._lop.Running = false;
         }
     }
 }

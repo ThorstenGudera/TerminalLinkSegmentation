@@ -14,6 +14,7 @@ namespace AvoidAGrabCutEasy
     {
         public event EventHandler<ConvolutionLib.ProgressEventArgs>? ProgressPlus;
         public float[,]? IGGLuminanceMap { get; internal set; }
+        public bool Running { get; internal set; }
 
         public LuminancMapOp() { }
 
@@ -21,123 +22,151 @@ namespace AvoidAGrabCutEasy
         {
             float[,]? result = await Task.Run(() =>
             {
-                float[,]? result = new float[bmp.Width, bmp.Height];
-                using Bitmap b = new Bitmap(bmp);
-
-                //1 blur
-                int krnl = 127;
-                int maxVal = 101;
-
-                Convolution conv = new();
-                conv.ProgressPlus += Conv_ProgressPlus;
-                conv.CancelLoops = false;
-
-                InvGaussGradOp igg = new InvGaussGradOp();
-                igg.BGW = null;
-
-                igg.FastZGaussian_Blur_NxN_SigmaAsDistance(b, krnl, 0.01, 255, false, false, conv, false, 1E-12, maxVal);
-
-                //2 igg
-                int kernelLength = 27;
-                double cornerWeight = 0.01;
-                int sigma = 255;
-                double steepness = 1E-12;
-                int radius = 340;
-                double alpha = (double)101 * 255.0;
-                GradientMode gradientMode = GradientMode.Scharr16;
-                double divisor = 8.0;
-                //bool grayscale = false;
-                bool stretchValues = true;
-                int threshold = 127;  
-                bool invGaussGrad = true;
-                int pBKrnl = invGaussGrad ? 7 : 15;
-                int kernelLengthMorph = 15;
-
-                Rectangle r = new Rectangle(0, 0, bmp.Width, bmp.Height);
-
-                if (r.Width > 0 && r.Height > 0)
+                if (!this.Running)
                 {
-                    //Bitmap? iG = igg.Inv_InvGaussGrad(b, alpha, gradientMode, divisor, kernelLength, cornerWeight,
-                    //    sigma, steepness, radius, stretchValues, threshold);
+                    this.Running = true;
+                    float[,]? result = new float[bmp.Width, bmp.Height];
+                    using Bitmap b = new Bitmap(bmp);
 
-                    Bitmap? iG = null;
+                    //1 blur
+                    int krnl = 127;
+                    int maxVal = 101;
 
-                    if (invGaussGrad)
+                    Convolution conv = new();
+                    conv.ProgressPlus += Conv_ProgressPlus;
+                    conv.CancelLoops = false;
+
+                    InvGaussGradOp igg = new InvGaussGradOp();
+                    igg.BGW = null;
+
+                    igg.FastZGaussian_Blur_NxN_SigmaAsDistance(b, krnl, 0.01, 255, false, false, conv, false, 1E-12, maxVal);
+
+                    if (!this.Running)
                     {
-                        iG = igg.Inv_InvGaussGrad(b, alpha, gradientMode, divisor, kernelLength, cornerWeight,
-                                sigma, steepness, radius, stretchValues, threshold);
-                    }
-                    else
-                    {
-                        Grayscale(b);
-
-                        using Bitmap bCopy1 = new Bitmap(b);
-                        using Bitmap bCopy2 = new Bitmap(b);
-
-                        MorphologicalProcessing2.IMorphologicalOperation alg = new MorphologicalProcessing2.Algorithms.Dilate();
-                        alg.BGW = null;
-                        alg.SetupEx(kernelLengthMorph, kernelLengthMorph);
-                        alg.ApplyGrayscale(bCopy1);
-                        alg.Dispose();
-
-                        alg = new MorphologicalProcessing2.Algorithms.Erode();
-                        alg.BGW = null;
-                        alg.SetupEx(kernelLengthMorph, kernelLengthMorph);
-                        alg.ApplyGrayscale(bCopy2);
-                        alg.Dispose();
-
-                        Bitmap bOut = new Bitmap(bCopy1.Width, bCopy1.Height);
-                        Subtract(bCopy1, bCopy2, bOut);
-
-                        iG = bOut;
+                        if (b != null)
+                            b.Dispose();
+                        return null;
                     }
 
-                    if (iG != null && AvailMem.AvailMem.checkAvailRam(bmp.Width * bmp.Height * 12L))
+                    //2 igg
+                    int kernelLength = 27;
+                    double cornerWeight = 0.01;
+                    int sigma = 255;
+                    double steepness = 1E-12;
+                    int radius = 340;
+                    double alpha = (double)101 * 255.0;
+                    GradientMode gradientMode = GradientMode.Scharr16;
+                    double divisor = 8.0;
+                    //bool grayscale = false;
+                    bool stretchValues = true;
+                    int threshold = 127;
+                    bool invGaussGrad = true;
+                    int pBKrnl = invGaussGrad ? 7 : 15;
+                    int kernelLengthMorph = 15;
+
+                    Rectangle r = new Rectangle(0, 0, bmp.Width, bmp.Height);
+
+                    if (r.Width > 0 && r.Height > 0)
                     {
-                        //3 PostBlur
-                        try
+                        //Bitmap? iG = igg.Inv_InvGaussGrad(b, alpha, gradientMode, divisor, kernelLength, cornerWeight,
+                        //    sigma, steepness, radius, stretchValues, threshold);
+
+                        Bitmap? iG = null;
+
+                        if (invGaussGrad)
                         {
-                            igg.FastZGaussian_Blur_NxN_SigmaAsDistance(iG, pBKrnl, 0.01,
-                                            255, true, true, false, conv);
+                            iG = igg.Inv_InvGaussGrad(b, alpha, gradientMode, divisor, kernelLength, cornerWeight,
+                                    sigma, steepness, radius, stretchValues, threshold);
+                        }
+                        else
+                        {
+                            Grayscale(b);
 
-                            unsafe
+                            using Bitmap bCopy1 = new Bitmap(b);
+                            using Bitmap bCopy2 = new Bitmap(b);
+
+                            MorphologicalProcessing2.IMorphologicalOperation alg = new MorphologicalProcessing2.Algorithms.Dilate();
+                            alg.BGW = null;
+                            alg.SetupEx(kernelLengthMorph, kernelLengthMorph);
+                            alg.ApplyGrayscale(bCopy1);
+                            alg.Dispose();
+
+                            alg = new MorphologicalProcessing2.Algorithms.Erode();
+                            alg.BGW = null;
+                            alg.SetupEx(kernelLengthMorph, kernelLengthMorph);
+                            alg.ApplyGrayscale(bCopy2);
+                            alg.Dispose();
+
+                            Bitmap bOut = new Bitmap(bCopy1.Width, bCopy1.Height);
+                            Subtract(bCopy1, bCopy2, bOut);
+
+                            iG = bOut;
+                        }
+
+                        if (!this.Running)
+                        {
+                            if (b != null)
+                                b.Dispose();
+                            if (iG != null)
+                                iG.Dispose();
+                            return null;
+                        }
+
+                        if (iG != null && AvailMem.AvailMem.checkAvailRam(bmp.Width * bmp.Height * 12L))
+                        {
+                            //3 PostBlur
+                            try
                             {
-                                int w = bmp.Width;
-                                int h = bmp.Height;
-                                BitmapData bmD = iG.LockBits(new Rectangle(0, 0, w, h), ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
-                                int stride = bmD.Stride;
+                                igg.FastZGaussian_Blur_NxN_SigmaAsDistance(iG, pBKrnl, 0.01,
+                                                255, true, true, false, conv);
 
-                                Parallel.For(0, h, y =>
+                                if (!this.Running)
+                                    return null;
+
+                                unsafe
                                 {
-                                    byte* p = (byte*)bmD.Scan0;
-                                    p += y * stride;
+                                    int w = bmp.Width;
+                                    int h = bmp.Height;
+                                    BitmapData bmD = iG.LockBits(new Rectangle(0, 0, w, h), ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
+                                    int stride = bmD.Stride;
 
-                                    for (int x = 0; x < w; x++)
+                                    Parallel.For(0, h, (y, loopState) =>
                                     {
-                                        Color c = Color.FromArgb(255, p[2], p[1], p[0]);
-                                        result[x, y] = 1.0f - c.GetBrightness();
-                                        p += 4;
-                                    }
-                                });
+                                        byte* p = (byte*)bmD.Scan0;
+                                        p += y * stride;
 
-                                iG.UnlockBits(bmD);
+                                        if (!this.Running)
+                                            loopState.Break();
+
+                                        for (int x = 0; x < w; x++)
+                                        {
+                                            Color c = Color.FromArgb(255, p[2], p[1], p[0]);
+                                            result[x, y] = 1.0f - c.GetBrightness();
+                                            p += 4;
+                                        }
+                                    });
+
+                                    iG.UnlockBits(bmD);
+                                }
+                            }
+                            catch (Exception exc)
+                            {
+                                MessageBox.Show(exc.ToString());
                             }
                         }
-                        catch (Exception exc)
-                        {
-                            MessageBox.Show(exc.ToString());
-                        }
+                        else
+                            MessageBox.Show("Not enough Memory.");
                     }
-                    else
-                        MessageBox.Show("Not enough Memory.");
+
+                    conv.ProgressPlus -= Conv_ProgressPlus;
+
+                    return result;
                 }
 
-                conv.ProgressPlus -= Conv_ProgressPlus;
-
-                return result;
+                return null;
             });
 
-            return result;
+            return null;
         }
 
         public float[,]? ComputeInvLuminanceMapSync(Bitmap bmp)

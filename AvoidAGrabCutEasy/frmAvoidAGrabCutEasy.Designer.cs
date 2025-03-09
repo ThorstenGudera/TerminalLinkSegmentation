@@ -157,6 +157,7 @@
             floodFGToolStripMenuItem = new ToolStripMenuItem();
             timer1 = new System.Windows.Forms.Timer(components);
             backgroundWorker4 = new System.ComponentModel.BackgroundWorker();
+            timer2 = new System.Windows.Forms.Timer(components);
             panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numComponents2).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numWH).BeginInit();
@@ -492,6 +493,7 @@
             cbCompLumMap.TabIndex = 733;
             cbCompLumMap.Text = "use LumMap";
             cbCompLumMap.UseVisualStyleBackColor = true;
+            cbCompLumMap.CheckedChanged += cbCompLumMap_CheckedChanged;
             // 
             // btnCmpLMap
             // 
@@ -1644,6 +1646,11 @@
             backgroundWorker4.ProgressChanged += backgroundWorker4_ProgressChanged;
             backgroundWorker4.RunWorkerCompleted += backgroundWorker4_RunWorkerCompleted;
             // 
+            // timer2
+            // 
+            timer2.Interval = 5000;
+            timer2.Tick += timer2_Tick;
+            // 
             // frmAvoidAGrabCutEasy
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -1813,5 +1820,6 @@
         private Panel panel2;
         private Panel panel5;
         private Panel panel9;
+        internal System.Windows.Forms.Timer timer2;
     }
 }
