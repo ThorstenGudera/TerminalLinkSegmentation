@@ -6154,7 +6154,10 @@ namespace AvoidAGrabCutEasy
         private void cbCompLumMap_CheckedChanged(object sender, EventArgs e)
         {
             if (!this.cbCompLumMap.Checked)
+            {
                 this._lumMapRunning = false;
+                this.btnGo.Enabled = this.btnGetOutline.Enabled = true;
+            }
             if (this._lop != null && !this.cbCompLumMap.Checked)
                 this._lop.Running = false;
         }
