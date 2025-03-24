@@ -45,6 +45,7 @@ namespace QuickExtractingLib2
             bool isEdge = false;
 
             byte* p = (byte*)bmpDataForValueComputation.Scan0;
+            int length = stride * bmpDataForValueComputation.Height;
 
             //testing...
             double colVal = 1.0;
@@ -71,12 +72,12 @@ namespace QuickExtractingLib2
 
             double fL = 1d;
 
-            if (useProcNeighbor)
+            if (useProcNeighbor && p[neighbor + 3] < length)
                 fL = procNeighbor &&
                 ((p[address + 3] > laplaceUpperThreshold && p[neighbor + 3] < laplaceLowerThreshold) ||
                  (p[address + 3] < laplaceLowerThreshold && p[neighbor + 3] > laplaceUpperThreshold)) &&
                  Math.Abs(p[neighbor + 3] - 127) < Math.Abs(p[address + 3] - 127) ? 0 : 1;
-            else
+            else if (p[neighbor + 3] < length)
                 fL = ((p[address + 3] > laplaceUpperThreshold && p[neighbor + 3] < laplaceLowerThreshold) ||
                  (p[address + 3] < laplaceLowerThreshold && p[neighbor + 3] > laplaceUpperThreshold)) ? 0 : 1;
 
