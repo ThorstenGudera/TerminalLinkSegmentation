@@ -4438,7 +4438,7 @@ namespace AvoidAGrabCutEasy
 
         private async void CmpLMap()
         {
-            if (this.helplineRulerCtrl1.Bmp != null)
+            if (this.helplineRulerCtrl1.Bmp != null && !this._lumMapRunning)
             {
                 this._lumMapRunning = true;
                 this.lblLumMap.Text = "computing...";
@@ -5662,7 +5662,7 @@ namespace AvoidAGrabCutEasy
 
         private async void btnCmpLMap_Click(object sender, EventArgs e)
         {
-            if (this._bmpBU != null && this.cbCompLumMap.Checked)
+            if (this._bmpBU != null && this.cbCompLumMap.Checked && !this._lumMapRunning)
             {
                 this._lumMapRunning = true;
                 this.lblLumMap.Text = "computing...";
