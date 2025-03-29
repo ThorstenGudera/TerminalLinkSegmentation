@@ -2118,6 +2118,11 @@ namespace AvoidAGrabCutEasy
                 //method for conputing the gradient pic may change.
                 if (this._gc.UseLumMap)
                 {
+                    if (this._lumMapRunning)
+                    {
+                        while (this._lumMapRunning)
+                            Thread.Sleep(1000);
+                    }
                     if (this._iggLuminanceMap != null || (this._iggLuminanceMap2 != null && this._useLumMapBasePic))
                     {
                         this._gc.IGGLuminanceMap = (this._useLumMapBasePic && this._iggLuminanceMap2 != null) ? this._iggLuminanceMap2 : this._iggLuminanceMap;
@@ -4435,6 +4440,7 @@ namespace AvoidAGrabCutEasy
         {
             if (this.helplineRulerCtrl1.Bmp != null)
             {
+                this._lumMapRunning = true;
                 this.lblLumMap.Text = "computing...";
                 this.btnGo.Enabled = this.btnGetOutline.Enabled = false;
                 this.btnGo.Refresh();
@@ -4450,6 +4456,7 @@ namespace AvoidAGrabCutEasy
                 this.lblLumMap.Text = "done";
                 this.toolStripProgressBar1.Value = this.toolStripProgressBar1.Maximum;
                 this.toolStripProgressBar1.Visible = false;
+                this._lumMapRunning = false;
             }
         }
 

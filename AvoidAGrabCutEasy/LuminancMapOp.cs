@@ -166,7 +166,7 @@ namespace AvoidAGrabCutEasy
                 return null;
             });
 
-            return null;
+            return result;
         }
 
         public float[,]? ComputeInvLuminanceMapSync(Bitmap bmp)
