@@ -10,13 +10,13 @@ using System.Threading.Tasks;
 
 namespace AvoidAGrabCutEasy
 {
-    public class LuminancMapOp
+    public class LuminanceMapOp
     {
         public event EventHandler<ConvolutionLib.ProgressEventArgs>? ProgressPlus;
         public float[,]? IGGLuminanceMap { get; internal set; }
         public bool Running { get; internal set; }
 
-        public LuminancMapOp() { }
+        public LuminanceMapOp() { }
 
         public async Task<float[,]?> ComputeInvLuminanceMap(Bitmap bmp)
         {

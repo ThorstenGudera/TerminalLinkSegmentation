@@ -142,7 +142,7 @@ namespace AvoidAGrabCutEasy
         private List<ChainCode>? _removedChains;
         private bool _dontAskOnClosing;
         private bool _lumMapRunning;
-        private LuminancMapOp? _lop;
+        private LuminanceMapOp? _lop;
 
         public event EventHandler<string>? ShowInfo;
         //public event EventHandler<string> BoundaryError;
@@ -2137,7 +2137,7 @@ namespace AvoidAGrabCutEasy
                                 this.toolStripStatusLabel4.Text = "Computing LumMap";
                                 this.lblLumMap.Text = "computing...";
                             }));
-                            LuminancMapOp lop = new LuminancMapOp();
+                            LuminanceMapOp lop = new LuminanceMapOp();
                             lop.ProgressPlus += lop_ProgressPlus;
                             using Bitmap bmp = new Bitmap(this._bmpBU);
                             float[,]? lMap = lop.ComputeInvLuminanceMapSync(bmp);
@@ -2474,6 +2474,8 @@ namespace AvoidAGrabCutEasy
                 Bitmap bC = new Bitmap(this.helplineRulerCtrl2.Bmp);
                 this.SetBitmap(ref this._b4Copy, ref bC);
                 this.toolStripDropDownButton1.Enabled = true;
+
+                this.cbCompLumMap.Checked = false;
 
                 //Bitmap bC2 = new Bitmap(this.helplineRulerCtrl1.Bmp);
                 //this.SetBitmap(ref this._bmpBU, ref bC2);
@@ -4446,7 +4448,7 @@ namespace AvoidAGrabCutEasy
                 this.btnGo.Refresh();
                 this.toolStripProgressBar1.Value = 0;
                 this.toolStripProgressBar1.Visible = true;
-                LuminancMapOp lop = new LuminancMapOp();
+                LuminanceMapOp lop = new LuminanceMapOp();
                 lop.ProgressPlus += lop_ProgressPlus;
                 using Bitmap bmp = new Bitmap(this.helplineRulerCtrl1.Bmp);
                 float[,]? lMap = await lop.ComputeInvLuminanceMap(bmp);
@@ -5670,7 +5672,7 @@ namespace AvoidAGrabCutEasy
                 this.btnGo.Refresh();
                 this.toolStripProgressBar1.Value = 0;
                 this.toolStripProgressBar1.Visible = true;
-                LuminancMapOp lop = new LuminancMapOp();
+                LuminanceMapOp lop = new LuminanceMapOp();
                 this._lop = lop;
                 lop.ProgressPlus += lop_ProgressPlus;
                 using Bitmap bmp = new Bitmap(this._bmpBU);
@@ -5716,7 +5718,7 @@ namespace AvoidAGrabCutEasy
                         if (frm.FBitmap != null && !frm.cbAppSettingsOnly.Checked)
                         {
                             using Bitmap? bmp = new Bitmap(frm.FBitmap);
-                            this._iggLuminanceMap2 = LuminancMapOp.ComputeLuminanceMapFromPicSync(bmp);
+                            this._iggLuminanceMap2 = LuminanceMapOp.ComputeLuminanceMapFromPicSync(bmp);
 
                             this.cbUseLumMapBasePic.Enabled = true;
                         }

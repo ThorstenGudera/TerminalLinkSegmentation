@@ -485,8 +485,6 @@
             // cbCompLumMap
             // 
             cbCompLumMap.AutoSize = true;
-            cbCompLumMap.Checked = true;
-            cbCompLumMap.CheckState = CheckState.Checked;
             cbCompLumMap.Location = new Point(622, 93);
             cbCompLumMap.Name = "cbCompLumMap";
             cbCompLumMap.Size = new Size(95, 19);
