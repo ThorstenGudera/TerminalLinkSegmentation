@@ -1,10 +1,9 @@
-﻿using Cache;
+﻿using AvoidAGrabCutEasy.ProcOutline;
+using Cache;
 using ChainCodeFinder;
 using ConvolutionLib;
-using MorphologicalProcessing2.Algorithms;
 using SegmentsListLib;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -251,12 +250,14 @@ namespace AvoidAGrabCutEasy
                 }
             }
         }
+
         public void SetupCache()
         {
             _undoOPCache = new Cache.UndoOPCache(this.GetType(), CachePathAddition, "frmLumMapSet");
             if (this.helplineRulerCtrl1.Bmp != null)
                 _undoOPCache.Add(this.helplineRulerCtrl1.Bmp);
         }
+
         private void cbAuto_CheckedChanged(object sender, EventArgs e)
         {
             this.numThMultiplier.Enabled = this.label6.Enabled = !cbAuto.Checked;
@@ -488,7 +489,7 @@ namespace AvoidAGrabCutEasy
             }
         }
 
-        private void SetBitmap(ref Bitmap? bitmapToSet, ref Bitmap bitmapToBeSet)
+        private void SetBitmap(ref Bitmap? bitmapToSet, ref Bitmap? bitmapToBeSet)
         {
             Bitmap? bOld = bitmapToSet;
 
@@ -545,10 +546,12 @@ namespace AvoidAGrabCutEasy
         private void CreateBasePic()
         {
             Bitmap bmp = new Bitmap(this.pictureBox1.ClientSize.Width, this.pictureBox1.ClientSize.Height);
-            using Graphics graphics = Graphics.FromImage(bmp);
-            graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
-            using Pen pen = new Pen(Color.Black, 2);
-            graphics.DrawLine(pen, new Point(0, bmp.Height), new Point(bmp.Width, 0));
+            using (Graphics graphics = Graphics.FromImage(bmp))
+            {
+                graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                using (Pen pen = new Pen(Color.Black, 2))
+                    graphics.DrawLine(pen, new Point(0, bmp.Height), new Point(bmp.Width, 0));
+            }
 
             this._baseImg = bmp;
             this.pictureBox1.Image = new Bitmap(this._baseImg);
@@ -583,14 +586,14 @@ namespace AvoidAGrabCutEasy
             if (this.helplineRulerCtrl1.Bmp != null)
             {
                 byte[] rgb = new byte[256];
-                List<Point> p = new();
+                List<Point> p = new List<Point>();
                 p.Add(new Point(0, 0));
                 p.Add(new Point((int)this.numValSrc.Value, (int)this.numValDst.Value));
                 if (this.cbSecondColor.Checked)
                     p.Add(new Point((int)this.numValSrc2.Value, (int)this.numValDst2.Value));
                 p.Add(new Point(255, 255));
 
-                CurveSegment cuSgmt = new();
+                CurveSegment cuSgmt = new CurveSegment();
                 List<BezierSegment> bz = cuSgmt.CalcBezierSegments(p.ToArray(), 0.5f);
                 List<PointF> pts = cuSgmt.GetAllPoints(bz, 256, 0, 255);
                 cuSgmt.MapPoints(pts, rgb);
@@ -615,20 +618,24 @@ namespace AvoidAGrabCutEasy
         private void DisplayGradPic(List<Point> p)
         {
             Bitmap bmp = new Bitmap(this.pictureBox1.ClientSize.Width, this.pictureBox1.ClientSize.Height);
-            using Graphics gx = Graphics.FromImage(bmp);
-            gx.SmoothingMode = SmoothingMode.AntiAlias;
+            using (Graphics gx = Graphics.FromImage(bmp))
+            {
+                gx.SmoothingMode = SmoothingMode.AntiAlias;
 
-            double factor = this.pictureBox1.ClientSize.Width / 255.0;
+                double factor = this.pictureBox1.ClientSize.Width / 255.0;
 
-            List<PointF> pNew = new();
-            for (int i = 0; i < p.Count; i++)
-                pNew.Add(new PointF((float)(p[i].X * factor), (float)(p[i].Y * factor)));
+                List<PointF> pNew = new List<PointF>();
+                for (int i = 0; i < p.Count; i++)
+                    pNew.Add(new PointF((float)(p[i].X * factor), (float)(p[i].Y * factor)));
+                pNew.Reverse();
 
-            using Pen pen = new Pen(Color.Black, 2f);
-
-            gx.ScaleTransform(1f, -1f);
-            gx.TranslateTransform(0, bmp.Height, MatrixOrder.Append);
-            gx.DrawCurve(pen, pNew.ToArray());
+                using (Pen pen = new Pen(Color.Black, 2f))
+                {
+                    gx.ScaleTransform(1f, -1f);
+                    gx.TranslateTransform(0, bmp.Height, MatrixOrder.Append);
+                    gx.DrawCurve(pen, pNew.ToArray());
+                }
+            }
 
             Image? iOld = this.pictureBox1.Image;
             this.pictureBox1.Image = bmp;
@@ -641,11 +648,11 @@ namespace AvoidAGrabCutEasy
             }
 
             if (this._bmpInfos == null)
-                this._bmpInfos = new();
+                this._bmpInfos = new UndoList();
 
             if (this._undoOPCache != null)
             {
-                BitmapInfo bInfo = new(new Bitmap(bmp), this._undoOPCache.CurrentPosition);
+                BitmapInfo bInfo = new BitmapInfo(new Bitmap(bmp), this._undoOPCache.CurrentPosition);
                 if (this._bmpInfos.CurrentPosition < this._bmpInfos.Count && (this._bmpInfos.Count - this._bmpInfos.CurrentPosition) < this._bmpInfos.Count)
                     this._bmpInfos.RemoveRange(this._bmpInfos.CurrentPosition, this._bmpInfos.Count - this._bmpInfos.CurrentPosition);
 
@@ -688,7 +695,7 @@ namespace AvoidAGrabCutEasy
                 int krnl = (int)o[1];
                 int maxVal = (int)o[2];
 
-                Convolution conv = new();
+                ConvolutionLib.Convolution conv = new ConvolutionLib.Convolution();
                 conv.ProgressPlus += Conv_ProgressPlus;
                 conv.CancelLoops = false;
 
@@ -702,7 +709,7 @@ namespace AvoidAGrabCutEasy
             }
         }
 
-        private void Conv_ProgressPlus(object sender, ProgressEventArgs e)
+        private void Conv_ProgressPlus(object sender, ConvolutionLib.ProgressEventArgs e)
         {
             this.backgroundWorker3.ReportProgress(Math.Min((int)(((double)e.CurrentProgress / (double)e.ImgWidthHeight) * 100), 100));
         }
@@ -906,10 +913,12 @@ namespace AvoidAGrabCutEasy
                 bool postBlur = this.cbPostBlur.Checked;
                 int pBKrnl = (int)this.numPostBlurKrrnl.Value;
                 bool invGaussGrad = this.rbIGG.Checked;
+                int tolerance = (int)this.numTolerance.Value;
+                bool procInner = this.cbProcInner.Checked;
 
                 object[] o = { kernelLength, cornerWeight, sigma, steepness,
                                radius, alpha, gradientMode, divisor, grayscale, stretchValues,
-                               threshold, postBlur, pBKrnl, invGaussGrad };
+                               threshold, postBlur, pBKrnl, invGaussGrad, tolerance, procInner };
 
                 this.backgroundWorker4.RunWorkerAsync(o);
             }
@@ -919,77 +928,123 @@ namespace AvoidAGrabCutEasy
         {
             if (e.Argument != null && this.helplineRulerCtrl1.Bmp != null)
             {
-                using Bitmap bmp = new Bitmap(this.helplineRulerCtrl1.Bmp);
-
-                object[] o = (object[])e.Argument;
-
-                int kernelLength = (int)o[0];
-                double cornerWeight = (double)o[1];
-                int sigma = (int)o[2];
-                double steepness = (double)o[3];
-                int radius = (int)o[4];
-                double alpha = (double)o[5];
-                GradientMode gradientMode = (GradientMode)o[6];
-                double divisor = (double)o[7];
-                bool grayscale = (bool)o[8];
-                bool stretchValues = (bool)o[9];
-                int threshold = (int)o[10];
-                bool postBlur = (bool)o[11];
-                int pBKrnl = (int)o[12];
-                bool invGaussGrad = (bool)o[13];
-
-                Rectangle r = new Rectangle(0, 0, bmp.Width, bmp.Height);
-
-                using (GraphicsPath gp = new GraphicsPath())
+                using (Bitmap bmp = new Bitmap(this.helplineRulerCtrl1.Bmp))
                 {
-                    if (r.Width > 0 && r.Height > 0)
+                    object[] o = (object[])e.Argument;
+
+                    int kernelLength = (int)o[0];
+                    double cornerWeight = (double)o[1];
+                    int sigma = (int)o[2];
+                    double steepness = (double)o[3];
+                    int radius = (int)o[4];
+                    double alpha = (double)o[5];
+                    GradientMode gradientMode = (GradientMode)o[6];
+                    double divisor = (double)o[7];
+                    bool grayscale = (bool)o[8];
+                    bool stretchValues = (bool)o[9];
+                    int threshold = (int)o[10];
+                    bool postBlur = (bool)o[11];
+                    int pBKrnl = (int)o[12];
+                    bool invGaussGrad = (bool)o[13];
+                    int tolerance = (int)o[14];
+                    bool procInner = (bool)o[15];
+
+                    Rectangle r = new Rectangle(0, 0, bmp.Width, bmp.Height);
+
+                    using (GraphicsPath gp = new GraphicsPath())
                     {
-                        InvGaussGradOp igg = new InvGaussGradOp();
-                        igg.BGW = this.backgroundWorker4;
-
-                        //Bitmap? iG = igg.Inv_InvGaussGrad(bmp, alpha, gradientMode, divisor, kernelLength, cornerWeight,
-                        //    sigma, steepness, radius, stretchValues, threshold);
-
-                        Bitmap? iG = null;
-
-                        if (invGaussGrad)
+                        if (r.Width > 0 && r.Height > 0)
                         {
-                            iG = igg.Inv_InvGaussGrad(bmp, alpha, gradientMode, divisor, kernelLength, cornerWeight,
-                                    sigma, steepness, radius, stretchValues, threshold);
+                            InvGaussGradOp igg = new InvGaussGradOp();
+                            igg.BGW = this.backgroundWorker4;
+
+                            Bitmap? iG = null;
+
+                            if (invGaussGrad)
+                            {
+                                iG = igg.Inv_InvGaussGrad(bmp, alpha, gradientMode, divisor, kernelLength, cornerWeight,
+                                        sigma, steepness, radius, stretchValues, threshold);
+                            }
+                            else
+                            {
+                                Grayscale(bmp);
+
+                                using (Bitmap bCopy1 = new Bitmap(bmp))
+                                using (Bitmap bCopy2 = new Bitmap(bmp))
+                                {
+                                    MorphologicalProcessing2.IMorphologicalOperation alg = new MorphologicalProcessing2.Algorithms.Dilate();
+                                    alg.BGW = this.backgroundWorker4;
+                                    alg.SetupEx(kernelLength, kernelLength);
+                                    alg.ApplyGrayscale(bCopy1);
+                                    alg.Dispose();
+
+                                    alg = new MorphologicalProcessing2.Algorithms.Erode();
+                                    alg.BGW = this.backgroundWorker4;
+                                    alg.SetupEx(kernelLength, kernelLength);
+                                    alg.ApplyGrayscale(bCopy2);
+                                    alg.Dispose();
+
+                                    Bitmap bOut = new Bitmap(bCopy1.Width, bCopy1.Height);
+                                    Subtract(bCopy1, bCopy2, bOut);
+
+                                    iG = bOut;
+                                }
+                            }
+
+                            //now get the components and fill the inner parts of the components white,
+                            //so these pixels will not be removed from the result.
+                            using Bitmap iGC = new Bitmap(iG ?? throw new ArgumentNullException("iG is null"));
+                            Grayscale(iGC);
+                            Fipbmp fip = new Fipbmp();
+                            fip.ReplaceColors(iGC, 0, 0, 0, 0, tolerance, 255, 0, 0, 0);
+
+                            List<ChainCode>? c = GetBoundary(iGC, 0, false);
+                            if (c != null)
+                            {
+                                c = c.OrderByDescending(x => x.Coord.Count).ToList();
+
+                                foreach (ChainCode cc in c)
+                                {
+                                    if (!ChainFinder.IsInnerOutline(cc))
+                                    {
+                                        using Graphics gx = Graphics.FromImage(iG);
+                                        using GraphicsPath gP = new GraphicsPath();
+                                        gP.AddLines(cc.Coord.Select(a => new PointF(a.X, a.Y)).ToArray());
+                                        gP.FillMode = FillMode.Winding;
+                                        gx.FillPath(Brushes.White, gP);
+                                    }
+                                    else
+                                    {
+                                        if (procInner)
+                                        {
+                                            using Graphics gx = Graphics.FromImage(iG);
+                                            using (GraphicsPath gP = new GraphicsPath())
+                                            {
+                                                try
+                                                {
+                                                    gP.AddLines(cc.Coord.Select(a => new PointF(a.X, a.Y)).ToArray());
+                                                    gx.CompositingMode = CompositingMode.SourceCopy;
+                                                    gx.FillPath(Brushes.Transparent, gP);
+                                                }
+                                                catch (Exception exc)
+                                                {
+                                                    Console.WriteLine(exc.ToString());
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+
+                            if (postBlur && iG != null)
+                            {
+                                if (this.backgroundWorker4.WorkerReportsProgress)
+                                    this.backgroundWorker4.ReportProgress(0);
+                                igg.FastZGaussian_Blur_NxN_SigmaAsDistance(iG, pBKrnl, 0.01,
+                                                                        255, true, true, false);
+                            }
+                            e.Result = iG;
                         }
-                        else
-                        {
-                            Grayscale(bmp);
-
-                            using Bitmap bCopy1 = new Bitmap(bmp);
-                            using Bitmap bCopy2 = new Bitmap(bmp);
-
-                            MorphologicalProcessing2.IMorphologicalOperation alg = new MorphologicalProcessing2.Algorithms.Dilate();
-                            alg.BGW = this.backgroundWorker4;
-                            alg.SetupEx(kernelLength, kernelLength);
-                            alg.ApplyGrayscale(bCopy1);
-                            alg.Dispose();
-
-                            alg = new MorphologicalProcessing2.Algorithms.Erode();
-                            alg.BGW = this.backgroundWorker4;
-                            alg.SetupEx(kernelLength, kernelLength);
-                            alg.ApplyGrayscale(bCopy2);
-                            alg.Dispose();
-
-                            Bitmap bOut = new Bitmap(bCopy1.Width, bCopy1.Height);
-                            Subtract(bCopy1, bCopy2, bOut);
-
-                            iG = bOut;
-                        }
-
-                        if (postBlur && iG != null)
-                        {
-                            if (this.backgroundWorker4.WorkerReportsProgress)
-                                this.backgroundWorker4.ReportProgress(0);
-                            igg.FastZGaussian_Blur_NxN_SigmaAsDistance(iG, pBKrnl, 0.01,
-                                                                    255, true, true, false);
-                        }
-                        e.Result = iG;
                     }
                 }
             }
@@ -1126,6 +1181,39 @@ namespace AvoidAGrabCutEasy
         private void cbDoFirstMult_CheckedChanged(object sender, EventArgs e)
         {
             this.label1.Enabled = this.label2.Enabled = this.numF1.Enabled = this.numExp1.Enabled = cbDoFirstMult.Checked;
+        }
+
+        private List<ChainCode>? GetBoundary(Bitmap? upperImg, int minAlpha, bool grayScale)
+        {
+            List<ChainCode>? l = null;
+            if (upperImg != null)
+            {
+                Bitmap? bmpTmp = null;
+                try
+                {
+                    if (AvailMem.AvailMem.checkAvailRam(upperImg.Width * upperImg.Height * 4L))
+                        bmpTmp = new Bitmap(upperImg);
+                    else
+                        throw new Exception("Not enough memory.");
+                    int nWidth = bmpTmp.Width;
+                    int nHeight = bmpTmp.Height;
+                    ChainFinder cf = new ChainFinder();
+                    l = cf.GetOutline(bmpTmp, nWidth, nHeight, minAlpha, grayScale, 0, false, 0, false);
+                }
+                catch
+                {
+
+                }
+                finally
+                {
+                    if (bmpTmp != null)
+                    {
+                        bmpTmp.Dispose();
+                        bmpTmp = null;
+                    }
+                }
+            }
+            return l;
         }
     }
 }

@@ -1,12 +1,16 @@
-﻿using ConvolutionLib;
+﻿using AvoidAGrabCutEasy.ProcOutline;
+using ChainCodeFinder;
+using ConvolutionLib;
 using SegmentsListLib;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace AvoidAGrabCutEasy
 {
@@ -15,6 +19,9 @@ namespace AvoidAGrabCutEasy
         public event EventHandler<ConvolutionLib.ProgressEventArgs>? ProgressPlus;
         public float[,]? IGGLuminanceMap { get; internal set; }
         public bool Running { get; internal set; }
+        public int Tolerance { get; internal set; } = 101;
+        public bool ShowBitmap { get; internal set; }
+        public bool ProcInnerOutlines { get; private set; } = true;
 
         public LuminanceMapOp() { }
 
@@ -68,9 +75,6 @@ namespace AvoidAGrabCutEasy
 
                     if (r.Width > 0 && r.Height > 0)
                     {
-                        //Bitmap? iG = igg.Inv_InvGaussGrad(b, alpha, gradientMode, divisor, kernelLength, cornerWeight,
-                        //    sigma, steepness, radius, stretchValues, threshold);
-
                         Bitmap? iG = null;
 
                         if (invGaussGrad)
@@ -101,6 +105,60 @@ namespace AvoidAGrabCutEasy
                             Subtract(bCopy1, bCopy2, bOut);
 
                             iG = bOut;
+                        }
+
+                        //now get the components and fill the inner parts of the components white,
+                        //so these pixels will not be removed from the result.
+                        using Bitmap iGC = new Bitmap(iG ?? throw new ArgumentNullException("iG is null"));
+                        Grayscale(iGC);
+                        Fipbmp fip = new Fipbmp();
+                        fip.ReplaceColors(iGC, 0, 0, 0, 0, Tolerance, 255, 0, 0, 0);
+
+                        List<ChainCode>? c = GetBoundary(iGC, 0, false);
+                        if (c != null)
+                        {
+                            c = c.OrderByDescending(x => x.Coord.Count).ToList();
+
+                            foreach (ChainCode cc in c)
+                            {
+                                if (!ChainFinder.IsInnerOutline(cc))
+                                {
+                                    using Graphics gx = Graphics.FromImage(iG);
+                                    using GraphicsPath gP = new GraphicsPath();
+                                    gP.AddLines(cc.Coord.Select(a => new PointF(a.X, a.Y)).ToArray());
+                                    gP.FillMode = FillMode.Winding;
+                                    gx.FillPath(Brushes.White, gP);
+                                }
+                                else
+                                {
+                                    if (this.ProcInnerOutlines)
+                                    {
+                                        using Graphics gx = Graphics.FromImage(iG);
+                                        using (GraphicsPath gP = new GraphicsPath())
+                                        {
+                                            try
+                                            {
+                                                gP.AddLines(cc.Coord.Select(a => new PointF(a.X, a.Y)).ToArray());
+                                                gx.CompositingMode = CompositingMode.SourceCopy;
+                                                gx.FillPath(Brushes.Transparent, gP);
+                                            }
+                                            catch (Exception exc)
+                                            {
+                                                Console.WriteLine(exc.ToString());
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        if (this.ShowBitmap)
+                        {
+                            Form fff = new Form();
+                            fff.BackgroundImage = iG;
+                            fff.BackgroundImageLayout = ImageLayout.Zoom;
+                            fff.ShowDialog();
+                            fff.BringToFront();
                         }
 
                         if (!this.Running)
@@ -156,6 +214,10 @@ namespace AvoidAGrabCutEasy
                         }
                         else
                             MessageBox.Show("Not enough Memory.");
+
+                        if (iG != null)
+                            iG.Dispose();
+                        iG = null;
                     }
 
                     conv.ProgressPlus -= Conv_ProgressPlus;
@@ -169,154 +231,182 @@ namespace AvoidAGrabCutEasy
             return result;
         }
 
-        public float[,]? ComputeInvLuminanceMapSync(Bitmap bmp)
+        public float[,] ComputeInvLuminanceMapSync(Bitmap bmp)
         {
-            float[,]? result = new float[bmp.Width, bmp.Height];
-
-            using Bitmap b = new Bitmap(bmp);
-
-            //1 blur
-            int krnl = 127;
-            int maxVal = 101;
-
-            Convolution conv = new();
-            conv.ProgressPlus += Conv_ProgressPlus;
-            conv.CancelLoops = false;
-
-            InvGaussGradOp igg = new InvGaussGradOp();
-            igg.BGW = null;
-
-            igg.FastZGaussian_Blur_NxN_SigmaAsDistance(b, krnl, 0.01, 255, false, false, conv, false, 1E-12, maxVal);
-
-            //2 igg
-            int kernelLength = 27;
-            double cornerWeight = 0.01;
-            int sigma = 255;
-            double steepness = 1E-12;
-            int radius = 340;
-            double alpha = (double)101 * 255.0;
-            GradientMode gradientMode = GradientMode.Scharr16;
-            double divisor = 8.0;
-            //bool grayscale = false;
-            bool stretchValues = true;
-            int threshold = 127;
-            bool invGaussGrad = true;
-            int pBKrnl = invGaussGrad ? 7 : 15;
-            int kernelLengthMorph = 15;
-
-            Rectangle r = new Rectangle(0, 0, bmp.Width, bmp.Height);
-
-            if (r.Width > 0 && r.Height > 0)
+            float[,] result = new float[bmp.Width, bmp.Height];
             {
-                //Bitmap? iG = igg.Inv_InvGaussGrad(b, alpha, gradientMode, divisor, kernelLength, cornerWeight,
-                //    sigma, steepness, radius, stretchValues, threshold);
-
-                Bitmap? iG = null;
-
-                if (invGaussGrad)
+                using (Bitmap b = new Bitmap(bmp))
                 {
-                    iG = igg.Inv_InvGaussGrad(b, alpha, gradientMode, divisor, kernelLength, cornerWeight,
-                            sigma, steepness, radius, stretchValues, threshold);
-                }
-                else
-                {
-                    Grayscale(b);
+                    //1 blur
+                    int krnl = 127;
+                    int maxVal = 101;
 
-                    using Bitmap bCopy1 = new Bitmap(b);
-                    using Bitmap bCopy2 = new Bitmap(b);
+                    ConvolutionLib.Convolution conv = new ConvolutionLib.Convolution();
+                    conv.ProgressPlus += Conv_ProgressPlus;
+                    conv.CancelLoops = false;
 
-                    MorphologicalProcessing2.IMorphologicalOperation alg = new MorphologicalProcessing2.Algorithms.Dilate();
-                    alg.BGW = null;
-                    alg.SetupEx(kernelLengthMorph, kernelLengthMorph);
-                    alg.ApplyGrayscale(bCopy1);
-                    alg.Dispose();
+                    InvGaussGradOp igg = new InvGaussGradOp();
+                    igg.BGW = null;
 
-                    alg = new MorphologicalProcessing2.Algorithms.Erode();
-                    alg.BGW = null;
-                    alg.SetupEx(kernelLengthMorph, kernelLengthMorph);
-                    alg.ApplyGrayscale(bCopy2);
-                    alg.Dispose();
+                    igg.FastZGaussian_Blur_NxN_SigmaAsDistance(b, krnl, 0.01, 255, false, false, conv, false, 1E-12, maxVal);
 
-                    Bitmap bOut = new Bitmap(bCopy1.Width, bCopy1.Height);
-                    Subtract(bCopy1, bCopy2, bOut);
+                    //2 igg
+                    int kernelLength = 27;
+                    double cornerWeight = 0.01;
+                    int sigma = 255;
+                    double steepness = 1E-12;
+                    int radius = 340;
+                    double alpha = (double)101 * 255.0;
+                    GradientMode gradientMode = GradientMode.Scharr16;
+                    double divisor = 8.0;
+                    //bool grayscale = false;
+                    bool stretchValues = true;
+                    int threshold = 127;
+                    bool invGaussGrad = true;
+                    int pBKrnl = invGaussGrad ? 7 : 15;
+                    int kernelLengthMorph = 15;
 
-                    iG = bOut;
-                }
+                    Rectangle r = new Rectangle(0, 0, bmp.Width, bmp.Height);
 
-                if (iG != null)
-                {
-                    //3 PostBlur
-                    igg.FastZGaussian_Blur_NxN_SigmaAsDistance(iG, pBKrnl, 0.01,
-                                                            255, true, true, false, conv);
-                    unsafe
+                    using (GraphicsPath gp = new GraphicsPath())
                     {
-                        int w = bmp.Width;
-                        int h = bmp.Height;
-                        BitmapData bmD = iG.LockBits(new Rectangle(0, 0, w, h), ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
-                        int stride = bmD.Stride;
-
-                        Parallel.For(0, h, y =>
+                        if (r.Width > 0 && r.Height > 0)
                         {
-                            byte* p = (byte*)bmD.Scan0;
-                            p += y * stride;
+                            Bitmap? iG = null;
 
-                            for (int x = 0; x < w; x++)
+                            if (invGaussGrad)
                             {
-                                Color c = Color.FromArgb(255, p[2], p[1], p[0]);
-                                result[x, y] = 1.0f - c.GetBrightness();
-                                p += 4;
+                                iG = igg.Inv_InvGaussGrad(b, alpha, gradientMode, divisor, kernelLength, cornerWeight,
+                                        sigma, steepness, radius, stretchValues, threshold);
                             }
-                        });
+                            else
+                            {
+                                Grayscale(b);
 
-                        iG.UnlockBits(bmD);
+                                using (Bitmap bCopy1 = new Bitmap(b))
+                                using (Bitmap bCopy2 = new Bitmap(b))
+                                {
+                                    MorphologicalProcessing2.IMorphologicalOperation alg = new MorphologicalProcessing2.Algorithms.Dilate();
+                                    alg.BGW = null;
+                                    alg.SetupEx(kernelLengthMorph, kernelLengthMorph);
+                                    alg.ApplyGrayscale(bCopy1);
+                                    alg.Dispose();
+
+                                    alg = new MorphologicalProcessing2.Algorithms.Erode();
+                                    alg.BGW = null;
+                                    alg.SetupEx(kernelLengthMorph, kernelLengthMorph);
+                                    alg.ApplyGrayscale(bCopy2);
+                                    alg.Dispose();
+
+                                    Bitmap bOut = new Bitmap(bCopy1.Width, bCopy1.Height);
+                                    Subtract(bCopy1, bCopy2, bOut);
+
+                                    iG = bOut;
+                                }
+                            }
+
+                            //now get the components and fill the inner parts of the components white,
+                            //so these pixels will not be removed from the result.
+                            using Bitmap iGC = new Bitmap(iG ?? throw new ArgumentNullException("iG is null"));
+                            Grayscale(iGC);
+                            Fipbmp fip = new Fipbmp();
+                            fip.ReplaceColors(iGC, 0, 0, 0, 0, Tolerance, 255, 0, 0, 0);
+
+                            List<ChainCode>? c = GetBoundary(iGC, 0, false);
+                            if (c != null)
+                            {
+                                c = c.OrderByDescending(x => x.Coord.Count).ToList();
+
+                                foreach (ChainCode cc in c)
+                                {
+                                    if (!ChainFinder.IsInnerOutline(cc))
+                                    {
+                                        using Graphics gx = Graphics.FromImage(iG);
+                                        using GraphicsPath gP = new GraphicsPath();
+                                        gP.AddLines(cc.Coord.Select(a => new PointF(a.X, a.Y)).ToArray());
+                                        gP.FillMode = FillMode.Winding;
+                                        gx.FillPath(Brushes.White, gP);
+                                    }
+                                    else
+                                    {
+                                        if (this.ProcInnerOutlines)
+                                        {
+                                            using Graphics gx = Graphics.FromImage(iG);
+                                            using (GraphicsPath gP = new GraphicsPath())
+                                            {
+                                                try
+                                                {
+                                                    gP.AddLines(cc.Coord.Select(a => new PointF(a.X, a.Y)).ToArray());
+                                                    gx.CompositingMode = CompositingMode.SourceCopy;
+                                                    gx.FillPath(Brushes.Transparent, gP);
+                                                }
+                                                catch (Exception exc)
+                                                {
+                                                    Console.WriteLine(exc.ToString());
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+
+                            if (this.ShowBitmap)
+                            {
+                                Form fff = new Form();
+                                fff.BackgroundImage = iG;
+                                fff.BackgroundImageLayout = ImageLayout.Zoom;
+                                fff.ShowDialog();
+                                fff.BringToFront();
+                            }
+
+                            if (iG != null && AvailMem.AvailMem.checkAvailRam(bmp.Width * bmp.Height * 12L))
+                            {
+                                //3 PostBlur
+                                try
+                                {
+                                    igg.FastZGaussian_Blur_NxN_SigmaAsDistance(iG, pBKrnl, 0.01,
+                                                                        255, true, true, false, conv);
+
+                                    unsafe
+                                    {
+                                        int w = bmp.Width;
+                                        int h = bmp.Height;
+                                        BitmapData bmD = iG.LockBits(new Rectangle(0, 0, w, h), ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
+                                        int stride = bmD.Stride;
+
+                                        Parallel.For(0, h, y =>
+                                        {
+                                            byte* p = (byte*)bmD.Scan0;
+                                            p += y * stride;
+
+                                            for (int x = 0; x < w; x++)
+                                            {
+                                                Color c = Color.FromArgb(255, p[2], p[1], p[0]);
+                                                result[x, y] = 1.0f - c.GetBrightness();
+                                                p += 4;
+                                            }
+                                        });
+
+                                        iG.UnlockBits(bmD);
+                                    }
+                                }
+                                catch (Exception exc)
+                                {
+                                    MessageBox.Show(exc.ToString());
+                                }
+                            }
+                            else
+                                MessageBox.Show("Not enough Memory.");
+
+                            if (iG != null)
+                                iG.Dispose();
+                            iG = null;
+                        }
                     }
+
+                    conv.ProgressPlus -= Conv_ProgressPlus;
                 }
             }
-
-            conv.ProgressPlus -= Conv_ProgressPlus;
-
-            return result;
-        }
-
-        private void Conv_ProgressPlus(object sender, ProgressEventArgs e)
-        {
-            ProgressPlus?.Invoke(sender, e);
-        }
-        public static float[,]? ComputeLuminanceMapFromPicSync(Bitmap iG)
-        {
-            float[,]? result = new float[iG.Width, iG.Height];
-
-            Rectangle r = new Rectangle(0, 0, iG.Width, iG.Height);
-
-            if (r.Width > 0 && r.Height > 0)
-            {
-                if (iG != null)
-                {
-                    unsafe
-                    {
-                        int w = iG.Width;
-                        int h = iG.Height;
-                        BitmapData bmD = iG.LockBits(new Rectangle(0, 0, w, h), ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
-                        int stride = bmD.Stride;
-
-                        Parallel.For(0, h, y =>
-                        {
-                            byte* p = (byte*)bmD.Scan0;
-                            p += y * stride;
-
-                            for (int x = 0; x < w; x++)
-                            {
-                                Color c = Color.FromArgb(255, p[2], p[1], p[0]);
-                                result[x, y] = 1.0f - c.GetBrightness();
-                                p += 4;
-                            }
-                        });
-
-                        iG.UnlockBits(bmD);
-                    }
-                }
-            }
-
             return result;
         }
 
@@ -384,6 +474,82 @@ namespace AvoidAGrabCutEasy
             }
 
             bmp.UnlockBits(bmData);
+        }
+
+        private void Conv_ProgressPlus(object sender, ConvolutionLib.ProgressEventArgs e)
+        {
+            ProgressPlus?.Invoke(sender, e);
+        }
+
+        public static float[,] ComputeLuminanceMapFromPicSync(Bitmap iG)
+        {
+            float[,] result = new float[iG.Width, iG.Height];
+
+            Rectangle r = new Rectangle(0, 0, iG.Width, iG.Height);
+
+            if (r.Width > 0 && r.Height > 0)
+            {
+                if (iG != null)
+                {
+                    unsafe
+                    {
+                        int w = iG.Width;
+                        int h = iG.Height;
+                        BitmapData bmD = iG.LockBits(new Rectangle(0, 0, w, h), ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
+                        int stride = bmD.Stride;
+
+                        Parallel.For(0, h, y =>
+                        {
+                            byte* p = (byte*)bmD.Scan0;
+                            p += y * stride;
+
+                            for (int x = 0; x < w; x++)
+                            {
+                                Color c = Color.FromArgb(255, p[2], p[1], p[0]);
+                                result[x, y] = 1.0f - c.GetBrightness();
+                                p += 4;
+                            }
+                        });
+
+                        iG.UnlockBits(bmD);
+                    }
+                }
+            }
+
+            return result;
+        }
+
+        private List<ChainCode>? GetBoundary(Bitmap? upperImg, int minAlpha, bool grayScale)
+        {
+            List<ChainCode>? l = null;
+            if (upperImg != null)
+            {
+                Bitmap? bmpTmp = null;
+                try
+                {
+                    if (AvailMem.AvailMem.checkAvailRam(upperImg.Width * upperImg.Height * 4L))
+                        bmpTmp = new Bitmap(upperImg);
+                    else
+                        throw new Exception("Not enough memory.");
+                    int nWidth = bmpTmp.Width;
+                    int nHeight = bmpTmp.Height;
+                    ChainFinder cf = new ChainFinder();
+                    l = cf.GetOutline(bmpTmp, nWidth, nHeight, minAlpha, grayScale, 0, false, 0, false);
+                }
+                catch
+                {
+
+                }
+                finally
+                {
+                    if (bmpTmp != null)
+                    {
+                        bmpTmp.Dispose();
+                        bmpTmp = null;
+                    }
+                }
+            }
+            return l;
         }
     }
 }

@@ -1,4 +1,7 @@
-﻿namespace AvoidAGrabCutEasy
+﻿using System.Drawing;
+using System.Windows.Forms;
+
+namespace AvoidAGrabCutEasy
 {
     partial class frmLumMapSettings
     {
@@ -63,18 +66,20 @@
             rbApp = new RadioButton();
             rbImage = new RadioButton();
             groupBox4 = new GroupBox();
-            numPostBlurKrrnl = new NumericUpDown();
             cbPostBlur = new CheckBox();
             label22 = new Label();
-            label10 = new Label();
             numIGGDivisor = new NumericUpDown();
             label21 = new Label();
+            label11 = new Label();
+            label10 = new Label();
             label18 = new Label();
             numIGGAlpha = new NumericUpDown();
+            numTolerance = new NumericUpDown();
+            numPostBlurKrrnl = new NumericUpDown();
             btnInvGaussGrad = new Button();
-            numIGGKernel = new NumericUpDown();
             rbMorph = new RadioButton();
             rbIGG = new RadioButton();
+            numIGGKernel = new NumericUpDown();
             groupBox3 = new GroupBox();
             label16 = new Label();
             label15 = new Label();
@@ -85,18 +90,18 @@
             pictureBox1 = new PictureBox();
             cbSecondColor = new CheckBox();
             label8 = new Label();
-            numValDst2 = new NumericUpDown();
-            numValSrc2 = new NumericUpDown();
             label7 = new Label();
             label17 = new Label();
+            numValDst2 = new NumericUpDown();
             numValDst = new NumericUpDown();
+            numValSrc2 = new NumericUpDown();
             numValSrc = new NumericUpDown();
             btnColors = new Button();
             panel1 = new Panel();
             groupBox1 = new GroupBox();
-            label9 = new Label();
             rbGreaterThan = new RadioButton();
             rbLessThan = new RadioButton();
+            label9 = new Label();
             cbDoFirstMult = new CheckBox();
             cbDoSecondMult = new CheckBox();
             toolTip1 = new ToolTip(components);
@@ -104,6 +109,7 @@
             backgroundWorker3 = new System.ComponentModel.BackgroundWorker();
             Timer3 = new System.Windows.Forms.Timer(components);
             backgroundWorker4 = new System.ComponentModel.BackgroundWorker();
+            cbProcInner = new CheckBox();
             ((System.ComponentModel.ISupportInitialize)numF1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numTh).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numF2).BeginInit();
@@ -116,9 +122,10 @@
             splitContainer1.SuspendLayout();
             statusStrip1.SuspendLayout();
             groupBox4.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)numPostBlurKrrnl).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numIGGDivisor).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numIGGAlpha).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)numTolerance).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)numPostBlurKrrnl).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numIGGKernel).BeginInit();
             groupBox3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numDistWeight).BeginInit();
@@ -126,8 +133,8 @@
             groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numValDst2).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)numValSrc2).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numValDst).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)numValSrc2).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numValSrc).BeginInit();
             groupBox1.SuspendLayout();
             SuspendLayout();
@@ -136,7 +143,7 @@
             // 
             btnCancel.DialogResult = DialogResult.Cancel;
             btnCancel.ForeColor = SystemColors.ControlText;
-            btnCancel.Location = new Point(326, 758);
+            btnCancel.Location = new Point(326, 768);
             btnCancel.Margin = new Padding(4, 3, 4, 3);
             btnCancel.Name = "btnCancel";
             btnCancel.Size = new Size(88, 27);
@@ -148,7 +155,7 @@
             // 
             btnOK.DialogResult = DialogResult.OK;
             btnOK.ForeColor = SystemColors.ControlText;
-            btnOK.Location = new Point(229, 758);
+            btnOK.Location = new Point(229, 768);
             btnOK.Margin = new Padding(4, 3, 4, 3);
             btnOK.Name = "btnOK";
             btnOK.Size = new Size(88, 27);
@@ -160,7 +167,8 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(6, 45);
+            label1.Location = new Point(6, 46);
+            label1.Margin = new Padding(4, 0, 4, 0);
             label1.Name = "label1";
             label1.Size = new Size(44, 15);
             label1.TabIndex = 734;
@@ -171,6 +179,7 @@
             // 
             label2.AutoSize = true;
             label2.Location = new Point(6, 105);
+            label2.Margin = new Padding(4, 0, 4, 0);
             label2.Name = "label2";
             label2.Size = new Size(57, 15);
             label2.TabIndex = 734;
@@ -179,7 +188,8 @@
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(6, 157);
+            label3.Location = new Point(6, 164);
+            label3.Margin = new Padding(4, 0, 4, 0);
             label3.Name = "label3";
             label3.Size = new Size(44, 15);
             label3.TabIndex = 734;
@@ -190,7 +200,8 @@
             // 
             numF1.DecimalPlaces = 4;
             numF1.Increment = new decimal(new int[] { 1, 0, 0, 65536 });
-            numF1.Location = new Point(80, 43);
+            numF1.Location = new Point(80, 45);
+            numF1.Margin = new Padding(4, 3, 4, 3);
             numF1.Maximum = new decimal(new int[] { 10000, 0, 0, 0 });
             numF1.Name = "numF1";
             numF1.Size = new Size(88, 23);
@@ -203,6 +214,7 @@
             numTh.DecimalPlaces = 4;
             numTh.Increment = new decimal(new int[] { 1, 0, 0, 65536 });
             numTh.Location = new Point(80, 103);
+            numTh.Margin = new Padding(4, 3, 4, 3);
             numTh.Name = "numTh";
             numTh.Size = new Size(88, 23);
             numTh.TabIndex = 735;
@@ -212,7 +224,8 @@
             // 
             numF2.DecimalPlaces = 4;
             numF2.Increment = new decimal(new int[] { 1, 0, 0, 65536 });
-            numF2.Location = new Point(80, 154);
+            numF2.Location = new Point(80, 162);
+            numF2.Margin = new Padding(4, 3, 4, 3);
             numF2.Maximum = new decimal(new int[] { 10000, 0, 0, 0 });
             numF2.Name = "numF2";
             numF2.Size = new Size(88, 23);
@@ -223,7 +236,8 @@
             // label4
             // 
             label4.AutoSize = true;
-            label4.Location = new Point(193, 45);
+            label4.Location = new Point(192, 46);
+            label4.Margin = new Padding(4, 0, 4, 0);
             label4.Name = "label4";
             label4.Size = new Size(63, 15);
             label4.TabIndex = 734;
@@ -233,7 +247,8 @@
             // 
             numExp1.DecimalPlaces = 4;
             numExp1.Increment = new decimal(new int[] { 1, 0, 0, 65536 });
-            numExp1.Location = new Point(283, 43);
+            numExp1.Location = new Point(284, 45);
+            numExp1.Margin = new Padding(4, 3, 4, 3);
             numExp1.Name = "numExp1";
             numExp1.Size = new Size(88, 23);
             numExp1.TabIndex = 735;
@@ -242,7 +257,8 @@
             // label5
             // 
             label5.AutoSize = true;
-            label5.Location = new Point(193, 157);
+            label5.Location = new Point(192, 164);
+            label5.Margin = new Padding(4, 0, 4, 0);
             label5.Name = "label5";
             label5.Size = new Size(63, 15);
             label5.TabIndex = 734;
@@ -252,7 +268,8 @@
             // 
             numExp2.DecimalPlaces = 4;
             numExp2.Increment = new decimal(new int[] { 1, 0, 0, 65536 });
-            numExp2.Location = new Point(283, 154);
+            numExp2.Location = new Point(284, 162);
+            numExp2.Margin = new Padding(4, 3, 4, 3);
             numExp2.Name = "numExp2";
             numExp2.Size = new Size(88, 23);
             numExp2.TabIndex = 735;
@@ -261,7 +278,8 @@
             // label6
             // 
             label6.AutoSize = true;
-            label6.Location = new Point(193, 105);
+            label6.Location = new Point(192, 105);
+            label6.Margin = new Padding(4, 0, 4, 0);
             label6.Name = "label6";
             label6.Size = new Size(86, 15);
             label6.TabIndex = 734;
@@ -271,7 +289,8 @@
             // 
             numThMultiplier.DecimalPlaces = 4;
             numThMultiplier.Increment = new decimal(new int[] { 1, 0, 0, 65536 });
-            numThMultiplier.Location = new Point(283, 103);
+            numThMultiplier.Location = new Point(284, 103);
+            numThMultiplier.Margin = new Padding(4, 3, 4, 3);
             numThMultiplier.Name = "numThMultiplier";
             numThMultiplier.Size = new Size(88, 23);
             numThMultiplier.TabIndex = 735;
@@ -280,7 +299,8 @@
             // cbAuto
             // 
             cbAuto.AutoSize = true;
-            cbAuto.Location = new Point(80, 127);
+            cbAuto.Location = new Point(80, 130);
+            cbAuto.Margin = new Padding(4, 3, 4, 3);
             cbAuto.Name = "cbAuto";
             cbAuto.Size = new Size(50, 19);
             cbAuto.TabIndex = 736;
@@ -293,6 +313,7 @@
             // 
             splitContainer1.Dock = DockStyle.Fill;
             splitContainer1.Location = new Point(0, 0);
+            splitContainer1.Margin = new Padding(4, 3, 4, 3);
             splitContainer1.Name = "splitContainer1";
             // 
             // splitContainer1.Panel1
@@ -320,8 +341,8 @@
             splitContainer1.Panel2.Controls.Add(groupBox1);
             splitContainer1.Panel2.Controls.Add(btnOK);
             splitContainer1.Panel2.Controls.Add(btnCancel);
-            splitContainer1.Size = new Size(1255, 797);
-            splitContainer1.SplitterDistance = 824;
+            splitContainer1.Size = new Size(1255, 805);
+            splitContainer1.SplitterDistance = 823;
             splitContainer1.TabIndex = 737;
             // 
             // helplineRulerCtrl1
@@ -336,11 +357,11 @@
             helplineRulerCtrl1.DrawPixelated = false;
             helplineRulerCtrl1.IgnoreZoom = false;
             helplineRulerCtrl1.Location = new Point(0, 0);
-            helplineRulerCtrl1.Margin = new Padding(4, 3, 4, 3);
+            helplineRulerCtrl1.Margin = new Padding(5, 3, 5, 3);
             helplineRulerCtrl1.MoveHelpLinesOnResize = false;
             helplineRulerCtrl1.Name = "helplineRulerCtrl1";
             helplineRulerCtrl1.SetZoomOnlyByMethodCall = false;
-            helplineRulerCtrl1.Size = new Size(824, 762);
+            helplineRulerCtrl1.Size = new Size(823, 766);
             helplineRulerCtrl1.TabIndex = 1;
             helplineRulerCtrl1.Zoom = 1F;
             helplineRulerCtrl1.ZoomSetManually = false;
@@ -349,9 +370,9 @@
             // statusStrip1
             // 
             statusStrip1.Items.AddRange(new ToolStripItem[] { toolStripStatusLabel1, toolStripStatusLabel2, toolStripProgressBar1, toolStripStatusLabel3 });
-            statusStrip1.Location = new Point(0, 762);
+            statusStrip1.Location = new Point(0, 766);
             statusStrip1.Name = "statusStrip1";
-            statusStrip1.Size = new Size(824, 35);
+            statusStrip1.Size = new Size(823, 39);
             statusStrip1.TabIndex = 0;
             statusStrip1.Text = "statusStrip1";
             // 
@@ -359,7 +380,7 @@
             // 
             toolStripStatusLabel1.Font = new Font("Segoe UI", 15.75F);
             toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            toolStripStatusLabel1.Size = new Size(61, 30);
+            toolStripStatusLabel1.Size = new Size(61, 34);
             toolStripStatusLabel1.Text = "Hallo";
             // 
             // toolStripStatusLabel2
@@ -367,28 +388,29 @@
             toolStripStatusLabel2.AutoSize = false;
             toolStripStatusLabel2.Font = new Font("Segoe UI", 15.75F);
             toolStripStatusLabel2.Name = "toolStripStatusLabel2";
-            toolStripStatusLabel2.Size = new Size(49, 30);
+            toolStripStatusLabel2.Size = new Size(49, 34);
             toolStripStatusLabel2.Text = "    ";
             // 
             // toolStripProgressBar1
             // 
             toolStripProgressBar1.Name = "toolStripProgressBar1";
-            toolStripProgressBar1.Size = new Size(250, 29);
+            toolStripProgressBar1.Size = new Size(250, 33);
             // 
             // toolStripStatusLabel3
             // 
             toolStripStatusLabel3.Font = new Font("Segoe UI", 15.75F);
             toolStripStatusLabel3.Name = "toolStripStatusLabel3";
-            toolStripStatusLabel3.Size = new Size(61, 30);
+            toolStripStatusLabel3.Size = new Size(61, 34);
             toolStripStatusLabel3.Text = "Hallo";
             // 
             // cbAppSettingsOnly
             // 
             cbAppSettingsOnly.AutoSize = true;
-            cbAppSettingsOnly.Location = new Point(13, 597);
+            cbAppSettingsOnly.Location = new Point(18, 623);
+            cbAppSettingsOnly.Margin = new Padding(4, 3, 4, 3);
             cbAppSettingsOnly.Name = "cbAppSettingsOnly";
             cbAppSettingsOnly.Size = new Size(174, 19);
-            cbAppSettingsOnly.TabIndex = 750;
+            cbAppSettingsOnly.TabIndex = 749;
             cbAppSettingsOnly.Text = "do Application settings only";
             toolTip1.SetToolTip(cbAppSettingsOnly, "Dont set the image, but the factors and threshold");
             cbAppSettingsOnly.UseVisualStyleBackColor = true;
@@ -397,7 +419,7 @@
             // 
             button10.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             button10.ForeColor = SystemColors.ControlText;
-            button10.Location = new Point(319, 677);
+            button10.Location = new Point(335, 655);
             button10.Margin = new Padding(4, 3, 4, 3);
             button10.Name = "button10";
             button10.Size = new Size(88, 27);
@@ -410,7 +432,7 @@
             // 
             button8.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             button8.ForeColor = SystemColors.ControlText;
-            button8.Location = new Point(224, 677);
+            button8.Location = new Point(239, 655);
             button8.Margin = new Padding(4, 3, 4, 3);
             button8.Name = "button8";
             button8.Size = new Size(88, 27);
@@ -424,7 +446,7 @@
             button2.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             button2.FlatStyle = FlatStyle.System;
             button2.ForeColor = SystemColors.ControlText;
-            button2.Location = new Point(318, 602);
+            button2.Location = new Point(335, 618);
             button2.Margin = new Padding(4, 3, 4, 3);
             button2.Name = "button2";
             button2.Size = new Size(88, 27);
@@ -437,7 +459,7 @@
             btnRedo.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             btnRedo.Enabled = false;
             btnRedo.ForeColor = SystemColors.ControlText;
-            btnRedo.Location = new Point(320, 640);
+            btnRedo.Location = new Point(335, 689);
             btnRedo.Margin = new Padding(4, 3, 4, 3);
             btnRedo.Name = "btnRedo";
             btnRedo.Size = new Size(88, 27);
@@ -451,7 +473,7 @@
             btnUndo.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             btnUndo.Enabled = false;
             btnUndo.ForeColor = SystemColors.ControlText;
-            btnUndo.Location = new Point(224, 640);
+            btnUndo.Location = new Point(239, 689);
             btnUndo.Margin = new Padding(4, 3, 4, 3);
             btnUndo.Name = "btnUndo";
             btnUndo.Size = new Size(88, 27);
@@ -463,7 +485,7 @@
             // Label20
             // 
             Label20.AutoSize = true;
-            Label20.Location = new Point(162, 723);
+            Label20.Location = new Point(162, 734);
             Label20.Margin = new Padding(4, 0, 4, 0);
             Label20.Name = "Label20";
             Label20.Size = new Size(58, 15);
@@ -475,7 +497,7 @@
             cmbZoom.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbZoom.FormattingEnabled = true;
             cmbZoom.Items.AddRange(new object[] { "4", "2", "1", "Fit_Width", "Fit" });
-            cmbZoom.Location = new Point(230, 719);
+            cmbZoom.Location = new Point(230, 729);
             cmbZoom.Margin = new Padding(4, 3, 4, 3);
             cmbZoom.Name = "cmbZoom";
             cmbZoom.Size = new Size(87, 23);
@@ -488,7 +510,7 @@
             cbBGColor.AutoSize = true;
             cbBGColor.Checked = true;
             cbBGColor.CheckState = CheckState.Checked;
-            cbBGColor.Location = new Point(18, 721);
+            cbBGColor.Location = new Point(42, 732);
             cbBGColor.Margin = new Padding(4, 3, 4, 3);
             cbBGColor.Name = "cbBGColor";
             cbBGColor.Size = new Size(67, 19);
@@ -501,7 +523,8 @@
             // 
             rbApp.AutoSize = true;
             rbApp.Checked = true;
-            rbApp.Location = new Point(18, 372);
+            rbApp.Location = new Point(18, 389);
+            rbApp.Margin = new Padding(4, 3, 4, 3);
             rbApp.Name = "rbApp";
             rbApp.Size = new Size(86, 19);
             rbApp.TabIndex = 740;
@@ -514,6 +537,7 @@
             // 
             rbImage.AutoSize = true;
             rbImage.Location = new Point(18, 12);
+            rbImage.Margin = new Padding(4, 3, 4, 3);
             rbImage.Name = "rbImage";
             rbImage.Size = new Size(58, 19);
             rbImage.TabIndex = 740;
@@ -522,70 +546,55 @@
             // 
             // groupBox4
             // 
-            groupBox4.Controls.Add(numPostBlurKrrnl);
+            groupBox4.Controls.Add(cbProcInner);
             groupBox4.Controls.Add(cbPostBlur);
             groupBox4.Controls.Add(label22);
-            groupBox4.Controls.Add(label10);
             groupBox4.Controls.Add(numIGGDivisor);
             groupBox4.Controls.Add(label21);
+            groupBox4.Controls.Add(label11);
+            groupBox4.Controls.Add(label10);
             groupBox4.Controls.Add(label18);
             groupBox4.Controls.Add(numIGGAlpha);
+            groupBox4.Controls.Add(numTolerance);
+            groupBox4.Controls.Add(numPostBlurKrrnl);
             groupBox4.Controls.Add(btnInvGaussGrad);
-            groupBox4.Controls.Add(numIGGKernel);
             groupBox4.Controls.Add(rbMorph);
             groupBox4.Controls.Add(rbIGG);
-            groupBox4.Location = new Point(13, 207);
+            groupBox4.Controls.Add(numIGGKernel);
+            groupBox4.Location = new Point(13, 198);
+            groupBox4.Margin = new Padding(4, 3, 4, 3);
             groupBox4.Name = "groupBox4";
-            groupBox4.Size = new Size(402, 132);
+            groupBox4.Padding = new Padding(4, 3, 4, 3);
+            groupBox4.Size = new Size(402, 169);
             groupBox4.TabIndex = 739;
             groupBox4.TabStop = false;
             groupBox4.Text = "3) InvGaussGrad";
             // 
-            // numPostBlurKrrnl
-            // 
-            numPostBlurKrrnl.Location = new Point(177, 93);
-            numPostBlurKrrnl.Margin = new Padding(4, 3, 4, 3);
-            numPostBlurKrrnl.Maximum = new decimal(new int[] { 255, 0, 0, 0 });
-            numPostBlurKrrnl.Minimum = new decimal(new int[] { 3, 0, 0, 0 });
-            numPostBlurKrrnl.Name = "numPostBlurKrrnl";
-            numPostBlurKrrnl.Size = new Size(52, 23);
-            numPostBlurKrrnl.TabIndex = 688;
-            numPostBlurKrrnl.Value = new decimal(new int[] { 7, 0, 0, 0 });
-            // 
             // cbPostBlur
             // 
             cbPostBlur.AutoSize = true;
-            cbPostBlur.Checked = true;
-            cbPostBlur.CheckState = CheckState.Checked;
-            cbPostBlur.Location = new Point(19, 96);
+            cbPostBlur.Location = new Point(22, 82);
+            cbPostBlur.Margin = new Padding(4, 3, 4, 3);
             cbPostBlur.Name = "cbPostBlur";
             cbPostBlur.Size = new Size(73, 19);
-            cbPostBlur.TabIndex = 694;
+            cbPostBlur.TabIndex = 749;
             cbPostBlur.Text = "post Blur";
             cbPostBlur.UseVisualStyleBackColor = true;
-            cbPostBlur.CheckedChanged += cbSecondColor_CheckedChanged;
             // 
             // label22
             // 
             label22.AutoSize = true;
-            label22.Location = new Point(132, 58);
+            label22.Location = new Point(132, 52);
+            label22.Margin = new Padding(4, 0, 4, 0);
             label22.Name = "label22";
             label22.Size = new Size(38, 15);
             label22.TabIndex = 695;
             label22.Text = "Alpha";
             // 
-            // label10
-            // 
-            label10.AutoSize = true;
-            label10.Location = new Point(132, 97);
-            label10.Name = "label10";
-            label10.Size = new Size(40, 15);
-            label10.TabIndex = 685;
-            label10.Text = "Kernel";
-            // 
             // numIGGDivisor
             // 
-            numIGGDivisor.Location = new Point(295, 55);
+            numIGGDivisor.Location = new Point(295, 48);
+            numIGGDivisor.Margin = new Padding(4, 3, 4, 3);
             numIGGDivisor.Maximum = new decimal(new int[] { 32767, 0, 0, 0 });
             numIGGDivisor.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
             numIGGDivisor.Name = "numIGGDivisor";
@@ -596,16 +605,38 @@
             // label21
             // 
             label21.AutoSize = true;
-            label21.Location = new Point(246, 58);
+            label21.Location = new Point(246, 52);
+            label21.Margin = new Padding(4, 0, 4, 0);
             label21.Name = "label21";
             label21.Size = new Size(43, 15);
             label21.TabIndex = 694;
             label21.Text = "Divisor";
             // 
+            // label11
+            // 
+            label11.AutoSize = true;
+            label11.Location = new Point(46, 113);
+            label11.Margin = new Padding(4, 0, 4, 0);
+            label11.Name = "label11";
+            label11.Size = new Size(122, 15);
+            label11.TabIndex = 693;
+            label11.Text = " ChainCode Tolerance";
+            // 
+            // label10
+            // 
+            label10.AutoSize = true;
+            label10.Location = new Point(128, 83);
+            label10.Margin = new Padding(4, 0, 4, 0);
+            label10.Name = "label10";
+            label10.Size = new Size(40, 15);
+            label10.TabIndex = 693;
+            label10.Text = "Kernel";
+            // 
             // label18
             // 
             label18.AutoSize = true;
-            label18.Location = new Point(19, 58);
+            label18.Location = new Point(19, 52);
+            label18.Margin = new Padding(4, 0, 4, 0);
             label18.Name = "label18";
             label18.Size = new Size(40, 15);
             label18.TabIndex = 693;
@@ -613,7 +644,7 @@
             // 
             // numIGGAlpha
             // 
-            numIGGAlpha.Location = new Point(177, 56);
+            numIGGAlpha.Location = new Point(177, 50);
             numIGGAlpha.Margin = new Padding(4, 3, 4, 3);
             numIGGAlpha.Maximum = new decimal(new int[] { 9999, 0, 0, 0 });
             numIGGAlpha.Name = "numIGGAlpha";
@@ -621,11 +652,32 @@
             numIGGAlpha.TabIndex = 691;
             numIGGAlpha.Value = new decimal(new int[] { 101, 0, 0, 0 });
             // 
+            // numTolerance
+            // 
+            numTolerance.Location = new Point(177, 110);
+            numTolerance.Margin = new Padding(4, 3, 4, 3);
+            numTolerance.Maximum = new decimal(new int[] { 255, 0, 0, 0 });
+            numTolerance.Name = "numTolerance";
+            numTolerance.Size = new Size(52, 23);
+            numTolerance.TabIndex = 692;
+            numTolerance.Value = new decimal(new int[] { 101, 0, 0, 0 });
+            // 
+            // numPostBlurKrrnl
+            // 
+            numPostBlurKrrnl.Location = new Point(177, 80);
+            numPostBlurKrrnl.Margin = new Padding(4, 3, 4, 3);
+            numPostBlurKrrnl.Maximum = new decimal(new int[] { 255, 0, 0, 0 });
+            numPostBlurKrrnl.Minimum = new decimal(new int[] { 3, 0, 0, 0 });
+            numPostBlurKrrnl.Name = "numPostBlurKrrnl";
+            numPostBlurKrrnl.Size = new Size(52, 23);
+            numPostBlurKrrnl.TabIndex = 692;
+            numPostBlurKrrnl.Value = new decimal(new int[] { 7, 0, 0, 0 });
+            // 
             // btnInvGaussGrad
             // 
             btnInvGaussGrad.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             btnInvGaussGrad.ForeColor = SystemColors.ControlText;
-            btnInvGaussGrad.Location = new Point(305, 92);
+            btnInvGaussGrad.Location = new Point(317, 136);
             btnInvGaussGrad.Margin = new Padding(4, 3, 4, 3);
             btnInvGaussGrad.Name = "btnInvGaussGrad";
             btnInvGaussGrad.Size = new Size(65, 27);
@@ -634,32 +686,24 @@
             btnInvGaussGrad.UseVisualStyleBackColor = true;
             btnInvGaussGrad.Click += btnInvGaussGrad_Click;
             // 
-            // numIGGKernel
-            // 
-            numIGGKernel.Location = new Point(70, 56);
-            numIGGKernel.Margin = new Padding(4, 3, 4, 3);
-            numIGGKernel.Maximum = new decimal(new int[] { 255, 0, 0, 0 });
-            numIGGKernel.Minimum = new decimal(new int[] { 3, 0, 0, 0 });
-            numIGGKernel.Name = "numIGGKernel";
-            numIGGKernel.Size = new Size(52, 23);
-            numIGGKernel.TabIndex = 692;
-            numIGGKernel.Value = new decimal(new int[] { 27, 0, 0, 0 });
-            // 
             // rbMorph
             // 
             rbMorph.AutoSize = true;
-            rbMorph.Location = new Point(132, 22);
+            rbMorph.Location = new Point(146, 22);
+            rbMorph.Margin = new Padding(4, 3, 4, 3);
             rbMorph.Name = "rbMorph";
             rbMorph.Size = new Size(151, 19);
             rbMorph.TabIndex = 740;
             rbMorph.Text = "Morphological Gradient";
             rbMorph.UseVisualStyleBackColor = true;
+            rbMorph.CheckedChanged += rbApp_CheckedChanged;
             // 
             // rbIGG
             // 
             rbIGG.AutoSize = true;
             rbIGG.Checked = true;
             rbIGG.Location = new Point(19, 22);
+            rbIGG.Margin = new Padding(4, 3, 4, 3);
             rbIGG.Name = "rbIGG";
             rbIGG.Size = new Size(97, 19);
             rbIGG.TabIndex = 740;
@@ -668,6 +712,17 @@
             rbIGG.UseVisualStyleBackColor = true;
             rbIGG.CheckedChanged += rbIGG_CheckedChanged;
             // 
+            // numIGGKernel
+            // 
+            numIGGKernel.Location = new Point(70, 50);
+            numIGGKernel.Margin = new Padding(4, 3, 4, 3);
+            numIGGKernel.Maximum = new decimal(new int[] { 255, 0, 0, 0 });
+            numIGGKernel.Minimum = new decimal(new int[] { 3, 0, 0, 0 });
+            numIGGKernel.Name = "numIGGKernel";
+            numIGGKernel.Size = new Size(52, 23);
+            numIGGKernel.TabIndex = 692;
+            numIGGKernel.Value = new decimal(new int[] { 27, 0, 0, 0 });
+            // 
             // groupBox3
             // 
             groupBox3.Controls.Add(label16);
@@ -675,8 +730,10 @@
             groupBox3.Controls.Add(numDistWeight);
             groupBox3.Controls.Add(btnBlur);
             groupBox3.Controls.Add(numKernel);
-            groupBox3.Location = new Point(13, 138);
+            groupBox3.Location = new Point(13, 131);
+            groupBox3.Margin = new Padding(4, 3, 4, 3);
             groupBox3.Name = "groupBox3";
+            groupBox3.Padding = new Padding(4, 3, 4, 3);
             groupBox3.Size = new Size(402, 59);
             groupBox3.TabIndex = 739;
             groupBox3.TabStop = false;
@@ -685,7 +742,8 @@
             // label16
             // 
             label16.AutoSize = true;
-            label16.Location = new Point(132, 26);
+            label16.Location = new Point(132, 27);
+            label16.Margin = new Padding(4, 0, 4, 0);
             label16.Name = "label16";
             label16.Size = new Size(64, 15);
             label16.TabIndex = 689;
@@ -694,7 +752,8 @@
             // label15
             // 
             label15.AutoSize = true;
-            label15.Location = new Point(19, 26);
+            label15.Location = new Point(19, 27);
+            label15.Margin = new Padding(4, 0, 4, 0);
             label15.Name = "label15";
             label15.Size = new Size(40, 15);
             label15.TabIndex = 685;
@@ -741,16 +800,18 @@
             groupBox2.Controls.Add(pictureBox1);
             groupBox2.Controls.Add(cbSecondColor);
             groupBox2.Controls.Add(label8);
-            groupBox2.Controls.Add(numValDst2);
-            groupBox2.Controls.Add(numValSrc2);
             groupBox2.Controls.Add(label7);
             groupBox2.Controls.Add(label17);
+            groupBox2.Controls.Add(numValDst2);
             groupBox2.Controls.Add(numValDst);
+            groupBox2.Controls.Add(numValSrc2);
             groupBox2.Controls.Add(numValSrc);
             groupBox2.Controls.Add(btnColors);
-            groupBox2.Location = new Point(13, 40);
+            groupBox2.Location = new Point(13, 42);
+            groupBox2.Margin = new Padding(4, 3, 4, 3);
             groupBox2.Name = "groupBox2";
-            groupBox2.Size = new Size(402, 92);
+            groupBox2.Padding = new Padding(4, 3, 4, 3);
+            groupBox2.Size = new Size(402, 84);
             groupBox2.TabIndex = 739;
             groupBox2.TabStop = false;
             groupBox2.Text = "1) Colors [optional, not done in automatic methods]";
@@ -758,19 +819,21 @@
             // pictureBox1
             // 
             pictureBox1.BorderStyle = BorderStyle.FixedSingle;
-            pictureBox1.Location = new Point(359, 8);
+            pictureBox1.Location = new Point(355, 6);
+            pictureBox1.Margin = new Padding(4, 3, 4, 3);
             pictureBox1.Name = "pictureBox1";
-            pictureBox1.Size = new Size(40, 40);
-            pictureBox1.TabIndex = 695;
+            pictureBox1.Size = new Size(44, 44);
+            pictureBox1.TabIndex = 691;
             pictureBox1.TabStop = false;
             // 
             // cbSecondColor
             // 
             cbSecondColor.AutoSize = true;
-            cbSecondColor.Location = new Point(19, 56);
+            cbSecondColor.Location = new Point(19, 55);
+            cbSecondColor.Margin = new Padding(4, 3, 4, 3);
             cbSecondColor.Name = "cbSecondColor";
             cbSecondColor.Size = new Size(125, 19);
-            cbSecondColor.TabIndex = 694;
+            cbSecondColor.TabIndex = 690;
             cbSecondColor.Text = "map a 2nd color X:";
             cbSecondColor.UseVisualStyleBackColor = true;
             cbSecondColor.CheckedChanged += cbSecondColor_CheckedChanged;
@@ -778,38 +841,18 @@
             // label8
             // 
             label8.AutoSize = true;
-            label8.Location = new Point(214, 58);
+            label8.Location = new Point(215, 57);
+            label8.Margin = new Padding(4, 0, 4, 0);
             label8.Name = "label8";
             label8.Size = new Size(31, 15);
-            label8.TabIndex = 693;
+            label8.TabIndex = 689;
             label8.Text = "to Y:";
-            // 
-            // numValDst2
-            // 
-            numValDst2.Enabled = false;
-            numValDst2.Location = new Point(251, 55);
-            numValDst2.Margin = new Padding(4, 3, 4, 3);
-            numValDst2.Maximum = new decimal(new int[] { 255, 0, 0, 0 });
-            numValDst2.Name = "numValDst2";
-            numValDst2.Size = new Size(52, 23);
-            numValDst2.TabIndex = 691;
-            numValDst2.Value = new decimal(new int[] { 164, 0, 0, 0 });
-            // 
-            // numValSrc2
-            // 
-            numValSrc2.Enabled = false;
-            numValSrc2.Location = new Point(155, 55);
-            numValSrc2.Margin = new Padding(4, 3, 4, 3);
-            numValSrc2.Maximum = new decimal(new int[] { 255, 0, 0, 0 });
-            numValSrc2.Name = "numValSrc2";
-            numValSrc2.Size = new Size(52, 23);
-            numValSrc2.TabIndex = 692;
-            numValSrc2.Value = new decimal(new int[] { 148, 0, 0, 0 });
             // 
             // label7
             // 
             label7.AutoSize = true;
-            label7.Location = new Point(132, 26);
+            label7.Location = new Point(132, 27);
+            label7.Margin = new Padding(4, 0, 4, 0);
             label7.Name = "label7";
             label7.Size = new Size(31, 15);
             label7.TabIndex = 689;
@@ -818,11 +861,23 @@
             // label17
             // 
             label17.AutoSize = true;
-            label17.Location = new Point(19, 26);
+            label17.Location = new Point(19, 27);
+            label17.Margin = new Padding(4, 0, 4, 0);
             label17.Name = "label17";
             label17.Size = new Size(44, 15);
             label17.TabIndex = 689;
             label17.Text = "Map X:";
+            // 
+            // numValDst2
+            // 
+            numValDst2.Enabled = false;
+            numValDst2.Location = new Point(253, 54);
+            numValDst2.Margin = new Padding(4, 3, 4, 3);
+            numValDst2.Maximum = new decimal(new int[] { 255, 0, 0, 0 });
+            numValDst2.Name = "numValDst2";
+            numValDst2.Size = new Size(52, 23);
+            numValDst2.TabIndex = 687;
+            numValDst2.Value = new decimal(new int[] { 148, 0, 0, 0 });
             // 
             // numValDst
             // 
@@ -833,6 +888,17 @@
             numValDst.Size = new Size(52, 23);
             numValDst.TabIndex = 687;
             numValDst.Value = new decimal(new int[] { 148, 0, 0, 0 });
+            // 
+            // numValSrc2
+            // 
+            numValSrc2.Enabled = false;
+            numValSrc2.Location = new Point(153, 54);
+            numValSrc2.Margin = new Padding(4, 3, 4, 3);
+            numValSrc2.Maximum = new decimal(new int[] { 255, 0, 0, 0 });
+            numValSrc2.Name = "numValSrc2";
+            numValSrc2.Size = new Size(52, 23);
+            numValSrc2.TabIndex = 688;
+            numValSrc2.Value = new decimal(new int[] { 62, 0, 0, 0 });
             // 
             // numValSrc
             // 
@@ -848,7 +914,7 @@
             // 
             btnColors.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             btnColors.ForeColor = SystemColors.ControlText;
-            btnColors.Location = new Point(313, 52);
+            btnColors.Location = new Point(317, 51);
             btnColors.Margin = new Padding(4, 3, 4, 3);
             btnColors.Name = "btnColors";
             btnColors.Size = new Size(65, 27);
@@ -861,16 +927,17 @@
             // panel1
             // 
             panel1.BackColor = SystemColors.ControlDarkDark;
-            panel1.Location = new Point(13, 357);
+            panel1.Location = new Point(13, 373);
+            panel1.Margin = new Padding(4, 3, 4, 3);
             panel1.Name = "panel1";
             panel1.Size = new Size(400, 2);
             panel1.TabIndex = 738;
             // 
             // groupBox1
             // 
-            groupBox1.Controls.Add(label9);
             groupBox1.Controls.Add(rbGreaterThan);
             groupBox1.Controls.Add(rbLessThan);
+            groupBox1.Controls.Add(label9);
             groupBox1.Controls.Add(label1);
             groupBox1.Controls.Add(numF1);
             groupBox1.Controls.Add(cbDoFirstMult);
@@ -886,29 +953,23 @@
             groupBox1.Controls.Add(label2);
             groupBox1.Controls.Add(label4);
             groupBox1.Controls.Add(numThMultiplier);
-            groupBox1.Location = new Point(12, 401);
+            groupBox1.Location = new Point(12, 415);
+            groupBox1.Margin = new Padding(4, 3, 4, 3);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(403, 186);
+            groupBox1.Padding = new Padding(4, 3, 4, 3);
+            groupBox1.Size = new Size(402, 196);
             groupBox1.TabIndex = 737;
             groupBox1.TabStop = false;
             groupBox1.Text = "Application Settings";
             // 
-            // label9
-            // 
-            label9.AutoSize = true;
-            label9.Location = new Point(153, 128);
-            label9.Name = "label9";
-            label9.Size = new Size(102, 15);
-            label9.TabIndex = 738;
-            label9.Text = "factor2 values are ";
-            // 
             // rbGreaterThan
             // 
             rbGreaterThan.AutoSize = true;
-            rbGreaterThan.Location = new Point(321, 126);
+            rbGreaterThan.Location = new Point(321, 129);
+            rbGreaterThan.Margin = new Padding(4, 3, 4, 3);
             rbGreaterThan.Name = "rbGreaterThan";
             rbGreaterThan.Size = new Size(47, 19);
-            rbGreaterThan.TabIndex = 737;
+            rbGreaterThan.TabIndex = 738;
             rbGreaterThan.Text = "> th";
             rbGreaterThan.UseVisualStyleBackColor = true;
             // 
@@ -916,20 +977,32 @@
             // 
             rbLessThan.AutoSize = true;
             rbLessThan.Checked = true;
-            rbLessThan.Location = new Point(267, 126);
+            rbLessThan.Location = new Point(261, 129);
+            rbLessThan.Margin = new Padding(4, 3, 4, 3);
             rbLessThan.Name = "rbLessThan";
             rbLessThan.Size = new Size(47, 19);
-            rbLessThan.TabIndex = 737;
+            rbLessThan.TabIndex = 738;
             rbLessThan.TabStop = true;
             rbLessThan.Text = "< th";
             rbLessThan.UseVisualStyleBackColor = true;
+            // 
+            // label9
+            // 
+            label9.AutoSize = true;
+            label9.Location = new Point(144, 132);
+            label9.Margin = new Padding(4, 0, 4, 0);
+            label9.Name = "label9";
+            label9.Size = new Size(102, 15);
+            label9.TabIndex = 737;
+            label9.Text = "factor2 values are ";
             // 
             // cbDoFirstMult
             // 
             cbDoFirstMult.AutoSize = true;
             cbDoFirstMult.Checked = true;
             cbDoFirstMult.CheckState = CheckState.Checked;
-            cbDoFirstMult.Location = new Point(8, 18);
+            cbDoFirstMult.Location = new Point(6, 23);
+            cbDoFirstMult.Margin = new Padding(4, 3, 4, 3);
             cbDoFirstMult.Name = "cbDoFirstMult";
             cbDoFirstMult.Size = new Size(87, 19);
             cbDoFirstMult.TabIndex = 736;
@@ -942,7 +1015,8 @@
             cbDoSecondMult.AutoSize = true;
             cbDoSecondMult.Checked = true;
             cbDoSecondMult.CheckState = CheckState.Checked;
-            cbDoSecondMult.Location = new Point(8, 78);
+            cbDoSecondMult.Location = new Point(6, 78);
+            cbDoSecondMult.Margin = new Padding(4, 3, 4, 3);
             cbDoSecondMult.Name = "cbDoSecondMult";
             cbDoSecondMult.Size = new Size(92, 19);
             cbDoSecondMult.TabIndex = 736;
@@ -976,13 +1050,26 @@
             backgroundWorker4.ProgressChanged += backgroundWorker4_ProgressChanged;
             backgroundWorker4.RunWorkerCompleted += backgroundWorker4_RunWorkerCompleted;
             // 
+            // cbProcInner
+            // 
+            cbProcInner.AutoSize = true;
+            cbProcInner.Checked = true;
+            cbProcInner.CheckState = CheckState.Checked;
+            cbProcInner.Location = new Point(246, 112);
+            cbProcInner.Name = "cbProcInner";
+            cbProcInner.Size = new Size(143, 19);
+            cbProcInner.TabIndex = 751;
+            cbProcInner.Text = "Process Inner Outlines";
+            cbProcInner.UseVisualStyleBackColor = true;
+            // 
             // frmLumMapSettings
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1255, 797);
+            ClientSize = new Size(1255, 805);
             Controls.Add(splitContainer1);
             FormBorderStyle = FormBorderStyle.Fixed3D;
+            Margin = new Padding(4, 3, 4, 3);
             MaximizeBox = false;
             Name = "frmLumMapSettings";
             StartPosition = FormStartPosition.CenterParent;
@@ -1005,9 +1092,10 @@
             statusStrip1.PerformLayout();
             groupBox4.ResumeLayout(false);
             groupBox4.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)numPostBlurKrrnl).EndInit();
             ((System.ComponentModel.ISupportInitialize)numIGGDivisor).EndInit();
             ((System.ComponentModel.ISupportInitialize)numIGGAlpha).EndInit();
+            ((System.ComponentModel.ISupportInitialize)numTolerance).EndInit();
+            ((System.ComponentModel.ISupportInitialize)numPostBlurKrrnl).EndInit();
             ((System.ComponentModel.ISupportInitialize)numIGGKernel).EndInit();
             groupBox3.ResumeLayout(false);
             groupBox3.PerformLayout();
@@ -1017,12 +1105,13 @@
             groupBox2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             ((System.ComponentModel.ISupportInitialize)numValDst2).EndInit();
-            ((System.ComponentModel.ISupportInitialize)numValSrc2).EndInit();
             ((System.ComponentModel.ISupportInitialize)numValDst).EndInit();
+            ((System.ComponentModel.ISupportInitialize)numValSrc2).EndInit();
             ((System.ComponentModel.ISupportInitialize)numValSrc).EndInit();
             groupBox1.ResumeLayout(false);
             groupBox1.PerformLayout();
             ResumeLayout(false);
+
         }
 
         #endregion
@@ -1092,15 +1181,18 @@
         internal NumericUpDown numValSrc2;
         internal CheckBox cbAppSettingsOnly;
         private PictureBox pictureBox1;
-        private Label label9;
         internal RadioButton rbGreaterThan;
         internal RadioButton rbLessThan;
-        internal NumericUpDown numPostBlurKrrnl;
+        private Label label9;
         internal CheckBox cbPostBlur;
         private Label label10;
+        internal NumericUpDown numPostBlurKrrnl;
         private RadioButton rbMorph;
         private RadioButton rbIGG;
         internal CheckBox cbDoSecondMult;
         internal CheckBox cbDoFirstMult;
+        private Label label11;
+        internal NumericUpDown numTolerance;
+        private CheckBox cbProcInner;
     }
 }
