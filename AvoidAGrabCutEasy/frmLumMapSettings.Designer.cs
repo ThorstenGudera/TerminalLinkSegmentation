@@ -66,6 +66,7 @@ namespace AvoidAGrabCutEasy
             rbApp = new RadioButton();
             rbImage = new RadioButton();
             groupBox4 = new GroupBox();
+            cbProcInner = new CheckBox();
             cbPostBlur = new CheckBox();
             label22 = new Label();
             numIGGDivisor = new NumericUpDown();
@@ -109,7 +110,7 @@ namespace AvoidAGrabCutEasy
             backgroundWorker3 = new System.ComponentModel.BackgroundWorker();
             Timer3 = new System.Windows.Forms.Timer(components);
             backgroundWorker4 = new System.ComponentModel.BackgroundWorker();
-            cbProcInner = new CheckBox();
+            cbSetInnerTransp = new CheckBox();
             ((System.ComponentModel.ISupportInitialize)numF1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numTh).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numF2).BeginInit();
@@ -546,6 +547,7 @@ namespace AvoidAGrabCutEasy
             // 
             // groupBox4
             // 
+            groupBox4.Controls.Add(cbSetInnerTransp);
             groupBox4.Controls.Add(cbProcInner);
             groupBox4.Controls.Add(cbPostBlur);
             groupBox4.Controls.Add(label22);
@@ -569,6 +571,18 @@ namespace AvoidAGrabCutEasy
             groupBox4.TabIndex = 739;
             groupBox4.TabStop = false;
             groupBox4.Text = "3) InvGaussGrad";
+            // 
+            // cbProcInner
+            // 
+            cbProcInner.AutoSize = true;
+            cbProcInner.Checked = true;
+            cbProcInner.CheckState = CheckState.Checked;
+            cbProcInner.Location = new Point(246, 112);
+            cbProcInner.Name = "cbProcInner";
+            cbProcInner.Size = new Size(143, 19);
+            cbProcInner.TabIndex = 751;
+            cbProcInner.Text = "Process Inner Outlines";
+            cbProcInner.UseVisualStyleBackColor = true;
             // 
             // cbPostBlur
             // 
@@ -1050,17 +1064,17 @@ namespace AvoidAGrabCutEasy
             backgroundWorker4.ProgressChanged += backgroundWorker4_ProgressChanged;
             backgroundWorker4.RunWorkerCompleted += backgroundWorker4_RunWorkerCompleted;
             // 
-            // cbProcInner
+            // cbSetInnerTransp
             // 
-            cbProcInner.AutoSize = true;
-            cbProcInner.Checked = true;
-            cbProcInner.CheckState = CheckState.Checked;
-            cbProcInner.Location = new Point(246, 112);
-            cbProcInner.Name = "cbProcInner";
-            cbProcInner.Size = new Size(143, 19);
-            cbProcInner.TabIndex = 751;
-            cbProcInner.Text = "Process Inner Outlines";
-            cbProcInner.UseVisualStyleBackColor = true;
+            cbSetInnerTransp.AutoSize = true;
+            cbSetInnerTransp.Checked = true;
+            cbSetInnerTransp.CheckState = CheckState.Checked;
+            cbSetInnerTransp.Location = new Point(70, 141);
+            cbSetInnerTransp.Name = "cbSetInnerTransp";
+            cbSetInnerTransp.Size = new Size(151, 19);
+            cbSetInnerTransp.TabIndex = 752;
+            cbSetInnerTransp.Text = "set InnerOutlines transp";
+            cbSetInnerTransp.UseVisualStyleBackColor = true;
             // 
             // frmLumMapSettings
             // 
@@ -1194,5 +1208,6 @@ namespace AvoidAGrabCutEasy
         private Label label11;
         internal NumericUpDown numTolerance;
         private CheckBox cbProcInner;
+        private CheckBox cbSetInnerTransp;
     }
 }

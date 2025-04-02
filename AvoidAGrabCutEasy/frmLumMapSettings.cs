@@ -915,10 +915,12 @@ namespace AvoidAGrabCutEasy
                 bool invGaussGrad = this.rbIGG.Checked;
                 int tolerance = (int)this.numTolerance.Value;
                 bool procInner = this.cbProcInner.Checked;
+                bool setInnerTransp = this.cbSetInnerTransp.Checked;
 
                 object[] o = { kernelLength, cornerWeight, sigma, steepness,
                                radius, alpha, gradientMode, divisor, grayscale, stretchValues,
-                               threshold, postBlur, pBKrnl, invGaussGrad, tolerance, procInner };
+                               threshold, postBlur, pBKrnl, invGaussGrad, tolerance, procInner,
+                               setInnerTransp };
 
                 this.backgroundWorker4.RunWorkerAsync(o);
             }
@@ -948,6 +950,7 @@ namespace AvoidAGrabCutEasy
                     bool invGaussGrad = (bool)o[13];
                     int tolerance = (int)o[14];
                     bool procInner = (bool)o[15];
+                    bool setInnerTransp = (bool)o[16];
 
                     Rectangle r = new Rectangle(0, 0, bmp.Width, bmp.Height);
 
@@ -1023,8 +1026,18 @@ namespace AvoidAGrabCutEasy
                                                 try
                                                 {
                                                     gP.AddLines(cc.Coord.Select(a => new PointF(a.X, a.Y)).ToArray());
-                                                    gx.CompositingMode = CompositingMode.SourceCopy;
-                                                    gx.FillPath(Brushes.Transparent, gP);
+
+                                                    if (setInnerTransp)
+                                                    {
+                                                        gx.CompositingMode = CompositingMode.SourceCopy;
+                                                        gx.FillPath(Brushes.Transparent, gP);
+                                                    }
+                                                    else
+                                                    {
+                                                        using Bitmap bC = new Bitmap(iG);
+                                                        using TextureBrush tb = new TextureBrush(bC);
+                                                        gx.FillPath(tb, gP);
+                                                    }
                                                 }
                                                 catch (Exception exc)
                                                 {

@@ -2475,7 +2475,7 @@ namespace AvoidAGrabCutEasy
                 this.SetBitmap(ref this._b4Copy, ref bC);
                 this.toolStripDropDownButton1.Enabled = true;
 
-                this.cbCompLumMap.Checked = false;
+                //this.cbCompLumMap.Checked = false;
 
                 //Bitmap bC2 = new Bitmap(this.helplineRulerCtrl1.Bmp);
                 //this.SetBitmap(ref this._bmpBU, ref bC2);

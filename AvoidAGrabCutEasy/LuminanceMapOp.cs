@@ -21,7 +21,8 @@ namespace AvoidAGrabCutEasy
         public bool Running { get; internal set; }
         public int Tolerance { get; internal set; } = 101;
         public bool ShowBitmap { get; internal set; }
-        public bool ProcInnerOutlines { get; private set; } = true;
+        public bool ProcInnerOutlines { get; internal set; } = true;
+        public bool SetInnerTransp { get; internal set; } = true;
 
         public LuminanceMapOp() { }
 
@@ -139,8 +140,18 @@ namespace AvoidAGrabCutEasy
                                             try
                                             {
                                                 gP.AddLines(cc.Coord.Select(a => new PointF(a.X, a.Y)).ToArray());
-                                                gx.CompositingMode = CompositingMode.SourceCopy;
-                                                gx.FillPath(Brushes.Transparent, gP);
+
+                                                if (this.SetInnerTransp)
+                                                {
+                                                    gx.CompositingMode = CompositingMode.SourceCopy;
+                                                    gx.FillPath(Brushes.Transparent, gP);
+                                                }
+                                                else
+                                                {
+                                                    using Bitmap bC = new Bitmap(iG);
+                                                    using TextureBrush tb = new TextureBrush(bC);
+                                                    gx.FillPath(tb, gP);
+                                                }
                                             }
                                             catch (Exception exc)
                                             {
@@ -337,8 +348,18 @@ namespace AvoidAGrabCutEasy
                                                 try
                                                 {
                                                     gP.AddLines(cc.Coord.Select(a => new PointF(a.X, a.Y)).ToArray());
-                                                    gx.CompositingMode = CompositingMode.SourceCopy;
-                                                    gx.FillPath(Brushes.Transparent, gP);
+
+                                                    if (this.SetInnerTransp)
+                                                    {
+                                                        gx.CompositingMode = CompositingMode.SourceCopy;
+                                                        gx.FillPath(Brushes.Transparent, gP);
+                                                    }
+                                                    else
+                                                    {
+                                                        using Bitmap bC = new Bitmap(iG);
+                                                        using TextureBrush tb = new TextureBrush(bC);
+                                                        gx.FillPath(tb, gP);
+                                                    }
                                                 }
                                                 catch (Exception exc)
                                                 {
