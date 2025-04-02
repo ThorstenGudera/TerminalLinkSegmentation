@@ -916,11 +916,12 @@ namespace AvoidAGrabCutEasy
                 int tolerance = (int)this.numTolerance.Value;
                 bool procInner = this.cbProcInner.Checked;
                 bool setInnerTransp = this.cbSetInnerTransp.Checked;
+                bool useChainCode = this.cbUseChainCode.Checked;
 
                 object[] o = { kernelLength, cornerWeight, sigma, steepness,
                                radius, alpha, gradientMode, divisor, grayscale, stretchValues,
                                threshold, postBlur, pBKrnl, invGaussGrad, tolerance, procInner,
-                               setInnerTransp };
+                               setInnerTransp, useChainCode };
 
                 this.backgroundWorker4.RunWorkerAsync(o);
             }
@@ -951,6 +952,7 @@ namespace AvoidAGrabCutEasy
                     int tolerance = (int)o[14];
                     bool procInner = (bool)o[15];
                     bool setInnerTransp = (bool)o[16];
+                    bool useChainCode = (bool)o[17];
 
                     Rectangle r = new Rectangle(0, 0, bmp.Width, bmp.Height);
 
@@ -994,54 +996,57 @@ namespace AvoidAGrabCutEasy
                                 }
                             }
 
-                            //now get the components and fill the inner parts of the components white,
-                            //so these pixels will not be removed from the result.
-                            using Bitmap iGC = new Bitmap(iG ?? throw new ArgumentNullException("iG is null"));
-                            Grayscale(iGC);
-                            Fipbmp fip = new Fipbmp();
-                            fip.ReplaceColors(iGC, 0, 0, 0, 0, tolerance, 255, 0, 0, 0);
-
-                            List<ChainCode>? c = GetBoundary(iGC, 0, false);
-                            if (c != null)
+                            if (useChainCode)
                             {
-                                c = c.OrderByDescending(x => x.Coord.Count).ToList();
+                                //now get the components and fill the inner parts of the components white,
+                                //so these pixels will not be removed from the result.
+                                using Bitmap iGC = new Bitmap(iG ?? throw new ArgumentNullException("iG is null"));
+                                Grayscale(iGC);
+                                Fipbmp fip = new Fipbmp();
+                                fip.ReplaceColors(iGC, 0, 0, 0, 0, tolerance, 255, 0, 0, 0);
 
-                                foreach (ChainCode cc in c)
+                                List<ChainCode>? c = GetBoundary(iGC, 0, false);
+                                if (c != null)
                                 {
-                                    if (!ChainFinder.IsInnerOutline(cc))
+                                    c = c.OrderByDescending(x => x.Coord.Count).ToList();
+
+                                    foreach (ChainCode cc in c)
                                     {
-                                        using Graphics gx = Graphics.FromImage(iG);
-                                        using GraphicsPath gP = new GraphicsPath();
-                                        gP.AddLines(cc.Coord.Select(a => new PointF(a.X, a.Y)).ToArray());
-                                        gP.FillMode = FillMode.Winding;
-                                        gx.FillPath(Brushes.White, gP);
-                                    }
-                                    else
-                                    {
-                                        if (procInner)
+                                        if (!ChainFinder.IsInnerOutline(cc))
                                         {
                                             using Graphics gx = Graphics.FromImage(iG);
-                                            using (GraphicsPath gP = new GraphicsPath())
+                                            using GraphicsPath gP = new GraphicsPath();
+                                            gP.AddLines(cc.Coord.Select(a => new PointF(a.X, a.Y)).ToArray());
+                                            gP.FillMode = FillMode.Winding;
+                                            gx.FillPath(Brushes.White, gP);
+                                        }
+                                        else
+                                        {
+                                            if (procInner)
                                             {
-                                                try
+                                                using Graphics gx = Graphics.FromImage(iG);
+                                                using (GraphicsPath gP = new GraphicsPath())
                                                 {
-                                                    gP.AddLines(cc.Coord.Select(a => new PointF(a.X, a.Y)).ToArray());
+                                                    try
+                                                    {
+                                                        gP.AddLines(cc.Coord.Select(a => new PointF(a.X, a.Y)).ToArray());
 
-                                                    if (setInnerTransp)
-                                                    {
-                                                        gx.CompositingMode = CompositingMode.SourceCopy;
-                                                        gx.FillPath(Brushes.Transparent, gP);
+                                                        if (setInnerTransp)
+                                                        {
+                                                            gx.CompositingMode = CompositingMode.SourceCopy;
+                                                            gx.FillPath(Brushes.Transparent, gP);
+                                                        }
+                                                        else
+                                                        {
+                                                            using Bitmap bC = new Bitmap(iG);
+                                                            using TextureBrush tb = new TextureBrush(bC);
+                                                            gx.FillPath(tb, gP);
+                                                        }
                                                     }
-                                                    else
+                                                    catch (Exception exc)
                                                     {
-                                                        using Bitmap bC = new Bitmap(iG);
-                                                        using TextureBrush tb = new TextureBrush(bC);
-                                                        gx.FillPath(tb, gP);
+                                                        Console.WriteLine(exc.ToString());
                                                     }
-                                                }
-                                                catch (Exception exc)
-                                                {
-                                                    Console.WriteLine(exc.ToString());
                                                 }
                                             }
                                         }
@@ -1227,6 +1232,12 @@ namespace AvoidAGrabCutEasy
                 }
             }
             return l;
+        }
+
+        private void cbUseChainCode_CheckedChanged(object sender, EventArgs e)
+        {
+            this.label11.Enabled = this.numTolerance.Enabled =
+                this.cbSetInnerTransp.Enabled = this.cbProcInner.Enabled = this.cbUseChainCode.Checked;
         }
     }
 }

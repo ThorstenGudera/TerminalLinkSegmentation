@@ -66,6 +66,7 @@ namespace AvoidAGrabCutEasy
             rbApp = new RadioButton();
             rbImage = new RadioButton();
             groupBox4 = new GroupBox();
+            cbSetInnerTransp = new CheckBox();
             cbProcInner = new CheckBox();
             cbPostBlur = new CheckBox();
             label22 = new Label();
@@ -110,7 +111,7 @@ namespace AvoidAGrabCutEasy
             backgroundWorker3 = new System.ComponentModel.BackgroundWorker();
             Timer3 = new System.Windows.Forms.Timer(components);
             backgroundWorker4 = new System.ComponentModel.BackgroundWorker();
-            cbSetInnerTransp = new CheckBox();
+            cbUseChainCode = new CheckBox();
             ((System.ComponentModel.ISupportInitialize)numF1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numTh).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numF2).BeginInit();
@@ -285,6 +286,7 @@ namespace AvoidAGrabCutEasy
             label6.Size = new Size(86, 15);
             label6.TabIndex = 734;
             label6.Text = "multiplier 10^-";
+            toolTip1.SetToolTip(label6, "unchecking auto and lowering this value\r\nwill lead to displaying less pixels");
             // 
             // numThMultiplier
             // 
@@ -295,6 +297,7 @@ namespace AvoidAGrabCutEasy
             numThMultiplier.Name = "numThMultiplier";
             numThMultiplier.Size = new Size(88, 23);
             numThMultiplier.TabIndex = 735;
+            toolTip1.SetToolTip(numThMultiplier, "unchecking auto and lowering this value\r\nwill lead to displaying less pixels");
             numThMultiplier.Value = new decimal(new int[] { 10, 0, 0, 0 });
             // 
             // cbAuto
@@ -547,6 +550,7 @@ namespace AvoidAGrabCutEasy
             // 
             // groupBox4
             // 
+            groupBox4.Controls.Add(cbUseChainCode);
             groupBox4.Controls.Add(cbSetInnerTransp);
             groupBox4.Controls.Add(cbProcInner);
             groupBox4.Controls.Add(cbPostBlur);
@@ -571,6 +575,18 @@ namespace AvoidAGrabCutEasy
             groupBox4.TabIndex = 739;
             groupBox4.TabStop = false;
             groupBox4.Text = "3) InvGaussGrad";
+            // 
+            // cbSetInnerTransp
+            // 
+            cbSetInnerTransp.AutoSize = true;
+            cbSetInnerTransp.Checked = true;
+            cbSetInnerTransp.CheckState = CheckState.Checked;
+            cbSetInnerTransp.Location = new Point(70, 141);
+            cbSetInnerTransp.Name = "cbSetInnerTransp";
+            cbSetInnerTransp.Size = new Size(151, 19);
+            cbSetInnerTransp.TabIndex = 752;
+            cbSetInnerTransp.Text = "set InnerOutlines transp";
+            cbSetInnerTransp.UseVisualStyleBackColor = true;
             // 
             // cbProcInner
             // 
@@ -1064,17 +1080,18 @@ namespace AvoidAGrabCutEasy
             backgroundWorker4.ProgressChanged += backgroundWorker4_ProgressChanged;
             backgroundWorker4.RunWorkerCompleted += backgroundWorker4_RunWorkerCompleted;
             // 
-            // cbSetInnerTransp
+            // cbUseChainCode
             // 
-            cbSetInnerTransp.AutoSize = true;
-            cbSetInnerTransp.Checked = true;
-            cbSetInnerTransp.CheckState = CheckState.Checked;
-            cbSetInnerTransp.Location = new Point(70, 141);
-            cbSetInnerTransp.Name = "cbSetInnerTransp";
-            cbSetInnerTransp.Size = new Size(151, 19);
-            cbSetInnerTransp.TabIndex = 752;
-            cbSetInnerTransp.Text = "set InnerOutlines transp";
-            cbSetInnerTransp.UseVisualStyleBackColor = true;
+            cbUseChainCode.AutoSize = true;
+            cbUseChainCode.Checked = true;
+            cbUseChainCode.CheckState = CheckState.Checked;
+            cbUseChainCode.Location = new Point(246, 81);
+            cbUseChainCode.Name = "cbUseChainCode";
+            cbUseChainCode.Size = new Size(106, 19);
+            cbUseChainCode.TabIndex = 753;
+            cbUseChainCode.Text = "use ChainCode";
+            cbUseChainCode.UseVisualStyleBackColor = true;
+            cbUseChainCode.CheckedChanged += cbUseChainCode_CheckedChanged;
             // 
             // frmLumMapSettings
             // 
@@ -1209,5 +1226,6 @@ namespace AvoidAGrabCutEasy
         internal NumericUpDown numTolerance;
         private CheckBox cbProcInner;
         private CheckBox cbSetInnerTransp;
+        private CheckBox cbUseChainCode;
     }
 }
