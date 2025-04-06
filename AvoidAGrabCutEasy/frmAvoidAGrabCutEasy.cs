@@ -2576,6 +2576,7 @@ namespace AvoidAGrabCutEasy
             this.cbScribbleMode.Checked = false;
             this.cbScribbleMode.Enabled = false;
             this.label17.Enabled = this.numComponents2.Enabled = true;
+            this.cbOutline.Enabled = this.numOutlineWH.Enabled = true;
 
             this.numMaxSize.Enabled = this.numGmmComp.Enabled = false;
 
@@ -3953,6 +3954,7 @@ namespace AvoidAGrabCutEasy
             this.cbScribbleMode.Checked = false;
             this.cbScribbleMode.Enabled = false;
             this.label17.Enabled = this.numComponents2.Enabled = true;
+            this.cbOutline.Enabled = this.numOutlineWH.Enabled = true;
 
             this.toolStripStatusLabel4.Text = "done";
 
@@ -6169,6 +6171,40 @@ namespace AvoidAGrabCutEasy
             }
             if (this._lop != null && !this.cbCompLumMap.Checked)
                 this._lop.Running = false;
+        }
+
+        private void cbOutline_CheckedChanged(object sender, EventArgs e)
+        {
+            if (this.cbOutline.Checked && this.helplineRulerCtrl2.Bmp != null)
+            {
+                using Bitmap bmp = new Bitmap(this.helplineRulerCtrl2.Bmp);
+                List<ChainCode>? c = GetBoundary(bmp, 0, false);
+                c = c?.OrderByDescending(x => x.Coord.Count).ToList();
+
+                if (c != null)
+                {
+                    int wh = (int)this.numOutlineWH.Value;
+                    this.cbScribbleMode.Checked = true;
+                    this.cbClickMode.Checked = false;
+
+                    //if(MessageBox.Show("Clear existing scribbles?", "", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                    btnClearScribbles_Click(this.btnClearScribbles, new EventArgs());
+
+                    AddPointsToScribblePathFromFrmQuickExtract(c, wh);
+
+                    this._pic_changed = true;
+                }
+            }
+
+            this.helplineRulerCtrl1.dbPanel1.Invalidate();
+        }
+
+        private void numOutlineWH_ValueChanged(object sender, EventArgs e)
+        {
+            if (this.cbOutline.Checked && this.helplineRulerCtrl2.Bmp != null)
+            {
+                this.cbOutline_CheckedChanged(this.cbOutline, new EventArgs());
+            }
         }
     }
 }

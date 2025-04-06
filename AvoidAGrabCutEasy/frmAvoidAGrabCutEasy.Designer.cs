@@ -158,6 +158,8 @@
             timer1 = new System.Windows.Forms.Timer(components);
             backgroundWorker4 = new System.ComponentModel.BackgroundWorker();
             timer2 = new System.Windows.Forms.Timer(components);
+            numOutlineWH = new NumericUpDown();
+            cbOutline = new CheckBox();
             panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numComponents2).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numWH).BeginInit();
@@ -177,11 +179,14 @@
             splitContainer1.SuspendLayout();
             statusStrip1.SuspendLayout();
             contextMenuStrip1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)numOutlineWH).BeginInit();
             SuspendLayout();
             // 
             // panel1
             // 
             panel1.AutoScroll = true;
+            panel1.Controls.Add(numOutlineWH);
+            panel1.Controls.Add(cbOutline);
             panel1.Controls.Add(panel9);
             panel1.Controls.Add(panel6);
             panel1.Controls.Add(panel2);
@@ -1649,6 +1654,32 @@
             timer2.Interval = 5000;
             timer2.Tick += timer2_Tick;
             // 
+            // numOutlineWH
+            // 
+            numOutlineWH.Enabled = false;
+            numOutlineWH.Location = new Point(1190, 157);
+            numOutlineWH.Maximum = new decimal(new int[] { 255, 0, 0, 0 });
+            numOutlineWH.Minimum = new decimal(new int[] { 3, 0, 0, 0 });
+            numOutlineWH.Name = "numOutlineWH";
+            numOutlineWH.Size = new Size(52, 23);
+            numOutlineWH.TabIndex = 750;
+            toolTip1.SetToolTip(numOutlineWH, "Clears existing scribbles");
+            numOutlineWH.Value = new decimal(new int[] { 15, 0, 0, 0 });
+            numOutlineWH.ValueChanged += numOutlineWH_ValueChanged;
+            // 
+            // cbOutline
+            // 
+            cbOutline.AutoSize = true;
+            cbOutline.Enabled = false;
+            cbOutline.Location = new Point(927, 159);
+            cbOutline.Name = "cbOutline";
+            cbOutline.Size = new Size(258, 19);
+            cbOutline.TabIndex = 749;
+            cbOutline.Text = "compute outline to helplineRulerCtrl1 width";
+            toolTip1.SetToolTip(cbOutline, "Clears existing scribbles");
+            cbOutline.UseVisualStyleBackColor = true;
+            cbOutline.CheckedChanged += cbOutline_CheckedChanged;
+            // 
             // frmAvoidAGrabCutEasy
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -1685,6 +1716,7 @@
             statusStrip1.ResumeLayout(false);
             statusStrip1.PerformLayout();
             contextMenuStrip1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)numOutlineWH).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -1819,5 +1851,7 @@
         private Panel panel5;
         private Panel panel9;
         internal System.Windows.Forms.Timer timer2;
+        public NumericUpDown numOutlineWH;
+        public CheckBox cbOutline;
     }
 }
