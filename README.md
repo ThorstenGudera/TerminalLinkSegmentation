@@ -60,3 +60,6 @@ Ok, I sometimes get a "something didn't work" error page, when clicking the link
 If you do so either, here's what helps me in this situation. Simply click the "back" button in your browser.
 After a phase of flashing and blinking, the correct file should be displayed. At least this works for me.
 This really should be fixed, its exactly the link they provided [that] I added to the readme file.)
+
+# Update:
+Since complexity has risen a lot, I added a lightweight demo for better code readability (winexe project "DemoLightWeight").
