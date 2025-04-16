@@ -42,44 +42,44 @@ namespace AvoidAGrabCutEasy
         private bool _addOnlySourceAndSink;
 
         public Bitmap? Bmp { get; set; }
-        public int Gmm_comp { get; internal set; }
-        public double Gamma { get; internal set; }
-        public int NumIters { get; internal set; }
-        public bool RectMode { get; internal set; }
-        public Rectangle Rc { get; internal set; }
-        public BackgroundWorker? BGW { get; internal set; }
-        public int[,]? Mask { get; internal set; }
-        public List<int>? Result { get; internal set; }
-        public bool ScribbleMode { get; internal set; }
+        public int Gmm_comp { get; set; }
+        public double Gamma { get; set; }
+        public int NumIters { get;  set; }
+        public bool RectMode { get;  set; }
+        public Rectangle Rc { get;  set; }
+        public BackgroundWorker? BGW { get;  set; }
+        public int[,]? Mask { get;  set; }
+        public List<int>? Result { get;  set; }
+        public bool ScribbleMode { get;  set; }
         public List<StartNode> StartNodes { get; private set; } = new List<StartNode> { };
-        public Dictionary<int, Dictionary<int, List<List<Point>>>>? Scribbles { get; internal set; }
+        public Dictionary<int, Dictionary<int, List<List<Point>>>>? Scribbles { get;  set; }
         public bool QuickEstimation { get; set; }
-        public bool EightAdj { get; internal set; }
-        internal ListSelectionMode SelectionMode { get; set; }
-        public bool SkipLearn { get; internal set; }
-        public bool GammaChanged { get; internal set; }
+        public bool EightAdj { get;  set; }
+        public ListSelectionMode SelectionMode { get; set; }
+        public bool SkipLearn { get;  set; }
+        public bool GammaChanged { get;  set; }
         public double Threshold { get; set; } = 13;
         public bool UseThreshold { get; set; } = false;
-        public double ProbMult1 { get; internal set; } = 1.0;
-        public bool MultCapacitiesForTLinks { get; internal set; }
-        public bool CastIntCapacitiesForTLinks { get; internal set; }
-        public double MultTLinkCapacity { get; internal set; }
-        public double NumItems { get; internal set; }
-        public double NumCorrect { get; internal set; }
-        public double NumItems2 { get; internal set; }
-        public double NumCorrect2 { get; internal set; }
-        public double KMInitW { get; internal set; } = 2;
-        public double KMInitH { get; internal set; } = 2;
-        public BoykovKolmogorov? AlgBK { get; internal set; }
-        public bool AutoThreshold { get; internal set; }
-        public double MaxAllowedAutoThreshold { get; internal set; } = 16.1;
-        public double AutoThresholdAddition { get; internal set; } = 6.5;
-        public int KMeansInitIters { get; internal set; } = 10;
-        public int KMeansIters { get; internal set; } = 0;
-        public bool kMInitRnd { get; internal set; } = false;
-        public bool AssumeExpDist { get; internal set; }
-        public List<Tuple<int, int, int, bool, List<List<Point>>>>? ScribbleSeq { get; internal set; }
-        public float[,]? IGGLuminanceMap { get; internal set; }
+        public double ProbMult1 { get;  set; } = 1.0;
+        public bool MultCapacitiesForTLinks { get;  set; }
+        public bool CastIntCapacitiesForTLinks { get;  set; }
+        public double MultTLinkCapacity { get;  set; }
+        public double NumItems { get;  set; }
+        public double NumCorrect { get;  set; }
+        public double NumItems2 { get;  set; }
+        public double NumCorrect2 { get;  set; }
+        public double KMInitW { get;  set; } = 2;
+        public double KMInitH { get;  set; } = 2;
+        public BoykovKolmogorov? AlgBK { get;  set; }
+        public bool AutoThreshold { get;  set; }
+        public double MaxAllowedAutoThreshold { get;  set; } = 16.1;
+        public double AutoThresholdAddition { get;  set; } = 6.5;
+        public int KMeansInitIters { get;  set; } = 10;
+        public int KMeansIters { get;  set; } = 0;
+        public bool kMInitRnd { get;  set; } = false;
+        public bool AssumeExpDist { get;  set; }
+        public List<Tuple<int, int, int, bool, List<List<Point>>>>? ScribbleSeq { get;  set; }
+        public float[,]? IGGLuminanceMap { get;  set; }
         internal LumMapApplicationSettings? LumMapSettings { get; set; }
         public bool UseLumMap { get; set; }
 

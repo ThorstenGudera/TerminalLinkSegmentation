@@ -6,11 +6,14 @@
     <Nullable>enable</Nullable>
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\AvailMem\AvailMem.vbproj" />
     <ProjectReference Include="..\AvoidAGrabCutEasy\AvoidAGrabCutEasy.csproj" />
-    <ProjectReference Include="..\DemoLightWeight\DemoLightWeight.csproj" />
+    <ProjectReference Include="..\ChainCodeFinder\ChainCodeFinder.vbproj" />
+    <ProjectReference Include="..\HelplineRulerControl\HelplineRulerControl.vbproj" />
   </ItemGroup>
 
 </Project>

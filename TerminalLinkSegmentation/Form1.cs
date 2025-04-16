@@ -1,5 +1,6 @@
 using AvoidAGrabCutEasy;
 using OutlineOperations;
+using System.Diagnostics;
 using System.Drawing.Imaging;
 
 namespace TerminalLinkSegmentation
@@ -15,6 +16,7 @@ namespace TerminalLinkSegmentation
         private int _iy;
         private int _endX;
         private int _endY;
+        private string _lastOpenedFile = "";
 
         public Form1()
         {
@@ -39,50 +41,22 @@ namespace TerminalLinkSegmentation
                 using (Image img = Image.FromFile(this.OpenFileDialog1.FileName))
                     bmp = new Bitmap(img);
 
-                //test, if the BitmapData class is really back in .net 8.0
-                //if(bmp != null)
-                //{
-                //    int w = bmp.Width;
-                //    int h = bmp.Height;
-                //    BitmapData bmD = bmp.LockBits(new Rectangle(0, 0, w, h), ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
-                //    int stride = bmD.Stride;
+                if (bmp != null)
+                {
+                    this._lastOpenedFile = this.OpenFileDialog1.FileName;
 
-                //    unsafe
-                //    {
-                //        Parallel.For(0, h, y =>
-                //        {
-                //            byte* p = (byte*)bmD.Scan0;
-                //            p += y * stride;
+                    Image iOld = this.pictureBox1.Image;
+                    this.pictureBox1.Image = bmp;
+                    if (iOld != null)
+                        iOld.Dispose();
 
-                //            for(int x = 0; x < w; x++)
-                //            {
-                //                p[0] = (byte)(255 - p[0]);      
-                //                p[1] = (byte)(255 - p[1]); 
-                //                p[2] = (byte)(255 - p[2]);
+                    this.Text = this.OpenFileDialog1.FileName;
 
-                //                p += 4;
-                //            }
-                //        });
-                //    }
+                    this._rc = GetImageRectangle();
+                    this._ix = this._iy = this._endX = this._endY = 0;
 
-                //    bmp.UnlockBits(bmD);
-                //}
-
-                Image iOld = this.pictureBox1.Image;
-                this.pictureBox1.Image = bmp;
-                if (iOld != null)
-                    iOld.Dispose();
-
-                this.Text = this.OpenFileDialog1.FileName;
-
-                this._rc = GetImageRectangle();
-                this._ix = this._iy = this._endX = this._endY = 0;
-
-                this._dontDrawRect = true;
-
-                if (this.timer1.Enabled)
-                    this.timer1.Stop();
-                this.timer1.Start();
+                    this._dontDrawRect = true;
+                }
             }
         }
 
@@ -283,13 +257,6 @@ namespace TerminalLinkSegmentation
             }
         }
 
-        private void timer1_Tick(object sender, EventArgs e)
-        {
-            this.timer1.Stop();
-            this.button4_Click(this.button4, new EventArgs());
-            this._dontDrawRect = false;
-        }
-
         private void pictureBox1_DoubleClick(object sender, EventArgs e)
         {
             if (this.pictureBox1.SizeMode == PictureBoxSizeMode.Zoom)
@@ -354,6 +321,21 @@ namespace TerminalLinkSegmentation
                         }
                     }
                 }
+            }
+        }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            string? s = Path.GetDirectoryName(Application.StartupPath);
+            if (s != null && File.Exists(Path.Combine(s, "DemoLightWeight.exe")))
+            {
+                Process p = new Process();
+                p.StartInfo.UseShellExecute = true;
+                p.StartInfo.FileName = Path.Combine(s, "DemoLightWeight.exe");
+                if (this.pictureBox1.Image != null)
+                    p.StartInfo.Arguments = "\"" + this._lastOpenedFile + "\"";
+
+                p.Start();
             }
         }
     }

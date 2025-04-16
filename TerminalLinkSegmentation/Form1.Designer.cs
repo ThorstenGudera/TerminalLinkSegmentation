@@ -31,6 +31,7 @@
             components = new System.ComponentModel.Container();
             pictureBox1 = new PictureBox();
             splitContainer1 = new SplitContainer();
+            button6 = new Button();
             button5 = new Button();
             button4 = new Button();
             button3 = new Button();
@@ -40,7 +41,6 @@
             OpenFileDialog1 = new OpenFileDialog();
             saveFileDialog1 = new SaveFileDialog();
             ToolTip1 = new ToolTip(components);
-            timer1 = new System.Windows.Forms.Timer(components);
             statusStrip1 = new StatusStrip();
             toolStripStatusLabel1 = new ToolStripStatusLabel();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
@@ -78,6 +78,7 @@
             // 
             // splitContainer1.Panel1
             // 
+            splitContainer1.Panel1.Controls.Add(button6);
             splitContainer1.Panel1.Controls.Add(button5);
             splitContainer1.Panel1.Controls.Add(button4);
             splitContainer1.Panel1.Controls.Add(button3);
@@ -94,6 +95,16 @@
             splitContainer1.SplitterDistance = 62;
             splitContainer1.SplitterWidth = 5;
             splitContainer1.TabIndex = 5;
+            // 
+            // button6
+            // 
+            button6.Location = new Point(279, 14);
+            button6.Name = "button6";
+            button6.Size = new Size(144, 27);
+            button6.TabIndex = 3;
+            button6.Text = "run lightweight Demo";
+            button6.UseVisualStyleBackColor = true;
+            button6.Click += button6_Click;
             // 
             // button5
             // 
@@ -169,10 +180,6 @@
             saveFileDialog1.FileName = "Bild1.png";
             saveFileDialog1.Filter = "Png-Images (*.png)|*.png";
             // 
-            // timer1
-            // 
-            timer1.Tick += timer1_Tick;
-            // 
             // statusStrip1
             // 
             statusStrip1.Items.AddRange(new ToolStripItem[] { toolStripStatusLabel1 });
@@ -221,11 +228,11 @@
         private System.Windows.Forms.SaveFileDialog saveFileDialog1;
         internal System.Windows.Forms.ToolTip ToolTip1;
         private Button button3;
-        private System.Windows.Forms.Timer timer1;
         private Button button4;
         private Button button5;
         private Button btnOutlineOperations;
         private StatusStrip statusStrip1;
         private ToolStripStatusLabel toolStripStatusLabel1;
+        private Button button6;
     }
 }
