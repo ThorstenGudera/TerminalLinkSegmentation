@@ -64,10 +64,10 @@ namespace AvoidAGrabCutEasy
         public bool MultCapacitiesForTLinks { get;  set; }
         public bool CastIntCapacitiesForTLinks { get;  set; }
         public double MultTLinkCapacity { get;  set; }
-        public double NumItems { get;  set; }
-        public double NumCorrect { get;  set; }
-        public double NumItems2 { get;  set; }
-        public double NumCorrect2 { get;  set; }
+        public double NumItems { get; set; } = 10;
+        public double NumCorrect { get; set; } = 5;
+        public double NumItems2 { get; set; } = 10;
+        public double NumCorrect2 { get; set; } = 2;
         public double KMInitW { get;  set; } = 2;
         public double KMInitH { get;  set; } = 2;
         public BoykovKolmogorov? AlgBK { get;  set; }

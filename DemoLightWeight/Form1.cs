@@ -30,6 +30,8 @@ namespace DemoLightWeight
         public Form1(string[] args)
         {
             InitializeComponent();
+            this.helplineRulerCtrl1.AddDefaultHelplines();
+            this.helplineRulerCtrl1.ResetAllHelpLineLabelsColor();
 
             if (args != null)
             {
@@ -95,7 +97,7 @@ namespace DemoLightWeight
 
             this.helplineRulerCtrl1.dbPanel1.Invalidate();
 
-            if(this._dontDoZoom)
+            if (this._dontDoZoom)
                 this._dontDoZoom = false;
         }
 
@@ -162,6 +164,8 @@ namespace DemoLightWeight
                 }
 
                 this.Text = this.OpenFileDialog1.FileName;
+
+                this.btnGo.Enabled = true;
 
                 this._rX = this._rY = this._rW = this._eH = 0;
             }
@@ -360,10 +364,53 @@ namespace DemoLightWeight
                     this.helplineRulerCtrl1.dbPanel1.AutoScrollMinSize = new Size(System.Convert.ToInt32(this.helplineRulerCtrl1.Bmp.Width * this.helplineRulerCtrl1.Zoom), System.Convert.ToInt32(this.helplineRulerCtrl1.Bmp.Height * this.helplineRulerCtrl1.Zoom));
                     this.helplineRulerCtrl1.dbPanel1.Invalidate();
 
-                    this.btnGo.Enabled = true;
+                    this.btnGo.Enabled = this.numDispAmnt.Enabled = true;
                 }
 
-                this._rX = this._rY = this._rW = this._eH = 0;
+                //this._rX = this._rY = this._rW = this._eH = 0;
+            }
+        }
+
+        private void btnGo_Click(object sender, EventArgs e)
+        {
+            //reset state
+            if (this.backgroundWorker1.IsBusy)
+            {
+                if (this.backgroundWorker1.IsBusy)
+                    this.backgroundWorker1.CancelAsync();
+
+                return;
+            }
+
+            if (!this.backgroundWorker1.IsBusy && this.helplineRulerCtrl1.Bmp != null &&
+                this.helplineRulerCtrl1.Bmp.Width > 10 && this.helplineRulerCtrl1.Bmp.Height > 10)
+            {
+                //this test is not corresponding to the real amount of RAM being used by the algorithms. It's more or less just an indicator, if to start at all.
+                if (AvailMem.AvailMem.checkAvailRam(this.helplineRulerCtrl1.Bmp.Width * this.helplineRulerCtrl1.Bmp.Height * 100L))
+                {
+                    //now get the needed parameters from the controls
+                    this.SetControls(false);
+                    this.btnGo.Text = "Cancel";
+                    this.btnGo.Enabled = true;
+
+                    this.toolStripProgressBar1.Value = 0;
+                    this.toolStripProgressBar1.Visible = true;
+
+                    this.toolStripStatusLabel1.Text = "1";
+
+                    Rectangle r = new Rectangle(this._rX, this._rY, this._rW, this._rH);
+
+                    //if no rect specified, setup with almost the whole image
+                    if (r.Width == 0 || r.Height == 0)
+                        r = new Rectangle(10, 10, this.helplineRulerCtrl1.Bmp.Width - 20, this.helplineRulerCtrl1.Bmp.Height - 20);
+
+                    Bitmap bWork = new Bitmap(this.helplineRulerCtrl1.Bmp);
+
+                    int displayAmnt = (int)this.numDispAmnt.Value;
+
+                    //now start the work
+                    this.backgroundWorker1.RunWorkerAsync(new object[] { bWork, r, displayAmnt });
+                }
             }
         }
 
@@ -376,6 +423,7 @@ namespace DemoLightWeight
                 Bitmap? bWork = (Bitmap)o[0];
                 Bitmap bTmp = new Bitmap(bWork);
                 Rectangle r = (Rectangle)o[1];
+                int displayAmnt = (int)o[2];
 
                 //create the operator for the GrabcutALike methods
                 GrabCutOp _gc = new GrabCutOp()
@@ -385,30 +433,16 @@ namespace DemoLightWeight
                     Gamma = 50,
                     NumIters = 1,
                     RectMode = true,
-                    ScribbleMode = false,
                     Rc = r,
                     BGW = this.backgroundWorker1,
                     QuickEstimation = true,
-                    EightAdj = false,
                     UseThreshold = true,
                     Threshold = 10.5,
                     MultCapacitiesForTLinks = true,
                     MultTLinkCapacity = 1,
                     CastIntCapacitiesForTLinks = true,
                     SelectionMode = AvoidAGrabCutEasy.ListSelectionMode.Min,
-                    ProbMult1 = 1,
-                    KMInitW = 2,
-                    KMInitH = 2,
-                    NumItems = 10,
-                    NumCorrect = 5,
-                    NumItems2 = 10,
-                    NumCorrect2 = 2,
-                    AutoThreshold = true,
-                    KMeansInitIters = 10,
-                    kMInitRnd = false,
-                    KMeansIters = 0,
-                    AssumeExpDist = true,
-                    UseLumMap = false
+                    AssumeExpDist = true
                 };
 
                 _gc.ShowInfo += _gc_ShowInfo;
@@ -444,7 +478,7 @@ namespace DemoLightWeight
 
                 if (bWork != null)
                 {
-                    e.Result = ProcessResults(bTmp, _gc.Result, bTmp.Size, _gc.Mask, r);
+                    e.Result = ProcessResults(bTmp, _gc.Result, bTmp.Size, _gc.Mask, r, displayAmnt);
 
                     if (bTmp != null)
                         bTmp.Dispose();
@@ -455,7 +489,7 @@ namespace DemoLightWeight
             }
         }
 
-        private unsafe Bitmap? ProcessResults(Bitmap bTmp, List<int>? result, Size sz, int[,]? mask, Rectangle r)
+        private unsafe Bitmap? ProcessResults(Bitmap bTmp, List<int>? result, Size sz, int[,]? mask, Rectangle r, int displayAmnt)
         {
             //... and get the result ...
             List<int>? res = result;
@@ -515,7 +549,7 @@ namespace DemoLightWeight
             int? comp = c?.Count;
 
             if (comp.HasValue)
-                comp = Math.Min(comp.Value, 1);
+                comp = Math.Min(comp.Value, displayAmnt);
 
             if (c != null)
             {
@@ -565,7 +599,7 @@ namespace DemoLightWeight
                 //now redraw the inner outlines and "transparent" components
                 //we can do this in the easy way with setting graphics.CompositionMode to sourceCopy
                 //because the whole operations are full_pixel_wise (at least for the standard 4-connectivity)
-                if (c.Count > 0L && comp.HasValue)
+                if (c.Count > 0 && comp.HasValue)
                 {
                     int amnt = comp.Value;
 
@@ -691,7 +725,8 @@ namespace DemoLightWeight
             this.SetControls(true);
             this._picChanged = true;
             this.btnGo.Text = "Go";
-            this.btnGo.Enabled = false;
+            this.btnGo.Enabled = this.numDispAmnt.Enabled = false;
+
 
             //re init the bgw
             this.backgroundWorker1.Dispose();
@@ -703,41 +738,6 @@ namespace DemoLightWeight
             this.backgroundWorker1.RunWorkerCompleted += backgroundWorker1_RunWorkerCompleted;
 
             this.toolStripStatusLabel4.Text = "done";
-        }
-
-        private void btnGo_Click(object sender, EventArgs e)
-        {
-            //reset state
-            if (this.backgroundWorker1.IsBusy)
-            {
-                if (this.backgroundWorker1.IsBusy)
-                    this.backgroundWorker1.CancelAsync();
-
-                return;
-            }
-
-            if (!this.backgroundWorker1.IsBusy && this.helplineRulerCtrl1.Bmp != null)
-            {
-                //this test is not corresponding to the real amount of RAM being used by the algorithms. It's more or less just an indicator, if to start at all.
-                if (AvailMem.AvailMem.checkAvailRam(this.helplineRulerCtrl1.Bmp.Width * this.helplineRulerCtrl1.Bmp.Height * 100L))
-                {
-                    //now get the needed parameters from the controls
-                    this.SetControls(false);
-                    this.btnGo.Text = "Cancel";
-                    this.btnGo.Enabled = true;
-
-                    this.toolStripProgressBar1.Value = 0;
-                    this.toolStripProgressBar1.Visible = true;
-
-                    this.toolStripStatusLabel1.Text = "1";
-
-                    Rectangle r = new Rectangle(this._rX, this._rY, this._rW, this._rH);
-                    Bitmap bWork = new Bitmap(this.helplineRulerCtrl1.Bmp);
-
-                    //now start the work
-                    this.backgroundWorker1.RunWorkerAsync(new object[] { bWork, r });
-                }
-            }
         }
 
         private void SetControls(bool e)

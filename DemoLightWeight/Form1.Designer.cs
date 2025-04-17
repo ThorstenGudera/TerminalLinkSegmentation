@@ -29,6 +29,9 @@
         private void InitializeComponent()
         {
             splitContainer1 = new SplitContainer();
+            label2 = new Label();
+            numDispAmnt = new NumericUpDown();
+            label1 = new Label();
             btnGo = new Button();
             btnReload = new Button();
             btnSave = new Button();
@@ -47,6 +50,7 @@
             splitContainer1.Panel1.SuspendLayout();
             splitContainer1.Panel2.SuspendLayout();
             splitContainer1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)numDispAmnt).BeginInit();
             statusStrip1.SuspendLayout();
             SuspendLayout();
             // 
@@ -59,6 +63,9 @@
             // 
             // splitContainer1.Panel1
             // 
+            splitContainer1.Panel1.Controls.Add(label2);
+            splitContainer1.Panel1.Controls.Add(numDispAmnt);
+            splitContainer1.Panel1.Controls.Add(label1);
             splitContainer1.Panel1.Controls.Add(btnGo);
             splitContainer1.Panel1.Controls.Add(btnReload);
             splitContainer1.Panel1.Controls.Add(btnSave);
@@ -66,15 +73,43 @@
             // 
             // splitContainer1.Panel2
             // 
-            splitContainer1.Panel2.Controls.Add(statusStrip1);
             splitContainer1.Panel2.Controls.Add(helplineRulerCtrl1);
+            splitContainer1.Panel2.Controls.Add(statusStrip1);
             splitContainer1.Size = new Size(912, 750);
             splitContainer1.SplitterDistance = 63;
             splitContainer1.TabIndex = 0;
             // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Location = new Point(528, 24);
+            label2.Name = "label2";
+            label2.Size = new Size(75, 15);
+            label2.TabIndex = 7;
+            label2.Text = "display amnt";
+            // 
+            // numDispAmnt
+            // 
+            numDispAmnt.Location = new Point(609, 22);
+            numDispAmnt.Maximum = new decimal(new int[] { 1000, 0, 0, 0 });
+            numDispAmnt.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
+            numDispAmnt.Name = "numDispAmnt";
+            numDispAmnt.Size = new Size(38, 23);
+            numDispAmnt.TabIndex = 6;
+            numDispAmnt.Value = new decimal(new int[] { 1, 0, 0, 0 });
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Location = new Point(135, 24);
+            label1.Name = "label1";
+            label1.Size = new Size(276, 15);
+            label1.TabIndex = 5;
+            label1.Text = "draw a rectangle around the object with the mouse";
+            // 
             // btnGo
             // 
-            btnGo.Location = new Point(561, 18);
+            btnGo.Location = new Point(417, 18);
             btnGo.Name = "btnGo";
             btnGo.Size = new Size(88, 27);
             btnGo.TabIndex = 4;
@@ -173,7 +208,7 @@
             helplineRulerCtrl1.MoveHelpLinesOnResize = false;
             helplineRulerCtrl1.Name = "helplineRulerCtrl1";
             helplineRulerCtrl1.SetZoomOnlyByMethodCall = false;
-            helplineRulerCtrl1.Size = new Size(912, 683);
+            helplineRulerCtrl1.Size = new Size(912, 644);
             helplineRulerCtrl1.TabIndex = 0;
             helplineRulerCtrl1.Zoom = 1F;
             helplineRulerCtrl1.ZoomSetManually = false;
@@ -209,10 +244,12 @@
             FormClosing += Form1_FormClosing;
             Load += Form1_Load;
             splitContainer1.Panel1.ResumeLayout(false);
+            splitContainer1.Panel1.PerformLayout();
             splitContainer1.Panel2.ResumeLayout(false);
             splitContainer1.Panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).EndInit();
             splitContainer1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)numDispAmnt).EndInit();
             statusStrip1.ResumeLayout(false);
             statusStrip1.PerformLayout();
             ResumeLayout(false);
@@ -235,5 +272,8 @@
         private ToolStripProgressBar toolStripProgressBar1;
         private ToolStripStatusLabel toolStripStatusLabel5;
         private ToolStripStatusLabel toolStripStatusLabel4;
+        private Label label1;
+        private Label label2;
+        private NumericUpDown numDispAmnt;
     }
 }
