@@ -414,7 +414,7 @@ namespace DemoLightWeight
             }
         }
 
-        private unsafe void backgroundWorker1_DoWork(object? sender, System.ComponentModel.DoWorkEventArgs e)
+        private void backgroundWorker1_DoWork(object? sender, System.ComponentModel.DoWorkEventArgs e)
         {
             if (e.Argument != null)
             {
@@ -538,10 +538,6 @@ namespace DemoLightWeight
             bTmp.UnlockBits(bmWork);
             bRes.UnlockBits(bmData);
 
-            //now do some analysis of the result, to be able to redraw the resultpic with a different set of components
-            Bitmap bResCopy = new Bitmap(bRes);
-            Bitmap bCTransp = new Bitmap(bRes);
-
             //use a ChainCode [that works on the - invisible - "cracks" between the pixels, because it is very fast aand reliable]
             List<ChainCode>? c = GetBoundary(bRes, 0, false);
             c = c?.OrderByDescending(x => x.Coord.Count).ToList();
@@ -583,9 +579,6 @@ namespace DemoLightWeight
                                 {
                                     using (TextureBrush tb = new TextureBrush(bTmp))
                                         gx.FillPath(tb, gp);
-
-                                    //using (Pen pen = new Pen(Color.Red, 2))
-                                    //    gx.DrawPath(pen, gp);
                                 }
                                 catch (Exception exc)
                                 {
