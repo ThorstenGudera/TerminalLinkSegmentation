@@ -377,7 +377,7 @@ namespace AvoidAGrabCutEasy
 
         private void frmProcOutline_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (_pic_changed & !_dontAskOnClosing)
+            if (_pic_changed && !_dontAskOnClosing)
             {
                 DialogResult dlg = MessageBox.Show("Save image?", "Unsaved data", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Exclamation);
 
@@ -543,56 +543,102 @@ namespace AvoidAGrabCutEasy
                 this.Cursor = Cursors.WaitCursor;
                 this.SetControls(false);
 
-                Bitmap? bWork = new Bitmap(this.helplineRulerCtrl1.Bmp);
-
-                if (this.numJRem1.Value > 0)
+                if (this.cbSelectOutlines.Checked)
                 {
-                    Bitmap? bTmp = Fipbmp.RemOutline(bWork, Math.Max((int)this.numJRem1.Value, 1), null);
-
-                    Bitmap? bOld = bWork;
-                    bWork = bTmp;
-                    if (bOld != null)
+                    using (frmExtendOutlinesExtended frm = new frmExtendOutlinesExtended(this.helplineRulerCtrl1.Bmp, this.CachePathAddition))
                     {
-                        bOld.Dispose();
-                        bOld = null;
-                    }
-                }
+                        frm.SetupCache();
 
-                if (this.numJRem2.Value > 0 && this._bmpOrig != null && bWork != null)
-                {
-                    Bitmap? bTmp4 = Fipbmp.ExtOutline(bWork, this._bmpOrig, Math.Max((int)this.numJRem2.Value, 0), null);
-
-                    if (bTmp4 != null)
-                    {
-                        Bitmap? bOld2 = bWork;
-                        bWork = bTmp4;
-                        if (bOld2 != null)
+                        if (frm.ShowDialog() == DialogResult.OK)
                         {
-                            bOld2.Dispose();
-                            bOld2 = null;
+                            Bitmap? bmp = null;
+
+                            if (frm.FBitmap != null)
+                                bmp = new Bitmap(frm.FBitmap);
+
+                            if (bmp != null)
+                            {
+                                this.SetBitmap(this.helplineRulerCtrl1.Bmp, bmp, this.helplineRulerCtrl1, "Bmp");
+
+                                this.helplineRulerCtrl1.SetZoom(this.helplineRulerCtrl1.Zoom.ToString());
+                                this.helplineRulerCtrl1.MakeBitmap(this.helplineRulerCtrl1.Bmp);
+                                this.helplineRulerCtrl1.dbPanel1.AutoScrollMinSize = new Size(
+                                    (int)(this.helplineRulerCtrl1.Bmp.Width * this.helplineRulerCtrl1.Zoom),
+                                    (int)(this.helplineRulerCtrl1.Bmp.Height * this.helplineRulerCtrl1.Zoom));
+
+                                _undoOPCache?.Add(bmp);
+
+                                this.btnUndo.Enabled = true;
+                                this.CheckRedoButton();
+
+                                this.helplineRulerCtrl1.dbPanel1.Invalidate();
+                            }
+
+                            this._pic_changed = true;
+
+                            if (this.Timer3.Enabled)
+                                this.Timer3.Stop();
+
+                            this.Timer3.Start();
                         }
                     }
                 }
-
-                if (bWork != null)
+                else
                 {
-                    this.SetBitmap(this.helplineRulerCtrl1.Bmp, bWork, this.helplineRulerCtrl1, "Bmp");
+                    Bitmap? bWork = new Bitmap(this.helplineRulerCtrl1.Bmp);
 
-                    Bitmap? bC = new Bitmap(bWork);
-                    this.SetBitmap(ref _bmpRef, ref bC);
+                    if (this.numJRem1.Value > 0)
+                    {
+                        Bitmap? bTmp = Fipbmp.RemOutline(bWork, Math.Max((int)this.numJRem1.Value, 1), null);
 
-                    this.helplineRulerCtrl1.SetZoom(this.helplineRulerCtrl1.Zoom.ToString());
-                    this.helplineRulerCtrl1.MakeBitmap(this.helplineRulerCtrl1.Bmp);
-                    this.helplineRulerCtrl1.dbPanel1.AutoScrollMinSize = new Size(
-                        (int)(this.helplineRulerCtrl1.Bmp.Width * this.helplineRulerCtrl1.Zoom),
-                        (int)(this.helplineRulerCtrl1.Bmp.Height * this.helplineRulerCtrl1.Zoom));
+                        Bitmap? bOld = bWork;
+                        bWork = bTmp;
+                        if (bOld != null)
+                        {
+                            bOld.Dispose();
+                            bOld = null;
+                        }
+                    }
 
-                    _undoOPCache?.Add(bWork);
+                    if (this.numJRem2.Value > 0 && this._bmpOrig != null && bWork != null)
+                    {
+                        Bitmap? bTmp4 = Fipbmp.ExtOutline(bWork, this._bmpOrig, Math.Max((int)this.numJRem2.Value, 0), null);
+
+                        if (bTmp4 != null)
+                        {
+                            Bitmap? bOld2 = bWork;
+                            bWork = bTmp4;
+                            if (bOld2 != null)
+                            {
+                                bOld2.Dispose();
+                                bOld2 = null;
+                            }
+                        }
+                    }
+
+                    if (bWork != null)
+                    {
+                        this.SetBitmap(this.helplineRulerCtrl1.Bmp, bWork, this.helplineRulerCtrl1, "Bmp");
+
+                        Bitmap? bC = new Bitmap(bWork);
+                        this.SetBitmap(ref _bmpRef, ref bC);
+
+                        this.helplineRulerCtrl1.SetZoom(this.helplineRulerCtrl1.Zoom.ToString());
+                        this.helplineRulerCtrl1.MakeBitmap(this.helplineRulerCtrl1.Bmp);
+                        this.helplineRulerCtrl1.dbPanel1.AutoScrollMinSize = new Size(
+                            (int)(this.helplineRulerCtrl1.Bmp.Width * this.helplineRulerCtrl1.Zoom),
+                            (int)(this.helplineRulerCtrl1.Bmp.Height * this.helplineRulerCtrl1.Zoom));
+
+                        _undoOPCache?.Add(bWork);
+
+                        this.btnUndo.Enabled = true;
+                        this.CheckRedoButton();
+                    }
+
+                    this._pic_changed = true;
+
+                    this.helplineRulerCtrl1.dbPanel1.Invalidate();
                 }
-
-                this._pic_changed = true;
-
-                this.helplineRulerCtrl1.dbPanel1.Invalidate();
 
                 this.Cursor = Cursors.Default;
                 this.SetControls(true);

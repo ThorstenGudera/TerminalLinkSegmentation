@@ -8283,4 +8283,95 @@ Public Class ChainFinder
 
         Return pt
     End Function
+
+    Public Sub DoCornersR(bWork As Bitmap, fList As List(Of ChainCode))
+        Dim w As Integer = bWork.Width
+        Dim h As Integer = bWork.Height
+
+        Dim bmD As BitmapData = bWork.LockBits(New Rectangle(0, 0, w, h), ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb)
+        Dim stride As Integer = bmD.Stride
+
+        Dim p(w * h - 1) As Byte
+        Marshal.Copy(bmD.Scan0, p, 0, p.Length)
+
+        For j As Integer = 0 To fList.Count - 1
+            If ChainFinder.IsInnerOutline(fList(j)) Then
+                Dim l As List(Of Integer) = fList(j).Chain
+                Dim x As Integer = -1
+                Dim y As Integer = -1
+
+                If l(0) = 1 AndAlso l(l.Count - 1) = 0 Then
+                    x = fList(j).Coord(0).X
+                    y = fList(j).Coord(0).Y - 1
+
+                    p(x * 4 + y * stride + 3) = 0
+                End If
+
+                For i As Integer = 1 To l.Count - 1
+                    If l(i) = 0 AndAlso l(i - 1) = 3 Then
+
+                        x = fList(j).Coord(i).X - 1
+                        y = fList(j).Coord(i).Y
+
+                        p(x * 4 + y * stride + 3) = 0
+                    End If
+
+                    If l(i) = 1 AndAlso l(i - 1) = 0 Then
+                        x = fList(j).Coord(i).X
+                        y = fList(j).Coord(i).Y - 1
+
+                        p(x * 4 + y * stride + 3) = 0
+                    End If
+
+                    If l(i) = 2 AndAlso l(i - 1) = 1 Then
+                        x = fList(j).Coord(i).X + 1
+                        y = fList(j).Coord(i).Y
+
+                        p(x * 4 + y * stride + 3) = 0
+                    End If
+
+                    If l(i) = 3 AndAlso l(i - 1) = 2 Then
+                        x = fList(j).Coord(i).X
+                        y = fList(j).Coord(i).Y + 1
+
+                        p(x * 4 + y * stride + 3) = 0
+                    End If
+                Next
+            End If
+        Next
+
+        Marshal.Copy(p, 0, bmD.Scan0, p.Length)
+
+        bWork.UnlockBits(bmD)
+    End Sub
+
+    Public Sub DoCornersE(bWork As Bitmap, fList As List(Of ChainCode))
+        Dim w As Integer = bWork.Width
+        Dim h As Integer = bWork.Height
+
+        Dim bmD As BitmapData = bWork.LockBits(New Rectangle(0, 0, w, h), ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb)
+        Dim stride As Integer = bmD.Stride
+
+        Dim p(w * h - 1) As Byte
+        Marshal.Copy(bmD.Scan0, p, 0, p.Length)
+
+        For j As Integer = 0 To fList.Count - 1
+            If Not ChainFinder.IsInnerOutline(fList(j)) Then
+                Dim l As List(Of Integer) = fList(j).Chain
+                Dim x As Integer = -1
+                Dim y As Integer = -1
+
+                If l(0) = 1 AndAlso l(l.Count - 1) = 2 Then
+                    x = fList(j).Coord(0).X - 1
+                    y = fList(j).Coord(0).Y - 1
+
+                    p(x * 4 + y * stride + 3) = 255
+                End If
+            End If
+        Next
+
+        Marshal.Copy(p, 0, bmD.Scan0, p.Length)
+
+        bWork.UnlockBits(bmD)
+    End Sub
 End Class
