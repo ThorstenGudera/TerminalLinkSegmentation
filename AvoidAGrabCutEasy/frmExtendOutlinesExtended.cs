@@ -670,7 +670,7 @@ namespace AvoidAGrabCutEasy
 
         public void SetupCache()
         {
-            _undoOPCache = new Cache.UndoOPCache(this.GetType(), CachePathAddition, "frmChainCode");
+            _undoOPCache = new Cache.UndoOPCache(this.GetType(), CachePathAddition, "frmExtend");
             if (this.helplineRulerCtrl1.Bmp != null)
                 _undoOPCache.Add(this.helplineRulerCtrl1.Bmp);
         }
