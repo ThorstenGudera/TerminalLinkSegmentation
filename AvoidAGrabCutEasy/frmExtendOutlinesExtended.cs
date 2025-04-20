@@ -922,7 +922,7 @@ namespace AvoidAGrabCutEasy
 
                             if (c != null)
                                 foreach (ChainCode cc in c)
-                                    UpdateFListRem(cc, fList);
+                                    cf.UpdateFListRem(cc, fList);
                         }
 
                     if (ext > 0 && fList != null && fList.Count > 0)
@@ -940,7 +940,7 @@ namespace AvoidAGrabCutEasy
 
                             if (c != null)
                                 foreach (ChainCode cc in c)
-                                    UpdateFListExt(cc, fList);
+                                    cf.UpdateFListExt(cc, fList);
                         }
 
                     e.Result = bWork;
@@ -1045,101 +1045,101 @@ namespace AvoidAGrabCutEasy
         //    bWork.UnlockBits(bmD);
         //}
 
-        private void UpdateFListRem(ChainCode cNew, List<ChainCode> fList)
-        {
-            for (int i = 0; i < fList.Count; i++)
-            {
-                bool isInnerOutlineOld = ChainFinder.IsInnerOutline(fList[i]);
-                bool isInnerOutlineNew = ChainFinder.IsInnerOutline(cNew);
-                if (isInnerOutlineOld == isInnerOutlineNew)
-                {
-                    ChainCode f = fList[i];
-                    if (CompareChainsRem(cNew, f, isInnerOutlineOld))
-                    {
-                        fList[i] = cNew;
-                        break;
-                    }
-                }
-            }
-        }
+        //private void UpdateFListRem(ChainCode cNew, List<ChainCode> fList)
+        //{
+        //    for (int i = 0; i < fList.Count; i++)
+        //    {
+        //        bool isInnerOutlineOld = ChainFinder.IsInnerOutline(fList[i]);
+        //        bool isInnerOutlineNew = ChainFinder.IsInnerOutline(cNew);
+        //        if (isInnerOutlineOld == isInnerOutlineNew)
+        //        {
+        //            ChainCode f = fList[i];
+        //            if (CompareChainsRem(cNew, f, isInnerOutlineOld))
+        //            {
+        //                fList[i] = cNew;
+        //                break;
+        //            }
+        //        }
+        //    }
+        //}
 
-        private bool CompareChainsRem(ChainCode cNew, ChainCode cOld, bool isInnerOutline)
-        {
-            bool found = true;
-            using GraphicsPath gP = new GraphicsPath();
-            if (isInnerOutline)
-            {
-                gP.AddLines(cNew.Coord.Select(a => new PointF(a.X, a.Y)).ToArray());
+        //private bool CompareChainsRem(ChainCode cNew, ChainCode cOld, bool isInnerOutline)
+        //{
+        //    bool found = true;
+        //    using GraphicsPath gP = new GraphicsPath();
+        //    if (isInnerOutline)
+        //    {
+        //        gP.AddLines(cNew.Coord.Select(a => new PointF(a.X, a.Y)).ToArray());
 
-                foreach (Point pt in cOld.Coord)
-                    if (!gP.IsVisible(pt))
-                    {
-                        found = false;
-                        break;
-                    }
-            }
-            else
-            {
-                gP.AddLines(cOld.Coord.Select(a => new PointF(a.X, a.Y)).ToArray());
+        //        foreach (Point pt in cOld.Coord)
+        //            if (!gP.IsVisible(pt))
+        //            {
+        //                found = false;
+        //                break;
+        //            }
+        //    }
+        //    else
+        //    {
+        //        gP.AddLines(cOld.Coord.Select(a => new PointF(a.X, a.Y)).ToArray());
 
-                foreach (Point pt in cNew.Coord)
-                    if (!gP.IsVisible(pt))
-                    {
-                        found = false;
-                        break;
-                    }
-            }
+        //        foreach (Point pt in cNew.Coord)
+        //            if (!gP.IsVisible(pt))
+        //            {
+        //                found = false;
+        //                break;
+        //            }
+        //    }
 
-            return found;
-        }
+        //    return found;
+        //}
 
-        private void UpdateFListExt(ChainCode cNew, List<ChainCode> fList)
-        {
-            for (int i = 0; i < fList.Count; i++)
-            {
-                bool isInnerOutlineOld = ChainFinder.IsInnerOutline(fList[i]);
-                bool isInnerOutlineNew = ChainFinder.IsInnerOutline(cNew);
-                if (isInnerOutlineOld == isInnerOutlineNew)
-                {
-                    ChainCode f = fList[i];
-                    if (CompareChainsExt(cNew, f, isInnerOutlineOld))
-                    {
-                        fList[i] = cNew;
-                        break;
-                    }
-                }
-            }
-        }
+        //private void UpdateFListExt(ChainCode cNew, List<ChainCode> fList)
+        //{
+        //    for (int i = 0; i < fList.Count; i++)
+        //    {
+        //        bool isInnerOutlineOld = ChainFinder.IsInnerOutline(fList[i]);
+        //        bool isInnerOutlineNew = ChainFinder.IsInnerOutline(cNew);
+        //        if (isInnerOutlineOld == isInnerOutlineNew)
+        //        {
+        //            ChainCode f = fList[i];
+        //            if (CompareChainsExt(cNew, f, isInnerOutlineOld))
+        //            {
+        //                fList[i] = cNew;
+        //                break;
+        //            }
+        //        }
+        //    }
+        //}
 
-        private bool CompareChainsExt(ChainCode cNew, ChainCode cOld, bool isInnerOutline)
-        {
-            bool found = true;
-            using GraphicsPath gP = new GraphicsPath();
-            if (!isInnerOutline)
-            {
-                gP.AddLines(cNew.Coord.Select(a => new PointF(a.X, a.Y)).ToArray());
+        //private bool CompareChainsExt(ChainCode cNew, ChainCode cOld, bool isInnerOutline)
+        //{
+        //    bool found = true;
+        //    using GraphicsPath gP = new GraphicsPath();
+        //    if (!isInnerOutline)
+        //    {
+        //        gP.AddLines(cNew.Coord.Select(a => new PointF(a.X, a.Y)).ToArray());
 
-                foreach (Point pt in cOld.Coord)
-                    if (!gP.IsVisible(pt))
-                    {
-                        found = false;
-                        break;
-                    }
-            }
-            else
-            {
-                gP.AddLines(cOld.Coord.Select(a => new PointF(a.X, a.Y)).ToArray());
+        //        foreach (Point pt in cOld.Coord)
+        //            if (!gP.IsVisible(pt))
+        //            {
+        //                found = false;
+        //                break;
+        //            }
+        //    }
+        //    else
+        //    {
+        //        gP.AddLines(cOld.Coord.Select(a => new PointF(a.X, a.Y)).ToArray());
 
-                foreach (Point pt in cNew.Coord)
-                    if (!gP.IsVisible(pt))
-                    {
-                        found = false;
-                        break;
-                    }
-            }
+        //        foreach (Point pt in cNew.Coord)
+        //            if (!gP.IsVisible(pt))
+        //            {
+        //                found = false;
+        //                break;
+        //            }
+        //    }
 
-            return found;
-        }
+        //    return found;
+        //}
 
         private void backgroundWorker1_RunWorkerCompleted(object? sender, RunWorkerCompletedEventArgs e)
         {

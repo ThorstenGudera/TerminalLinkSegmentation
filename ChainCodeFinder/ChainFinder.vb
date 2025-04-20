@@ -2000,171 +2000,6 @@ Public Class ChainFinder
         End If
     End Sub
 
-    Public Sub RemoveOutline(b As Bitmap, fList As List(Of ChainCode))
-        Dim bmData As BitmapData = Nothing
-
-        If Not AvailMem.AvailMem.checkAvailRam(b.Width * b.Height * 4L) Then
-            Return
-        End If
-
-        Try
-            bmData = b.LockBits(New Rectangle(0, 0, b.Width, b.Height), ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb)
-            Dim stride As Integer = bmData.Stride
-
-            Dim Scan0 As System.IntPtr = bmData.Scan0
-
-            Dim p((bmData.Stride * bmData.Height) - 1) As Byte
-            Marshal.Copy(bmData.Scan0, p, 0, p.Length)
-
-            If fList IsNot Nothing AndAlso fList.Count > 0 Then
-                For Each c As ChainCode In fList
-                    For i As Integer = 0 To c.Coord.Count - 1
-                        Dim x As Integer = c.Coord(i).X
-                        Dim y As Integer = c.Coord(i).Y
-
-                        p(y * stride + x * 4 + 3) = CType(0, [Byte])
-                    Next
-                Next
-            End If
-
-            Marshal.Copy(p, 0, bmData.Scan0, p.Length)
-            b.UnlockBits(bmData)
-            p = Nothing
-        Catch
-            Try
-                b.UnlockBits(bmData)
-            Catch
-
-            End Try
-        End Try
-    End Sub
-
-    Public Sub RemoveOutline(b As Bitmap, fList As List(Of ChainCode), oP As List(Of List(Of List(Of Point))), origIndx As Integer)
-        Dim bmData As BitmapData = Nothing
-
-        If Not AvailMem.AvailMem.checkAvailRam(b.Width * b.Height * 4L) Then
-            Return
-        End If
-
-        Try
-            bmData = b.LockBits(New Rectangle(0, 0, b.Width, b.Height), ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb)
-            Dim stride As Integer = bmData.Stride
-
-            Dim Scan0 As System.IntPtr = bmData.Scan0
-
-            Dim p((bmData.Stride * bmData.Height) - 1) As Byte
-            Marshal.Copy(bmData.Scan0, p, 0, p.Length)
-
-            If fList IsNot Nothing AndAlso fList.Count > 0 Then
-                For Each c As ChainCode In fList
-                    For i As Integer = 0 To c.Coord.Count - 1
-                        Dim x As Integer = c.Coord(i).X
-                        Dim y As Integer = c.Coord(i).Y
-
-                        p(y * stride + x * 4 + 3) = CType(0, [Byte])
-                    Next
-                Next
-            End If
-
-            Marshal.Copy(p, 0, bmData.Scan0, p.Length)
-            b.UnlockBits(bmData)
-            p = Nothing
-
-            If fList IsNot Nothing AndAlso fList.Count > 0 Then
-                Dim cf As New ChainFinder
-                cf.AllowNullCells = True
-                Dim lList As List(Of ChainCode) = cf.GetOutline(b, 0, False, 0, False)
-
-                If lList IsNot Nothing AndAlso lList.Count > 0 Then
-                    Dim oPts As New List(Of List(Of Point))
-                    Dim cnt As Integer = 0
-                    For Each c As ChainCode In fList
-                        Dim oPt As New List(Of Point)
-                        If oP IsNot Nothing AndAlso origIndx < oP.Count Then
-                            If oP(origIndx) IsNot Nothing AndAlso cnt < oP(origIndx).Count Then
-                                Dim origCoord As List(Of Point) = oP(origIndx)(cnt)
-                                Using gP As New GraphicsPath
-                                    gP.AddLines(c.Coord.Select(Function(a) New PointF(a.X, a.Y)).ToArray())
-                                    gP.CloseFigure()
-
-                                    'transport nach innen!
-                                    For Each l As ChainCode In lList
-                                        Dim aPt(l.Coord.Count - 1) As Point
-                                        For j As Integer = 0 To aPt.Length - 1
-                                            aPt(j) = New Point(-1, -1)
-                                        Next
-
-                                        If gP.IsVisible(l.Coord(0)) AndAlso AreNeighbors(c.Coord(0), l.Coord(0)) Then
-                                            'zuordnen
-
-                                            If l.Coord.Count > 0 AndAlso c.Coord.Count > 0 Then
-                                                For i As Integer = 0 To c.Coord.Count - 1
-                                                    Dim j As Integer = Check4Adj(i, c.Coord, l.Coord, 100)
-
-                                                    If j > -1 AndAlso j < aPt.Count AndAlso i < origCoord.Count Then
-                                                        aPt(j) = origCoord(i)
-                                                    End If
-                                                Next
-
-                                                oPt = aPt.ToList()
-                                            End If
-
-                                            Exit For
-                                        End If
-                                    Next
-                                End Using
-                            End If
-                        End If
-                        oPts.Add(oPt)
-                        cnt += 1
-                    Next
-
-                    oP.Add(oPts)
-                End If
-            End If
-        Catch exc As Exception
-            Try
-                b.UnlockBits(bmData)
-            Catch
-
-            End Try
-        End Try
-    End Sub
-
-    Private Function AreNeighbors(point1 As Point, point2 As Point) As Boolean
-        Dim a As Boolean = Math.Abs(point1.X - point2.X) <= 1
-        Dim b As Boolean = Math.Abs(point1.Y - point2.Y) <= 1
-
-        Return a AndAlso b
-    End Function
-
-    Private Function Check4Adj(i As Integer, coordO As List(Of Point), coordI As List(Of Point), searchWidth As Integer) As Integer
-        If searchWidth >= coordI.Count Then
-            searchWidth = coordI.Count - 1
-        End If
-
-        Dim ptO As Point = coordO(i)
-
-        Dim st As Integer = (coordI.Count + (i - searchWidth)) Mod coordI.Count
-        Dim ed As Integer = (i + searchWidth) Mod coordI.Count
-
-        If ed < st Then
-            ed += coordI.Count
-        End If
-
-        For j As Integer = st To ed - 1
-            Dim j2 As Integer = j Mod coordI.Count
-            If Math.Abs(ptO.X - coordI(j2).X) = 1 AndAlso Math.Abs(ptO.Y - coordI(j2).Y) = 0 Then
-                Return j2
-            End If
-            If Math.Abs(ptO.X - coordI(j2).X) = 0 AndAlso Math.Abs(ptO.Y - coordI(j2).Y) = 1 Then
-                Return j2
-            End If
-        Next
-
-        Return -1
-    End Function
-
     Public Sub RemoveOutline(b As Bitmap, fList As List(Of ChainCode), outer As Boolean, inner As Boolean)
         Dim bmData As BitmapData = Nothing
 
@@ -2218,7 +2053,7 @@ Public Class ChainFinder
         End Try
     End Sub
 
-    Public Sub RemoveOutline(b As Bitmap, fList As List(Of ChainCode), outer As Boolean)
+    Public Sub RemoveOutline(b As Bitmap, fList As List(Of ChainCode))
         Dim bmData As BitmapData = Nothing
 
         If Not AvailMem.AvailMem.checkAvailRam(b.Width * b.Height * 4L) Then
@@ -2236,7 +2071,46 @@ Public Class ChainFinder
 
             If fList IsNot Nothing AndAlso fList.Count > 0 Then
                 For Each c As ChainCode In fList
-                    If outer Then
+                    For i As Integer = 0 To c.Coord.Count - 1
+                        Dim x As Integer = c.Coord(i).X
+                        Dim y As Integer = c.Coord(i).Y
+
+                        p(y * stride + x * 4 + 3) = CType(0, [Byte])
+                    Next
+                Next
+            End If
+
+            Marshal.Copy(p, 0, bmData.Scan0, p.Length)
+            b.UnlockBits(bmData)
+            p = Nothing
+        Catch
+            Try
+                b.UnlockBits(bmData)
+            Catch
+
+            End Try
+        End Try
+    End Sub
+
+    Public Sub RemoveOutline(b As Bitmap, fList As List(Of ChainCode), outerOnly As Boolean)
+        Dim bmData As BitmapData = Nothing
+
+        If Not AvailMem.AvailMem.checkAvailRam(b.Width * b.Height * 4L) Then
+            Return
+        End If
+
+        Try
+            bmData = b.LockBits(New Rectangle(0, 0, b.Width, b.Height), ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb)
+            Dim stride As Integer = bmData.Stride
+
+            Dim Scan0 As System.IntPtr = bmData.Scan0
+
+            Dim p((bmData.Stride * bmData.Height) - 1) As Byte
+            Marshal.Copy(bmData.Scan0, p, 0, p.Length)
+
+            If fList IsNot Nothing AndAlso fList.Count > 0 Then
+                For Each c As ChainCode In fList
+                    If outerOnly Then
                         If Not ChainFinder.IsInnerOutline(c) Then
                             For i As Integer = 0 To c.Coord.Count - 1
                                 Dim x As Integer = c.Coord(i).X
@@ -2380,37 +2254,37 @@ Public Class ChainFinder
                             Case 3 'u
                                 x += 1
                         End Select
-
+                        'dont forget, that x and y may have changed already and so are not the coords in the list anymore. So use the list's coords here
                         If i < c.Coord.Count - 1 Then
                             Select Case c.Chain(i + 1)
                                 Case 0
                                     If c.Chain(i) = 1 Then
-                                        x2 = x
-                                        y2 = y + 1
+                                        x2 = c.Coord(i).X
+                                        y2 = c.Coord(i).Y + 1
                                     End If
                                 Case 1
                                     If c.Chain(i) = 2 Then
-                                        x2 = x - 1
-                                        y2 = y
+                                        x2 = c.Coord(i).X - 1
+                                        y2 = c.Coord(i).Y
                                     End If
                                 Case 2
                                     If c.Chain(i) = 3 Then
-                                        x2 = x
-                                        y2 = y - 1
+                                        x2 = c.Coord(i).X
+                                        y2 = c.Coord(i).Y - 1
                                     End If
                                 Case 3
                                     If c.Chain(i) = 0 Then
-                                        x2 = x + 1
-                                        y2 = y
+                                        x2 = c.Coord(i).X + 1
+                                        y2 = c.Coord(i).Y
                                     End If
                             End Select
                         End If
 
-                        If x > -1 AndAlso x < b.Width AndAlso y > -1 AndAlso y < b.Height Then
+                        If x > -1 AndAlso x < b.Width AndAlso y > -1 AndAlso y < b.Height AndAlso p(y * stride + x * 4 + 3) = 0 Then
                             p(y * stride + x * 4 + 3) = CType(255, [Byte])
-                            If x2 > -1 AndAlso x2 < b.Width AndAlso y2 > -1 AndAlso y2 < b.Height Then
-                                p(y2 * stride + x2 * 4 + 3) = CType(255, [Byte])
-                            End If
+                        End If
+                        If x2 > -1 AndAlso x2 < b.Width AndAlso y2 > -1 AndAlso y2 < b.Height AndAlso p(y2 * stride + x2 * 4 + 3) = 0 Then
+                            p(y2 * stride + x2 * 4 + 3) = CType(255, [Byte])
                         End If
                     Next
                 Next
@@ -2420,118 +2294,6 @@ Public Class ChainFinder
             b.UnlockBits(bmData)
             p = Nothing
         Catch
-            Try
-                b.UnlockBits(bmData)
-            Catch
-
-            End Try
-        End Try
-    End Sub
-
-    Public Sub ExtendOutline(b As Bitmap, fList As List(Of ChainCode), oP As List(Of List(Of Point)),
-                             oPTS As List(Of List(Of List(Of Point))), cSmall As List(Of ChainCode), useCSmall As Boolean)
-        Dim bmData As BitmapData = Nothing
-
-        If Not AvailMem.AvailMem.checkAvailRam(b.Width * b.Height * 4L) Then
-            Return
-        End If
-
-        Try
-            bmData = b.LockBits(New Rectangle(0, 0, b.Width, b.Height), ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb)
-            Dim stride As Integer = bmData.Stride
-
-            Dim Scan0 As System.IntPtr = bmData.Scan0
-
-            Dim p((bmData.Stride * bmData.Height) - 1) As Byte
-            Marshal.Copy(bmData.Scan0, p, 0, p.Length)
-
-            If cSmall IsNot Nothing AndAlso cSmall.Count <> fList.Count Then
-                MessageBox.Show("döaskf")
-            End If
-
-            Dim cnt As Integer = 0
-
-            If fList IsNot Nothing AndAlso fList.Count > 0 Then
-                For Each c As ChainCode In fList
-                    Dim oC As ChainCode = Nothing
-                    Dim oCPt As List(Of Point) = Nothing
-                    If cSmall IsNot Nothing AndAlso useCSmall AndAlso cnt < cSmall.Count Then
-                        oC = cSmall(cnt)
-                    ElseIf Not useCSmall AndAlso cnt < oPTS.Count Then
-                        oCPt = oPTS(0)(cnt) 'we always insert at position 0, so the "previous orig pixels" are always at 0
-                    End If
-
-                    Dim oPt As New List(Of Point)
-                    For i As Integer = 0 To c.Coord.Count - 1
-                        Dim x As Integer = c.Coord(i).X
-                        Dim y As Integer = c.Coord(i).Y
-                        Dim x2 As Integer = -1
-                        Dim y2 As Integer = -1
-
-                        Select Case c.Chain(i)
-                            Case 0 'r
-                                y += 1
-                            Case 1 'd
-                                x -= 1
-                            Case 2 'l
-                                y -= 1
-                            Case 3 'u
-                                x += 1
-                        End Select
-
-                        If i < c.Coord.Count - 1 Then
-                            Select Case c.Chain(i + 1)
-                                Case 0
-                                    If c.Chain(i) = 1 Then
-                                        x2 = x
-                                        y2 = y + 1
-                                    End If
-                                Case 1
-                                    If c.Chain(i) = 2 Then
-                                        x2 = x - 1
-                                        y2 = y
-                                    End If
-                                Case 2
-                                    If c.Chain(i) = 3 Then
-                                        x2 = x
-                                        y2 = y - 1
-                                    End If
-                                Case 3
-                                    If c.Chain(i) = 0 Then
-                                        x2 = x + 1
-                                        y2 = y
-                                    End If
-                            End Select
-                        End If
-
-                        If x > -1 AndAlso x < b.Width AndAlso y > -1 AndAlso y < b.Height Then
-                            p(y * stride + x * 4 + 3) = CType(255, [Byte])
-                            If useCSmall Then
-                                oPt.Add(New Point(oC.Coord(i).X, oC.Coord(i).Y))
-                            Else
-                                oPt.Add(New Point(oCPt(i).X, oCPt(i).Y))
-                            End If
-                            If x2 > -1 AndAlso x2 < b.Width AndAlso y2 > -1 AndAlso y2 < b.Height Then
-                                p(y2 * stride + x2 * 4 + 3) = CType(255, [Byte])
-                                If useCSmall Then
-                                    oPt.Add(New Point(oC.Coord(i).X, oC.Coord(i).Y))
-                                Else
-                                    oPt.Add(New Point(oCPt(i).X, oCPt(i).Y))
-                                End If
-                            End If
-                        End If
-                    Next
-                    oP.Add(oPt)
-                    cnt += 1
-                Next
-
-                oPTS.Insert(0, oP)
-            End If
-
-            Marshal.Copy(p, 0, bmData.Scan0, p.Length)
-            b.UnlockBits(bmData)
-            p = Nothing
-        Catch exc As Exception
             Try
                 b.UnlockBits(bmData)
             Catch
@@ -8309,7 +8071,6 @@ Public Class ChainFinder
 
                 For i As Integer = 1 To l.Count - 1
                     If l(i) = 0 AndAlso l(i - 1) = 3 Then
-
                         x = fList(j).Coord(i).X - 1
                         y = fList(j).Coord(i).Y
 
@@ -8367,6 +8128,36 @@ Public Class ChainFinder
 
                     p(x * 4 + y * stride + 3) = 255
                 End If
+
+                For i As Integer = 1 To l.Count - 1
+                    If l(i) = 0 AndAlso l(i - 1) = 1 Then
+                        x = fList(j).Coord(i).X - 1
+                        y = fList(j).Coord(i).Y + 1
+
+                        p(x * 4 + y * stride + 3) = 255
+                    End If
+
+                    If l(i) = 1 AndAlso l(i - 1) = 2 Then
+                        x = fList(j).Coord(i).X - 1
+                        y = fList(j).Coord(i).Y - 1
+
+                        p(x * 4 + y * stride + 3) = 255
+                    End If
+
+                    If l(i) = 2 AndAlso l(i - 1) = 3 Then
+                        x = fList(j).Coord(i).X + 1
+                        y = fList(j).Coord(i).Y - 1
+
+                        p(x * 4 + y * stride + 3) = 255
+                    End If
+
+                    If l(i) = 3 AndAlso l(i - 1) = 0 Then
+                        x = fList(j).Coord(i).X + 1
+                        y = fList(j).Coord(i).Y + 1
+
+                        p(x * 4 + y * stride + 3) = 255
+                    End If
+                Next
             End If
         Next
 
@@ -8374,4 +8165,93 @@ Public Class ChainFinder
 
         bWork.UnlockBits(bmD)
     End Sub
+
+    Public Sub UpdateFListRem(ByVal cNew As ChainCode, ByVal fList As List(Of ChainCode))
+        For i As Integer = 0 To fList.Count - 1
+            Dim isInnerOutlineOld As Boolean = ChainFinder.IsInnerOutline(fList(i))
+            Dim isInnerOutlineNew As Boolean = ChainFinder.IsInnerOutline(cNew)
+
+            If isInnerOutlineOld = isInnerOutlineNew Then
+                Dim f As ChainCode = fList(i)
+
+                If CompareChainsRem(cNew, f, isInnerOutlineOld) Then
+                    fList(i) = cNew
+                    Exit For
+                End If
+            End If
+        Next
+    End Sub
+
+    Private Function CompareChainsRem(ByVal cNew As ChainCode, ByVal cOld As ChainCode, ByVal isInnerOutline As Boolean) As Boolean
+        Dim found As Boolean = True
+
+        Using gP As GraphicsPath = New GraphicsPath()
+
+            If isInnerOutline Then
+                gP.AddLines(cNew.Coord.[Select](Function(a) New PointF(a.X, a.Y)).ToArray())
+
+                For Each pt As Point In cOld.Coord
+                    If Not gP.IsVisible(pt) Then
+                        found = False
+                        Exit For
+                    End If
+                Next
+            Else
+                gP.AddLines(cOld.Coord.[Select](Function(a) New PointF(a.X, a.Y)).ToArray())
+
+                For Each pt As Point In cNew.Coord
+                    If Not gP.IsVisible(pt) Then
+                        found = False
+                        Exit For
+                    End If
+                Next
+            End If
+        End Using
+
+        Return found
+    End Function
+
+    Public Sub UpdateFListExt(ByVal cNew As ChainCode, ByVal fList As List(Of ChainCode))
+        For i As Integer = 0 To fList.Count - 1
+            Dim isInnerOutlineOld As Boolean = ChainFinder.IsInnerOutline(fList(i))
+            Dim isInnerOutlineNew As Boolean = ChainFinder.IsInnerOutline(cNew)
+
+            If isInnerOutlineOld = isInnerOutlineNew Then
+                Dim f As ChainCode = fList(i)
+
+                If CompareChainsExt(cNew, f, isInnerOutlineOld) Then
+                    fList(i) = cNew
+                    Exit For
+                End If
+            End If
+        Next
+    End Sub
+
+    Private Function CompareChainsExt(ByVal cNew As ChainCode, ByVal cOld As ChainCode, ByVal isInnerOutline As Boolean) As Boolean
+        Dim found As Boolean = True
+
+        Using gP As GraphicsPath = New GraphicsPath()
+            If Not isInnerOutline Then
+                gP.AddLines(cNew.Coord.[Select](Function(a) New PointF(a.X, a.Y)).ToArray())
+
+                For Each pt As Point In cOld.Coord
+                    If Not gP.IsVisible(pt) Then
+                        found = False
+                        Exit For
+                    End If
+                Next
+            Else
+                gP.AddLines(cOld.Coord.[Select](Function(a) New PointF(a.X, a.Y)).ToArray())
+
+                For Each pt As Point In cNew.Coord
+                    If Not gP.IsVisible(pt) Then
+                        found = False
+                        Exit For
+                    End If
+                Next
+            End If
+        End Using
+
+        Return found
+    End Function
 End Class
