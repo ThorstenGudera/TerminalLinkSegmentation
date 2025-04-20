@@ -56,6 +56,10 @@ namespace TerminalLinkSegmentation
                     this._ix = this._iy = this._endX = this._endY = 0;
 
                     this._dontDrawRect = true;
+
+                    if (this.timer1.Enabled)
+                        this.timer1.Stop();
+                    this.timer1.Start();
                 }
             }
         }
@@ -255,6 +259,13 @@ namespace TerminalLinkSegmentation
                     this._iy * this._zoom + this._rc.Value.Y + this.splitContainer1.Panel2.AutoScrollMinSize.Height,
                         (this._endX - this._ix) * this._zoom, (this._endY - this._iy) * this._zoom));
             }
+        }
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            this.timer1.Stop();
+            this.button4_Click(this.button4, new EventArgs());
+            this._dontDrawRect = false;
         }
 
         private void pictureBox1_DoubleClick(object sender, EventArgs e)

@@ -8291,7 +8291,7 @@ Public Class ChainFinder
         Dim bmD As BitmapData = bWork.LockBits(New Rectangle(0, 0, w, h), ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb)
         Dim stride As Integer = bmD.Stride
 
-        Dim p(w * h - 1) As Byte
+        Dim p(stride * h - 1) As Byte
         Marshal.Copy(bmD.Scan0, p, 0, p.Length)
 
         For j As Integer = 0 To fList.Count - 1
@@ -8352,7 +8352,7 @@ Public Class ChainFinder
         Dim bmD As BitmapData = bWork.LockBits(New Rectangle(0, 0, w, h), ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb)
         Dim stride As Integer = bmD.Stride
 
-        Dim p(w * h - 1) As Byte
+        Dim p(stride * h - 1) As Byte
         Marshal.Copy(bmD.Scan0, p, 0, p.Length)
 
         For j As Integer = 0 To fList.Count - 1

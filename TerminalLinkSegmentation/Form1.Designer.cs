@@ -43,6 +43,7 @@
             ToolTip1 = new ToolTip(components);
             statusStrip1 = new StatusStrip();
             toolStripStatusLabel1 = new ToolStripStatusLabel();
+            timer1 = new System.Windows.Forms.Timer(components);
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
@@ -195,6 +196,11 @@
             toolStripStatusLabel1.Size = new Size(16, 17);
             toolStripStatusLabel1.Text = "   ";
             // 
+            // timer1
+            // 
+            timer1.Interval = 200;
+            timer1.Tick += timer1_Tick;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -234,5 +240,6 @@
         private StatusStrip statusStrip1;
         private ToolStripStatusLabel toolStripStatusLabel1;
         private Button button6;
+        private System.Windows.Forms.Timer timer1;
     }
 }
