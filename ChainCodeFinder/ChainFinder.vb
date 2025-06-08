@@ -7,6 +7,7 @@ Imports System.Drawing
 Imports System.Threading.Tasks
 Imports ChainCodeFinder
 Imports System.Drawing.Drawing2D
+Imports System.Diagnostics.Eventing.Reader
 
 'This class implements a chaincode finder (crack code), as an adaption of 
 '       http://www.miszalok.de/Samples/CV/ChainCode/chain_code.htm and
@@ -1846,9 +1847,9 @@ Public Class ChainFinder
                 Dim vy As Double = ((t.X * dd) + d)
                 Dim A As Double = (t.Y - vy) * dx
 
-                distT = CDbl(Math.Abs(A)) / distPQ
+                distT = Math.Abs(A) / distPQ
 
-                If dx = 0 Then
+                If dx = 0 OrElse A = 0 Then
                     If t.X <> p.X Then
                         distT = Math.Abs(p.X - t.X)
                     End If
@@ -2294,6 +2295,267 @@ Public Class ChainFinder
             b.UnlockBits(bmData)
             p = Nothing
         Catch
+            Try
+                b.UnlockBits(bmData)
+            Catch
+
+            End Try
+        End Try
+    End Sub
+
+    Public Sub ExtendOutline(b As Bitmap, bCopyFrom As Bitmap, fList As List(Of ChainCode), innerOnly As Boolean)
+        Dim bmData As BitmapData = Nothing
+        Dim bmC As BitmapData = Nothing
+
+        If Not AvailMem.AvailMem.checkAvailRam(b.Width * b.Height * 4L) Then
+            Return
+        End If
+
+        Try
+            bmData = b.LockBits(New Rectangle(0, 0, b.Width, b.Height), ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb)
+            bmC = bCopyFrom.LockBits(New Rectangle(0, 0, b.Width, b.Height), ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb)
+            Dim stride As Integer = bmData.Stride
+
+            Dim Scan0 As System.IntPtr = bmData.Scan0
+
+            Dim p((bmData.Stride * bmData.Height) - 1) As Byte
+            Marshal.Copy(bmData.Scan0, p, 0, p.Length)
+            Dim p2((bmData.Stride * bmData.Height) - 1) As Byte
+            Marshal.Copy(bmC.Scan0, p2, 0, p2.Length)
+
+            If fList IsNot Nothing AndAlso fList.Count > 0 Then
+                For Each c As ChainCode In fList
+                    If innerOnly Then
+                        If c.Area > 0 Then
+                            For i As Integer = 0 To c.Coord.Count - 1
+                                Dim x As Integer = c.Coord(i).X
+                                Dim y As Integer = c.Coord(i).Y
+                                Dim x2 As Integer = -1
+                                Dim y2 As Integer = -1
+
+                                Select Case c.Chain(i)
+                                    Case 0 'r
+                                        y += 1
+                                    Case 1 'd
+                                        x -= 1
+                                    Case 2 'l
+                                        y -= 1
+                                    Case 3 'u
+                                        x += 1
+                                End Select
+                                'dont forget, that x and y may have changed already and so are not the coords in the list anymore. So use the list's coords here
+                                If i < c.Coord.Count - 1 Then
+                                    Select Case c.Chain(i + 1)
+                                        Case 0
+                                            If c.Chain(i) = 1 Then
+                                                x2 = c.Coord(i).X
+                                                y2 = c.Coord(i).Y + 1
+                                            End If
+                                        Case 1
+                                            If c.Chain(i) = 2 Then
+                                                x2 = c.Coord(i).X - 1
+                                                y2 = c.Coord(i).Y
+                                            End If
+                                        Case 2
+                                            If c.Chain(i) = 3 Then
+                                                x2 = c.Coord(i).X
+                                                y2 = c.Coord(i).Y - 1
+                                            End If
+                                        Case 3
+                                            If c.Chain(i) = 0 Then
+                                                x2 = c.Coord(i).X + 1
+                                                y2 = c.Coord(i).Y
+                                            End If
+                                    End Select
+                                End If
+
+                                If x > -1 AndAlso x < b.Width AndAlso y > -1 AndAlso y < b.Height AndAlso p(y * stride + x * 4 + 3) = 0 Then
+                                    p(y * stride + x * 4) = p2(y * stride + x * 4)
+                                    p(y * stride + x * 4 + 1) = p2(y * stride + x * 4 + 1)
+                                    p(y * stride + x * 4 + 2) = p2(y * stride + x * 4 + 2)
+                                    p(y * stride + x * 4 + 3) = CType(255, [Byte])
+                                End If
+                                If x2 > -1 AndAlso x2 < b.Width AndAlso y2 > -1 AndAlso y2 < b.Height AndAlso p(y2 * stride + x2 * 4 + 3) = 0 Then
+                                    p(y2 * stride + x2 * 4) = p2(y2 * stride + x2 * 4)
+                                    p(y2 * stride + x2 * 4 + 1) = p2(y2 * stride + x2 * 4 + 1)
+                                    p(y2 * stride + x2 * 4 + 2) = p2(y2 * stride + x2 * 4 + 2)
+                                    p(y2 * stride + x2 * 4 + 3) = CType(255, [Byte])
+                                End If
+                            Next
+                        End If
+                    Else
+                        For i As Integer = 0 To c.Coord.Count - 1
+                            Dim x As Integer = c.Coord(i).X
+                            Dim y As Integer = c.Coord(i).Y
+                            Dim x2 As Integer = -1
+                            Dim y2 As Integer = -1
+
+                            Select Case c.Chain(i)
+                                Case 0 'r
+                                    y += 1
+                                Case 1 'd
+                                    x -= 1
+                                Case 2 'l
+                                    y -= 1
+                                Case 3 'u
+                                    x += 1
+                            End Select
+                            'dont forget, that x and y may have changed already and so are not the coords in the list anymore. So use the list's coords here
+                            If i < c.Coord.Count - 1 Then
+                                Select Case c.Chain(i + 1)
+                                    Case 0
+                                        If c.Chain(i) = 1 Then
+                                            x2 = c.Coord(i).X
+                                            y2 = c.Coord(i).Y + 1
+                                        End If
+                                    Case 1
+                                        If c.Chain(i) = 2 Then
+                                            x2 = c.Coord(i).X - 1
+                                            y2 = c.Coord(i).Y
+                                        End If
+                                    Case 2
+                                        If c.Chain(i) = 3 Then
+                                            x2 = c.Coord(i).X
+                                            y2 = c.Coord(i).Y - 1
+                                        End If
+                                    Case 3
+                                        If c.Chain(i) = 0 Then
+                                            x2 = c.Coord(i).X + 1
+                                            y2 = c.Coord(i).Y
+                                        End If
+                                End Select
+                            End If
+
+                            If x > -1 AndAlso x < b.Width AndAlso y > -1 AndAlso y < b.Height AndAlso p(y * stride + x * 4 + 3) = 0 Then
+                                p(y * stride + x * 4) = p2(y * stride + x * 4)
+                                p(y * stride + x * 4 + 1) = p2(y * stride + x * 4 + 1)
+                                p(y * stride + x * 4 + 2) = p2(y * stride + x * 4 + 2)
+                                p(y * stride + x * 4 + 3) = CType(255, [Byte])
+                            End If
+                            If x2 > -1 AndAlso x2 < b.Width AndAlso y2 > -1 AndAlso y2 < b.Height AndAlso p(y2 * stride + x2 * 4 + 3) = 0 Then
+                                p(y2 * stride + x2 * 4) = p2(y2 * stride + x2 * 4)
+                                p(y2 * stride + x2 * 4 + 1) = p2(y2 * stride + x2 * 4 + 1)
+                                p(y2 * stride + x2 * 4 + 2) = p2(y2 * stride + x2 * 4 + 2)
+                                p(y2 * stride + x2 * 4 + 3) = CType(255, [Byte])
+                            End If
+                        Next
+                    End If
+                Next
+            End If
+
+            Marshal.Copy(p, 0, bmData.Scan0, p.Length)
+            b.UnlockBits(bmData)
+            bCopyFrom.UnlockBits(bmC)
+            p = Nothing
+        Catch
+            Try
+                b.UnlockBits(bmData)
+            Catch
+
+            End Try
+            Try
+                bCopyFrom.UnlockBits(bmC)
+            Catch
+
+            End Try
+        End Try
+    End Sub
+
+    Public Sub ExtendOutline(b As Bitmap, fList As List(Of ChainCode), getColorFromChainCoord As Boolean)
+        Dim bmData As BitmapData = Nothing
+
+        If Not AvailMem.AvailMem.checkAvailRam(b.Width * b.Height * 4L) Then
+            Return
+        End If
+
+        Try
+            bmData = b.LockBits(New Rectangle(0, 0, b.Width, b.Height), ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb)
+            Dim stride As Integer = bmData.Stride
+
+            Dim Scan0 As System.IntPtr = bmData.Scan0
+
+            Dim p((bmData.Stride * bmData.Height) - 1) As Byte
+            Marshal.Copy(bmData.Scan0, p, 0, p.Length)
+
+            If fList IsNot Nothing AndAlso fList.Count > 0 Then
+                For Each c As ChainCode In fList
+                    Dim cl As Color = Color.Transparent
+                    If getColorFromChainCoord Then
+                        cl = Color.FromArgb(255, p(c.Coord(0).Y * stride + c.Coord(0).X * 4 + 2),
+                                             p(c.Coord(0).Y * stride + c.Coord(0).X * 4 + 1),
+                                             p(c.Coord(0).Y * stride + c.Coord(0).X * 4))
+                    End If
+                    For i As Integer = 0 To c.Coord.Count - 1
+                        Dim x As Integer = c.Coord(i).X
+                        Dim y As Integer = c.Coord(i).Y
+                        Dim x2 As Integer = -1
+                        Dim y2 As Integer = -1
+
+                        Select Case c.Chain(i)
+                            Case 0 'r
+                                y += 1
+                            Case 1 'd
+                                x -= 1
+                            Case 2 'l
+                                y -= 1
+                            Case 3 'u
+                                x += 1
+                        End Select
+                        'dont forget, that x and y may have changed already and so are not the coords in the list anymore. So use the list's coords here
+                        If i < c.Coord.Count - 1 Then
+                            Select Case c.Chain(i + 1)
+                                Case 0
+                                    If c.Chain(i) = 1 Then
+                                        x2 = c.Coord(i).X
+                                        y2 = c.Coord(i).Y + 1
+                                    End If
+                                Case 1
+                                    If c.Chain(i) = 2 Then
+                                        x2 = c.Coord(i).X - 1
+                                        y2 = c.Coord(i).Y
+                                    End If
+                                Case 2
+                                    If c.Chain(i) = 3 Then
+                                        x2 = c.Coord(i).X
+                                        y2 = c.Coord(i).Y - 1
+                                    End If
+                                Case 3
+                                    If c.Chain(i) = 0 Then
+                                        x2 = c.Coord(i).X + 1
+                                        y2 = c.Coord(i).Y
+                                    End If
+                            End Select
+                        End If
+
+                        If x > -1 AndAlso x < b.Width AndAlso y > -1 AndAlso y < b.Height AndAlso p(y * stride + x * 4 + 3) < 255 Then
+                            If getColorFromChainCoord Then
+                                p(y * stride + x * 4) = cl.B
+                                p(y * stride + x * 4 + 1) = cl.G
+                                p(y * stride + x * 4 + 2) = cl.R
+                                p(y * stride + x * 4 + 3) = 255
+                            Else
+                                p(y * stride + x * 4 + 3) = CType(255, [Byte])
+                            End If
+                            p(y * stride + x * 4 + 3) = CType(255, [Byte])
+                        End If
+                        If x2 > -1 AndAlso x2 < b.Width AndAlso y2 > -1 AndAlso y2 < b.Height AndAlso p(y2 * stride + x2 * 4 + 3) < 255 Then
+                            If getColorFromChainCoord Then
+                                p(y2 * stride + x2 * 4) = cl.B
+                                p(y2 * stride + x2 * 4 + 1) = cl.G
+                                p(y2 * stride + x2 * 4 + 2) = cl.R
+                                p(y2 * stride + x2 * 4 + 3) = 255
+                            Else
+                                p(y2 * stride + x2 * 4 + 3) = CType(255, [Byte])
+                            End If
+                        End If
+                    Next
+                Next
+            End If
+
+            Marshal.Copy(p, 0, bmData.Scan0, p.Length)
+            b.UnlockBits(bmData)
+            p = Nothing
+        Catch ex As Exception
             Try
                 b.UnlockBits(bmData)
             Catch
@@ -8166,6 +8428,165 @@ Public Class ChainFinder
         bWork.UnlockBits(bmD)
     End Sub
 
+    Public Sub DoCornersE2(bWork As Bitmap, bu As Bitmap, fList As List(Of ChainCode), innerOnly As Boolean)
+        Dim w As Integer = bWork.Width
+        Dim h As Integer = bWork.Height
+
+        Dim bmD As BitmapData = bWork.LockBits(New Rectangle(0, 0, w, h), ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb)
+        Dim bmU As BitmapData = bu.LockBits(New Rectangle(0, 0, w, h), ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb)
+        Dim stride As Integer = bmD.Stride
+
+        Dim p(stride * h - 1) As Byte
+        Marshal.Copy(bmD.Scan0, p, 0, p.Length)
+        Dim pu(stride * h - 1) As Byte
+        Marshal.Copy(bmU.Scan0, pu, 0, pu.Length)
+
+        For j As Integer = 0 To fList.Count - 1
+            If innerOnly Then
+                If fList(j).Area > 0 Then
+                    Dim l As List(Of Integer) = fList(j).Chain
+                    Dim x As Integer = -1
+                    Dim y As Integer = -1
+
+                    If l(0) = 1 AndAlso l(l.Count - 1) = 2 Then
+                        x = fList(j).Coord(0).X - 1
+                        y = fList(j).Coord(0).Y - 1
+
+                        If x >= 0 AndAlso y >= 0 AndAlso x < w AndAlso y < h Then
+                            p(x * 4 + y * stride) = pu(x * 4 + y * stride)
+                            p(x * 4 + y * stride + 1) = pu(x * 4 + y * stride + 1)
+                            p(x * 4 + y * stride + 2) = pu(x * 4 + y * stride + 2)
+                            p(x * 4 + y * stride + 3) = 255
+                        End If
+                    End If
+
+                    For i As Integer = 1 To l.Count - 1
+                        If l(i) = 0 AndAlso l(i - 1) = 1 Then
+                            x = fList(j).Coord(i).X - 1
+                            y = fList(j).Coord(i).Y + 1
+
+                            If x >= 0 AndAlso y >= 0 AndAlso x < w AndAlso y < h Then
+                                p(x * 4 + y * stride) = pu(x * 4 + y * stride)
+                                p(x * 4 + y * stride + 1) = pu(x * 4 + y * stride + 1)
+                                p(x * 4 + y * stride + 2) = pu(x * 4 + y * stride + 2)
+                                p(x * 4 + y * stride + 3) = 255
+                            End If
+                        End If
+
+                        If l(i) = 1 AndAlso l(i - 1) = 2 Then
+                            x = fList(j).Coord(i).X - 1
+                            y = fList(j).Coord(i).Y - 1
+
+                            If x >= 0 AndAlso y >= 0 AndAlso x < w AndAlso y < h Then
+                                p(x * 4 + y * stride) = pu(x * 4 + y * stride)
+                                p(x * 4 + y * stride + 1) = pu(x * 4 + y * stride + 1)
+                                p(x * 4 + y * stride + 2) = pu(x * 4 + y * stride + 2)
+                                p(x * 4 + y * stride + 3) = 255
+                            End If
+                        End If
+
+                        If l(i) = 2 AndAlso l(i - 1) = 3 Then
+                            x = fList(j).Coord(i).X + 1
+                            y = fList(j).Coord(i).Y - 1
+
+                            If x >= 0 AndAlso y >= 0 AndAlso x < w AndAlso y < h Then
+                                p(x * 4 + y * stride) = pu(x * 4 + y * stride)
+                                p(x * 4 + y * stride + 1) = pu(x * 4 + y * stride + 1)
+                                p(x * 4 + y * stride + 2) = pu(x * 4 + y * stride + 2)
+                                p(x * 4 + y * stride + 3) = 255
+                            End If
+                        End If
+
+                        If l(i) = 3 AndAlso l(i - 1) = 0 Then
+                            x = fList(j).Coord(i).X + 1
+                            y = fList(j).Coord(i).Y + 1
+
+                            If x >= 0 AndAlso y >= 0 AndAlso x < w AndAlso y < h Then
+                                p(x * 4 + y * stride) = pu(x * 4 + y * stride)
+                                p(x * 4 + y * stride + 1) = pu(x * 4 + y * stride + 1)
+                                p(x * 4 + y * stride + 2) = pu(x * 4 + y * stride + 2)
+                                p(x * 4 + y * stride + 3) = 255
+                            End If
+                        End If
+                    Next
+                End If
+            Else
+                If fList(j).Area <> 0 Then
+                    Dim l As List(Of Integer) = fList(j).Chain
+                    Dim x As Integer = -1
+                    Dim y As Integer = -1
+
+                    If l(0) = 1 AndAlso l(l.Count - 1) = 2 Then
+                        x = fList(j).Coord(0).X - 1
+                        y = fList(j).Coord(0).Y - 1
+
+                        If x >= 0 AndAlso y >= 0 AndAlso x < w AndAlso y < h Then
+                            p(x * 4 + y * stride) = pu(x * 4 + y * stride)
+                            p(x * 4 + y * stride + 1) = pu(x * 4 + y * stride + 1)
+                            p(x * 4 + y * stride + 2) = pu(x * 4 + y * stride + 2)
+                            p(x * 4 + y * stride + 3) = 255
+                        End If
+                    End If
+
+                    For i As Integer = 1 To l.Count - 1
+                        If l(i) = 0 AndAlso l(i - 1) = 1 Then
+                            x = fList(j).Coord(i).X - 1
+                            y = fList(j).Coord(i).Y + 1
+
+                            If x >= 0 AndAlso y >= 0 AndAlso x < w AndAlso y < h Then
+                                p(x * 4 + y * stride) = pu(x * 4 + y * stride)
+                                p(x * 4 + y * stride + 1) = pu(x * 4 + y * stride + 1)
+                                p(x * 4 + y * stride + 2) = pu(x * 4 + y * stride + 2)
+                                p(x * 4 + y * stride + 3) = 255
+                            End If
+                        End If
+
+                        If l(i) = 1 AndAlso l(i - 1) = 2 Then
+                            x = fList(j).Coord(i).X - 1
+                            y = fList(j).Coord(i).Y - 1
+
+                            If x >= 0 AndAlso y >= 0 AndAlso x < w AndAlso y < h Then
+                                p(x * 4 + y * stride) = pu(x * 4 + y * stride)
+                                p(x * 4 + y * stride + 1) = pu(x * 4 + y * stride + 1)
+                                p(x * 4 + y * stride + 2) = pu(x * 4 + y * stride + 2)
+                                p(x * 4 + y * stride + 3) = 255
+                            End If
+                        End If
+
+                        If l(i) = 2 AndAlso l(i - 1) = 3 Then
+                            x = fList(j).Coord(i).X + 1
+                            y = fList(j).Coord(i).Y - 1
+
+                            If x >= 0 AndAlso y >= 0 AndAlso x < w AndAlso y < h Then
+                                p(x * 4 + y * stride) = pu(x * 4 + y * stride)
+                                p(x * 4 + y * stride + 1) = pu(x * 4 + y * stride + 1)
+                                p(x * 4 + y * stride + 2) = pu(x * 4 + y * stride + 2)
+                                p(x * 4 + y * stride + 3) = 255
+                            End If
+                        End If
+
+                        If l(i) = 3 AndAlso l(i - 1) = 0 Then
+                            x = fList(j).Coord(i).X + 1
+                            y = fList(j).Coord(i).Y + 1
+
+                            If x >= 0 AndAlso y >= 0 AndAlso x < w AndAlso y < h Then
+                                p(x * 4 + y * stride) = pu(x * 4 + y * stride)
+                                p(x * 4 + y * stride + 1) = pu(x * 4 + y * stride + 1)
+                                p(x * 4 + y * stride + 2) = pu(x * 4 + y * stride + 2)
+                                p(x * 4 + y * stride + 3) = 255
+                            End If
+                        End If
+                    Next
+                End If
+            End If
+        Next
+
+        Marshal.Copy(p, 0, bmD.Scan0, p.Length)
+
+        bWork.UnlockBits(bmD)
+        bu.UnlockBits(bmU)
+    End Sub
+
     Public Sub UpdateFListRem(ByVal cNew As ChainCode, ByVal fList As List(Of ChainCode))
         For i As Integer = 0 To fList.Count - 1
             Dim isInnerOutlineOld As Boolean = ChainFinder.IsInnerOutline(fList(i))
@@ -8254,4 +8675,318 @@ Public Class ChainFinder
 
         Return found
     End Function
+
+    Public Function GetBoundary(ByVal upperImg As Bitmap, ByVal minAlpha As Integer, ByVal transpMode As Boolean) As List(Of ChainCode)
+        Dim l As List(Of ChainCode) = Nothing
+        Dim bmpTmp As Bitmap = Nothing
+
+        Try
+            If AvailMem.AvailMem.checkAvailRam(upperImg.Width * upperImg.Height * 4L) Then
+                bmpTmp = New Bitmap(upperImg)
+            Else
+                Throw New Exception("Not enough memory.")
+            End If
+
+            Dim nWidth As Integer = bmpTmp.Width
+            Dim nHeight As Integer = bmpTmp.Height
+
+            If transpMode Then
+                l = GetOutline(bmpTmp, nWidth, nHeight, minAlpha, False, 0, False, 0, False)
+            Else
+                l = GetOutline(bmpTmp, nWidth, nHeight, minAlpha, True, 0, False, 0, False)
+            End If
+        Catch exc As Exception
+
+        Finally
+            If bmpTmp IsNot Nothing Then
+                bmpTmp.Dispose()
+                bmpTmp = Nothing
+            End If
+        End Try
+
+        If l IsNot Nothing Then
+            Return l
+        Else
+            Return Nothing
+        End If
+    End Function
+
+    Public Sub FillOutline(b As Bitmap, bCopyFrom As Bitmap, fList As List(Of ChainCode), innerOnly As Boolean)
+        Dim bmData As BitmapData = Nothing
+        Dim bmC As BitmapData = Nothing
+
+        If Not AvailMem.AvailMem.checkAvailRam(b.Width * b.Height * 4L) Then
+            Return
+        End If
+
+        Try
+            bmData = b.LockBits(New Rectangle(0, 0, b.Width, b.Height), ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb)
+            bmC = bCopyFrom.LockBits(New Rectangle(0, 0, b.Width, b.Height), ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb)
+            Dim stride As Integer = bmData.Stride
+
+            Dim Scan0 As System.IntPtr = bmData.Scan0
+
+            Dim p((bmData.Stride * bmData.Height) - 1) As Byte
+            Marshal.Copy(bmData.Scan0, p, 0, p.Length)
+            Dim p2((bmData.Stride * bmData.Height) - 1) As Byte
+            Marshal.Copy(bmC.Scan0, p2, 0, p2.Length)
+
+            If fList IsNot Nothing AndAlso fList.Count > 0 Then
+                For Each c As ChainCode In fList
+                    If innerOnly Then
+                        If c.Area > 0 Then
+                            For i As Integer = 0 To c.Coord.Count - 1
+                                Dim x As Integer = c.Coord(i).X
+                                Dim y As Integer = c.Coord(i).Y
+                                Dim xOrg As Integer = c.Coord(i).X
+                                Dim yOrg As Integer = c.Coord(i).Y
+                                Dim x2 As Integer = -1
+                                Dim y2 As Integer = -1
+                                Dim x4 As Integer = -1
+                                Dim y4 As Integer = -1
+
+                                Select Case c.Chain(i)
+                                    Case 0 'r
+                                        y += 1
+                                    Case 1 'd
+                                        x -= 1
+                                    Case 2 'l
+                                        y -= 1
+                                    Case 3 'u
+                                        x += 1
+                                End Select
+                                'dont forget, that x and y may have changed already and so are not the coords in the list anymore. So use the list's coords here
+                                If i < c.Coord.Count - 1 Then
+                                    Select Case c.Chain(i + 1)
+                                        Case 0
+                                            If c.Chain(i) = 1 Then
+                                                x2 = c.Coord(i).X
+                                                y2 = c.Coord(i).Y + 1
+                                                x4 = c.Coord(i).X - 1
+                                                y4 = c.Coord(i).Y + 1
+                                            End If
+                                        Case 1
+                                            If c.Chain(i) = 2 Then
+                                                x2 = c.Coord(i).X - 1
+                                                y2 = c.Coord(i).Y
+                                                x4 = c.Coord(i).X - 1
+                                                y4 = c.Coord(i).Y - 1
+                                            End If
+                                        Case 2
+                                            If c.Chain(i) = 3 Then
+                                                x2 = c.Coord(i).X
+                                                y2 = c.Coord(i).Y - 1
+                                                x4 = c.Coord(i).X + 1
+                                                y4 = c.Coord(i).Y - 1
+                                            End If
+                                        Case 3
+                                            If c.Chain(i) = 0 Then
+                                                x2 = c.Coord(i).X + 1
+                                                y2 = c.Coord(i).Y
+                                                x4 = c.Coord(i).X + 1
+                                                y4 = c.Coord(i).Y + 1
+                                            End If
+                                    End Select
+                                End If
+
+                                If x > -1 AndAlso x < b.Width AndAlso y > -1 AndAlso y < b.Height AndAlso p(y * stride + x * 4 + 3) = 0 Then
+                                    p(y * stride + x * 4) = p2(yOrg * stride + xOrg * 4)
+                                    p(y * stride + x * 4 + 1) = p2(yOrg * stride + xOrg * 4 + 1)
+                                    p(y * stride + x * 4 + 2) = p2(yOrg * stride + xOrg * 4 + 2)
+                                    p(y * stride + x * 4 + 3) = CType(255, [Byte])
+                                End If
+                                If x2 > -1 AndAlso x2 < b.Width AndAlso y2 > -1 AndAlso y2 < b.Height AndAlso p(y2 * stride + x2 * 4 + 3) = 0 Then
+                                    p(y2 * stride + x2 * 4) = p2(yOrg * stride + xOrg * 4)
+                                    p(y2 * stride + x2 * 4 + 1) = p2(yOrg * stride + xOrg * 4 + 1)
+                                    p(y2 * stride + x2 * 4 + 2) = p2(yOrg * stride + xOrg * 4 + 2)
+                                    p(y2 * stride + x2 * 4 + 3) = CType(255, [Byte])
+                                End If
+                                If x4 > -1 AndAlso x4 < b.Width AndAlso y4 > -1 AndAlso y4 < b.Height AndAlso p(y4 * stride + x4 * 4 + 3) = 0 Then
+                                    p(y4 * stride + x4 * 4) = p2(yOrg * stride + xOrg * 4)
+                                    p(y4 * stride + x4 * 4 + 1) = p2(yOrg * stride + xOrg * 4 + 1)
+                                    p(y4 * stride + x4 * 4 + 2) = p2(yOrg * stride + xOrg * 4 + 2)
+                                    p(y4 * stride + x4 * 4 + 3) = CType(255, [Byte])
+                                End If
+                            Next
+                        End If
+                    Else
+                        'If c.Area > 0 Then
+                        For i As Integer = 0 To c.Coord.Count - 1
+                            Dim x As Integer = c.Coord(i).X
+                            Dim y As Integer = c.Coord(i).Y
+                            Dim xOrg As Integer = c.Coord(i).X
+                            Dim yOrg As Integer = c.Coord(i).Y
+                            Dim x2 As Integer = -1
+                            Dim y2 As Integer = -1
+                            Dim x4 As Integer = -1
+                            Dim y4 As Integer = -1
+
+                            Select Case c.Chain(i)
+                                Case 0 'r
+                                    y += 1
+                                Case 1 'd
+                                    x -= 1
+                                Case 2 'l
+                                    y -= 1
+                                Case 3 'u
+                                    x += 1
+                            End Select
+                            'dont forget, that x and y may have changed already and so are not the coords in the list anymore. So use the list's coords here
+                            If i < c.Coord.Count - 1 Then
+                                Select Case c.Chain(i + 1)
+                                    Case 0
+                                        If c.Chain(i) = 1 Then
+                                            x2 = c.Coord(i).X
+                                            y2 = c.Coord(i).Y + 1
+                                            x4 = c.Coord(i).X - 1
+                                            y4 = c.Coord(i).Y + 1
+                                        End If
+                                    Case 1
+                                        If c.Chain(i) = 2 Then
+                                            x2 = c.Coord(i).X - 1
+                                            y2 = c.Coord(i).Y
+                                            x4 = c.Coord(i).X - 1
+                                            y4 = c.Coord(i).Y - 1
+                                        End If
+                                    Case 2
+                                        If c.Chain(i) = 3 Then
+                                            x2 = c.Coord(i).X
+                                            y2 = c.Coord(i).Y - 1
+                                            x4 = c.Coord(i).X + 1
+                                            y4 = c.Coord(i).Y - 1
+                                        End If
+                                    Case 3
+                                        If c.Chain(i) = 0 Then
+                                            x2 = c.Coord(i).X + 1
+                                            y2 = c.Coord(i).Y
+                                            x4 = c.Coord(i).X + 1
+                                            y4 = c.Coord(i).Y + 1
+                                        End If
+                                End Select
+                            End If
+
+                            If x > -1 AndAlso x < b.Width AndAlso y > -1 AndAlso y < b.Height Then
+                                p(y * stride + x * 4) = p2(yOrg * stride + xOrg * 4)
+                                p(y * stride + x * 4 + 1) = p2(yOrg * stride + xOrg * 4 + 1)
+                                p(y * stride + x * 4 + 2) = p2(yOrg * stride + xOrg * 4 + 2)
+                                p(y * stride + x * 4 + 3) = CType(255, [Byte])
+                            End If
+                            If x2 > -1 AndAlso x2 < b.Width AndAlso y2 > -1 AndAlso y2 < b.Height Then
+                                p(y2 * stride + x2 * 4) = p2(yOrg * stride + xOrg * 4)
+                                p(y2 * stride + x2 * 4 + 1) = p2(yOrg * stride + xOrg * 4 + 1)
+                                p(y2 * stride + x2 * 4 + 2) = p2(yOrg * stride + xOrg * 4 + 2)
+                                p(y2 * stride + x2 * 4 + 3) = CType(255, [Byte])
+                            End If
+                            If x4 > -1 AndAlso x4 < b.Width AndAlso y4 > -1 AndAlso y4 < b.Height Then
+                                p(y4 * stride + x4 * 4) = p2(yOrg * stride + xOrg * 4)
+                                p(y4 * stride + x4 * 4 + 1) = p2(yOrg * stride + xOrg * 4 + 1)
+                                p(y4 * stride + x4 * 4 + 2) = p2(yOrg * stride + xOrg * 4 + 2)
+                                p(y4 * stride + x4 * 4 + 3) = CType(255, [Byte])
+                            End If
+
+                            'test
+                            'If p2(yOrg * stride + xOrg * 4 + 3) < 255 Then
+                            '    MessageBox.Show(p2(yOrg * stride + xOrg * 4 + 3).ToString())
+                            'End If
+                        Next
+                        'Else
+                        '    If c.Area < 0 Then
+                        '        For i As Integer = 0 To c.Coord.Count - 1
+                        '            Dim x As Integer = c.Coord(i).X
+                        '            Dim y As Integer = c.Coord(i).Y
+                        '            Dim xOrg As Integer = c.Coord(i).X
+                        '            Dim yOrg As Integer = c.Coord(i).Y
+                        '            Dim x2 As Integer = -1
+                        '            Dim y2 As Integer = -1
+                        '            Dim x4 As Integer = -1
+                        '            Dim y4 As Integer = -1
+
+                        '            Select Case c.Chain(i)
+                        '                Case 0 'r
+                        '                    y += 1
+                        '                Case 1 'd
+                        '                    x -= 1
+                        '                Case 2 'l
+                        '                    y -= 1
+                        '                Case 3 'u
+                        '                    x += 1
+                        '            End Select
+                        '            'dont forget, that x and y may have changed already and so are not the coords in the list anymore. So use the list's coords here
+                        '            If i < c.Coord.Count - 1 Then
+                        '                Select Case c.Chain(i + 1)
+                        '                    Case 0
+                        '                        If c.Chain(i) = 1 Then
+                        '                            x2 = c.Coord(i).X
+                        '                            y2 = c.Coord(i).Y + 1
+                        '                            x4 = c.Coord(i).X - 1
+                        '                            y4 = c.Coord(i).Y + 1
+                        '                        End If
+                        '                    Case 1
+                        '                        If c.Chain(i) = 2 Then
+                        '                            x2 = c.Coord(i).X - 1
+                        '                            y2 = c.Coord(i).Y
+                        '                            x4 = c.Coord(i).X - 1
+                        '                            y4 = c.Coord(i).Y - 1
+                        '                        End If
+                        '                    Case 2
+                        '                        If c.Chain(i) = 3 Then
+                        '                            x2 = c.Coord(i).X
+                        '                            y2 = c.Coord(i).Y - 1
+                        '                            x4 = c.Coord(i).X + 1
+                        '                            y4 = c.Coord(i).Y - 1
+                        '                        End If
+                        '                    Case 3
+                        '                        If c.Chain(i) = 0 Then
+                        '                            x2 = c.Coord(i).X + 1
+                        '                            y2 = c.Coord(i).Y
+                        '                            x4 = c.Coord(i).X + 1
+                        '                            y4 = c.Coord(i).Y + 1
+                        '                        End If
+                        '                End Select
+                        '            End If
+
+                        '            If x > -1 AndAlso x < b.Width AndAlso y > -1 AndAlso y < b.Height Then
+                        '                p(y * stride + x * 4) = p2(yOrg * stride + xOrg * 4)
+                        '                p(y * stride + x * 4 + 1) = p2(yOrg * stride + xOrg * 4 + 1)
+                        '                p(y * stride + x * 4 + 2) = p2(yOrg * stride + xOrg * 4 + 2)
+                        '                p(y * stride + x * 4 + 3) = CType(255, [Byte])
+                        '            End If
+                        '            If x2 > -1 AndAlso x2 < b.Width AndAlso y2 > -1 AndAlso y2 < b.Height Then
+                        '                p(y2 * stride + x2 * 4) = p2(yOrg * stride + xOrg * 4)
+                        '                p(y2 * stride + x2 * 4 + 1) = p2(yOrg * stride + xOrg * 4 + 1)
+                        '                p(y2 * stride + x2 * 4 + 2) = p2(yOrg * stride + xOrg * 4 + 2)
+                        '                p(y2 * stride + x2 * 4 + 3) = CType(255, [Byte])
+                        '            End If
+                        '            If x4 > -1 AndAlso x4 < b.Width AndAlso y4 > -1 AndAlso y4 < b.Height Then
+                        '                p(y4 * stride + x4 * 4) = p2(yOrg * stride + xOrg * 4)
+                        '                p(y4 * stride + x4 * 4 + 1) = p2(yOrg * stride + xOrg * 4 + 1)
+                        '                p(y4 * stride + x4 * 4 + 2) = p2(yOrg * stride + xOrg * 4 + 2)
+                        '                p(y4 * stride + x4 * 4 + 3) = CType(255, [Byte])
+                        '            End If
+                        '        Next
+                        '    End If
+                        'End If
+                    End If
+                Next
+            End If
+
+            Marshal.Copy(p, 0, bmData.Scan0, p.Length)
+            b.UnlockBits(bmData)
+            bCopyFrom.UnlockBits(bmC)
+
+            p = Nothing
+            p2 = Nothing
+        Catch
+            Try
+                b.UnlockBits(bmData)
+            Catch
+
+            End Try
+            Try
+                bCopyFrom.UnlockBits(bmC)
+            Catch
+
+            End Try
+        End Try
+    End Sub
 End Class
