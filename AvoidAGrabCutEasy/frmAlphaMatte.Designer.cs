@@ -124,6 +124,7 @@
             backgroundWorker5 = new System.ComponentModel.BackgroundWorker();
             backgroundWorker3 = new System.ComponentModel.BackgroundWorker();
             backgroundWorker4 = new System.ComponentModel.BackgroundWorker();
+            cbExcludeFG = new CheckBox();
             statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
@@ -271,7 +272,7 @@
             label9.Location = new Point(13, 13);
             label9.Margin = new Padding(4, 0, 4, 0);
             label9.Name = "label9";
-            label9.Size = new Size(53, 15);
+            label9.Size = new Size(52, 15);
             label9.TabIndex = 672;
             label9.Text = "Max Size";
             toolTip1.SetToolTip(label9, "Maximum size of the long picture-side.\r\nBigger pictures will be resampled down - then processed -\r\nand re-resampled up again.\r\nRealMinCut MaxSize is fix at 300, due to processing time.");
@@ -287,7 +288,7 @@
             // splitContainer1
             // 
             splitContainer1.Dock = DockStyle.Fill;
-            splitContainer1.Location = new Point(0, 227);
+            splitContainer1.Location = new Point(0, 247);
             splitContainer1.Margin = new Padding(4, 3, 4, 3);
             splitContainer1.Name = "splitContainer1";
             // 
@@ -298,7 +299,7 @@
             // splitContainer1.Panel2
             // 
             splitContainer1.Panel2.Controls.Add(helplineRulerCtrl2);
-            splitContainer1.Size = new Size(1479, 645);
+            splitContainer1.Size = new Size(1479, 625);
             splitContainer1.SplitterDistance = 756;
             splitContainer1.SplitterWidth = 5;
             splitContainer1.TabIndex = 227;
@@ -319,7 +320,7 @@
             helplineRulerCtrl1.MoveHelpLinesOnResize = false;
             helplineRulerCtrl1.Name = "helplineRulerCtrl1";
             helplineRulerCtrl1.SetZoomOnlyByMethodCall = false;
-            helplineRulerCtrl1.Size = new Size(756, 645);
+            helplineRulerCtrl1.Size = new Size(756, 625);
             helplineRulerCtrl1.TabIndex = 0;
             helplineRulerCtrl1.Zoom = 1F;
             helplineRulerCtrl1.ZoomSetManually = false;
@@ -340,7 +341,7 @@
             helplineRulerCtrl2.MoveHelpLinesOnResize = false;
             helplineRulerCtrl2.Name = "helplineRulerCtrl2";
             helplineRulerCtrl2.SetZoomOnlyByMethodCall = false;
-            helplineRulerCtrl2.Size = new Size(718, 645);
+            helplineRulerCtrl2.Size = new Size(718, 625);
             helplineRulerCtrl2.TabIndex = 0;
             helplineRulerCtrl2.Zoom = 1F;
             helplineRulerCtrl2.ZoomSetManually = false;
@@ -504,6 +505,7 @@
             // panel1
             // 
             panel1.AutoScroll = true;
+            panel1.Controls.Add(cbExcludeFG);
             panel1.Controls.Add(btnSmothenSettings);
             panel1.Controls.Add(panel9);
             panel1.Controls.Add(cbApproxLines);
@@ -562,7 +564,7 @@
             panel1.Location = new Point(0, 0);
             panel1.Margin = new Padding(4, 3, 4, 3);
             panel1.Name = "panel1";
-            panel1.Size = new Size(1479, 227);
+            panel1.Size = new Size(1479, 247);
             panel1.TabIndex = 226;
             // 
             // btnSmothenSettings
@@ -608,10 +610,11 @@
             cbExcludeRegions.AutoSize = true;
             cbExcludeRegions.Location = new Point(1109, 189);
             cbExcludeRegions.Name = "cbExcludeRegions";
-            cbExcludeRegions.Size = new Size(109, 19);
+            cbExcludeRegions.Size = new Size(108, 19);
             cbExcludeRegions.TabIndex = 723;
             cbExcludeRegions.Text = "exclude regions";
             cbExcludeRegions.UseVisualStyleBackColor = true;
+            cbExcludeRegions.CheckedChanged += cbExcludeRegions_CheckedChanged;
             // 
             // btnOutlineOperations
             // 
@@ -877,7 +880,7 @@
             label1.Location = new Point(6, 55);
             label1.Margin = new Padding(4, 0, 4, 0);
             label1.Name = "label1";
-            label1.Size = new Size(71, 15);
+            label1.Size = new Size(70, 15);
             label1.TabIndex = 691;
             label1.Text = "MaxRestarts";
             // 
@@ -985,12 +988,12 @@
             // 
             contextMenuStrip2.Items.AddRange(new ToolStripItem[] { saveTrimapToolStripMenuItem });
             contextMenuStrip2.Name = "contextMenuStrip2";
-            contextMenuStrip2.Size = new Size(135, 26);
+            contextMenuStrip2.Size = new Size(136, 26);
             // 
             // saveTrimapToolStripMenuItem
             // 
             saveTrimapToolStripMenuItem.Name = "saveTrimapToolStripMenuItem";
-            saveTrimapToolStripMenuItem.Size = new Size(134, 22);
+            saveTrimapToolStripMenuItem.Size = new Size(135, 22);
             saveTrimapToolStripMenuItem.Text = "SaveTrimap";
             saveTrimapToolStripMenuItem.Click += saveTrimapToolStripMenuItem_Click;
             // 
@@ -1076,7 +1079,7 @@
             btnCancel.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             btnCancel.DialogResult = DialogResult.Cancel;
             btnCancel.ForeColor = SystemColors.ControlText;
-            btnCancel.Location = new Point(1378, 191);
+            btnCancel.Location = new Point(1378, 213);
             btnCancel.Margin = new Padding(4, 3, 4, 3);
             btnCancel.Name = "btnCancel";
             btnCancel.Size = new Size(88, 27);
@@ -1090,7 +1093,7 @@
             btnOK.DialogResult = DialogResult.OK;
             btnOK.Enabled = false;
             btnOK.ForeColor = SystemColors.ControlText;
-            btnOK.Location = new Point(1281, 191);
+            btnOK.Location = new Point(1281, 213);
             btnOK.Margin = new Padding(4, 3, 4, 3);
             btnOK.Name = "btnOK";
             btnOK.Size = new Size(88, 27);
@@ -1217,6 +1220,17 @@
             backgroundWorker4.WorkerSupportsCancellation = true;
             backgroundWorker4.DoWork += backgroundWorker4_DoWork;
             backgroundWorker4.RunWorkerCompleted += backgroundWorker4_RunWorkerCompleted;
+            // 
+            // cbExcludeFG
+            // 
+            cbExcludeFG.AutoSize = true;
+            cbExcludeFG.Location = new Point(1223, 189);
+            cbExcludeFG.Name = "cbExcludeFG";
+            cbExcludeFG.Size = new Size(83, 19);
+            cbExcludeFG.TabIndex = 730;
+            cbExcludeFG.Text = "exclude FG";
+            cbExcludeFG.UseVisualStyleBackColor = true;
+            cbExcludeFG.CheckedChanged += cbExcludeFG_CheckedChanged;
             // 
             // frmAlphaMatte
             // 
@@ -1357,5 +1371,6 @@
         private Button btnSmothenSettings;
         private Panel panel9;
         private CheckBox cbApproxLines;
+        private CheckBox cbExcludeFG;
     }
 }

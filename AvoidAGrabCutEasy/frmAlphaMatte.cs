@@ -2779,23 +2779,72 @@ namespace AvoidAGrabCutEasy
                 string? c = this.CachePathAddition;
                 if (c != null && this.cbExcludeRegions.Checked)
                 {
-                    using frmExcludeFromPic frm = new frmExcludeFromPic(b, c);
-                    frm.SetupCache();
-
-                    if (frm.ShowDialog() == DialogResult.OK)
+                    bool show = true;
+                    if (this._excludedRegions != null && this._excludedRegions.Count > 0)
                     {
-                        if (frm.ExcludedBmpRegions != null)
+                        if (MessageBox.Show("Use existing Exclusions?", "", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) == DialogResult.Yes)
                         {
-                            using Graphics gx = Graphics.FromImage(b);
-                            for (int i = 0; i < frm.ExcludedBmpRegions.Count; i++)
-                            {
-                                Bitmap? rem = frm.ExcludedBmpRegions[i].Remaining;
-                                if (rem != null)
-                                    SetTransp(b, rem, frm.ExcludedBmpRegions[i].Location);
-                            }
-
-                            CopyRegions(frm.ExcludedBmpRegions);
                             redrawExcluded = true;
+                            show = false;
+                        }
+                    }
+
+                    if (show)
+                    {
+                        using frmExcludeFromPic frm = new frmExcludeFromPic(b, c);
+                        frm.SetupCache();
+
+                        if (frm.ShowDialog() == DialogResult.OK)
+                        {
+                            if (frm.ExcludedBmpRegions != null)
+                            {
+                                using Graphics gx = Graphics.FromImage(b);
+                                for (int i = 0; i < frm.ExcludedBmpRegions.Count; i++)
+                                {
+                                    Bitmap? rem = frm.ExcludedBmpRegions[i].Remaining;
+                                    if (rem != null)
+                                        SetTransp(b, rem, frm.ExcludedBmpRegions[i].Location);
+                                }
+
+                                CopyRegions(frm.ExcludedBmpRegions);
+                                redrawExcluded = true;
+                            }
+                        }
+                    }
+                }
+
+                if (c != null && this.cbExcludeFG.Checked)
+                {
+                    bool show = true;
+                    if (this._excludedRegions != null && this._excludedRegions.Count > 0)
+                    {
+                        if (MessageBox.Show("Use existing Exclusions?", "", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) == DialogResult.Yes)
+                        {
+                            redrawExcluded = true;
+                            show = false;
+                        }
+                    }
+
+                    if (show)
+                    {
+                        using frmDefineFGPic frm = new frmDefineFGPic(b, c);
+                        frm.SetupCache();
+
+                        if (frm.ShowDialog() == DialogResult.OK)
+                        {
+                            if (frm.Excluded != null)
+                            {
+                                using Graphics gx = Graphics.FromImage(b);
+
+                                Bitmap? rem = frm.Excluded.Remaining;
+                                if (rem != null)
+                                    SetTransp(b, rem, frm.Excluded.Location);
+
+                                List<ExcludedBmpRegion> l = new();
+                                l.Add(frm.Excluded);
+                                CopyRegions(l);
+                                redrawExcluded = true;
+                            }
                         }
                     }
                 }
@@ -3134,23 +3183,72 @@ namespace AvoidAGrabCutEasy
             string? c = this.CachePathAddition;
             if (c != null && this.cbExcludeRegions.Checked)
             {
-                using frmExcludeFromPic frm = new frmExcludeFromPic(b, c);
-                frm.SetupCache();
-
-                if (frm.ShowDialog() == DialogResult.OK)
+                bool show = true;
+                if (this._excludedRegions != null && this._excludedRegions.Count > 0)
                 {
-                    if (frm.ExcludedBmpRegions != null)
+                    if (MessageBox.Show("Use existing Exclusions?", "", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) == DialogResult.Yes)
                     {
-                        using Graphics gx = Graphics.FromImage(b);
-                        for (int i = 0; i < frm.ExcludedBmpRegions.Count; i++)
-                        {
-                            Bitmap? rem = frm.ExcludedBmpRegions[i].Remaining;
-                            if (rem != null)
-                                SetTransp(b, rem, frm.ExcludedBmpRegions[i].Location);
-                        }
-
-                        CopyRegions(frm.ExcludedBmpRegions);
                         redrawExcluded = true;
+                        show = false;
+                    }
+                }
+
+                if (show)
+                {
+                    using frmExcludeFromPic frm = new frmExcludeFromPic(b, c);
+                    frm.SetupCache();
+
+                    if (frm.ShowDialog() == DialogResult.OK)
+                    {
+                        if (frm.ExcludedBmpRegions != null)
+                        {
+                            using Graphics gx = Graphics.FromImage(b);
+                            for (int i = 0; i < frm.ExcludedBmpRegions.Count; i++)
+                            {
+                                Bitmap? rem = frm.ExcludedBmpRegions[i].Remaining;
+                                if (rem != null)
+                                    SetTransp(b, rem, frm.ExcludedBmpRegions[i].Location);
+                            }
+
+                            CopyRegions(frm.ExcludedBmpRegions);
+                            redrawExcluded = true;
+                        }
+                    }
+                }
+            }
+
+            if (c != null && this.cbExcludeFG.Checked)
+            {
+                bool show = true;
+                if (this._excludedRegions != null && this._excludedRegions.Count > 0)
+                {
+                    if (MessageBox.Show("Use existing Exclusions?", "", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) == DialogResult.Yes)
+                    {
+                        redrawExcluded = true;
+                        show = false;
+                    }
+                }
+
+                if (show)
+                {
+                    using frmDefineFGPic frm = new frmDefineFGPic(b, c);
+                    frm.SetupCache();
+
+                    if (frm.ShowDialog() == DialogResult.OK)
+                    {
+                        if (frm.Excluded != null)
+                        {
+                            using Graphics gx = Graphics.FromImage(b);
+
+                            Bitmap? rem = frm.Excluded.Remaining;
+                            if (rem != null)
+                                SetTransp(b, rem, frm.Excluded.Location);
+
+                            List<ExcludedBmpRegion> l = new();
+                            l.Add(frm.Excluded);
+                            CopyRegions(l);
+                            redrawExcluded = true;
+                        }
                     }
                 }
             }
@@ -3818,6 +3916,18 @@ namespace AvoidAGrabCutEasy
         private void numScribblesWFactor_ValueChanged(object sender, EventArgs e)
         {
             this.btnGo.Enabled = false;
+        }
+
+        private void cbExcludeRegions_CheckedChanged(object sender, EventArgs e)
+        {
+            if (this.cbExcludeRegions.Checked)
+                this.cbExcludeFG.Checked = false;
+        }
+
+        private void cbExcludeFG_CheckedChanged(object sender, EventArgs e)
+        {
+            if (this.cbExcludeFG.Checked)
+                this.cbExcludeRegions.Checked = false;
         }
     }
 }
