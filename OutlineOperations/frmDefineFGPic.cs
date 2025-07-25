@@ -865,6 +865,10 @@ namespace OutlineOperations
 
                     this.SetBitmap(this.helplineRulerCtrl2.Bmp, bmp, this.helplineRulerCtrl2, "Bmp");
                     this._undoOPCache?.Add(this.helplineRulerCtrl2.Bmp);
+
+                    this.helplineRulerCtrl2.dbPanel1.AutoScrollMinSize = new Size(System.Convert.ToInt32(this.helplineRulerCtrl1.Bmp.Width * this.helplineRulerCtrl1.Zoom), System.Convert.ToInt32(this.helplineRulerCtrl1.Bmp.Height * this.helplineRulerCtrl1.Zoom));
+                    this.helplineRulerCtrl2.MakeBitmap(this.helplineRulerCtrl1.Bmp);
+
                     this.helplineRulerCtrl2.dbPanel1.Invalidate();
 
                     Bitmap b = new Bitmap(this.helplineRulerCtrl2.Bmp);
@@ -900,7 +904,7 @@ namespace OutlineOperations
                 }
             }
 
-            this.helplineRulerCtrl2.dbPanel1.Invalidate();
+            this.helplineRulerCtrl1.dbPanel1.Invalidate();
         }
 
         private void btnRedoDraw_Click(object sender, EventArgs e)
@@ -922,7 +926,7 @@ namespace OutlineOperations
                 }
             }
 
-            this.helplineRulerCtrl2.dbPanel1.Invalidate();
+            this.helplineRulerCtrl1.dbPanel1.Invalidate();
         }
 
         private void btnCrop_Click(object sender, EventArgs e)
@@ -941,6 +945,10 @@ namespace OutlineOperations
 
                 this.SetBitmap(this.helplineRulerCtrl2.Bmp, bmp, this.helplineRulerCtrl2, "Bmp");
                 this._undoOPCache?.Add(this.helplineRulerCtrl2.Bmp);
+
+                this.helplineRulerCtrl2.dbPanel1.AutoScrollMinSize = new Size(System.Convert.ToInt32(this.helplineRulerCtrl1.Bmp.Width * this.helplineRulerCtrl1.Zoom), System.Convert.ToInt32(this.helplineRulerCtrl1.Bmp.Height * this.helplineRulerCtrl1.Zoom));
+                this.helplineRulerCtrl2.MakeBitmap(this.helplineRulerCtrl1.Bmp);
+
                 this.helplineRulerCtrl2.dbPanel1.Invalidate();
 
                 List<ChainCode>? l = this.GetBoundary(this.helplineRulerCtrl2.Bmp, 0);
