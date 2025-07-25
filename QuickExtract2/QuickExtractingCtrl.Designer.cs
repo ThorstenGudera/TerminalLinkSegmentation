@@ -781,6 +781,7 @@
             Label42.Size = new Size(111, 15);
             Label42.TabIndex = 293;
             Label42.Text = "set result as new src";
+            Label42.Click += Label42_Click;
             // 
             // cbAutoSetResAsNewSrc
             // 

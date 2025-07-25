@@ -938,7 +938,7 @@ namespace AvoidAGrabCutEasy
                     this._undoOPCache?.Add(this.helplineRulerCtrl2.Bmp);
 
                     this.helplineRulerCtrl2.dbPanel1.AutoScrollMinSize = new Size(System.Convert.ToInt32(this.helplineRulerCtrl1.Bmp.Width * this.helplineRulerCtrl1.Zoom), System.Convert.ToInt32(this.helplineRulerCtrl1.Bmp.Height * this.helplineRulerCtrl1.Zoom));
-                    this.helplineRulerCtrl2.MakeBitmap(this.helplineRulerCtrl1.Bmp);
+                    this.helplineRulerCtrl2.MakeBitmap(this.helplineRulerCtrl2.Bmp);
 
                     this.helplineRulerCtrl2.dbPanel1.Invalidate();
 
@@ -1018,7 +1018,7 @@ namespace AvoidAGrabCutEasy
                 this._undoOPCache?.Add(this.helplineRulerCtrl2.Bmp);
 
                 this.helplineRulerCtrl2.dbPanel1.AutoScrollMinSize = new Size(System.Convert.ToInt32(this.helplineRulerCtrl1.Bmp.Width * this.helplineRulerCtrl1.Zoom), System.Convert.ToInt32(this.helplineRulerCtrl1.Bmp.Height * this.helplineRulerCtrl1.Zoom));
-                this.helplineRulerCtrl2.MakeBitmap(this.helplineRulerCtrl1.Bmp);
+                this.helplineRulerCtrl2.MakeBitmap(this.helplineRulerCtrl2.Bmp);
 
                 this.helplineRulerCtrl2.dbPanel1.Invalidate();
 

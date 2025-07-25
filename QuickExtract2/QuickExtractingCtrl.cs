@@ -370,5 +370,10 @@ namespace QuickExtract2
         {
             this.cbAddLine.Enabled = !cbAutoAddLine.Checked;
         }
+
+        private void Label42_Click(object sender, EventArgs e)
+        {
+            this.cbAutoSetResAsNewSrc.Checked = !this.cbAutoSetResAsNewSrc.Checked;
+        }
     }
 }
