@@ -3476,10 +3476,24 @@ namespace AvoidAGrabCutEasy
                 int h = b.Height;
                 PrepareBWPic(b);
 
-                MorphologicalProcessing2.IMorphologicalOperation alg = new MorphologicalProcessing2.Algorithms.ConvexHull();
-                alg.BGW = null;
-                alg.ApplyGrayscale(b);
-                alg.Dispose();
+                //MorphologicalProcessing2.IMorphologicalOperation alg = new MorphologicalProcessing2.Algorithms.ConvexHull();
+                //alg.BGW = null;
+                //alg.ApplyGrayscale(b);
+                //alg.Dispose();
+
+                ChainFinder cf = new();
+                List<ChainCode> c = cf.GetOutline(b, 0, true, 0, false, 0, false);
+
+                for (int j = 0; j < c.Count; j++)
+                {
+                    List<Point> ptsCH = FindConvexHull(c[j].Coord);
+                    using GraphicsPath gP2 = new();
+                    gP2.AddLines(ptsCH.Select(a => new PointF(a.X, a.Y)).ToArray());
+                    gP2.CloseFigure();
+
+                    using Graphics gx = Graphics.FromImage(b);
+                    gx.FillPath(Brushes.White, gP2);
+                }
 
                 bResult = new Bitmap(w, h);
 
@@ -3848,6 +3862,76 @@ namespace AvoidAGrabCutEasy
         {
             if (this._bmpPenStrokes != null)
                 this.helplineRulerCtrl2.dbPanel1.Invalidate();
+        }
+
+        // GrahamScan, from:
+        //https://www.geeksforgeeks.org/dsa/convex-hull-using-graham-scan/
+        public static List<Point> FindConvexHull(List<Point> pts)
+        {
+            List<Point> inputCopy = new();
+            inputCopy.AddRange(pts);
+
+            int n = inputCopy.Count;
+
+            // Convex hull is not possible if there are fewer than 3 points
+            if (n < 3)
+                return new List<Point> { new Point(-1, -1) };
+
+            // Find the point with the lowest y-coordinate (and leftmost in case of tie)
+            Point p0 = inputCopy[0];
+            foreach (Point p in inputCopy)
+            {
+                if (p.Y < p0.Y || (p.Y == p0.Y && p.X < p0.X))
+                    p0 = p;
+            }
+
+            // Sort points based on polar angle with respect to the reference point p0
+            inputCopy.Sort((a1, b1) => {
+                int o = Orientation(p0, a1, b1);
+                if (o == 0)
+                    return DistSq(p0, a1).CompareTo(DistSq(p0, b1));
+
+                return o < 0 ? -1 : 1;
+            });
+
+            // List to store the points on the convex hull
+            List<Point> st = new List<Point>();
+
+            // Process each point to build the hull
+            foreach (Point pt in inputCopy)
+            {
+                // While last two points and current point make a non-left turn, remove the middle one
+                while (st.Count > 1 && Orientation(st[st.Count - 2], st[st.Count - 1], pt) >= 0)
+                {
+                    st.RemoveAt(st.Count - 1);
+                }
+                // Add the current point to the hull
+                st.Add(pt);
+            }
+
+            // If fewer than 3 points in the final hull, return [-1]
+            if (st.Count < 3) return new List<Point> { new Point(-1, -1) };
+
+            return st;
+        }
+
+        // Function to find orientation of the triplet (a, b, c)
+        // Returns -1 if clockwise, 1 if counter-clockwise, 0 if collinear
+        private static int Orientation(Point a, Point b, Point c)
+        {
+            double v = a.X * (b.Y - c.Y) +
+                       b.X * (c.Y - a.Y) +
+                       c.X * (a.Y - b.Y);
+            if (v < 0) return -1;
+            if (v > 0) return 1;
+            return 0;
+        }
+
+        // Function to calculate the squared distance between two points
+        static double DistSq(Point a, Point b)
+        {
+            return (a.X - b.X) * (a.X - b.X) +
+                   (a.Y - b.Y) * (a.Y - b.Y);
         }
     }
 }
