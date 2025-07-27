@@ -118,6 +118,7 @@ namespace PseudoShadow
             backgroundWorker3 = new System.ComponentModel.BackgroundWorker();
             backgroundWorker4 = new System.ComponentModel.BackgroundWorker();
             openFileDialog2 = new OpenFileDialog();
+            cbExcludeFG = new CheckBox();
             statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer2).BeginInit();
             splitContainer2.Panel1.SuspendLayout();
@@ -280,6 +281,7 @@ namespace PseudoShadow
             // splitContainer2.Panel2
             // 
             splitContainer2.Panel2.AutoScroll = true;
+            splitContainer2.Panel2.Controls.Add(cbExcludeFG);
             splitContainer2.Panel2.Controls.Add(btnFromCache);
             splitContainer2.Panel2.Controls.Add(cbExcludeRegions);
             splitContainer2.Panel2.Controls.Add(btnCloneColors);
@@ -310,7 +312,7 @@ namespace PseudoShadow
             splitContainer2.Panel2.Controls.Add(button8);
             splitContainer2.Panel2.Controls.Add(button2);
             splitContainer2.Size = new Size(1486, 882);
-            splitContainer2.SplitterDistance = 1116;
+            splitContainer2.SplitterDistance = 1115;
             splitContainer2.SplitterWidth = 5;
             splitContainer2.TabIndex = 0;
             // 
@@ -323,7 +325,7 @@ namespace PseudoShadow
             luBitmapDesignerCtrl1.SelectedShape = null;
             luBitmapDesignerCtrl1.ShadowMode = false;
             luBitmapDesignerCtrl1.ShapeList = null;
-            luBitmapDesignerCtrl1.Size = new Size(1116, 882);
+            luBitmapDesignerCtrl1.Size = new Size(1115, 882);
             luBitmapDesignerCtrl1.TabIndex = 0;
             // 
             // btnFromCache
@@ -343,7 +345,7 @@ namespace PseudoShadow
             cbExcludeRegions.AutoSize = true;
             cbExcludeRegions.Location = new Point(26, 460);
             cbExcludeRegions.Name = "cbExcludeRegions";
-            cbExcludeRegions.Size = new Size(109, 19);
+            cbExcludeRegions.Size = new Size(108, 19);
             cbExcludeRegions.TabIndex = 724;
             cbExcludeRegions.Text = "exclude regions";
             cbExcludeRegions.UseVisualStyleBackColor = true;
@@ -454,7 +456,7 @@ namespace PseudoShadow
             label10.AutoSize = true;
             label10.Location = new Point(29, 30);
             label10.Name = "label10";
-            label10.Size = new Size(16, 15);
+            label10.Size = new Size(15, 15);
             label10.TabIndex = 713;
             label10.Text = "x:";
             // 
@@ -463,7 +465,7 @@ namespace PseudoShadow
             label8.AutoSize = true;
             label8.Location = new Point(4, 50);
             label8.Name = "label8";
-            label8.Size = new Size(16, 15);
+            label8.Size = new Size(15, 15);
             label8.TabIndex = 713;
             label8.Text = "x:";
             // 
@@ -593,7 +595,7 @@ namespace PseudoShadow
             label7.AutoSize = true;
             label7.Location = new Point(105, 18);
             label7.Name = "label7";
-            label7.Size = new Size(57, 15);
+            label7.Size = new Size(58, 15);
             label7.TabIndex = 715;
             label7.Text = "Tolerance";
             // 
@@ -907,6 +909,16 @@ namespace PseudoShadow
             openFileDialog2.FileName = "openFileDialog1";
             openFileDialog2.Filter = "Images - (*.bmp;*.jpg;*.jpeg;*.jfif;*.png)|*.bmp;*.jpg;*.jpeg;*.jfif;*.png";
             // 
+            // cbExcludeFG
+            // 
+            cbExcludeFG.AutoSize = true;
+            cbExcludeFG.Location = new Point(140, 460);
+            cbExcludeFG.Name = "cbExcludeFG";
+            cbExcludeFG.Size = new Size(83, 19);
+            cbExcludeFG.TabIndex = 726;
+            cbExcludeFG.Text = "exclude FG";
+            cbExcludeFG.UseVisualStyleBackColor = true;
+            // 
             // frmComposePseudoShadow
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -1021,5 +1033,6 @@ namespace PseudoShadow
         private CheckBox cbExcludeRegions;
         public Button btnFromCache;
         private OpenFileDialog openFileDialog2;
+        private CheckBox cbExcludeFG;
     }
 }
