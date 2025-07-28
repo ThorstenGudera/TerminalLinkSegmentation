@@ -186,6 +186,143 @@ namespace QuickExtract2
             this.quickExtractingCtrl1.cbScaleValues.CheckedChanged += CheckBox9_CheckedChanged;
             this.quickExtractingCtrl1.btnTrain.Click += Button14_Click;
             this.quickExtractingCtrl1.btnResetTrain.Click += Button15_Click;
+
+            this.quickExtractingCtrl1.btnGetPath.Click += BtnGetPath_Click;
+            this.quickExtractingCtrl1.btnRemOutline.Click += BtnRemOutline_Click;
+        }
+
+        private void BtnRemOutline_Click(object? sender, EventArgs e)
+        {
+            this.SetControls(false);
+
+            Bitmap? bWork = new Bitmap(this.helplineRulerCtrl1.Bmp);
+
+            if (this.quickExtractingCtrl1.numRemOutline.Value > 0)
+            {
+                Bitmap? bTmp = Fipbmp.RemOutline(bWork, Math.Max((int)this.quickExtractingCtrl1.numRemOutline.Value, 1), null);
+
+                Bitmap? bOld = bWork;
+                bWork = bTmp;
+                if (bOld != null)
+                {
+                    bOld.Dispose();
+                    bOld = null;
+                }
+
+                if (bWork != null)
+                {
+                    this.SetBitmap(this.helplineRulerCtrl1.Bmp, bWork, this.helplineRulerCtrl1, "Bmp");
+                    _undoOPCache?.Add(this.helplineRulerCtrl1.Bmp);
+                    this.button4.Enabled = true;
+                    CheckRedoButton();
+                    this._pic_changed = true;
+                    this.helplineRulerCtrl1.dbPanel1.AutoScrollMinSize = new Size(System.Convert.ToInt32(this.helplineRulerCtrl1.Bmp.Width * this.helplineRulerCtrl1.Zoom), System.Convert.ToInt32(this.helplineRulerCtrl1.Bmp.Height * this.helplineRulerCtrl1.Zoom));
+                    this.helplineRulerCtrl1.MakeBitmap(this.helplineRulerCtrl1.Bmp);
+                    this.helplineRulerCtrl1.dbPanel1.Invalidate();
+                }
+            }
+
+            this.SetControls(true);
+        }
+
+        private void SetControls(bool e)
+        {
+            if (InvokeRequired)
+            {
+                this.Invoke(new Action(() =>
+                {
+                    foreach (Control ct in this.Panel1.Controls)
+                    {
+                        if (ct.Name != "btnCancel" && !(ct is PictureBox))
+                            ct.Enabled = e;
+                    }
+
+                    this.helplineRulerCtrl1.Enabled = e;
+
+                    this.Cursor = e ? Cursors.Default : Cursors.WaitCursor;
+                }));
+            }
+            else
+            {
+                foreach (Control ct in this.Panel1.Controls)
+                {
+                    if (ct.Name != "btnCancel" && !(ct is PictureBox))
+                        ct.Enabled = e;
+                }
+
+                this.helplineRulerCtrl1.Enabled = e;
+
+                this.Cursor = e ? Cursors.Default : Cursors.WaitCursor;
+            }
+        }
+
+        private void BtnGetPath_Click(object? sender, EventArgs e)
+        {
+            if (this.helplineRulerCtrl1.Bmp != null)
+            {
+                this.SetControls(false);
+
+                int alphaMax = 0;
+                using frmSetAlphaMax frm = new();
+                if (frm.ShowDialog() == DialogResult.OK)
+                    alphaMax = (int)frm.numAlphaMax.Value;
+
+                List<ChainCode> c = Fipbmp.GetOutline(this.helplineRulerCtrl1.Bmp, alphaMax);
+
+                using GraphicsPath gP = new();
+
+                foreach (ChainCode cc in c)
+                {
+                    gP.AddLines(cc.Coord.Select(a => new PointF(a.X, a.Y)).ToArray());
+                    gP.CloseFigure();
+                }
+
+                try
+                {
+                    PointF[]? pts2 = gP.PathPoints;
+                    byte[]? tps = gP.PathTypes;
+
+                    if (pts2 != null && tps != null)
+                    {
+                        GraphicsPath? gp = new GraphicsPath(pts2, tps);
+
+                        if (this.quickExtractingCtrl1.PathList == null)
+                            this.quickExtractingCtrl1.PathList = new List<List<List<PointF>>>();
+
+                        if (gp.PointCount > 1)
+                        {
+                            byte[] types = gp.PathTypes;
+                            for (int i = 0; i < types.Length; i++)
+                            {
+                                int j = i;
+                                List<List<PointF>> l = new List<List<PointF>>();
+                                List<PointF> p = new List<PointF>();
+
+                                while ((j < types.Length) && ((types[j] & 0x80) != 0x80))
+                                    // p.Add(gp.PathPoints(j))
+                                    j += 1;
+                                p.AddRange(gp.PathPoints.Skip(i).Take(j - i));
+
+                                if (j < gp.PathPoints.Length)
+                                    p.Add(gp.PathPoints[j]);
+                                l.Add(p);
+                                i = j;
+
+                                this.quickExtractingCtrl1.PathList.Add(l);
+                                this.quickExtractingCtrl1.CurPath = this.quickExtractingCtrl1.PathList[0];
+                            }
+                        }
+                    }
+                }
+                catch
+                {
+
+                }
+
+                this.helplineRulerCtrl1.dbPanel1.Invalidate();
+
+                this.SetControls(true);
+            }
         }
 
         private void Helplinerulerctrl1_Paint(object sender, PaintEventArgs e)

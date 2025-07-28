@@ -31,6 +31,8 @@
             components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmAvoidAGrabCutEasy));
             panel1 = new Panel();
+            numOutlineWH = new NumericUpDown();
+            cbOutline = new CheckBox();
             panel9 = new Panel();
             panel6 = new Panel();
             panel2 = new Panel();
@@ -158,9 +160,9 @@
             timer1 = new System.Windows.Forms.Timer(components);
             backgroundWorker4 = new System.ComponentModel.BackgroundWorker();
             timer2 = new System.Windows.Forms.Timer(components);
-            numOutlineWH = new NumericUpDown();
-            cbOutline = new CheckBox();
+            btnLoadToHLC1 = new Button();
             panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)numOutlineWH).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numComponents2).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numWH).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numMultTLCap).BeginInit();
@@ -179,12 +181,12 @@
             splitContainer1.SuspendLayout();
             statusStrip1.SuspendLayout();
             contextMenuStrip1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)numOutlineWH).BeginInit();
             SuspendLayout();
             // 
             // panel1
             // 
             panel1.AutoScroll = true;
+            panel1.Controls.Add(btnLoadToHLC1);
             panel1.Controls.Add(numOutlineWH);
             panel1.Controls.Add(cbOutline);
             panel1.Controls.Add(panel9);
@@ -299,6 +301,32 @@
             panel1.MouseDoubleClick += panel1_MouseDoubleClick;
             panel1.MouseDown += panel1_MouseDown;
             // 
+            // numOutlineWH
+            // 
+            numOutlineWH.Enabled = false;
+            numOutlineWH.Location = new Point(1190, 157);
+            numOutlineWH.Maximum = new decimal(new int[] { 255, 0, 0, 0 });
+            numOutlineWH.Minimum = new decimal(new int[] { 3, 0, 0, 0 });
+            numOutlineWH.Name = "numOutlineWH";
+            numOutlineWH.Size = new Size(52, 23);
+            numOutlineWH.TabIndex = 750;
+            toolTip1.SetToolTip(numOutlineWH, "Clears existing scribbles");
+            numOutlineWH.Value = new decimal(new int[] { 15, 0, 0, 0 });
+            numOutlineWH.ValueChanged += numOutlineWH_ValueChanged;
+            // 
+            // cbOutline
+            // 
+            cbOutline.AutoSize = true;
+            cbOutline.Enabled = false;
+            cbOutline.Location = new Point(927, 159);
+            cbOutline.Name = "cbOutline";
+            cbOutline.Size = new Size(258, 19);
+            cbOutline.TabIndex = 749;
+            cbOutline.Text = "compute outline to helplineRulerCtrl1 width";
+            toolTip1.SetToolTip(cbOutline, "Clears existing scribbles");
+            cbOutline.UseVisualStyleBackColor = true;
+            cbOutline.CheckedChanged += cbOutline_CheckedChanged;
+            // 
             // panel9
             // 
             panel9.BackColor = SystemColors.ControlDark;
@@ -338,7 +366,7 @@
             cbAssumeExpDist.CheckState = CheckState.Checked;
             cbAssumeExpDist.Location = new Point(348, 143);
             cbAssumeExpDist.Name = "cbAssumeExpDist";
-            cbAssumeExpDist.Size = new Size(142, 19);
+            cbAssumeExpDist.Size = new Size(141, 19);
             cbAssumeExpDist.TabIndex = 679;
             cbAssumeExpDist.Text = "assume exp dist in dH";
             toolTip1.SetToolTip(cbAssumeExpDist, "assume an exponential distribution in the histogram for the auto-threshold");
@@ -823,7 +851,7 @@
             label9.Location = new Point(14, 65);
             label9.Margin = new Padding(4, 0, 4, 0);
             label9.Name = "label9";
-            label9.Size = new Size(53, 15);
+            label9.Size = new Size(52, 15);
             label9.TabIndex = 672;
             label9.Text = "Max Size";
             toolTip1.SetToolTip(label9, "Maximum size of the long picture-side.\r\nBigger pictures will be resampled down - then processed -\r\nand re-resampled up again.\r\nRealMinCut MaxSize is fix at 300, due to processing time.");
@@ -844,7 +872,7 @@
             label7.Location = new Point(413, 167);
             label7.Margin = new Padding(4, 0, 4, 0);
             label7.Name = "label7";
-            label7.Size = new Size(110, 15);
+            label7.Size = new Size(109, 15);
             label7.TabIndex = 670;
             label7.Text = "max # components";
             toolTip1.SetToolTip(label7, "maximum output number of connected components,\r\nouter- and inner-paths (components which are drawn transparent).");
@@ -1177,7 +1205,7 @@
             cbMultTLCap.Location = new Point(241, 193);
             cbMultTLCap.Margin = new Padding(4, 3, 4, 3);
             cbMultTLCap.Name = "cbMultTLCap";
-            cbMultTLCap.Size = new Size(125, 19);
+            cbMultTLCap.Size = new Size(126, 19);
             cbMultTLCap.TabIndex = 639;
             cbMultTLCap.Text = "multTLinkCapacity";
             cbMultTLCap.UseVisualStyleBackColor = true;
@@ -1239,7 +1267,7 @@
             cbUseTh.Location = new Point(478, 118);
             cbUseTh.Margin = new Padding(4, 3, 4, 3);
             cbUseTh.Name = "cbUseTh";
-            cbUseTh.Size = new Size(99, 19);
+            cbUseTh.Size = new Size(100, 19);
             cbUseTh.TabIndex = 633;
             cbUseTh.Text = "use Threshold";
             cbUseTh.UseVisualStyleBackColor = true;
@@ -1273,7 +1301,7 @@
             cbQuickEst.Location = new Point(241, 93);
             cbQuickEst.Margin = new Padding(4, 3, 4, 3);
             cbQuickEst.Name = "cbQuickEst";
-            cbQuickEst.Size = new Size(114, 19);
+            cbQuickEst.Size = new Size(113, 19);
             cbQuickEst.TabIndex = 630;
             cbQuickEst.Text = "QuickExtimation";
             cbQuickEst.UseVisualStyleBackColor = true;
@@ -1654,31 +1682,15 @@
             timer2.Interval = 5000;
             timer2.Tick += timer2_Tick;
             // 
-            // numOutlineWH
+            // btnLoadToHLC1
             // 
-            numOutlineWH.Enabled = false;
-            numOutlineWH.Location = new Point(1190, 157);
-            numOutlineWH.Maximum = new decimal(new int[] { 255, 0, 0, 0 });
-            numOutlineWH.Minimum = new decimal(new int[] { 3, 0, 0, 0 });
-            numOutlineWH.Name = "numOutlineWH";
-            numOutlineWH.Size = new Size(52, 23);
-            numOutlineWH.TabIndex = 750;
-            toolTip1.SetToolTip(numOutlineWH, "Clears existing scribbles");
-            numOutlineWH.Value = new decimal(new int[] { 15, 0, 0, 0 });
-            numOutlineWH.ValueChanged += numOutlineWH_ValueChanged;
-            // 
-            // cbOutline
-            // 
-            cbOutline.AutoSize = true;
-            cbOutline.Enabled = false;
-            cbOutline.Location = new Point(927, 159);
-            cbOutline.Name = "cbOutline";
-            cbOutline.Size = new Size(258, 19);
-            cbOutline.TabIndex = 749;
-            cbOutline.Text = "compute outline to helplineRulerCtrl1 width";
-            toolTip1.SetToolTip(cbOutline, "Clears existing scribbles");
-            cbOutline.UseVisualStyleBackColor = true;
-            cbOutline.CheckedChanged += cbOutline_CheckedChanged;
+            btnLoadToHLC1.Location = new Point(1263, 161);
+            btnLoadToHLC1.Name = "btnLoadToHLC1";
+            btnLoadToHLC1.Size = new Size(113, 23);
+            btnLoadToHLC1.TabIndex = 751;
+            btnLoadToHLC1.Text = "Load pic to HLC1";
+            btnLoadToHLC1.UseVisualStyleBackColor = true;
+            btnLoadToHLC1.Click += btnLoadToHLC1_Click;
             // 
             // frmAvoidAGrabCutEasy
             // 
@@ -1697,6 +1709,7 @@
             Load += frmGrabCut_Load;
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)numOutlineWH).EndInit();
             ((System.ComponentModel.ISupportInitialize)numComponents2).EndInit();
             ((System.ComponentModel.ISupportInitialize)numWH).EndInit();
             ((System.ComponentModel.ISupportInitialize)numMultTLCap).EndInit();
@@ -1716,7 +1729,6 @@
             statusStrip1.ResumeLayout(false);
             statusStrip1.PerformLayout();
             contextMenuStrip1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)numOutlineWH).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -1853,5 +1865,6 @@
         internal System.Windows.Forms.Timer timer2;
         public NumericUpDown numOutlineWH;
         public CheckBox cbOutline;
+        private Button btnLoadToHLC1;
     }
 }

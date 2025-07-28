@@ -234,7 +234,7 @@
             Panel1.Location = new Point(0, 0);
             Panel1.Margin = new Padding(4, 3, 4, 3);
             Panel1.Name = "Panel1";
-            Panel1.Size = new Size(1516, 240);
+            Panel1.Size = new Size(1516, 250);
             Panel1.TabIndex = 218;
             // 
             // numWH
@@ -311,7 +311,7 @@
             quickExtractingCtrl1.Location = new Point(4, 3);
             quickExtractingCtrl1.Margin = new Padding(5, 3, 5, 3);
             quickExtractingCtrl1.Name = "quickExtractingCtrl1";
-            quickExtractingCtrl1.Size = new Size(1166, 238);
+            quickExtractingCtrl1.Size = new Size(1166, 248);
             quickExtractingCtrl1.TabIndex = 281;
             // 
             // Panel11
@@ -363,7 +363,7 @@
             Label1.Location = new Point(1176, 210);
             Label1.Margin = new Padding(4, 0, 4, 0);
             Label1.Name = "Label1";
-            Label1.Size = new Size(99, 15);
+            Label1.Size = new Size(98, 15);
             Label1.TabIndex = 238;
             Label1.Text = "add 100px border";
             // 
@@ -454,12 +454,12 @@
             helplineRulerCtrl1.DrawModeClipped = false;
             helplineRulerCtrl1.DrawPixelated = false;
             helplineRulerCtrl1.IgnoreZoom = false;
-            helplineRulerCtrl1.Location = new Point(0, 240);
+            helplineRulerCtrl1.Location = new Point(0, 250);
             helplineRulerCtrl1.Margin = new Padding(5, 3, 5, 3);
             helplineRulerCtrl1.MoveHelpLinesOnResize = false;
             helplineRulerCtrl1.Name = "helplineRulerCtrl1";
             helplineRulerCtrl1.SetZoomOnlyByMethodCall = false;
-            helplineRulerCtrl1.Size = new Size(1516, 591);
+            helplineRulerCtrl1.Size = new Size(1516, 581);
             helplineRulerCtrl1.TabIndex = 220;
             helplineRulerCtrl1.Zoom = 1F;
             helplineRulerCtrl1.ZoomSetManually = false;
