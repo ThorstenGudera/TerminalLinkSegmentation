@@ -110,6 +110,8 @@
             toolTip1 = new ToolTip(components);
             SaveFileDialog2 = new SaveFileDialog();
             timer2 = new System.Windows.Forms.Timer(components);
+            btnRemSgmnt = new Button();
+            label21 = new Label();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
             splitContainer1.Panel2.SuspendLayout();
@@ -145,6 +147,7 @@
             // splitContainer1.Panel2
             // 
             splitContainer1.Panel2.AutoScroll = true;
+            splitContainer1.Panel2.Controls.Add(label21);
             splitContainer1.Panel2.Controls.Add(label19);
             splitContainer1.Panel2.Controls.Add(label18);
             splitContainer1.Panel2.Controls.Add(numValO);
@@ -184,6 +187,7 @@
             splitContainer1.Panel2.Controls.Add(panel1);
             splitContainer1.Panel2.Controls.Add(Button5);
             splitContainer1.Panel2.Controls.Add(CheckBox1);
+            splitContainer1.Panel2.Controls.Add(btnRemSgmnt);
             splitContainer1.Panel2.Controls.Add(btnComputeStep);
             splitContainer1.Panel2.Controls.Add(btnComputePath);
             splitContainer1.Panel2.Controls.Add(btnGetSeedPts);
@@ -366,7 +370,7 @@
             numValO.DecimalPlaces = 4;
             numValO.Enabled = false;
             numValO.Increment = new decimal(new int[] { 1, 0, 0, 65536 });
-            numValO.Location = new Point(249, 712);
+            numValO.Location = new Point(249, 737);
             numValO.Margin = new Padding(4, 3, 4, 3);
             numValO.Maximum = new decimal(new int[] { 4, 0, 0, 0 });
             numValO.Name = "numValO";
@@ -378,7 +382,7 @@
             // 
             label17.AutoSize = true;
             label17.Enabled = false;
-            label17.Location = new Point(215, 715);
+            label17.Location = new Point(215, 740);
             label17.Margin = new Padding(4, 0, 4, 0);
             label17.Name = "label17";
             label17.Size = new Size(31, 15);
@@ -390,7 +394,7 @@
             numVal_I.DecimalPlaces = 4;
             numVal_I.Enabled = false;
             numVal_I.Increment = new decimal(new int[] { 1, 0, 0, 65536 });
-            numVal_I.Location = new Point(149, 712);
+            numVal_I.Location = new Point(149, 737);
             numVal_I.Margin = new Padding(4, 3, 4, 3);
             numVal_I.Maximum = new decimal(new int[] { 4, 0, 0, 0 });
             numVal_I.Name = "numVal_I";
@@ -402,7 +406,7 @@
             // 
             label15.AutoSize = true;
             label15.Enabled = false;
-            label15.Location = new Point(116, 715);
+            label15.Location = new Point(116, 740);
             label15.Margin = new Padding(4, 0, 4, 0);
             label15.Name = "label15";
             label15.Size = new Size(25, 15);
@@ -414,7 +418,7 @@
             numValP.DecimalPlaces = 4;
             numValP.Enabled = false;
             numValP.Increment = new decimal(new int[] { 1, 0, 0, 65536 });
-            numValP.Location = new Point(50, 712);
+            numValP.Location = new Point(50, 737);
             numValP.Margin = new Padding(4, 3, 4, 3);
             numValP.Maximum = new decimal(new int[] { 4, 0, 0, 0 });
             numValP.Name = "numValP";
@@ -426,7 +430,7 @@
             // 
             label16.AutoSize = true;
             label16.Enabled = false;
-            label16.Location = new Point(13, 715);
+            label16.Location = new Point(13, 740);
             label16.Margin = new Padding(4, 0, 4, 0);
             label16.Name = "label16";
             label16.Size = new Size(29, 15);
@@ -438,7 +442,7 @@
             cbUseCostMaps.AutoSize = true;
             cbUseCostMaps.Checked = true;
             cbUseCostMaps.CheckState = CheckState.Checked;
-            cbUseCostMaps.Location = new Point(13, 687);
+            cbUseCostMaps.Location = new Point(13, 712);
             cbUseCostMaps.Margin = new Padding(4, 3, 4, 3);
             cbUseCostMaps.Name = "cbUseCostMaps";
             cbUseCostMaps.Size = new Size(97, 19);
@@ -448,7 +452,7 @@
             // 
             // btnStdVals
             // 
-            btnStdVals.Location = new Point(246, 610);
+            btnStdVals.Location = new Point(246, 635);
             btnStdVals.Margin = new Padding(4, 3, 4, 3);
             btnStdVals.Name = "btnStdVals";
             btnStdVals.Size = new Size(61, 27);
@@ -461,7 +465,7 @@
             cbAddLine.AutoSize = true;
             cbAddLine.Enabled = false;
             cbAddLine.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            cbAddLine.Location = new Point(120, 649);
+            cbAddLine.Location = new Point(120, 674);
             cbAddLine.Margin = new Padding(4, 3, 4, 3);
             cbAddLine.Name = "cbAddLine";
             cbAddLine.Size = new Size(69, 19);
@@ -476,7 +480,7 @@
             cbAutoAddLine.Checked = true;
             cbAutoAddLine.CheckState = CheckState.Checked;
             cbAutoAddLine.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            cbAutoAddLine.Location = new Point(198, 649);
+            cbAutoAddLine.Location = new Point(198, 674);
             cbAutoAddLine.Name = "cbAutoAddLine";
             cbAutoAddLine.Size = new Size(96, 19);
             cbAutoAddLine.TabIndex = 341;
@@ -488,7 +492,7 @@
             cbScaleValues.AutoSize = true;
             cbScaleValues.Checked = true;
             cbScaleValues.CheckState = CheckState.Checked;
-            cbScaleValues.Location = new Point(14, 649);
+            cbScaleValues.Location = new Point(14, 674);
             cbScaleValues.Margin = new Padding(4, 3, 4, 3);
             cbScaleValues.Name = "cbScaleValues";
             cbScaleValues.Size = new Size(88, 19);
@@ -499,7 +503,7 @@
             // Label44
             // 
             Label44.AutoSize = true;
-            Label44.Location = new Point(121, 616);
+            Label44.Location = new Point(121, 641);
             Label44.Margin = new Padding(4, 0, 4, 0);
             Label44.Name = "Label44";
             Label44.Size = new Size(39, 15);
@@ -510,7 +514,7 @@
             // 
             numValC0l.DecimalPlaces = 4;
             numValC0l.Increment = new decimal(new int[] { 1, 0, 0, 65536 });
-            numValC0l.Location = new Point(168, 614);
+            numValC0l.Location = new Point(168, 639);
             numValC0l.Margin = new Padding(4, 3, 4, 3);
             numValC0l.Maximum = new decimal(new int[] { 25, 0, 0, 0 });
             numValC0l.Name = "numValC0l";
@@ -522,7 +526,7 @@
             // 
             numValCl.DecimalPlaces = 4;
             numValCl.Increment = new decimal(new int[] { 1, 0, 0, 65536 });
-            numValCl.Location = new Point(53, 614);
+            numValCl.Location = new Point(53, 639);
             numValCl.Margin = new Padding(4, 3, 4, 3);
             numValCl.Maximum = new decimal(new int[] { 4, 0, 0, 0 });
             numValCl.Name = "numValCl";
@@ -533,7 +537,7 @@
             // Label41
             // 
             Label41.AutoSize = true;
-            Label41.Location = new Point(14, 616);
+            Label41.Location = new Point(14, 641);
             Label41.Margin = new Padding(4, 0, 4, 0);
             Label41.Name = "Label41";
             Label41.Size = new Size(33, 15);
@@ -544,7 +548,7 @@
             // 
             numEdgeWeight.DecimalPlaces = 6;
             numEdgeWeight.Increment = new decimal(new int[] { 1, 0, 0, 65536 });
-            numEdgeWeight.Location = new Point(96, 582);
+            numEdgeWeight.Location = new Point(96, 607);
             numEdgeWeight.Margin = new Padding(4, 3, 4, 3);
             numEdgeWeight.Maximum = new decimal(new int[] { 1, 0, 0, 0 });
             numEdgeWeight.Minimum = new decimal(new int[] { 1, 0, 0, 393216 });
@@ -556,7 +560,7 @@
             // label14
             // 
             label14.AutoSize = true;
-            label14.Location = new Point(14, 584);
+            label14.Location = new Point(14, 609);
             label14.Margin = new Padding(4, 0, 4, 0);
             label14.Name = "label14";
             label14.Size = new Size(71, 15);
@@ -567,7 +571,7 @@
             // 
             numValG.DecimalPlaces = 4;
             numValG.Increment = new decimal(new int[] { 1, 0, 0, 65536 });
-            numValG.Location = new Point(168, 550);
+            numValG.Location = new Point(168, 575);
             numValG.Margin = new Padding(4, 3, 4, 3);
             numValG.Maximum = new decimal(new int[] { 4, 0, 0, 0 });
             numValG.Name = "numValG";
@@ -578,7 +582,7 @@
             // label12
             // 
             label12.AutoSize = true;
-            label12.Location = new Point(128, 552);
+            label12.Location = new Point(128, 577);
             label12.Margin = new Padding(4, 0, 4, 0);
             label12.Name = "label12";
             label12.Size = new Size(30, 15);
@@ -589,7 +593,7 @@
             // 
             numValM.DecimalPlaces = 4;
             numValM.Increment = new decimal(new int[] { 1, 0, 0, 65536 });
-            numValM.Location = new Point(53, 550);
+            numValM.Location = new Point(53, 575);
             numValM.Margin = new Padding(4, 3, 4, 3);
             numValM.Maximum = new decimal(new int[] { 4, 0, 0, 0 });
             numValM.Name = "numValM";
@@ -600,7 +604,7 @@
             // label13
             // 
             label13.AutoSize = true;
-            label13.Location = new Point(14, 552);
+            label13.Location = new Point(14, 577);
             label13.Margin = new Padding(4, 0, 4, 0);
             label13.Name = "label13";
             label13.Size = new Size(33, 15);
@@ -609,7 +613,7 @@
             // 
             // numLapTh
             // 
-            numLapTh.Location = new Point(168, 518);
+            numLapTh.Location = new Point(168, 543);
             numLapTh.Margin = new Padding(4, 3, 4, 3);
             numLapTh.Maximum = new decimal(new int[] { 255, 0, 0, 0 });
             numLapTh.Minimum = new decimal(new int[] { 127, 0, 0, 0 });
@@ -621,7 +625,7 @@
             // label10
             // 
             label10.AutoSize = true;
-            label10.Location = new Point(120, 520);
+            label10.Location = new Point(120, 545);
             label10.Margin = new Padding(4, 0, 4, 0);
             label10.Name = "label10";
             label10.Size = new Size(43, 15);
@@ -632,7 +636,7 @@
             // 
             numValL.DecimalPlaces = 4;
             numValL.Increment = new decimal(new int[] { 1, 0, 0, 65536 });
-            numValL.Location = new Point(53, 518);
+            numValL.Location = new Point(53, 543);
             numValL.Margin = new Padding(4, 3, 4, 3);
             numValL.Maximum = new decimal(new int[] { 4, 0, 0, 0 });
             numValL.Name = "numValL";
@@ -643,7 +647,7 @@
             // label11
             // 
             label11.AutoSize = true;
-            label11.Location = new Point(14, 520);
+            label11.Location = new Point(14, 545);
             label11.Margin = new Padding(4, 0, 4, 0);
             label11.Name = "label11";
             label11.Size = new Size(28, 15);
@@ -717,7 +721,7 @@
             // panel4
             // 
             panel4.BackColor = SystemColors.ControlDark;
-            panel4.Location = new Point(26, 755);
+            panel4.Location = new Point(26, 772);
             panel4.Name = "panel4";
             panel4.Size = new Size(260, 2);
             panel4.TabIndex = 319;
@@ -995,6 +999,26 @@
             // 
             timer2.Tick += timer2_Tick;
             // 
+            // btnRemSgmnt
+            // 
+            btnRemSgmnt.Location = new Point(219, 507);
+            btnRemSgmnt.Margin = new Padding(4, 3, 4, 3);
+            btnRemSgmnt.Name = "btnRemSgmnt";
+            btnRemSgmnt.Size = new Size(88, 27);
+            btnRemSgmnt.TabIndex = 315;
+            btnRemSgmnt.Text = "Go";
+            btnRemSgmnt.UseVisualStyleBackColor = true;
+            btnRemSgmnt.Click += btnRemSgmnt_Click;
+            // 
+            // label21
+            // 
+            label21.AutoSize = true;
+            label21.Location = new Point(138, 513);
+            label21.Name = "label21";
+            label21.Size = new Size(72, 15);
+            label21.TabIndex = 350;
+            label21.Text = "rem Segmnt";
+            // 
             // frmSetAndEditSeedPoints
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -1114,5 +1138,7 @@
         private Label label18;
         internal Button btnComputeStep;
         internal System.Windows.Forms.Timer timer2;
+        private Label label21;
+        internal Button btnRemSgmnt;
     }
 }

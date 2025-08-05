@@ -321,6 +321,9 @@ namespace QuickExtract2
                 if (this.backgroundWorker1.IsBusy)
                     this.backgroundWorker1.CancelAsync();
 
+                if (this.QuickExtractingCtrl?.Alg?.bmpDataForValueComputation != null)
+                    this.QuickExtractingCtrl?.Alg.UnlockBmpData();
+
                 if (this.QuickExtractingCtrl != null && this.QuickExtractingCtrl.CurPath != null &&
                     this.QuickExtractingCtrl.CurPath.Count > 0 && this.QuickExtractingCtrl.CurPath[0].Count > 0 &&
                     this.BmpForValueComputation != null && this.ImgDataPic != null)
@@ -500,7 +503,8 @@ namespace QuickExtract2
                 if (!this._finished)
                 {
                     this._finished = true;
-                    applyClose();
+                    applyClose();           
+                    this._curPos++;
                     //closePath();         
                 }
             }
@@ -1297,8 +1301,9 @@ namespace QuickExtract2
                         this.PathListNew?.Add(l);
                 }
             }
-            else if(this._computeFullPath)
-                this.btnComputeStep.PerformClick();
+            else if (this._computeFullPath && this._curPos <= this.SeedPoints?.Count)
+                //if(!this._finished)
+                    this.btnComputeStep.PerformClick();
         }
 
         private void ReRunLine()
@@ -1626,9 +1631,9 @@ namespace QuickExtract2
                 {
                     int j = this.ListBox1.SelectedIndex;
                     this.SeedPoints[this.ListBox1.SelectedIndex] = new PointF((float)this.NumericUpDown1.Value, (float)this.NumericUpDown2.Value);
-                    if(this.SeedPointsZ != null)
+                    if (this.SeedPointsZ != null)
                         this.SeedPointsZ[this.ListBox1.SelectedIndex] = new PointF((float)this.NumericUpDown1.Value * this.helplineRulerCtrl1.Zoom,
-                            (float)this.NumericUpDown2.Value * this.helplineRulerCtrl1.Zoom); 
+                            (float)this.NumericUpDown2.Value * this.helplineRulerCtrl1.Zoom);
                     this.ListBox1.Items[this.ListBox1.SelectedIndex] = new PointF((float)this.NumericUpDown1.Value, (float)this.NumericUpDown2.Value);
 
                     this.ListBox1.SelectedIndex = (this.ListBox1.Items.Count > j) ? j : 0;
@@ -1639,6 +1644,30 @@ namespace QuickExtract2
                         this.QuickExtractingCtrl?.Alg.UnlockBmpData();
 
                     this.helplineRulerCtrl1?.dbPanel1.Invalidate();
+                }
+            }
+        }
+
+        private void btnRemSgmnt_Click(object sender, EventArgs e)
+        {
+            if(this._curPos > 0)
+            {
+                if (this.backgroundWorker1.IsBusy)
+                    this.backgroundWorker1.CancelAsync();
+
+                if (this.QuickExtractingCtrl?.Alg?.bmpDataForValueComputation != null)
+                    this.QuickExtractingCtrl?.Alg.UnlockBmpData();
+
+                if(this.QuickExtractingCtrl?.Alg != null && this.QuickExtractingCtrl.SeedPoints != null && 
+                    this.QuickExtractingCtrl.CurPath != null && this.QuickExtractingCtrl.CurPath.Count > 0)
+                {
+                    this._curPos--;
+                    this._drawPathPart = true;
+                    this.QuickExtractingCtrl.SeedPoints.RemoveAt(this.QuickExtractingCtrl.SeedPoints.Count - 1);
+                    this.QuickExtractingCtrl.CurPath.RemoveAt(this.QuickExtractingCtrl.CurPath.Count - 1);
+                    this._finished = false;
+
+                    this.helplineRulerCtrl1.dbPanel1.Invalidate();
                 }
             }
         }
