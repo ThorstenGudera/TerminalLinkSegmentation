@@ -37,15 +37,14 @@
             ToolStripDropDownButton1 = new ToolStripDropDownButton();
             ToolStripMenuItem1 = new ToolStripMenuItem();
             ToolStripMenuItem2 = new ToolStripMenuItem();
-            ToolStripStatusLabel3 = new ToolStripStatusLabel();
-            ToolStripProgressBar1 = new ToolStripProgressBar();
             ToolStripStatusLabel5 = new ToolStripStatusLabel();
             ToolStripDropDownButton2 = new ToolStripDropDownButton();
             Add100PxBorderToolStripMenuItem = new ToolStripMenuItem();
             Remove100PxBorderToolStripMenuItem = new ToolStripMenuItem();
             ToolStripStatusLabel4 = new ToolStripStatusLabel();
-            ToolStripSplitButton1 = new ToolStripSplitButton();
-            ToolStripMenuItem3 = new ToolStripMenuItem();
+            toolStripDropDownButton3 = new ToolStripDropDownButton();
+            loadSeedPointsToolStripMenuItem = new ToolStripMenuItem();
+            saveSeedPointsToolStripMenuItem = new ToolStripMenuItem();
             label23 = new Label();
             cbLoadAsOne = new CheckBox();
             label22 = new Label();
@@ -93,6 +92,7 @@
             btnRemSgmnt = new Button();
             btnComputeStep = new Button();
             btnComputePath = new Button();
+            btnBackupSP = new Button();
             btnLoadSeedPoints = new Button();
             btnGetSeedPts = new Button();
             Button4 = new Button();
@@ -115,9 +115,9 @@
             timer1 = new System.Windows.Forms.Timer(components);
             backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             toolTip1 = new ToolTip(components);
-            SaveFileDialog2 = new SaveFileDialog();
+            saveFileDialog2 = new SaveFileDialog();
             timer2 = new System.Windows.Forms.Timer(components);
-            btnBackupSP = new Button();
+            openFileDialog1 = new OpenFileDialog();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
             splitContainer1.Panel2.SuspendLayout();
@@ -247,7 +247,7 @@
             // 
             // StatusStrip1
             // 
-            StatusStrip1.Items.AddRange(new ToolStripItem[] { toolStripStatusLabel1, ToolStripStatusLabel2, ToolStripDropDownButton1, ToolStripStatusLabel3, ToolStripProgressBar1, ToolStripStatusLabel5, ToolStripDropDownButton2, ToolStripStatusLabel4, ToolStripSplitButton1 });
+            StatusStrip1.Items.AddRange(new ToolStripItem[] { toolStripStatusLabel1, ToolStripStatusLabel2, ToolStripDropDownButton1, ToolStripStatusLabel5, ToolStripDropDownButton2, ToolStripStatusLabel4, toolStripDropDownButton3 });
             StatusStrip1.Location = new Point(0, 877);
             StatusStrip1.Name = "StatusStrip1";
             StatusStrip1.Padding = new Padding(1, 0, 16, 0);
@@ -293,19 +293,6 @@
             ToolStripMenuItem2.Text = "bgDark";
             ToolStripMenuItem2.Click += ToolStripMenuItem2_Click;
             // 
-            // ToolStripStatusLabel3
-            // 
-            ToolStripStatusLabel3.Name = "ToolStripStatusLabel3";
-            ToolStripStatusLabel3.Size = new Size(92, 29);
-            ToolStripStatusLabel3.Text = "widening points";
-            ToolStripStatusLabel3.Visible = false;
-            // 
-            // ToolStripProgressBar1
-            // 
-            ToolStripProgressBar1.Name = "ToolStripProgressBar1";
-            ToolStripProgressBar1.Size = new Size(233, 28);
-            ToolStripProgressBar1.Visible = false;
-            // 
             // ToolStripStatusLabel5
             // 
             ToolStripStatusLabel5.AutoSize = false;
@@ -342,22 +329,28 @@
             ToolStripStatusLabel4.Size = new Size(19, 29);
             ToolStripStatusLabel4.Text = "    ";
             // 
-            // ToolStripSplitButton1
+            // toolStripDropDownButton3
             // 
-            ToolStripSplitButton1.DisplayStyle = ToolStripItemDisplayStyle.Text;
-            ToolStripSplitButton1.DropDownButtonWidth = 16;
-            ToolStripSplitButton1.DropDownItems.AddRange(new ToolStripItem[] { ToolStripMenuItem3 });
-            ToolStripSplitButton1.ImageTransparentColor = Color.Magenta;
-            ToolStripSplitButton1.Name = "ToolStripSplitButton1";
-            ToolStripSplitButton1.Size = new Size(76, 32);
-            ToolStripSplitButton1.Text = "SavePath";
+            toolStripDropDownButton3.DisplayStyle = ToolStripItemDisplayStyle.Text;
+            toolStripDropDownButton3.DropDownItems.AddRange(new ToolStripItem[] { loadSeedPointsToolStripMenuItem, saveSeedPointsToolStripMenuItem });
+            toolStripDropDownButton3.ImageTransparentColor = Color.Magenta;
+            toolStripDropDownButton3.Name = "toolStripDropDownButton3";
+            toolStripDropDownButton3.Size = new Size(128, 32);
+            toolStripDropDownButton3.Text = "LoadSaveSeedPoints";
             // 
-            // ToolStripMenuItem3
+            // loadSeedPointsToolStripMenuItem
             // 
-            ToolStripMenuItem3.DisplayStyle = ToolStripItemDisplayStyle.Text;
-            ToolStripMenuItem3.Name = "ToolStripMenuItem3";
-            ToolStripMenuItem3.Size = new Size(136, 22);
-            ToolStripMenuItem3.Text = "OpenImage";
+            loadSeedPointsToolStripMenuItem.Name = "loadSeedPointsToolStripMenuItem";
+            loadSeedPointsToolStripMenuItem.Size = new Size(158, 22);
+            loadSeedPointsToolStripMenuItem.Text = "LoadSeedPoints";
+            loadSeedPointsToolStripMenuItem.Click += loadSeedPointsToolStripMenuItem_Click;
+            // 
+            // saveSeedPointsToolStripMenuItem
+            // 
+            saveSeedPointsToolStripMenuItem.Name = "saveSeedPointsToolStripMenuItem";
+            saveSeedPointsToolStripMenuItem.Size = new Size(158, 22);
+            saveSeedPointsToolStripMenuItem.Text = "SaveSeedPoints";
+            saveSeedPointsToolStripMenuItem.Click += saveSeedPointsToolStripMenuItem_Click;
             // 
             // label23
             // 
@@ -862,6 +855,18 @@
             btnComputePath.UseVisualStyleBackColor = true;
             btnComputePath.Click += btnComputePath_Click;
             // 
+            // btnBackupSP
+            // 
+            btnBackupSP.Enabled = false;
+            btnBackupSP.Location = new Point(14, 399);
+            btnBackupSP.Margin = new Padding(4, 3, 4, 3);
+            btnBackupSP.Name = "btnBackupSP";
+            btnBackupSP.Size = new Size(45, 27);
+            btnBackupSP.TabIndex = 315;
+            btnBackupSP.Text = "bu";
+            btnBackupSP.UseVisualStyleBackColor = true;
+            btnBackupSP.Click += btnBackupSP_Click;
+            // 
             // btnLoadSeedPoints
             // 
             btnLoadSeedPoints.Enabled = false;
@@ -1074,28 +1079,21 @@
             backgroundWorker1.DoWork += backgroundWorker1_DoWork;
             backgroundWorker1.RunWorkerCompleted += backgroundWorker1_RunWorkerCompleted;
             // 
-            // SaveFileDialog2
+            // saveFileDialog2
             // 
-            SaveFileDialog2.DefaultExt = "tggrp";
-            SaveFileDialog2.FileName = "File1.tggrp";
-            SaveFileDialog2.Filter = "GraphicsPath files (*.tggrp)|*.tggrp";
-            SaveFileDialog2.RestoreDirectory = true;
+            saveFileDialog2.DefaultExt = "tggrp";
+            saveFileDialog2.FileName = "File1.tgsp";
+            saveFileDialog2.Filter = "SeedPoints files (*.tgsp)|*.tgsp";
+            saveFileDialog2.RestoreDirectory = true;
             // 
             // timer2
             // 
             timer2.Tick += timer2_Tick;
             // 
-            // btnBackupSP
+            // openFileDialog1
             // 
-            btnBackupSP.Enabled = false;
-            btnBackupSP.Location = new Point(14, 399);
-            btnBackupSP.Margin = new Padding(4, 3, 4, 3);
-            btnBackupSP.Name = "btnBackupSP";
-            btnBackupSP.Size = new Size(45, 27);
-            btnBackupSP.TabIndex = 315;
-            btnBackupSP.Text = "bu";
-            btnBackupSP.UseVisualStyleBackColor = true;
-            btnBackupSP.Click += btnBackupSP_Click;
+            openFileDialog1.FileName = "File1.tgsp";
+            openFileDialog1.Filter = "SeedPoints files (*.tgsp)|*.tgsp";
             // 
             // frmSetAndEditSeedPoints
             // 
@@ -1143,20 +1141,16 @@
         public ToolStripDropDownButton ToolStripDropDownButton1;
         internal ToolStripMenuItem ToolStripMenuItem1;
         internal ToolStripMenuItem ToolStripMenuItem2;
-        internal ToolStripStatusLabel ToolStripStatusLabel3;
-        internal ToolStripProgressBar ToolStripProgressBar1;
         internal ToolStripStatusLabel ToolStripStatusLabel5;
         internal ToolStripDropDownButton ToolStripDropDownButton2;
         internal ToolStripMenuItem Add100PxBorderToolStripMenuItem;
         internal ToolStripMenuItem Remove100PxBorderToolStripMenuItem;
         internal ToolStripStatusLabel ToolStripStatusLabel4;
-        internal ToolStripSplitButton ToolStripSplitButton1;
-        internal ToolStripMenuItem ToolStripMenuItem3;
         internal ColorDialog ColorDialog1;
         internal System.Windows.Forms.Timer timer1;
         internal System.ComponentModel.BackgroundWorker backgroundWorker1;
         private ToolTip toolTip1;
-        internal SaveFileDialog SaveFileDialog2;
+        internal SaveFileDialog saveFileDialog2;
         internal Button Button13;
         internal Label Label5;
         internal NumericUpDown numPenWidth;
@@ -1224,5 +1218,9 @@
         private Label label23;
         internal Button btnLoadSeedPoints;
         internal Button btnBackupSP;
+        internal ToolStripDropDownButton toolStripDropDownButton3;
+        private ToolStripMenuItem loadSeedPointsToolStripMenuItem;
+        private ToolStripMenuItem saveSeedPointsToolStripMenuItem;
+        private OpenFileDialog openFileDialog1;
     }
 }

@@ -1,4 +1,6 @@
-﻿using QuickExtractingLib2;
+﻿using Cache;
+using ChainCodeFinder;
+using QuickExtractingLib2;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -7,6 +9,8 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -1763,7 +1767,7 @@ namespace QuickExtract2
                     this.firstClick = true;
                     this._curPos = 0;
 
-                    if(this.QuickExtractingCtrl.Alg != null)
+                    if (this.QuickExtractingCtrl.Alg != null)
                         this.QuickExtractingCtrl.Alg.UnlockBmpData();
                 }
             }
@@ -1775,6 +1779,109 @@ namespace QuickExtract2
             {
                 this.BackupSeedPoints(this.SeedPoints);
                 this.label23.Enabled = this.btnLoadSeedPoints.Enabled = true;
+            }
+        }
+
+        private void loadSeedPointsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.helplineRulerCtrl1.Enabled = false;
+
+            if (this.openFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                Stream? stream = null;
+                SavedSeedPoints? svsp = null;
+
+                try
+                {
+                    JsonSerializerOptions options = new()
+                    {
+                        NumberHandling =
+                            JsonNumberHandling.AllowReadingFromString |
+                            JsonNumberHandling.WriteAsString,
+                        WriteIndented = true,
+                        ReadCommentHandling = JsonCommentHandling.Skip,
+                        AllowTrailingCommas = true,
+                    };
+
+                    stream = new FileStream(this.openFileDialog1.FileName, FileMode.Open, FileAccess.Read, FileShare.Read);
+                    svsp = JsonSerializer.Deserialize<SavedSeedPoints>(stream, options);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(DateTime.Now.ToString() + " " + ex.ToString());
+                }
+
+                try
+                {
+                    //stream.Close()
+                    stream?.Dispose();
+                    stream = null;
+                }
+                catch
+                { }
+
+                this.SeedPoints = new List<PointF>();
+
+                if (this.QuickExtractingCtrl != null)
+                {
+                    if (svsp != null)
+                    {
+                        this.ListBox1.Items.Clear();
+                        this.ListBox1.BeginUpdate();
+
+                        for (int j = 0; j < svsp.SeedPoints?.Length; j++)
+                        {
+                            this.SeedPoints.Add(svsp.SeedPoints[j]);
+                            this.ListBox1.Items.Add(svsp.SeedPoints[j]);
+                        }
+
+                        this.ListBox1.EndUpdate();
+
+                        this.SeedPointsZ = GetTransformedSP(this.SeedPoints);
+                        this._drawPath = this._drawPathPart = false;
+
+                        this.helplineRulerCtrl1.dbPanel1.Invalidate();
+
+                        this.firstClick = true;
+                        this._curPos = 0;
+
+                        if (this.QuickExtractingCtrl.Alg != null)
+                            this.QuickExtractingCtrl.Alg.UnlockBmpData();
+                    }
+                }
+
+                this.helplineRulerCtrl1.Enabled = true;
+            }
+        }
+
+        private void saveSeedPointsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if(this.SeedPoints != null && this.SeedPoints.Count > 0 && this.saveFileDialog2.ShowDialog() == DialogResult.OK)
+            {
+                SavedSeedPoints svsp = new();
+
+                PointF[] pts = this.SeedPoints.ToArray();
+                svsp.SeedPoints = pts;
+
+                try
+                {
+                    JsonSerializerOptions options = new()
+                    {
+                        NumberHandling =
+                            JsonNumberHandling.AllowReadingFromString |
+                            JsonNumberHandling.WriteAsString,
+                        WriteIndented = true,
+                        ReadCommentHandling = JsonCommentHandling.Skip,
+                        AllowTrailingCommas = true,
+                    };
+
+                    using FileStream createStream = File.Create(this.saveFileDialog2.FileName);
+                    JsonSerializer.Serialize(createStream, svsp, options);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(DateTime.Now.ToString() + " " + ex.ToString());
+                }
             }
         }
     }
