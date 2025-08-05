@@ -278,6 +278,29 @@ namespace QuickExtractingLib2
             }
         }
 
+        public void UnlockBmpData()
+        {
+            try
+            {
+                if (bmp != null && this._bmpData != null)
+                    bmp.UnlockBits(this._bmpData);
+            }
+            catch
+            {
+
+            }
+
+            try
+            {
+                if (bmpForValueComputation != null && this.bmpDataForValueComputation != null)
+                    bmpForValueComputation.UnlockBits(this.bmpDataForValueComputation);
+            }
+            catch
+            {
+
+            }
+        }
+
         public void PrepareForTranslatedPaths(Bitmap? bmp, Bitmap? bmpForValueComputation, int transX, int transY)
         {
             DisposeBmpData();

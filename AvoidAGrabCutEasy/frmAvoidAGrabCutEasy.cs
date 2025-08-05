@@ -6239,5 +6239,69 @@ namespace AvoidAGrabCutEasy
                 this.helplineRulerCtrl1.dbPanel1.Invalidate();
             }
         }
+
+        private void btnLoadHLC2ToOutline_Click(object sender, EventArgs e)
+        {
+            if (this.helplineRulerCtrl2.Bmp != null && this.CachePathAddition != null)
+            {
+                using frmQuickExtract frm = new(this.helplineRulerCtrl2.Bmp);
+
+                frm.CachePathAddition = this.CachePathAddition;
+                frm.SetupCache();
+
+                if (this.helplineRulerCtrl1.Bmp != null)
+                    frm.OrigBmp = new Bitmap(this.helplineRulerCtrl1.Bmp);
+
+                if (frm.ShowDialog() == DialogResult.OK)
+                {
+                    Bitmap? b = null;
+                    if (frm.FBitmap != null)
+                        b = new Bitmap(frm.FBitmap);
+
+                    if (frm.cbLoadTo.Checked && b != null)
+                    {
+                        this.SetBitmap(this.helplineRulerCtrl2.Bmp, b, this.helplineRulerCtrl2, "Bmp");
+
+                        Bitmap bC = new Bitmap(this.helplineRulerCtrl2.Bmp);
+                        this.SetBitmap(ref this._b4Copy, ref bC);
+                        this.toolStripDropDownButton1.Enabled = true;
+
+                        //Bitmap bC2 = new Bitmap(this.helplineRulerCtrl1.Bmp);
+                        //this.SetBitmap(ref this._bmpBU, ref bC2);
+
+                        this.helplineRulerCtrl2.SetZoom(this.helplineRulerCtrl1.Zoom.ToString());
+                        this.helplineRulerCtrl2.MakeBitmap(this.helplineRulerCtrl2.Bmp);
+                        this.helplineRulerCtrl2.dbPanel1.AutoScrollMinSize = new Size(
+                            (int)(this.helplineRulerCtrl2.Bmp.Width * this.helplineRulerCtrl2.Zoom),
+                            (int)(this.helplineRulerCtrl2.Bmp.Height * this.helplineRulerCtrl2.Zoom));
+
+                        _undoOPCache?.Add(b);
+
+                        this._pic_changed = true;
+                    }
+                    else if (b != null)
+                    {
+                        b.Dispose();
+                        b = null;
+                    }
+
+                    if (frm.cbOutline.Checked && frm.FBitmap != null)
+                    {
+                        using Bitmap bmp = new Bitmap(frm.FBitmap);
+                        List<ChainCode>? c = GetBoundary(bmp, 0, false);
+                        c = c?.OrderByDescending(x => x.Coord.Count).ToList();
+
+                        int wh = (int)frm.numWH.Value;
+
+                        this.cbScribbleMode.Checked = true;
+                        this.cbClickMode.Checked = false;
+
+                        AddPointsToScribblePathFromFrmQuickExtract(c, wh);
+
+                        this._pic_changed = true;
+                    }
+                }
+            }
+        }
     }
 }

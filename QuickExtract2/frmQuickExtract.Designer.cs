@@ -50,6 +50,7 @@
             toolTip1 = new ToolTip(components);
             saveFileDialog1 = new SaveFileDialog();
             Panel1 = new Panel();
+            btnLoadOrig = new Button();
             numWH = new NumericUpDown();
             cbOutline = new CheckBox();
             cbLoadTo = new CheckBox();
@@ -208,6 +209,8 @@
             // 
             // Panel1
             // 
+            Panel1.AutoScroll = true;
+            Panel1.Controls.Add(btnLoadOrig);
             Panel1.Controls.Add(numWH);
             Panel1.Controls.Add(cbOutline);
             Panel1.Controls.Add(cbLoadTo);
@@ -234,8 +237,20 @@
             Panel1.Location = new Point(0, 0);
             Panel1.Margin = new Padding(4, 3, 4, 3);
             Panel1.Name = "Panel1";
-            Panel1.Size = new Size(1516, 250);
+            Panel1.Size = new Size(1516, 285);
             Panel1.TabIndex = 218;
+            // 
+            // btnLoadOrig
+            // 
+            btnLoadOrig.ForeColor = SystemColors.ControlText;
+            btnLoadOrig.Location = new Point(1201, 75);
+            btnLoadOrig.Margin = new Padding(4, 3, 4, 3);
+            btnLoadOrig.Name = "btnLoadOrig";
+            btnLoadOrig.Size = new Size(88, 27);
+            btnLoadOrig.TabIndex = 287;
+            btnLoadOrig.Text = "LoadOrig";
+            btnLoadOrig.UseVisualStyleBackColor = true;
+            btnLoadOrig.Click += btnLoadOrig_Click;
             // 
             // numWH
             // 
@@ -311,13 +326,13 @@
             quickExtractingCtrl1.Location = new Point(4, 3);
             quickExtractingCtrl1.Margin = new Padding(5, 3, 5, 3);
             quickExtractingCtrl1.Name = "quickExtractingCtrl1";
-            quickExtractingCtrl1.Size = new Size(1166, 248);
+            quickExtractingCtrl1.Size = new Size(1166, 280);
             quickExtractingCtrl1.TabIndex = 281;
             // 
             // Panel11
             // 
             Panel11.BackColor = SystemColors.ActiveCaptionText;
-            Panel11.Location = new Point(1228, 44);
+            Panel11.Location = new Point(1174, 23);
             Panel11.Margin = new Padding(4, 3, 4, 3);
             Panel11.Name = "Panel11";
             Panel11.Size = new Size(2, 35);
@@ -454,12 +469,12 @@
             helplineRulerCtrl1.DrawModeClipped = false;
             helplineRulerCtrl1.DrawPixelated = false;
             helplineRulerCtrl1.IgnoreZoom = false;
-            helplineRulerCtrl1.Location = new Point(0, 250);
+            helplineRulerCtrl1.Location = new Point(0, 285);
             helplineRulerCtrl1.Margin = new Padding(5, 3, 5, 3);
             helplineRulerCtrl1.MoveHelpLinesOnResize = false;
             helplineRulerCtrl1.Name = "helplineRulerCtrl1";
             helplineRulerCtrl1.SetZoomOnlyByMethodCall = false;
-            helplineRulerCtrl1.Size = new Size(1516, 581);
+            helplineRulerCtrl1.Size = new Size(1516, 546);
             helplineRulerCtrl1.TabIndex = 220;
             helplineRulerCtrl1.Zoom = 1F;
             helplineRulerCtrl1.ZoomSetManually = false;
@@ -536,5 +551,6 @@
         public NumericUpDown numWH;
         public CheckBox cbOutline;
         private System.Windows.Forms.Timer timer4;
+        private Button btnLoadOrig;
     }
 }

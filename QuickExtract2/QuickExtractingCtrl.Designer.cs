@@ -46,6 +46,7 @@
             btnStop = new Button();
             btnResetPath = new Button();
             btnRemPoint = new Button();
+            btnReRunLast = new Button();
             btnRemSeg = new Button();
             btnNewPath = new Button();
             btnClosePath = new Button();
@@ -105,6 +106,7 @@
             numDisplayIterations = new NumericUpDown();
             Label34 = new Label();
             toolTip1 = new ToolTip(components);
+            btnEditPath2 = new Button();
             groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numPenWidth).BeginInit();
             groupBox2.SuspendLayout();
@@ -129,6 +131,8 @@
             // 
             // groupBox1
             // 
+            groupBox1.Controls.Add(btnEditPath2);
+            groupBox1.Controls.Add(gbRemOutline);
             groupBox1.Controls.Add(btnSavedPaths);
             groupBox1.Controls.Add(btnRS);
             groupBox1.Controls.Add(cbUseCostMaps);
@@ -145,6 +149,7 @@
             groupBox1.Controls.Add(btnStop);
             groupBox1.Controls.Add(btnResetPath);
             groupBox1.Controls.Add(btnRemPoint);
+            groupBox1.Controls.Add(btnReRunLast);
             groupBox1.Controls.Add(btnRemSeg);
             groupBox1.Controls.Add(btnNewPath);
             groupBox1.Controls.Add(btnClosePath);
@@ -153,7 +158,7 @@
             groupBox1.Margin = new Padding(4, 3, 4, 3);
             groupBox1.Name = "groupBox1";
             groupBox1.Padding = new Padding(4, 3, 4, 3);
-            groupBox1.Size = new Size(830, 110);
+            groupBox1.Size = new Size(830, 150);
             groupBox1.TabIndex = 0;
             groupBox1.TabStop = false;
             groupBox1.Text = "DrawAndPath";
@@ -338,6 +343,16 @@
             btnRemPoint.Text = "remPt";
             btnRemPoint.UseVisualStyleBackColor = true;
             // 
+            // btnReRunLast
+            // 
+            btnReRunLast.Location = new Point(497, 106);
+            btnReRunLast.Margin = new Padding(4, 3, 4, 3);
+            btnReRunLast.Name = "btnReRunLast";
+            btnReRunLast.Size = new Size(88, 27);
+            btnReRunLast.TabIndex = 296;
+            btnReRunLast.Text = "ReRunLast";
+            btnReRunLast.UseVisualStyleBackColor = true;
+            // 
             // btnRemSeg
             // 
             btnRemSeg.Location = new Point(266, 28);
@@ -381,7 +396,6 @@
             // 
             // groupBox2
             // 
-            groupBox2.Controls.Add(gbRemOutline);
             groupBox2.Controls.Add(Label44);
             groupBox2.Controls.Add(numValC0l);
             groupBox2.Controls.Add(btnStdValsLow);
@@ -410,11 +424,11 @@
             groupBox2.Controls.Add(cbScaleValues);
             groupBox2.Controls.Add(btnResetTrain);
             groupBox2.Controls.Add(btnTrain);
-            groupBox2.Location = new Point(4, 120);
+            groupBox2.Location = new Point(4, 165);
             groupBox2.Margin = new Padding(4, 3, 4, 3);
             groupBox2.Name = "groupBox2";
             groupBox2.Padding = new Padding(4, 3, 4, 3);
-            groupBox2.Size = new Size(830, 125);
+            groupBox2.Size = new Size(830, 105);
             groupBox2.TabIndex = 0;
             groupBox2.TabStop = false;
             groupBox2.Text = "Alg Settings";
@@ -427,7 +441,7 @@
             gbRemOutline.Controls.Add(cbAddLine);
             gbRemOutline.Controls.Add(cbAutoAddLine);
             gbRemOutline.Controls.Add(numRemOutline);
-            gbRemOutline.Location = new Point(360, 75);
+            gbRemOutline.Location = new Point(21, 94);
             gbRemOutline.Name = "gbRemOutline";
             gbRemOutline.Size = new Size(463, 44);
             gbRemOutline.TabIndex = 323;
@@ -959,7 +973,7 @@
             groupBox4.Controls.Add(Label35);
             groupBox4.Controls.Add(numDisplayIterations);
             groupBox4.Controls.Add(Label34);
-            groupBox4.Location = new Point(840, 160);
+            groupBox4.Location = new Point(840, 190);
             groupBox4.Margin = new Padding(4, 3, 4, 3);
             groupBox4.Name = "groupBox4";
             groupBox4.Padding = new Padding(4, 3, 4, 3);
@@ -1030,6 +1044,18 @@
             Label34.TabIndex = 301;
             Label34.Text = "notify each";
             // 
+            // btnEditPath2
+            // 
+            btnEditPath2.Enabled = false;
+            btnEditPath2.ForeColor = SystemColors.ControlText;
+            btnEditPath2.Location = new Point(619, 106);
+            btnEditPath2.Margin = new Padding(4, 3, 4, 3);
+            btnEditPath2.Name = "btnEditPath2";
+            btnEditPath2.Size = new Size(88, 27);
+            btnEditPath2.TabIndex = 324;
+            btnEditPath2.Text = "Edit Path2";
+            btnEditPath2.UseVisualStyleBackColor = true;
+            // 
             // QuickExtractingCtrl
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -1040,7 +1066,7 @@
             Controls.Add(groupBox1);
             Margin = new Padding(4, 3, 4, 3);
             Name = "QuickExtractingCtrl";
-            Size = new Size(1166, 248);
+            Size = new Size(1166, 278);
             groupBox1.ResumeLayout(false);
             groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)numPenWidth).EndInit();
@@ -1146,5 +1172,7 @@
         internal NumericUpDown numRemOutline;
         internal Button btnRemOutline;
         internal Button btnGetPath;
+        internal Button btnReRunLast;
+        internal Button btnEditPath2;
     }
 }

@@ -35,5 +35,15 @@ namespace QuickExtract2
         public int amountY { get; set; }
         public double valCl { get; set; }
         public double valCol { get; set; }
+
+        //public void Dispose()
+        //{
+        //    if (this.imgDataPic != null)
+        //        this.imgDataPic.Dispose();
+        //    this.imgDataPic = null;
+        //    if (this.bmpDataForValueComputation != null)
+        //        this.bmpDataForValueComputation.Dispose();
+        //    this.bmpDataForValueComputation = null;
+        //}
     }
 }

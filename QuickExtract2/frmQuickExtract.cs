@@ -71,6 +71,9 @@ namespace QuickExtract2
                 return b;
             }
         }
+
+        public Bitmap? OrigBmp { get; set; }
+
         private bool _pic_changed = false;
 
         private int _openPanelHeight;
@@ -189,6 +192,66 @@ namespace QuickExtract2
 
             this.quickExtractingCtrl1.btnGetPath.Click += BtnGetPath_Click;
             this.quickExtractingCtrl1.btnRemOutline.Click += BtnRemOutline_Click;
+            this.quickExtractingCtrl1.btnReRunLast.Click += BtnReRunLast_Click;
+            this.quickExtractingCtrl1.btnEditPath2.Click += btnEditPath2_Click;
+        }
+
+        private void BtnReRunLast_Click(object? sender, EventArgs e)
+        {
+            if (this.quickExtractingCtrl1.Alg != null && quickExtractingCtrl1.Alg.SeedPoints?.Count > 1)
+            {
+                PointF pt = quickExtractingCtrl1.Alg.SeedPoints[quickExtractingCtrl1.Alg.SeedPoints.Count - 1];
+                this.quickExtractingCtrl1.btnRemSeg.PerformClick();
+
+                if (this.helplineRulerCtrl1.Bmp != null)
+                {
+                    if (this.backgroundWorker1.IsBusy)
+                        this.backgroundWorker1.CancelAsync();
+
+                    if (this.quickExtractingCtrl1.CurPath != null && this.quickExtractingCtrl1.CurPath.Count > 0 && this.quickExtractingCtrl1.CurPath[0].Count > 0)
+                    {
+                        int ix = (int)pt.X;
+                        int iy = (int)pt.Y;
+
+                        QuickExtractingParameters @params = new QuickExtractingParameters()
+                        {
+                            msg = this.quickExtractingCtrl1.cmbAlgMode.SelectedIndex == 0 ? "run" : "run2",
+                            bmpDataForValueComputation = this.bmpForValueComputation,
+                            imgDataPic = this.imgDataPic,
+                            MouseClicked = true,
+                            Ramps = this.quickExtractingCtrl1.Ramps,
+                            SeedPoints = this.quickExtractingCtrl1.SeedPoints,
+                            TempPath = this.quickExtractingCtrl1.TempPath,
+                            CurPath = this.quickExtractingCtrl1.CurPath,
+                            valL = System.Convert.ToDouble(this.quickExtractingCtrl1.numValL.Value),
+                            valM = System.Convert.ToDouble(this.quickExtractingCtrl1.numValM.Value),
+                            valG = System.Convert.ToDouble(this.quickExtractingCtrl1.numValG.Value),
+                            valP = System.Convert.ToDouble(this.quickExtractingCtrl1.numValP.Value),
+                            valI = System.Convert.ToDouble(this.quickExtractingCtrl1.numVal_I.Value),
+                            valO = System.Convert.ToDouble(this.quickExtractingCtrl1.numValO.Value),
+                            valCl = System.Convert.ToDouble(this.quickExtractingCtrl1.numValCl.Value),
+                            valCol = System.Convert.ToDouble(this.quickExtractingCtrl1.numValC0l.Value),
+                            laplTh = System.Convert.ToInt32(this.quickExtractingCtrl1.numLapTh.Value),
+                            edgeWeight = System.Convert.ToDouble(this.quickExtractingCtrl1.numEdgeWeight.Value),
+                            doScale = this.quickExtractingCtrl1.cbScaleValues.Checked,
+                            doR = this.quickExtractingCtrl1.cbR.Checked,
+                            doG = this.quickExtractingCtrl1.cbG.Checked,
+                            doB = this.quickExtractingCtrl1.cbB.Checked,
+                            neighbors = this.quickExtractingCtrl1.cmbAmntNeighbors.SelectedIndex,
+                            dist = System.Convert.ToInt32(this.quickExtractingCtrl1.numTrainDist.Value),
+                            useCostMap = this.quickExtractingCtrl1.cbUseCostMaps.Checked,
+                            notifyEach = System.Convert.ToInt32(this.quickExtractingCtrl1.numDisplayEdgeAt.Value)
+                        };
+
+                        if (this.quickExtractingCtrl1.cbAddLine.Checked)
+                            this.PrepareBGW(new object[] { 101, new Point(ix, iy), @params });
+                        else if (this.quickExtractingCtrl1.cmbAlgMode.SelectedIndex == 0)
+                            this.PrepareBGW(new object[] { 1, new Point(ix, iy), @params });
+                        else
+                            this.PrepareBGW(new object[] { 6, new Point(ix, iy), @params });
+                    }
+                }
+            }
         }
 
         private void BtnRemOutline_Click(object? sender, EventArgs e)
@@ -318,6 +381,8 @@ namespace QuickExtract2
                 {
 
                 }
+
+                this.quickExtractingCtrl1.btnEditPath2.Enabled = true;
 
                 this.helplineRulerCtrl1.dbPanel1.Invalidate();
 
@@ -1646,6 +1711,8 @@ namespace QuickExtract2
                     this.backgroundWorker1.CancelAsync();
                 if (this._bmpBU != null)
                     this._bmpBU.Dispose();
+                if (this.OrigBmp != null)
+                    this.OrigBmp.Dispose();
 
                 if (this.quickExtractingCtrl1.Alg != null)
                 {
@@ -2737,8 +2804,8 @@ namespace QuickExtract2
                                 List<List<PointF>> pathCopy = this.quickExtractingCtrl1.ClonePath(this.quickExtractingCtrl1.CurPath);
                                 this.quickExtractingCtrl1.PathList.Add(pathCopy);
                                 _curPathCopy = pathCopy;
-                                this.quickExtractingCtrl1.btnSavedPaths.Enabled = this.quickExtractingCtrl1.btnEditPathPoints.Enabled = true;
                             }
+                            this.quickExtractingCtrl1.btnSavedPaths.Enabled = this.quickExtractingCtrl1.btnEditPathPoints.Enabled = this.quickExtractingCtrl1.btnEditPath2.Enabled = true;
                         }
                         if (frm6.RadioButton2.Checked && frm6.CheckBox1.Enabled && frm6.CheckBox1.Checked)
                             this.quickExtractingCtrl1.PathList = new List<List<List<PointF>>>();
@@ -3251,8 +3318,8 @@ namespace QuickExtract2
                         List<List<PointF>> pathCopy = this.quickExtractingCtrl1.ClonePath(this.quickExtractingCtrl1.CurPath);
                         this.quickExtractingCtrl1.PathList.Add(pathCopy);
                         _curPathCopy = pathCopy;
-                        this.quickExtractingCtrl1.btnSavedPaths.Enabled = this.quickExtractingCtrl1.btnEditPathPoints.Enabled = true;
                     }
+                    this.quickExtractingCtrl1.btnSavedPaths.Enabled = this.quickExtractingCtrl1.btnEditPathPoints.Enabled = this.quickExtractingCtrl1.btnEditPath2.Enabled = true;
                 }
 
                 this.Label40.Enabled = true;
@@ -3922,6 +3989,70 @@ namespace QuickExtract2
         private void numWH_ValueChanged(object sender, EventArgs e)
         {
             this.cbOutline_CheckedChanged(this.cbOutline, new EventArgs());
+        }
+
+        private void btnLoadOrig_Click(object sender, EventArgs e)
+        {
+            if (this.OrigBmp != null)
+            {
+                DialogResult dlg = MessageBox.Show("Load chached Orig Bmp?", "", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation);
+                if (dlg == DialogResult.Yes)
+                {
+                    this.helplineRulerCtrl1.Bmp = new Bitmap(this.OrigBmp);
+                    _bmpBU = new Bitmap(this.OrigBmp);
+
+                    this.helplineRulerCtrl1.dbPanel1.AutoScrollMinSize = new Size(System.Convert.ToInt32(this.helplineRulerCtrl1.Bmp.Width * this.helplineRulerCtrl1.Zoom), System.Convert.ToInt32(this.helplineRulerCtrl1.Bmp.Height * this.helplineRulerCtrl1.Zoom));
+                    this.helplineRulerCtrl1.MakeBitmap(this.helplineRulerCtrl1.Bmp);
+
+                    this.helplineRulerCtrl1.dbPanel1.Invalidate();
+
+                    this.quickExtractingCtrl1.btnEditPath2.Enabled = true;
+                }
+                else
+                {
+                    //to come
+                }
+            }
+            else
+            {
+                //to come
+            }
+        }
+
+        private void btnEditPath2_Click(object? sender, EventArgs e)
+        {
+            if (this.quickExtractingCtrl1.CurPath != null && this.quickExtractingCtrl1.CurPath.Count > 0 && this.quickExtractingCtrl1.CurPath[0].Count > 0)
+            {
+                if (this.OrigBmp != null)
+                {
+                    using frmSetAndEditSeedPoints frm = new(this.OrigBmp, this.quickExtractingCtrl1);
+                    if (this.bmpForValueComputation != null)
+                        frm.BmpForValueComputation = new Bitmap(this.bmpForValueComputation);
+                    if (this.imgDataPic != null)
+                        frm.ImgDataPic = new Bitmap(this.imgDataPic);
+
+                    frm.ToolStripDropDownButton1.DropDownItems[1].PerformClick();
+
+                    if (frm.ShowDialog() == DialogResult.OK)
+                    {
+                        Bitmap? bC = new Bitmap(this.OrigBmp);
+                        this.SetBitmap(this.helplineRulerCtrl1.Bmp, bC, this.helplineRulerCtrl1, "Bmp");
+                        Bitmap? bC2 = new Bitmap(this.OrigBmp);
+                        this.SetBitmap(ref this._bmpBU, ref bC2);
+
+                        this._undoOPCache?.Add(this.helplineRulerCtrl1.Bmp);
+
+                        this.helplineRulerCtrl1.dbPanel1.AutoScrollMinSize = new Size(System.Convert.ToInt32(this.helplineRulerCtrl1.Bmp.Width * this.helplineRulerCtrl1.Zoom), System.Convert.ToInt32(this.helplineRulerCtrl1.Bmp.Height * this.helplineRulerCtrl1.Zoom));
+                        this.helplineRulerCtrl1.MakeBitmap(this.helplineRulerCtrl1.Bmp);
+                        this.helplineRulerCtrl1.dbPanel1.Invalidate();
+
+                        this.quickExtractingCtrl1.PathList = frm.PathListNew;
+                        this.quickExtractingCtrl1.CurPath = frm.PathListNew?[0];
+
+                        this.helplineRulerCtrl1.dbPanel1.Invalidate();
+                    }
+                }
+            }
         }
     }
 }
