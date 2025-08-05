@@ -4033,7 +4033,7 @@ namespace QuickExtract2
 
                     frm.ToolStripDropDownButton1.DropDownItems[1].PerformClick();
 
-                    if (frm.ShowDialog() == DialogResult.OK)
+                    if (frm.ShowDialog() == DialogResult.OK && frm.PathListNew != null && frm.PathListNew.Count > 0)
                     {
                         Bitmap? bC = new Bitmap(this.OrigBmp);
                         this.SetBitmap(this.helplineRulerCtrl1.Bmp, bC, this.helplineRulerCtrl1, "Bmp");

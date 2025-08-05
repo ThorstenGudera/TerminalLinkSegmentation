@@ -41,6 +41,7 @@ namespace QuickExtract2
         private bool _drawPathPart;
         private bool _finished;
         private bool _computeFullPath;
+        private List<List<List<PointF>>>? _pathListBU;
 
         public QuickExtractingCtrl? QuickExtractingCtrl { get; internal set; }
         public Bitmap? BmpForValueComputation { get; internal set; }
@@ -220,7 +221,7 @@ namespace QuickExtract2
             {
                 for (int i = 0; i < this.QuickExtractingCtrl.PathList.Count; i++)
                     this.cmbPaths.Items.Add("SavedPath_" + i.ToString() + "; " + this.QuickExtractingCtrl.PathList[i][0].Count.ToString());
-
+                this._pathListBU = CloneList(this.QuickExtractingCtrl.PathList);
                 this.cmbPaths.SelectedIndex = 0;
 
                 this._dontDoZoom = true;
@@ -503,7 +504,7 @@ namespace QuickExtract2
                 if (!this._finished)
                 {
                     this._finished = true;
-                    applyClose();           
+                    applyClose();
                     this._curPos++;
                     //closePath();         
                 }
@@ -1078,7 +1079,7 @@ namespace QuickExtract2
                     notifyEach = System.Convert.ToInt32(this.QuickExtractingCtrl.numDisplayEdgeAt.Value)
                 };
 
-                if (this.QuickExtractingCtrl.cbAddLine.Checked)
+                if (this.cbAddLine.Checked)
                     this.PrepareBGW(new object[] { 101, new Point(ix, iy), @params });
                 else if (this.QuickExtractingCtrl.cmbAlgMode.SelectedIndex == 0)
                     this.PrepareBGW(new object[] { 1, new Point(ix, iy), @params });
@@ -1303,7 +1304,7 @@ namespace QuickExtract2
             }
             else if (this._computeFullPath && this._curPos <= this.SeedPoints?.Count)
                 //if(!this._finished)
-                    this.btnComputeStep.PerformClick();
+                this.btnComputeStep.PerformClick();
         }
 
         private void ReRunLine()
@@ -1587,7 +1588,7 @@ namespace QuickExtract2
                         notifyEach = System.Convert.ToInt32(this.QuickExtractingCtrl.numDisplayEdgeAt.Value)
                     };
 
-                    if (this.QuickExtractingCtrl.cbAddLine.Checked)
+                    if (this.cbAddLine.Checked)
                         this.PrepareBGW(new object[] { 101, new Point(ix, iy), @params });
                     else if (this.QuickExtractingCtrl.cmbAlgMode.SelectedIndex == 0)
                         this.PrepareBGW(new object[] { 1, new Point(ix, iy), @params });
@@ -1650,7 +1651,7 @@ namespace QuickExtract2
 
         private void btnRemSgmnt_Click(object sender, EventArgs e)
         {
-            if(this._curPos > 0)
+            if (this._curPos > 0)
             {
                 if (this.backgroundWorker1.IsBusy)
                     this.backgroundWorker1.CancelAsync();
@@ -1658,7 +1659,7 @@ namespace QuickExtract2
                 if (this.QuickExtractingCtrl?.Alg?.bmpDataForValueComputation != null)
                     this.QuickExtractingCtrl?.Alg.UnlockBmpData();
 
-                if(this.QuickExtractingCtrl?.Alg != null && this.QuickExtractingCtrl.SeedPoints != null && 
+                if (this.QuickExtractingCtrl?.Alg != null && this.QuickExtractingCtrl.SeedPoints != null &&
                     this.QuickExtractingCtrl.CurPath != null && this.QuickExtractingCtrl.CurPath.Count > 0)
                 {
                     this._curPos--;
@@ -1668,6 +1669,53 @@ namespace QuickExtract2
                     this._finished = false;
 
                     this.helplineRulerCtrl1.dbPanel1.Invalidate();
+                }
+            }
+        }
+
+        private void cbAutoAddLine_CheckedChanged(object sender, EventArgs e)
+        {
+            this.cbAddLine.Enabled = !cbAutoAddLine.Checked;
+        }
+
+        private void btnReLoad_Click(object sender, EventArgs e)
+        {
+            if (this.QuickExtractingCtrl != null && this.QuickExtractingCtrl.PathList != null && this.QuickExtractingCtrl.PathList.Count > 0)
+            {
+                this.cmbPaths.Items.Clear();
+                this.QuickExtractingCtrl.PathList = this._pathListBU;
+                if (this.cbLoadAsOne.Checked)
+                {
+                    List<List<List<PointF>>> bigPath = new();
+                    for (int i = 0; i < this.QuickExtractingCtrl.PathList?.Count; i++)
+                    {
+                        bigPath.Add(new List<List<PointF>>());
+                        bigPath[i].Add(new List<PointF>());
+                        List<List<PointF>> cur = this.QuickExtractingCtrl.PathList[i];
+
+                        for (int j = 0; j < cur.Count; j++)
+                            bigPath[i][0].AddRange(cur[j].ToArray());
+                    }
+
+                    this.PathList = CloneList(bigPath);
+                    this.PathListNew = new List<List<List<PointF>>>();
+
+                    this.QuickExtractingCtrl.PathList = bigPath;
+
+                    for (int i = 0; i < bigPath.Count; i++)
+                        this.cmbPaths.Items.Add("SavedPath_" + i.ToString() + "; " + this.QuickExtractingCtrl.PathList[i][0].Count.ToString());
+
+                    this.cmbPaths.SelectedIndex = 0;
+                }
+                else
+                {
+                    for (int i = 0; i < this.QuickExtractingCtrl.PathList?.Count; i++)
+                        this.cmbPaths.Items.Add("SavedPath_" + i.ToString() + "; " + this.QuickExtractingCtrl.PathList[i][0].Count.ToString());
+
+                    this.cmbPaths.SelectedIndex = 0;
+
+                    this.PathList = CloneList(this.QuickExtractingCtrl.PathList);
+                    this.PathListNew = new List<List<List<PointF>>>();
                 }
             }
         }

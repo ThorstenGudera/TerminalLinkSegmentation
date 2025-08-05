@@ -46,6 +46,10 @@
             ToolStripStatusLabel4 = new ToolStripStatusLabel();
             ToolStripSplitButton1 = new ToolStripSplitButton();
             ToolStripMenuItem3 = new ToolStripMenuItem();
+            cbLoadAsOne = new CheckBox();
+            label22 = new Label();
+            btnReLoad = new Button();
+            label21 = new Label();
             label19 = new Label();
             label18 = new Label();
             numValO = new NumericUpDown();
@@ -85,6 +89,7 @@
             panel1 = new Panel();
             Button5 = new Button();
             CheckBox1 = new CheckBox();
+            btnRemSgmnt = new Button();
             btnComputeStep = new Button();
             btnComputePath = new Button();
             btnGetSeedPts = new Button();
@@ -110,8 +115,6 @@
             toolTip1 = new ToolTip(components);
             SaveFileDialog2 = new SaveFileDialog();
             timer2 = new System.Windows.Forms.Timer(components);
-            btnRemSgmnt = new Button();
-            label21 = new Label();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
             splitContainer1.Panel2.SuspendLayout();
@@ -147,6 +150,9 @@
             // splitContainer1.Panel2
             // 
             splitContainer1.Panel2.AutoScroll = true;
+            splitContainer1.Panel2.Controls.Add(cbLoadAsOne);
+            splitContainer1.Panel2.Controls.Add(label22);
+            splitContainer1.Panel2.Controls.Add(btnReLoad);
             splitContainer1.Panel2.Controls.Add(label21);
             splitContainer1.Panel2.Controls.Add(label19);
             splitContainer1.Panel2.Controls.Add(label18);
@@ -347,6 +353,46 @@
             ToolStripMenuItem3.Size = new Size(136, 22);
             ToolStripMenuItem3.Text = "OpenImage";
             // 
+            // cbLoadAsOne
+            // 
+            cbLoadAsOne.AutoSize = true;
+            cbLoadAsOne.Checked = true;
+            cbLoadAsOne.CheckState = CheckState.Checked;
+            cbLoadAsOne.Location = new Point(112, 63);
+            cbLoadAsOne.Name = "cbLoadAsOne";
+            cbLoadAsOne.Size = new Size(87, 19);
+            cbLoadAsOne.TabIndex = 353;
+            cbLoadAsOne.Text = "as one path";
+            cbLoadAsOne.UseVisualStyleBackColor = true;
+            // 
+            // label22
+            // 
+            label22.AutoSize = true;
+            label22.Location = new Point(25, 63);
+            label22.Name = "label22";
+            label22.Size = new Size(72, 15);
+            label22.TabIndex = 352;
+            label22.Text = "reload paths";
+            // 
+            // btnReLoad
+            // 
+            btnReLoad.Location = new Point(222, 59);
+            btnReLoad.Name = "btnReLoad";
+            btnReLoad.Size = new Size(75, 23);
+            btnReLoad.TabIndex = 351;
+            btnReLoad.Text = "Go";
+            btnReLoad.UseVisualStyleBackColor = true;
+            btnReLoad.Click += btnReLoad_Click;
+            // 
+            // label21
+            // 
+            label21.AutoSize = true;
+            label21.Location = new Point(138, 513);
+            label21.Name = "label21";
+            label21.Size = new Size(72, 15);
+            label21.TabIndex = 350;
+            label21.Text = "rem Segmnt";
+            // 
             // label19
             // 
             label19.AutoSize = true;
@@ -486,6 +532,7 @@
             cbAutoAddLine.TabIndex = 341;
             cbAutoAddLine.Text = "autoAddLine";
             cbAutoAddLine.UseVisualStyleBackColor = true;
+            cbAutoAddLine.CheckedChanged += cbAutoAddLine_CheckedChanged;
             // 
             // cbScaleValues
             // 
@@ -657,7 +704,7 @@
             // label9
             // 
             label9.AutoSize = true;
-            label9.Location = new Point(14, 59);
+            label9.Location = new Point(14, 47);
             label9.Name = "label9";
             label9.Size = new Size(19, 15);
             label9.TabIndex = 324;
@@ -765,6 +812,17 @@
             CheckBox1.TabIndex = 317;
             CheckBox1.Text = "Select by Clicking";
             CheckBox1.UseVisualStyleBackColor = true;
+            // 
+            // btnRemSgmnt
+            // 
+            btnRemSgmnt.Location = new Point(219, 507);
+            btnRemSgmnt.Margin = new Padding(4, 3, 4, 3);
+            btnRemSgmnt.Name = "btnRemSgmnt";
+            btnRemSgmnt.Size = new Size(88, 27);
+            btnRemSgmnt.TabIndex = 315;
+            btnRemSgmnt.Text = "Go";
+            btnRemSgmnt.UseVisualStyleBackColor = true;
+            btnRemSgmnt.Click += btnRemSgmnt_Click;
             // 
             // btnComputeStep
             // 
@@ -999,26 +1057,6 @@
             // 
             timer2.Tick += timer2_Tick;
             // 
-            // btnRemSgmnt
-            // 
-            btnRemSgmnt.Location = new Point(219, 507);
-            btnRemSgmnt.Margin = new Padding(4, 3, 4, 3);
-            btnRemSgmnt.Name = "btnRemSgmnt";
-            btnRemSgmnt.Size = new Size(88, 27);
-            btnRemSgmnt.TabIndex = 315;
-            btnRemSgmnt.Text = "Go";
-            btnRemSgmnt.UseVisualStyleBackColor = true;
-            btnRemSgmnt.Click += btnRemSgmnt_Click;
-            // 
-            // label21
-            // 
-            label21.AutoSize = true;
-            label21.Location = new Point(138, 513);
-            label21.Name = "label21";
-            label21.Size = new Size(72, 15);
-            label21.TabIndex = 350;
-            label21.Text = "rem Segmnt";
-            // 
             // frmSetAndEditSeedPoints
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -1140,5 +1178,8 @@
         internal System.Windows.Forms.Timer timer2;
         private Label label21;
         internal Button btnRemSgmnt;
+        private CheckBox cbLoadAsOne;
+        private Label label22;
+        private Button btnReLoad;
     }
 }
