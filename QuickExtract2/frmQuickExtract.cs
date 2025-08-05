@@ -4027,9 +4027,9 @@ namespace QuickExtract2
                 {
                     using frmSetAndEditSeedPoints frm = new(this.OrigBmp, this.quickExtractingCtrl1);
                     if (this.bmpForValueComputation != null)
-                        frm.BmpForValueComputation = new Bitmap(this.bmpForValueComputation);
+                        frm.BmpForValueComputation = new Bitmap(this.OrigBmp.Width, this.OrigBmp.Height);
                     if (this.imgDataPic != null)
-                        frm.ImgDataPic = new Bitmap(this.imgDataPic);
+                        frm.ImgDataPic = new Bitmap(this.OrigBmp);
 
                     frm.ToolStripDropDownButton1.DropDownItems[1].PerformClick();
 

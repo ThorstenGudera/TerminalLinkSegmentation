@@ -46,6 +46,7 @@
             ToolStripStatusLabel4 = new ToolStripStatusLabel();
             ToolStripSplitButton1 = new ToolStripSplitButton();
             ToolStripMenuItem3 = new ToolStripMenuItem();
+            label23 = new Label();
             cbLoadAsOne = new CheckBox();
             label22 = new Label();
             btnReLoad = new Button();
@@ -92,6 +93,7 @@
             btnRemSgmnt = new Button();
             btnComputeStep = new Button();
             btnComputePath = new Button();
+            btnLoadSeedPoints = new Button();
             btnGetSeedPts = new Button();
             Button4 = new Button();
             Button3 = new Button();
@@ -115,6 +117,7 @@
             toolTip1 = new ToolTip(components);
             SaveFileDialog2 = new SaveFileDialog();
             timer2 = new System.Windows.Forms.Timer(components);
+            btnBackupSP = new Button();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
             splitContainer1.Panel2.SuspendLayout();
@@ -150,6 +153,7 @@
             // splitContainer1.Panel2
             // 
             splitContainer1.Panel2.AutoScroll = true;
+            splitContainer1.Panel2.Controls.Add(label23);
             splitContainer1.Panel2.Controls.Add(cbLoadAsOne);
             splitContainer1.Panel2.Controls.Add(label22);
             splitContainer1.Panel2.Controls.Add(btnReLoad);
@@ -196,6 +200,8 @@
             splitContainer1.Panel2.Controls.Add(btnRemSgmnt);
             splitContainer1.Panel2.Controls.Add(btnComputeStep);
             splitContainer1.Panel2.Controls.Add(btnComputePath);
+            splitContainer1.Panel2.Controls.Add(btnBackupSP);
+            splitContainer1.Panel2.Controls.Add(btnLoadSeedPoints);
             splitContainer1.Panel2.Controls.Add(btnGetSeedPts);
             splitContainer1.Panel2.Controls.Add(Button4);
             splitContainer1.Panel2.Controls.Add(Button3);
@@ -352,6 +358,16 @@
             ToolStripMenuItem3.Name = "ToolStripMenuItem3";
             ToolStripMenuItem3.Size = new Size(136, 22);
             ToolStripMenuItem3.Text = "OpenImage";
+            // 
+            // label23
+            // 
+            label23.AutoSize = true;
+            label23.Enabled = false;
+            label23.Location = new Point(78, 405);
+            label23.Name = "label23";
+            label23.Size = new Size(122, 15);
+            label23.TabIndex = 354;
+            label23.Text = "load bu of SeedPoints";
             // 
             // cbLoadAsOne
             // 
@@ -739,7 +755,7 @@
             // 
             // numAmntSP
             // 
-            numAmntSP.Location = new Point(112, 380);
+            numAmntSP.Location = new Point(112, 368);
             numAmntSP.Maximum = new decimal(new int[] { 99999, 0, 0, 0 });
             numAmntSP.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
             numAmntSP.Name = "numAmntSP";
@@ -759,7 +775,7 @@
             // label6
             // 
             label6.AutoSize = true;
-            label6.Location = new Point(13, 382);
+            label6.Location = new Point(13, 370);
             label6.Name = "label6";
             label6.Size = new Size(85, 15);
             label6.TabIndex = 320;
@@ -776,7 +792,7 @@
             // panel2
             // 
             panel2.BackColor = SystemColors.ControlDark;
-            panel2.Location = new Point(26, 422);
+            panel2.Location = new Point(26, 429);
             panel2.Name = "panel2";
             panel2.Size = new Size(260, 2);
             panel2.TabIndex = 319;
@@ -784,7 +800,7 @@
             // panel1
             // 
             panel1.BackColor = SystemColors.ControlDark;
-            panel1.Location = new Point(25, 362);
+            panel1.Location = new Point(25, 350);
             panel1.Name = "panel1";
             panel1.Size = new Size(260, 2);
             panel1.TabIndex = 319;
@@ -846,9 +862,21 @@
             btnComputePath.UseVisualStyleBackColor = true;
             btnComputePath.Click += btnComputePath_Click;
             // 
+            // btnLoadSeedPoints
+            // 
+            btnLoadSeedPoints.Enabled = false;
+            btnLoadSeedPoints.Location = new Point(219, 399);
+            btnLoadSeedPoints.Margin = new Padding(4, 3, 4, 3);
+            btnLoadSeedPoints.Name = "btnLoadSeedPoints";
+            btnLoadSeedPoints.Size = new Size(88, 27);
+            btnLoadSeedPoints.TabIndex = 315;
+            btnLoadSeedPoints.Text = "Go";
+            btnLoadSeedPoints.UseVisualStyleBackColor = true;
+            btnLoadSeedPoints.Click += btnLoadSeedPoints_Click;
+            // 
             // btnGetSeedPts
             // 
-            btnGetSeedPts.Location = new Point(219, 376);
+            btnGetSeedPts.Location = new Point(219, 364);
             btnGetSeedPts.Margin = new Padding(4, 3, 4, 3);
             btnGetSeedPts.Name = "btnGetSeedPts";
             btnGetSeedPts.Size = new Size(88, 27);
@@ -1057,6 +1085,18 @@
             // 
             timer2.Tick += timer2_Tick;
             // 
+            // btnBackupSP
+            // 
+            btnBackupSP.Enabled = false;
+            btnBackupSP.Location = new Point(14, 399);
+            btnBackupSP.Margin = new Padding(4, 3, 4, 3);
+            btnBackupSP.Name = "btnBackupSP";
+            btnBackupSP.Size = new Size(45, 27);
+            btnBackupSP.TabIndex = 315;
+            btnBackupSP.Text = "bu";
+            btnBackupSP.UseVisualStyleBackColor = true;
+            btnBackupSP.Click += btnBackupSP_Click;
+            // 
             // frmSetAndEditSeedPoints
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -1181,5 +1221,8 @@
         private CheckBox cbLoadAsOne;
         private Label label22;
         private Button btnReLoad;
+        private Label label23;
+        internal Button btnLoadSeedPoints;
+        internal Button btnBackupSP;
     }
 }

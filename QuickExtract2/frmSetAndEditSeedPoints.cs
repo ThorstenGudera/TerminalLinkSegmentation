@@ -48,6 +48,7 @@ namespace QuickExtract2
         public Bitmap? ImgDataPic { get; internal set; }
         public List<PointF>? SeedPoints { get; private set; }
         public List<PointF>? SeedPointsZ { get; private set; }
+        public List<PointF>? SeedPointsBU { get; private set; }
 
         public frmSetAndEditSeedPoints(Bitmap bmp, QuickExtractingCtrl quickExtractingCtrl1)
         {
@@ -396,6 +397,8 @@ namespace QuickExtract2
 
                     this.firstClick = true;
                     this._curPos = 0;
+
+                    this.btnBackupSP.Enabled = true;
                 }
             }
         }
@@ -487,6 +490,8 @@ namespace QuickExtract2
                     this.QuickExtractingCtrl.SeedPoints = new List<PointF>();
                     this.QuickExtractingCtrl.TempPath = new List<PointF>();
                     this.QuickExtractingCtrl.CurPath = new List<List<PointF>>();
+                    BackupSeedPoints(this.SeedPoints);
+                    this.label23.Enabled = this.btnLoadSeedPoints.Enabled = this.btnBackupSP.Enabled = true;
                     fc = true;
                 }
 
@@ -508,6 +513,17 @@ namespace QuickExtract2
                     this._curPos++;
                     //closePath();         
                 }
+            }
+        }
+
+        private void BackupSeedPoints(List<PointF> seedPoints)
+        {
+            if (seedPoints != null)
+            {
+                this.SeedPointsBU = new List<PointF>();
+
+                for (int j = 0; j < seedPoints.Count; j++)
+                    this.SeedPointsBU.Add(new PointF(seedPoints[j].X, seedPoints[j].Y));
             }
         }
 
@@ -1717,6 +1733,48 @@ namespace QuickExtract2
                     this.PathList = CloneList(this.QuickExtractingCtrl.PathList);
                     this.PathListNew = new List<List<List<PointF>>>();
                 }
+            }
+        }
+
+        private void btnLoadSeedPoints_Click(object sender, EventArgs e)
+        {
+            this.SeedPoints = new List<PointF>();
+
+            if (this.QuickExtractingCtrl != null)
+            {
+                if (this.SeedPointsBU != null)
+                {
+                    this.ListBox1.Items.Clear();
+                    this.ListBox1.BeginUpdate();
+
+                    for (int j = 0; j < this.SeedPointsBU.Count; j++)
+                    {
+                        this.SeedPoints.Add(this.SeedPointsBU[j]);
+                        this.ListBox1.Items.Add(this.SeedPointsBU[j]);
+                    }
+
+                    this.ListBox1.EndUpdate();
+
+                    this.SeedPointsZ = GetTransformedSP(this.SeedPoints);
+                    this._drawPath = this._drawPathPart = false;
+
+                    this.helplineRulerCtrl1.dbPanel1.Invalidate();
+
+                    this.firstClick = true;
+                    this._curPos = 0;
+
+                    if(this.QuickExtractingCtrl.Alg != null)
+                        this.QuickExtractingCtrl.Alg.UnlockBmpData();
+                }
+            }
+        }
+
+        private void btnBackupSP_Click(object sender, EventArgs e)
+        {
+            if (this.SeedPoints != null)
+            {
+                this.BackupSeedPoints(this.SeedPoints);
+                this.label23.Enabled = this.btnLoadSeedPoints.Enabled = true;
             }
         }
     }
