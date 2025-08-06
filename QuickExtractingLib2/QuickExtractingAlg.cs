@@ -714,7 +714,7 @@ namespace QuickExtractingLib2
                     }
                 }
 
-            if (isEdge && this.Edges != null && this.TempData != null)
+            if (isEdge && this.Edges != null && this.TempData != null && (int)(address / 4.0) < this.Edges.Count)
             {
                 this.Edges[(int)(address / 4.0)] = isEdge;
                 this.TempData.Add(new Point(address % this._stride / 4, (int)(address / this._stride)));

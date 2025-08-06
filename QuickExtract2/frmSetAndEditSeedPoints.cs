@@ -253,14 +253,14 @@ namespace QuickExtract2
                 this.numVal_I.Value = this.QuickExtractingCtrl.numVal_I.Value;
                 this.numValO.Value = this.QuickExtractingCtrl.numValO.Value;
             }
-            else if(this.QuickExtractingCtrl != null)
+            else if (this.QuickExtractingCtrl != null)
             {
                 this.QuickExtractingCtrl.PathList = new List<List<List<PointF>>>();
                 this.QuickExtractingCtrl.PathList.Add(new List<List<PointF>>());
                 this.QuickExtractingCtrl.PathList[0].Add(new List<PointF>());
-                this.QuickExtractingCtrl.PathList[0][0].Add(new PointF(this.helplineRulerCtrl1.dbPanel1.ClientSize.Width - 32, 32));  
-                for(int i = 0; i < this.helplineRulerCtrl1.dbPanel1.ClientSize.Width - 128; i++)
-                    this.QuickExtractingCtrl.PathList[0][0].Add(new PointF(this.helplineRulerCtrl1.dbPanel1.ClientSize.Width - 32 - i, 32));  
+                this.QuickExtractingCtrl.PathList[0][0].Add(new PointF(this.helplineRulerCtrl1.dbPanel1.ClientSize.Width - 32, 32));
+                for (int i = 0; i < this.helplineRulerCtrl1.dbPanel1.ClientSize.Width - 128; i++)
+                    this.QuickExtractingCtrl.PathList[0][0].Add(new PointF(this.helplineRulerCtrl1.dbPanel1.ClientSize.Width - 32 - i, 32));
                 this.QuickExtractingCtrl.PathList[0][0].Add(new PointF(32, 32));
 
                 this.cmbPaths.Items.Add("SavedPath_" + 0.ToString() + "; " + this.QuickExtractingCtrl.PathList[0][0].Count.ToString());
@@ -521,6 +521,11 @@ namespace QuickExtract2
 
         private void button6_Click(object sender, EventArgs e)
         {
+            if (this._curPos == 0)
+                this.CheckSeedPoints(this.ImgDataPic, this.SeedPoints);
+            else
+                this.CheckSeedPoint(this.ImgDataPic, this.SeedPoints, this._curPos);
+
             if (this.QuickExtractingCtrl != null && this.SeedPoints != null && this.SeedPoints?.Count > this._curPos)
             {
                 this._drawPathPart = true;
@@ -555,6 +560,25 @@ namespace QuickExtract2
                     this._curPos++;
                     //closePath();         
                 }
+            }
+        }
+
+        private void CheckSeedPoint(Bitmap? imgDataPic, List<PointF>? seedPoints, int j)
+        {
+            if (imgDataPic != null && seedPoints != null)
+            {
+                int w = imgDataPic.Width;
+                int h = imgDataPic.Height;
+
+                if (seedPoints[j].X < 0)
+                    seedPoints[j] = new PointF(0, seedPoints[j].Y);
+                if (seedPoints[j].X > w - 1)
+                    seedPoints[j] = new PointF(w - 1, seedPoints[j].Y);
+                if (seedPoints[j].Y < 0)
+                    seedPoints[j] = new PointF(seedPoints[j].X, 0);
+                if (seedPoints[j].Y > h - 1)
+                    seedPoints[j] = new PointF(seedPoints[j].X, h - 1);
+
             }
         }
 
@@ -960,6 +984,27 @@ namespace QuickExtract2
             }
         }
 
+        private void CheckSeedPoints(Bitmap? imgDataPic, List<PointF>? seedPoints)
+        {
+            if (imgDataPic != null && seedPoints != null)
+            {
+                int w = imgDataPic.Width;
+                int h = imgDataPic.Height;
+
+                for (int j = 0; j < seedPoints.Count; j++)
+                {
+                    if (seedPoints[j].X < 0)
+                        seedPoints[j] = new PointF(0, seedPoints[j].Y);
+                    if (seedPoints[j].X > w - 1)
+                        seedPoints[j] = new PointF(w - 1, seedPoints[j].Y);
+                    if (seedPoints[j].Y < 0)
+                        seedPoints[j] = new PointF(seedPoints[j].X, 0);
+                    if (seedPoints[j].Y > h - 1)
+                        seedPoints[j] = new PointF(seedPoints[j].X, h - 1);
+                }
+            }
+        }
+
         private void timer1_Tick(object sender, EventArgs e)
         {
 
@@ -997,78 +1042,6 @@ namespace QuickExtract2
                     if (this.QuickExtractingCtrl.CurPath[i].Count == 0)
                         this.QuickExtractingCtrl.CurPath.RemoveAt(i);
                 }
-
-                // 'check for seedpoint outliers '07.06.2022
-                // If Me.ComboBox1.SelectedIndex = 1 Then
-                // For i As Integer = Me.CurPath.Count - 1 To 1 Step -1
-                // Dim p As List(Of PointF) = Me.CurPath(i)
-                // Dim q As List(Of PointF) = Me.CurPath(i - 1)
-
-                // Dim pt1 As PointF = p(0)
-                // Dim pt2 As PointF = q(q.Count - 1)
-
-                // Dim dx As Double = pt1.X - pt2.X
-                // Dim dy As Double = pt1.Y - pt2.Y
-
-                // Dim dist As Double = Math.Sqrt(dx * dx + dy * dy)
-
-                // If dist > 2.0 Then
-                // Me.CurPath.RemoveAt(i)
-                // End If
-                // Next
-                // End If
-
-                // 'check for seedpoint outliers '07.06.2022
-                // If Me.SeedPoints IsNot Nothing AndAlso Me.SeedPoints.Count > 1 Then
-                // For i As Integer = Me.SeedPoints.Count - 1 To 1 Step -1
-                // If Me.SeedPoints(i).X = Me.SeedPoints(i - 1).X AndAlso
-                // Me.SeedPoints(i).Y = Me.SeedPoints(i - 1).Y Then
-
-                // Me.SeedPoints.RemoveAt(i)
-                // End If
-
-                // Dim found As Boolean = False
-
-                // For j As Integer = 0 To Me.CurPath.Count - 1
-                // Dim p As List(Of PointF) = Me.CurPath(j)
-                // Dim pt As PointF = p(p.Count - 1)
-
-                // Dim r As New RectangleF(pt.X - 1, pt.Y - 1, 3, 3)
-
-                // If Me.SeedPoints.Count > i AndAlso r.Contains(Me.SeedPoints(i)) Then
-                // found = True
-                // Exit For
-                // End If
-
-                // 'Dim dx As Double = p(p.Count - 1).X - pt.X
-                // 'Dim dy As Double = p(p.Count - 1).Y - pt.Y
-                // 'Dim dist As Double = Math.Sqrt(dx * dx + dy * dy)
-
-                // 'If Me.SeedPoints.Count > i AndAlso dist <= Math.Sqrt(2.0) Then
-                // '    found = True
-                // '    Exit For
-                // 'End If
-                // Next
-
-                // If Me.SeedPoints.Count > i AndAlso i > 1 AndAlso found = False Then
-                // Me.SeedPoints.RemoveAt(i)
-                // End If
-                // Next
-                // End If
-
-                // For i As Integer = 0 To Me.CurPath.Count - 2
-                // Dim p As List(Of PointF) = Me.CurPath(i)
-                // Dim q As List(Of PointF) = Me.CurPath(i + 1)
-
-                // If p.Count > 0 Then
-                // Dim dx As Double = p(p.Count - 1).X - q(0).X
-                // Dim dy As Double = p(p.Count - 1).Y - q(0).Y
-                // Dim dist As Double = Math.Sqrt(dx * dx + dy * dy)
-                // If dist > Math.Sqrt(2.0) Then
-                // p.Add(q(0))
-                // End If
-                // End If
-                // Next
 
                 // refactor into method
                 if (this.QuickExtractingCtrl.CurPath.Count > 0)
@@ -1894,7 +1867,7 @@ namespace QuickExtract2
 
         private void saveSeedPointsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if(this.SeedPoints != null && this.SeedPoints.Count > 0 && this.saveFileDialog2.ShowDialog() == DialogResult.OK)
+            if (this.SeedPoints != null && this.SeedPoints.Count > 0 && this.saveFileDialog2.ShowDialog() == DialogResult.OK)
             {
                 SavedSeedPoints svsp = new();
 
