@@ -4047,7 +4047,7 @@ namespace QuickExtract2
                         this.helplineRulerCtrl1.dbPanel1.Invalidate();
 
                         this.quickExtractingCtrl1.PathList = frm.PathListNew;
-                        this.quickExtractingCtrl1.CurPath = frm.PathListNew?[0];
+                        this.quickExtractingCtrl1.CurPath = frm.PathListNew?[frm.PathListNew.Count - 1];
 
                         this.helplineRulerCtrl1.dbPanel1.Invalidate();
                     }
