@@ -30,6 +30,15 @@
         {
             components = new System.ComponentModel.Container();
             groupBox1 = new GroupBox();
+            btnCurAsOrig = new Button();
+            btnEditPath2 = new Button();
+            gbRemOutline = new GroupBox();
+            label1 = new Label();
+            btnRemOutline = new Button();
+            btnGetPath = new Button();
+            cbAddLine = new CheckBox();
+            cbAutoAddLine = new CheckBox();
+            numRemOutline = new NumericUpDown();
             btnSavedPaths = new Button();
             btnRS = new Button();
             cbUseCostMaps = new CheckBox();
@@ -52,13 +61,6 @@
             btnClosePath = new Button();
             Label43 = new Label();
             groupBox2 = new GroupBox();
-            gbRemOutline = new GroupBox();
-            label1 = new Label();
-            btnRemOutline = new Button();
-            btnGetPath = new Button();
-            cbAddLine = new CheckBox();
-            cbAutoAddLine = new CheckBox();
-            numRemOutline = new NumericUpDown();
             Label44 = new Label();
             numValC0l = new NumericUpDown();
             btnStdValsLow = new Button();
@@ -106,12 +108,11 @@
             numDisplayIterations = new NumericUpDown();
             Label34 = new Label();
             toolTip1 = new ToolTip(components);
-            btnEditPath2 = new Button();
             groupBox1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)numPenWidth).BeginInit();
-            groupBox2.SuspendLayout();
             gbRemOutline.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numRemOutline).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)numPenWidth).BeginInit();
+            groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numValC0l).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numValG).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numValCl).BeginInit();
@@ -131,6 +132,7 @@
             // 
             // groupBox1
             // 
+            groupBox1.Controls.Add(btnCurAsOrig);
             groupBox1.Controls.Add(btnEditPath2);
             groupBox1.Controls.Add(gbRemOutline);
             groupBox1.Controls.Add(btnSavedPaths);
@@ -162,6 +164,110 @@
             groupBox1.TabIndex = 0;
             groupBox1.TabStop = false;
             groupBox1.Text = "DrawAndPath";
+            // 
+            // btnCurAsOrig
+            // 
+            btnCurAsOrig.ForeColor = SystemColors.ControlText;
+            btnCurAsOrig.Location = new Point(714, 105);
+            btnCurAsOrig.Margin = new Padding(4, 3, 4, 3);
+            btnCurAsOrig.Name = "btnCurAsOrig";
+            btnCurAsOrig.Size = new Size(88, 27);
+            btnCurAsOrig.TabIndex = 324;
+            btnCurAsOrig.Text = "Cur as Orig";
+            btnCurAsOrig.UseVisualStyleBackColor = true;
+            // 
+            // btnEditPath2
+            // 
+            btnEditPath2.Enabled = false;
+            btnEditPath2.ForeColor = SystemColors.ControlText;
+            btnEditPath2.Location = new Point(619, 106);
+            btnEditPath2.Margin = new Padding(4, 3, 4, 3);
+            btnEditPath2.Name = "btnEditPath2";
+            btnEditPath2.Size = new Size(88, 27);
+            btnEditPath2.TabIndex = 324;
+            btnEditPath2.Text = "Edit Path2";
+            btnEditPath2.UseVisualStyleBackColor = true;
+            // 
+            // gbRemOutline
+            // 
+            gbRemOutline.Controls.Add(label1);
+            gbRemOutline.Controls.Add(btnRemOutline);
+            gbRemOutline.Controls.Add(btnGetPath);
+            gbRemOutline.Controls.Add(cbAddLine);
+            gbRemOutline.Controls.Add(cbAutoAddLine);
+            gbRemOutline.Controls.Add(numRemOutline);
+            gbRemOutline.Location = new Point(21, 94);
+            gbRemOutline.Name = "gbRemOutline";
+            gbRemOutline.Size = new Size(463, 44);
+            gbRemOutline.TabIndex = 323;
+            gbRemOutline.TabStop = false;
+            gbRemOutline.Text = "additional";
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Location = new Point(355, 19);
+            label1.Name = "label1";
+            label1.Size = new Size(34, 15);
+            label1.TabIndex = 325;
+            label1.Text = "wdth";
+            // 
+            // btnRemOutline
+            // 
+            btnRemOutline.Location = new Point(268, 15);
+            btnRemOutline.Name = "btnRemOutline";
+            btnRemOutline.Size = new Size(81, 23);
+            btnRemOutline.TabIndex = 324;
+            btnRemOutline.Text = "rem outline";
+            btnRemOutline.UseVisualStyleBackColor = true;
+            // 
+            // btnGetPath
+            // 
+            btnGetPath.Location = new Point(187, 15);
+            btnGetPath.Name = "btnGetPath";
+            btnGetPath.Size = new Size(75, 23);
+            btnGetPath.TabIndex = 323;
+            btnGetPath.Text = "getPath";
+            btnGetPath.UseVisualStyleBackColor = true;
+            // 
+            // cbAddLine
+            // 
+            cbAddLine.AutoSize = true;
+            cbAddLine.Enabled = false;
+            cbAddLine.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            cbAddLine.Location = new Point(7, 19);
+            cbAddLine.Margin = new Padding(4, 3, 4, 3);
+            cbAddLine.Name = "cbAddLine";
+            cbAddLine.Size = new Size(69, 19);
+            cbAddLine.TabIndex = 319;
+            cbAddLine.Text = "addLine";
+            toolTip1.SetToolTip(cbAddLine, "if the algorithm doesnt find a path,\r\nyou can add straight lines from the last SeedPoint\r\nto the Point you clicked.");
+            cbAddLine.UseVisualStyleBackColor = true;
+            // 
+            // cbAutoAddLine
+            // 
+            cbAutoAddLine.AutoSize = true;
+            cbAutoAddLine.Checked = true;
+            cbAutoAddLine.CheckState = CheckState.Checked;
+            cbAutoAddLine.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            cbAutoAddLine.Location = new Point(85, 19);
+            cbAutoAddLine.Name = "cbAutoAddLine";
+            cbAutoAddLine.Size = new Size(96, 19);
+            cbAutoAddLine.TabIndex = 322;
+            cbAutoAddLine.Text = "autoAddLine";
+            cbAutoAddLine.UseVisualStyleBackColor = true;
+            cbAutoAddLine.CheckedChanged += cbAutoAddLine_CheckedChanged;
+            // 
+            // numRemOutline
+            // 
+            numRemOutline.Location = new Point(396, 15);
+            numRemOutline.Margin = new Padding(4, 3, 4, 3);
+            numRemOutline.Maximum = new decimal(new int[] { 255, 0, 0, 0 });
+            numRemOutline.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
+            numRemOutline.Name = "numRemOutline";
+            numRemOutline.Size = new Size(58, 23);
+            numRemOutline.TabIndex = 303;
+            numRemOutline.Value = new decimal(new int[] { 1, 0, 0, 0 });
             // 
             // btnSavedPaths
             // 
@@ -432,87 +538,6 @@
             groupBox2.TabIndex = 0;
             groupBox2.TabStop = false;
             groupBox2.Text = "Alg Settings";
-            // 
-            // gbRemOutline
-            // 
-            gbRemOutline.Controls.Add(label1);
-            gbRemOutline.Controls.Add(btnRemOutline);
-            gbRemOutline.Controls.Add(btnGetPath);
-            gbRemOutline.Controls.Add(cbAddLine);
-            gbRemOutline.Controls.Add(cbAutoAddLine);
-            gbRemOutline.Controls.Add(numRemOutline);
-            gbRemOutline.Location = new Point(21, 94);
-            gbRemOutline.Name = "gbRemOutline";
-            gbRemOutline.Size = new Size(463, 44);
-            gbRemOutline.TabIndex = 323;
-            gbRemOutline.TabStop = false;
-            gbRemOutline.Text = "additional";
-            // 
-            // label1
-            // 
-            label1.AutoSize = true;
-            label1.Location = new Point(355, 19);
-            label1.Name = "label1";
-            label1.Size = new Size(34, 15);
-            label1.TabIndex = 325;
-            label1.Text = "wdth";
-            // 
-            // btnRemOutline
-            // 
-            btnRemOutline.Location = new Point(268, 15);
-            btnRemOutline.Name = "btnRemOutline";
-            btnRemOutline.Size = new Size(81, 23);
-            btnRemOutline.TabIndex = 324;
-            btnRemOutline.Text = "rem outline";
-            btnRemOutline.UseVisualStyleBackColor = true;
-            // 
-            // btnGetPath
-            // 
-            btnGetPath.Location = new Point(187, 15);
-            btnGetPath.Name = "btnGetPath";
-            btnGetPath.Size = new Size(75, 23);
-            btnGetPath.TabIndex = 323;
-            btnGetPath.Text = "getPath";
-            btnGetPath.UseVisualStyleBackColor = true;
-            // 
-            // cbAddLine
-            // 
-            cbAddLine.AutoSize = true;
-            cbAddLine.Enabled = false;
-            cbAddLine.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            cbAddLine.Location = new Point(7, 19);
-            cbAddLine.Margin = new Padding(4, 3, 4, 3);
-            cbAddLine.Name = "cbAddLine";
-            cbAddLine.Size = new Size(69, 19);
-            cbAddLine.TabIndex = 319;
-            cbAddLine.Text = "addLine";
-            toolTip1.SetToolTip(cbAddLine, "if the algorithm doesnt find a path,\r\nyou can add straight lines from the last SeedPoint\r\nto the Point you clicked.");
-            cbAddLine.UseVisualStyleBackColor = true;
-            // 
-            // cbAutoAddLine
-            // 
-            cbAutoAddLine.AutoSize = true;
-            cbAutoAddLine.Checked = true;
-            cbAutoAddLine.CheckState = CheckState.Checked;
-            cbAutoAddLine.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            cbAutoAddLine.Location = new Point(85, 19);
-            cbAutoAddLine.Name = "cbAutoAddLine";
-            cbAutoAddLine.Size = new Size(96, 19);
-            cbAutoAddLine.TabIndex = 322;
-            cbAutoAddLine.Text = "autoAddLine";
-            cbAutoAddLine.UseVisualStyleBackColor = true;
-            cbAutoAddLine.CheckedChanged += cbAutoAddLine_CheckedChanged;
-            // 
-            // numRemOutline
-            // 
-            numRemOutline.Location = new Point(396, 15);
-            numRemOutline.Margin = new Padding(4, 3, 4, 3);
-            numRemOutline.Maximum = new decimal(new int[] { 255, 0, 0, 0 });
-            numRemOutline.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
-            numRemOutline.Name = "numRemOutline";
-            numRemOutline.Size = new Size(58, 23);
-            numRemOutline.TabIndex = 303;
-            numRemOutline.Value = new decimal(new int[] { 1, 0, 0, 0 });
             // 
             // Label44
             // 
@@ -1044,18 +1069,6 @@
             Label34.TabIndex = 301;
             Label34.Text = "notify each";
             // 
-            // btnEditPath2
-            // 
-            btnEditPath2.Enabled = false;
-            btnEditPath2.ForeColor = SystemColors.ControlText;
-            btnEditPath2.Location = new Point(619, 106);
-            btnEditPath2.Margin = new Padding(4, 3, 4, 3);
-            btnEditPath2.Name = "btnEditPath2";
-            btnEditPath2.Size = new Size(88, 27);
-            btnEditPath2.TabIndex = 324;
-            btnEditPath2.Text = "Edit Path2";
-            btnEditPath2.UseVisualStyleBackColor = true;
-            // 
             // QuickExtractingCtrl
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -1069,12 +1082,12 @@
             Size = new Size(1166, 278);
             groupBox1.ResumeLayout(false);
             groupBox1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)numPenWidth).EndInit();
-            groupBox2.ResumeLayout(false);
-            groupBox2.PerformLayout();
             gbRemOutline.ResumeLayout(false);
             gbRemOutline.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)numRemOutline).EndInit();
+            ((System.ComponentModel.ISupportInitialize)numPenWidth).EndInit();
+            groupBox2.ResumeLayout(false);
+            groupBox2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)numValC0l).EndInit();
             ((System.ComponentModel.ISupportInitialize)numValG).EndInit();
             ((System.ComponentModel.ISupportInitialize)numValCl).EndInit();
@@ -1174,5 +1187,6 @@
         internal Button btnGetPath;
         internal Button btnReRunLast;
         internal Button btnEditPath2;
+        internal Button btnCurAsOrig;
     }
 }

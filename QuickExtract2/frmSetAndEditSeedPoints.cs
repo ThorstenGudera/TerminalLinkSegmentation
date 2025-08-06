@@ -253,6 +253,44 @@ namespace QuickExtract2
                 this.numVal_I.Value = this.QuickExtractingCtrl.numVal_I.Value;
                 this.numValO.Value = this.QuickExtractingCtrl.numValO.Value;
             }
+            else if(this.QuickExtractingCtrl != null)
+            {
+                this.QuickExtractingCtrl.PathList = new List<List<List<PointF>>>();
+                this.QuickExtractingCtrl.PathList.Add(new List<List<PointF>>());
+                this.QuickExtractingCtrl.PathList[0].Add(new List<PointF>());
+                this.QuickExtractingCtrl.PathList[0][0].Add(new PointF(this.helplineRulerCtrl1.dbPanel1.ClientSize.Width - 32, 32));  
+                for(int i = 0; i < this.helplineRulerCtrl1.dbPanel1.ClientSize.Width - 128; i++)
+                    this.QuickExtractingCtrl.PathList[0][0].Add(new PointF(this.helplineRulerCtrl1.dbPanel1.ClientSize.Width - 32 - i, 32));  
+                this.QuickExtractingCtrl.PathList[0][0].Add(new PointF(32, 32));
+
+                this.cmbPaths.Items.Add("SavedPath_" + 0.ToString() + "; " + this.QuickExtractingCtrl.PathList[0][0].Count.ToString());
+                this._pathListBU = CloneList(this.QuickExtractingCtrl.PathList);
+                this.cmbPaths.SelectedIndex = 0;
+
+                this._dontDoZoom = true;
+                this.ComboBox2.SelectedIndex = 4;
+                this._dontDoZoom = false;
+
+                this.PathList = CloneList(this.QuickExtractingCtrl.PathList);
+                this.PathListNew = new List<List<List<PointF>>>();
+
+                this.numValL.Value = this.QuickExtractingCtrl.numValL.Value;
+                this.numLapTh.Value = this.QuickExtractingCtrl.numLapTh.Value;
+                this.numValM.Value = this.QuickExtractingCtrl.numValM.Value;
+                this.numValG.Value = this.QuickExtractingCtrl.numValG.Value;
+                this.numEdgeWeight.Value = this.QuickExtractingCtrl.numEdgeWeight.Value;
+                this.numValCl.Value = this.QuickExtractingCtrl.numValCl.Value;
+                this.numValC0l.Value = this.QuickExtractingCtrl.numValC0l.Value;
+
+                this.cbScaleValues.Checked = this.QuickExtractingCtrl.cbScaleValues.Checked;
+                this.cbAddLine.Checked = this.QuickExtractingCtrl.cbAddLine.Checked;
+                this.cbAutoAddLine.Checked = this.QuickExtractingCtrl.cbAutoAddLine.Checked;
+                this.cbUseCostMaps.Checked = this.QuickExtractingCtrl.cbUseCostMaps.Checked;
+
+                this.numValP.Value = this.QuickExtractingCtrl.numValP.Value;
+                this.numVal_I.Value = this.QuickExtractingCtrl.numVal_I.Value;
+                this.numValO.Value = this.QuickExtractingCtrl.numValO.Value;
+            }
         }
 
         private List<List<List<PointF>>>? CloneList(List<List<List<PointF>>>? pathList)

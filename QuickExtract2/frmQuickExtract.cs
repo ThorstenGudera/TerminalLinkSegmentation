@@ -194,6 +194,29 @@ namespace QuickExtract2
             this.quickExtractingCtrl1.btnRemOutline.Click += BtnRemOutline_Click;
             this.quickExtractingCtrl1.btnReRunLast.Click += BtnReRunLast_Click;
             this.quickExtractingCtrl1.btnEditPath2.Click += btnEditPath2_Click;
+            this.quickExtractingCtrl1.btnCurAsOrig.Click += BtnCurAsOrig_Click;
+        }
+
+        private void BtnCurAsOrig_Click(object? sender, EventArgs e)
+        {
+            if (this.helplineRulerCtrl1.Bmp != null)
+            {
+                Bitmap? bC = new Bitmap(this.helplineRulerCtrl1.Bmp);
+                if (this.OrigBmp != null)
+                    this.SetBitmap(this.OrigBmp, bC, this, "OrigBmp");
+                else
+                    this.OrigBmp = bC;
+
+                Bitmap? bC2 = new Bitmap(this.OrigBmp);
+                this.SetBitmap(ref _bmpBU, ref bC2);
+
+                this.helplineRulerCtrl1.dbPanel1.AutoScrollMinSize = new Size(System.Convert.ToInt32(this.helplineRulerCtrl1.Bmp.Width * this.helplineRulerCtrl1.Zoom), System.Convert.ToInt32(this.helplineRulerCtrl1.Bmp.Height * this.helplineRulerCtrl1.Zoom));
+                this.helplineRulerCtrl1.MakeBitmap(this.helplineRulerCtrl1.Bmp);
+
+                this.helplineRulerCtrl1.dbPanel1.Invalidate();
+
+                this.quickExtractingCtrl1.btnEditPath2.Enabled = true;
+            }
         }
 
         private void BtnReRunLast_Click(object? sender, EventArgs e)
@@ -3999,7 +4022,8 @@ namespace QuickExtract2
                 if (dlg == DialogResult.Yes)
                 {
                     this.helplineRulerCtrl1.Bmp = new Bitmap(this.OrigBmp);
-                    _bmpBU = new Bitmap(this.OrigBmp);
+                    Bitmap? bC = new Bitmap(this.OrigBmp);
+                    this.SetBitmap(ref _bmpBU, ref bC);
 
                     this.helplineRulerCtrl1.dbPanel1.AutoScrollMinSize = new Size(System.Convert.ToInt32(this.helplineRulerCtrl1.Bmp.Width * this.helplineRulerCtrl1.Zoom), System.Convert.ToInt32(this.helplineRulerCtrl1.Bmp.Height * this.helplineRulerCtrl1.Zoom));
                     this.helplineRulerCtrl1.MakeBitmap(this.helplineRulerCtrl1.Bmp);
@@ -4022,6 +4046,38 @@ namespace QuickExtract2
         private void btnEditPath2_Click(object? sender, EventArgs e)
         {
             if (this.quickExtractingCtrl1.CurPath != null && this.quickExtractingCtrl1.CurPath.Count > 0 && this.quickExtractingCtrl1.CurPath[0].Count > 0)
+            {
+                if (this.OrigBmp != null)
+                {
+                    using frmSetAndEditSeedPoints frm = new(this.OrigBmp, this.quickExtractingCtrl1);
+                    if (this.bmpForValueComputation != null)
+                        frm.BmpForValueComputation = new Bitmap(this.OrigBmp.Width, this.OrigBmp.Height);
+                    if (this.imgDataPic != null)
+                        frm.ImgDataPic = new Bitmap(this.OrigBmp);
+
+                    frm.ToolStripDropDownButton1.DropDownItems[1].PerformClick();
+
+                    if (frm.ShowDialog() == DialogResult.OK && frm.PathListNew != null && frm.PathListNew.Count > 0)
+                    {
+                        Bitmap? bC = new Bitmap(this.OrigBmp);
+                        this.SetBitmap(this.helplineRulerCtrl1.Bmp, bC, this.helplineRulerCtrl1, "Bmp");
+                        Bitmap? bC2 = new Bitmap(this.OrigBmp);
+                        this.SetBitmap(ref this._bmpBU, ref bC2);
+
+                        this._undoOPCache?.Add(this.helplineRulerCtrl1.Bmp);
+
+                        this.helplineRulerCtrl1.dbPanel1.AutoScrollMinSize = new Size(System.Convert.ToInt32(this.helplineRulerCtrl1.Bmp.Width * this.helplineRulerCtrl1.Zoom), System.Convert.ToInt32(this.helplineRulerCtrl1.Bmp.Height * this.helplineRulerCtrl1.Zoom));
+                        this.helplineRulerCtrl1.MakeBitmap(this.helplineRulerCtrl1.Bmp);
+                        this.helplineRulerCtrl1.dbPanel1.Invalidate();
+
+                        this.quickExtractingCtrl1.PathList = frm.PathListNew;
+                        this.quickExtractingCtrl1.CurPath = frm.PathListNew?[frm.PathListNew.Count - 1];
+
+                        this.helplineRulerCtrl1.dbPanel1.Invalidate();
+                    }
+                }
+            }
+            else if (this.quickExtractingCtrl1.CurPath == null || this.quickExtractingCtrl1.CurPath.Count == 0 || this.quickExtractingCtrl1.CurPath[0].Count == 0)
             {
                 if (this.OrigBmp != null)
                 {
