@@ -45,6 +45,7 @@
             toolStripDropDownButton3 = new ToolStripDropDownButton();
             loadSeedPointsToolStripMenuItem = new ToolStripMenuItem();
             saveSeedPointsToolStripMenuItem = new ToolStripMenuItem();
+            label24 = new Label();
             label23 = new Label();
             cbLoadAsOne = new CheckBox();
             label22 = new Label();
@@ -118,6 +119,8 @@
             saveFileDialog2 = new SaveFileDialog();
             timer2 = new System.Windows.Forms.Timer(components);
             openFileDialog1 = new OpenFileDialog();
+            timer3 = new System.Windows.Forms.Timer(components);
+            timer4 = new System.Windows.Forms.Timer(components);
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
             splitContainer1.Panel2.SuspendLayout();
@@ -153,6 +156,7 @@
             // splitContainer1.Panel2
             // 
             splitContainer1.Panel2.AutoScroll = true;
+            splitContainer1.Panel2.Controls.Add(label24);
             splitContainer1.Panel2.Controls.Add(label23);
             splitContainer1.Panel2.Controls.Add(cbLoadAsOne);
             splitContainer1.Panel2.Controls.Add(label22);
@@ -341,16 +345,26 @@
             // loadSeedPointsToolStripMenuItem
             // 
             loadSeedPointsToolStripMenuItem.Name = "loadSeedPointsToolStripMenuItem";
-            loadSeedPointsToolStripMenuItem.Size = new Size(158, 22);
+            loadSeedPointsToolStripMenuItem.Size = new Size(180, 22);
             loadSeedPointsToolStripMenuItem.Text = "LoadSeedPoints";
             loadSeedPointsToolStripMenuItem.Click += loadSeedPointsToolStripMenuItem_Click;
             // 
             // saveSeedPointsToolStripMenuItem
             // 
             saveSeedPointsToolStripMenuItem.Name = "saveSeedPointsToolStripMenuItem";
-            saveSeedPointsToolStripMenuItem.Size = new Size(158, 22);
+            saveSeedPointsToolStripMenuItem.Size = new Size(180, 22);
             saveSeedPointsToolStripMenuItem.Text = "SaveSeedPoints";
             saveSeedPointsToolStripMenuItem.Click += saveSeedPointsToolStripMenuItem_Click;
+            // 
+            // label24
+            // 
+            label24.AutoSize = true;
+            label24.BorderStyle = BorderStyle.FixedSingle;
+            label24.Location = new Point(15, 478);
+            label24.Name = "label24";
+            label24.Size = new Size(21, 17);
+            label24.TabIndex = 355;
+            label24.Text = "    ";
             // 
             // label23
             // 
@@ -1095,6 +1109,14 @@
             openFileDialog1.FileName = "File1.tgsp";
             openFileDialog1.Filter = "SeedPoints files (*.tgsp)|*.tgsp";
             // 
+            // timer3
+            // 
+            timer3.Tick += timer3_Tick;
+            // 
+            // timer4
+            // 
+            timer4.Tick += timer4_Tick;
+            // 
             // frmSetAndEditSeedPoints
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -1222,5 +1244,8 @@
         private ToolStripMenuItem loadSeedPointsToolStripMenuItem;
         private ToolStripMenuItem saveSeedPointsToolStripMenuItem;
         private OpenFileDialog openFileDialog1;
+        private System.Windows.Forms.Timer timer3;
+        private Label label24;
+        private System.Windows.Forms.Timer timer4;
     }
 }

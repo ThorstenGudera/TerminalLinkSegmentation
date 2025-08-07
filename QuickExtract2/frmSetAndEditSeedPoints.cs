@@ -373,7 +373,9 @@ namespace QuickExtract2
                     this.BmpForValueComputation != null && this.ImgDataPic != null)
                 {
                     this._computeFullPath = true;
-                    this.btnComputeStep.PerformClick();
+                    //this.btnComputeStep.PerformClick();
+
+                    this.button6_Click(this.btnComputeStep, new EventArgs());
                 }
             }
         }
@@ -523,8 +525,13 @@ namespace QuickExtract2
         {
             if (this._curPos == 0)
                 this.CheckSeedPoints(this.ImgDataPic, this.SeedPoints);
-            else
+            else if (this._curPos < this.SeedPoints?.Count)
                 this.CheckSeedPoint(this.ImgDataPic, this.SeedPoints, this._curPos);
+
+            this.label24.Text = "running...";
+            this.btnComputeStep.Enabled = this.btnComputePath.Enabled = this.helplineRulerCtrl1.Enabled = false;
+            this.btnComputeStep.Refresh();
+            this.btnComputePath.Refresh();
 
             if (this.QuickExtractingCtrl != null && this.SeedPoints != null && this.SeedPoints?.Count > this._curPos)
             {
@@ -560,6 +567,10 @@ namespace QuickExtract2
                     this._curPos++;
                     //closePath();         
                 }
+
+                if (this.timer3.Enabled)
+                    this.timer3.Stop();
+                this.timer3.Start();
             }
         }
 
@@ -679,6 +690,9 @@ namespace QuickExtract2
                                 this.firstClick = false;
                                 this.Cursor = Cursors.Default;
                                 _dontDoMouseMove = false;
+                                if (this.timer3.Enabled)
+                                    this.timer3.Stop();
+                                this.timer3.Start();
                             }
 
                             break;
@@ -693,6 +707,9 @@ namespace QuickExtract2
                             }
                             this.Cursor = Cursors.Default;
                             _dontDoMouseMove = false;
+                            if (this.timer3.Enabled)
+                                this.timer3.Stop();
+                            this.timer3.Start();
                             break;
                         }
 
@@ -761,6 +778,10 @@ namespace QuickExtract2
                                     _dontDoMouseMove = false;
 
                                     this.QuickExtractingCtrl.lblTrainInfo.Text = "trained";
+
+                                    if (this.timer3.Enabled)
+                                        this.timer3.Stop();
+                                    this.timer3.Start();
                                 }
                             }
                             break;
@@ -780,6 +801,10 @@ namespace QuickExtract2
                             _dontDoMouseMove = false;
 
                             this.QuickExtractingCtrl.lblTrainInfo.Text = "not trained";
+
+                            if (this.timer3.Enabled)
+                                this.timer3.Stop();
+                            this.timer3.Start();
                             break;
                         }
 
@@ -842,6 +867,10 @@ namespace QuickExtract2
                                     this.firstClick = false;
                                     this.Cursor = Cursors.Default;
                                     _dontDoMouseMove = false;
+
+                                    if (this.timer3.Enabled)
+                                        this.timer3.Stop();
+                                    this.timer3.Start();
                                 }
                             }
 
@@ -946,6 +975,10 @@ namespace QuickExtract2
                             this.Cursor = Cursors.Default;
                             _dontDoMouseMove = false;
 
+                            if (this.timer3.Enabled)
+                                this.timer3.Stop();
+                            this.timer3.Start();
+
                             this.helplineRulerCtrl1.dbPanel1.Invalidate();
                             break;
                         }
@@ -970,6 +1003,10 @@ namespace QuickExtract2
                             this.firstClick = false;
                             this.Cursor = Cursors.Default;
                             _dontDoMouseMove = false;
+
+                            if (this.timer3.Enabled)
+                                this.timer3.Stop();
+                            this.timer3.Start();
 
                             this.helplineRulerCtrl1.dbPanel1.Invalidate();
                             break;
@@ -1335,7 +1372,12 @@ namespace QuickExtract2
             }
             else if (this._computeFullPath && this._curPos <= this.SeedPoints?.Count)
                 //if(!this._finished)
-                this.btnComputeStep.PerformClick();
+                //this.btnComputeStep.PerformClick();
+                this.button6_Click(this.btnComputeStep, new EventArgs());
+
+            if (this.timer3.Enabled)
+                this.timer3.Stop();
+            this.timer3.Start();
         }
 
         private void ReRunLine()
@@ -1795,7 +1837,9 @@ namespace QuickExtract2
 
         private void loadSeedPointsToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            this._dontDoMouseMove = true;
             this.helplineRulerCtrl1.Enabled = false;
+            this.helplineRulerCtrl1.Refresh();
 
             if (this.openFileDialog1.ShowDialog() == DialogResult.OK)
             {
@@ -1861,7 +1905,9 @@ namespace QuickExtract2
                     }
                 }
 
-                this.helplineRulerCtrl1.Enabled = true;
+                if(this.timer4.Enabled)
+                    this.timer4.Stop();
+                this.timer4.Start();
             }
         }
 
@@ -1894,6 +1940,22 @@ namespace QuickExtract2
                     Console.WriteLine(DateTime.Now.ToString() + " " + ex.ToString());
                 }
             }
+        }
+
+        private void timer3_Tick(object sender, EventArgs e)
+        {
+            this.timer3.Stop();
+            this.label24.Text = "done";
+            this.btnComputeStep.Enabled = this.btnComputePath.Enabled = this.helplineRulerCtrl1.Enabled = true;
+            this.btnComputeStep.Refresh();
+            this.btnComputePath.Refresh();
+        }
+
+        private void timer4_Tick(object sender, EventArgs e)
+        {
+            this.timer4.Stop();
+            this.helplineRulerCtrl1.Enabled = true;
+            this._dontDoMouseMove = false;
         }
     }
 }
