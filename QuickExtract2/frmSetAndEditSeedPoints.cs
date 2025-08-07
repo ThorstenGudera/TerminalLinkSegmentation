@@ -258,10 +258,13 @@ namespace QuickExtract2
                 this.QuickExtractingCtrl.PathList = new List<List<List<PointF>>>();
                 this.QuickExtractingCtrl.PathList.Add(new List<List<PointF>>());
                 this.QuickExtractingCtrl.PathList[0].Add(new List<PointF>());
-                this.QuickExtractingCtrl.PathList[0][0].Add(new PointF(this.helplineRulerCtrl1.dbPanel1.ClientSize.Width - 32, 32));
-                for (int i = 0; i < this.helplineRulerCtrl1.dbPanel1.ClientSize.Width - 128; i++)
-                    this.QuickExtractingCtrl.PathList[0][0].Add(new PointF(this.helplineRulerCtrl1.dbPanel1.ClientSize.Width - 32 - i, 32));
-                this.QuickExtractingCtrl.PathList[0][0].Add(new PointF(32, 32));
+                this.QuickExtractingCtrl.PathList[0][0].Add(new PointF((this.helplineRulerCtrl1.dbPanel1.ClientSize.Width - 32) / this.helplineRulerCtrl1.Zoom,
+                        32 / this.helplineRulerCtrl1.Zoom));
+                int z = this.helplineRulerCtrl1.dbPanel1.ClientSize.Width - 128;
+                for (int i = 0; i < z; i++)
+                    this.QuickExtractingCtrl.PathList[0][0].Add(new PointF(
+                        (this.helplineRulerCtrl1.dbPanel1.ClientSize.Width - 32 - i) / this.helplineRulerCtrl1.Zoom, 32 / this.helplineRulerCtrl1.Zoom));
+                this.QuickExtractingCtrl.PathList[0][0].Add(new PointF(32 / this.helplineRulerCtrl1.Zoom, 32 / this.helplineRulerCtrl1.Zoom));
 
                 this.cmbPaths.Items.Add("SavedPath_" + 0.ToString() + "; " + this.QuickExtractingCtrl.PathList[0][0].Count.ToString());
                 this._pathListBU = CloneList(this.QuickExtractingCtrl.PathList);
@@ -1170,6 +1173,15 @@ namespace QuickExtract2
                 {
                     case 1:
                         {
+                            int j = 0;
+                            if (@params.CurPath != null)
+                                j = @params.CurPath.Count;
+
+                            int jj = j + 1;
+
+                            if (this._finished && this.SeedPoints?.Count > 0)
+                                jj = 0;
+
                             this.QuickExtractingCtrl.Alg?.EnumeratePaths(true);
 
                             @params.CurPath = this.QuickExtractingCtrl.Alg?.CurPath;
@@ -1177,6 +1189,44 @@ namespace QuickExtract2
                             @params.TempPath = this.QuickExtractingCtrl.Alg?.TempPath;
                             if (this.QuickExtractingCtrl.Alg?.picAlg?.CostMaps != null)
                                 @params.Ramps = this.QuickExtractingCtrl.Alg.picAlg.CostMaps.Ramps;
+
+                            if (this.cbAlwaysToSeedPoint.Checked)
+                            {
+                                bool a = (this.SeedPoints != null && @params.SeedPoints != null &&
+                                    this.SeedPoints.Count > jj && @params.SeedPoints.Count > j + 1 &&
+                                    (this.SeedPoints[jj].X != @params.SeedPoints[j + 1].X ||
+                                    this.SeedPoints[jj].Y != @params.SeedPoints[j + 1].Y));
+
+                                if (this.QuickExtractingCtrl.Alg?.CurPath != null &&
+                                    (this.QuickExtractingCtrl.Alg?.CurPath.Count == j || a) &&
+                                    @params.SeedPoints != null && @params.SeedPoints.Count > 1)
+                                {
+                                    if (this.QuickExtractingCtrl.Alg?.CurPath.Count == 0)
+                                        @params.CurPath = new List<List<PointF>>();
+
+                                    if ((this.SeedPoints?.Count > jj && @params.SeedPoints.Count > j + 1 &&
+                                        this.SeedPoints[jj].X == @params.SeedPoints[j + 1].X &&
+                                        this.SeedPoints[jj].Y == @params.SeedPoints[j + 1].Y))
+                                    {
+                                        if (@params.CurPath != null)
+                                            @params.CurPath.Add(new List<PointF>());
+                                        if (@params.CurPath != null && @params.CurPath.Count > j)
+                                        {
+                                            @params.CurPath[j].Add(@params.SeedPoints[@params.SeedPoints.Count - 2]);
+                                            @params.CurPath[j].Add(@params.SeedPoints[@params.SeedPoints.Count - 1]);
+                                        }
+                                    }
+                                    else if (this.SeedPoints != null && this.SeedPoints.Count > jj && @params.CurPath != null)
+                                    {
+                                        //letzter point im path = seedpoint?
+                                        if (@params.CurPath[j][@params.CurPath[j].Count - 1] != this.SeedPoints[j])
+                                        {
+                                            @params.CurPath[j].Add(this.SeedPoints[jj]);
+                                            @params.SeedPoints[j + 1] = this.SeedPoints[jj];
+                                        }
+                                    }
+                                }
+                            }
 
                             e.Result = @params;
                             break;
@@ -1191,6 +1241,15 @@ namespace QuickExtract2
 
                     case 3:
                         {
+                            int j = 0;
+                            if (@params.CurPath != null)
+                                j = @params.CurPath.Count;
+
+                            int jj = j + 1;
+
+                            if (this._finished && this.SeedPoints?.Count > 0)
+                                jj = 0;
+
                             if (this.QuickExtractingCtrl.Alg != null)
                             {
                                 this.QuickExtractingCtrl.Alg.MouseClicked = false;
@@ -1205,6 +1264,44 @@ namespace QuickExtract2
                                     @params.TempPath = this.QuickExtractingCtrl.Alg.TempPath;
                                     if (this.QuickExtractingCtrl.Alg.picAlg?.CostMaps != null)
                                         @params.Ramps = this.QuickExtractingCtrl.Alg.picAlg.CostMaps.Ramps;
+
+                                    if (this.cbAlwaysToSeedPoint.Checked)
+                                    {
+                                        bool a = (this.SeedPoints != null && @params.SeedPoints != null &&
+                                            this.SeedPoints.Count > jj && @params.SeedPoints.Count > j + 1 &&
+                                            (this.SeedPoints[jj].X != @params.SeedPoints[j + 1].X ||
+                                            this.SeedPoints[jj].Y != @params.SeedPoints[j + 1].Y));
+
+                                        if (this.QuickExtractingCtrl.Alg?.CurPath != null &&
+                                            (this.QuickExtractingCtrl.Alg?.CurPath.Count == j || a) &&
+                                            @params.SeedPoints != null && @params.SeedPoints.Count > 1)
+                                        {
+                                            if (this.QuickExtractingCtrl.Alg?.CurPath.Count == 0)
+                                                @params.CurPath = new List<List<PointF>>();
+
+                                            if ((this.SeedPoints?.Count > jj && @params.SeedPoints.Count > j + 1 &&
+                                                this.SeedPoints[jj].X == @params.SeedPoints[j + 1].X &&
+                                                this.SeedPoints[jj].Y == @params.SeedPoints[j + 1].Y))
+                                            {
+                                                if (@params.CurPath != null)
+                                                    @params.CurPath.Add(new List<PointF>());
+                                                if (@params.CurPath != null && @params.CurPath.Count > j)
+                                                {
+                                                    @params.CurPath[j].Add(@params.SeedPoints[@params.SeedPoints.Count - 2]);
+                                                    @params.CurPath[j].Add(@params.SeedPoints[@params.SeedPoints.Count - 1]);
+                                                }
+                                            }
+                                            else if (this.SeedPoints != null && this.SeedPoints.Count > jj && @params.CurPath != null)
+                                            {
+                                                //letzter point im path = seedpoint?
+                                                if (@params.CurPath[j][@params.CurPath[j].Count - 1] != this.SeedPoints[j])
+                                                {
+                                                    @params.CurPath[j].Add(this.SeedPoints[jj]);
+                                                    @params.SeedPoints[j + 1] = this.SeedPoints[jj];
+                                                }
+                                            }
+                                        }
+                                    }
 
                                     e.Result = @params;
                                 }
@@ -1905,7 +2002,7 @@ namespace QuickExtract2
                     }
                 }
 
-                if(this.timer4.Enabled)
+                if (this.timer4.Enabled)
                     this.timer4.Stop();
                 this.timer4.Start();
             }

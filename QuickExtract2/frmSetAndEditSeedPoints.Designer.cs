@@ -121,6 +121,7 @@
             openFileDialog1 = new OpenFileDialog();
             timer3 = new System.Windows.Forms.Timer(components);
             timer4 = new System.Windows.Forms.Timer(components);
+            cbAlwaysToSeedPoint = new CheckBox();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
             splitContainer1.Panel2.SuspendLayout();
@@ -156,6 +157,7 @@
             // splitContainer1.Panel2
             // 
             splitContainer1.Panel2.AutoScroll = true;
+            splitContainer1.Panel2.Controls.Add(cbAlwaysToSeedPoint);
             splitContainer1.Panel2.Controls.Add(label24);
             splitContainer1.Panel2.Controls.Add(label23);
             splitContainer1.Panel2.Controls.Add(cbLoadAsOne);
@@ -345,14 +347,14 @@
             // loadSeedPointsToolStripMenuItem
             // 
             loadSeedPointsToolStripMenuItem.Name = "loadSeedPointsToolStripMenuItem";
-            loadSeedPointsToolStripMenuItem.Size = new Size(180, 22);
+            loadSeedPointsToolStripMenuItem.Size = new Size(158, 22);
             loadSeedPointsToolStripMenuItem.Text = "LoadSeedPoints";
             loadSeedPointsToolStripMenuItem.Click += loadSeedPointsToolStripMenuItem_Click;
             // 
             // saveSeedPointsToolStripMenuItem
             // 
             saveSeedPointsToolStripMenuItem.Name = "saveSeedPointsToolStripMenuItem";
-            saveSeedPointsToolStripMenuItem.Size = new Size(180, 22);
+            saveSeedPointsToolStripMenuItem.Size = new Size(158, 22);
             saveSeedPointsToolStripMenuItem.Text = "SaveSeedPoints";
             saveSeedPointsToolStripMenuItem.Click += saveSeedPointsToolStripMenuItem_Click;
             // 
@@ -534,7 +536,7 @@
             cbAddLine.AutoSize = true;
             cbAddLine.Enabled = false;
             cbAddLine.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            cbAddLine.Location = new Point(120, 674);
+            cbAddLine.Location = new Point(128, 699);
             cbAddLine.Margin = new Padding(4, 3, 4, 3);
             cbAddLine.Name = "cbAddLine";
             cbAddLine.Size = new Size(69, 19);
@@ -549,7 +551,7 @@
             cbAutoAddLine.Checked = true;
             cbAutoAddLine.CheckState = CheckState.Checked;
             cbAutoAddLine.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            cbAutoAddLine.Location = new Point(198, 674);
+            cbAutoAddLine.Location = new Point(206, 699);
             cbAutoAddLine.Name = "cbAutoAddLine";
             cbAutoAddLine.Size = new Size(96, 19);
             cbAutoAddLine.TabIndex = 341;
@@ -1117,6 +1119,17 @@
             // 
             timer4.Tick += timer4_Tick;
             // 
+            // cbAlwaysToSeedPoint
+            // 
+            cbAlwaysToSeedPoint.AutoSize = true;
+            cbAlwaysToSeedPoint.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            cbAlwaysToSeedPoint.Location = new Point(121, 674);
+            cbAlwaysToSeedPoint.Name = "cbAlwaysToSeedPoint";
+            cbAlwaysToSeedPoint.Size = new Size(190, 19);
+            cbAlwaysToSeedPoint.TabIndex = 356;
+            cbAlwaysToSeedPoint.Text = "always compute to SeedPoint";
+            cbAlwaysToSeedPoint.UseVisualStyleBackColor = true;
+            // 
             // frmSetAndEditSeedPoints
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -1247,5 +1260,6 @@
         private System.Windows.Forms.Timer timer3;
         private Label label24;
         private System.Windows.Forms.Timer timer4;
+        private CheckBox cbAlwaysToSeedPoint;
     }
 }
