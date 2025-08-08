@@ -45,6 +45,7 @@
             toolStripDropDownButton3 = new ToolStripDropDownButton();
             loadSeedPointsToolStripMenuItem = new ToolStripMenuItem();
             saveSeedPointsToolStripMenuItem = new ToolStripMenuItem();
+            cbAlwaysToSeedPoint = new CheckBox();
             label24 = new Label();
             label23 = new Label();
             cbLoadAsOne = new CheckBox();
@@ -121,7 +122,7 @@
             openFileDialog1 = new OpenFileDialog();
             timer3 = new System.Windows.Forms.Timer(components);
             timer4 = new System.Windows.Forms.Timer(components);
-            cbAlwaysToSeedPoint = new CheckBox();
+            label25 = new Label();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
             splitContainer1.Panel2.SuspendLayout();
@@ -158,6 +159,7 @@
             // 
             splitContainer1.Panel2.AutoScroll = true;
             splitContainer1.Panel2.Controls.Add(cbAlwaysToSeedPoint);
+            splitContainer1.Panel2.Controls.Add(label25);
             splitContainer1.Panel2.Controls.Add(label24);
             splitContainer1.Panel2.Controls.Add(label23);
             splitContainer1.Panel2.Controls.Add(cbLoadAsOne);
@@ -357,6 +359,17 @@
             saveSeedPointsToolStripMenuItem.Size = new Size(158, 22);
             saveSeedPointsToolStripMenuItem.Text = "SaveSeedPoints";
             saveSeedPointsToolStripMenuItem.Click += saveSeedPointsToolStripMenuItem_Click;
+            // 
+            // cbAlwaysToSeedPoint
+            // 
+            cbAlwaysToSeedPoint.AutoSize = true;
+            cbAlwaysToSeedPoint.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            cbAlwaysToSeedPoint.Location = new Point(121, 674);
+            cbAlwaysToSeedPoint.Name = "cbAlwaysToSeedPoint";
+            cbAlwaysToSeedPoint.Size = new Size(190, 19);
+            cbAlwaysToSeedPoint.TabIndex = 356;
+            cbAlwaysToSeedPoint.Text = "always compute to SeedPoint";
+            cbAlwaysToSeedPoint.UseVisualStyleBackColor = true;
             // 
             // label24
             // 
@@ -1119,16 +1132,15 @@
             // 
             timer4.Tick += timer4_Tick;
             // 
-            // cbAlwaysToSeedPoint
+            // label25
             // 
-            cbAlwaysToSeedPoint.AutoSize = true;
-            cbAlwaysToSeedPoint.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            cbAlwaysToSeedPoint.Location = new Point(121, 674);
-            cbAlwaysToSeedPoint.Name = "cbAlwaysToSeedPoint";
-            cbAlwaysToSeedPoint.Size = new Size(190, 19);
-            cbAlwaysToSeedPoint.TabIndex = 356;
-            cbAlwaysToSeedPoint.Text = "always compute to SeedPoint";
-            cbAlwaysToSeedPoint.UseVisualStyleBackColor = true;
+            label25.AutoSize = true;
+            label25.BorderStyle = BorderStyle.FixedSingle;
+            label25.Location = new Point(13, 513);
+            label25.Name = "label25";
+            label25.Size = new Size(21, 17);
+            label25.TabIndex = 355;
+            label25.Text = "    ";
             // 
             // frmSetAndEditSeedPoints
             // 
@@ -1261,5 +1273,6 @@
         private Label label24;
         private System.Windows.Forms.Timer timer4;
         private CheckBox cbAlwaysToSeedPoint;
+        private Label label25;
     }
 }

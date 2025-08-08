@@ -33,6 +33,7 @@
             btnCurAsOrig = new Button();
             btnEditPath2 = new Button();
             gbRemOutline = new GroupBox();
+            cbAlwaysToSeedPoint = new CheckBox();
             label1 = new Label();
             btnRemOutline = new Button();
             btnGetPath = new Button();
@@ -160,7 +161,7 @@
             groupBox1.Margin = new Padding(4, 3, 4, 3);
             groupBox1.Name = "groupBox1";
             groupBox1.Padding = new Padding(4, 3, 4, 3);
-            groupBox1.Size = new Size(830, 150);
+            groupBox1.Size = new Size(830, 160);
             groupBox1.TabIndex = 0;
             groupBox1.TabStop = false;
             groupBox1.Text = "DrawAndPath";
@@ -190,18 +191,30 @@
             // 
             // gbRemOutline
             // 
+            gbRemOutline.Controls.Add(cbAlwaysToSeedPoint);
             gbRemOutline.Controls.Add(label1);
             gbRemOutline.Controls.Add(btnRemOutline);
             gbRemOutline.Controls.Add(btnGetPath);
             gbRemOutline.Controls.Add(cbAddLine);
             gbRemOutline.Controls.Add(cbAutoAddLine);
             gbRemOutline.Controls.Add(numRemOutline);
-            gbRemOutline.Location = new Point(21, 94);
+            gbRemOutline.Location = new Point(21, 92);
             gbRemOutline.Name = "gbRemOutline";
-            gbRemOutline.Size = new Size(463, 44);
+            gbRemOutline.Size = new Size(463, 64);
             gbRemOutline.TabIndex = 323;
             gbRemOutline.TabStop = false;
             gbRemOutline.Text = "additional";
+            // 
+            // cbAlwaysToSeedPoint
+            // 
+            cbAlwaysToSeedPoint.AutoSize = true;
+            cbAlwaysToSeedPoint.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            cbAlwaysToSeedPoint.Location = new Point(7, 40);
+            cbAlwaysToSeedPoint.Name = "cbAlwaysToSeedPoint";
+            cbAlwaysToSeedPoint.Size = new Size(190, 19);
+            cbAlwaysToSeedPoint.TabIndex = 357;
+            cbAlwaysToSeedPoint.Text = "always compute to SeedPoint";
+            cbAlwaysToSeedPoint.UseVisualStyleBackColor = true;
             // 
             // label1
             // 
@@ -1188,5 +1201,6 @@
         internal Button btnReRunLast;
         internal Button btnEditPath2;
         internal Button btnCurAsOrig;
+        internal CheckBox cbAlwaysToSeedPoint;
     }
 }

@@ -376,8 +376,11 @@ namespace QuickExtract2
                     this.BmpForValueComputation != null && this.ImgDataPic != null)
                 {
                     this._computeFullPath = true;
-                    //this.btnComputeStep.PerformClick();
-
+                    this.button6_Click(this.btnComputeStep, new EventArgs());
+                }
+                else if(this.QuickExtractingCtrl?.CurPath?.Count == 0)
+                {
+                    this._computeFullPath = true;
                     this.button6_Click(this.btnComputeStep, new EventArgs());
                 }
             }
@@ -575,6 +578,8 @@ namespace QuickExtract2
                     this.timer3.Stop();
                 this.timer3.Start();
             }
+
+            this.label25.Text = "CurPos: " + this._curPos.ToString();
         }
 
         private void CheckSeedPoint(Bitmap? imgDataPic, List<PointF>? seedPoints, int j)
@@ -1821,6 +1826,9 @@ namespace QuickExtract2
 
         private void btnRemSgmnt_Click(object sender, EventArgs e)
         {
+            if (this.SeedPoints != null && this._curPos > this.SeedPoints.Count + 1)
+                this._curPos = this.SeedPoints.Count + 1;
+
             if (this._curPos > 0)
             {
                 if (this.backgroundWorker1.IsBusy)
@@ -1840,7 +1848,18 @@ namespace QuickExtract2
 
                     this.helplineRulerCtrl1.dbPanel1.Invalidate();
                 }
+                else if (this.QuickExtractingCtrl?.CurPath?.Count == 0)
+                {
+                    this._curPos--;
+                    this._finished = false;
+                    this._drawPathPart = true;
+                }
             }
+
+            if (this._curPos == 0)
+                this.firstClick = true;
+
+            this.label25.Text = "CurPos: " + this._curPos.ToString();
         }
 
         private void cbAutoAddLine_CheckedChanged(object sender, EventArgs e)

@@ -2330,6 +2330,15 @@ namespace QuickExtract2
                 {
                     case 1:
                         {
+                            int j = 0;
+                            if (@params.CurPath != null)
+                                j = @params.CurPath.Count;
+
+                            int jj = j + 1;
+
+                            if (jj >= this.quickExtractingCtrl1.SeedPoints?.Count && this.quickExtractingCtrl1.SeedPoints?.Count > 0)
+                                jj = 0;
+
                             this.quickExtractingCtrl1.Alg?.EnumeratePaths(true);
 
                             @params.CurPath = this.quickExtractingCtrl1.Alg?.CurPath;
@@ -2337,6 +2346,47 @@ namespace QuickExtract2
                             @params.TempPath = this.quickExtractingCtrl1.Alg?.TempPath;
                             if (this.quickExtractingCtrl1.Alg?.picAlg?.CostMaps != null)
                                 @params.Ramps = this.quickExtractingCtrl1.Alg.picAlg.CostMaps.Ramps;
+
+                            if (this.quickExtractingCtrl1.cbAlwaysToSeedPoint.Checked)
+                            {
+                                bool a = (this.quickExtractingCtrl1.SeedPoints != null && @params.SeedPoints != null &&
+                                    this.quickExtractingCtrl1.SeedPoints.Count > jj && @params.SeedPoints.Count > j + 1 &&
+                                    (this.quickExtractingCtrl1.SeedPoints[jj].X != @params.SeedPoints[j + 1].X ||
+                                    this.quickExtractingCtrl1.SeedPoints[jj].Y != @params.SeedPoints[j + 1].Y));
+
+                                if (this.quickExtractingCtrl1.Alg?.CurPath != null &&
+                                    (this.quickExtractingCtrl1.Alg?.CurPath.Count == j || a) &&
+                                    @params.SeedPoints != null && @params.SeedPoints.Count > 1)
+                                {
+                                    if (this.quickExtractingCtrl1.Alg?.CurPath.Count == 0)
+                                        @params.CurPath = new List<List<PointF>>();
+
+                                    if ((this.quickExtractingCtrl1.SeedPoints?.Count > jj && @params.SeedPoints.Count > j + 1 &&
+                                        pt.X == @params.SeedPoints[j + 1].X &&
+                                        pt.Y == @params.SeedPoints[j + 1].Y))
+                                    {
+                                        if (@params.CurPath != null)
+                                            @params.CurPath.Add(new List<PointF>());
+                                        if (@params.CurPath != null && @params.CurPath.Count > j)
+                                        {
+                                            @params.CurPath[j].Add(@params.SeedPoints[@params.SeedPoints.Count - 2]);
+                                            @params.CurPath[j].Add(@params.SeedPoints[@params.SeedPoints.Count - 1]);
+                                        }
+                                    }
+                                    else if (this.quickExtractingCtrl1.SeedPoints != null && this.quickExtractingCtrl1.SeedPoints.Count > jj && @params.CurPath != null)
+                                    {
+                                        //letzter point im path = seedpoint?
+                                        if (@params.CurPath[j][@params.CurPath[j].Count - 1] != pt)
+                                        {
+                                            @params.CurPath[j].Add(pt);
+                                            @params.SeedPoints[j + 1] = pt;
+                                        }
+                                    }
+
+                                    if (@params.CurPath != null && @params.CurPath[@params.CurPath.Count - 1].Count == 0)
+                                        @params.CurPath.RemoveAt(@params.CurPath.Count - 1);
+                                }
+                            }
 
                             e.Result = @params;
                             break;
@@ -2351,6 +2401,15 @@ namespace QuickExtract2
 
                     case 3:
                         {
+                            int j = 0;
+                            if (@params.CurPath != null)
+                                j = @params.CurPath.Count;
+
+                            int jj = j + 1;
+
+                            if (jj >= this.quickExtractingCtrl1.SeedPoints?.Count && this.quickExtractingCtrl1.SeedPoints?.Count > 0)
+                                jj = 0;
+
                             if (this.quickExtractingCtrl1.Alg != null)
                             {
                                 this.quickExtractingCtrl1.Alg.MouseClicked = false;
@@ -2365,6 +2424,47 @@ namespace QuickExtract2
                                     @params.TempPath = this.quickExtractingCtrl1.Alg.TempPath;
                                     if (this.quickExtractingCtrl1.Alg.picAlg?.CostMaps != null)
                                         @params.Ramps = this.quickExtractingCtrl1.Alg.picAlg.CostMaps.Ramps;
+
+                                    if (this.quickExtractingCtrl1.cbAlwaysToSeedPoint.Checked)
+                                    {
+                                        bool a = (this.quickExtractingCtrl1.SeedPoints != null && @params.SeedPoints != null &&
+                                            this.quickExtractingCtrl1.SeedPoints.Count > jj && @params.SeedPoints.Count > j + 1 &&
+                                            (this.quickExtractingCtrl1.SeedPoints[jj].X != @params.SeedPoints[j + 1].X ||
+                                            this.quickExtractingCtrl1.SeedPoints[jj].Y != @params.SeedPoints[j + 1].Y));
+
+                                        if (this.quickExtractingCtrl1.Alg?.CurPath != null &&
+                                            (this.quickExtractingCtrl1.Alg?.CurPath.Count == j || a) &&
+                                            @params.SeedPoints != null && @params.SeedPoints.Count > 1)
+                                        {
+                                            if (this.quickExtractingCtrl1.Alg?.CurPath.Count == 0)
+                                                @params.CurPath = new List<List<PointF>>();
+
+                                            if ((this.quickExtractingCtrl1.SeedPoints?.Count > jj && @params.SeedPoints.Count > j + 1 &&
+                                                pt.X == @params.SeedPoints[j + 1].X &&
+                                                pt.Y == @params.SeedPoints[j + 1].Y))
+                                            {
+                                                if (@params.CurPath != null)
+                                                    @params.CurPath.Add(new List<PointF>());
+                                                if (@params.CurPath != null && @params.CurPath.Count > j)
+                                                {
+                                                    @params.CurPath[j].Add(@params.SeedPoints[@params.SeedPoints.Count - 2]);
+                                                    @params.CurPath[j].Add(@params.SeedPoints[@params.SeedPoints.Count - 1]);
+                                                }
+                                            }
+                                            else if (this.quickExtractingCtrl1.SeedPoints != null && this.quickExtractingCtrl1.SeedPoints.Count > jj && @params.CurPath != null)
+                                            {
+                                                //letzter point im path = seedpoint?
+                                                if (@params.CurPath[j][@params.CurPath[j].Count - 1] != pt)
+                                                {
+                                                    @params.CurPath[j].Add(pt);
+                                                    @params.SeedPoints[j + 1] = pt;
+                                                }
+                                            }
+
+                                            if (@params.CurPath != null && @params.CurPath[@params.CurPath.Count - 1].Count == 0)
+                                                @params.CurPath.RemoveAt(@params.CurPath.Count - 1);
+                                        }
+                                    }
 
                                     e.Result = @params;
                                 }
