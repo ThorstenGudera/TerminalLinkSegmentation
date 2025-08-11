@@ -1,5 +1,6 @@
 ﻿using Cache;
 using ChainCodeFinder;
+using QuickExtract2;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -9,6 +10,8 @@ using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -57,6 +60,7 @@ namespace AvoidAGrabCutEasy
         private List<PointF> _points2 = new List<PointF>();
         private List<PointF> _points = new List<PointF>();
         private List<PointF> _redoList = new List<PointF>();
+        private List<Point>? _tp;
 
         public frmDefineFGPic(Bitmap bmp, string? basePathAddition)
         {
@@ -106,7 +110,7 @@ namespace AvoidAGrabCutEasy
             //this.helplineRulerCtrl2.dbPanel1.MouseMove += helplineRulerCtrl2_MouseMove;
             //this.helplineRulerCtrl2.dbPanel1.MouseUp += helplineRulerCtrl2_MouseUp;
 
-            //this.helplineRulerCtrl2.PostPaint += helplineRulerCtrl2_Paint;
+            this.helplineRulerCtrl2.PostPaint += helplineRulerCtrl2_Paint;
 
             this._dontDoZoom = true;
             this.cmbZoom.SelectedIndex = 4;
@@ -119,6 +123,32 @@ namespace AvoidAGrabCutEasy
 
             //while developing...
             //AvailMem.AvailMem.NoMemCheck = true;
+        }
+
+        private void helplineRulerCtrl2_Paint(object sender, PaintEventArgs e)
+        {
+            if (this._tp != null && this._points != null)
+            {
+                using GraphicsPath gP2 = new();
+                gP2.AddLines(this._tp.Select(a => new PointF(a.X, a.Y)).ToArray());
+                gP2.CloseFigure();
+
+                using Matrix mx = new(this.helplineRulerCtrl2.Zoom, 0, 0, this.helplineRulerCtrl2.Zoom, this.helplineRulerCtrl2.dbPanel1.AutoScrollPosition.X, this.helplineRulerCtrl2.dbPanel1.AutoScrollPosition.Y);
+                gP2.Transform(mx);
+
+                e.Graphics.DrawPath(Pens.Lime, gP2);
+
+                using GraphicsPath gP4 = new();
+                gP4.AddLines(this._points.ToArray());
+                gP4.CloseFigure();
+
+                using Matrix mx2 = new(this.helplineRulerCtrl2.Zoom, 0, 0, this.helplineRulerCtrl2.Zoom, this.helplineRulerCtrl2.dbPanel1.AutoScrollPosition.X, this.helplineRulerCtrl2.dbPanel1.AutoScrollPosition.Y);
+                gP4.Transform(mx2);
+
+                e.Graphics.DrawPath(Pens.Red, gP4);
+
+                this.Text = gP2.PointCount.ToString() + " - " + this._points.Count.ToString();
+            }
         }
 
         private void helplineRulerCtrl1_MouseDown(object? sender, MouseEventArgs e)
@@ -385,7 +415,7 @@ namespace AvoidAGrabCutEasy
 
         private void button2_Click(object sender, EventArgs e)
         {
-            if (this.helplineRulerCtrl1.Bmp != null)
+            if (this.helplineRulerCtrl2.Bmp != null)
             {
                 this.saveFileDialog1.Filter = "Png-Images (*.png)|*.png";
                 this.saveFileDialog1.FileName = "Bild1.png";
@@ -1002,17 +1032,49 @@ namespace AvoidAGrabCutEasy
 
         private void btnCrop_Click(object sender, EventArgs e)
         {
-            if (this.helplineRulerCtrl1.Bmp != null)
+            if (this.helplineRulerCtrl1.Bmp != null && this._points != null && this._points.Count > 2)
             {
                 using GraphicsPath gP = new();
                 gP.AddLines(this._points.ToArray());
                 gP.CloseFigure();
 
                 Bitmap bmp = new(this.helplineRulerCtrl1.Bmp.Width, this.helplineRulerCtrl1.Bmp.Height);
+                int w = bmp.Width;
+                int h = bmp.Height;
+
                 using Graphics gx = Graphics.FromImage(bmp);
+                gx.SmoothingMode = SmoothingMode.None;
+                gx.InterpolationMode = InterpolationMode.NearestNeighbor;
                 using TextureBrush tb = new(this.helplineRulerCtrl1.Bmp);
+                using Pen p = new(tb, 1);
 
                 gx.FillPath(tb, gP);
+                gx.DrawPath(p, gP);
+
+                //using Bitmap bC = new Bitmap(this.helplineRulerCtrl1.Bmp);
+                //BitmapData bmD = bmp.LockBits(new Rectangle(0, 0, w, h), ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
+                //BitmapData bmC = bC.LockBits(new Rectangle(0, 0, w, h), ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
+                //int stride = bmD.Stride;
+
+                //Parallel.For(0, h, y =>
+                //{
+                //    byte* p = (byte*)bmD.Scan0;
+                //    p += y * stride;
+                //    byte* pC = (byte*)bmC.Scan0;
+                //    pC += y * stride;
+
+                //    for (int x = 0; x < w; x++)
+                //    {
+                //        if (p[3] > 0 && p[3] < pC[3])
+                //            p[3] = pC[3];
+
+                //        p += 4;
+                //        pC += 4;
+                //    }
+                //});
+
+                //bmp.UnlockBits(bmD);
+                //bC.UnlockBits(bmC);
 
                 this.SetBitmap(this.helplineRulerCtrl2.Bmp, bmp, this.helplineRulerCtrl2, "Bmp");
                 this._undoOPCache?.Add(this.helplineRulerCtrl2.Bmp);
@@ -1036,7 +1098,154 @@ namespace AvoidAGrabCutEasy
                 if (old != null)
                     old.Dispose();
                 old = null;
+
+                this._tp = l?[0].Coord;
             }
         }
+
+        private void btnLoadPath_Click(object sender, EventArgs e)
+        {
+            if (this.OpenFileDialog2.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                string fileName = this.OpenFileDialog2.FileName;
+                this.Cursor = Cursors.WaitCursor;
+                this.Enabled = false;
+                this.Refresh();
+                SavedPath? sp = null;
+                bool bError = false;
+                Stream? stream = null;
+
+                try
+                {
+                    JsonSerializerOptions options = new()
+                    {
+                        NumberHandling =
+                        JsonNumberHandling.AllowReadingFromString |
+                        JsonNumberHandling.WriteAsString,
+                        WriteIndented = true,
+                        ReadCommentHandling = JsonCommentHandling.Skip,
+                        AllowTrailingCommas = true,
+                    };
+
+                    stream = new FileStream(fileName, FileMode.Open, FileAccess.Read, FileShare.Read);
+                    sp = JsonSerializer.Deserialize<SavedPath>(stream, options);
+                }
+                catch (Exception ex)
+                {
+                    bError = true;
+                    Console.WriteLine(DateTime.Now.ToString() + " " + ex.ToString());
+                }
+
+                try
+                {
+                    //stream.Close()
+                    stream?.Dispose();
+                    stream = null;
+                }
+                catch
+                { }
+
+                if (sp != null)
+                {
+                    try
+                    {
+                        PointF[]? pts2 = sp.PathPoints; //(PointF[])o[0];
+                        byte[]? tps = sp.PathTypes; //(byte[])o[1];
+
+                        if (pts2 != null && tps != null)
+                        {
+                            GraphicsPath? gp = new GraphicsPath(pts2, tps);
+
+                            //if (this._points == null)
+                            this._points = new List<PointF>();
+
+                            if (gp.PointCount > 1)
+                            {
+                                //PointF[] ll = new PointF[gp.PointCount];
+                                //gp.PathPoints.CopyTo(ll, 0);
+                                //this._points.AddRange(ll);
+
+                                byte[] types = gp.PathTypes;
+                                for (int i = 0; i <= types.Length - 1; i++)
+                                {
+                                    int j = i;
+                                    List<PointF> p = new List<PointF>();
+
+                                    while ((j < types.Length) && ((types[j] & 0x80) != 0x80))
+                                        // p.Add(gp.PathPoints(j))
+                                        j += 1;
+                                    p.AddRange(gp.PathPoints.Skip(i).Take(j - i));
+
+                                    if (j < gp.PathPoints.Length)
+                                        p.Add(gp.PathPoints[j]);
+                                    i = j;
+
+                                    this._points.AddRange(p.ToArray());
+                                }
+                            }
+                            else
+                            {
+                                gp.Dispose();
+                                gp = null;
+                            }
+                        }
+                    }
+                    catch
+                    {
+                        bError = true;
+                    }
+                }
+
+                if (bError)
+                    MessageBox.Show("Error.", "", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+
+                this.Enabled = true;
+                this.Cursor = Cursors.Default;
+
+                this.cbDraw.Checked = true;
+
+                this.helplineRulerCtrl1.dbPanel1.Invalidate();
+            }
+        }
+
+        private void btnSavePath_Click(object sender, EventArgs e)
+        {
+            if (this._points != null && this._points.Count > 0)
+            {
+                GraphicsPath? gPath = new GraphicsPath();
+                {
+                    if (this.SaveFileDialog2.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                    {
+                        try
+                        {
+                            JsonSerializerOptions options = new()
+                            {
+                                NumberHandling =
+                                    JsonNumberHandling.AllowReadingFromString |
+                                    JsonNumberHandling.WriteAsString,
+                                WriteIndented = true,
+                                ReadCommentHandling = JsonCommentHandling.Skip,
+                                AllowTrailingCommas = true,
+                            };
+
+                            SavedPath sp = new SavedPath();
+                            sp.PathPoints = gPath.PathPoints;
+                            sp.PathTypes = gPath.PathTypes;
+
+                            string FileName = this.SaveFileDialog2.FileName;
+
+                            using FileStream createStream = File.Create(FileName);
+                            JsonSerializer.Serialize(createStream, sp, options);
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine(DateTime.Now.ToString() + " " + ex.ToString());
+                        }
+                    }
+                }
+            }
+        }
+
+
     }
 }

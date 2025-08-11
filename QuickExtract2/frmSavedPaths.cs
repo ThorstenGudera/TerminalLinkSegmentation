@@ -254,6 +254,8 @@ namespace QuickExtract2
                         int i = this.ListBox1.Items.Count;
                         this.ListBox1.Items.Add("savedPath_" + i.ToString());
                     }
+
+                    this.CheckBox2.Checked = true;
                 }
             }
         }

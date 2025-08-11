@@ -1117,7 +1117,7 @@ namespace OutlineOperations
             if (e.Argument != null)
             {
                 object[] o = (object[])e.Argument;
-                Bitmap bmp = new Bitmap((Bitmap)o[0]);
+                using Bitmap bmp = new Bitmap((Bitmap)o[0]);
                 double alphaTh = (int)o[1];
                 bool redrawExcluded = (bool)o[2];
 
@@ -1192,6 +1192,9 @@ namespace OutlineOperations
                         if (this._excludedRegions != null && this._exclLocations != null)
                         {
                             using Graphics gx = Graphics.FromImage(bmp);
+                            gx.SmoothingMode = SmoothingMode.None;
+                            gx.InterpolationMode = InterpolationMode.NearestNeighbor;
+
                             for (int i = 0; i < this._excludedRegions.Count; i++)
                             {
                                 SetTransp(bmp, this._excludedRegions[i], this._exclLocations[i]);
@@ -1199,6 +1202,9 @@ namespace OutlineOperations
                             }
                         }
                     }
+
+                    //since ...
+                    SetColorsToOrig(bmp, this.helplineRulerCtrl1.Bmp);
                 }
 
                 if (bmp != null)
@@ -1241,6 +1247,37 @@ namespace OutlineOperations
                 //this.backgroundWorker4.ProgressChanged += backgroundWorker4_ProgressChanged;
                 this.backgroundWorker4.RunWorkerCompleted += backgroundWorker4_RunWorkerCompleted;
             }
+        }
+
+        private unsafe void SetColorsToOrig(Bitmap bmpWrite, Bitmap bmpRead)
+        {
+            int w = bmpWrite.Width;
+            int h = bmpRead.Height;
+
+            BitmapData bmD = bmpWrite.LockBits(new Rectangle(0, 0, w, h), ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
+            BitmapData bmR = bmpRead.LockBits(new Rectangle(0, 0, w, h), ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
+            int stride = bmD.Stride;
+
+            Parallel.For(0, h, y =>
+            {
+                byte* p = (byte*)bmD.Scan0;
+                p += y * stride;
+                byte* pR = (byte*)bmR.Scan0;
+                pR += y * stride;
+
+                for (int x = 0; x < w; x++)
+                {
+                    p[0] = pR[0];
+                    p[1] = pR[1];
+                    p[2] = pR[2];
+
+                    p += 4;
+                    pR += 4;
+                }
+            });
+
+            bmpWrite.UnlockBits(bmD);
+            bmpRead.UnlockBits(bmR);
         }
 
         private void backgroundWorker5_DoWork(object? sender, DoWorkEventArgs e)

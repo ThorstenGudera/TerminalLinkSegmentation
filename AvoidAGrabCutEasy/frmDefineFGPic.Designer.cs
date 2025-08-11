@@ -38,6 +38,8 @@
             splitContainer1 = new SplitContainer();
             openFileDialog1 = new OpenFileDialog();
             panel1 = new Panel();
+            btnLoadPath = new Button();
+            btnSavePath = new Button();
             label3 = new Label();
             cbDraw = new CheckBox();
             numPenW = new NumericUpDown();
@@ -69,6 +71,8 @@
             saveFileDialog1 = new SaveFileDialog();
             Timer3 = new System.Windows.Forms.Timer(components);
             backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
+            OpenFileDialog2 = new OpenFileDialog();
+            SaveFileDialog2 = new SaveFileDialog();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
             splitContainer1.Panel2.SuspendLayout();
@@ -181,6 +185,8 @@
             // panel1
             // 
             panel1.AutoScroll = true;
+            panel1.Controls.Add(btnLoadPath);
+            panel1.Controls.Add(btnSavePath);
             panel1.Controls.Add(label3);
             panel1.Controls.Add(cbDraw);
             panel1.Controls.Add(numPenW);
@@ -211,6 +217,28 @@
             panel1.TabIndex = 230;
             panel1.MouseDoubleClick += panel1_MouseDoubleClick;
             panel1.MouseDown += panel1_MouseDown;
+            // 
+            // btnLoadPath
+            // 
+            btnLoadPath.Location = new Point(409, 79);
+            btnLoadPath.Margin = new Padding(4, 3, 4, 3);
+            btnLoadPath.Name = "btnLoadPath";
+            btnLoadPath.Size = new Size(88, 27);
+            btnLoadPath.TabIndex = 715;
+            btnLoadPath.Text = "Load Path";
+            btnLoadPath.UseVisualStyleBackColor = true;
+            btnLoadPath.Click += btnLoadPath_Click;
+            // 
+            // btnSavePath
+            // 
+            btnSavePath.Location = new Point(502, 79);
+            btnSavePath.Margin = new Padding(4, 3, 4, 3);
+            btnSavePath.Name = "btnSavePath";
+            btnSavePath.Size = new Size(88, 27);
+            btnSavePath.TabIndex = 716;
+            btnSavePath.Text = "Save Path";
+            btnSavePath.UseVisualStyleBackColor = true;
+            btnSavePath.Click += btnSavePath_Click;
             // 
             // label3
             // 
@@ -509,6 +537,18 @@
             backgroundWorker1.WorkerReportsProgress = true;
             backgroundWorker1.WorkerSupportsCancellation = true;
             // 
+            // OpenFileDialog2
+            // 
+            OpenFileDialog2.FileName = "File1";
+            OpenFileDialog2.Filter = "GraphicsPath-Files (*.tggrp)|*.tggrp";
+            // 
+            // SaveFileDialog2
+            // 
+            SaveFileDialog2.DefaultExt = "tggrp";
+            SaveFileDialog2.FileName = "File1.tggrp";
+            SaveFileDialog2.Filter = "GraphicsPath files (*.tggrp)|*.tggrp";
+            SaveFileDialog2.RestoreDirectory = true;
+            // 
             // frmDefineFGPic
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -578,5 +618,9 @@
         private Button btnCrop;
         private Button btnRedoDraw;
         private Button btnUndoDraw;
+        internal Button btnLoadPath;
+        internal Button btnSavePath;
+        internal OpenFileDialog OpenFileDialog2;
+        internal SaveFileDialog SaveFileDialog2;
     }
 }

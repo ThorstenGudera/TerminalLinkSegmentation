@@ -2751,7 +2751,7 @@ namespace QuickExtract2
 
             this.quickExtractingCtrl1.cbRunAlg.Checked = false;
             this.quickExtractingCtrl1.cbRunOnMouseMove.Checked = false;
-            this.quickExtractingCtrl1.cbRunAlg.Enabled = false;
+            //this.quickExtractingCtrl1.cbRunAlg.Enabled = false;
             this.quickExtractingCtrl1.cbRunOnMouseMove.Enabled = false;
 
             this.quickExtractingCtrl1.btnCrop.Enabled = true;

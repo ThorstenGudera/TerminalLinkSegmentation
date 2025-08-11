@@ -113,8 +113,6 @@
             // CheckBox3
             // 
             CheckBox3.AutoSize = true;
-            CheckBox3.Checked = true;
-            CheckBox3.CheckState = CheckState.Checked;
             CheckBox3.Location = new Point(139, 333);
             CheckBox3.Margin = new Padding(4, 3, 4, 3);
             CheckBox3.Name = "CheckBox3";
@@ -231,7 +229,7 @@
             CheckBox1.Location = new Point(138, 261);
             CheckBox1.Margin = new Padding(4, 3, 4, 3);
             CheckBox1.Name = "CheckBox1";
-            CheckBox1.Size = new Size(80, 19);
+            CheckBox1.Size = new Size(79, 19);
             CheckBox1.TabIndex = 3;
             CheckBox1.Text = "shift 50 px";
             CheckBox1.UseVisualStyleBackColor = true;
@@ -396,7 +394,7 @@
             label5.AutoSize = true;
             label5.Location = new Point(85, 22);
             label5.Name = "label5";
-            label5.Size = new Size(57, 15);
+            label5.Size = new Size(58, 15);
             label5.TabIndex = 652;
             label5.Text = "Tolerance";
             // 
