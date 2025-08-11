@@ -931,7 +931,7 @@ namespace PseudoShadow
             if (e.Argument != null)
             {
                 object[] o = (object[])e.Argument;
-                Bitmap bmp = (Bitmap)o[0];
+                using Bitmap bmp = (Bitmap)o[0];
                 double gamma = (double)o[1];
                 bool redrawExcluded = (bool)o[2];
 
@@ -1006,6 +1006,15 @@ namespace PseudoShadow
                             for (int i = 0; i < this._excludedRegions.Count; i++)
                                 gx.DrawImage(this._excludedRegions[i], this._exclLocations[i]);
                         }
+                    }
+
+                    //since ...
+                    Bitmap? b = this.luBitmapDesignerCtrl1.GetUpperImage();
+
+                    if (b != null)
+                    {
+                        using Bitmap bC = new Bitmap(b);
+                        SetColorsToOrig(bmp, b);
                     }
                 }
 

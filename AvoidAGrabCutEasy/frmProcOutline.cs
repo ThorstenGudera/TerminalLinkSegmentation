@@ -2934,7 +2934,7 @@ namespace AvoidAGrabCutEasy
             if (this._bmpRef != null && e.Argument != null)
             {
                 object[] o = (object[])e.Argument;
-                Bitmap bmp = (Bitmap)o[0];
+                using Bitmap bmp = (Bitmap)o[0];
                 double gamma = (double)o[1];
                 bool redrawExcluded = (bool)o[2];
 
@@ -2964,6 +2964,9 @@ namespace AvoidAGrabCutEasy
                                 gx.DrawImage(this._excludedRegions[i], this._exclLocations[i]);
                         }
                     }
+
+                    //since ...
+                    SetColorsToOrig(bmp, this.helplineRulerCtrl1.Bmp);
                 }
 
                 if (bmp != null)
