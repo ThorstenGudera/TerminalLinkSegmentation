@@ -2570,9 +2570,11 @@ namespace QuickExtract2
                     this.quickExtractingCtrl1.TempPath = qe.TempPath;
                     this.quickExtractingCtrl1.CurPath = qe.CurPath;
                 }
-
-                if (qe != null)
+                else if (qe != null)
                 {
+                    //MessageBox.Show(qe.SeedPoints?.Equals(this.quickExtractingCtrl1.SeedPoints).ToString()); //maybe use this as a constraint
+                    //test
+                    //explicitely set these, else points could be lost
                     this.quickExtractingCtrl1.Ramps = qe.Ramps;
                     this.quickExtractingCtrl1.SeedPoints = qe.SeedPoints;
                     this.quickExtractingCtrl1.TempPath = qe.TempPath;
