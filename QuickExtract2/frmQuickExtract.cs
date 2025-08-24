@@ -2536,6 +2536,10 @@ namespace QuickExtract2
                 {
                     int? l = qe.CurPath?.Count - 1;
 
+                    if (qe.CurPath != null && qe.CurPath[qe.CurPath.Count - 1].Count > 1 && qe.SeedPoints != null && qe.SeedPoints.Count > 2)
+                        if (qe.CurPath[qe.CurPath.Count - 1][qe.CurPath[qe.CurPath.Count - 1].Count - 2] == qe.SeedPoints[qe.SeedPoints.Count - 2])
+                            qe.CurPath[qe.CurPath.Count - 1].RemoveAt(qe.CurPath[qe.CurPath.Count - 1].Count - 2);
+
                     if (l.HasValue && l.Value > 0)
                     {
                         int? c = qe.CurPath?[l.Value].Count - 1;
@@ -2572,6 +2576,10 @@ namespace QuickExtract2
                 }
                 else if (qe != null)
                 {
+                    if (qe.CurPath != null && qe.CurPath[qe.CurPath.Count - 1].Count > 1 && qe.SeedPoints != null && qe.SeedPoints.Count > 2)
+                        if (qe.CurPath[qe.CurPath.Count - 1][qe.CurPath[qe.CurPath.Count - 1].Count - 2] == qe.SeedPoints[qe.SeedPoints.Count - 2])
+                            qe.CurPath[qe.CurPath.Count - 1].RemoveAt(qe.CurPath[qe.CurPath.Count - 1].Count - 2);
+
                     //MessageBox.Show(qe.SeedPoints?.Equals(this.quickExtractingCtrl1.SeedPoints).ToString()); //maybe use this as a constraint
                     //test
                     //explicitely set these, else points could be lost
