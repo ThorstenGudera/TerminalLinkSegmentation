@@ -2361,6 +2361,30 @@ namespace QuickExtract2
                                     if (this.quickExtractingCtrl1.Alg?.CurPath.Count == 0)
                                         @params.CurPath = new List<List<PointF>>();
 
+                                    if (@params.CurPath != null && @params.CurPath.Count != @params.SeedPoints.Count - 1)
+                                    {
+                                        if (@params.CurPath.Count >= @params.SeedPoints.Count)
+                                        {
+                                            int i = @params.SeedPoints.Count;
+                                            for (int z = i; z < @params.CurPath.Count; z++)
+                                            {
+                                                if (@params.CurPath[z] != null && @params.CurPath[z].Count > 0)
+                                                    @params.SeedPoints.Add(@params.CurPath[z][@params.CurPath[z].Count - 1]);
+                                            }
+                                        }
+                                        else
+                                        {
+                                            int i = @params.CurPath.Count;
+                                            for (int z = i; z < @params.SeedPoints.Count - 1; z++)
+                                            {
+                                                @params.CurPath.Add(new List<PointF>());
+                                                @params.CurPath[i].Add(@params.SeedPoints[z]);
+                                                //if (z < @params.SeedPoints.Count - 1)
+                                                @params.CurPath[i].Add(@params.SeedPoints[z + 1]);
+                                            }
+                                        }
+                                    }
+
                                     if ((this.quickExtractingCtrl1.SeedPoints?.Count > jj && @params.SeedPoints.Count > j + 1 &&
                                         pt.X == @params.SeedPoints[j + 1].X &&
                                         pt.Y == @params.SeedPoints[j + 1].Y))
@@ -2438,6 +2462,30 @@ namespace QuickExtract2
                                         {
                                             if (this.quickExtractingCtrl1.Alg?.CurPath.Count == 0)
                                                 @params.CurPath = new List<List<PointF>>();
+
+                                            if (@params.CurPath != null && @params.CurPath.Count != @params.SeedPoints.Count - 1)
+                                            {
+                                                if (@params.CurPath.Count >= @params.SeedPoints.Count)
+                                                {
+                                                    int i = @params.SeedPoints.Count;
+                                                    for (int z = i; z < @params.CurPath.Count; z++)
+                                                    {
+                                                        if (@params.CurPath[z] != null && @params.CurPath[z].Count > 0)
+                                                            @params.SeedPoints.Add(@params.CurPath[z][@params.CurPath[z].Count - 1]);
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    int i = @params.CurPath.Count;
+                                                    for (int z = i; z < @params.SeedPoints.Count - 1; z++)
+                                                    {
+                                                        @params.CurPath.Add(new List<PointF>());
+                                                        @params.CurPath[i].Add(@params.SeedPoints[z]);
+                                                        //if (z < @params.SeedPoints.Count - 1)
+                                                        @params.CurPath[i].Add(@params.SeedPoints[z + 1]);
+                                                    }
+                                                }
+                                            }
 
                                             if ((this.quickExtractingCtrl1.SeedPoints?.Count > jj && @params.SeedPoints.Count > j + 1 &&
                                                 pt.X == @params.SeedPoints[j + 1].X &&
@@ -2545,7 +2593,7 @@ namespace QuickExtract2
                         int? c = qe.CurPath?[l.Value].Count - 1;
                         int? c2 = qe.CurPath?[l.Value - 1].Count - 1;
 
-                        if (c.HasValue && c2.HasValue)
+                        if (c.HasValue && c2.HasValue && c.Value > -1 && c2.Value > -1)
                         {
                             PointF? pt = qe.CurPath?[l.Value][c.Value];
 

@@ -31,6 +31,8 @@
             components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmAvoidAGrabCutEasy));
             panel1 = new Panel();
+            label13 = new Label();
+            btnLoadHLC2ToOutline = new Button();
             btnLoadToHLC1 = new Button();
             numOutlineWH = new NumericUpDown();
             cbOutline = new CheckBox();
@@ -161,8 +163,6 @@
             timer1 = new System.Windows.Forms.Timer(components);
             backgroundWorker4 = new System.ComponentModel.BackgroundWorker();
             timer2 = new System.Windows.Forms.Timer(components);
-            label13 = new Label();
-            btnLoadHLC2ToOutline = new Button();
             panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numOutlineWH).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numComponents2).BeginInit();
@@ -304,6 +304,26 @@
             panel1.TabIndex = 0;
             panel1.MouseDoubleClick += panel1_MouseDoubleClick;
             panel1.MouseDown += panel1_MouseDown;
+            // 
+            // label13
+            // 
+            label13.AutoSize = true;
+            label13.Location = new Point(1287, 125);
+            label13.Name = "label13";
+            label13.Size = new Size(140, 15);
+            label13.TabIndex = 753;
+            label13.Text = "Load HLC2 to frmOutline";
+            // 
+            // btnLoadHLC2ToOutline
+            // 
+            btnLoadHLC2ToOutline.Enabled = false;
+            btnLoadHLC2ToOutline.Location = new Point(1441, 121);
+            btnLoadHLC2ToOutline.Name = "btnLoadHLC2ToOutline";
+            btnLoadHLC2ToOutline.Size = new Size(55, 23);
+            btnLoadHLC2ToOutline.TabIndex = 752;
+            btnLoadHLC2ToOutline.Text = "Go";
+            btnLoadHLC2ToOutline.UseVisualStyleBackColor = true;
+            btnLoadHLC2ToOutline.Click += btnLoadHLC2ToOutline_Click;
             // 
             // btnLoadToHLC1
             // 
@@ -462,7 +482,6 @@
             // 
             // btnGetOutline
             // 
-            btnGetOutline.Enabled = false;
             btnGetOutline.Location = new Point(14, 191);
             btnGetOutline.Name = "btnGetOutline";
             btnGetOutline.Size = new Size(68, 23);
@@ -1695,26 +1714,6 @@
             // 
             timer2.Interval = 5000;
             timer2.Tick += timer2_Tick;
-            // 
-            // label13
-            // 
-            label13.AutoSize = true;
-            label13.Location = new Point(1287, 125);
-            label13.Name = "label13";
-            label13.Size = new Size(140, 15);
-            label13.TabIndex = 753;
-            label13.Text = "Load HLC2 to frmOutline";
-            // 
-            // btnLoadHLC2ToOutline
-            // 
-            btnLoadHLC2ToOutline.Enabled = false;
-            btnLoadHLC2ToOutline.Location = new Point(1441, 121);
-            btnLoadHLC2ToOutline.Name = "btnLoadHLC2ToOutline";
-            btnLoadHLC2ToOutline.Size = new Size(55, 23);
-            btnLoadHLC2ToOutline.TabIndex = 752;
-            btnLoadHLC2ToOutline.Text = "Go";
-            btnLoadHLC2ToOutline.UseVisualStyleBackColor = true;
-            btnLoadHLC2ToOutline.Click += btnLoadHLC2ToOutline_Click;
             // 
             // frmAvoidAGrabCutEasy
             // 
