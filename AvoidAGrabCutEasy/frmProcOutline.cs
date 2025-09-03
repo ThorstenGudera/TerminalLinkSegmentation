@@ -2774,7 +2774,8 @@ namespace AvoidAGrabCutEasy
                         p[2] = pIn[2];
 
                         if (procOrig || (!procOrig && pIn[3] > 0))
-                            p[3] = pA[0];
+                            //p[3] = pA[0];
+                            p[3] = (byte)Math.Max(Math.Min(((double)pA[0] / 255.0 * (double)pIn[3]), 255), 0);
                         //  maybe use
                         //  p[3] = (byte)Math.Max(Math.Min(255.0 * Math.Pow((double)pA[3] / 255.0, gamma), 255), 0);
 

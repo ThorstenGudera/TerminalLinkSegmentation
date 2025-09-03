@@ -2636,7 +2636,8 @@ namespace AvoidAGrabCutEasy
                         p[1] = pIn[1];
                         p[2] = pIn[2];
 
-                        p[3] = pA[0];
+                        //p[3] = pA[0];
+                        p[3] = (byte)Math.Max(Math.Min(((double)pA[0] / 255.0 * (double)pIn[3]), 255), 0);
 
                         p += 4;
                         pIn += 4;
