@@ -2584,7 +2584,7 @@ namespace QuickExtract2
                 {
                     int? l = qe.CurPath?.Count - 1;
 
-                    if (qe.CurPath != null && qe.CurPath[qe.CurPath.Count - 1].Count > 1 && qe.SeedPoints != null && qe.SeedPoints.Count > 2)
+                    if (qe.CurPath != null && qe.CurPath.Count > 0 && qe.CurPath[qe.CurPath.Count - 1].Count > 1 && qe.SeedPoints != null && qe.SeedPoints.Count > 2)
                         if (qe.CurPath[qe.CurPath.Count - 1][qe.CurPath[qe.CurPath.Count - 1].Count - 2] == qe.SeedPoints[qe.SeedPoints.Count - 2])
                             qe.CurPath[qe.CurPath.Count - 1].RemoveAt(qe.CurPath[qe.CurPath.Count - 1].Count - 2);
 

@@ -28,11 +28,14 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmEdgePic));
             splitContainer1 = new SplitContainer();
             helplineRulerCtrl1 = new HelplineRulerControl.HelplineRulerCtrl();
             btnSave = new Button();
+            btnCancel = new Button();
             btnClose = new Button();
             saveFileDialog1 = new SaveFileDialog();
+            label1 = new Label();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
             splitContainer1.Panel2.SuspendLayout();
@@ -53,7 +56,9 @@
             // 
             // splitContainer1.Panel2
             // 
+            splitContainer1.Panel2.Controls.Add(label1);
             splitContainer1.Panel2.Controls.Add(btnSave);
+            splitContainer1.Panel2.Controls.Add(btnCancel);
             splitContainer1.Panel2.Controls.Add(btnClose);
             splitContainer1.Size = new Size(933, 772);
             splitContainer1.SplitterDistance = 720;
@@ -85,7 +90,7 @@
             // btnSave
             // 
             btnSave.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            btnSave.Location = new Point(653, 7);
+            btnSave.Location = new Point(629, 7);
             btnSave.Margin = new Padding(4, 3, 4, 3);
             btnSave.Name = "btnSave";
             btnSave.Size = new Size(88, 27);
@@ -93,6 +98,20 @@
             btnSave.Text = "Save";
             btnSave.UseVisualStyleBackColor = true;
             btnSave.Click += btnSave_Click;
+            // 
+            // btnCancel
+            // 
+            btnCancel.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            btnCancel.DialogResult = DialogResult.Cancel;
+            btnCancel.Location = new Point(737, 7);
+            btnCancel.Margin = new Padding(4, 3, 4, 3);
+            btnCancel.Name = "btnCancel";
+            btnCancel.Size = new Size(88, 27);
+            btnCancel.TabIndex = 0;
+            btnCancel.Text = "Cancel";
+            btnCancel.UseVisualStyleBackColor = true;
+            btnCancel.Visible = false;
+            btnCancel.Click += btnClose_Click;
             // 
             // btnClose
             // 
@@ -111,6 +130,16 @@
             saveFileDialog1.FileName = "Bild1.png";
             saveFileDialog1.Filter = "Png-Images (*.png)|*.png";
             // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Location = new Point(42, 15);
+            label1.Name = "label1";
+            label1.Size = new Size(248, 15);
+            label1.TabIndex = 2;
+            label1.Text = "Please click a foreground-Point in the Picture.";
+            label1.Visible = false;
+            // 
             // frmEdgePic
             // 
             AcceptButton = btnClose;
@@ -118,6 +147,7 @@
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(933, 772);
             Controls.Add(splitContainer1);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Margin = new Padding(4, 3, 4, 3);
             Name = "frmEdgePic";
             StartPosition = FormStartPosition.CenterParent;
@@ -125,17 +155,21 @@
             Load += frmEdgePic_Load;
             splitContainer1.Panel1.ResumeLayout(false);
             splitContainer1.Panel2.ResumeLayout(false);
+            splitContainer1.Panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).EndInit();
             splitContainer1.ResumeLayout(false);
             ResumeLayout(false);
+
         }
 
         #endregion
 
         private System.Windows.Forms.SplitContainer splitContainer1;
-        private System.Windows.Forms.Button btnClose;
-        private HelplineRulerControl.HelplineRulerCtrl helplineRulerCtrl1;
         private System.Windows.Forms.Button btnSave;
         private System.Windows.Forms.SaveFileDialog saveFileDialog1;
+        internal System.Windows.Forms.Button btnCancel;
+        internal System.Windows.Forms.Button btnClose;
+        internal HelplineRulerControl.HelplineRulerCtrl helplineRulerCtrl1;
+        private Label label1;
     }
 }

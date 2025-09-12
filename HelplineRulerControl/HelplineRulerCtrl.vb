@@ -4,6 +4,7 @@ Imports System.Drawing
 Imports System.Windows.Forms
 Imports System.Drawing.Drawing2D
 Imports System.Windows.Forms.VisualStyles.VisualStyleElement
+Imports System.Runtime.Intrinsics.X86
 
 
 Partial Public Class HelplineRulerCtrl
@@ -117,11 +118,17 @@ Partial Public Class HelplineRulerCtrl
     Public Event HelpLineMouseDown As EventHandler(Of MouseEventArgs)
     Public Event HelpLineMouseMove As EventHandler(Of MouseEventArgs)
     Public Event HelpLineMouseUp As EventHandler(Of MouseEventArgs)
+    Public Event MeasureChanged As EventHandler(Of Boolean)
 
     Private _shiftKey As Boolean
 
     Private _zoomWidth As Boolean
     Private _cnt As Integer
+    Private _tracking As Boolean
+    Public Property PtSt As Point
+    Public Property PtEnd As Point
+    Public Property Measure As Boolean
+    Public Property HandleMeasureByContainingForm As Boolean
 
     Public Sub New()
         InitializeComponent()
@@ -731,6 +738,13 @@ Partial Public Class HelplineRulerCtrl
             Return True
         End If
 
+        If Me.Bmp IsNot Nothing Then
+            If keyData = (Keys.M Or Keys.Control) Then
+                Me.Measure = Not Me.Measure
+                RaiseEvent MeasureChanged(Me, Me.Measure)
+            End If
+        End If
+
         If Me.dbPanel1 IsNot Nothing Then
             If keyData = Keys.Down Then
                 dbPanel1.AutoScrollPosition = New Point(-dbPanel1.AutoScrollPosition.X, -dbPanel1.AutoScrollPosition.Y + 4)
@@ -890,6 +904,47 @@ Partial Public Class HelplineRulerCtrl
         End If
 
         RaiseEvent PostPaint(Me, e)
+
+        If Me._tracking AndAlso Not HandleMeasureByContainingForm AndAlso Me.Zoom <> 0 Then
+            Dim xSt As Single = (Me.PtSt.X - Me.dbPanel1.AutoScrollPosition.X) / Me.Zoom
+            Dim ySt As Single = (Me.PtSt.Y - Me.dbPanel1.AutoScrollPosition.Y) / Me.Zoom
+            Dim xEnd As Single = (Me.PtEnd.X - Me.dbPanel1.AutoScrollPosition.X) / Me.Zoom
+            Dim yEnd As Single = (Me.PtEnd.Y - Me.dbPanel1.AutoScrollPosition.Y) / Me.Zoom
+
+            Dim dx As Double = xEnd - xSt
+            Dim dy As Double = yEnd - ySt
+            Dim dist As Double = Math.Sqrt(dx * dx + dy * dy)
+
+            Dim dx2 As Double = Me.PtEnd.X - Me.PtSt.X
+            Dim dy2 As Double = Me.PtEnd.Y - Me.PtSt.Y
+            Dim dist2 As Double = Math.Sqrt(dx2 * dx2 + dy2 * dy2)
+
+            Using pen As New Pen(Color.Lime, 1)
+                e.Graphics.DrawRectangle(pen, New RectangleF(Me.PtSt.X - 2, Me.PtSt.Y - 2, 4, 4))
+                e.Graphics.DrawRectangle(pen, New RectangleF(Me.PtEnd.X - 2, Me.PtEnd.Y - 2, 4, 4))
+                e.Graphics.DrawLine(pen, Me.PtSt, Me.PtEnd)
+
+                Using f As New Font("Arial", 10)
+                    Dim ptXY1 As New PointF(xSt, ySt)
+                    Dim ptXY2 As New PointF(xEnd, yEnd)
+                    Dim sz2 As SizeF = e.Graphics.MeasureString(ptXY2.ToString(), f)
+                    Dim yyy As Single = Me.PtSt.Y - 20
+                    Dim yyyy As Single = Me.PtEnd.Y + 4
+                    e.Graphics.DrawString(ptXY1.ToString(), f, Brushes.Yellow, New PointF(Me.PtSt.X, yyy))
+                    e.Graphics.DrawString(ptXY2.ToString(), f, Brushes.Yellow, New PointF(Me.PtEnd.X - sz2.Width / 2.0F, yyyy))
+
+                    Dim xx As Single = Me.PtSt.X + CSng(dx2 / 2.0F) - 20
+                    Dim yy As Single = Me.PtSt.Y + CSng(dy2 / 2.0F) - 20
+                    If Math.Abs(yy - yyy) < sz2.Height OrElse Math.Abs(yy - yyyy) < sz2.Height Then
+                        yy += sz2.Height * 1.5F
+                    End If
+                    If Math.Abs(yy - yyyy) < sz2.Height OrElse Math.Abs(yy - yyy) < sz2.Height Then
+                        yy += sz2.Height * 1.5F
+                    End If
+                    e.Graphics.DrawString(dist.ToString("N2"), f, Brushes.Yellow, New PointF(xx, yy))
+                End Using
+            End Using
+        End If
     End Sub
 
     Private Sub dbPanel1_Click(sender As Object, e As EventArgs) Handles dbPanel1.Click
@@ -1084,5 +1139,30 @@ Partial Public Class HelplineRulerCtrl
     Public Sub Reset()
         Me.DisposeBitmapData(False)
         Me.dbPanel1.Invalidate()
+    End Sub
+
+    Private Sub dbPanel1_MouseDown(sender As Object, e As MouseEventArgs) Handles dbPanel1.MouseDown
+        If Measure AndAlso e.Button = MouseButtons.Left Then
+            Me.dbPanel1.Capture = True
+            Me.PtSt = New Point(e.X, e.Y)
+            Me._tracking = True
+        End If
+    End Sub
+
+    Private Sub dbPanel1_MouseMove(sender As Object, e As MouseEventArgs) Handles dbPanel1.MouseMove
+        If Me._tracking Then
+            Me.PtEnd = New Point(e.X, e.Y)
+            Me.dbPanel1.Invalidate()
+        End If
+    End Sub
+
+    Private Sub dbPanel1_MouseUp(sender As Object, e As MouseEventArgs) Handles dbPanel1.MouseUp
+        If Me._tracking Then
+            Me.PtEnd = New Point(e.X, e.Y)
+            Me.dbPanel1.Invalidate()
+        End If
+
+        Me._tracking = False
+        Me.dbPanel1.Capture = False
     End Sub
 End Class
