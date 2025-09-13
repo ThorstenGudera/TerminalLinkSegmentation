@@ -1212,6 +1212,12 @@ namespace AvoidAGrabCutEasy
 
             if (this.helplineRulerCtrl1.Bmp != null)
                 this.numMaxSize.Value = (decimal)Math.Max(this.helplineRulerCtrl1.Bmp.Width, this.helplineRulerCtrl1.Bmp.Height);
+
+            this.cmbZoom.Items.Add((0.75F).ToString());
+            this.cmbZoom.Items.Add((0.5F).ToString());
+            this.cmbZoom.Items.Add((0.25F).ToString());
+
+            this.cmbZoom.SelectedIndex = 4;
         }
 
         private void SetControls(bool e)

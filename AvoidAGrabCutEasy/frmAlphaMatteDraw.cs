@@ -4368,6 +4368,12 @@ namespace AvoidAGrabCutEasy
             this.cbRestrictMatte.Checked = false;
 
             this.numScribblesWFactor.Value = (decimal)Math.Sqrt(2.0);
+
+            this.cmbZoom.Items.Add((0.75F).ToString());
+            this.cmbZoom.Items.Add((0.5F).ToString());
+            this.cmbZoom.Items.Add((0.25F).ToString());
+
+            this.cmbZoom.SelectedIndex = 4;
         }
 
         private async void floodBGToolStripMenuItem_Click(object sender, EventArgs e)
