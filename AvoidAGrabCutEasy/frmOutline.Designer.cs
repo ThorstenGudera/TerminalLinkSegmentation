@@ -75,6 +75,7 @@
             Timer3 = new System.Windows.Forms.Timer(components);
             toolTip1 = new ToolTip(components);
             cbTB = new CheckBox();
+            numDistWeight = new NumericUpDown();
             saveFileDialog1 = new SaveFileDialog();
             label19 = new Label();
             numWHScribbles = new NumericUpDown();
@@ -115,7 +116,6 @@
             numValDst = new NumericUpDown();
             numIGGAlpha = new NumericUpDown();
             numValSrc = new NumericUpDown();
-            numDistWeight = new NumericUpDown();
             btnInvGaussGrad = new Button();
             btnColors = new Button();
             btnBlur = new Button();
@@ -159,6 +159,7 @@
             ((System.ComponentModel.ISupportInitialize)numRestrict).BeginInit();
             panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numReplace).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)numDistWeight).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numWHScribbles).BeginInit();
             panel5.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numDraw).BeginInit();
@@ -176,7 +177,6 @@
             ((System.ComponentModel.ISupportInitialize)numValDst).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numIGGAlpha).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numValSrc).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)numDistWeight).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numIGGKernel).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numKernel).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numNewSegment).BeginInit();
@@ -249,7 +249,6 @@
             // 
             // cbBGColor
             // 
-            cbBGColor.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             cbBGColor.AutoSize = true;
             cbBGColor.Checked = true;
             cbBGColor.CheckState = CheckState.Checked;
@@ -264,7 +263,6 @@
             // 
             // button10
             // 
-            button10.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             button10.ForeColor = SystemColors.ControlText;
             button10.Location = new Point(1346, 47);
             button10.Margin = new Padding(4, 3, 4, 3);
@@ -277,7 +275,6 @@
             // 
             // button8
             // 
-            button8.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             button8.ForeColor = SystemColors.ControlText;
             button8.Location = new Point(1251, 47);
             button8.Margin = new Padding(4, 3, 4, 3);
@@ -290,7 +287,6 @@
             // 
             // button2
             // 
-            button2.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             button2.FlatStyle = FlatStyle.System;
             button2.ForeColor = SystemColors.ControlText;
             button2.Location = new Point(1346, 10);
@@ -303,7 +299,6 @@
             // 
             // btnRedo
             // 
-            btnRedo.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             btnRedo.ForeColor = SystemColors.ControlText;
             btnRedo.Location = new Point(1347, 117);
             btnRedo.Margin = new Padding(4, 3, 4, 3);
@@ -316,7 +311,6 @@
             // 
             // btnUndo
             // 
-            btnUndo.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             btnUndo.ForeColor = SystemColors.ControlText;
             btnUndo.Location = new Point(1251, 117);
             btnUndo.Margin = new Padding(4, 3, 4, 3);
@@ -363,11 +357,15 @@
             helplineRulerCtrl1.DontProcDoubleClick = false;
             helplineRulerCtrl1.DrawModeClipped = false;
             helplineRulerCtrl1.DrawPixelated = false;
+            helplineRulerCtrl1.HandleMeasureByContainingForm = false;
             helplineRulerCtrl1.IgnoreZoom = false;
             helplineRulerCtrl1.Location = new Point(0, 0);
             helplineRulerCtrl1.Margin = new Padding(4, 3, 4, 3);
+            helplineRulerCtrl1.Measure = false;
             helplineRulerCtrl1.MoveHelpLinesOnResize = false;
             helplineRulerCtrl1.Name = "helplineRulerCtrl1";
+            helplineRulerCtrl1.PtEnd = new Point(0, 0);
+            helplineRulerCtrl1.PtSt = new Point(0, 0);
             helplineRulerCtrl1.SetZoomOnlyByMethodCall = false;
             helplineRulerCtrl1.Size = new Size(1165, 608);
             helplineRulerCtrl1.TabIndex = 0;
@@ -670,7 +668,7 @@
             label3.AutoSize = true;
             label3.Location = new Point(8, 11);
             label3.Name = "label3";
-            label3.Size = new Size(78, 15);
+            label3.Size = new Size(79, 15);
             label3.TabIndex = 0;
             label3.Text = "Set BG Transp";
             // 
@@ -701,6 +699,18 @@
             cbTB.Text = "TextureBrush";
             toolTip1.SetToolTip(cbTB, "Texture Brush of orig Image");
             cbTB.UseVisualStyleBackColor = true;
+            // 
+            // numDistWeight
+            // 
+            numDistWeight.Location = new Point(217, 9);
+            numDistWeight.Margin = new Padding(4, 3, 4, 3);
+            numDistWeight.Maximum = new decimal(new int[] { 444, 0, 0, 0 });
+            numDistWeight.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
+            numDistWeight.Name = "numDistWeight";
+            numDistWeight.Size = new Size(52, 23);
+            numDistWeight.TabIndex = 683;
+            toolTip1.SetToolTip(numDistWeight, "max color dist to keep blurring.\r\n\"Edge weight\" - bigger blurs more edges\r\nvalue range from 1 to 443, \r\n444 is blurs without efge test");
+            numDistWeight.Value = new decimal(new int[] { 101, 0, 0, 0 });
             // 
             // saveFileDialog1
             // 
@@ -893,7 +903,7 @@
             label4.AutoSize = true;
             label4.Location = new Point(104, 8);
             label4.Name = "label4";
-            label4.Size = new Size(57, 15);
+            label4.Size = new Size(58, 15);
             label4.TabIndex = 1;
             label4.Text = "Tolerance";
             // 
@@ -1152,18 +1162,6 @@
             numValSrc.TabIndex = 683;
             numValSrc.Value = new decimal(new int[] { 62, 0, 0, 0 });
             // 
-            // numDistWeight
-            // 
-            numDistWeight.Location = new Point(217, 9);
-            numDistWeight.Margin = new Padding(4, 3, 4, 3);
-            numDistWeight.Maximum = new decimal(new int[] { 444, 0, 0, 0 });
-            numDistWeight.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
-            numDistWeight.Name = "numDistWeight";
-            numDistWeight.Size = new Size(52, 23);
-            numDistWeight.TabIndex = 683;
-            toolTip1.SetToolTip(numDistWeight, "max color dist to keep blurring.\r\n\"Edge weight\" - bigger blurs more edges\r\nvalue range from 1 to 443, \r\n444 is blurs without efge test");
-            numDistWeight.Value = new decimal(new int[] { 101, 0, 0, 0 });
-            // 
             // btnInvGaussGrad
             // 
             btnInvGaussGrad.Anchor = AnchorStyles.Top | AnchorStyles.Right;
@@ -1320,7 +1318,7 @@
             cbUseExisting.AutoSize = true;
             cbUseExisting.Location = new Point(197, 9);
             cbUseExisting.Name = "cbUseExisting";
-            cbUseExisting.Size = new Size(85, 19);
+            cbUseExisting.Size = new Size(84, 19);
             cbUseExisting.TabIndex = 685;
             cbUseExisting.Text = "useExisting";
             cbUseExisting.UseVisualStyleBackColor = true;
@@ -1468,7 +1466,6 @@
             // 
             // btnCancel
             // 
-            btnCancel.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             btnCancel.DialogResult = DialogResult.Cancel;
             btnCancel.ForeColor = SystemColors.ControlText;
             btnCancel.Location = new Point(1377, 182);
@@ -1481,7 +1478,6 @@
             // 
             // btnOK
             // 
-            btnOK.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             btnOK.DialogResult = DialogResult.OK;
             btnOK.ForeColor = SystemColors.ControlText;
             btnOK.Location = new Point(1281, 183);
@@ -1550,6 +1546,7 @@
             panel2.ResumeLayout(false);
             panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)numReplace).EndInit();
+            ((System.ComponentModel.ISupportInitialize)numDistWeight).EndInit();
             ((System.ComponentModel.ISupportInitialize)numWHScribbles).EndInit();
             panel5.ResumeLayout(false);
             panel5.PerformLayout();
@@ -1573,7 +1570,6 @@
             ((System.ComponentModel.ISupportInitialize)numValDst).EndInit();
             ((System.ComponentModel.ISupportInitialize)numIGGAlpha).EndInit();
             ((System.ComponentModel.ISupportInitialize)numValSrc).EndInit();
-            ((System.ComponentModel.ISupportInitialize)numDistWeight).EndInit();
             ((System.ComponentModel.ISupportInitialize)numIGGKernel).EndInit();
             ((System.ComponentModel.ISupportInitialize)numKernel).EndInit();
             ((System.ComponentModel.ISupportInitialize)numNewSegment).EndInit();

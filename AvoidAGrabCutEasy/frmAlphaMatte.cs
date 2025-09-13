@@ -1782,8 +1782,9 @@ namespace AvoidAGrabCutEasy
                             }
                     }
 
-                    FloodFillMethods.floodfill(b, ptSt.X, ptSt.Y, 125, startColor, replaceColor,
-                        Int32.MaxValue, false, false, 1.0, false, false);
+                    if (!FloodFillMethods.Cancel)
+                        FloodFillMethods.floodfill(b, ptSt.X, ptSt.Y, 125, startColor, replaceColor,
+                            Int32.MaxValue, false, false, 1.0, false, false);
 
                     List<Point> ll = new List<Point>();
 
@@ -1961,8 +1962,9 @@ namespace AvoidAGrabCutEasy
                             }
                     }
 
-                    FloodFillMethods.floodfill(b, ptSt.X, ptSt.Y, 125, startColor, replaceColor,
-                        Int32.MaxValue, false, false, 1.0, false, false);
+                    if (!FloodFillMethods.Cancel)
+                        FloodFillMethods.floodfill(b, ptSt.X, ptSt.Y, 125, startColor, replaceColor,
+                            Int32.MaxValue, false, false, 1.0, false, false);
 
                     List<Point> ll = new List<Point>();
 
@@ -2080,6 +2082,12 @@ namespace AvoidAGrabCutEasy
             if (this.backgroundWorker1.IsBusy)
             {
                 this.backgroundWorker1.CancelAsync();
+                return;
+            }
+
+            if (this.btnGo.Text == "Cancel")
+            {
+                FloodFillMethods.Cancel = true;
                 return;
             }
 
@@ -2710,16 +2718,38 @@ namespace AvoidAGrabCutEasy
                 this.numMaxSize.Value = (decimal)Math.Max(this.helplineRulerCtrl1.Bmp.Width, this.helplineRulerCtrl1.Bmp.Height);
         }
 
-        private void floodBGToolStripMenuItem_Click(object sender, EventArgs e)
+        private async void floodBGToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Point pt = this._ptHLC1FGBG;
-            this.FloodBG();
+            this.SetControls(false);
+            this.btnGo.Text = "Cancel";
+            this.btnGo.Enabled = true;
+            FloodFillMethods.Cancel = false;
+
+            await Task.Run(() =>
+            {
+                Point pt = this._ptHLC1FGBG;
+                this.FloodBG();
+            });
+
+            this.SetControls(true);
+            this.btnGo.Text = "Go";
         }
 
-        private void floodFGToolStripMenuItem_Click(object sender, EventArgs e)
+        private async void floodFGToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Point pt = this._ptHLC1FGBG;
-            this.FloodFG();
+            this.SetControls(false);
+            this.btnGo.Text = "Cancel";
+            this.btnGo.Enabled = true;
+            FloodFillMethods.Cancel = false;
+
+            await Task.Run(() =>
+            {
+                Point pt = this._ptHLC1FGBG;
+                this.FloodFG();
+            });
+
+            this.SetControls(true);
+            this.btnGo.Text = "Go";
         }
 
         private void cbOverlay_CheckedChanged(object sender, EventArgs e)

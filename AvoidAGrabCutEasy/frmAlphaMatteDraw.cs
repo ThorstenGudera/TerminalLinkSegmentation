@@ -2868,8 +2868,9 @@ namespace AvoidAGrabCutEasy
                             }
                     }
 
-                    FloodFillMethods.floodfill(b, ptSt.X, ptSt.Y, 125, startColor, replaceColor,
-                        Int32.MaxValue, false, false, 1.0, false, false);
+                    if (!FloodFillMethods.Cancel)
+                        FloodFillMethods.floodfill(b, ptSt.X, ptSt.Y, 125, startColor, replaceColor,
+                            Int32.MaxValue, false, false, 1.0, false, false);
 
                     List<Point> ll = new List<Point>();
 
@@ -3007,8 +3008,9 @@ namespace AvoidAGrabCutEasy
                             }
                     }
 
-                    FloodFillMethods.floodfill(b, ptSt.X, ptSt.Y, 125, startColor, replaceColor,
-                        Int32.MaxValue, false, false, 1.0, false, false);
+                    if (!FloodFillMethods.Cancel)
+                        FloodFillMethods.floodfill(b, ptSt.X, ptSt.Y, 125, startColor, replaceColor,
+                            Int32.MaxValue, false, false, 1.0, false, false);
 
                     List<Point> ll = new List<Point>();
 
@@ -4368,22 +4370,44 @@ namespace AvoidAGrabCutEasy
             this.numScribblesWFactor.Value = (decimal)Math.Sqrt(2.0);
         }
 
-        private void floodBGToolStripMenuItem_Click(object sender, EventArgs e)
+        private async void floodBGToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Point pt = this._ptHLC1BG;
-            this._ptHLC1BG = this._ptHLC1FGBG;
-            this.btnFloodBG.Enabled = true;
-            this.btnFloodBG_Click(this.btnFloodBG, new EventArgs());
-            this._ptHLC1BG = pt;
+            this.SetControls(false);
+            this.btnCancelBGW.Text = "Cancel";
+            this.btnCancelBGW.Enabled = true;
+            FloodFillMethods.Cancel = false;
+
+            await Task.Run(() =>
+            {
+                Point pt = this._ptHLC1BG;
+                this._ptHLC1BG = this._ptHLC1FGBG;
+                this.btnFloodBG.Enabled = true;
+                this.btnFloodBG_Click(this.btnFloodBG, new EventArgs());
+                this._ptHLC1BG = pt;
+            });
+
+            this.SetControls(true);
+            this.btnCancelBGW.Text = "Cancel";
         }
 
-        private void floodFGToolStripMenuItem_Click(object sender, EventArgs e)
+        private async void floodFGToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Point pt = this._ptHLC1FG;
-            this._ptHLC1FG = this._ptHLC1FGBG; //!
-            this.btnFloodFG.Enabled = true;
-            this.btnFloodFG_Click(this.btnFloodFG, new EventArgs());
-            this._ptHLC1FG = pt;
+            this.SetControls(false);
+            this.btnCancelBGW.Text = "Cancel";
+            this.btnCancelBGW.Enabled = true;
+            FloodFillMethods.Cancel = false;
+
+            await Task.Run(() =>
+            {
+                Point pt = this._ptHLC1FG;
+                this._ptHLC1FG = this._ptHLC1FGBG; //!
+                this.btnFloodFG.Enabled = true;
+                this.btnFloodFG_Click(this.btnFloodFG, new EventArgs());
+                this._ptHLC1FG = pt;
+            });
+
+            this.SetControls(true);
+            this.btnCancelBGW.Text = "Cancel";
         }
 
         private void cbOverlay_CheckedChanged(object sender, EventArgs e)
@@ -5606,13 +5630,24 @@ namespace AvoidAGrabCutEasy
             }
         }
 
-        private void floodFGRemOuterInnerToolStripMenuItem_Click(object sender, EventArgs e)
+        private async void floodFGRemOuterInnerToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Point pt = this._ptHLC1FG;
-            this._ptHLC1FG = this._ptHLC1FGBG; //!
-            this.btnFloodFG2.Enabled = true;
-            this.btnFloodFG2_Click(this.btnFloodFG2, new EventArgs());
-            this._ptHLC1FG = pt;
+            this.SetControls(false);
+            this.btnCancelBGW.Text = "Cancel";
+            this.btnCancelBGW.Enabled = true;
+            FloodFillMethods.Cancel = false;
+
+            await Task.Run(() =>
+            {
+                Point pt = this._ptHLC1FG;
+                this._ptHLC1FG = this._ptHLC1FGBG; //!
+                this.btnFloodFG2.Enabled = true;
+                this.btnFloodFG2_Click(this.btnFloodFG2, new EventArgs());
+                this._ptHLC1FG = pt;
+            });
+
+            this.SetControls(true);
+            this.btnCancelBGW.Text = "Cancel";
         }
 
         private unsafe void btnFloodFG2_Click(object sender, EventArgs e)
@@ -5772,8 +5807,9 @@ namespace AvoidAGrabCutEasy
                                 startColor = bForeground2.GetPixel(ptSt.X, ptSt.Y);
 
                                 //floodfill fg
-                                FloodFillMethods.floodfill(bForeground2, ptSt.X, ptSt.Y, 125, startColor, replaceColor,
-                                    Int32.MaxValue, false, false, 1.0, false, false);
+                                if (!FloodFillMethods.Cancel)
+                                    FloodFillMethods.floodfill(bForeground2, ptSt.X, ptSt.Y, 125, startColor, replaceColor,
+                                        Int32.MaxValue, false, false, 1.0, false, false);
 
                                 //now get the outer (= removed) unkknown scribbles for the trimap
                                 if (this._oldUnknownFT == null)
@@ -6516,6 +6552,12 @@ namespace AvoidAGrabCutEasy
         {
             if (this.backgroundWorker1.IsBusy)
                 this.backgroundWorker1.CancelAsync();
+
+            if (this.btnCancelBGW.Text == "Cancel")
+            {
+                FloodFillMethods.Cancel = true;
+                return;
+            }
 
             if (this._ptBU == null)
                 this._ptBU = new List<Point>();

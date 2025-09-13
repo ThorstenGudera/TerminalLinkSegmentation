@@ -13,7 +13,10 @@ namespace AvoidAGrabCutEasy
 {
     public class FloodFillMethods
     {
-        public static void floodfill(Bitmap bmp, int x, int y, double tolerance, Color OrgPixelColor, Color ZielColor, int MaxIterations, bool smooth, bool compAlpha, double epsilon, bool useCurves, bool useClosedCurve)
+        public static bool Cancel { get; set; }
+
+        public static void floodfill(Bitmap bmp, int x, int y, double tolerance, Color OrgPixelColor, Color ZielColor,
+            int MaxIterations, bool smooth, bool compAlpha, double epsilon, bool useCurves, bool useClosedCurve)
         {
             if (tolerance == 255)
                 drawOneColor(bmp, ZielColor.A, ZielColor.R, ZielColor.G, ZielColor.B);
@@ -49,6 +52,9 @@ namespace AvoidAGrabCutEasy
 
                 while (z < Pixellist.Count && z < MaxIterations)
                 {
+                    if (FloodFillMethods.Cancel)
+                        break;
+
                     try
                     {
                         flood(bmp, System.Convert.ToInt32(Pixellist[z]), tolerance, OrgPixelColor, bmData, pp, Pixellist, List, ref zaehl, p);
@@ -116,6 +122,9 @@ namespace AvoidAGrabCutEasy
 
                 while (z < Pixellist.Count && z < MaxIterations)
                 {
+                    if (FloodFillMethods.Cancel)
+                        break;
+
                     try
                     {
                         flood(bmp, System.Convert.ToInt32(Pixellist[z]), tolerance, OrgPixelColor, bmData, pp, Pixellist, List, ref zaehl, p, edges);
@@ -276,6 +285,8 @@ namespace AvoidAGrabCutEasy
 
                             foreach (int i in Pixellist.Values)
                             {
+                                if (FloodFillMethods.Cancel)
+                                    break;
                                 p2[i] = System.Convert.ToByte(z.B);
                                 p2[i + 1] = System.Convert.ToByte(z.G);
                                 p2[i + 2] = System.Convert.ToByte(z.R);
@@ -355,6 +366,8 @@ namespace AvoidAGrabCutEasy
 
                     foreach (int i in Pixellist.Values)
                     {
+                        if (FloodFillMethods.Cancel)
+                            break;
                         p[i] = System.Convert.ToByte(z.B);
                         p[i + 1] = System.Convert.ToByte(z.G);
                         p[i + 2] = System.Convert.ToByte(z.R);
@@ -466,6 +479,8 @@ namespace AvoidAGrabCutEasy
 
                 while (z < Pixellist.Count && z < MaxIterations)
                 {
+                    if (FloodFillMethods.Cancel)
+                        break;
                     try
                     {
                         if (Pixellist2[z] >= minVal)
@@ -540,6 +555,8 @@ namespace AvoidAGrabCutEasy
 
                 while (z < Pixellist.Count && z < MaxIterations)
                 {
+                    if (FloodFillMethods.Cancel)
+                        break;
                     try
                     {
                         if (Pixellist2[z] >= minVal)
@@ -690,6 +707,8 @@ namespace AvoidAGrabCutEasy
 
                             foreach (KeyValuePair<int, int> f in Pixellist)
                             {
+                                if (FloodFillMethods.Cancel)
+                                    break;
                                 double multiplier = Pixellist2[f.Key]; // unused at current stage
 
                                 if (multiplier == 1000)
@@ -803,6 +822,8 @@ namespace AvoidAGrabCutEasy
 
                     foreach (KeyValuePair<int, int> f in Pixellist)
                     {
+                        if (FloodFillMethods.Cancel)
+                            break;
                         double multiplier = Pixellist2[f.Key]; // unused at current stage
 
                         if (multiplier == 1000)
@@ -869,6 +890,8 @@ namespace AvoidAGrabCutEasy
 
                     for (int y = 0; y <= nHeight - 1; y++)
                     {
+                        if (FloodFillMethods.Cancel)
+                            break;
                         int posPixel = y * scanline;
                         for (int x = 0; x <= nWidth - 1; x++)
                         {
