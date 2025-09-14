@@ -791,7 +791,7 @@ namespace PseudoShadow
                     if (b != null)
                     {
                         using Bitmap bC = new Bitmap(b);
-                        SetColorsToOrig(bmp, b);
+                        SetColorsToOrig(bmp, bC);
                     }
                 }
 
@@ -1014,7 +1014,7 @@ namespace PseudoShadow
                     if (b != null)
                     {
                         using Bitmap bC = new Bitmap(b);
-                        SetColorsToOrig(bmp, b);
+                        SetColorsToOrig(bmp, bC);
                     }
                 }
 
