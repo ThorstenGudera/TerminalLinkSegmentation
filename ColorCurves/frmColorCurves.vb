@@ -1245,6 +1245,9 @@ Public Class frmColorCurves
     Private Sub pictureBox1_MouseUp(ByVal sender As System.Object, ByVal e As System.Windows.Forms.MouseEventArgs)
         If (_tracking2) AndAlso (_bSrc.Width > pictureBox1.Width Or _bSrc.Height > pictureBox1.Height) Then
             If AvailMem.AvailMem.checkAvailRam(Me.pictureBox1.ClientSize.Width * Me.pictureBox1.ClientSize.Height * 4L) Then
+                If Not IsNothing(_bitmap) Then
+                    _bitmap.Dispose()
+                End If
                 _bitmap = New Bitmap(Me.pictureBox1.ClientSize.Width, Me.pictureBox1.ClientSize.Height)
             Else
                 Return

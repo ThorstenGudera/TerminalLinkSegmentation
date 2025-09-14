@@ -289,6 +289,9 @@ Public Class frmHSLRange
             AddHandler pictureBox1.MouseMove, AddressOf pictureBox1_MouseMove_2
             AddHandler pictureBox1.MouseUp, AddressOf pictureBox1_MouseUp
 
+            If Not IsNothing(_bitmap) Then
+                _bitmap.Dispose()
+            End If
             If AvailMem.AvailMem.checkAvailRam(Me.pictureBox1.ClientSize.Width * Me.pictureBox1.ClientSize.Height * 4L) Then
                 _bitmap = New Bitmap(Me.pictureBox1.ClientSize.Width, Me.pictureBox1.ClientSize.Height)
 
@@ -307,6 +310,9 @@ Public Class frmHSLRange
             RemoveHandler pictureBox1.MouseUp, AddressOf pictureBox1_MouseUp
 
             Dim b2 As Bitmap = makeBitmap(_bSrc)
+            If Not IsNothing(_bitmap) Then
+                _bitmap.Dispose()
+            End If
             If AvailMem.AvailMem.checkAvailRam(b2.Width * b2.Height * 4L) Then
                 _bitmap = New Bitmap(b2)
             Else
@@ -340,6 +346,9 @@ Public Class frmHSLRange
         'geänderten Auschnitt des Bildes (Verschiebung) darstellen
         If (_tracking) And (_bSrc.Width > pictureBox1.Width Or _bSrc.Height > pictureBox1.Height) Then
             If AvailMem.AvailMem.checkAvailRam(Me.pictureBox1.ClientSize.Width * Me.pictureBox1.ClientSize.Height * 4L) Then
+                If Not IsNothing(_bitmap) Then
+                    _bitmap.Dispose()
+                End If
                 _bitmap = New Bitmap(Me.pictureBox1.ClientSize.Width, Me.pictureBox1.ClientSize.Height)
             Else
                 Return
@@ -488,6 +497,9 @@ Public Class frmHSLRange
                 _top = pt.Y
 
                 If (_bSrc.Width > pictureBox1.Width Or _bSrc.Height > pictureBox1.Height) Then
+                    If Not IsNothing(_bitmap) Then
+                        _bitmap.Dispose()
+                    End If
                     If AvailMem.AvailMem.checkAvailRam(Me.pictureBox1.ClientSize.Width * Me.pictureBox1.ClientSize.Height * 4L) Then
                         _bitmap = New Bitmap(Me.pictureBox1.ClientSize.Width, Me.pictureBox1.ClientSize.Height)
                     Else
