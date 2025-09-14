@@ -72,6 +72,7 @@
             openFileDialog1 = new OpenFileDialog();
             backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             panel1 = new Panel();
+            cbExcludeFG = new CheckBox();
             cbPicIsMatte = new CheckBox();
             label13 = new Label();
             numKernel2 = new NumericUpDown();
@@ -118,7 +119,7 @@
             backgroundWorker9 = new System.ComponentModel.BackgroundWorker();
             helplineRulerCtrl1 = new HelplineRulerControl.HelplineRulerCtrl();
             backgroundWorker3 = new System.ComponentModel.BackgroundWorker();
-            cbExcludeFG = new CheckBox();
+            btnBGCol = new Button();
             statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numEpsilon).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numKernel).BeginInit();
@@ -560,6 +561,7 @@
             // 
             // panel1
             // 
+            panel1.Controls.Add(btnBGCol);
             panel1.Controls.Add(cbExcludeFG);
             panel1.Controls.Add(cbPicIsMatte);
             panel1.Controls.Add(label13);
@@ -634,6 +636,17 @@
             panel1.TabIndex = 243;
             panel1.MouseDoubleClick += panel1_MouseDoubleClick;
             panel1.MouseDown += panel1_MouseDown;
+            // 
+            // cbExcludeFG
+            // 
+            cbExcludeFG.AutoSize = true;
+            cbExcludeFG.Location = new Point(14, 68);
+            cbExcludeFG.Name = "cbExcludeFG";
+            cbExcludeFG.Size = new Size(83, 19);
+            cbExcludeFG.TabIndex = 770;
+            cbExcludeFG.Text = "exclude FG";
+            cbExcludeFG.UseVisualStyleBackColor = true;
+            cbExcludeFG.CheckedChanged += cbExcludeFG_CheckedChanged;
             // 
             // cbPicIsMatte
             // 
@@ -1113,11 +1126,15 @@
             helplineRulerCtrl1.DontProcDoubleClick = false;
             helplineRulerCtrl1.DrawModeClipped = false;
             helplineRulerCtrl1.DrawPixelated = false;
+            helplineRulerCtrl1.HandleMeasureByContainingForm = false;
             helplineRulerCtrl1.IgnoreZoom = false;
             helplineRulerCtrl1.Location = new Point(0, 189);
             helplineRulerCtrl1.Margin = new Padding(5, 3, 5, 3);
+            helplineRulerCtrl1.Measure = false;
             helplineRulerCtrl1.MoveHelpLinesOnResize = false;
             helplineRulerCtrl1.Name = "helplineRulerCtrl1";
+            helplineRulerCtrl1.PtEnd = new Point(0, 0);
+            helplineRulerCtrl1.PtSt = new Point(0, 0);
             helplineRulerCtrl1.SetZoomOnlyByMethodCall = false;
             helplineRulerCtrl1.Size = new Size(1596, 817);
             helplineRulerCtrl1.TabIndex = 245;
@@ -1133,16 +1150,15 @@
             backgroundWorker3.ProgressChanged += backgroundWorker3_ProgressChanged;
             backgroundWorker3.RunWorkerCompleted += backgroundWorker3_RunWorkerCompleted;
             // 
-            // cbExcludeFG
+            // btnBGCol
             // 
-            cbExcludeFG.AutoSize = true;
-            cbExcludeFG.Location = new Point(14, 68);
-            cbExcludeFG.Name = "cbExcludeFG";
-            cbExcludeFG.Size = new Size(83, 19);
-            cbExcludeFG.TabIndex = 770;
-            cbExcludeFG.Text = "exclude FG";
-            cbExcludeFG.UseVisualStyleBackColor = true;
-            cbExcludeFG.CheckedChanged += cbExcludeFG_CheckedChanged;
+            btnBGCol.Location = new Point(1407, 117);
+            btnBGCol.Name = "btnBGCol";
+            btnBGCol.Size = new Size(75, 23);
+            btnBGCol.TabIndex = 771;
+            btnBGCol.Text = "set BGCol";
+            btnBGCol.UseVisualStyleBackColor = true;
+            btnBGCol.Click += btnBGCol_Click;
             // 
             // frnOutlineOperations
             // 
@@ -1276,5 +1292,6 @@
         private Button btnBlurResult;
         internal System.ComponentModel.BackgroundWorker backgroundWorker3;
         private CheckBox cbExcludeFG;
+        private Button btnBGCol;
     }
 }

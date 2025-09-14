@@ -2686,5 +2686,13 @@ namespace OutlineOperations
             if (this.cbExcludeFG.Checked)
                 this.cbExcludeRegions.Checked = false;
         }
+
+        private void btnBGCol_Click(object sender, EventArgs e)
+        {
+            using frmSetBGColor frm = new frmSetBGColor(this.helplineRulerCtrl1.dbPanel1.BackColor);
+
+            if (frm.ShowDialog() == DialogResult.OK)
+                this.helplineRulerCtrl1.dbPanel1.BackColor = frm.label1.BackColor;
+        }
     }
 }
