@@ -17,6 +17,7 @@ using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using GetAlphaMatte;
+using ColorCurvesAlpha;
 
 namespace AvoidAGrabCutEasy
 {
@@ -6665,6 +6666,227 @@ namespace AvoidAGrabCutEasy
         private void btnOK_Click(object sender, EventArgs e)
         {
             this._dontAskOnClosing = true;
+        }
+
+        private void btnAlphaCurve_Click(object sender, EventArgs e)
+        {
+            if (this.backgroundWorker6.IsBusy)
+            {
+                this.backgroundWorker6.CancelAsync();
+                return;
+            }
+
+            if (this.helplineRulerCtrl2.Bmp != null)
+            {
+                this.Cursor = Cursors.WaitCursor;
+                this.SetControls(false);
+
+                int alphaTh = (int)this.numAlphaZAndGain.Value;
+
+                Bitmap b = new Bitmap(this.helplineRulerCtrl2.Bmp);
+                bool redrawExcluded = false;
+
+                string? c = this.CachePathAddition;
+                if (c != null && this.cbExcludeRegions.Checked)
+                {
+                    bool show = true;
+                    if (this._excludedRegions != null && this._excludedRegions.Count > 0)
+                    {
+                        if (MessageBox.Show("Use existing Exclusions?", "", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) == DialogResult.Yes)
+                        {
+                            redrawExcluded = true;
+                            show = false;
+                        }
+                    }
+
+                    if (show)
+                    {
+                        using frmExcludeFromPic frm = new frmExcludeFromPic(b, c);
+                        frm.SetupCache();
+
+                        if (frm.ShowDialog() == DialogResult.OK)
+                        {
+                            if (frm.ExcludedBmpRegions != null)
+                            {
+                                using Graphics gx = Graphics.FromImage(b);
+                                for (int i = 0; i < frm.ExcludedBmpRegions.Count; i++)
+                                {
+                                    Bitmap? rem = frm.ExcludedBmpRegions[i].Remaining;
+                                    if (rem != null)
+                                        SetTransp(b, rem, frm.ExcludedBmpRegions[i].Location);
+                                }
+
+                                CopyRegions(frm.ExcludedBmpRegions);
+                                redrawExcluded = true;
+                            }
+                        }
+                    }
+                }
+
+                if (c != null && this.cbExcludeFG.Checked)
+                {
+                    bool show = true;
+                    if (this._excludedRegions != null && this._excludedRegions.Count > 0)
+                    {
+                        if (MessageBox.Show("Use existing Exclusions?", "", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) == DialogResult.Yes)
+                        {
+                            redrawExcluded = true;
+                            show = false;
+                        }
+                    }
+
+                    if (show)
+                    {
+                        using frmDefineFGPic frm = new frmDefineFGPic(b, c);
+                        frm.SetupCache();
+
+                        if (frm.ShowDialog() == DialogResult.OK)
+                        {
+                            if (frm.Excluded != null)
+                            {
+                                using Graphics gx = Graphics.FromImage(b);
+
+                                Bitmap? rem = frm.Excluded.Remaining;
+                                if (rem != null)
+                                {
+                                    if (frm.cbSetOpaque.Checked)
+                                    {
+                                        SetOpaque(b, rem);
+                                        SetOpaque(rem, rem);
+                                    }
+                                    SetTransp(b, rem, frm.Excluded.Location);
+                                }
+
+                                List<ExcludedBmpRegion> l = new();
+                                l.Add(frm.Excluded);
+                                CopyRegions(l);
+                                redrawExcluded = true;
+                            }
+                        }
+                    }
+                }
+
+                this.toolStripProgressBar1.Value = 0;
+                this.toolStripProgressBar1.Visible = true;
+
+                using frmColorCurves frmA = new frmColorCurves(b, "255;127;127;127", 255);
+
+                if (frmA.ShowDialog() == DialogResult.OK)
+                {
+                    int[] aalpha = new int[256];
+
+                    Array.Copy(frmA.MappingsAlpha, aalpha, frmA.MappingsAlpha.Length);
+                    this.backgroundWorker6.RunWorkerAsync(new object[] { b, aalpha, frmA.RadioButton1.Checked, frmA.CheckBox1.Checked, frmA.CheckBox4.Checked, redrawExcluded });
+                }
+            }
+        }
+
+        private void backgroundWorker6_DoWork(object? sender, DoWorkEventArgs e)
+        {
+            Bitmap? b = null;
+            Bitmap? bRet = null;
+            bool redrawExcluded = false;
+
+            if (e.Argument != null)
+            {
+                object[] o = (object[])e.Argument;
+                b = (Bitmap)o[0];
+
+                this.backgroundWorker6.ReportProgress(50);
+
+                int[] aalpha = (int[])o[1];
+
+                if ((bool)o[2])
+                    ColorCurvesAlpha.fipbmp.gradColors(b, aalpha, (bool)o[3]);
+                else
+                    ColorCurvesAlpha.fipbmp.gradLumToAlpha(b, aalpha, (bool)o[4], (bool)o[3]);
+
+                this.backgroundWorker6.ReportProgress(100);
+
+                bRet = b;
+                redrawExcluded = (bool)o[5];
+            }
+
+            if (bRet != null)
+                e.Result = new object[] { bRet, redrawExcluded };
+        }
+
+        private void backgroundWorker6_ProgressChanged(object? sender, ProgressChangedEventArgs e)
+        {
+            if (this.toolStripProgressBar1 != null && !this.toolStripProgressBar1.IsDisposed && this.toolStripProgressBar1.Visible)
+                this.toolStripProgressBar1.Value = e.ProgressPercentage;
+            else if (this.backgroundWorker6 != null && this.backgroundWorker6.IsBusy)
+                this.backgroundWorker6.CancelAsync();
+        }
+
+        private void backgroundWorker6_RunWorkerCompleted(object? sender, RunWorkerCompletedEventArgs e)
+        {
+            if (!this.IsDisposed)
+            {
+                Bitmap? bmp = null;
+
+                if (e.Result != null)
+                {
+                    object[] o = (object[])e.Result;
+                    bmp = (Bitmap)o[0];
+
+                    if ((bool)o[1])
+                    {
+                        if (this._excludedRegions != null && this._exclLocations != null)
+                        {
+                            using Graphics gx = Graphics.FromImage(bmp);
+                            gx.SmoothingMode = SmoothingMode.None;
+                            gx.InterpolationMode = InterpolationMode.NearestNeighbor;
+
+                            for (int i = 0; i < this._excludedRegions.Count; i++)
+                            {
+                                SetTransp(bmp, this._excludedRegions[i], this._exclLocations[i]);
+                                gx.DrawImage(this._excludedRegions[i], this._exclLocations[i]);
+                            }
+                        }
+                    }
+
+                    //since ...
+                    SetColorsToOrig(bmp, this.helplineRulerCtrl2.Bmp);
+                }
+
+                if (bmp != null)
+                {
+                    this.SetBitmap(this.helplineRulerCtrl2.Bmp, bmp, this.helplineRulerCtrl2, "Bmp");
+
+                    this.helplineRulerCtrl2.SetZoom(this.helplineRulerCtrl1.Zoom.ToString());
+                    this.helplineRulerCtrl2.MakeBitmap(this.helplineRulerCtrl2.Bmp);
+                    this.helplineRulerCtrl2.dbPanel1.AutoScrollMinSize = new Size(
+                        (int)(this.helplineRulerCtrl2.Bmp.Width * this.helplineRulerCtrl2.Zoom),
+                        (int)(this.helplineRulerCtrl2.Bmp.Height * this.helplineRulerCtrl2.Zoom));
+
+                    _undoOPCache?.Add(bmp);
+                }
+
+                this.btnAlphaCurve.Text = "Go";
+
+                this.SetControls(true);
+                this.Cursor = Cursors.Default;
+
+                this.btnOK.Enabled = this.btnCancel.Enabled = true;
+
+                this._pic_changed = true;
+
+                this.helplineRulerCtrl2.dbPanel1.Invalidate();
+
+                if (this.Timer3.Enabled)
+                    this.Timer3.Stop();
+
+                this.Timer3.Start();
+
+                this.backgroundWorker6.Dispose();
+                this.backgroundWorker6 = new BackgroundWorker();
+                this.backgroundWorker6.WorkerReportsProgress = true;
+                this.backgroundWorker6.WorkerSupportsCancellation = true;
+                this.backgroundWorker6.DoWork += backgroundWorker6_DoWork;
+                this.backgroundWorker6.ProgressChanged += backgroundWorker6_ProgressChanged;
+                this.backgroundWorker6.RunWorkerCompleted += backgroundWorker6_RunWorkerCompleted;
+            }
         }
     }
 }

@@ -153,6 +153,9 @@
             backgroundWorker5 = new System.ComponentModel.BackgroundWorker();
             backgroundWorker3 = new System.ComponentModel.BackgroundWorker();
             backgroundWorker4 = new System.ComponentModel.BackgroundWorker();
+            backgroundWorker6 = new System.ComponentModel.BackgroundWorker();
+            label22 = new Label();
+            btnAlphaCurve = new Button();
             statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
@@ -257,7 +260,7 @@
             // cbRefPtFG
             // 
             cbRefPtFG.AutoSize = true;
-            cbRefPtFG.Location = new Point(1239, 228);
+            cbRefPtFG.Location = new Point(1239, 236);
             cbRefPtFG.Margin = new Padding(4, 3, 4, 3);
             cbRefPtFG.Name = "cbRefPtFG";
             cbRefPtFG.Size = new Size(86, 19);
@@ -270,7 +273,7 @@
             // cbRefPtBG
             // 
             cbRefPtBG.AutoSize = true;
-            cbRefPtBG.Location = new Point(1138, 228);
+            cbRefPtBG.Location = new Point(1138, 236);
             cbRefPtBG.Margin = new Padding(4, 3, 4, 3);
             cbRefPtBG.Name = "cbRefPtBG";
             cbRefPtBG.Size = new Size(89, 19);
@@ -283,7 +286,7 @@
             // label14
             // 
             label14.AutoSize = true;
-            label14.Location = new Point(1334, 230);
+            label14.Location = new Point(1334, 238);
             label14.Margin = new Padding(4, 0, 4, 0);
             label14.Name = "label14";
             label14.Size = new Size(37, 15);
@@ -294,7 +297,7 @@
             // btnFloodFG
             // 
             btnFloodFG.Enabled = false;
-            btnFloodFG.Location = new Point(1426, 225);
+            btnFloodFG.Location = new Point(1426, 233);
             btnFloodFG.Margin = new Padding(4, 3, 4, 3);
             btnFloodFG.Name = "btnFloodFG";
             btnFloodFG.Size = new Size(40, 23);
@@ -307,7 +310,7 @@
             // btnFloodBG
             // 
             btnFloodBG.Enabled = false;
-            btnFloodBG.Location = new Point(1377, 225);
+            btnFloodBG.Location = new Point(1377, 233);
             btnFloodBG.Margin = new Padding(4, 3, 4, 3);
             btnFloodBG.Name = "btnFloodBG";
             btnFloodBG.Size = new Size(42, 23);
@@ -680,6 +683,8 @@
             // panel1
             // 
             panel1.AutoScroll = true;
+            panel1.Controls.Add(label22);
+            panel1.Controls.Add(btnAlphaCurve);
             panel1.Controls.Add(cbAskTrimap);
             panel1.Controls.Add(btnLoadBmp);
             panel1.Controls.Add(pictureBox2);
@@ -907,7 +912,7 @@
             // 
             // btnFloodFG2
             // 
-            btnFloodFG2.Location = new Point(1188, 195);
+            btnFloodFG2.Location = new Point(1188, 203);
             btnFloodFG2.Margin = new Padding(4, 3, 4, 3);
             btnFloodFG2.Name = "btnFloodFG2";
             btnFloodFG2.Size = new Size(46, 27);
@@ -1631,6 +1636,34 @@
             backgroundWorker4.DoWork += backgroundWorker4_DoWork;
             backgroundWorker4.RunWorkerCompleted += backgroundWorker4_RunWorkerCompleted;
             // 
+            // backgroundWorker6
+            // 
+            backgroundWorker6.WorkerReportsProgress = true;
+            backgroundWorker6.WorkerSupportsCancellation = true;
+            backgroundWorker6.DoWork += backgroundWorker6_DoWork;
+            backgroundWorker6.ProgressChanged += backgroundWorker6_ProgressChanged;
+            backgroundWorker6.RunWorkerCompleted += backgroundWorker6_RunWorkerCompleted;
+            // 
+            // label22
+            // 
+            label22.AutoSize = true;
+            label22.Location = new Point(1291, 208);
+            label22.Name = "label22";
+            label22.Size = new Size(69, 15);
+            label22.TabIndex = 750;
+            label22.Text = "AlphaCurve";
+            // 
+            // btnAlphaCurve
+            // 
+            btnAlphaCurve.Location = new Point(1378, 201);
+            btnAlphaCurve.Margin = new Padding(4, 3, 4, 3);
+            btnAlphaCurve.Name = "btnAlphaCurve";
+            btnAlphaCurve.Size = new Size(88, 27);
+            btnAlphaCurve.TabIndex = 749;
+            btnAlphaCurve.Text = "Go";
+            btnAlphaCurve.UseVisualStyleBackColor = true;
+            btnAlphaCurve.Click += btnAlphaCurve_Click;
+            // 
             // frmAlphaMatteDraw
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -1807,5 +1840,8 @@
         private PictureBox pictureBox2;
         internal Button btnLoadBmp;
         private CheckBox cbAskTrimap;
+        internal System.ComponentModel.BackgroundWorker backgroundWorker6;
+        private Label label22;
+        private Button btnAlphaCurve;
     }
 }

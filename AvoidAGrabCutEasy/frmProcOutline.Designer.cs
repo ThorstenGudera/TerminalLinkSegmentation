@@ -148,6 +148,7 @@
             numPPEpsilon2 = new NumericUpDown();
             numPPEpsilon = new NumericUpDown();
             groupBox1 = new GroupBox();
+            cbSelectOutlines = new CheckBox();
             numJRem2 = new NumericUpDown();
             numJRem1 = new NumericUpDown();
             label43 = new Label();
@@ -172,7 +173,10 @@
             backgroundWorker7 = new System.ComponentModel.BackgroundWorker();
             openFileDialog1 = new OpenFileDialog();
             backgroundWorker8 = new System.ComponentModel.BackgroundWorker();
-            cbSelectOutlines = new CheckBox();
+            backgroundWorker11 = new System.ComponentModel.BackgroundWorker();
+            label22 = new Label();
+            btnAlphaCurve = new Button();
+            cbExcludeFG = new CheckBox();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
             splitContainer1.Panel2.SuspendLayout();
@@ -252,7 +256,7 @@
             splitContainer1.Panel2.Controls.Add(groupBox4);
             splitContainer1.Panel2.Controls.Add(groupBox3);
             splitContainer1.Panel2.Controls.Add(groupBox1);
-            splitContainer1.Size = new Size(1479, 912);
+            splitContainer1.Size = new Size(1479, 942);
             splitContainer1.SplitterDistance = 973;
             splitContainer1.SplitterWidth = 5;
             splitContainer1.TabIndex = 0;
@@ -267,13 +271,17 @@
             helplineRulerCtrl1.DontProcDoubleClick = false;
             helplineRulerCtrl1.DrawModeClipped = false;
             helplineRulerCtrl1.DrawPixelated = false;
+            helplineRulerCtrl1.HandleMeasureByContainingForm = false;
             helplineRulerCtrl1.IgnoreZoom = false;
             helplineRulerCtrl1.Location = new Point(0, 0);
             helplineRulerCtrl1.Margin = new Padding(5, 3, 5, 3);
+            helplineRulerCtrl1.Measure = false;
             helplineRulerCtrl1.MoveHelpLinesOnResize = false;
             helplineRulerCtrl1.Name = "helplineRulerCtrl1";
+            helplineRulerCtrl1.PtEnd = new Point(0, 0);
+            helplineRulerCtrl1.PtSt = new Point(0, 0);
             helplineRulerCtrl1.SetZoomOnlyByMethodCall = false;
-            helplineRulerCtrl1.Size = new Size(973, 912);
+            helplineRulerCtrl1.Size = new Size(973, 942);
             helplineRulerCtrl1.TabIndex = 0;
             helplineRulerCtrl1.Zoom = 1F;
             helplineRulerCtrl1.ZoomSetManually = false;
@@ -283,7 +291,7 @@
             // 
             btnRedo.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             btnRedo.ForeColor = SystemColors.ControlText;
-            btnRedo.Location = new Point(101, 841);
+            btnRedo.Location = new Point(100, 861);
             btnRedo.Margin = new Padding(4, 3, 4, 3);
             btnRedo.Name = "btnRedo";
             btnRedo.Size = new Size(88, 27);
@@ -296,7 +304,7 @@
             // 
             btnUndo.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             btnUndo.ForeColor = SystemColors.ControlText;
-            btnUndo.Location = new Point(5, 841);
+            btnUndo.Location = new Point(4, 861);
             btnUndo.Margin = new Padding(4, 3, 4, 3);
             btnUndo.Name = "btnUndo";
             btnUndo.Size = new Size(88, 27);
@@ -308,7 +316,7 @@
             // label16
             // 
             label16.AutoSize = true;
-            label16.Location = new Point(15, 885);
+            label16.Location = new Point(15, 905);
             label16.Name = "label16";
             label16.Size = new Size(73, 15);
             label16.TabIndex = 662;
@@ -318,7 +326,7 @@
             // 
             btnLoadBasePic.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             btnLoadBasePic.ForeColor = SystemColors.ControlText;
-            btnLoadBasePic.Location = new Point(92, 879);
+            btnLoadBasePic.Location = new Point(91, 899);
             btnLoadBasePic.Margin = new Padding(4, 3, 4, 3);
             btnLoadBasePic.Name = "btnLoadBasePic";
             btnLoadBasePic.Size = new Size(88, 27);
@@ -329,6 +337,9 @@
             // 
             // groupBox2
             // 
+            groupBox2.Controls.Add(cbExcludeFG);
+            groupBox2.Controls.Add(label22);
+            groupBox2.Controls.Add(btnAlphaCurve);
             groupBox2.Controls.Add(cbExcludeRegions);
             groupBox2.Controls.Add(label1);
             groupBox2.Controls.Add(label14);
@@ -337,11 +348,11 @@
             groupBox2.Controls.Add(btnSetGamma);
             groupBox2.Controls.Add(label3);
             groupBox2.Controls.Add(numGamma);
-            groupBox2.Location = new Point(10, 720);
+            groupBox2.Location = new Point(10, 704);
             groupBox2.Margin = new Padding(4, 3, 4, 3);
             groupBox2.Name = "groupBox2";
             groupBox2.Padding = new Padding(4, 3, 4, 3);
-            groupBox2.Size = new Size(486, 81);
+            groupBox2.Size = new Size(486, 115);
             groupBox2.TabIndex = 659;
             groupBox2.TabStop = false;
             groupBox2.Text = "AlphaGammaEtc";
@@ -349,9 +360,9 @@
             // cbExcludeRegions
             // 
             cbExcludeRegions.AutoSize = true;
-            cbExcludeRegions.Location = new Point(18, 36);
+            cbExcludeRegions.Location = new Point(18, 34);
             cbExcludeRegions.Name = "cbExcludeRegions";
-            cbExcludeRegions.Size = new Size(109, 19);
+            cbExcludeRegions.Size = new Size(108, 19);
             cbExcludeRegions.TabIndex = 722;
             cbExcludeRegions.Text = "exclude regions";
             cbExcludeRegions.UseVisualStyleBackColor = true;
@@ -359,7 +370,7 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(337, 21);
+            label1.Location = new Point(337, 19);
             label1.Name = "label1";
             label1.Size = new Size(27, 15);
             label1.TabIndex = 715;
@@ -368,7 +379,7 @@
             // label14
             // 
             label14.AutoSize = true;
-            label14.Location = new Point(152, 21);
+            label14.Location = new Point(152, 19);
             label14.Name = "label14";
             label14.Size = new Size(85, 15);
             label14.TabIndex = 716;
@@ -376,7 +387,7 @@
             // 
             // btnAlphaZAndGain
             // 
-            btnAlphaZAndGain.Location = new Point(371, 15);
+            btnAlphaZAndGain.Location = new Point(371, 13);
             btnAlphaZAndGain.Margin = new Padding(4, 3, 4, 3);
             btnAlphaZAndGain.Name = "btnAlphaZAndGain";
             btnAlphaZAndGain.Size = new Size(88, 27);
@@ -387,7 +398,7 @@
             // 
             // numAlphaZAndGain
             // 
-            numAlphaZAndGain.Location = new Point(257, 18);
+            numAlphaZAndGain.Location = new Point(257, 16);
             numAlphaZAndGain.Margin = new Padding(4, 3, 4, 3);
             numAlphaZAndGain.Maximum = new decimal(new int[] { 255, 0, 0, 0 });
             numAlphaZAndGain.Name = "numAlphaZAndGain";
@@ -397,7 +408,7 @@
             // 
             // btnSetGamma
             // 
-            btnSetGamma.Location = new Point(370, 48);
+            btnSetGamma.Location = new Point(370, 46);
             btnSetGamma.Margin = new Padding(4, 3, 4, 3);
             btnSetGamma.Name = "btnSetGamma";
             btnSetGamma.Size = new Size(88, 27);
@@ -409,7 +420,7 @@
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(150, 54);
+            label3.Location = new Point(150, 52);
             label3.Margin = new Padding(4, 0, 4, 0);
             label3.Name = "label3";
             label3.Size = new Size(98, 15);
@@ -420,7 +431,7 @@
             // 
             numGamma.DecimalPlaces = 2;
             numGamma.Increment = new decimal(new int[] { 1, 0, 0, 65536 });
-            numGamma.Location = new Point(255, 52);
+            numGamma.Location = new Point(255, 50);
             numGamma.Margin = new Padding(4, 3, 4, 3);
             numGamma.Minimum = new decimal(new int[] { 1, 0, 0, 131072 });
             numGamma.Name = "numGamma";
@@ -431,7 +442,7 @@
             // Label20
             // 
             Label20.AutoSize = true;
-            Label20.Location = new Point(15, 811);
+            Label20.Location = new Point(15, 831);
             Label20.Margin = new Padding(4, 0, 4, 0);
             Label20.Name = "Label20";
             Label20.Size = new Size(58, 15);
@@ -443,7 +454,7 @@
             cmbZoom.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbZoom.FormattingEnabled = true;
             cmbZoom.Items.AddRange(new object[] { "4", "2", "1", "Fit_Width", "Fit" });
-            cmbZoom.Location = new Point(81, 808);
+            cmbZoom.Location = new Point(81, 828);
             cmbZoom.Margin = new Padding(4, 3, 4, 3);
             cmbZoom.Name = "cmbZoom";
             cmbZoom.Size = new Size(87, 23);
@@ -454,10 +465,10 @@
             // 
             label9.AutoSize = true;
             label9.Enabled = false;
-            label9.Location = new Point(254, 812);
+            label9.Location = new Point(254, 832);
             label9.Margin = new Padding(4, 0, 4, 0);
             label9.Name = "label9";
-            label9.Size = new Size(53, 15);
+            label9.Size = new Size(52, 15);
             label9.TabIndex = 674;
             label9.Text = "Max Size";
             toolTip1.SetToolTip(label9, "Maximum size of the long picture-side.\r\nBigger pictures will be resampled down - then processed -\r\nand re-resampled up again.\r\nRealMinCut MaxSize is fix at 300, due to processing time.");
@@ -468,7 +479,7 @@
             cbBGColor.AutoSize = true;
             cbBGColor.Checked = true;
             cbBGColor.CheckState = CheckState.Checked;
-            cbBGColor.Location = new Point(173, 810);
+            cbBGColor.Location = new Point(172, 830);
             cbBGColor.Margin = new Padding(4, 3, 4, 3);
             cbBGColor.Name = "cbBGColor";
             cbBGColor.Size = new Size(67, 19);
@@ -481,7 +492,7 @@
             // 
             numMaxSize.Enabled = false;
             numMaxSize.Increment = new decimal(new int[] { 1, 0, 0, 65536 });
-            numMaxSize.Location = new Point(315, 809);
+            numMaxSize.Location = new Point(315, 829);
             numMaxSize.Margin = new Padding(4, 3, 4, 3);
             numMaxSize.Maximum = new decimal(new int[] { 9999, 0, 0, 0 });
             numMaxSize.Minimum = new decimal(new int[] { 20, 0, 0, 0 });
@@ -494,7 +505,7 @@
             // 
             button10.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             button10.ForeColor = SystemColors.ControlText;
-            button10.Location = new Point(354, 841);
+            button10.Location = new Point(353, 861);
             button10.Margin = new Padding(4, 3, 4, 3);
             button10.Name = "button10";
             button10.Size = new Size(88, 27);
@@ -507,7 +518,7 @@
             // 
             button8.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             button8.ForeColor = SystemColors.ControlText;
-            button8.Location = new Point(259, 841);
+            button8.Location = new Point(258, 861);
             button8.Margin = new Padding(4, 3, 4, 3);
             button8.Name = "button8";
             button8.Size = new Size(88, 27);
@@ -521,7 +532,7 @@
             button2.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             button2.FlatStyle = FlatStyle.System;
             button2.ForeColor = SystemColors.ControlText;
-            button2.Location = new Point(387, 805);
+            button2.Location = new Point(386, 825);
             button2.Margin = new Padding(4, 3, 4, 3);
             button2.Name = "button2";
             button2.Size = new Size(88, 27);
@@ -534,7 +545,7 @@
             btnCancel.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             btnCancel.DialogResult = DialogResult.Cancel;
             btnCancel.ForeColor = SystemColors.ControlText;
-            btnCancel.Location = new Point(363, 882);
+            btnCancel.Location = new Point(362, 902);
             btnCancel.Margin = new Padding(4, 3, 4, 3);
             btnCancel.Name = "btnCancel";
             btnCancel.Size = new Size(88, 27);
@@ -547,7 +558,7 @@
             btnOK.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             btnOK.DialogResult = DialogResult.OK;
             btnOK.ForeColor = SystemColors.ControlText;
-            btnOK.Location = new Point(270, 882);
+            btnOK.Location = new Point(269, 902);
             btnOK.Margin = new Padding(4, 3, 4, 3);
             btnOK.Name = "btnOK";
             btnOK.Size = new Size(88, 27);
@@ -608,7 +619,7 @@
             groupBox4.Controls.Add(numBoundInner);
             groupBox4.Controls.Add(label46);
             groupBox4.ForeColor = SystemColors.ControlText;
-            groupBox4.Location = new Point(10, 297);
+            groupBox4.Location = new Point(10, 283);
             groupBox4.Margin = new Padding(4, 3, 4, 3);
             groupBox4.Name = "groupBox4";
             groupBox4.Padding = new Padding(4, 3, 4, 3);
@@ -623,7 +634,7 @@
             cbUseExistingTrimap.Enabled = false;
             cbUseExistingTrimap.Location = new Point(165, 213);
             cbUseExistingTrimap.Name = "cbUseExistingTrimap";
-            cbUseExistingTrimap.Size = new Size(88, 19);
+            cbUseExistingTrimap.Size = new Size(87, 19);
             cbUseExistingTrimap.TabIndex = 689;
             cbUseExistingTrimap.Text = "use existing";
             cbUseExistingTrimap.UseVisualStyleBackColor = true;
@@ -792,7 +803,7 @@
             label6.Location = new Point(176, 325);
             label6.Margin = new Padding(4, 0, 4, 0);
             label6.Name = "label6";
-            label6.Size = new Size(39, 15);
+            label6.Size = new Size(38, 15);
             label6.TabIndex = 676;
             label6.Text = "wMax";
             toolTip1.SetToolTip(label6, "Maximum angle");
@@ -1005,7 +1016,7 @@
             label13.Location = new Point(21, 94);
             label13.Margin = new Padding(4, 0, 4, 0);
             label13.Name = "label13";
-            label13.Size = new Size(71, 15);
+            label13.Size = new Size(70, 15);
             label13.TabIndex = 540;
             label13.Text = "MaxRestarts";
             // 
@@ -1103,7 +1114,7 @@
             label51.Location = new Point(257, 236);
             label51.Margin = new Padding(4, 0, 4, 0);
             label51.Name = "label51";
-            label51.Size = new Size(99, 15);
+            label51.Size = new Size(98, 15);
             label51.TabIndex = 545;
             label51.Text = "factor outerPixels";
             // 
@@ -1136,7 +1147,7 @@
             rbOuterPx.Location = new Point(18, 233);
             rbOuterPx.Margin = new Padding(4, 3, 4, 3);
             rbOuterPx.Name = "rbOuterPx";
-            rbOuterPx.Size = new Size(83, 19);
+            rbOuterPx.Size = new Size(82, 19);
             rbOuterPx.TabIndex = 543;
             rbOuterPx.TabStop = true;
             rbOuterPx.Text = "outerPixels";
@@ -1368,7 +1379,7 @@
             groupBox3.Controls.Add(numPPEpsilon2);
             groupBox3.Controls.Add(numPPEpsilon);
             groupBox3.ForeColor = SystemColors.ControlText;
-            groupBox3.Location = new Point(52, 55);
+            groupBox3.Location = new Point(52, 49);
             groupBox3.Margin = new Padding(4, 3, 4, 3);
             groupBox3.Name = "groupBox3";
             groupBox3.Padding = new Padding(4, 3, 4, 3);
@@ -1437,7 +1448,7 @@
             cbApproxLines.Location = new Point(13, 46);
             cbApproxLines.Margin = new Padding(4, 3, 4, 3);
             cbApproxLines.Name = "cbApproxLines";
-            cbApproxLines.Size = new Size(111, 19);
+            cbApproxLines.Size = new Size(110, 19);
             cbApproxLines.TabIndex = 590;
             cbApproxLines.Text = "approx lines eps";
             cbApproxLines.UseVisualStyleBackColor = true;
@@ -1683,6 +1694,17 @@
             groupBox1.TabStop = false;
             groupBox1.Text = "remove/extend only";
             // 
+            // cbSelectOutlines
+            // 
+            cbSelectOutlines.AutoSize = true;
+            cbSelectOutlines.Location = new Point(316, 15);
+            cbSelectOutlines.Name = "cbSelectOutlines";
+            cbSelectOutlines.Size = new Size(56, 19);
+            cbSelectOutlines.TabIndex = 542;
+            cbSelectOutlines.Text = "select";
+            toolTip1.SetToolTip(cbSelectOutlines, "select the outlines to process");
+            cbSelectOutlines.UseVisualStyleBackColor = true;
+            // 
             // numJRem2
             // 
             numJRem2.Location = new Point(254, 13);
@@ -1708,7 +1730,7 @@
             label43.Location = new Point(14, 18);
             label43.Margin = new Padding(4, 0, 4, 0);
             label43.Name = "label43";
-            label43.Size = new Size(127, 15);
+            label43.Size = new Size(126, 15);
             label43.TabIndex = 540;
             label43.Text = "remove/extend      rem";
             // 
@@ -1718,7 +1740,7 @@
             label44.Location = new Point(218, 17);
             label44.Margin = new Padding(4, 0, 4, 0);
             label44.Name = "label44";
-            label44.Size = new Size(23, 15);
+            label44.Size = new Size(22, 15);
             label44.TabIndex = 540;
             label44.Text = "ext";
             // 
@@ -1737,7 +1759,7 @@
             // statusStrip1
             // 
             statusStrip1.Items.AddRange(new ToolStripItem[] { toolStripStatusLabel1, toolStripStatusLabel2, toolStripProgressBar1, toolStripStatusLabel5, toolStripStatusLabel4, toolStripDropDownButton1 });
-            statusStrip1.Location = new Point(0, 912);
+            statusStrip1.Location = new Point(0, 942);
             statusStrip1.Name = "statusStrip1";
             statusStrip1.Padding = new Padding(1, 0, 16, 0);
             statusStrip1.Size = new Size(1479, 44);
@@ -1867,22 +1889,49 @@
             backgroundWorker8.DoWork += backgroundWorker8_DoWork;
             backgroundWorker8.RunWorkerCompleted += backgroundWorker8_RunWorkerCompleted;
             // 
-            // cbSelectOutlines
+            // backgroundWorker11
             // 
-            cbSelectOutlines.AutoSize = true;
-            cbSelectOutlines.Location = new Point(316, 15);
-            cbSelectOutlines.Name = "cbSelectOutlines";
-            cbSelectOutlines.Size = new Size(56, 19);
-            cbSelectOutlines.TabIndex = 542;
-            cbSelectOutlines.Text = "select";
-            toolTip1.SetToolTip(cbSelectOutlines, "select the outlines to process");
-            cbSelectOutlines.UseVisualStyleBackColor = true;
+            backgroundWorker11.WorkerReportsProgress = true;
+            backgroundWorker11.WorkerSupportsCancellation = true;
+            backgroundWorker11.DoWork += backgroundWorker11_DoWork;
+            backgroundWorker11.ProgressChanged += backgroundWorker11_ProgressChanged;
+            backgroundWorker11.RunWorkerCompleted += backgroundWorker11_RunWorkerCompleted;
+            // 
+            // label22
+            // 
+            label22.AutoSize = true;
+            label22.Location = new Point(283, 87);
+            label22.Name = "label22";
+            label22.Size = new Size(69, 15);
+            label22.TabIndex = 749;
+            label22.Text = "AlphaCurve";
+            // 
+            // btnAlphaCurve
+            // 
+            btnAlphaCurve.Location = new Point(370, 80);
+            btnAlphaCurve.Margin = new Padding(4, 3, 4, 3);
+            btnAlphaCurve.Name = "btnAlphaCurve";
+            btnAlphaCurve.Size = new Size(88, 27);
+            btnAlphaCurve.TabIndex = 748;
+            btnAlphaCurve.Text = "Go";
+            btnAlphaCurve.UseVisualStyleBackColor = true;
+            btnAlphaCurve.Click += btnAlphaCurve_Click;
+            // 
+            // cbExcludeFG
+            // 
+            cbExcludeFG.AutoSize = true;
+            cbExcludeFG.Location = new Point(18, 59);
+            cbExcludeFG.Name = "cbExcludeFG";
+            cbExcludeFG.Size = new Size(83, 19);
+            cbExcludeFG.TabIndex = 750;
+            cbExcludeFG.Text = "exclude FG";
+            cbExcludeFG.UseVisualStyleBackColor = true;
             // 
             // frmProcOutline
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1479, 956);
+            ClientSize = new Size(1479, 986);
             Controls.Add(splitContainer1);
             Controls.Add(statusStrip1);
             Margin = new Padding(4, 3, 4, 3);
@@ -2093,5 +2142,9 @@
         private CheckBox cbExcludeRegions;
         private ToolStripStatusLabel toolStripStatusLabel5;
         private CheckBox cbSelectOutlines;
+        internal System.ComponentModel.BackgroundWorker backgroundWorker11;
+        private Label label22;
+        private Button btnAlphaCurve;
+        private CheckBox cbExcludeFG;
     }
 }

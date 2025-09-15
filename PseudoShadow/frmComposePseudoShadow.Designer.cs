@@ -64,6 +64,7 @@ namespace PseudoShadow
             saveFileDialog1 = new SaveFileDialog();
             splitContainer2 = new SplitContainer();
             luBitmapDesignerCtrl1 = new LUBitmapDesigner.LUBitmapDesignerCtrl();
+            cbExcludeFG = new CheckBox();
             btnFromCache = new Button();
             cbExcludeRegions = new CheckBox();
             btnCloneColors = new Button();
@@ -118,7 +119,9 @@ namespace PseudoShadow
             backgroundWorker3 = new System.ComponentModel.BackgroundWorker();
             backgroundWorker4 = new System.ComponentModel.BackgroundWorker();
             openFileDialog2 = new OpenFileDialog();
-            cbExcludeFG = new CheckBox();
+            backgroundWorker6 = new System.ComponentModel.BackgroundWorker();
+            label22 = new Label();
+            btnAlphaCurve = new Button();
             statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer2).BeginInit();
             splitContainer2.Panel1.SuspendLayout();
@@ -281,6 +284,8 @@ namespace PseudoShadow
             // splitContainer2.Panel2
             // 
             splitContainer2.Panel2.AutoScroll = true;
+            splitContainer2.Panel2.Controls.Add(label22);
+            splitContainer2.Panel2.Controls.Add(btnAlphaCurve);
             splitContainer2.Panel2.Controls.Add(cbExcludeFG);
             splitContainer2.Panel2.Controls.Add(btnFromCache);
             splitContainer2.Panel2.Controls.Add(cbExcludeRegions);
@@ -312,7 +317,7 @@ namespace PseudoShadow
             splitContainer2.Panel2.Controls.Add(button8);
             splitContainer2.Panel2.Controls.Add(button2);
             splitContainer2.Size = new Size(1486, 882);
-            splitContainer2.SplitterDistance = 1115;
+            splitContainer2.SplitterDistance = 1114;
             splitContainer2.SplitterWidth = 5;
             splitContainer2.TabIndex = 0;
             // 
@@ -325,8 +330,18 @@ namespace PseudoShadow
             luBitmapDesignerCtrl1.SelectedShape = null;
             luBitmapDesignerCtrl1.ShadowMode = false;
             luBitmapDesignerCtrl1.ShapeList = null;
-            luBitmapDesignerCtrl1.Size = new Size(1115, 882);
+            luBitmapDesignerCtrl1.Size = new Size(1114, 882);
             luBitmapDesignerCtrl1.TabIndex = 0;
+            // 
+            // cbExcludeFG
+            // 
+            cbExcludeFG.AutoSize = true;
+            cbExcludeFG.Location = new Point(140, 446);
+            cbExcludeFG.Name = "cbExcludeFG";
+            cbExcludeFG.Size = new Size(83, 19);
+            cbExcludeFG.TabIndex = 726;
+            cbExcludeFG.Text = "exclude FG";
+            cbExcludeFG.UseVisualStyleBackColor = true;
             // 
             // btnFromCache
             // 
@@ -343,7 +358,7 @@ namespace PseudoShadow
             // cbExcludeRegions
             // 
             cbExcludeRegions.AutoSize = true;
-            cbExcludeRegions.Location = new Point(26, 460);
+            cbExcludeRegions.Location = new Point(26, 446);
             cbExcludeRegions.Name = "cbExcludeRegions";
             cbExcludeRegions.Size = new Size(108, 19);
             cbExcludeRegions.TabIndex = 724;
@@ -353,7 +368,7 @@ namespace PseudoShadow
             // btnCloneColors
             // 
             btnCloneColors.Enabled = false;
-            btnCloneColors.Location = new Point(210, 357);
+            btnCloneColors.Location = new Point(210, 343);
             btnCloneColors.Name = "btnCloneColors";
             btnCloneColors.Size = new Size(88, 27);
             btnCloneColors.TabIndex = 723;
@@ -364,7 +379,7 @@ namespace PseudoShadow
             // label14
             // 
             label14.AutoSize = true;
-            label14.Location = new Point(122, 740);
+            label14.Location = new Point(122, 750);
             label14.Name = "label14";
             label14.Size = new Size(98, 15);
             label14.TabIndex = 722;
@@ -387,7 +402,7 @@ namespace PseudoShadow
             panel3.Controls.Add(numericUpDown2);
             panel3.Controls.Add(numericUpDown3);
             panel3.Controls.Add(numericUpDown1);
-            panel3.Location = new Point(9, 584);
+            panel3.Location = new Point(9, 598);
             panel3.Name = "panel3";
             panel3.Size = new Size(317, 139);
             panel3.TabIndex = 721;
@@ -552,7 +567,7 @@ namespace PseudoShadow
             panel2.BorderStyle = BorderStyle.FixedSingle;
             panel2.Controls.Add(label2);
             panel2.Controls.Add(btnGaussian);
-            panel2.Location = new Point(9, 545);
+            panel2.Location = new Point(9, 559);
             panel2.Name = "panel2";
             panel2.Size = new Size(317, 33);
             panel2.TabIndex = 720;
@@ -585,7 +600,7 @@ namespace PseudoShadow
             panel1.Controls.Add(btnFloodfill);
             panel1.Controls.Add(btnColor);
             panel1.Controls.Add(numTolerance);
-            panel1.Location = new Point(9, 485);
+            panel1.Location = new Point(9, 499);
             panel1.Name = "panel1";
             panel1.Size = new Size(317, 54);
             panel1.TabIndex = 719;
@@ -672,7 +687,7 @@ namespace PseudoShadow
             // label6
             // 
             label6.AutoSize = true;
-            label6.Location = new Point(193, 403);
+            label6.Location = new Point(193, 389);
             label6.Name = "label6";
             label6.Size = new Size(27, 15);
             label6.TabIndex = 715;
@@ -681,7 +696,7 @@ namespace PseudoShadow
             // label5
             // 
             label5.AutoSize = true;
-            label5.Location = new Point(24, 403);
+            label5.Location = new Point(24, 389);
             label5.Name = "label5";
             label5.Size = new Size(85, 15);
             label5.TabIndex = 716;
@@ -689,7 +704,7 @@ namespace PseudoShadow
             // 
             // btnAlphaZAndGain
             // 
-            btnAlphaZAndGain.Location = new Point(230, 397);
+            btnAlphaZAndGain.Location = new Point(230, 383);
             btnAlphaZAndGain.Margin = new Padding(4, 3, 4, 3);
             btnAlphaZAndGain.Name = "btnAlphaZAndGain";
             btnAlphaZAndGain.Size = new Size(88, 27);
@@ -700,7 +715,7 @@ namespace PseudoShadow
             // 
             // btnSetGamma
             // 
-            btnSetGamma.Location = new Point(210, 428);
+            btnSetGamma.Location = new Point(230, 414);
             btnSetGamma.Margin = new Padding(4, 3, 4, 3);
             btnSetGamma.Name = "btnSetGamma";
             btnSetGamma.Size = new Size(88, 27);
@@ -712,7 +727,7 @@ namespace PseudoShadow
             // label4
             // 
             label4.AutoSize = true;
-            label4.Location = new Point(24, 434);
+            label4.Location = new Point(24, 420);
             label4.Margin = new Padding(4, 0, 4, 0);
             label4.Name = "label4";
             label4.Size = new Size(98, 15);
@@ -723,7 +738,7 @@ namespace PseudoShadow
             // 
             numGamma.DecimalPlaces = 2;
             numGamma.Increment = new decimal(new int[] { 1, 0, 0, 65536 });
-            numGamma.Location = new Point(132, 432);
+            numGamma.Location = new Point(132, 418);
             numGamma.Margin = new Padding(4, 3, 4, 3);
             numGamma.Minimum = new decimal(new int[] { 1, 0, 0, 131072 });
             numGamma.Name = "numGamma";
@@ -733,7 +748,7 @@ namespace PseudoShadow
             // 
             // numAlphaZAndGain
             // 
-            numAlphaZAndGain.Location = new Point(116, 401);
+            numAlphaZAndGain.Location = new Point(116, 387);
             numAlphaZAndGain.Margin = new Padding(4, 3, 4, 3);
             numAlphaZAndGain.Maximum = new decimal(new int[] { 255, 0, 0, 0 });
             numAlphaZAndGain.Name = "numAlphaZAndGain";
@@ -743,7 +758,7 @@ namespace PseudoShadow
             // 
             // picInfoCtrl1
             // 
-            picInfoCtrl1.Location = new Point(9, 51);
+            picInfoCtrl1.Location = new Point(9, 45);
             picInfoCtrl1.Margin = new Padding(5, 3, 5, 3);
             picInfoCtrl1.Name = "picInfoCtrl1";
             picInfoCtrl1.Size = new Size(280, 300);
@@ -773,7 +788,7 @@ namespace PseudoShadow
             // btnClone
             // 
             btnClone.ForeColor = SystemColors.ControlText;
-            btnClone.Location = new Point(150, 770);
+            btnClone.Location = new Point(150, 780);
             btnClone.Margin = new Padding(4, 3, 4, 3);
             btnClone.Name = "btnClone";
             btnClone.Size = new Size(124, 27);
@@ -785,7 +800,7 @@ namespace PseudoShadow
             // btnSwap
             // 
             btnSwap.ForeColor = SystemColors.ControlText;
-            btnSwap.Location = new Point(16, 770);
+            btnSwap.Location = new Point(16, 780);
             btnSwap.Margin = new Padding(4, 3, 4, 3);
             btnSwap.Name = "btnSwap";
             btnSwap.Size = new Size(124, 27);
@@ -797,7 +812,7 @@ namespace PseudoShadow
             // btnLoadUpper
             // 
             btnLoadUpper.ForeColor = SystemColors.ControlText;
-            btnLoadUpper.Location = new Point(231, 734);
+            btnLoadUpper.Location = new Point(231, 744);
             btnLoadUpper.Margin = new Padding(4, 3, 4, 3);
             btnLoadUpper.Name = "btnLoadUpper";
             btnLoadUpper.Size = new Size(88, 27);
@@ -809,7 +824,7 @@ namespace PseudoShadow
             // btnMerge
             // 
             btnMerge.ForeColor = SystemColors.ControlText;
-            btnMerge.Location = new Point(24, 357);
+            btnMerge.Location = new Point(24, 343);
             btnMerge.Margin = new Padding(4, 3, 4, 3);
             btnMerge.Name = "btnMerge";
             btnMerge.Size = new Size(88, 27);
@@ -821,7 +836,7 @@ namespace PseudoShadow
             // btnRemove
             // 
             btnRemove.ForeColor = SystemColors.ControlText;
-            btnRemove.Location = new Point(16, 734);
+            btnRemove.Location = new Point(16, 744);
             btnRemove.Margin = new Padding(4, 3, 4, 3);
             btnRemove.Name = "btnRemove";
             btnRemove.Size = new Size(88, 27);
@@ -909,15 +924,33 @@ namespace PseudoShadow
             openFileDialog2.FileName = "openFileDialog1";
             openFileDialog2.Filter = "Images - (*.bmp;*.jpg;*.jpeg;*.jfif;*.png)|*.bmp;*.jpg;*.jpeg;*.jfif;*.png";
             // 
-            // cbExcludeFG
+            // backgroundWorker6
             // 
-            cbExcludeFG.AutoSize = true;
-            cbExcludeFG.Location = new Point(140, 460);
-            cbExcludeFG.Name = "cbExcludeFG";
-            cbExcludeFG.Size = new Size(83, 19);
-            cbExcludeFG.TabIndex = 726;
-            cbExcludeFG.Text = "exclude FG";
-            cbExcludeFG.UseVisualStyleBackColor = true;
+            backgroundWorker6.WorkerReportsProgress = true;
+            backgroundWorker6.WorkerSupportsCancellation = true;
+            backgroundWorker6.DoWork += backgroundWorker6_DoWork;
+            backgroundWorker6.ProgressChanged += backgroundWorker6_ProgressChanged;
+            backgroundWorker6.RunWorkerCompleted += backgroundWorker6_RunWorkerCompleted;
+            // 
+            // label22
+            // 
+            label22.AutoSize = true;
+            label22.Location = new Point(143, 473);
+            label22.Name = "label22";
+            label22.Size = new Size(69, 15);
+            label22.TabIndex = 749;
+            label22.Text = "AlphaCurve";
+            // 
+            // btnAlphaCurve
+            // 
+            btnAlphaCurve.Location = new Point(230, 466);
+            btnAlphaCurve.Margin = new Padding(4, 3, 4, 3);
+            btnAlphaCurve.Name = "btnAlphaCurve";
+            btnAlphaCurve.Size = new Size(88, 27);
+            btnAlphaCurve.TabIndex = 748;
+            btnAlphaCurve.Text = "Go";
+            btnAlphaCurve.UseVisualStyleBackColor = true;
+            btnAlphaCurve.Click += btnAlphaCurve_Click;
             // 
             // frmComposePseudoShadow
             // 
@@ -1034,5 +1067,8 @@ namespace PseudoShadow
         public Button btnFromCache;
         private OpenFileDialog openFileDialog2;
         private CheckBox cbExcludeFG;
+        internal System.ComponentModel.BackgroundWorker backgroundWorker6;
+        private Label label22;
+        private Button btnAlphaCurve;
     }
 }

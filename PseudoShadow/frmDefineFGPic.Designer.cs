@@ -68,6 +68,7 @@
             saveFileDialog1 = new SaveFileDialog();
             Timer3 = new System.Windows.Forms.Timer(components);
             backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
+            cbSetOpaque = new CheckBox();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
             splitContainer1.Panel2.SuspendLayout();
@@ -119,11 +120,15 @@
             helplineRulerCtrl2.DontProcDoubleClick = false;
             helplineRulerCtrl2.DrawModeClipped = false;
             helplineRulerCtrl2.DrawPixelated = false;
+            helplineRulerCtrl2.HandleMeasureByContainingForm = false;
             helplineRulerCtrl2.IgnoreZoom = false;
             helplineRulerCtrl2.Location = new Point(0, 0);
             helplineRulerCtrl2.Margin = new Padding(5, 3, 5, 3);
+            helplineRulerCtrl2.Measure = false;
             helplineRulerCtrl2.MoveHelpLinesOnResize = false;
             helplineRulerCtrl2.Name = "helplineRulerCtrl2";
+            helplineRulerCtrl2.PtEnd = new Point(0, 0);
+            helplineRulerCtrl2.PtSt = new Point(0, 0);
             helplineRulerCtrl2.SetZoomOnlyByMethodCall = false;
             helplineRulerCtrl2.Size = new Size(621, 658);
             helplineRulerCtrl2.TabIndex = 0;
@@ -141,11 +146,15 @@
             helplineRulerCtrl1.DontProcDoubleClick = false;
             helplineRulerCtrl1.DrawModeClipped = false;
             helplineRulerCtrl1.DrawPixelated = false;
+            helplineRulerCtrl1.HandleMeasureByContainingForm = false;
             helplineRulerCtrl1.IgnoreZoom = false;
             helplineRulerCtrl1.Location = new Point(0, 0);
             helplineRulerCtrl1.Margin = new Padding(5, 3, 5, 3);
+            helplineRulerCtrl1.Measure = false;
             helplineRulerCtrl1.MoveHelpLinesOnResize = false;
             helplineRulerCtrl1.Name = "helplineRulerCtrl1";
+            helplineRulerCtrl1.PtEnd = new Point(0, 0);
+            helplineRulerCtrl1.PtSt = new Point(0, 0);
             helplineRulerCtrl1.SetZoomOnlyByMethodCall = false;
             helplineRulerCtrl1.Size = new Size(653, 658);
             helplineRulerCtrl1.TabIndex = 0;
@@ -180,6 +189,7 @@
             // panel1
             // 
             panel1.AutoScroll = true;
+            panel1.Controls.Add(cbSetOpaque);
             panel1.Controls.Add(label3);
             panel1.Controls.Add(cbDraw);
             panel1.Controls.Add(numPenW);
@@ -494,6 +504,16 @@
             backgroundWorker1.WorkerReportsProgress = true;
             backgroundWorker1.WorkerSupportsCancellation = true;
             // 
+            // cbSetOpaque
+            // 
+            cbSetOpaque.AutoSize = true;
+            cbSetOpaque.Location = new Point(470, 51);
+            cbSetOpaque.Name = "cbSetOpaque";
+            cbSetOpaque.Size = new Size(133, 19);
+            cbSetOpaque.TabIndex = 721;
+            cbSetOpaque.Text = "set FG alpha opaque";
+            cbSetOpaque.UseVisualStyleBackColor = true;
+            // 
             // frmDefineFGPic
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -562,5 +582,6 @@
         private Button btnCrop;
         private Button btnRedoDraw;
         private Button btnUndoDraw;
+        internal CheckBox cbSetOpaque;
     }
 }

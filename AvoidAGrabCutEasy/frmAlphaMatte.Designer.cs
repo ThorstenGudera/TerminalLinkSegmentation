@@ -64,6 +64,8 @@
             cbLSBmp = new CheckBox();
             Label20 = new Label();
             panel1 = new Panel();
+            label21 = new Label();
+            btnAlphaMatteDraw = new Button();
             cbExcludeFG = new CheckBox();
             btnSmothenSettings = new Button();
             panel9 = new Panel();
@@ -125,8 +127,9 @@
             backgroundWorker5 = new System.ComponentModel.BackgroundWorker();
             backgroundWorker3 = new System.ComponentModel.BackgroundWorker();
             backgroundWorker4 = new System.ComponentModel.BackgroundWorker();
-            label21 = new Label();
-            btnAlphaMatteDraw = new Button();
+            backgroundWorker6 = new System.ComponentModel.BackgroundWorker();
+            label22 = new Label();
+            btnAlphaCurve = new Button();
             statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
@@ -290,7 +293,7 @@
             // splitContainer1
             // 
             splitContainer1.Dock = DockStyle.Fill;
-            splitContainer1.Location = new Point(0, 247);
+            splitContainer1.Location = new Point(0, 267);
             splitContainer1.Margin = new Padding(4, 3, 4, 3);
             splitContainer1.Name = "splitContainer1";
             // 
@@ -301,7 +304,7 @@
             // splitContainer1.Panel2
             // 
             splitContainer1.Panel2.Controls.Add(helplineRulerCtrl2);
-            splitContainer1.Size = new Size(1479, 625);
+            splitContainer1.Size = new Size(1479, 605);
             splitContainer1.SplitterDistance = 756;
             splitContainer1.SplitterWidth = 5;
             splitContainer1.TabIndex = 227;
@@ -326,7 +329,7 @@
             helplineRulerCtrl1.PtEnd = new Point(0, 0);
             helplineRulerCtrl1.PtSt = new Point(0, 0);
             helplineRulerCtrl1.SetZoomOnlyByMethodCall = false;
-            helplineRulerCtrl1.Size = new Size(756, 625);
+            helplineRulerCtrl1.Size = new Size(756, 605);
             helplineRulerCtrl1.TabIndex = 0;
             helplineRulerCtrl1.Zoom = 1F;
             helplineRulerCtrl1.ZoomSetManually = false;
@@ -351,7 +354,7 @@
             helplineRulerCtrl2.PtEnd = new Point(0, 0);
             helplineRulerCtrl2.PtSt = new Point(0, 0);
             helplineRulerCtrl2.SetZoomOnlyByMethodCall = false;
-            helplineRulerCtrl2.Size = new Size(718, 625);
+            helplineRulerCtrl2.Size = new Size(718, 605);
             helplineRulerCtrl2.TabIndex = 0;
             helplineRulerCtrl2.Zoom = 1F;
             helplineRulerCtrl2.ZoomSetManually = false;
@@ -515,6 +518,8 @@
             // panel1
             // 
             panel1.AutoScroll = true;
+            panel1.Controls.Add(label22);
+            panel1.Controls.Add(btnAlphaCurve);
             panel1.Controls.Add(label21);
             panel1.Controls.Add(btnAlphaMatteDraw);
             panel1.Controls.Add(cbExcludeFG);
@@ -576,13 +581,33 @@
             panel1.Location = new Point(0, 0);
             panel1.Margin = new Padding(4, 3, 4, 3);
             panel1.Name = "panel1";
-            panel1.Size = new Size(1479, 247);
+            panel1.Size = new Size(1479, 267);
             panel1.TabIndex = 226;
+            // 
+            // label21
+            // 
+            label21.AutoSize = true;
+            label21.Location = new Point(1052, 239);
+            label21.Name = "label21";
+            label21.Size = new Size(99, 15);
+            label21.TabIndex = 747;
+            label21.Text = "AlphaMatte Draw";
+            // 
+            // btnAlphaMatteDraw
+            // 
+            btnAlphaMatteDraw.Location = new Point(1158, 233);
+            btnAlphaMatteDraw.Margin = new Padding(4, 3, 4, 3);
+            btnAlphaMatteDraw.Name = "btnAlphaMatteDraw";
+            btnAlphaMatteDraw.Size = new Size(88, 27);
+            btnAlphaMatteDraw.TabIndex = 746;
+            btnAlphaMatteDraw.Text = "Go";
+            btnAlphaMatteDraw.UseVisualStyleBackColor = true;
+            btnAlphaMatteDraw.Click += btnAlphaMatteDraw_Click;
             // 
             // cbExcludeFG
             // 
             cbExcludeFG.AutoSize = true;
-            cbExcludeFG.Location = new Point(1223, 189);
+            cbExcludeFG.Location = new Point(1223, 179);
             cbExcludeFG.Name = "cbExcludeFG";
             cbExcludeFG.Size = new Size(83, 19);
             cbExcludeFG.TabIndex = 730;
@@ -631,7 +656,7 @@
             // cbExcludeRegions
             // 
             cbExcludeRegions.AutoSize = true;
-            cbExcludeRegions.Location = new Point(1109, 189);
+            cbExcludeRegions.Location = new Point(1109, 179);
             cbExcludeRegions.Name = "cbExcludeRegions";
             cbExcludeRegions.Size = new Size(108, 19);
             cbExcludeRegions.TabIndex = 723;
@@ -721,7 +746,7 @@
             // label5
             // 
             label5.AutoSize = true;
-            label5.Location = new Point(1297, 129);
+            label5.Location = new Point(1297, 119);
             label5.Name = "label5";
             label5.Size = new Size(27, 15);
             label5.TabIndex = 712;
@@ -730,7 +755,7 @@
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(1109, 129);
+            label3.Location = new Point(1109, 119);
             label3.Name = "label3";
             label3.Size = new Size(85, 15);
             label3.TabIndex = 712;
@@ -766,7 +791,7 @@
             // 
             // btnAlphaZAndGain
             // 
-            btnAlphaZAndGain.Location = new Point(1331, 123);
+            btnAlphaZAndGain.Location = new Point(1331, 113);
             btnAlphaZAndGain.Margin = new Padding(4, 3, 4, 3);
             btnAlphaZAndGain.Name = "btnAlphaZAndGain";
             btnAlphaZAndGain.Size = new Size(88, 27);
@@ -777,7 +802,7 @@
             // 
             // btnSetGamma
             // 
-            btnSetGamma.Location = new Point(1294, 156);
+            btnSetGamma.Location = new Point(1331, 146);
             btnSetGamma.Margin = new Padding(4, 3, 4, 3);
             btnSetGamma.Name = "btnSetGamma";
             btnSetGamma.Size = new Size(88, 27);
@@ -789,7 +814,7 @@
             // label4
             // 
             label4.AutoSize = true;
-            label4.Location = new Point(1109, 162);
+            label4.Location = new Point(1146, 152);
             label4.Margin = new Padding(4, 0, 4, 0);
             label4.Name = "label4";
             label4.Size = new Size(98, 15);
@@ -800,7 +825,7 @@
             // 
             numGamma.DecimalPlaces = 2;
             numGamma.Increment = new decimal(new int[] { 1, 0, 0, 65536 });
-            numGamma.Location = new Point(1217, 160);
+            numGamma.Location = new Point(1254, 150);
             numGamma.Margin = new Padding(4, 3, 4, 3);
             numGamma.Minimum = new decimal(new int[] { 1, 0, 0, 131072 });
             numGamma.Name = "numGamma";
@@ -975,7 +1000,7 @@
             // 
             // numAlphaZAndGain
             // 
-            numAlphaZAndGain.Location = new Point(1217, 126);
+            numAlphaZAndGain.Location = new Point(1217, 116);
             numAlphaZAndGain.Margin = new Padding(4, 3, 4, 3);
             numAlphaZAndGain.Maximum = new decimal(new int[] { 255, 0, 0, 0 });
             numAlphaZAndGain.Name = "numAlphaZAndGain";
@@ -1102,7 +1127,7 @@
             btnCancel.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             btnCancel.DialogResult = DialogResult.Cancel;
             btnCancel.ForeColor = SystemColors.ControlText;
-            btnCancel.Location = new Point(1378, 213);
+            btnCancel.Location = new Point(1378, 233);
             btnCancel.Margin = new Padding(4, 3, 4, 3);
             btnCancel.Name = "btnCancel";
             btnCancel.Size = new Size(88, 27);
@@ -1116,7 +1141,7 @@
             btnOK.DialogResult = DialogResult.OK;
             btnOK.Enabled = false;
             btnOK.ForeColor = SystemColors.ControlText;
-            btnOK.Location = new Point(1281, 213);
+            btnOK.Location = new Point(1281, 233);
             btnOK.Margin = new Padding(4, 3, 4, 3);
             btnOK.Name = "btnOK";
             btnOK.Size = new Size(88, 27);
@@ -1244,25 +1269,33 @@
             backgroundWorker4.DoWork += backgroundWorker4_DoWork;
             backgroundWorker4.RunWorkerCompleted += backgroundWorker4_RunWorkerCompleted;
             // 
-            // label21
+            // backgroundWorker6
             // 
-            label21.AutoSize = true;
-            label21.Location = new Point(1052, 219);
-            label21.Name = "label21";
-            label21.Size = new Size(99, 15);
-            label21.TabIndex = 747;
-            label21.Text = "AlphaMatte Draw";
+            backgroundWorker6.WorkerReportsProgress = true;
+            backgroundWorker6.WorkerSupportsCancellation = true;
+            backgroundWorker6.DoWork += backgroundWorker6_DoWork;
+            backgroundWorker6.ProgressChanged += backgroundWorker6_ProgressChanged;
+            backgroundWorker6.RunWorkerCompleted += backgroundWorker6_RunWorkerCompleted;
             // 
-            // btnAlphaMatteDraw
+            // label22
             // 
-            btnAlphaMatteDraw.Location = new Point(1158, 213);
-            btnAlphaMatteDraw.Margin = new Padding(4, 3, 4, 3);
-            btnAlphaMatteDraw.Name = "btnAlphaMatteDraw";
-            btnAlphaMatteDraw.Size = new Size(88, 27);
-            btnAlphaMatteDraw.TabIndex = 746;
-            btnAlphaMatteDraw.Text = "Go";
-            btnAlphaMatteDraw.UseVisualStyleBackColor = true;
-            btnAlphaMatteDraw.Click += btnAlphaMatteDraw_Click;
+            label22.AutoSize = true;
+            label22.Location = new Point(1244, 209);
+            label22.Name = "label22";
+            label22.Size = new Size(69, 15);
+            label22.TabIndex = 749;
+            label22.Text = "AlphaCurve";
+            // 
+            // btnAlphaCurve
+            // 
+            btnAlphaCurve.Location = new Point(1331, 202);
+            btnAlphaCurve.Margin = new Padding(4, 3, 4, 3);
+            btnAlphaCurve.Name = "btnAlphaCurve";
+            btnAlphaCurve.Size = new Size(88, 27);
+            btnAlphaCurve.TabIndex = 748;
+            btnAlphaCurve.Text = "Go";
+            btnAlphaCurve.UseVisualStyleBackColor = true;
+            btnAlphaCurve.Click += btnAlphaCurve_Click;
             // 
             // frmAlphaMatte
             // 
@@ -1406,5 +1439,8 @@
         private CheckBox cbExcludeFG;
         private Label label21;
         private Button btnAlphaMatteDraw;
+        internal System.ComponentModel.BackgroundWorker backgroundWorker6;
+        private Label label22;
+        private Button btnAlphaCurve;
     }
 }

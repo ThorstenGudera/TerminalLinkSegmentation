@@ -12,6 +12,7 @@
     <ProjectReference Include="..\AvailMem\AvailMem.vbproj" />
     <ProjectReference Include="..\Cache\Cache.vbproj" />
     <ProjectReference Include="..\ChainCodeFinder\ChainCodeFinder.vbproj" />
+    <ProjectReference Include="..\ColorCurvesAlpha\ColorCurvesAlpha.vbproj" />
     <ProjectReference Include="..\ConvolutionLib\ConvolutionLib.vbproj" />
     <ProjectReference Include="..\LUBitmapDesigner\LUBitmapDesigner.csproj" />
   </ItemGroup>

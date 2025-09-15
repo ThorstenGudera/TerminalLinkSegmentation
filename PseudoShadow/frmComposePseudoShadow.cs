@@ -1,4 +1,5 @@
 ﻿using Cache;
+using ColorCurvesAlpha;
 using ConvolutionLib;
 using LUBitmapDesigner;
 using System;
@@ -1828,6 +1829,299 @@ namespace PseudoShadow
                     }
                 }
                 this.openFileDialog1.InitialDirectory = s;
+            }
+        }
+
+        private void btnAlphaCurve_Click(object sender, EventArgs e)
+        {
+            if (this.backgroundWorker6.IsBusy)
+            {
+                this.backgroundWorker6.CancelAsync();
+                return;
+            }
+
+            if (this.luBitmapDesignerCtrl1.ShapeList != null && this.luBitmapDesignerCtrl1.ShapeList.Count > 1)
+            {
+                Bitmap? b = this.luBitmapDesignerCtrl1.GetUpperImage();
+                this.Cursor = Cursors.WaitCursor;
+                this.SetControls(false);
+
+                int alphaTh = (int)this.numAlphaZAndGain.Value;
+                bool redrawExcluded = false;
+
+                string? c = this.CachePathAddition;
+                if (c != null && this.cbExcludeRegions.Checked)
+                {
+                    bool show = true;
+                    if (this._excludedRegions != null && this._excludedRegions.Count > 0)
+                    {
+                        if (MessageBox.Show("Use existing Exclusions?", "", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) == DialogResult.Yes)
+                        {
+                            redrawExcluded = true;
+                            show = false;
+                        }
+                    }
+
+                    if (b != null && show)
+                    {
+                        using frmExcludeFromPic frm = new frmExcludeFromPic(b, c);
+                        frm.SetupCache();
+
+                        if (frm.ShowDialog() == DialogResult.OK)
+                        {
+                            if (frm.ExcludedBmpRegions != null)
+                            {
+                                using Graphics gx = Graphics.FromImage(b);
+                                for (int i = 0; i < frm.ExcludedBmpRegions.Count; i++)
+                                {
+                                    Bitmap? rem = frm.ExcludedBmpRegions[i].Remaining;
+                                    if (rem != null)
+                                        SetTransp(b, rem, frm.ExcludedBmpRegions[i].Location);
+                                }
+
+                                CopyRegions(frm.ExcludedBmpRegions);
+                                redrawExcluded = true;
+                            }
+                        }
+                    }
+                }
+
+                if (c != null && this.cbExcludeFG.Checked)
+                {
+                    bool show = true;
+                    if (this._excludedRegions != null && this._excludedRegions.Count > 0)
+                    {
+                        if (MessageBox.Show("Use existing Exclusions?", "", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) == DialogResult.Yes)
+                        {
+                            redrawExcluded = true;
+                            show = false;
+                        }
+                    }
+
+                    if (b != null && show)
+                    {
+                        using frmDefineFGPic frm = new frmDefineFGPic(b, c);
+                        frm.SetupCache();
+
+                        if (frm.ShowDialog() == DialogResult.OK)
+                        {
+                            if (frm.Excluded != null)
+                            {
+                                using Graphics gx = Graphics.FromImage(b);
+
+                                Bitmap? rem = frm.Excluded.Remaining;
+                                if (rem != null)
+                                {
+                                    if (frm.cbSetOpaque.Checked)
+                                    {
+                                        SetOpaque(b, rem);
+                                        SetOpaque(rem, rem);
+                                    }
+                                    SetTransp(b, rem, frm.Excluded.Location);
+                                }
+
+                                List<ExcludedBmpRegion> l = new();
+                                l.Add(frm.Excluded);
+                                CopyRegions(l);
+                                redrawExcluded = true;
+                            }
+                        }
+                    }
+                }
+
+                this.toolStripProgressBar1.Value = 0;
+                this.toolStripProgressBar1.Visible = true;
+
+                using frmColorCurves frmA = new frmColorCurves(b, "255;127;127;127", 255);
+
+                if (b != null && frmA.ShowDialog() == DialogResult.OK)
+                {
+                    int[] aalpha = new int[256];
+
+                    Array.Copy(frmA.MappingsAlpha, aalpha, frmA.MappingsAlpha.Length);
+                    this.backgroundWorker6.RunWorkerAsync(new object[] { b, aalpha, frmA.RadioButton1.Checked, frmA.CheckBox1.Checked, frmA.CheckBox4.Checked, redrawExcluded });
+                }
+            }
+        }
+
+        private unsafe void SetOpaque(Bitmap bWrite, Bitmap bRead)
+        {
+            int w = bWrite.Width;
+            int h = bWrite.Height;
+
+            if (bWrite.Equals(bRead))
+            {
+                BitmapData bmD = bWrite.LockBits(new Rectangle(0, 0, w, h), ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
+                int stride = bmD.Stride;
+
+                Parallel.For(0, h, y =>
+                {
+                    byte* p = (byte*)bmD.Scan0;
+                    p += y * stride;
+
+                    for (int x = 0; x < w; x++)
+                    {
+                        if (p[3] > 0 && p[3] < 255)
+                            p[3] = 255;
+                        p += 4;
+                    }
+                });
+
+                bWrite.UnlockBits(bmD);
+            }
+            else
+            {
+                BitmapData bmD = bWrite.LockBits(new Rectangle(0, 0, w, h), ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
+                BitmapData bmR = bRead.LockBits(new Rectangle(0, 0, w, h), ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
+                int stride = bmD.Stride;
+
+                Parallel.For(0, h, y =>
+                {
+                    byte* p = (byte*)bmD.Scan0;
+                    p += y * stride;
+                    byte* pR = (byte*)bmR.Scan0;
+                    pR += y * stride;
+
+                    for (int x = 0; x < w; x++)
+                    {
+                        if (pR[3] > 0 && pR[3] < 255)
+                            p[3] = 255;
+                        p += 4;
+                        pR += 4;
+                    }
+                });
+
+                bWrite.UnlockBits(bmD);
+                bRead.UnlockBits(bmR);
+            }
+        }
+
+        private void backgroundWorker6_DoWork(object? sender, DoWorkEventArgs e)
+        {
+            Bitmap? b = null;
+            Bitmap? bRet = null;
+            bool redrawExcluded = false;
+
+            if (e.Argument != null)
+            {
+                object[] o = (object[])e.Argument;
+                b = (Bitmap)o[0];
+
+                this.backgroundWorker6.ReportProgress(50);
+
+                int[] aalpha = (int[])o[1];
+
+                if ((bool)o[2])
+                    ColorCurvesAlpha.fipbmp.gradColors(b, aalpha, (bool)o[3]);
+                else
+                    ColorCurvesAlpha.fipbmp.gradLumToAlpha(b, aalpha, (bool)o[4], (bool)o[3]);
+
+                this.backgroundWorker6.ReportProgress(100);
+
+                bRet = b;
+                redrawExcluded = (bool)o[5];
+            }
+
+            if (bRet != null)
+                e.Result = new object[] { bRet, redrawExcluded };
+        }
+
+        private void backgroundWorker6_ProgressChanged(object? sender, ProgressChangedEventArgs e)
+        {
+            if (this.toolStripProgressBar1 != null && !this.toolStripProgressBar1.IsDisposed && this.toolStripProgressBar1.Visible)
+                this.toolStripProgressBar1.Value = e.ProgressPercentage;
+            else if (this.backgroundWorker6 != null && this.backgroundWorker6.IsBusy)
+                this.backgroundWorker6.CancelAsync();
+        }
+
+        private void backgroundWorker6_RunWorkerCompleted(object? sender, RunWorkerCompletedEventArgs e)
+        {
+            if (!this.IsDisposed)
+            {
+                Bitmap? bmp = null;
+
+                if (e.Result != null)
+                {
+                    object[] o = (object[])e.Result;
+                    bmp = (Bitmap)o[0];
+
+                    if ((bool)o[1])
+                    {
+                        if (this._excludedRegions != null && this._exclLocations != null)
+                        {
+                            using Graphics gx = Graphics.FromImage(bmp);
+                            gx.SmoothingMode = SmoothingMode.None;
+                            gx.InterpolationMode = InterpolationMode.NearestNeighbor;
+
+                            for (int i = 0; i < this._excludedRegions.Count; i++)
+                            {
+                                SetTransp(bmp, this._excludedRegions[i], this._exclLocations[i]);
+                                gx.DrawImage(this._excludedRegions[i], this._exclLocations[i]);
+                            }
+                        }
+                    }
+
+                    //since ...
+                    Bitmap? b = this.luBitmapDesignerCtrl1.GetUpperImage();
+
+                    if (b != null)
+                    {
+                        using Bitmap bC = new Bitmap(b);
+                        SetColorsToOrig(bmp, bC);
+                    }
+                }
+
+                if (bmp != null)
+                {
+                    float x = 0f;
+                    float y = 0f;
+
+                    if (this.luBitmapDesignerCtrl1.ShapeList != null && this.luBitmapDesignerCtrl1.ShapeList.Count > 1)
+                    {
+                        x = this.luBitmapDesignerCtrl1.ShapeList[1].Bounds.X;
+                        y = this.luBitmapDesignerCtrl1.ShapeList[1].Bounds.Y;
+                    }
+
+                    if (this.luBitmapDesignerCtrl1.SelectedShape != null && this.luBitmapDesignerCtrl1.SelectedShape.Bmp != null)
+                        this.luBitmapDesignerCtrl1.SetSelectedImage(bmp, x, y);
+                    //else
+                    //    this.luBitmapDesignerCtrl1.SetUpperImage(bmp, x, y);
+
+                    this.cmbZoom_SelectedIndexChanged(this.cmbZoom, new EventArgs());
+
+                    //_undoOPCache?.Add(bmp);
+                    if (this._undoOPCache != null && this.luBitmapDesignerCtrl1.SelectedShape != null && this.luBitmapDesignerCtrl1.SelectedShape.Bmp != null)
+                    {
+                        int id = this.luBitmapDesignerCtrl1.SelectedShape.ID;
+                        if (this._cacheMappings[0].Item2 == id)
+                            this._undoOPCache?.Add(this.luBitmapDesignerCtrl1.SelectedShape.Bmp);
+                        else
+                            this._undoOPCache2?.Add(this.luBitmapDesignerCtrl1.SelectedShape.Bmp);
+                    }
+
+                    this.btnUndo.Enabled = true;
+                    this.CheckRedoButton();
+                }
+
+                this.btnAlphaZAndGain.Text = "Go";
+
+                this.SetControls(true);
+                this.Cursor = Cursors.Default;
+
+                this.luBitmapDesignerCtrl1.SetupBGImage();
+                //this.luBitmapDesignerCtrl1.helplineRulerCtrl1.dbPanel1.Invalidate();
+
+                this.btnOK.Enabled = this.btnCancel.Enabled = true;
+
+                this._pic_changed = true;
+
+                this.backgroundWorker6.Dispose();
+                this.backgroundWorker6 = new BackgroundWorker();
+                this.backgroundWorker6.WorkerReportsProgress = true;
+                this.backgroundWorker6.WorkerSupportsCancellation = true;
+                this.backgroundWorker6.DoWork += backgroundWorker6_DoWork;
+                this.backgroundWorker6.ProgressChanged += backgroundWorker6_ProgressChanged;
+                this.backgroundWorker6.RunWorkerCompleted += backgroundWorker6_RunWorkerCompleted;
             }
         }
     }

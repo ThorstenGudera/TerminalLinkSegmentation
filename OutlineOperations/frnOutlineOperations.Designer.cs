@@ -72,6 +72,7 @@
             openFileDialog1 = new OpenFileDialog();
             backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             panel1 = new Panel();
+            btnBGCol = new Button();
             cbExcludeFG = new CheckBox();
             cbPicIsMatte = new CheckBox();
             label13 = new Label();
@@ -119,7 +120,9 @@
             backgroundWorker9 = new System.ComponentModel.BackgroundWorker();
             helplineRulerCtrl1 = new HelplineRulerControl.HelplineRulerCtrl();
             backgroundWorker3 = new System.ComponentModel.BackgroundWorker();
-            btnBGCol = new Button();
+            backgroundWorker6 = new System.ComponentModel.BackgroundWorker();
+            label22 = new Label();
+            btnAlphaCurve = new Button();
             statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numEpsilon).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numKernel).BeginInit();
@@ -296,7 +299,7 @@
             // 
             // btnApplyMatte
             // 
-            btnApplyMatte.Location = new Point(159, 139);
+            btnApplyMatte.Location = new Point(159, 147);
             btnApplyMatte.Margin = new Padding(4, 3, 4, 3);
             btnApplyMatte.Name = "btnApplyMatte";
             btnApplyMatte.Size = new Size(88, 27);
@@ -332,7 +335,7 @@
             // 
             // btnAlphaTh
             // 
-            btnAlphaTh.Location = new Point(253, 139);
+            btnAlphaTh.Location = new Point(253, 147);
             btnAlphaTh.Margin = new Padding(4, 3, 4, 3);
             btnAlphaTh.Name = "btnAlphaTh";
             btnAlphaTh.Size = new Size(106, 27);
@@ -445,7 +448,7 @@
             // 
             // btnResizeMatte
             // 
-            btnResizeMatte.Location = new Point(271, 94);
+            btnResizeMatte.Location = new Point(271, 114);
             btnResizeMatte.Margin = new Padding(4, 3, 4, 3);
             btnResizeMatte.Name = "btnResizeMatte";
             btnResizeMatte.Size = new Size(88, 27);
@@ -458,7 +461,7 @@
             // label8
             // 
             label8.AutoSize = true;
-            label8.Location = new Point(24, 101);
+            label8.Location = new Point(24, 121);
             label8.Name = "label8";
             label8.Size = new Size(37, 15);
             label8.TabIndex = 739;
@@ -468,7 +471,7 @@
             // label9
             // 
             label9.AutoSize = true;
-            label9.Location = new Point(145, 101);
+            label9.Location = new Point(145, 121);
             label9.Name = "label9";
             label9.Size = new Size(41, 15);
             label9.TabIndex = 739;
@@ -477,7 +480,7 @@
             // 
             // numRMatteW
             // 
-            numRMatteW.Location = new Point(68, 99);
+            numRMatteW.Location = new Point(68, 119);
             numRMatteW.Margin = new Padding(4, 3, 4, 3);
             numRMatteW.Maximum = new decimal(new int[] { 32767, 0, 0, 0 });
             numRMatteW.Minimum = new decimal(new int[] { 4, 0, 0, 0 });
@@ -489,7 +492,7 @@
             // 
             // numRMatteH
             // 
-            numRMatteH.Location = new Point(193, 98);
+            numRMatteH.Location = new Point(193, 118);
             numRMatteH.Margin = new Padding(4, 3, 4, 3);
             numRMatteH.Maximum = new decimal(new int[] { 32767, 0, 0, 0 });
             numRMatteH.Minimum = new decimal(new int[] { 4, 0, 0, 0 });
@@ -561,6 +564,8 @@
             // 
             // panel1
             // 
+            panel1.Controls.Add(label22);
+            panel1.Controls.Add(btnAlphaCurve);
             panel1.Controls.Add(btnBGCol);
             panel1.Controls.Add(cbExcludeFG);
             panel1.Controls.Add(cbPicIsMatte);
@@ -636,6 +641,16 @@
             panel1.TabIndex = 243;
             panel1.MouseDoubleClick += panel1_MouseDoubleClick;
             panel1.MouseDown += panel1_MouseDown;
+            // 
+            // btnBGCol
+            // 
+            btnBGCol.Location = new Point(1407, 117);
+            btnBGCol.Name = "btnBGCol";
+            btnBGCol.Size = new Size(75, 23);
+            btnBGCol.TabIndex = 771;
+            btnBGCol.Text = "set BGCol";
+            btnBGCol.UseVisualStyleBackColor = true;
+            btnBGCol.Click += btnBGCol_Click;
             // 
             // cbExcludeFG
             // 
@@ -720,7 +735,7 @@
             // 
             // btnSetAsMatte
             // 
-            btnSetAsMatte.Location = new Point(14, 139);
+            btnSetAsMatte.Location = new Point(14, 147);
             btnSetAsMatte.Margin = new Padding(4, 3, 4, 3);
             btnSetAsMatte.Name = "btnSetAsMatte";
             btnSetAsMatte.Size = new Size(114, 27);
@@ -1150,15 +1165,33 @@
             backgroundWorker3.ProgressChanged += backgroundWorker3_ProgressChanged;
             backgroundWorker3.RunWorkerCompleted += backgroundWorker3_RunWorkerCompleted;
             // 
-            // btnBGCol
+            // backgroundWorker6
             // 
-            btnBGCol.Location = new Point(1407, 117);
-            btnBGCol.Name = "btnBGCol";
-            btnBGCol.Size = new Size(75, 23);
-            btnBGCol.TabIndex = 771;
-            btnBGCol.Text = "set BGCol";
-            btnBGCol.UseVisualStyleBackColor = true;
-            btnBGCol.Click += btnBGCol_Click;
+            backgroundWorker6.WorkerReportsProgress = true;
+            backgroundWorker6.WorkerSupportsCancellation = true;
+            backgroundWorker6.DoWork += backgroundWorker6_DoWork;
+            backgroundWorker6.ProgressChanged += backgroundWorker6_ProgressChanged;
+            backgroundWorker6.RunWorkerCompleted += backgroundWorker6_RunWorkerCompleted;
+            // 
+            // label22
+            // 
+            label22.AutoSize = true;
+            label22.Location = new Point(226, 88);
+            label22.Name = "label22";
+            label22.Size = new Size(69, 15);
+            label22.TabIndex = 773;
+            label22.Text = "AlphaCurve";
+            // 
+            // btnAlphaCurve
+            // 
+            btnAlphaCurve.Location = new Point(313, 81);
+            btnAlphaCurve.Margin = new Padding(4, 3, 4, 3);
+            btnAlphaCurve.Name = "btnAlphaCurve";
+            btnAlphaCurve.Size = new Size(88, 27);
+            btnAlphaCurve.TabIndex = 772;
+            btnAlphaCurve.Text = "Go";
+            btnAlphaCurve.UseVisualStyleBackColor = true;
+            btnAlphaCurve.Click += btnAlphaCurve_Click;
             // 
             // frnOutlineOperations
             // 
@@ -1293,5 +1326,8 @@
         internal System.ComponentModel.BackgroundWorker backgroundWorker3;
         private CheckBox cbExcludeFG;
         private Button btnBGCol;
+        internal System.ComponentModel.BackgroundWorker backgroundWorker6;
+        private Label label22;
+        private Button btnAlphaCurve;
     }
 }
