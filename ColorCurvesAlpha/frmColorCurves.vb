@@ -5,6 +5,7 @@ Imports System.Collections
 Imports System.Collections.Generic
 Imports System.Drawing
 Imports System.Drawing.Drawing2D
+Imports System.Text.Json
 Imports System.Windows.Forms
 Imports HelplineRulerControl
 Imports SegmentsListLib
@@ -790,6 +791,7 @@ Public Class frmColorCurves
             Me.numericUpDown2.Value = CDec(0)
             Me.numericUpDown3.Value = CDec(Me._bSrc.Width)
             Me.numericUpDown4.Value = CDec(Me._bSrc.Height)
+            Me.numericUpDown5.Value = CDec(0)
             Me._dontSetValues = False
 
             If Me._bgPic IsNot Nothing Then
@@ -840,10 +842,18 @@ Public Class frmColorCurves
         Using gx As Graphics = Graphics.FromImage(res)
             If CheckBoxPic.Checked Then
                 gx.TranslateTransform(-Me.numericUpDown1.Value - _left, -Me.numericUpDown2.Value - _top)
+            Else
+                gx.TranslateTransform(-Me.numericUpDown1.Value, -Me.numericUpDown2.Value)
             End If
             Dim w As Single = CSng(Me.numericUpDown3.Value) / _bSrc.Width
             Dim h As Single = CSng(Me.numericUpDown4.Value) / _bSrc.Height
-            gx.ScaleTransform(1.0F / w * z, 1.0F / h * z)
+            gx.ScaleTransform(1.0F / w * z, 1.0F / h * z, MatrixOrder.Append)
+
+            If Me.numericUpDown5.Value <> 0.0 Then
+                Dim rot As Single = CSng(Me.numericUpDown5.Value)
+                gx.RotateTransform(-rot, MatrixOrder.Append)
+            End If
+
             gx.DrawImage(Me._bgPic, 0, 0)
         End Using
 
@@ -893,5 +903,18 @@ Public Class frmColorCurves
         End If
 
         Me.pictureBox1.BackgroundImage = Nothing
+    End Sub
+
+    Private Sub numericUpDown5_ValueChanged(sender As Object, e As EventArgs) Handles numericUpDown5.ValueChanged
+        If Not Me._dontSetValues AndAlso Me._bgPic IsNot Nothing Then
+            Dim pOld As Image = Me.pictureBox1.BackgroundImage
+            Me.pictureBox1.BackgroundImage = MakeBGImage()
+            If pOld IsNot Nothing Then
+                pOld.Dispose()
+                pOld = Nothing
+            End If
+        End If
+
+        Me.pictureBox1.Refresh()
     End Sub
 End Class
