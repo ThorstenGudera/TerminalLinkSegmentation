@@ -9,36 +9,38 @@ Imports ChainCodeFinder
 Imports System.Drawing.Drawing2D
 Imports System.Diagnostics.Eventing.Reader
 
-'This class implements a chaincode finder (crack code), as an adaption of 
-'       http://www.miszalok.de/Samples/CV/ChainCode/chain_code.htm and
-'       http://www.miszalok.de/Lectures/L08_ComputerVision/CrackCode/CrackCode_d.htm (german only). See also
-'       http://www.miszalok.de/Samples/CV/ChainCode/chaincode_kovalev_e.htm
-'As the name crackcode says, we are moving on the (invisible) "cracks" in between the pixels to find the outlines of objects
-'in an image. The algorithm is as follows:
-'- Find a start pixel moving left to right and top to bottom over the image that matches the conditions.
-'- Now we are at the leftTop location of the *pixel* the crack left of the pixel. 
-'- We now set our direction to the only reasonable value "down" and move along the crack, so we truly start the
-'  algorithm at the lowest "point" of the left crack, ie. the leftBottom location of the start pixel, and we turn our
-'- looking direction also down, so the pixel left before us is the pixel below of the start pixel.
+'//    This class implements a chaincode finder (crack code), as an adaption of 
+'//    (PLEASE NOTE THAT THESE ARE *Not* HTTPS CONNECTIONS! It's an old web-site.)
+'//       http://www.miszalok.de/Samples/CV/ChainCode/chain_code.htm And
+'//       http://www.miszalok.de/Lectures/L08_ComputerVision/CrackCode/CrackCode_d.htm (german only). See also
+'//       http://www.miszalok.de/Samples/CV/ChainCode/chaincode_kovalev_e.htm
+'//As the name crackcode says, we are moving on the (invisible) "cracks" in between the pixels to find the outlines of objects
+'//in an image. The algorithm Is as follows:
+'//- Find a start pixel moving left to right And top to bottom over the image which matches the conditions.
+'//- Now we are at the leftTop location of the *pixel*, the crack left of the pixel. 
+'//- We now set our direction to the only reasonable value "down" And move along the crack, so we truly start the
+'//  algorithm at the lowest "point" of the left crack, ie. the leftBottom location of the starting pixel, And we turn our
+'//- looking direction also down, so the pixel left in front of us Is the pixel below of the start pixel.
 
-'- Now its getting easy: We
+'//- Now we
 
-'- Look to the pixel thats left before us, 
-'    a) if it doesnt meet the conditions (search criteria is lower than the threshold),
-'       we turn left (set the direction to left, turn ourselves left and move along that crack to the next junction, 
-'       being now at the BottomRight corner of the start pixel)
-'    b) if it meets the conditions, we:
-'           a) look to the pixels thats right before us,
-'               aa) if it doesnt meet the conditions (search criteria is lower than the threshold),
-'                   we go straight on, keeping direction "down", being now at the BottomLeft corner 
-'                   of the pixel below our start pixel
-'               bb) if it meets the conditions, we turn right (setting the direction and ourselves "right" 
-'                   and move along that crack to the next junction, being now at the BottomLeft corner 
-'                   of the pixel on the right of our start pixel
-'- Since we always turn our looking-direction, we can now repeat the above until we are back at the point we began.
-'- Since we move on the cracks, we always will come back to that point, if we only have one pixel matching the
-'  conditions, we get a chain of 4 cracks, once around the pixel
+'//- Look to the pixel thats left in front of us, 
+'//    a) if it doesnt meet the conditions (search criteria Is lower than the threshold),
+'//       we turn left (set the direction to left, turn ourselves left And move along that crack to the next junction, 
+'//       being now at the BottomRight corner of the start pixel)
+'//    b) if it meets the conditions, we:
+'//           a) look to the pixels thats on the right in front of us,
+'//               aa) if it doesnt meet the conditions (search criteria Is lower than the threshold),
+'//                   we go straight on, keeping direction "down", being now at the BottomLeft corner 
+'//                   of the pixel below our start pixel
+'//               bb) if it meets the conditions, we turn right (setting the direction And ourselves "right" 
+'//                   And move along that crack to the next junction, being now at the BottomLeft corner 
+'//                   of the pixel on the left of our start pixel (when looking "normally" to the picture)
+'//- Since we always turn our looking-direction, we can now repeat the above until we are back at the point we began.
+'//- Since we move on the cracks, we always will come back to that point, if we only have one pixel matching the
+'//  conditions, we get a chain of 4 cracks, once around the pixel
 
+'//Please note that I dont use the /unsafe switch And byte-pointers, since I dont know, whether you are allowed to use that in your code...
 
 Public Class ChainFinder
     Public Delegate Sub ProgressPlusEventHandler(sender As Object, e As ProgEventArgs)
@@ -196,10 +198,10 @@ Public Class ChainFinder
         Dim Negative As [SByte](,) = New [SByte](,) {{0, -1}, {0, 0}, {-1, 0}, {-1, -1}}
         Dim Positive As [SByte](,) = New [SByte](,) {{0, 0}, {-1, 0}, {-1, -1}, {0, -1}}
 
-        Dim LeftBefore As New Point()
-        Dim RightBefore As New Point()
+        Dim LeftInFront As New Point()
+        Dim RightInFront As New Point()
 
-        Dim LeftBeforeGreaterTh As Boolean, RightBeforeGreaterTh As Boolean
+        Dim LeftInFrontGreaterTh As Boolean, RightInFrontGreaterTh As Boolean
         Dim direction As Integer = 1
 
         Dim bmData As BitmapData = Nothing
@@ -227,56 +229,56 @@ Public Class ChainFinder
                 cc.Chain.Add(direction)
 
                 While x <> _start.X OrElse y <> _start.Y
-                    LeftBefore.X = x + Negative(direction, 0)
-                    LeftBefore.Y = y + Negative(direction, 1)
-                    RightBefore.X = x + Positive(direction, 0)
-                    RightBefore.Y = y + Positive(direction, 1)
+                    LeftInFront.X = x + Negative(direction, 0)
+                    LeftInFront.Y = y + Negative(direction, 1)
+                    RightInFront.X = x + Positive(direction, 0)
+                    RightInFront.Y = y + Positive(direction, 1)
 
                     Select Case direction
                         Case 0
-                            cc.Coord.Add(New Point(LeftBefore.X - 1, LeftBefore.Y))
+                            cc.Coord.Add(New Point(LeftInFront.X - 1, LeftInFront.Y))
                             Exit Select
                         Case 1
-                            cc.Coord.Add(New Point(LeftBefore.X, LeftBefore.Y - 1))
+                            cc.Coord.Add(New Point(LeftInFront.X, LeftInFront.Y - 1))
                             Exit Select
                         Case 2
-                            cc.Coord.Add(New Point(LeftBefore.X + 1, LeftBefore.Y))
+                            cc.Coord.Add(New Point(LeftInFront.X + 1, LeftInFront.Y))
                             Exit Select
                         Case 3
-                            cc.Coord.Add(New Point(LeftBefore.X, LeftBefore.Y + 1))
+                            cc.Coord.Add(New Point(LeftInFront.X, LeftInFront.Y + 1))
                             Exit Select
                     End Select
 
-                    LeftBeforeGreaterTh = False
-                    RightBeforeGreaterTh = False
+                    LeftInFrontGreaterTh = False
+                    RightInFrontGreaterTh = False
 
-                    If LeftBefore.X >= 0 AndAlso LeftBefore.X < b.Width AndAlso LeftBefore.Y >= 0 AndAlso LeftBefore.Y < b.Height Then
+                    If LeftInFront.X >= 0 AndAlso LeftInFront.X < b.Width AndAlso LeftInFront.Y >= 0 AndAlso LeftInFront.Y < b.Height Then
                         If Not grayscale Then
-                            LeftBeforeGreaterTh = p(LeftBefore.Y * stride + LeftBefore.X * 4 + 3) > _threshold
+                            LeftInFrontGreaterTh = p(LeftInFront.Y * stride + LeftInFront.X * 4 + 3) > _threshold
                         Else
                             If range > 0 Then
-                                LeftBeforeGreaterTh = ((p(LeftBefore.Y * stride + LeftBefore.X * 4) > _threshold) AndAlso (p(LeftBefore.Y * stride + LeftBefore.X * 4) <= _threshold + range))
+                                LeftInFrontGreaterTh = ((p(LeftInFront.Y * stride + LeftInFront.X * 4) > _threshold) AndAlso (p(LeftInFront.Y * stride + LeftInFront.X * 4) <= _threshold + range))
                             Else
-                                LeftBeforeGreaterTh = p(LeftBefore.Y * stride + LeftBefore.X * 4) > _threshold
+                                LeftInFrontGreaterTh = p(LeftInFront.Y * stride + LeftInFront.X * 4) > _threshold
                             End If
                         End If
                     End If
 
-                    If RightBefore.X >= 0 AndAlso RightBefore.X < b.Width AndAlso RightBefore.Y >= 0 AndAlso RightBefore.Y < b.Height Then
+                    If RightInFront.X >= 0 AndAlso RightInFront.X < b.Width AndAlso RightInFront.Y >= 0 AndAlso RightInFront.Y < b.Height Then
                         If Not grayscale Then
-                            RightBeforeGreaterTh = p(RightBefore.Y * stride + RightBefore.X * 4 + 3) > _threshold
+                            RightInFrontGreaterTh = p(RightInFront.Y * stride + RightInFront.X * 4 + 3) > _threshold
                         Else
                             If range > 0 Then
-                                RightBeforeGreaterTh = ((p(RightBefore.Y * stride + RightBefore.X * 4) > _threshold) AndAlso (p(RightBefore.Y * stride + RightBefore.X * 4) <= _threshold + range))
+                                RightInFrontGreaterTh = ((p(RightInFront.Y * stride + RightInFront.X * 4) > _threshold) AndAlso (p(RightInFront.Y * stride + RightInFront.X * 4) <= _threshold + range))
                             Else
-                                RightBeforeGreaterTh = p(RightBefore.Y * stride + RightBefore.X * 4) > _threshold
+                                RightInFrontGreaterTh = p(RightInFront.Y * stride + RightInFront.X * 4) > _threshold
                             End If
                         End If
                     End If
 
-                    If RightBeforeGreaterTh AndAlso (LeftBeforeGreaterTh OrElse _nullCells) Then
+                    If RightInFrontGreaterTh AndAlso (LeftInFrontGreaterTh OrElse _nullCells) Then
                         direction = (direction + 1) Mod 4
-                    ElseIf Not LeftBeforeGreaterTh AndAlso (Not RightBeforeGreaterTh OrElse Not _nullCells) Then
+                    ElseIf Not LeftInFrontGreaterTh AndAlso (Not RightInFrontGreaterTh OrElse Not _nullCells) Then
                         direction = (direction + 3) Mod 4
                     End If
 
@@ -335,10 +337,10 @@ Public Class ChainFinder
         Dim Negative As [SByte](,) = New [SByte](,) {{0, -1}, {0, 0}, {-1, 0}, {-1, -1}}
         Dim Positive As [SByte](,) = New [SByte](,) {{0, 0}, {-1, 0}, {-1, -1}, {0, -1}}
 
-        Dim LeftBefore As New Point()
-        Dim RightBefore As New Point()
+        Dim LeftInFront As New Point()
+        Dim RightInFront As New Point()
 
-        Dim LeftBeforeGreaterTh As Boolean, RightBeforeGreaterTh As Boolean
+        Dim LeftInFrontGreaterTh As Boolean, RightInFrontGreaterTh As Boolean
         Dim direction As Integer = 1
 
         Dim bmData As BitmapData = Nothing
@@ -366,56 +368,56 @@ Public Class ChainFinder
                 cc.Chain.Add(direction)
 
                 While x <> _start.X OrElse y <> _start.Y
-                    LeftBefore.X = x + Negative(direction, 0)
-                    LeftBefore.Y = y + Negative(direction, 1)
-                    RightBefore.X = x + Positive(direction, 0)
-                    RightBefore.Y = y + Positive(direction, 1)
+                    LeftInFront.X = x + Negative(direction, 0)
+                    LeftInFront.Y = y + Negative(direction, 1)
+                    RightInFront.X = x + Positive(direction, 0)
+                    RightInFront.Y = y + Positive(direction, 1)
 
                     Select Case direction
                         Case 0
-                            cc.Coord.Add(New Point(LeftBefore.X - 1, LeftBefore.Y))
+                            cc.Coord.Add(New Point(LeftInFront.X - 1, LeftInFront.Y))
                             Exit Select
                         Case 1
-                            cc.Coord.Add(New Point(LeftBefore.X, LeftBefore.Y - 1))
+                            cc.Coord.Add(New Point(LeftInFront.X, LeftInFront.Y - 1))
                             Exit Select
                         Case 2
-                            cc.Coord.Add(New Point(LeftBefore.X + 1, LeftBefore.Y))
+                            cc.Coord.Add(New Point(LeftInFront.X + 1, LeftInFront.Y))
                             Exit Select
                         Case 3
-                            cc.Coord.Add(New Point(LeftBefore.X, LeftBefore.Y + 1))
+                            cc.Coord.Add(New Point(LeftInFront.X, LeftInFront.Y + 1))
                             Exit Select
                     End Select
 
-                    LeftBeforeGreaterTh = False
-                    RightBeforeGreaterTh = False
+                    LeftInFrontGreaterTh = False
+                    RightInFrontGreaterTh = False
 
-                    If LeftBefore.X >= 0 AndAlso LeftBefore.X < b.Width AndAlso LeftBefore.Y >= 0 AndAlso LeftBefore.Y < b.Height Then
+                    If LeftInFront.X >= 0 AndAlso LeftInFront.X < b.Width AndAlso LeftInFront.Y >= 0 AndAlso LeftInFront.Y < b.Height Then
                         If Not grayscale Then
-                            LeftBeforeGreaterTh = p(LeftBefore.Y * stride + LeftBefore.X * 4 + 3) > _threshold
+                            LeftInFrontGreaterTh = p(LeftInFront.Y * stride + LeftInFront.X * 4 + 3) > _threshold
                         Else
                             If range > 0 Then
-                                LeftBeforeGreaterTh = ((p(LeftBefore.Y * stride + LeftBefore.X * 4) > _threshold) AndAlso (p(LeftBefore.Y * stride + LeftBefore.X * 4) <= _threshold + range))
+                                LeftInFrontGreaterTh = ((p(LeftInFront.Y * stride + LeftInFront.X * 4) > _threshold) AndAlso (p(LeftInFront.Y * stride + LeftInFront.X * 4) <= _threshold + range))
                             Else
-                                LeftBeforeGreaterTh = p(LeftBefore.Y * stride + LeftBefore.X * 4) > _threshold
+                                LeftInFrontGreaterTh = p(LeftInFront.Y * stride + LeftInFront.X * 4) > _threshold
                             End If
                         End If
                     End If
 
-                    If RightBefore.X >= 0 AndAlso RightBefore.X < b.Width AndAlso RightBefore.Y >= 0 AndAlso RightBefore.Y < b.Height Then
+                    If RightInFront.X >= 0 AndAlso RightInFront.X < b.Width AndAlso RightInFront.Y >= 0 AndAlso RightInFront.Y < b.Height Then
                         If Not grayscale Then
-                            RightBeforeGreaterTh = p(RightBefore.Y * stride + RightBefore.X * 4 + 3) > _threshold
+                            RightInFrontGreaterTh = p(RightInFront.Y * stride + RightInFront.X * 4 + 3) > _threshold
                         Else
                             If range > 0 Then
-                                RightBeforeGreaterTh = ((p(RightBefore.Y * stride + RightBefore.X * 4) > _threshold) AndAlso (p(RightBefore.Y * stride + RightBefore.X * 4) <= _threshold + range))
+                                RightInFrontGreaterTh = ((p(RightInFront.Y * stride + RightInFront.X * 4) > _threshold) AndAlso (p(RightInFront.Y * stride + RightInFront.X * 4) <= _threshold + range))
                             Else
-                                RightBeforeGreaterTh = p(RightBefore.Y * stride + RightBefore.X * 4) > _threshold
+                                RightInFrontGreaterTh = p(RightInFront.Y * stride + RightInFront.X * 4) > _threshold
                             End If
                         End If
                     End If
 
-                    If RightBeforeGreaterTh AndAlso (LeftBeforeGreaterTh OrElse _nullCells) Then
+                    If RightInFrontGreaterTh AndAlso (LeftInFrontGreaterTh OrElse _nullCells) Then
                         direction = (direction + 1) Mod 4
-                    ElseIf Not LeftBeforeGreaterTh AndAlso (Not RightBeforeGreaterTh OrElse Not _nullCells) Then
+                    ElseIf Not LeftInFrontGreaterTh AndAlso (Not RightInFrontGreaterTh OrElse Not _nullCells) Then
                         direction = (direction + 3) Mod 4
                     End If
 
@@ -479,10 +481,10 @@ Public Class ChainFinder
         Dim Negative As [SByte](,) = New [SByte](,) {{0, -1}, {0, 0}, {-1, 0}, {-1, -1}}
         Dim Positive As [SByte](,) = New [SByte](,) {{0, 0}, {-1, 0}, {-1, -1}, {0, -1}}
 
-        Dim LeftBefore As New Point()
-        Dim RightBefore As New Point()
+        Dim LeftInFront As New Point()
+        Dim RightInFront As New Point()
 
-        Dim LeftBeforeGreaterTh As Boolean, RightBeforeGreaterTh As Boolean
+        Dim LeftInFrontGreaterTh As Boolean, RightInFrontGreaterTh As Boolean
         Dim direction As Integer = 1
 
         Dim bmData As BitmapData = Nothing
@@ -510,56 +512,56 @@ Public Class ChainFinder
                 cc.Chain.Add(direction)
 
                 While x <> _start.X OrElse y <> _start.Y
-                    LeftBefore.X = x + Negative(direction, 0)
-                    LeftBefore.Y = y + Negative(direction, 1)
-                    RightBefore.X = x + Positive(direction, 0)
-                    RightBefore.Y = y + Positive(direction, 1)
+                    LeftInFront.X = x + Negative(direction, 0)
+                    LeftInFront.Y = y + Negative(direction, 1)
+                    RightInFront.X = x + Positive(direction, 0)
+                    RightInFront.Y = y + Positive(direction, 1)
 
                     Select Case direction
                         Case 0
-                            cc.Coord.Add(New Point(LeftBefore.X - 1, LeftBefore.Y))
+                            cc.Coord.Add(New Point(LeftInFront.X - 1, LeftInFront.Y))
                             Exit Select
                         Case 1
-                            cc.Coord.Add(New Point(LeftBefore.X, LeftBefore.Y - 1))
+                            cc.Coord.Add(New Point(LeftInFront.X, LeftInFront.Y - 1))
                             Exit Select
                         Case 2
-                            cc.Coord.Add(New Point(LeftBefore.X + 1, LeftBefore.Y))
+                            cc.Coord.Add(New Point(LeftInFront.X + 1, LeftInFront.Y))
                             Exit Select
                         Case 3
-                            cc.Coord.Add(New Point(LeftBefore.X, LeftBefore.Y + 1))
+                            cc.Coord.Add(New Point(LeftInFront.X, LeftInFront.Y + 1))
                             Exit Select
                     End Select
 
-                    LeftBeforeGreaterTh = False
-                    RightBeforeGreaterTh = False
+                    LeftInFrontGreaterTh = False
+                    RightInFrontGreaterTh = False
 
-                    If LeftBefore.X >= 0 AndAlso LeftBefore.X < b.Width AndAlso LeftBefore.Y >= 0 AndAlso LeftBefore.Y < b.Height Then
+                    If LeftInFront.X >= 0 AndAlso LeftInFront.X < b.Width AndAlso LeftInFront.Y >= 0 AndAlso LeftInFront.Y < b.Height Then
                         If Not grayscale Then
-                            LeftBeforeGreaterTh = p(LeftBefore.Y * stride + LeftBefore.X * 4 + 3) < _threshold
+                            LeftInFrontGreaterTh = p(LeftInFront.Y * stride + LeftInFront.X * 4 + 3) < _threshold
                         Else
                             If range > 0 Then
-                                LeftBeforeGreaterTh = ((p(LeftBefore.Y * stride + LeftBefore.X * 4) < _threshold) AndAlso (p(LeftBefore.Y * stride + LeftBefore.X * 4) >= _threshold + range))
+                                LeftInFrontGreaterTh = ((p(LeftInFront.Y * stride + LeftInFront.X * 4) < _threshold) AndAlso (p(LeftInFront.Y * stride + LeftInFront.X * 4) >= _threshold + range))
                             Else
-                                LeftBeforeGreaterTh = p(LeftBefore.Y * stride + LeftBefore.X * 4) < _threshold
+                                LeftInFrontGreaterTh = p(LeftInFront.Y * stride + LeftInFront.X * 4) < _threshold
                             End If
                         End If
                     End If
 
-                    If RightBefore.X >= 0 AndAlso RightBefore.X < b.Width AndAlso RightBefore.Y >= 0 AndAlso RightBefore.Y < b.Height Then
+                    If RightInFront.X >= 0 AndAlso RightInFront.X < b.Width AndAlso RightInFront.Y >= 0 AndAlso RightInFront.Y < b.Height Then
                         If Not grayscale Then
-                            RightBeforeGreaterTh = p(RightBefore.Y * stride + RightBefore.X * 4 + 3) < _threshold
+                            RightInFrontGreaterTh = p(RightInFront.Y * stride + RightInFront.X * 4 + 3) < _threshold
                         Else
                             If range > 0 Then
-                                RightBeforeGreaterTh = ((p(RightBefore.Y * stride + RightBefore.X * 4) < _threshold) AndAlso (p(RightBefore.Y * stride + RightBefore.X * 4) >= _threshold + range))
+                                RightInFrontGreaterTh = ((p(RightInFront.Y * stride + RightInFront.X * 4) < _threshold) AndAlso (p(RightInFront.Y * stride + RightInFront.X * 4) >= _threshold + range))
                             Else
-                                RightBeforeGreaterTh = p(RightBefore.Y * stride + RightBefore.X * 4) < _threshold
+                                RightInFrontGreaterTh = p(RightInFront.Y * stride + RightInFront.X * 4) < _threshold
                             End If
                         End If
                     End If
 
-                    If RightBeforeGreaterTh AndAlso (LeftBeforeGreaterTh OrElse _nullCells) Then
+                    If RightInFrontGreaterTh AndAlso (LeftInFrontGreaterTh OrElse _nullCells) Then
                         direction = (direction + 1) Mod 4
-                    ElseIf Not LeftBeforeGreaterTh AndAlso (Not RightBeforeGreaterTh OrElse Not _nullCells) Then
+                    ElseIf Not LeftInFrontGreaterTh AndAlso (Not RightInFrontGreaterTh OrElse Not _nullCells) Then
                         direction = (direction + 3) Mod 4
                     End If
 
@@ -620,10 +622,10 @@ Public Class ChainFinder
         Dim Negative As [SByte](,) = New [SByte](,) {{0, -1}, {0, 0}, {-1, 0}, {-1, -1}}
         Dim Positive As [SByte](,) = New [SByte](,) {{0, 0}, {-1, 0}, {-1, -1}, {0, -1}}
 
-        Dim LeftBefore As New Point()
-        Dim RightBefore As New Point()
+        Dim LeftInFront As New Point()
+        Dim RightInFront As New Point()
 
-        Dim LeftBeforeGreaterTh As Boolean, RightBeforeGreaterTh As Boolean
+        Dim LeftInFrontGreaterTh As Boolean, RightInFrontGreaterTh As Boolean
         Dim direction As Integer = 1
 
         Dim bmData As BitmapData = Nothing
@@ -651,56 +653,56 @@ Public Class ChainFinder
                 cc.Chain.Add(direction)
 
                 While x <> _start.X OrElse y <> _start.Y
-                    LeftBefore.X = x + Negative(direction, 0)
-                    LeftBefore.Y = y + Negative(direction, 1)
-                    RightBefore.X = x + Positive(direction, 0)
-                    RightBefore.Y = y + Positive(direction, 1)
+                    LeftInFront.X = x + Negative(direction, 0)
+                    LeftInFront.Y = y + Negative(direction, 1)
+                    RightInFront.X = x + Positive(direction, 0)
+                    RightInFront.Y = y + Positive(direction, 1)
 
                     Select Case direction
                         Case 0
-                            cc.Coord.Add(New Point(LeftBefore.X - 1, LeftBefore.Y))
+                            cc.Coord.Add(New Point(LeftInFront.X - 1, LeftInFront.Y))
                             Exit Select
                         Case 1
-                            cc.Coord.Add(New Point(LeftBefore.X, LeftBefore.Y - 1))
+                            cc.Coord.Add(New Point(LeftInFront.X, LeftInFront.Y - 1))
                             Exit Select
                         Case 2
-                            cc.Coord.Add(New Point(LeftBefore.X + 1, LeftBefore.Y))
+                            cc.Coord.Add(New Point(LeftInFront.X + 1, LeftInFront.Y))
                             Exit Select
                         Case 3
-                            cc.Coord.Add(New Point(LeftBefore.X, LeftBefore.Y + 1))
+                            cc.Coord.Add(New Point(LeftInFront.X, LeftInFront.Y + 1))
                             Exit Select
                     End Select
 
-                    LeftBeforeGreaterTh = False
-                    RightBeforeGreaterTh = False
+                    LeftInFrontGreaterTh = False
+                    RightInFrontGreaterTh = False
 
-                    If LeftBefore.X >= 0 AndAlso LeftBefore.X < b.Width AndAlso LeftBefore.Y >= 0 AndAlso LeftBefore.Y < b.Height Then
+                    If LeftInFront.X >= 0 AndAlso LeftInFront.X < b.Width AndAlso LeftInFront.Y >= 0 AndAlso LeftInFront.Y < b.Height Then
                         If Not grayscale Then
-                            LeftBeforeGreaterTh = p(LeftBefore.Y * stride + LeftBefore.X * 4 + 3) > _threshold
+                            LeftInFrontGreaterTh = p(LeftInFront.Y * stride + LeftInFront.X * 4 + 3) > _threshold
                         Else
                             If range > 0 Then
-                                LeftBeforeGreaterTh = ((p(LeftBefore.Y * stride + LeftBefore.X * 4) > _threshold) AndAlso (p(LeftBefore.Y * stride + LeftBefore.X * 4) <= _threshold + range))
+                                LeftInFrontGreaterTh = ((p(LeftInFront.Y * stride + LeftInFront.X * 4) > _threshold) AndAlso (p(LeftInFront.Y * stride + LeftInFront.X * 4) <= _threshold + range))
                             Else
-                                LeftBeforeGreaterTh = p(LeftBefore.Y * stride + LeftBefore.X * 4) > _threshold
+                                LeftInFrontGreaterTh = p(LeftInFront.Y * stride + LeftInFront.X * 4) > _threshold
                             End If
                         End If
                     End If
 
-                    If RightBefore.X >= 0 AndAlso RightBefore.X < b.Width AndAlso RightBefore.Y >= 0 AndAlso RightBefore.Y < b.Height Then
+                    If RightInFront.X >= 0 AndAlso RightInFront.X < b.Width AndAlso RightInFront.Y >= 0 AndAlso RightInFront.Y < b.Height Then
                         If Not grayscale Then
-                            RightBeforeGreaterTh = p(RightBefore.Y * stride + RightBefore.X * 4 + 3) > _threshold
+                            RightInFrontGreaterTh = p(RightInFront.Y * stride + RightInFront.X * 4 + 3) > _threshold
                         Else
                             If range > 0 Then
-                                RightBeforeGreaterTh = ((p(RightBefore.Y * stride + RightBefore.X * 4) > _threshold) AndAlso (p(RightBefore.Y * stride + RightBefore.X * 4) <= _threshold + range))
+                                RightInFrontGreaterTh = ((p(RightInFront.Y * stride + RightInFront.X * 4) > _threshold) AndAlso (p(RightInFront.Y * stride + RightInFront.X * 4) <= _threshold + range))
                             Else
-                                RightBeforeGreaterTh = p(RightBefore.Y * stride + RightBefore.X * 4) > _threshold
+                                RightInFrontGreaterTh = p(RightInFront.Y * stride + RightInFront.X * 4) > _threshold
                             End If
                         End If
                     End If
 
-                    If RightBeforeGreaterTh AndAlso (LeftBeforeGreaterTh OrElse _nullCells) Then
+                    If RightInFrontGreaterTh AndAlso (LeftInFrontGreaterTh OrElse _nullCells) Then
                         direction = (direction + 1) Mod 4
-                    ElseIf Not LeftBeforeGreaterTh AndAlso (Not RightBeforeGreaterTh OrElse Not _nullCells) Then
+                    ElseIf Not LeftInFrontGreaterTh AndAlso (Not RightInFrontGreaterTh OrElse Not _nullCells) Then
                         direction = (direction + 3) Mod 4
                     End If
 
@@ -809,10 +811,10 @@ Public Class ChainFinder
         Dim Negative As [SByte](,) = New [SByte](,) {{0, -1}, {0, 0}, {-1, 0}, {-1, -1}}
         Dim Positive As [SByte](,) = New [SByte](,) {{0, 0}, {-1, 0}, {-1, -1}, {0, -1}}
 
-        Dim LeftBefore As New Point()
-        Dim RightBefore As New Point()
+        Dim LeftInFront As New Point()
+        Dim RightInFront As New Point()
 
-        Dim LeftBeforeGreaterTh As Boolean, RightBeforeGreaterTh As Boolean
+        Dim LeftInFrontGreaterTh As Boolean, RightInFrontGreaterTh As Boolean
         Dim direction As Integer = 1
 
         Dim bmData As BitmapData = Nothing
@@ -840,56 +842,56 @@ Public Class ChainFinder
                 cc.Chain.Add(direction)
 
                 While x <> _start.X OrElse y <> _start.Y
-                    LeftBefore.X = x + Negative(direction, 0)
-                    LeftBefore.Y = y + Negative(direction, 1)
-                    RightBefore.X = x + Positive(direction, 0)
-                    RightBefore.Y = y + Positive(direction, 1)
+                    LeftInFront.X = x + Negative(direction, 0)
+                    LeftInFront.Y = y + Negative(direction, 1)
+                    RightInFront.X = x + Positive(direction, 0)
+                    RightInFront.Y = y + Positive(direction, 1)
 
                     Select Case direction
                         Case 0
-                            cc.Coord.Add(New Point(LeftBefore.X - 1, LeftBefore.Y))
+                            cc.Coord.Add(New Point(LeftInFront.X - 1, LeftInFront.Y))
                             Exit Select
                         Case 1
-                            cc.Coord.Add(New Point(LeftBefore.X, LeftBefore.Y - 1))
+                            cc.Coord.Add(New Point(LeftInFront.X, LeftInFront.Y - 1))
                             Exit Select
                         Case 2
-                            cc.Coord.Add(New Point(LeftBefore.X + 1, LeftBefore.Y))
+                            cc.Coord.Add(New Point(LeftInFront.X + 1, LeftInFront.Y))
                             Exit Select
                         Case 3
-                            cc.Coord.Add(New Point(LeftBefore.X, LeftBefore.Y + 1))
+                            cc.Coord.Add(New Point(LeftInFront.X, LeftInFront.Y + 1))
                             Exit Select
                     End Select
 
-                    LeftBeforeGreaterTh = False
-                    RightBeforeGreaterTh = False
+                    LeftInFrontGreaterTh = False
+                    RightInFrontGreaterTh = False
 
-                    If LeftBefore.X >= 0 AndAlso LeftBefore.X < b.Width AndAlso LeftBefore.Y >= 0 AndAlso LeftBefore.Y < b.Height Then
+                    If LeftInFront.X >= 0 AndAlso LeftInFront.X < b.Width AndAlso LeftInFront.Y >= 0 AndAlso LeftInFront.Y < b.Height Then
                         If Not grayscale Then
-                            LeftBeforeGreaterTh = p(LeftBefore.Y * stride + LeftBefore.X * 4 + 3) < _threshold
+                            LeftInFrontGreaterTh = p(LeftInFront.Y * stride + LeftInFront.X * 4 + 3) < _threshold
                         Else
                             If range > 0 Then
-                                LeftBeforeGreaterTh = ((p(LeftBefore.Y * stride + LeftBefore.X * 4) < _threshold) AndAlso (p(LeftBefore.Y * stride + LeftBefore.X * 4) >= _threshold + range))
+                                LeftInFrontGreaterTh = ((p(LeftInFront.Y * stride + LeftInFront.X * 4) < _threshold) AndAlso (p(LeftInFront.Y * stride + LeftInFront.X * 4) >= _threshold + range))
                             Else
-                                LeftBeforeGreaterTh = p(LeftBefore.Y * stride + LeftBefore.X * 4) < _threshold
+                                LeftInFrontGreaterTh = p(LeftInFront.Y * stride + LeftInFront.X * 4) < _threshold
                             End If
                         End If
                     End If
 
-                    If RightBefore.X >= 0 AndAlso RightBefore.X < b.Width AndAlso RightBefore.Y >= 0 AndAlso RightBefore.Y < b.Height Then
+                    If RightInFront.X >= 0 AndAlso RightInFront.X < b.Width AndAlso RightInFront.Y >= 0 AndAlso RightInFront.Y < b.Height Then
                         If Not grayscale Then
-                            RightBeforeGreaterTh = p(RightBefore.Y * stride + RightBefore.X * 4 + 3) < _threshold
+                            RightInFrontGreaterTh = p(RightInFront.Y * stride + RightInFront.X * 4 + 3) < _threshold
                         Else
                             If range > 0 Then
-                                RightBeforeGreaterTh = ((p(RightBefore.Y * stride + RightBefore.X * 4) < _threshold) AndAlso (p(RightBefore.Y * stride + RightBefore.X * 4) >= _threshold + range))
+                                RightInFrontGreaterTh = ((p(RightInFront.Y * stride + RightInFront.X * 4) < _threshold) AndAlso (p(RightInFront.Y * stride + RightInFront.X * 4) >= _threshold + range))
                             Else
-                                RightBeforeGreaterTh = p(RightBefore.Y * stride + RightBefore.X * 4) < _threshold
+                                RightInFrontGreaterTh = p(RightInFront.Y * stride + RightInFront.X * 4) < _threshold
                             End If
                         End If
                     End If
 
-                    If RightBeforeGreaterTh AndAlso (LeftBeforeGreaterTh OrElse _nullCells) Then
+                    If RightInFrontGreaterTh AndAlso (LeftInFrontGreaterTh OrElse _nullCells) Then
                         direction = (direction + 1) Mod 4
-                    ElseIf Not LeftBeforeGreaterTh AndAlso (Not RightBeforeGreaterTh OrElse Not _nullCells) Then
+                    ElseIf Not LeftInFrontGreaterTh AndAlso (Not RightInFrontGreaterTh OrElse Not _nullCells) Then
                         direction = (direction + 3) Mod 4
                     End If
 
@@ -964,10 +966,10 @@ Public Class ChainFinder
         Dim Negative As [SByte](,) = New [SByte](,) {{0, -1}, {0, 0}, {-1, 0}, {-1, -1}}
         Dim Positive As [SByte](,) = New [SByte](,) {{0, 0}, {-1, 0}, {-1, -1}, {0, -1}}
 
-        Dim LeftBefore As New Point()
-        Dim RightBefore As New Point()
+        Dim LeftInFront As New Point()
+        Dim RightInFront As New Point()
 
-        Dim LeftBeforeGreaterTh As Boolean, RightBeforeGreaterTh As Boolean
+        Dim LeftInFrontGreaterTh As Boolean, RightInFrontGreaterTh As Boolean
         Dim direction As Integer = 1
 
         Dim bmData As BitmapData = Nothing
@@ -996,56 +998,56 @@ Public Class ChainFinder
                 cc.Chain.Add(direction)
 
                 While x <> _start.X OrElse y <> _start.Y
-                    LeftBefore.X = x + Negative(direction, 0)
-                    LeftBefore.Y = y + Negative(direction, 1)
-                    RightBefore.X = x + Positive(direction, 0)
-                    RightBefore.Y = y + Positive(direction, 1)
+                    LeftInFront.X = x + Negative(direction, 0)
+                    LeftInFront.Y = y + Negative(direction, 1)
+                    RightInFront.X = x + Positive(direction, 0)
+                    RightInFront.Y = y + Positive(direction, 1)
 
                     Select Case direction
                         Case 0
-                            cc.Coord.Add(New Point(LeftBefore.X - 1, LeftBefore.Y))
+                            cc.Coord.Add(New Point(LeftInFront.X - 1, LeftInFront.Y))
                             Exit Select
                         Case 1
-                            cc.Coord.Add(New Point(LeftBefore.X, LeftBefore.Y - 1))
+                            cc.Coord.Add(New Point(LeftInFront.X, LeftInFront.Y - 1))
                             Exit Select
                         Case 2
-                            cc.Coord.Add(New Point(LeftBefore.X + 1, LeftBefore.Y))
+                            cc.Coord.Add(New Point(LeftInFront.X + 1, LeftInFront.Y))
                             Exit Select
                         Case 3
-                            cc.Coord.Add(New Point(LeftBefore.X, LeftBefore.Y + 1))
+                            cc.Coord.Add(New Point(LeftInFront.X, LeftInFront.Y + 1))
                             Exit Select
                     End Select
 
-                    LeftBeforeGreaterTh = False
-                    RightBeforeGreaterTh = False
+                    LeftInFrontGreaterTh = False
+                    RightInFrontGreaterTh = False
 
-                    If LeftBefore.X >= 0 AndAlso LeftBefore.X < b.Width AndAlso LeftBefore.Y >= 0 AndAlso LeftBefore.Y < b.Height Then
+                    If LeftInFront.X >= 0 AndAlso LeftInFront.X < b.Width AndAlso LeftInFront.Y >= 0 AndAlso LeftInFront.Y < b.Height Then
                         If Not grayscale Then
-                            LeftBeforeGreaterTh = p(LeftBefore.Y * stride + LeftBefore.X * 4 + 3) > _threshold
+                            LeftInFrontGreaterTh = p(LeftInFront.Y * stride + LeftInFront.X * 4 + 3) > _threshold
                         Else
                             If range > 0 Then
-                                LeftBeforeGreaterTh = ((p(LeftBefore.Y * stride + LeftBefore.X * 4) > _threshold) AndAlso (p(LeftBefore.Y * stride + LeftBefore.X * 4) <= _threshold + range))
+                                LeftInFrontGreaterTh = ((p(LeftInFront.Y * stride + LeftInFront.X * 4) > _threshold) AndAlso (p(LeftInFront.Y * stride + LeftInFront.X * 4) <= _threshold + range))
                             Else
-                                LeftBeforeGreaterTh = p(LeftBefore.Y * stride + LeftBefore.X * 4) > _threshold
+                                LeftInFrontGreaterTh = p(LeftInFront.Y * stride + LeftInFront.X * 4) > _threshold
                             End If
                         End If
                     End If
 
-                    If RightBefore.X >= 0 AndAlso RightBefore.X < b.Width AndAlso RightBefore.Y >= 0 AndAlso RightBefore.Y < b.Height Then
+                    If RightInFront.X >= 0 AndAlso RightInFront.X < b.Width AndAlso RightInFront.Y >= 0 AndAlso RightInFront.Y < b.Height Then
                         If Not grayscale Then
-                            RightBeforeGreaterTh = p(RightBefore.Y * stride + RightBefore.X * 4 + 3) > _threshold
+                            RightInFrontGreaterTh = p(RightInFront.Y * stride + RightInFront.X * 4 + 3) > _threshold
                         Else
                             If range > 0 Then
-                                RightBeforeGreaterTh = ((p(RightBefore.Y * stride + RightBefore.X * 4) > _threshold) AndAlso (p(RightBefore.Y * stride + RightBefore.X * 4) <= _threshold + range))
+                                RightInFrontGreaterTh = ((p(RightInFront.Y * stride + RightInFront.X * 4) > _threshold) AndAlso (p(RightInFront.Y * stride + RightInFront.X * 4) <= _threshold + range))
                             Else
-                                RightBeforeGreaterTh = p(RightBefore.Y * stride + RightBefore.X * 4) > _threshold
+                                RightInFrontGreaterTh = p(RightInFront.Y * stride + RightInFront.X * 4) > _threshold
                             End If
                         End If
                     End If
 
-                    If RightBeforeGreaterTh AndAlso (LeftBeforeGreaterTh OrElse _nullCells) Then
+                    If RightInFrontGreaterTh AndAlso (LeftInFrontGreaterTh OrElse _nullCells) Then
                         direction = (direction + 1) Mod 4
-                    ElseIf Not LeftBeforeGreaterTh AndAlso (Not RightBeforeGreaterTh OrElse Not _nullCells) Then
+                    ElseIf Not LeftInFrontGreaterTh AndAlso (Not RightInFrontGreaterTh OrElse Not _nullCells) Then
                         direction = (direction + 3) Mod 4
                     End If
 
@@ -1150,10 +1152,10 @@ Public Class ChainFinder
         Dim Negative As [SByte](,) = New [SByte](,) {{0, -1}, {0, 0}, {-1, 0}, {-1, -1}}
         Dim Positive As [SByte](,) = New [SByte](,) {{0, 0}, {-1, 0}, {-1, -1}, {0, -1}}
 
-        Dim LeftBefore As New Point()
-        Dim RightBefore As New Point()
+        Dim LeftInFront As New Point()
+        Dim RightInFront As New Point()
 
-        Dim LeftBeforeGreaterTh As Boolean, RightBeforeGreaterTh As Boolean
+        Dim LeftInFrontGreaterTh As Boolean, RightInFrontGreaterTh As Boolean
         Dim direction As Integer = 1
 
         Dim bmData As BitmapData = Nothing
@@ -1182,56 +1184,56 @@ Public Class ChainFinder
                 cc.Chain.Add(direction)
 
                 While x <> _start.X OrElse y <> _start.Y
-                    LeftBefore.X = x + Negative(direction, 0)
-                    LeftBefore.Y = y + Negative(direction, 1)
-                    RightBefore.X = x + Positive(direction, 0)
-                    RightBefore.Y = y + Positive(direction, 1)
+                    LeftInFront.X = x + Negative(direction, 0)
+                    LeftInFront.Y = y + Negative(direction, 1)
+                    RightInFront.X = x + Positive(direction, 0)
+                    RightInFront.Y = y + Positive(direction, 1)
 
                     Select Case direction
                         Case 0
-                            cc.Coord.Add(New Point(LeftBefore.X - 1, LeftBefore.Y))
+                            cc.Coord.Add(New Point(LeftInFront.X - 1, LeftInFront.Y))
                             Exit Select
                         Case 1
-                            cc.Coord.Add(New Point(LeftBefore.X, LeftBefore.Y - 1))
+                            cc.Coord.Add(New Point(LeftInFront.X, LeftInFront.Y - 1))
                             Exit Select
                         Case 2
-                            cc.Coord.Add(New Point(LeftBefore.X + 1, LeftBefore.Y))
+                            cc.Coord.Add(New Point(LeftInFront.X + 1, LeftInFront.Y))
                             Exit Select
                         Case 3
-                            cc.Coord.Add(New Point(LeftBefore.X, LeftBefore.Y + 1))
+                            cc.Coord.Add(New Point(LeftInFront.X, LeftInFront.Y + 1))
                             Exit Select
                     End Select
 
-                    LeftBeforeGreaterTh = False
-                    RightBeforeGreaterTh = False
+                    LeftInFrontGreaterTh = False
+                    RightInFrontGreaterTh = False
 
-                    If LeftBefore.X >= 0 AndAlso LeftBefore.X < b.Width AndAlso LeftBefore.Y >= 0 AndAlso LeftBefore.Y < b.Height Then
+                    If LeftInFront.X >= 0 AndAlso LeftInFront.X < b.Width AndAlso LeftInFront.Y >= 0 AndAlso LeftInFront.Y < b.Height Then
                         If Not grayscale Then
-                            LeftBeforeGreaterTh = p(LeftBefore.Y * stride + LeftBefore.X * 4 + 3) > _threshold
+                            LeftInFrontGreaterTh = p(LeftInFront.Y * stride + LeftInFront.X * 4 + 3) > _threshold
                         Else
                             If range > 0 Then
-                                LeftBeforeGreaterTh = ((p(LeftBefore.Y * stride + LeftBefore.X * 4) > _threshold) AndAlso (p(LeftBefore.Y * stride + LeftBefore.X * 4) <= _threshold + range))
+                                LeftInFrontGreaterTh = ((p(LeftInFront.Y * stride + LeftInFront.X * 4) > _threshold) AndAlso (p(LeftInFront.Y * stride + LeftInFront.X * 4) <= _threshold + range))
                             Else
-                                LeftBeforeGreaterTh = p(LeftBefore.Y * stride + LeftBefore.X * 4) > _threshold
+                                LeftInFrontGreaterTh = p(LeftInFront.Y * stride + LeftInFront.X * 4) > _threshold
                             End If
                         End If
                     End If
 
-                    If RightBefore.X >= 0 AndAlso RightBefore.X < b.Width AndAlso RightBefore.Y >= 0 AndAlso RightBefore.Y < b.Height Then
+                    If RightInFront.X >= 0 AndAlso RightInFront.X < b.Width AndAlso RightInFront.Y >= 0 AndAlso RightInFront.Y < b.Height Then
                         If Not grayscale Then
-                            RightBeforeGreaterTh = p(RightBefore.Y * stride + RightBefore.X * 4 + 3) > _threshold
+                            RightInFrontGreaterTh = p(RightInFront.Y * stride + RightInFront.X * 4 + 3) > _threshold
                         Else
                             If range > 0 Then
-                                RightBeforeGreaterTh = ((p(RightBefore.Y * stride + RightBefore.X * 4) > _threshold) AndAlso (p(RightBefore.Y * stride + RightBefore.X * 4) <= _threshold + range))
+                                RightInFrontGreaterTh = ((p(RightInFront.Y * stride + RightInFront.X * 4) > _threshold) AndAlso (p(RightInFront.Y * stride + RightInFront.X * 4) <= _threshold + range))
                             Else
-                                RightBeforeGreaterTh = p(RightBefore.Y * stride + RightBefore.X * 4) > _threshold
+                                RightInFrontGreaterTh = p(RightInFront.Y * stride + RightInFront.X * 4) > _threshold
                             End If
                         End If
                     End If
 
-                    If RightBeforeGreaterTh AndAlso (LeftBeforeGreaterTh OrElse _nullCells) Then
+                    If RightInFrontGreaterTh AndAlso (LeftInFrontGreaterTh OrElse _nullCells) Then
                         direction = (direction + 1) Mod 4
-                    ElseIf Not LeftBeforeGreaterTh AndAlso (Not RightBeforeGreaterTh OrElse Not _nullCells) Then
+                    ElseIf Not LeftInFrontGreaterTh AndAlso (Not RightInFrontGreaterTh OrElse Not _nullCells) Then
                         direction = (direction + 3) Mod 4
                     End If
 
@@ -1305,10 +1307,10 @@ Public Class ChainFinder
         Dim Negative As [SByte](,) = New [SByte](,) {{0, -1}, {0, 0}, {-1, 0}, {-1, -1}}
         Dim Positive As [SByte](,) = New [SByte](,) {{0, 0}, {-1, 0}, {-1, -1}, {0, -1}}
 
-        Dim LeftBefore As New Point()
-        Dim RightBefore As New Point()
+        Dim LeftInFront As New Point()
+        Dim RightInFront As New Point()
 
-        Dim LeftBeforeGreaterTh As Boolean, RightBeforeGreaterTh As Boolean
+        Dim LeftInFrontGreaterTh As Boolean, RightInFrontGreaterTh As Boolean
         Dim direction As Integer = 1
 
         Dim bmData As BitmapData = Nothing
@@ -1336,56 +1338,56 @@ Public Class ChainFinder
                 cc.Chain.Add(direction)
 
                 While x <> _start.X OrElse y <> _start.Y
-                    LeftBefore.X = x + Negative(direction, 0)
-                    LeftBefore.Y = y + Negative(direction, 1)
-                    RightBefore.X = x + Positive(direction, 0)
-                    RightBefore.Y = y + Positive(direction, 1)
+                    LeftInFront.X = x + Negative(direction, 0)
+                    LeftInFront.Y = y + Negative(direction, 1)
+                    RightInFront.X = x + Positive(direction, 0)
+                    RightInFront.Y = y + Positive(direction, 1)
 
                     Select Case direction
                         Case 0
-                            cc.Coord.Add(New Point(LeftBefore.X - 1, LeftBefore.Y))
+                            cc.Coord.Add(New Point(LeftInFront.X - 1, LeftInFront.Y))
                             Exit Select
                         Case 1
-                            cc.Coord.Add(New Point(LeftBefore.X, LeftBefore.Y - 1))
+                            cc.Coord.Add(New Point(LeftInFront.X, LeftInFront.Y - 1))
                             Exit Select
                         Case 2
-                            cc.Coord.Add(New Point(LeftBefore.X + 1, LeftBefore.Y))
+                            cc.Coord.Add(New Point(LeftInFront.X + 1, LeftInFront.Y))
                             Exit Select
                         Case 3
-                            cc.Coord.Add(New Point(LeftBefore.X, LeftBefore.Y + 1))
+                            cc.Coord.Add(New Point(LeftInFront.X, LeftInFront.Y + 1))
                             Exit Select
                     End Select
 
-                    LeftBeforeGreaterTh = False
-                    RightBeforeGreaterTh = False
+                    LeftInFrontGreaterTh = False
+                    RightInFrontGreaterTh = False
 
-                    If LeftBefore.X >= 0 AndAlso LeftBefore.X < b.Width AndAlso LeftBefore.Y >= 0 AndAlso LeftBefore.Y < b.Height Then
+                    If LeftInFront.X >= 0 AndAlso LeftInFront.X < b.Width AndAlso LeftInFront.Y >= 0 AndAlso LeftInFront.Y < b.Height Then
                         If Not grayscale Then
-                            LeftBeforeGreaterTh = p(LeftBefore.Y * stride + LeftBefore.X * 4 + 3) < _threshold
+                            LeftInFrontGreaterTh = p(LeftInFront.Y * stride + LeftInFront.X * 4 + 3) < _threshold
                         Else
                             If range > 0 Then
-                                LeftBeforeGreaterTh = ((p(LeftBefore.Y * stride + LeftBefore.X * 4) < _threshold) AndAlso (p(LeftBefore.Y * stride + LeftBefore.X * 4) >= _threshold + range))
+                                LeftInFrontGreaterTh = ((p(LeftInFront.Y * stride + LeftInFront.X * 4) < _threshold) AndAlso (p(LeftInFront.Y * stride + LeftInFront.X * 4) >= _threshold + range))
                             Else
-                                LeftBeforeGreaterTh = p(LeftBefore.Y * stride + LeftBefore.X * 4) < _threshold
+                                LeftInFrontGreaterTh = p(LeftInFront.Y * stride + LeftInFront.X * 4) < _threshold
                             End If
                         End If
                     End If
 
-                    If RightBefore.X >= 0 AndAlso RightBefore.X < b.Width AndAlso RightBefore.Y >= 0 AndAlso RightBefore.Y < b.Height Then
+                    If RightInFront.X >= 0 AndAlso RightInFront.X < b.Width AndAlso RightInFront.Y >= 0 AndAlso RightInFront.Y < b.Height Then
                         If Not grayscale Then
-                            RightBeforeGreaterTh = p(RightBefore.Y * stride + RightBefore.X * 4 + 3) < _threshold
+                            RightInFrontGreaterTh = p(RightInFront.Y * stride + RightInFront.X * 4 + 3) < _threshold
                         Else
                             If range > 0 Then
-                                RightBeforeGreaterTh = ((p(RightBefore.Y * stride + RightBefore.X * 4) < _threshold) AndAlso (p(RightBefore.Y * stride + RightBefore.X * 4) >= _threshold + range))
+                                RightInFrontGreaterTh = ((p(RightInFront.Y * stride + RightInFront.X * 4) < _threshold) AndAlso (p(RightInFront.Y * stride + RightInFront.X * 4) >= _threshold + range))
                             Else
-                                RightBeforeGreaterTh = p(RightBefore.Y * stride + RightBefore.X * 4) < _threshold
+                                RightInFrontGreaterTh = p(RightInFront.Y * stride + RightInFront.X * 4) < _threshold
                             End If
                         End If
                     End If
 
-                    If RightBeforeGreaterTh AndAlso (LeftBeforeGreaterTh OrElse _nullCells) Then
+                    If RightInFrontGreaterTh AndAlso (LeftInFrontGreaterTh OrElse _nullCells) Then
                         direction = (direction + 1) Mod 4
-                    ElseIf Not LeftBeforeGreaterTh AndAlso (Not RightBeforeGreaterTh OrElse Not _nullCells) Then
+                    ElseIf Not LeftInFrontGreaterTh AndAlso (Not RightInFrontGreaterTh OrElse Not _nullCells) Then
                         direction = (direction + 3) Mod 4
                     End If
 
@@ -2882,10 +2884,10 @@ Public Class ChainFinder
         Dim Negative As [SByte](,) = New [SByte](,) {{0, -1}, {0, 0}, {-1, 0}, {-1, -1}}
         Dim Positive As [SByte](,) = New [SByte](,) {{0, 0}, {-1, 0}, {-1, -1}, {0, -1}}
 
-        Dim LeftBefore As New Point()
-        Dim RightBefore As New Point()
+        Dim LeftInFront As New Point()
+        Dim RightInFront As New Point()
 
-        Dim LeftBeforeGreaterTh As Boolean, RightBeforeGreaterTh As Boolean
+        Dim LeftInFrontGreaterTh As Boolean, RightInFrontGreaterTh As Boolean
         Dim direction As Integer = 1
 
         Dim bmData As BitmapData = Nothing
@@ -2913,50 +2915,50 @@ Public Class ChainFinder
                 cc.Chain.Add(direction)
 
                 While x <> _start.X OrElse y <> _start.Y
-                    LeftBefore.X = x + Negative(direction, 0)
-                    LeftBefore.Y = y + Negative(direction, 1)
-                    RightBefore.X = x + Positive(direction, 0)
-                    RightBefore.Y = y + Positive(direction, 1)
+                    LeftInFront.X = x + Negative(direction, 0)
+                    LeftInFront.Y = y + Negative(direction, 1)
+                    RightInFront.X = x + Positive(direction, 0)
+                    RightInFront.Y = y + Positive(direction, 1)
 
                     Select Case direction
                         Case 0
-                            cc.Coord.Add(New Point(LeftBefore.X - 1, LeftBefore.Y))
+                            cc.Coord.Add(New Point(LeftInFront.X - 1, LeftInFront.Y))
                             Exit Select
                         Case 1
-                            cc.Coord.Add(New Point(LeftBefore.X, LeftBefore.Y - 1))
+                            cc.Coord.Add(New Point(LeftInFront.X, LeftInFront.Y - 1))
                             Exit Select
                         Case 2
-                            cc.Coord.Add(New Point(LeftBefore.X + 1, LeftBefore.Y))
+                            cc.Coord.Add(New Point(LeftInFront.X + 1, LeftInFront.Y))
                             Exit Select
                         Case 3
-                            cc.Coord.Add(New Point(LeftBefore.X, LeftBefore.Y + 1))
+                            cc.Coord.Add(New Point(LeftInFront.X, LeftInFront.Y + 1))
                             Exit Select
                     End Select
 
-                    LeftBeforeGreaterTh = False
-                    RightBeforeGreaterTh = False
+                    LeftInFrontGreaterTh = False
+                    RightInFrontGreaterTh = False
 
-                    If LeftBefore.X >= 0 AndAlso LeftBefore.X < b.Width AndAlso LeftBefore.Y >= 0 AndAlso LeftBefore.Y < b.Height Then
+                    If LeftInFront.X >= 0 AndAlso LeftInFront.X < b.Width AndAlso LeftInFront.Y >= 0 AndAlso LeftInFront.Y < b.Height Then
                         '#Region "singleVal"
                         If doR AndAlso Not doG AndAlso Not doB Then
                             If rangeR > 0 Then
-                                LeftBeforeGreaterTh = ((p(LeftBefore.Y * stride + LeftBefore.X * 4 + 2) > _thresholdR) AndAlso (p(LeftBefore.Y * stride + LeftBefore.X * 4 + 2) <= _thresholdR + rangeR))
+                                LeftInFrontGreaterTh = ((p(LeftInFront.Y * stride + LeftInFront.X * 4 + 2) > _thresholdR) AndAlso (p(LeftInFront.Y * stride + LeftInFront.X * 4 + 2) <= _thresholdR + rangeR))
                             Else
-                                LeftBeforeGreaterTh = p(LeftBefore.Y * stride + LeftBefore.X * 4 + 2) > _thresholdR
+                                LeftInFrontGreaterTh = p(LeftInFront.Y * stride + LeftInFront.X * 4 + 2) > _thresholdR
                             End If
                         End If
                         If Not doR AndAlso doG AndAlso Not doB Then
                             If rangeG > 0 Then
-                                LeftBeforeGreaterTh = ((p(LeftBefore.Y * stride + LeftBefore.X * 4 + 1) > _thresholdG) AndAlso (p(LeftBefore.Y * stride + LeftBefore.X * 4 + 1) <= _thresholdG + rangeG))
+                                LeftInFrontGreaterTh = ((p(LeftInFront.Y * stride + LeftInFront.X * 4 + 1) > _thresholdG) AndAlso (p(LeftInFront.Y * stride + LeftInFront.X * 4 + 1) <= _thresholdG + rangeG))
                             Else
-                                LeftBeforeGreaterTh = p(LeftBefore.Y * stride + LeftBefore.X * 4 + 1) > _thresholdG
+                                LeftInFrontGreaterTh = p(LeftInFront.Y * stride + LeftInFront.X * 4 + 1) > _thresholdG
                             End If
                         End If
                         If Not doR AndAlso Not doG AndAlso doB Then
                             If rangeB > 0 Then
-                                LeftBeforeGreaterTh = ((p(LeftBefore.Y * stride + LeftBefore.X * 4) > _thresholdB) AndAlso (p(LeftBefore.Y * stride + LeftBefore.X * 4) <= _thresholdB + rangeB))
+                                LeftInFrontGreaterTh = ((p(LeftInFront.Y * stride + LeftInFront.X * 4) > _thresholdB) AndAlso (p(LeftInFront.Y * stride + LeftInFront.X * 4) <= _thresholdB + rangeB))
                             Else
-                                LeftBeforeGreaterTh = p(LeftBefore.Y * stride + LeftBefore.X * 4) > _thresholdB
+                                LeftInFrontGreaterTh = p(LeftInFront.Y * stride + LeftInFront.X * 4) > _thresholdB
                             End If
                         End If
                         '#End Region
@@ -2964,24 +2966,24 @@ Public Class ChainFinder
                         '#Region "doubleVal"
                         If doR AndAlso doG AndAlso Not doB Then
                             If rangeR > 0 OrElse rangeG > 0 Then
-                                LeftBeforeGreaterTh = (((p(LeftBefore.Y * stride + LeftBefore.X * 4 + 2) > _thresholdR) AndAlso (p(LeftBefore.Y * stride + LeftBefore.X * 4 + 2) <= _thresholdR + rangeR))) AndAlso (((p(LeftBefore.Y * stride + LeftBefore.X * 4 + 1) > _thresholdG) AndAlso (p(LeftBefore.Y * stride + LeftBefore.X * 4 + 1) <= _thresholdG + rangeG)))
+                                LeftInFrontGreaterTh = (((p(LeftInFront.Y * stride + LeftInFront.X * 4 + 2) > _thresholdR) AndAlso (p(LeftInFront.Y * stride + LeftInFront.X * 4 + 2) <= _thresholdR + rangeR))) AndAlso (((p(LeftInFront.Y * stride + LeftInFront.X * 4 + 1) > _thresholdG) AndAlso (p(LeftInFront.Y * stride + LeftInFront.X * 4 + 1) <= _thresholdG + rangeG)))
                             Else
-                                LeftBeforeGreaterTh = (p(LeftBefore.Y * stride + LeftBefore.X * 4 + 2) > _thresholdR) AndAlso (p(LeftBefore.Y * stride + LeftBefore.X * 4 + 1) > _thresholdG)
+                                LeftInFrontGreaterTh = (p(LeftInFront.Y * stride + LeftInFront.X * 4 + 2) > _thresholdR) AndAlso (p(LeftInFront.Y * stride + LeftInFront.X * 4 + 1) > _thresholdG)
 
                             End If
                         End If
                         If doR AndAlso Not doG AndAlso doB Then
                             If rangeR > 0 OrElse rangeB > 0 Then
-                                LeftBeforeGreaterTh = (((p(LeftBefore.Y * stride + LeftBefore.X * 4 + 2) > _thresholdR) AndAlso (p(LeftBefore.Y * stride + LeftBefore.X * 4 + 2) <= _thresholdR + rangeR))) AndAlso (((p(LeftBefore.Y * stride + LeftBefore.X * 4) > _thresholdB) AndAlso (p(LeftBefore.Y * stride + LeftBefore.X * 4) <= _thresholdB + rangeB)))
+                                LeftInFrontGreaterTh = (((p(LeftInFront.Y * stride + LeftInFront.X * 4 + 2) > _thresholdR) AndAlso (p(LeftInFront.Y * stride + LeftInFront.X * 4 + 2) <= _thresholdR + rangeR))) AndAlso (((p(LeftInFront.Y * stride + LeftInFront.X * 4) > _thresholdB) AndAlso (p(LeftInFront.Y * stride + LeftInFront.X * 4) <= _thresholdB + rangeB)))
                             Else
-                                LeftBeforeGreaterTh = (p(LeftBefore.Y * stride + LeftBefore.X * 4 + 2) > _thresholdR) AndAlso (p(LeftBefore.Y * stride + LeftBefore.X * 4) > _thresholdB)
+                                LeftInFrontGreaterTh = (p(LeftInFront.Y * stride + LeftInFront.X * 4 + 2) > _thresholdR) AndAlso (p(LeftInFront.Y * stride + LeftInFront.X * 4) > _thresholdB)
                             End If
                         End If
                         If Not doR AndAlso doG AndAlso doB Then
                             If rangeB > 0 OrElse rangeG > 0 Then
-                                LeftBeforeGreaterTh = (((p(LeftBefore.Y * stride + LeftBefore.X * 4) > _thresholdB) AndAlso (p(LeftBefore.Y * stride + LeftBefore.X * 4) <= _thresholdB + rangeB))) AndAlso (((p(LeftBefore.Y * stride + LeftBefore.X * 4 + 1) > _thresholdG) AndAlso (p(LeftBefore.Y * stride + LeftBefore.X * 4 + 1) <= _thresholdG + rangeG)))
+                                LeftInFrontGreaterTh = (((p(LeftInFront.Y * stride + LeftInFront.X * 4) > _thresholdB) AndAlso (p(LeftInFront.Y * stride + LeftInFront.X * 4) <= _thresholdB + rangeB))) AndAlso (((p(LeftInFront.Y * stride + LeftInFront.X * 4 + 1) > _thresholdG) AndAlso (p(LeftInFront.Y * stride + LeftInFront.X * 4 + 1) <= _thresholdG + rangeG)))
                             Else
-                                LeftBeforeGreaterTh = (p(LeftBefore.Y * stride + LeftBefore.X * 4) > _thresholdB) AndAlso (p(LeftBefore.Y * stride + LeftBefore.X * 4 + 1) > _thresholdG)
+                                LeftInFrontGreaterTh = (p(LeftInFront.Y * stride + LeftInFront.X * 4) > _thresholdB) AndAlso (p(LeftInFront.Y * stride + LeftInFront.X * 4 + 1) > _thresholdG)
                             End If
                         End If
                         '#End Region
@@ -2989,35 +2991,35 @@ Public Class ChainFinder
                         '#Region "allVals"
                         If doR AndAlso doG AndAlso doB Then
                             If rangeR > 0 OrElse rangeG > 0 OrElse rangeB > 0 Then
-                                LeftBeforeGreaterTh = (((p(LeftBefore.Y * stride + LeftBefore.X * 4 + 2) > _thresholdR) AndAlso (p(LeftBefore.Y * stride + LeftBefore.X * 4 + 2) <= _thresholdR + rangeR))) AndAlso (((p(LeftBefore.Y * stride + LeftBefore.X * 4 + 1) > _thresholdG) AndAlso (p(LeftBefore.Y * stride + LeftBefore.X * 4 + 1) <= _thresholdG + rangeG))) AndAlso (((p(LeftBefore.Y * stride + LeftBefore.X * 4) > _thresholdB) AndAlso (p(LeftBefore.Y * stride + LeftBefore.X * 4) <= _thresholdB + rangeB)))
+                                LeftInFrontGreaterTh = (((p(LeftInFront.Y * stride + LeftInFront.X * 4 + 2) > _thresholdR) AndAlso (p(LeftInFront.Y * stride + LeftInFront.X * 4 + 2) <= _thresholdR + rangeR))) AndAlso (((p(LeftInFront.Y * stride + LeftInFront.X * 4 + 1) > _thresholdG) AndAlso (p(LeftInFront.Y * stride + LeftInFront.X * 4 + 1) <= _thresholdG + rangeG))) AndAlso (((p(LeftInFront.Y * stride + LeftInFront.X * 4) > _thresholdB) AndAlso (p(LeftInFront.Y * stride + LeftInFront.X * 4) <= _thresholdB + rangeB)))
                             Else
-                                LeftBeforeGreaterTh = (p(LeftBefore.Y * stride + LeftBefore.X * 4 + 2) > _thresholdR) AndAlso (p(LeftBefore.Y * stride + LeftBefore.X * 4 + 1) > _thresholdG) AndAlso (p(LeftBefore.Y * stride + LeftBefore.X * 4) > _thresholdB)
+                                LeftInFrontGreaterTh = (p(LeftInFront.Y * stride + LeftInFront.X * 4 + 2) > _thresholdR) AndAlso (p(LeftInFront.Y * stride + LeftInFront.X * 4 + 1) > _thresholdG) AndAlso (p(LeftInFront.Y * stride + LeftInFront.X * 4) > _thresholdB)
                             End If
                             '#End Region
                         End If
                     End If
 
-                    If RightBefore.X >= 0 AndAlso RightBefore.X < b.Width AndAlso RightBefore.Y >= 0 AndAlso RightBefore.Y < b.Height Then
+                    If RightInFront.X >= 0 AndAlso RightInFront.X < b.Width AndAlso RightInFront.Y >= 0 AndAlso RightInFront.Y < b.Height Then
                         '#Region "singleVal"
                         If doR AndAlso Not doG AndAlso Not doB Then
                             If rangeR > 0 Then
-                                RightBeforeGreaterTh = ((p(RightBefore.Y * stride + RightBefore.X * 4 + 2) > _thresholdR) AndAlso (p(RightBefore.Y * stride + RightBefore.X * 4 + 2) <= _thresholdR + rangeR))
+                                RightInFrontGreaterTh = ((p(RightInFront.Y * stride + RightInFront.X * 4 + 2) > _thresholdR) AndAlso (p(RightInFront.Y * stride + RightInFront.X * 4 + 2) <= _thresholdR + rangeR))
                             Else
-                                RightBeforeGreaterTh = p(RightBefore.Y * stride + RightBefore.X * 4 + 2) > _thresholdR
+                                RightInFrontGreaterTh = p(RightInFront.Y * stride + RightInFront.X * 4 + 2) > _thresholdR
                             End If
                         End If
                         If Not doR AndAlso doG AndAlso Not doB Then
                             If rangeG > 0 Then
-                                RightBeforeGreaterTh = ((p(RightBefore.Y * stride + RightBefore.X * 4 + 1) > _thresholdG) AndAlso (p(RightBefore.Y * stride + RightBefore.X * 4 + 1) <= _thresholdG + rangeG))
+                                RightInFrontGreaterTh = ((p(RightInFront.Y * stride + RightInFront.X * 4 + 1) > _thresholdG) AndAlso (p(RightInFront.Y * stride + RightInFront.X * 4 + 1) <= _thresholdG + rangeG))
                             Else
-                                RightBeforeGreaterTh = p(RightBefore.Y * stride + RightBefore.X * 4 + 1) > _thresholdG
+                                RightInFrontGreaterTh = p(RightInFront.Y * stride + RightInFront.X * 4 + 1) > _thresholdG
                             End If
                         End If
                         If Not doR AndAlso Not doG AndAlso doB Then
                             If rangeB > 0 Then
-                                RightBeforeGreaterTh = ((p(RightBefore.Y * stride + RightBefore.X * 4) > _thresholdB) AndAlso (p(RightBefore.Y * stride + RightBefore.X * 4) <= _thresholdB + rangeB))
+                                RightInFrontGreaterTh = ((p(RightInFront.Y * stride + RightInFront.X * 4) > _thresholdB) AndAlso (p(RightInFront.Y * stride + RightInFront.X * 4) <= _thresholdB + rangeB))
                             Else
-                                RightBeforeGreaterTh = p(RightBefore.Y * stride + RightBefore.X * 4) > _thresholdB
+                                RightInFrontGreaterTh = p(RightInFront.Y * stride + RightInFront.X * 4) > _thresholdB
                             End If
                         End If
                         '#End Region
@@ -3025,25 +3027,25 @@ Public Class ChainFinder
                         '#Region "doubleVal"
                         If doR AndAlso doG AndAlso Not doB Then
                             If rangeR > 0 OrElse rangeG > 0 Then
-                                RightBeforeGreaterTh = (((p(RightBefore.Y * stride + RightBefore.X * 4 + 2) > _thresholdR) AndAlso (p(RightBefore.Y * stride + RightBefore.X * 4 + 2) <= _thresholdR + rangeR))) AndAlso (((p(RightBefore.Y * stride + RightBefore.X * 4 + 1) > _thresholdG) AndAlso (p(RightBefore.Y * stride + RightBefore.X * 4 + 1) <= _thresholdG + rangeG)))
+                                RightInFrontGreaterTh = (((p(RightInFront.Y * stride + RightInFront.X * 4 + 2) > _thresholdR) AndAlso (p(RightInFront.Y * stride + RightInFront.X * 4 + 2) <= _thresholdR + rangeR))) AndAlso (((p(RightInFront.Y * stride + RightInFront.X * 4 + 1) > _thresholdG) AndAlso (p(RightInFront.Y * stride + RightInFront.X * 4 + 1) <= _thresholdG + rangeG)))
                             Else
-                                RightBeforeGreaterTh = (p(RightBefore.Y * stride + RightBefore.X * 4 + 2) > _thresholdR) AndAlso (p(RightBefore.Y * stride + RightBefore.X * 4 + 1) > _thresholdG)
+                                RightInFrontGreaterTh = (p(RightInFront.Y * stride + RightInFront.X * 4 + 2) > _thresholdR) AndAlso (p(RightInFront.Y * stride + RightInFront.X * 4 + 1) > _thresholdG)
                             End If
                         End If
 
                         If doR AndAlso Not doG AndAlso doB Then
                             If rangeR > 0 OrElse rangeB > 0 Then
-                                RightBeforeGreaterTh = (((p(RightBefore.Y * stride + RightBefore.X * 4 + 2) > _thresholdR) AndAlso (p(RightBefore.Y * stride + RightBefore.X * 4 + 2) <= _thresholdR + rangeR))) AndAlso (((p(RightBefore.Y * stride + RightBefore.X * 4) > _thresholdB) AndAlso (p(RightBefore.Y * stride + RightBefore.X * 4) <= _thresholdB + rangeB)))
+                                RightInFrontGreaterTh = (((p(RightInFront.Y * stride + RightInFront.X * 4 + 2) > _thresholdR) AndAlso (p(RightInFront.Y * stride + RightInFront.X * 4 + 2) <= _thresholdR + rangeR))) AndAlso (((p(RightInFront.Y * stride + RightInFront.X * 4) > _thresholdB) AndAlso (p(RightInFront.Y * stride + RightInFront.X * 4) <= _thresholdB + rangeB)))
                             Else
-                                RightBeforeGreaterTh = (p(RightBefore.Y * stride + RightBefore.X * 4 + 2) > _thresholdR) AndAlso (p(RightBefore.Y * stride + RightBefore.X * 4) > _thresholdB)
+                                RightInFrontGreaterTh = (p(RightInFront.Y * stride + RightInFront.X * 4 + 2) > _thresholdR) AndAlso (p(RightInFront.Y * stride + RightInFront.X * 4) > _thresholdB)
                             End If
                         End If
 
                         If Not doR AndAlso doG AndAlso doB Then
                             If rangeB > 0 OrElse rangeG > 0 Then
-                                RightBeforeGreaterTh = (((p(RightBefore.Y * stride + RightBefore.X * 4) > _thresholdB) AndAlso (p(RightBefore.Y * stride + RightBefore.X * 4) <= _thresholdB + rangeB))) AndAlso (((p(RightBefore.Y * stride + RightBefore.X * 4 + 1) > _thresholdG) AndAlso (p(RightBefore.Y * stride + RightBefore.X * 4 + 1) <= _thresholdG + rangeG)))
+                                RightInFrontGreaterTh = (((p(RightInFront.Y * stride + RightInFront.X * 4) > _thresholdB) AndAlso (p(RightInFront.Y * stride + RightInFront.X * 4) <= _thresholdB + rangeB))) AndAlso (((p(RightInFront.Y * stride + RightInFront.X * 4 + 1) > _thresholdG) AndAlso (p(RightInFront.Y * stride + RightInFront.X * 4 + 1) <= _thresholdG + rangeG)))
                             Else
-                                RightBeforeGreaterTh = (p(RightBefore.Y * stride + RightBefore.X * 4) > _thresholdB) AndAlso (p(RightBefore.Y * stride + RightBefore.X * 4 + 1) > _thresholdG)
+                                RightInFrontGreaterTh = (p(RightInFront.Y * stride + RightInFront.X * 4) > _thresholdB) AndAlso (p(RightInFront.Y * stride + RightInFront.X * 4 + 1) > _thresholdG)
                             End If
                         End If
                         '#End Region
@@ -3051,17 +3053,17 @@ Public Class ChainFinder
                         '#Region "allVals"
                         If doR AndAlso doG AndAlso doB Then
                             If rangeR > 0 OrElse rangeG > 0 OrElse rangeB > 0 Then
-                                RightBeforeGreaterTh = (((p(RightBefore.Y * stride + RightBefore.X * 4 + 2) > _thresholdR) AndAlso (p(RightBefore.Y * stride + RightBefore.X * 4 + 2) <= _thresholdR + rangeR))) AndAlso (((p(RightBefore.Y * stride + RightBefore.X * 4 + 1) > _thresholdG) AndAlso (p(RightBefore.Y * stride + RightBefore.X * 4 + 1) <= _thresholdG + rangeG))) AndAlso (((p(RightBefore.Y * stride + RightBefore.X * 4) > _thresholdB) AndAlso (p(RightBefore.Y * stride + RightBefore.X * 4) <= _thresholdB + rangeB)))
+                                RightInFrontGreaterTh = (((p(RightInFront.Y * stride + RightInFront.X * 4 + 2) > _thresholdR) AndAlso (p(RightInFront.Y * stride + RightInFront.X * 4 + 2) <= _thresholdR + rangeR))) AndAlso (((p(RightInFront.Y * stride + RightInFront.X * 4 + 1) > _thresholdG) AndAlso (p(RightInFront.Y * stride + RightInFront.X * 4 + 1) <= _thresholdG + rangeG))) AndAlso (((p(RightInFront.Y * stride + RightInFront.X * 4) > _thresholdB) AndAlso (p(RightInFront.Y * stride + RightInFront.X * 4) <= _thresholdB + rangeB)))
                             Else
-                                RightBeforeGreaterTh = (p(RightBefore.Y * stride + RightBefore.X * 4 + 2) > _thresholdR) AndAlso (p(RightBefore.Y * stride + RightBefore.X * 4 + 1) > _thresholdG) AndAlso (p(RightBefore.Y * stride + RightBefore.X * 4) > _thresholdB)
+                                RightInFrontGreaterTh = (p(RightInFront.Y * stride + RightInFront.X * 4 + 2) > _thresholdR) AndAlso (p(RightInFront.Y * stride + RightInFront.X * 4 + 1) > _thresholdG) AndAlso (p(RightInFront.Y * stride + RightInFront.X * 4) > _thresholdB)
                             End If
                             '#End Region
                         End If
                     End If
 
-                    If RightBeforeGreaterTh AndAlso (LeftBeforeGreaterTh OrElse _nullCells) Then
+                    If RightInFrontGreaterTh AndAlso (LeftInFrontGreaterTh OrElse _nullCells) Then
                         direction = (direction + 1) Mod 4
-                    ElseIf Not LeftBeforeGreaterTh AndAlso (Not RightBeforeGreaterTh OrElse Not _nullCells) Then
+                    ElseIf Not LeftInFrontGreaterTh AndAlso (Not RightInFrontGreaterTh OrElse Not _nullCells) Then
                         direction = (direction + 3) Mod 4
                     End If
 
@@ -3315,10 +3317,10 @@ Public Class ChainFinder
         Dim Negative As [SByte](,) = New [SByte](,) {{0, -1}, {0, 0}, {-1, 0}, {-1, -1}}
         Dim Positive As [SByte](,) = New [SByte](,) {{0, 0}, {-1, 0}, {-1, -1}, {0, -1}}
 
-        Dim LeftBefore As New Point()
-        Dim RightBefore As New Point()
+        Dim LeftInFront As New Point()
+        Dim RightInFront As New Point()
 
-        Dim LeftBeforeSmallerTh As Boolean, RightBeforeSmallerTh As Boolean
+        Dim LeftInFrontSmallerTh As Boolean, RightInFrontSmallerTh As Boolean
         Dim direction As Integer = 1
 
         Dim bmData As BitmapData = Nothing
@@ -3346,50 +3348,50 @@ Public Class ChainFinder
                 cc.Chain.Add(direction)
 
                 While x <> _start.X OrElse y <> _start.Y
-                    LeftBefore.X = x + Negative(direction, 0)
-                    LeftBefore.Y = y + Negative(direction, 1)
-                    RightBefore.X = x + Positive(direction, 0)
-                    RightBefore.Y = y + Positive(direction, 1)
+                    LeftInFront.X = x + Negative(direction, 0)
+                    LeftInFront.Y = y + Negative(direction, 1)
+                    RightInFront.X = x + Positive(direction, 0)
+                    RightInFront.Y = y + Positive(direction, 1)
 
                     Select Case direction
                         Case 0
-                            cc.Coord.Add(New Point(LeftBefore.X - 1, LeftBefore.Y))
+                            cc.Coord.Add(New Point(LeftInFront.X - 1, LeftInFront.Y))
                             Exit Select
                         Case 1
-                            cc.Coord.Add(New Point(LeftBefore.X, LeftBefore.Y - 1))
+                            cc.Coord.Add(New Point(LeftInFront.X, LeftInFront.Y - 1))
                             Exit Select
                         Case 2
-                            cc.Coord.Add(New Point(LeftBefore.X + 1, LeftBefore.Y))
+                            cc.Coord.Add(New Point(LeftInFront.X + 1, LeftInFront.Y))
                             Exit Select
                         Case 3
-                            cc.Coord.Add(New Point(LeftBefore.X, LeftBefore.Y + 1))
+                            cc.Coord.Add(New Point(LeftInFront.X, LeftInFront.Y + 1))
                             Exit Select
                     End Select
 
-                    LeftBeforeSmallerTh = False
-                    RightBeforeSmallerTh = False
+                    LeftInFrontSmallerTh = False
+                    RightInFrontSmallerTh = False
 
-                    If LeftBefore.X >= 0 AndAlso LeftBefore.X < b.Width AndAlso LeftBefore.Y >= 0 AndAlso LeftBefore.Y < b.Height Then
+                    If LeftInFront.X >= 0 AndAlso LeftInFront.X < b.Width AndAlso LeftInFront.Y >= 0 AndAlso LeftInFront.Y < b.Height Then
                         '#Region "singleVal"
                         If doR AndAlso Not doG AndAlso Not doB Then
                             If rangeR > 0 Then
-                                LeftBeforeSmallerTh = ((p(LeftBefore.Y * stride + LeftBefore.X * 4 + 2) < _thresholdR) AndAlso (p(LeftBefore.Y * stride + LeftBefore.X * 4 + 2) >= _thresholdR - rangeR))
+                                LeftInFrontSmallerTh = ((p(LeftInFront.Y * stride + LeftInFront.X * 4 + 2) < _thresholdR) AndAlso (p(LeftInFront.Y * stride + LeftInFront.X * 4 + 2) >= _thresholdR - rangeR))
                             Else
-                                LeftBeforeSmallerTh = p(LeftBefore.Y * stride + LeftBefore.X * 4 + 2) < _thresholdR
+                                LeftInFrontSmallerTh = p(LeftInFront.Y * stride + LeftInFront.X * 4 + 2) < _thresholdR
                             End If
                         End If
                         If Not doR AndAlso doG AndAlso Not doB Then
                             If rangeG > 0 Then
-                                LeftBeforeSmallerTh = ((p(LeftBefore.Y * stride + LeftBefore.X * 4 + 1) < _thresholdG) AndAlso (p(LeftBefore.Y * stride + LeftBefore.X * 4 + 1) >= _thresholdG - rangeG))
+                                LeftInFrontSmallerTh = ((p(LeftInFront.Y * stride + LeftInFront.X * 4 + 1) < _thresholdG) AndAlso (p(LeftInFront.Y * stride + LeftInFront.X * 4 + 1) >= _thresholdG - rangeG))
                             Else
-                                LeftBeforeSmallerTh = p(LeftBefore.Y * stride + LeftBefore.X * 4 + 1) < _thresholdG
+                                LeftInFrontSmallerTh = p(LeftInFront.Y * stride + LeftInFront.X * 4 + 1) < _thresholdG
                             End If
                         End If
                         If Not doR AndAlso Not doG AndAlso doB Then
                             If rangeB > 0 Then
-                                LeftBeforeSmallerTh = ((p(LeftBefore.Y * stride + LeftBefore.X * 4) < _thresholdB) AndAlso (p(LeftBefore.Y * stride + LeftBefore.X * 4) >= _thresholdB - rangeB))
+                                LeftInFrontSmallerTh = ((p(LeftInFront.Y * stride + LeftInFront.X * 4) < _thresholdB) AndAlso (p(LeftInFront.Y * stride + LeftInFront.X * 4) >= _thresholdB - rangeB))
                             Else
-                                LeftBeforeSmallerTh = p(LeftBefore.Y * stride + LeftBefore.X * 4) < _thresholdB
+                                LeftInFrontSmallerTh = p(LeftInFront.Y * stride + LeftInFront.X * 4) < _thresholdB
                             End If
                         End If
                         '#End Region
@@ -3397,24 +3399,24 @@ Public Class ChainFinder
                         '#Region "doubleVal"
                         If doR AndAlso doG AndAlso Not doB Then
                             If rangeR > 0 OrElse rangeG > 0 Then
-                                LeftBeforeSmallerTh = (((p(LeftBefore.Y * stride + LeftBefore.X * 4 + 2) < _thresholdR) AndAlso (p(LeftBefore.Y * stride + LeftBefore.X * 4 + 2) >= _thresholdR - rangeR))) AndAlso (((p(LeftBefore.Y * stride + LeftBefore.X * 4 + 1) < _thresholdG) AndAlso (p(LeftBefore.Y * stride + LeftBefore.X * 4 + 1) >= _thresholdG - rangeG)))
+                                LeftInFrontSmallerTh = (((p(LeftInFront.Y * stride + LeftInFront.X * 4 + 2) < _thresholdR) AndAlso (p(LeftInFront.Y * stride + LeftInFront.X * 4 + 2) >= _thresholdR - rangeR))) AndAlso (((p(LeftInFront.Y * stride + LeftInFront.X * 4 + 1) < _thresholdG) AndAlso (p(LeftInFront.Y * stride + LeftInFront.X * 4 + 1) >= _thresholdG - rangeG)))
                             Else
-                                LeftBeforeSmallerTh = (p(LeftBefore.Y * stride + LeftBefore.X * 4 + 2) < _thresholdR) AndAlso (p(LeftBefore.Y * stride + LeftBefore.X * 4 + 1) < _thresholdG)
+                                LeftInFrontSmallerTh = (p(LeftInFront.Y * stride + LeftInFront.X * 4 + 2) < _thresholdR) AndAlso (p(LeftInFront.Y * stride + LeftInFront.X * 4 + 1) < _thresholdG)
 
                             End If
                         End If
                         If doR AndAlso Not doG AndAlso doB Then
                             If rangeR > 0 OrElse rangeB > 0 Then
-                                LeftBeforeSmallerTh = (((p(LeftBefore.Y * stride + LeftBefore.X * 4 + 2) < _thresholdR) AndAlso (p(LeftBefore.Y * stride + LeftBefore.X * 4 + 2) >= _thresholdR - rangeR))) AndAlso (((p(LeftBefore.Y * stride + LeftBefore.X * 4) < _thresholdB) AndAlso (p(LeftBefore.Y * stride + LeftBefore.X * 4) >= _thresholdB - rangeB)))
+                                LeftInFrontSmallerTh = (((p(LeftInFront.Y * stride + LeftInFront.X * 4 + 2) < _thresholdR) AndAlso (p(LeftInFront.Y * stride + LeftInFront.X * 4 + 2) >= _thresholdR - rangeR))) AndAlso (((p(LeftInFront.Y * stride + LeftInFront.X * 4) < _thresholdB) AndAlso (p(LeftInFront.Y * stride + LeftInFront.X * 4) >= _thresholdB - rangeB)))
                             Else
-                                LeftBeforeSmallerTh = (p(LeftBefore.Y * stride + LeftBefore.X * 4 + 2) < _thresholdR) AndAlso (p(LeftBefore.Y * stride + LeftBefore.X * 4) < _thresholdB)
+                                LeftInFrontSmallerTh = (p(LeftInFront.Y * stride + LeftInFront.X * 4 + 2) < _thresholdR) AndAlso (p(LeftInFront.Y * stride + LeftInFront.X * 4) < _thresholdB)
                             End If
                         End If
                         If Not doR AndAlso doG AndAlso doB Then
                             If rangeB > 0 OrElse rangeG > 0 Then
-                                LeftBeforeSmallerTh = (((p(LeftBefore.Y * stride + LeftBefore.X * 4) < _thresholdB) AndAlso (p(LeftBefore.Y * stride + LeftBefore.X * 4) >= _thresholdB - rangeB))) AndAlso (((p(LeftBefore.Y * stride + LeftBefore.X * 4 + 1) < _thresholdG) AndAlso (p(LeftBefore.Y * stride + LeftBefore.X * 4 + 1) >= _thresholdG - rangeG)))
+                                LeftInFrontSmallerTh = (((p(LeftInFront.Y * stride + LeftInFront.X * 4) < _thresholdB) AndAlso (p(LeftInFront.Y * stride + LeftInFront.X * 4) >= _thresholdB - rangeB))) AndAlso (((p(LeftInFront.Y * stride + LeftInFront.X * 4 + 1) < _thresholdG) AndAlso (p(LeftInFront.Y * stride + LeftInFront.X * 4 + 1) >= _thresholdG - rangeG)))
                             Else
-                                LeftBeforeSmallerTh = (p(LeftBefore.Y * stride + LeftBefore.X * 4) < _thresholdB) AndAlso (p(LeftBefore.Y * stride + LeftBefore.X * 4 + 1) < _thresholdG)
+                                LeftInFrontSmallerTh = (p(LeftInFront.Y * stride + LeftInFront.X * 4) < _thresholdB) AndAlso (p(LeftInFront.Y * stride + LeftInFront.X * 4 + 1) < _thresholdG)
                             End If
                         End If
                         '#End Region
@@ -3422,35 +3424,35 @@ Public Class ChainFinder
                         '#Region "allVals"
                         If doR AndAlso doG AndAlso doB Then
                             If rangeR > 0 OrElse rangeG > 0 OrElse rangeB > 0 Then
-                                LeftBeforeSmallerTh = (((p(LeftBefore.Y * stride + LeftBefore.X * 4 + 2) < _thresholdR) AndAlso (p(LeftBefore.Y * stride + LeftBefore.X * 4 + 2) >= _thresholdR - rangeR))) AndAlso (((p(LeftBefore.Y * stride + LeftBefore.X * 4 + 1) < _thresholdG) AndAlso (p(LeftBefore.Y * stride + LeftBefore.X * 4 + 1) >= _thresholdG - rangeG))) AndAlso (((p(LeftBefore.Y * stride + LeftBefore.X * 4) < _thresholdB) AndAlso (p(LeftBefore.Y * stride + LeftBefore.X * 4) >= _thresholdB - rangeB)))
+                                LeftInFrontSmallerTh = (((p(LeftInFront.Y * stride + LeftInFront.X * 4 + 2) < _thresholdR) AndAlso (p(LeftInFront.Y * stride + LeftInFront.X * 4 + 2) >= _thresholdR - rangeR))) AndAlso (((p(LeftInFront.Y * stride + LeftInFront.X * 4 + 1) < _thresholdG) AndAlso (p(LeftInFront.Y * stride + LeftInFront.X * 4 + 1) >= _thresholdG - rangeG))) AndAlso (((p(LeftInFront.Y * stride + LeftInFront.X * 4) < _thresholdB) AndAlso (p(LeftInFront.Y * stride + LeftInFront.X * 4) >= _thresholdB - rangeB)))
                             Else
-                                LeftBeforeSmallerTh = (p(LeftBefore.Y * stride + LeftBefore.X * 4 + 2) < _thresholdR) AndAlso (p(LeftBefore.Y * stride + LeftBefore.X * 4 + 1) < _thresholdG) AndAlso (p(LeftBefore.Y * stride + LeftBefore.X * 4) < _thresholdB)
+                                LeftInFrontSmallerTh = (p(LeftInFront.Y * stride + LeftInFront.X * 4 + 2) < _thresholdR) AndAlso (p(LeftInFront.Y * stride + LeftInFront.X * 4 + 1) < _thresholdG) AndAlso (p(LeftInFront.Y * stride + LeftInFront.X * 4) < _thresholdB)
                             End If
                             '#End Region
                         End If
                     End If
 
-                    If RightBefore.X >= 0 AndAlso RightBefore.X < b.Width AndAlso RightBefore.Y >= 0 AndAlso RightBefore.Y < b.Height Then
+                    If RightInFront.X >= 0 AndAlso RightInFront.X < b.Width AndAlso RightInFront.Y >= 0 AndAlso RightInFront.Y < b.Height Then
                         '#Region "singleVal"
                         If doR AndAlso Not doG AndAlso Not doB Then
                             If rangeR > 0 Then
-                                RightBeforeSmallerTh = ((p(RightBefore.Y * stride + RightBefore.X * 4 + 2) < _thresholdR) AndAlso (p(RightBefore.Y * stride + RightBefore.X * 4 + 2) >= _thresholdR - rangeR))
+                                RightInFrontSmallerTh = ((p(RightInFront.Y * stride + RightInFront.X * 4 + 2) < _thresholdR) AndAlso (p(RightInFront.Y * stride + RightInFront.X * 4 + 2) >= _thresholdR - rangeR))
                             Else
-                                RightBeforeSmallerTh = p(RightBefore.Y * stride + RightBefore.X * 4 + 2) < _thresholdR
+                                RightInFrontSmallerTh = p(RightInFront.Y * stride + RightInFront.X * 4 + 2) < _thresholdR
                             End If
                         End If
                         If Not doR AndAlso doG AndAlso Not doB Then
                             If rangeG > 0 Then
-                                RightBeforeSmallerTh = ((p(RightBefore.Y * stride + RightBefore.X * 4 + 1) < _thresholdG) AndAlso (p(RightBefore.Y * stride + RightBefore.X * 4 + 1) >= _thresholdG - rangeG))
+                                RightInFrontSmallerTh = ((p(RightInFront.Y * stride + RightInFront.X * 4 + 1) < _thresholdG) AndAlso (p(RightInFront.Y * stride + RightInFront.X * 4 + 1) >= _thresholdG - rangeG))
                             Else
-                                RightBeforeSmallerTh = p(RightBefore.Y * stride + RightBefore.X * 4 + 1) < _thresholdG
+                                RightInFrontSmallerTh = p(RightInFront.Y * stride + RightInFront.X * 4 + 1) < _thresholdG
                             End If
                         End If
                         If Not doR AndAlso Not doG AndAlso doB Then
                             If rangeB > 0 Then
-                                RightBeforeSmallerTh = ((p(RightBefore.Y * stride + RightBefore.X * 4) < _thresholdB) AndAlso (p(RightBefore.Y * stride + RightBefore.X * 4) >= _thresholdB - rangeB))
+                                RightInFrontSmallerTh = ((p(RightInFront.Y * stride + RightInFront.X * 4) < _thresholdB) AndAlso (p(RightInFront.Y * stride + RightInFront.X * 4) >= _thresholdB - rangeB))
                             Else
-                                RightBeforeSmallerTh = p(RightBefore.Y * stride + RightBefore.X * 4) < _thresholdB
+                                RightInFrontSmallerTh = p(RightInFront.Y * stride + RightInFront.X * 4) < _thresholdB
                             End If
                         End If
                         '#End Region
@@ -3458,25 +3460,25 @@ Public Class ChainFinder
                         '#Region "doubleVal"
                         If doR AndAlso doG AndAlso Not doB Then
                             If rangeR > 0 OrElse rangeG > 0 Then
-                                RightBeforeSmallerTh = (((p(RightBefore.Y * stride + RightBefore.X * 4 + 2) < _thresholdR) AndAlso (p(RightBefore.Y * stride + RightBefore.X * 4 + 2) >= _thresholdR - rangeR))) AndAlso (((p(RightBefore.Y * stride + RightBefore.X * 4 + 1) < _thresholdG) AndAlso (p(RightBefore.Y * stride + RightBefore.X * 4 + 1) >= _thresholdG - rangeG)))
+                                RightInFrontSmallerTh = (((p(RightInFront.Y * stride + RightInFront.X * 4 + 2) < _thresholdR) AndAlso (p(RightInFront.Y * stride + RightInFront.X * 4 + 2) >= _thresholdR - rangeR))) AndAlso (((p(RightInFront.Y * stride + RightInFront.X * 4 + 1) < _thresholdG) AndAlso (p(RightInFront.Y * stride + RightInFront.X * 4 + 1) >= _thresholdG - rangeG)))
                             Else
-                                RightBeforeSmallerTh = (p(RightBefore.Y * stride + RightBefore.X * 4 + 2) < _thresholdR) AndAlso (p(RightBefore.Y * stride + RightBefore.X * 4 + 1) < _thresholdG)
+                                RightInFrontSmallerTh = (p(RightInFront.Y * stride + RightInFront.X * 4 + 2) < _thresholdR) AndAlso (p(RightInFront.Y * stride + RightInFront.X * 4 + 1) < _thresholdG)
                             End If
                         End If
 
                         If doR AndAlso Not doG AndAlso doB Then
                             If rangeR > 0 OrElse rangeB > 0 Then
-                                RightBeforeSmallerTh = (((p(RightBefore.Y * stride + RightBefore.X * 4 + 2) < _thresholdR) AndAlso (p(RightBefore.Y * stride + RightBefore.X * 4 + 2) >= _thresholdR - rangeR))) AndAlso (((p(RightBefore.Y * stride + RightBefore.X * 4) < _thresholdB) AndAlso (p(RightBefore.Y * stride + RightBefore.X * 4) >= _thresholdB - rangeB)))
+                                RightInFrontSmallerTh = (((p(RightInFront.Y * stride + RightInFront.X * 4 + 2) < _thresholdR) AndAlso (p(RightInFront.Y * stride + RightInFront.X * 4 + 2) >= _thresholdR - rangeR))) AndAlso (((p(RightInFront.Y * stride + RightInFront.X * 4) < _thresholdB) AndAlso (p(RightInFront.Y * stride + RightInFront.X * 4) >= _thresholdB - rangeB)))
                             Else
-                                RightBeforeSmallerTh = (p(RightBefore.Y * stride + RightBefore.X * 4 + 2) < _thresholdR) AndAlso (p(RightBefore.Y * stride + RightBefore.X * 4) < _thresholdB)
+                                RightInFrontSmallerTh = (p(RightInFront.Y * stride + RightInFront.X * 4 + 2) < _thresholdR) AndAlso (p(RightInFront.Y * stride + RightInFront.X * 4) < _thresholdB)
                             End If
                         End If
 
                         If Not doR AndAlso doG AndAlso doB Then
                             If rangeB > 0 OrElse rangeG > 0 Then
-                                RightBeforeSmallerTh = (((p(RightBefore.Y * stride + RightBefore.X * 4) < _thresholdB) AndAlso (p(RightBefore.Y * stride + RightBefore.X * 4) >= _thresholdB - rangeB))) AndAlso (((p(RightBefore.Y * stride + RightBefore.X * 4 + 1) < _thresholdG) AndAlso (p(RightBefore.Y * stride + RightBefore.X * 4 + 1) >= _thresholdG - rangeG)))
+                                RightInFrontSmallerTh = (((p(RightInFront.Y * stride + RightInFront.X * 4) < _thresholdB) AndAlso (p(RightInFront.Y * stride + RightInFront.X * 4) >= _thresholdB - rangeB))) AndAlso (((p(RightInFront.Y * stride + RightInFront.X * 4 + 1) < _thresholdG) AndAlso (p(RightInFront.Y * stride + RightInFront.X * 4 + 1) >= _thresholdG - rangeG)))
                             Else
-                                RightBeforeSmallerTh = (p(RightBefore.Y * stride + RightBefore.X * 4) < _thresholdB) AndAlso (p(RightBefore.Y * stride + RightBefore.X * 4 + 1) < _thresholdG)
+                                RightInFrontSmallerTh = (p(RightInFront.Y * stride + RightInFront.X * 4) < _thresholdB) AndAlso (p(RightInFront.Y * stride + RightInFront.X * 4 + 1) < _thresholdG)
                             End If
                         End If
                         '#End Region
@@ -3484,17 +3486,17 @@ Public Class ChainFinder
                         '#Region "allVals"
                         If doR AndAlso doG AndAlso doB Then
                             If rangeR > 0 OrElse rangeG > 0 OrElse rangeB > 0 Then
-                                RightBeforeSmallerTh = (((p(RightBefore.Y * stride + RightBefore.X * 4 + 2) < _thresholdR) AndAlso (p(RightBefore.Y * stride + RightBefore.X * 4 + 2) >= _thresholdR - rangeR))) AndAlso (((p(RightBefore.Y * stride + RightBefore.X * 4 + 1) < _thresholdG) AndAlso (p(RightBefore.Y * stride + RightBefore.X * 4 + 1) >= _thresholdG - rangeG))) AndAlso (((p(RightBefore.Y * stride + RightBefore.X * 4) < _thresholdB) AndAlso (p(RightBefore.Y * stride + RightBefore.X * 4) >= _thresholdB - rangeB)))
+                                RightInFrontSmallerTh = (((p(RightInFront.Y * stride + RightInFront.X * 4 + 2) < _thresholdR) AndAlso (p(RightInFront.Y * stride + RightInFront.X * 4 + 2) >= _thresholdR - rangeR))) AndAlso (((p(RightInFront.Y * stride + RightInFront.X * 4 + 1) < _thresholdG) AndAlso (p(RightInFront.Y * stride + RightInFront.X * 4 + 1) >= _thresholdG - rangeG))) AndAlso (((p(RightInFront.Y * stride + RightInFront.X * 4) < _thresholdB) AndAlso (p(RightInFront.Y * stride + RightInFront.X * 4) >= _thresholdB - rangeB)))
                             Else
-                                RightBeforeSmallerTh = (p(RightBefore.Y * stride + RightBefore.X * 4 + 2) < _thresholdR) AndAlso (p(RightBefore.Y * stride + RightBefore.X * 4 + 1) < _thresholdG) AndAlso (p(RightBefore.Y * stride + RightBefore.X * 4) < _thresholdB)
+                                RightInFrontSmallerTh = (p(RightInFront.Y * stride + RightInFront.X * 4 + 2) < _thresholdR) AndAlso (p(RightInFront.Y * stride + RightInFront.X * 4 + 1) < _thresholdG) AndAlso (p(RightInFront.Y * stride + RightInFront.X * 4) < _thresholdB)
                             End If
                             '#End Region
                         End If
                     End If
 
-                    If RightBeforeSmallerTh AndAlso (LeftBeforeSmallerTh OrElse _nullCells) Then
+                    If RightInFrontSmallerTh AndAlso (LeftInFrontSmallerTh OrElse _nullCells) Then
                         direction = (direction + 1) Mod 4
-                    ElseIf Not LeftBeforeSmallerTh AndAlso (Not RightBeforeSmallerTh OrElse Not _nullCells) Then
+                    ElseIf Not LeftInFrontSmallerTh AndAlso (Not RightInFrontSmallerTh OrElse Not _nullCells) Then
                         direction = (direction + 3) Mod 4
                     End If
 
@@ -5889,7 +5891,7 @@ Public Class ChainFinder
 
                     Dim r2 As Double = Math.Max(Math.Abs(dx), Math.Abs(dy))
 
-                    'we assume that in the outerpoints each point differs 1 from the point before,
+                    'we assume that in the outerpoints each point differs 1 from the point InFront,
                     'so we estimate the correct index by:
                     If Not dx / r2 = -dyN OrElse Not dy / r2 = dxN Then 'comp reversed (from dxN and dyN to normal)
                         If dxN > dyN Then 'large shift is in y direction
@@ -6389,7 +6391,7 @@ Public Class ChainFinder
 
                     Dim r2 As Double = Math.Max(Math.Abs(dx), Math.Abs(dy))
 
-                    'we assume that in the outerpoints each point differs 1 from the point before,
+                    'we assume that in the outerpoints each point differs 1 from the point InFront,
                     'so we estimate the correct index by:
                     If Not dx / r2 = -dyN OrElse Not dy / r2 = dxN Then 'comp reversed (from dxN and dyN to normal)
                         If dxN > dyN Then 'large shift is in y direction
@@ -7201,10 +7203,10 @@ Public Class ChainFinder
         Dim Negative As [SByte](,) = New [SByte](,) {{0, -1}, {0, 0}, {-1, 0}, {-1, -1}}
         Dim Positive As [SByte](,) = New [SByte](,) {{0, 0}, {-1, 0}, {-1, -1}, {0, -1}}
 
-        Dim LeftBefore As New Point()
-        Dim RightBefore As New Point()
+        Dim LeftInFront As New Point()
+        Dim RightInFront As New Point()
 
-        Dim LeftBeforeGreaterTh As Boolean, RightBeforeGreaterTh As Boolean
+        Dim LeftInFrontGreaterTh As Boolean, RightInFrontGreaterTh As Boolean
         Dim direction As Integer = 1
 
         Dim bmData As BitmapData = Nothing
@@ -7232,50 +7234,50 @@ Public Class ChainFinder
                 cc.Chain.Add(direction)
 
                 While x <> _start.X OrElse y <> _start.Y
-                    LeftBefore.X = x + Negative(direction, 0)
-                    LeftBefore.Y = y + Negative(direction, 1)
-                    RightBefore.X = x + Positive(direction, 0)
-                    RightBefore.Y = y + Positive(direction, 1)
+                    LeftInFront.X = x + Negative(direction, 0)
+                    LeftInFront.Y = y + Negative(direction, 1)
+                    RightInFront.X = x + Positive(direction, 0)
+                    RightInFront.Y = y + Positive(direction, 1)
 
                     Select Case direction
                         Case 0
-                            cc.Coord.Add(New Point(LeftBefore.X - 1, LeftBefore.Y))
+                            cc.Coord.Add(New Point(LeftInFront.X - 1, LeftInFront.Y))
                             Exit Select
                         Case 1
-                            cc.Coord.Add(New Point(LeftBefore.X, LeftBefore.Y - 1))
+                            cc.Coord.Add(New Point(LeftInFront.X, LeftInFront.Y - 1))
                             Exit Select
                         Case 2
-                            cc.Coord.Add(New Point(LeftBefore.X + 1, LeftBefore.Y))
+                            cc.Coord.Add(New Point(LeftInFront.X + 1, LeftInFront.Y))
                             Exit Select
                         Case 3
-                            cc.Coord.Add(New Point(LeftBefore.X, LeftBefore.Y + 1))
+                            cc.Coord.Add(New Point(LeftInFront.X, LeftInFront.Y + 1))
                             Exit Select
                     End Select
 
-                    LeftBeforeGreaterTh = False
-                    RightBeforeGreaterTh = False
+                    LeftInFrontGreaterTh = False
+                    RightInFrontGreaterTh = False
 
-                    If LeftBefore.X >= 0 AndAlso LeftBefore.X < b.Width AndAlso LeftBefore.Y >= 0 AndAlso LeftBefore.Y < b.Height Then
+                    If LeftInFront.X >= 0 AndAlso LeftInFront.X < b.Width AndAlso LeftInFront.Y >= 0 AndAlso LeftInFront.Y < b.Height Then
                         '#Region "singleVal"
                         If doR AndAlso Not doG AndAlso Not doB Then
                             If rangeR > 0 Then
-                                LeftBeforeGreaterTh = ((p(LeftBefore.Y * stride + LeftBefore.X * 4 + 2) > _thresholdR) AndAlso (p(LeftBefore.Y * stride + LeftBefore.X * 4 + 2) <= _thresholdR + rangeR))
+                                LeftInFrontGreaterTh = ((p(LeftInFront.Y * stride + LeftInFront.X * 4 + 2) > _thresholdR) AndAlso (p(LeftInFront.Y * stride + LeftInFront.X * 4 + 2) <= _thresholdR + rangeR))
                             Else
-                                LeftBeforeGreaterTh = p(LeftBefore.Y * stride + LeftBefore.X * 4 + 2) > _thresholdR
+                                LeftInFrontGreaterTh = p(LeftInFront.Y * stride + LeftInFront.X * 4 + 2) > _thresholdR
                             End If
                         End If
                         If Not doR AndAlso doG AndAlso Not doB Then
                             If rangeG > 0 Then
-                                LeftBeforeGreaterTh = ((p(LeftBefore.Y * stride + LeftBefore.X * 4 + 1) > _thresholdG) AndAlso (p(LeftBefore.Y * stride + LeftBefore.X * 4 + 1) <= _thresholdG + rangeG))
+                                LeftInFrontGreaterTh = ((p(LeftInFront.Y * stride + LeftInFront.X * 4 + 1) > _thresholdG) AndAlso (p(LeftInFront.Y * stride + LeftInFront.X * 4 + 1) <= _thresholdG + rangeG))
                             Else
-                                LeftBeforeGreaterTh = p(LeftBefore.Y * stride + LeftBefore.X * 4 + 1) > _thresholdG
+                                LeftInFrontGreaterTh = p(LeftInFront.Y * stride + LeftInFront.X * 4 + 1) > _thresholdG
                             End If
                         End If
                         If Not doR AndAlso Not doG AndAlso doB Then
                             If rangeB > 0 Then
-                                LeftBeforeGreaterTh = ((p(LeftBefore.Y * stride + LeftBefore.X * 4) > _thresholdB) AndAlso (p(LeftBefore.Y * stride + LeftBefore.X * 4) <= _thresholdB + rangeB))
+                                LeftInFrontGreaterTh = ((p(LeftInFront.Y * stride + LeftInFront.X * 4) > _thresholdB) AndAlso (p(LeftInFront.Y * stride + LeftInFront.X * 4) <= _thresholdB + rangeB))
                             Else
-                                LeftBeforeGreaterTh = p(LeftBefore.Y * stride + LeftBefore.X * 4) > _thresholdB
+                                LeftInFrontGreaterTh = p(LeftInFront.Y * stride + LeftInFront.X * 4) > _thresholdB
                             End If
                         End If
                         '#End Region
@@ -7283,29 +7285,29 @@ Public Class ChainFinder
                         '#Region "doubleVal"
                         If doR AndAlso doG AndAlso Not doB Then
                             If rangeR > 0 OrElse rangeG > 0 Then
-                                LeftBeforeGreaterTh =
-                                  ((Math.Sqrt(CDbl(p(LeftBefore.Y * stride + LeftBefore.X * 4 + 2)) * CDbl(p(LeftBefore.Y * stride + LeftBefore.X * 4 + 2)) + CDbl(p(LeftBefore.Y * stride + LeftBefore.X * 4 + 1)) * CDbl(p(LeftBefore.Y * stride + LeftBefore.X * 4 + 1))) > Math.Sqrt(_thresholdR * _thresholdR + _thresholdG * _thresholdG) AndAlso
-                                  Math.Sqrt(CDbl(p(LeftBefore.Y * stride + LeftBefore.X * 4 + 2)) * CDbl(p(LeftBefore.Y * stride + LeftBefore.X * 4 + 2)) + CDbl(p(LeftBefore.Y * stride + LeftBefore.X * 4 + 1)) * CDbl(p(LeftBefore.Y * stride + LeftBefore.X * 4 + 1))) <= Math.Sqrt((_thresholdR + rangeR) * (_thresholdR + rangeR) + (_thresholdG + rangeG) * (_thresholdG + rangeG))))
+                                LeftInFrontGreaterTh =
+                                  ((Math.Sqrt(CDbl(p(LeftInFront.Y * stride + LeftInFront.X * 4 + 2)) * CDbl(p(LeftInFront.Y * stride + LeftInFront.X * 4 + 2)) + CDbl(p(LeftInFront.Y * stride + LeftInFront.X * 4 + 1)) * CDbl(p(LeftInFront.Y * stride + LeftInFront.X * 4 + 1))) > Math.Sqrt(_thresholdR * _thresholdR + _thresholdG * _thresholdG) AndAlso
+                                  Math.Sqrt(CDbl(p(LeftInFront.Y * stride + LeftInFront.X * 4 + 2)) * CDbl(p(LeftInFront.Y * stride + LeftInFront.X * 4 + 2)) + CDbl(p(LeftInFront.Y * stride + LeftInFront.X * 4 + 1)) * CDbl(p(LeftInFront.Y * stride + LeftInFront.X * 4 + 1))) <= Math.Sqrt((_thresholdR + rangeR) * (_thresholdR + rangeR) + (_thresholdG + rangeG) * (_thresholdG + rangeG))))
                             Else
-                                LeftBeforeGreaterTh = (Math.Sqrt(CDbl(p(LeftBefore.Y * stride + LeftBefore.X * 4 + 2)) * CDbl(p(LeftBefore.Y * stride + LeftBefore.X * 4 + 2)) + CDbl(p(LeftBefore.Y * stride + LeftBefore.X * 4 + 1)) * CDbl(p(LeftBefore.Y * stride + LeftBefore.X * 4 + 1))) > Math.Sqrt(_thresholdR * _thresholdR + _thresholdG * _thresholdG))
+                                LeftInFrontGreaterTh = (Math.Sqrt(CDbl(p(LeftInFront.Y * stride + LeftInFront.X * 4 + 2)) * CDbl(p(LeftInFront.Y * stride + LeftInFront.X * 4 + 2)) + CDbl(p(LeftInFront.Y * stride + LeftInFront.X * 4 + 1)) * CDbl(p(LeftInFront.Y * stride + LeftInFront.X * 4 + 1))) > Math.Sqrt(_thresholdR * _thresholdR + _thresholdG * _thresholdG))
                             End If
                         End If
                         If doR AndAlso Not doG AndAlso doB Then
                             If rangeR > 0 OrElse rangeB > 0 Then
-                                LeftBeforeGreaterTh =
-                                  ((Math.Sqrt(CDbl(p(LeftBefore.Y * stride + LeftBefore.X * 4 + 2)) * CDbl(p(LeftBefore.Y * stride + LeftBefore.X * 4 + 2)) + CDbl(p(LeftBefore.Y * stride + LeftBefore.X * 4)) * CDbl(p(LeftBefore.Y * stride + LeftBefore.X * 4))) > Math.Sqrt(_thresholdR * _thresholdR + _thresholdB * _thresholdB) AndAlso
-                                  Math.Sqrt(CDbl(p(LeftBefore.Y * stride + LeftBefore.X * 4 + 2)) * CDbl(p(LeftBefore.Y * stride + LeftBefore.X * 4 + 2)) + CDbl(p(LeftBefore.Y * stride + LeftBefore.X * 4)) * CDbl(p(LeftBefore.Y * stride + LeftBefore.X * 4))) <= Math.Sqrt((_thresholdR + rangeR) * (_thresholdR + rangeR) + (_thresholdB + rangeB) * (_thresholdB + rangeB))))
+                                LeftInFrontGreaterTh =
+                                  ((Math.Sqrt(CDbl(p(LeftInFront.Y * stride + LeftInFront.X * 4 + 2)) * CDbl(p(LeftInFront.Y * stride + LeftInFront.X * 4 + 2)) + CDbl(p(LeftInFront.Y * stride + LeftInFront.X * 4)) * CDbl(p(LeftInFront.Y * stride + LeftInFront.X * 4))) > Math.Sqrt(_thresholdR * _thresholdR + _thresholdB * _thresholdB) AndAlso
+                                  Math.Sqrt(CDbl(p(LeftInFront.Y * stride + LeftInFront.X * 4 + 2)) * CDbl(p(LeftInFront.Y * stride + LeftInFront.X * 4 + 2)) + CDbl(p(LeftInFront.Y * stride + LeftInFront.X * 4)) * CDbl(p(LeftInFront.Y * stride + LeftInFront.X * 4))) <= Math.Sqrt((_thresholdR + rangeR) * (_thresholdR + rangeR) + (_thresholdB + rangeB) * (_thresholdB + rangeB))))
                             Else
-                                LeftBeforeGreaterTh = (Math.Sqrt(CDbl(p(LeftBefore.Y * stride + LeftBefore.X * 4 + 2)) * CDbl(p(LeftBefore.Y * stride + LeftBefore.X * 4 + 2)) + CDbl(p(LeftBefore.Y * stride + LeftBefore.X * 4)) * CDbl(p(LeftBefore.Y * stride + LeftBefore.X * 4))) > Math.Sqrt(_thresholdR * _thresholdR + _thresholdB * _thresholdB))
+                                LeftInFrontGreaterTh = (Math.Sqrt(CDbl(p(LeftInFront.Y * stride + LeftInFront.X * 4 + 2)) * CDbl(p(LeftInFront.Y * stride + LeftInFront.X * 4 + 2)) + CDbl(p(LeftInFront.Y * stride + LeftInFront.X * 4)) * CDbl(p(LeftInFront.Y * stride + LeftInFront.X * 4))) > Math.Sqrt(_thresholdR * _thresholdR + _thresholdB * _thresholdB))
                             End If
                         End If
                         If Not doR AndAlso doG AndAlso doB Then
                             If rangeB > 0 OrElse rangeG > 0 Then
-                                LeftBeforeGreaterTh =
-                                  ((Math.Sqrt(CDbl(p(LeftBefore.Y * stride + LeftBefore.X * 4)) * CDbl(p(LeftBefore.Y * stride + LeftBefore.X * 4)) + CDbl(p(LeftBefore.Y * stride + LeftBefore.X * 4 + 1)) * CDbl(p(LeftBefore.Y * stride + LeftBefore.X * 4 + 1))) > Math.Sqrt(_thresholdB * _thresholdB + _thresholdG * _thresholdG) AndAlso
-                                  Math.Sqrt(CDbl(p(LeftBefore.Y * stride + LeftBefore.X * 4)) * CDbl(p(LeftBefore.Y * stride + LeftBefore.X * 4)) + CDbl(p(LeftBefore.Y * stride + LeftBefore.X * 4 + 1)) * CDbl(p(LeftBefore.Y * stride + LeftBefore.X * 4 + 1))) <= Math.Sqrt((_thresholdB + rangeB) * (_thresholdB + rangeB) + (_thresholdG + rangeG) * (_thresholdG + rangeG))))
+                                LeftInFrontGreaterTh =
+                                  ((Math.Sqrt(CDbl(p(LeftInFront.Y * stride + LeftInFront.X * 4)) * CDbl(p(LeftInFront.Y * stride + LeftInFront.X * 4)) + CDbl(p(LeftInFront.Y * stride + LeftInFront.X * 4 + 1)) * CDbl(p(LeftInFront.Y * stride + LeftInFront.X * 4 + 1))) > Math.Sqrt(_thresholdB * _thresholdB + _thresholdG * _thresholdG) AndAlso
+                                  Math.Sqrt(CDbl(p(LeftInFront.Y * stride + LeftInFront.X * 4)) * CDbl(p(LeftInFront.Y * stride + LeftInFront.X * 4)) + CDbl(p(LeftInFront.Y * stride + LeftInFront.X * 4 + 1)) * CDbl(p(LeftInFront.Y * stride + LeftInFront.X * 4 + 1))) <= Math.Sqrt((_thresholdB + rangeB) * (_thresholdB + rangeB) + (_thresholdG + rangeG) * (_thresholdG + rangeG))))
                             Else
-                                LeftBeforeGreaterTh = (Math.Sqrt(CDbl(p(LeftBefore.Y * stride + LeftBefore.X * 4)) * CDbl(p(LeftBefore.Y * stride + LeftBefore.X * 4)) + CDbl(p(LeftBefore.Y * stride + LeftBefore.X * 4 + 1)) * CDbl(p(LeftBefore.Y * stride + LeftBefore.X * 4 + 1))) > Math.Sqrt(_thresholdB * _thresholdB + _thresholdG * _thresholdG))
+                                LeftInFrontGreaterTh = (Math.Sqrt(CDbl(p(LeftInFront.Y * stride + LeftInFront.X * 4)) * CDbl(p(LeftInFront.Y * stride + LeftInFront.X * 4)) + CDbl(p(LeftInFront.Y * stride + LeftInFront.X * 4 + 1)) * CDbl(p(LeftInFront.Y * stride + LeftInFront.X * 4 + 1))) > Math.Sqrt(_thresholdB * _thresholdB + _thresholdG * _thresholdG))
                             End If
                         End If
                         '#End Region
@@ -7313,37 +7315,37 @@ Public Class ChainFinder
                         '#Region "allVals"
                         If doR AndAlso doG AndAlso doB Then
                             If rangeR > 0 OrElse rangeG > 0 OrElse rangeB > 0 Then
-                                LeftBeforeGreaterTh =
-                                  ((Math.Sqrt(CDbl(p(LeftBefore.Y * stride + LeftBefore.X * 4 + 2)) * CDbl(p(LeftBefore.Y * stride + LeftBefore.X * 4 + 2)) + CDbl(p(LeftBefore.Y * stride + LeftBefore.X * 4 + 1)) * CDbl(p(LeftBefore.Y * stride + LeftBefore.X * 4 + 1)) + CDbl(p(LeftBefore.Y * stride + LeftBefore.X * 4)) * CDbl(p(LeftBefore.Y * stride + LeftBefore.X * 4))) > Math.Sqrt(_thresholdR * _thresholdR + _thresholdG * _thresholdG + _thresholdB * _thresholdB) AndAlso
-                                  Math.Sqrt(CDbl(p(LeftBefore.Y * stride + LeftBefore.X * 4 + 2)) * CDbl(p(LeftBefore.Y * stride + LeftBefore.X * 4 + 2)) + CDbl(p(LeftBefore.Y * stride + LeftBefore.X * 4 + 1)) * CDbl(p(LeftBefore.Y * stride + LeftBefore.X * 4 + 1)) + CDbl(p(LeftBefore.Y * stride + LeftBefore.X * 4)) * CDbl(p(LeftBefore.Y * stride + LeftBefore.X * 4))) <= Math.Sqrt((_thresholdR + rangeR) * (_thresholdR + rangeR) + (_thresholdG + rangeG) * (_thresholdG + rangeG) + (_thresholdB + rangeB) * (_thresholdB + rangeB))))
+                                LeftInFrontGreaterTh =
+                                  ((Math.Sqrt(CDbl(p(LeftInFront.Y * stride + LeftInFront.X * 4 + 2)) * CDbl(p(LeftInFront.Y * stride + LeftInFront.X * 4 + 2)) + CDbl(p(LeftInFront.Y * stride + LeftInFront.X * 4 + 1)) * CDbl(p(LeftInFront.Y * stride + LeftInFront.X * 4 + 1)) + CDbl(p(LeftInFront.Y * stride + LeftInFront.X * 4)) * CDbl(p(LeftInFront.Y * stride + LeftInFront.X * 4))) > Math.Sqrt(_thresholdR * _thresholdR + _thresholdG * _thresholdG + _thresholdB * _thresholdB) AndAlso
+                                  Math.Sqrt(CDbl(p(LeftInFront.Y * stride + LeftInFront.X * 4 + 2)) * CDbl(p(LeftInFront.Y * stride + LeftInFront.X * 4 + 2)) + CDbl(p(LeftInFront.Y * stride + LeftInFront.X * 4 + 1)) * CDbl(p(LeftInFront.Y * stride + LeftInFront.X * 4 + 1)) + CDbl(p(LeftInFront.Y * stride + LeftInFront.X * 4)) * CDbl(p(LeftInFront.Y * stride + LeftInFront.X * 4))) <= Math.Sqrt((_thresholdR + rangeR) * (_thresholdR + rangeR) + (_thresholdG + rangeG) * (_thresholdG + rangeG) + (_thresholdB + rangeB) * (_thresholdB + rangeB))))
                             Else
-                                LeftBeforeGreaterTh = (Math.Sqrt(CDbl(p(LeftBefore.Y * stride + LeftBefore.X * 4 + 2)) * CDbl(p(LeftBefore.Y * stride + LeftBefore.X * 4 + 2)) + CDbl(p(LeftBefore.Y * stride + LeftBefore.X * 4 + 1)) * CDbl(p(LeftBefore.Y * stride + LeftBefore.X * 4 + 1)) + CDbl(p(LeftBefore.Y * stride + LeftBefore.X * 4)) * CDbl(p(LeftBefore.Y * stride + LeftBefore.X * 4))) > Math.Sqrt(_thresholdR * _thresholdR + _thresholdG * _thresholdG + _thresholdB * _thresholdB))
+                                LeftInFrontGreaterTh = (Math.Sqrt(CDbl(p(LeftInFront.Y * stride + LeftInFront.X * 4 + 2)) * CDbl(p(LeftInFront.Y * stride + LeftInFront.X * 4 + 2)) + CDbl(p(LeftInFront.Y * stride + LeftInFront.X * 4 + 1)) * CDbl(p(LeftInFront.Y * stride + LeftInFront.X * 4 + 1)) + CDbl(p(LeftInFront.Y * stride + LeftInFront.X * 4)) * CDbl(p(LeftInFront.Y * stride + LeftInFront.X * 4))) > Math.Sqrt(_thresholdR * _thresholdR + _thresholdG * _thresholdG + _thresholdB * _thresholdB))
                             End If
                             '#End Region
                         End If
                     End If
 
-                    If RightBefore.X >= 0 AndAlso RightBefore.X < b.Width AndAlso RightBefore.Y >= 0 AndAlso RightBefore.Y < b.Height Then
+                    If RightInFront.X >= 0 AndAlso RightInFront.X < b.Width AndAlso RightInFront.Y >= 0 AndAlso RightInFront.Y < b.Height Then
                         '#Region "singleVal"
                         If doR AndAlso Not doG AndAlso Not doB Then
                             If rangeR > 0 Then
-                                RightBeforeGreaterTh = ((p(RightBefore.Y * stride + RightBefore.X * 4 + 2) > _thresholdR) AndAlso (p(RightBefore.Y * stride + RightBefore.X * 4 + 2) <= _thresholdR + rangeR))
+                                RightInFrontGreaterTh = ((p(RightInFront.Y * stride + RightInFront.X * 4 + 2) > _thresholdR) AndAlso (p(RightInFront.Y * stride + RightInFront.X * 4 + 2) <= _thresholdR + rangeR))
                             Else
-                                RightBeforeGreaterTh = p(RightBefore.Y * stride + RightBefore.X * 4 + 2) > _thresholdR
+                                RightInFrontGreaterTh = p(RightInFront.Y * stride + RightInFront.X * 4 + 2) > _thresholdR
                             End If
                         End If
                         If Not doR AndAlso doG AndAlso Not doB Then
                             If rangeG > 0 Then
-                                RightBeforeGreaterTh = ((p(RightBefore.Y * stride + RightBefore.X * 4 + 1) > _thresholdG) AndAlso (p(RightBefore.Y * stride + RightBefore.X * 4 + 1) <= _thresholdG + rangeG))
+                                RightInFrontGreaterTh = ((p(RightInFront.Y * stride + RightInFront.X * 4 + 1) > _thresholdG) AndAlso (p(RightInFront.Y * stride + RightInFront.X * 4 + 1) <= _thresholdG + rangeG))
                             Else
-                                RightBeforeGreaterTh = p(RightBefore.Y * stride + RightBefore.X * 4 + 1) > _thresholdG
+                                RightInFrontGreaterTh = p(RightInFront.Y * stride + RightInFront.X * 4 + 1) > _thresholdG
                             End If
                         End If
                         If Not doR AndAlso Not doG AndAlso doB Then
                             If rangeB > 0 Then
-                                RightBeforeGreaterTh = ((p(RightBefore.Y * stride + RightBefore.X * 4) > _thresholdB) AndAlso (p(RightBefore.Y * stride + RightBefore.X * 4) <= _thresholdB + rangeB))
+                                RightInFrontGreaterTh = ((p(RightInFront.Y * stride + RightInFront.X * 4) > _thresholdB) AndAlso (p(RightInFront.Y * stride + RightInFront.X * 4) <= _thresholdB + rangeB))
                             Else
-                                RightBeforeGreaterTh = p(RightBefore.Y * stride + RightBefore.X * 4) > _thresholdB
+                                RightInFrontGreaterTh = p(RightInFront.Y * stride + RightInFront.X * 4) > _thresholdB
                             End If
                         End If
                         '#End Region
@@ -7351,28 +7353,28 @@ Public Class ChainFinder
                         '#Region "doubleVal"
                         If doR AndAlso doG AndAlso Not doB Then
                             If rangeR > 0 OrElse rangeG > 0 Then
-                                RightBeforeGreaterTh = ((Math.Sqrt(CDbl(p(RightBefore.Y * stride + RightBefore.X * 4 + 2)) * CDbl(p(RightBefore.Y * stride + RightBefore.X * 4 + 2)) + CDbl(p(RightBefore.Y * stride + RightBefore.X * 4 + 1)) * CDbl(p(RightBefore.Y * stride + RightBefore.X * 4 + 1))) > Math.Sqrt(_thresholdR * _thresholdR + _thresholdG * _thresholdG) AndAlso
-                                Math.Sqrt(CDbl(p(RightBefore.Y * stride + RightBefore.X * 4 + 2)) * CDbl(p(RightBefore.Y * stride + RightBefore.X * 4 + 2)) + CDbl(p(RightBefore.Y * stride + RightBefore.X * 4 + 1)) * CDbl(p(RightBefore.Y * stride + RightBefore.X * 4 + 1))) <= Math.Sqrt((_thresholdR + rangeR) * (_thresholdR + rangeR) + (_thresholdG + rangeG) * (_thresholdG + rangeG))))
+                                RightInFrontGreaterTh = ((Math.Sqrt(CDbl(p(RightInFront.Y * stride + RightInFront.X * 4 + 2)) * CDbl(p(RightInFront.Y * stride + RightInFront.X * 4 + 2)) + CDbl(p(RightInFront.Y * stride + RightInFront.X * 4 + 1)) * CDbl(p(RightInFront.Y * stride + RightInFront.X * 4 + 1))) > Math.Sqrt(_thresholdR * _thresholdR + _thresholdG * _thresholdG) AndAlso
+                                Math.Sqrt(CDbl(p(RightInFront.Y * stride + RightInFront.X * 4 + 2)) * CDbl(p(RightInFront.Y * stride + RightInFront.X * 4 + 2)) + CDbl(p(RightInFront.Y * stride + RightInFront.X * 4 + 1)) * CDbl(p(RightInFront.Y * stride + RightInFront.X * 4 + 1))) <= Math.Sqrt((_thresholdR + rangeR) * (_thresholdR + rangeR) + (_thresholdG + rangeG) * (_thresholdG + rangeG))))
                             Else
-                                RightBeforeGreaterTh = (Math.Sqrt(CDbl(p(RightBefore.Y * stride + RightBefore.X * 4 + 2)) * CDbl(p(RightBefore.Y * stride + RightBefore.X * 4 + 2)) + CDbl(p(RightBefore.Y * stride + RightBefore.X * 4 + 1)) * CDbl(p(RightBefore.Y * stride + RightBefore.X * 4 + 1))) > Math.Sqrt(_thresholdR * _thresholdR + _thresholdG * _thresholdG))
+                                RightInFrontGreaterTh = (Math.Sqrt(CDbl(p(RightInFront.Y * stride + RightInFront.X * 4 + 2)) * CDbl(p(RightInFront.Y * stride + RightInFront.X * 4 + 2)) + CDbl(p(RightInFront.Y * stride + RightInFront.X * 4 + 1)) * CDbl(p(RightInFront.Y * stride + RightInFront.X * 4 + 1))) > Math.Sqrt(_thresholdR * _thresholdR + _thresholdG * _thresholdG))
                             End If
                         End If
 
                         If doR AndAlso Not doG AndAlso doB Then
                             If rangeR > 0 OrElse rangeB > 0 Then
-                                RightBeforeGreaterTh = ((Math.Sqrt(CDbl(p(RightBefore.Y * stride + RightBefore.X * 4 + 2)) * CDbl(p(RightBefore.Y * stride + RightBefore.X * 4 + 2)) + CDbl(p(RightBefore.Y * stride + RightBefore.X * 4)) * CDbl(p(RightBefore.Y * stride + RightBefore.X * 4))) > Math.Sqrt(_thresholdR * _thresholdR + _thresholdB * _thresholdB) AndAlso
-                                Math.Sqrt(CDbl(p(RightBefore.Y * stride + RightBefore.X * 4 + 2)) * CDbl(p(RightBefore.Y * stride + RightBefore.X * 4 + 2)) + CDbl(p(RightBefore.Y * stride + RightBefore.X * 4)) * CDbl(p(RightBefore.Y * stride + RightBefore.X * 4))) <= Math.Sqrt((_thresholdR + rangeR) * (_thresholdR + rangeR) + (_thresholdB + rangeB) * (_thresholdB + rangeB))))
+                                RightInFrontGreaterTh = ((Math.Sqrt(CDbl(p(RightInFront.Y * stride + RightInFront.X * 4 + 2)) * CDbl(p(RightInFront.Y * stride + RightInFront.X * 4 + 2)) + CDbl(p(RightInFront.Y * stride + RightInFront.X * 4)) * CDbl(p(RightInFront.Y * stride + RightInFront.X * 4))) > Math.Sqrt(_thresholdR * _thresholdR + _thresholdB * _thresholdB) AndAlso
+                                Math.Sqrt(CDbl(p(RightInFront.Y * stride + RightInFront.X * 4 + 2)) * CDbl(p(RightInFront.Y * stride + RightInFront.X * 4 + 2)) + CDbl(p(RightInFront.Y * stride + RightInFront.X * 4)) * CDbl(p(RightInFront.Y * stride + RightInFront.X * 4))) <= Math.Sqrt((_thresholdR + rangeR) * (_thresholdR + rangeR) + (_thresholdB + rangeB) * (_thresholdB + rangeB))))
                             Else
-                                RightBeforeGreaterTh = (Math.Sqrt(CDbl(p(RightBefore.Y * stride + RightBefore.X * 4 + 2)) * CDbl(p(RightBefore.Y * stride + RightBefore.X * 4 + 2)) + CDbl(p(RightBefore.Y * stride + RightBefore.X * 4)) * CDbl(p(RightBefore.Y * stride + RightBefore.X * 4))) > Math.Sqrt(_thresholdR * _thresholdR + _thresholdB * _thresholdB))
+                                RightInFrontGreaterTh = (Math.Sqrt(CDbl(p(RightInFront.Y * stride + RightInFront.X * 4 + 2)) * CDbl(p(RightInFront.Y * stride + RightInFront.X * 4 + 2)) + CDbl(p(RightInFront.Y * stride + RightInFront.X * 4)) * CDbl(p(RightInFront.Y * stride + RightInFront.X * 4))) > Math.Sqrt(_thresholdR * _thresholdR + _thresholdB * _thresholdB))
                             End If
                         End If
 
                         If Not doR AndAlso doG AndAlso doB Then
                             If rangeB > 0 OrElse rangeG > 0 Then
-                                RightBeforeGreaterTh = ((Math.Sqrt(CDbl(p(RightBefore.Y * stride + RightBefore.X * 4)) * CDbl(p(RightBefore.Y * stride + RightBefore.X * 4)) + CDbl(p(RightBefore.Y * stride + RightBefore.X * 4 + 1)) * CDbl(p(RightBefore.Y * stride + RightBefore.X * 4 + 1))) > Math.Sqrt(_thresholdB * _thresholdB + _thresholdG * _thresholdG) AndAlso
-                                Math.Sqrt(CDbl(p(RightBefore.Y * stride + RightBefore.X * 4)) * CDbl(p(RightBefore.Y * stride + RightBefore.X * 4)) + CDbl(p(RightBefore.Y * stride + RightBefore.X * 4 + 1)) * CDbl(p(RightBefore.Y * stride + RightBefore.X * 4 + 1))) <= Math.Sqrt((_thresholdB + rangeB) * (_thresholdB + rangeB) + (_thresholdG + rangeG) * (_thresholdG + rangeG))))
+                                RightInFrontGreaterTh = ((Math.Sqrt(CDbl(p(RightInFront.Y * stride + RightInFront.X * 4)) * CDbl(p(RightInFront.Y * stride + RightInFront.X * 4)) + CDbl(p(RightInFront.Y * stride + RightInFront.X * 4 + 1)) * CDbl(p(RightInFront.Y * stride + RightInFront.X * 4 + 1))) > Math.Sqrt(_thresholdB * _thresholdB + _thresholdG * _thresholdG) AndAlso
+                                Math.Sqrt(CDbl(p(RightInFront.Y * stride + RightInFront.X * 4)) * CDbl(p(RightInFront.Y * stride + RightInFront.X * 4)) + CDbl(p(RightInFront.Y * stride + RightInFront.X * 4 + 1)) * CDbl(p(RightInFront.Y * stride + RightInFront.X * 4 + 1))) <= Math.Sqrt((_thresholdB + rangeB) * (_thresholdB + rangeB) + (_thresholdG + rangeG) * (_thresholdG + rangeG))))
                             Else
-                                RightBeforeGreaterTh = (Math.Sqrt(CDbl(p(RightBefore.Y * stride + RightBefore.X * 4)) * CDbl(p(RightBefore.Y * stride + RightBefore.X * 4)) + CDbl(p(RightBefore.Y * stride + RightBefore.X * 4 + 1)) * CDbl(p(RightBefore.Y * stride + RightBefore.X * 4 + 1))) > Math.Sqrt(_thresholdB * _thresholdB + _thresholdG * _thresholdG))
+                                RightInFrontGreaterTh = (Math.Sqrt(CDbl(p(RightInFront.Y * stride + RightInFront.X * 4)) * CDbl(p(RightInFront.Y * stride + RightInFront.X * 4)) + CDbl(p(RightInFront.Y * stride + RightInFront.X * 4 + 1)) * CDbl(p(RightInFront.Y * stride + RightInFront.X * 4 + 1))) > Math.Sqrt(_thresholdB * _thresholdB + _thresholdG * _thresholdG))
                             End If
                         End If
                         '#End Region
@@ -7380,18 +7382,18 @@ Public Class ChainFinder
                         '#Region "allVals"
                         If doR AndAlso doG AndAlso doB Then
                             If rangeR > 0 OrElse rangeG > 0 OrElse rangeB > 0 Then
-                                RightBeforeGreaterTh = ((Math.Sqrt(CDbl(p(RightBefore.Y * stride + RightBefore.X * 4 + 2)) * CDbl(p(RightBefore.Y * stride + RightBefore.X * 4 + 2)) + CDbl(p(RightBefore.Y * stride + RightBefore.X * 4 + 1)) * CDbl(p(RightBefore.Y * stride + RightBefore.X * 4 + 1)) + CDbl(p(RightBefore.Y * stride + RightBefore.X * 4 + 1)) * CDbl(p(RightBefore.Y * stride + RightBefore.X * 4 + 1))) > Math.Sqrt(_thresholdR * _thresholdR + _thresholdG * _thresholdG + _thresholdB * _thresholdB) AndAlso
-                                Math.Sqrt(CDbl(p(RightBefore.Y * stride + RightBefore.X * 4 + 2)) * CDbl(p(RightBefore.Y * stride + RightBefore.X * 4 + 2)) + CDbl(p(RightBefore.Y * stride + RightBefore.X * 4 + 1)) * CDbl(p(RightBefore.Y * stride + RightBefore.X * 4 + 1)) + CDbl(p(RightBefore.Y * stride + RightBefore.X * 4)) * CDbl(p(RightBefore.Y * stride + RightBefore.X * 4))) <= Math.Sqrt((_thresholdR + rangeR) * (_thresholdR + rangeR) + (_thresholdG + rangeG) * (_thresholdG + rangeG) + (_thresholdB + rangeB) * (_thresholdB + rangeB))))
+                                RightInFrontGreaterTh = ((Math.Sqrt(CDbl(p(RightInFront.Y * stride + RightInFront.X * 4 + 2)) * CDbl(p(RightInFront.Y * stride + RightInFront.X * 4 + 2)) + CDbl(p(RightInFront.Y * stride + RightInFront.X * 4 + 1)) * CDbl(p(RightInFront.Y * stride + RightInFront.X * 4 + 1)) + CDbl(p(RightInFront.Y * stride + RightInFront.X * 4 + 1)) * CDbl(p(RightInFront.Y * stride + RightInFront.X * 4 + 1))) > Math.Sqrt(_thresholdR * _thresholdR + _thresholdG * _thresholdG + _thresholdB * _thresholdB) AndAlso
+                                Math.Sqrt(CDbl(p(RightInFront.Y * stride + RightInFront.X * 4 + 2)) * CDbl(p(RightInFront.Y * stride + RightInFront.X * 4 + 2)) + CDbl(p(RightInFront.Y * stride + RightInFront.X * 4 + 1)) * CDbl(p(RightInFront.Y * stride + RightInFront.X * 4 + 1)) + CDbl(p(RightInFront.Y * stride + RightInFront.X * 4)) * CDbl(p(RightInFront.Y * stride + RightInFront.X * 4))) <= Math.Sqrt((_thresholdR + rangeR) * (_thresholdR + rangeR) + (_thresholdG + rangeG) * (_thresholdG + rangeG) + (_thresholdB + rangeB) * (_thresholdB + rangeB))))
                             Else
-                                RightBeforeGreaterTh = (Math.Sqrt(CDbl(p(RightBefore.Y * stride + RightBefore.X * 4 + 2)) * CDbl(p(RightBefore.Y * stride + RightBefore.X * 4 + 2)) + CDbl(p(RightBefore.Y * stride + RightBefore.X * 4 + 1)) * CDbl(p(RightBefore.Y * stride + RightBefore.X * 4 + 1)) + CDbl(p(RightBefore.Y * stride + RightBefore.X * 4)) * CDbl(p(RightBefore.Y * stride + RightBefore.X * 4))) > Math.Sqrt(_thresholdR * _thresholdR + _thresholdG * _thresholdG + _thresholdB * _thresholdB))
+                                RightInFrontGreaterTh = (Math.Sqrt(CDbl(p(RightInFront.Y * stride + RightInFront.X * 4 + 2)) * CDbl(p(RightInFront.Y * stride + RightInFront.X * 4 + 2)) + CDbl(p(RightInFront.Y * stride + RightInFront.X * 4 + 1)) * CDbl(p(RightInFront.Y * stride + RightInFront.X * 4 + 1)) + CDbl(p(RightInFront.Y * stride + RightInFront.X * 4)) * CDbl(p(RightInFront.Y * stride + RightInFront.X * 4))) > Math.Sqrt(_thresholdR * _thresholdR + _thresholdG * _thresholdG + _thresholdB * _thresholdB))
                             End If
                             '#End Region
                         End If
                     End If
 
-                    If RightBeforeGreaterTh AndAlso (LeftBeforeGreaterTh OrElse _nullCells) Then
+                    If RightInFrontGreaterTh AndAlso (LeftInFrontGreaterTh OrElse _nullCells) Then
                         direction = (direction + 1) Mod 4
-                    ElseIf Not LeftBeforeGreaterTh AndAlso (Not RightBeforeGreaterTh OrElse Not _nullCells) Then
+                    ElseIf Not LeftInFrontGreaterTh AndAlso (Not RightInFrontGreaterTh OrElse Not _nullCells) Then
                         direction = (direction + 3) Mod 4
                     End If
 
@@ -7658,10 +7660,10 @@ Public Class ChainFinder
         Dim Negative As [SByte](,) = New [SByte](,) {{0, -1}, {0, 0}, {-1, 0}, {-1, -1}}
         Dim Positive As [SByte](,) = New [SByte](,) {{0, 0}, {-1, 0}, {-1, -1}, {0, -1}}
 
-        Dim LeftBefore As New Point()
-        Dim RightBefore As New Point()
+        Dim LeftInFront As New Point()
+        Dim RightInFront As New Point()
 
-        Dim LeftBeforeSmallerTh As Boolean, RightBeforeSmallerTh As Boolean
+        Dim LeftInFrontSmallerTh As Boolean, RightInFrontSmallerTh As Boolean
         Dim direction As Integer = 1
 
         Dim bmData As BitmapData = Nothing
@@ -7689,50 +7691,50 @@ Public Class ChainFinder
                 cc.Chain.Add(direction)
 
                 While x <> _start.X OrElse y <> _start.Y
-                    LeftBefore.X = x + Negative(direction, 0)
-                    LeftBefore.Y = y + Negative(direction, 1)
-                    RightBefore.X = x + Positive(direction, 0)
-                    RightBefore.Y = y + Positive(direction, 1)
+                    LeftInFront.X = x + Negative(direction, 0)
+                    LeftInFront.Y = y + Negative(direction, 1)
+                    RightInFront.X = x + Positive(direction, 0)
+                    RightInFront.Y = y + Positive(direction, 1)
 
                     Select Case direction
                         Case 0
-                            cc.Coord.Add(New Point(LeftBefore.X - 1, LeftBefore.Y))
+                            cc.Coord.Add(New Point(LeftInFront.X - 1, LeftInFront.Y))
                             Exit Select
                         Case 1
-                            cc.Coord.Add(New Point(LeftBefore.X, LeftBefore.Y - 1))
+                            cc.Coord.Add(New Point(LeftInFront.X, LeftInFront.Y - 1))
                             Exit Select
                         Case 2
-                            cc.Coord.Add(New Point(LeftBefore.X + 1, LeftBefore.Y))
+                            cc.Coord.Add(New Point(LeftInFront.X + 1, LeftInFront.Y))
                             Exit Select
                         Case 3
-                            cc.Coord.Add(New Point(LeftBefore.X, LeftBefore.Y + 1))
+                            cc.Coord.Add(New Point(LeftInFront.X, LeftInFront.Y + 1))
                             Exit Select
                     End Select
 
-                    LeftBeforeSmallerTh = False
-                    RightBeforeSmallerTh = False
+                    LeftInFrontSmallerTh = False
+                    RightInFrontSmallerTh = False
 
-                    If LeftBefore.X >= 0 AndAlso LeftBefore.X < b.Width AndAlso LeftBefore.Y >= 0 AndAlso LeftBefore.Y < b.Height Then
+                    If LeftInFront.X >= 0 AndAlso LeftInFront.X < b.Width AndAlso LeftInFront.Y >= 0 AndAlso LeftInFront.Y < b.Height Then
                         '#Region "singleVal"
                         If doR AndAlso Not doG AndAlso Not doB Then
                             If rangeR > 0 Then
-                                LeftBeforeSmallerTh = ((p(LeftBefore.Y * stride + LeftBefore.X * 4 + 2) < _thresholdR) AndAlso (p(LeftBefore.Y * stride + LeftBefore.X * 4 + 2) >= _thresholdR - rangeR))
+                                LeftInFrontSmallerTh = ((p(LeftInFront.Y * stride + LeftInFront.X * 4 + 2) < _thresholdR) AndAlso (p(LeftInFront.Y * stride + LeftInFront.X * 4 + 2) >= _thresholdR - rangeR))
                             Else
-                                LeftBeforeSmallerTh = p(LeftBefore.Y * stride + LeftBefore.X * 4 + 2) < _thresholdR
+                                LeftInFrontSmallerTh = p(LeftInFront.Y * stride + LeftInFront.X * 4 + 2) < _thresholdR
                             End If
                         End If
                         If Not doR AndAlso doG AndAlso Not doB Then
                             If rangeG > 0 Then
-                                LeftBeforeSmallerTh = ((p(LeftBefore.Y * stride + LeftBefore.X * 4 + 1) < _thresholdG) AndAlso (p(LeftBefore.Y * stride + LeftBefore.X * 4 + 1) >= _thresholdG - rangeG))
+                                LeftInFrontSmallerTh = ((p(LeftInFront.Y * stride + LeftInFront.X * 4 + 1) < _thresholdG) AndAlso (p(LeftInFront.Y * stride + LeftInFront.X * 4 + 1) >= _thresholdG - rangeG))
                             Else
-                                LeftBeforeSmallerTh = p(LeftBefore.Y * stride + LeftBefore.X * 4 + 1) < _thresholdG
+                                LeftInFrontSmallerTh = p(LeftInFront.Y * stride + LeftInFront.X * 4 + 1) < _thresholdG
                             End If
                         End If
                         If Not doR AndAlso Not doG AndAlso doB Then
                             If rangeB > 0 Then
-                                LeftBeforeSmallerTh = ((p(LeftBefore.Y * stride + LeftBefore.X * 4) < _thresholdB) AndAlso (p(LeftBefore.Y * stride + LeftBefore.X * 4) >= _thresholdB - rangeB))
+                                LeftInFrontSmallerTh = ((p(LeftInFront.Y * stride + LeftInFront.X * 4) < _thresholdB) AndAlso (p(LeftInFront.Y * stride + LeftInFront.X * 4) >= _thresholdB - rangeB))
                             Else
-                                LeftBeforeSmallerTh = p(LeftBefore.Y * stride + LeftBefore.X * 4) < _thresholdB
+                                LeftInFrontSmallerTh = p(LeftInFront.Y * stride + LeftInFront.X * 4) < _thresholdB
                             End If
                         End If
                         '#End Region
@@ -7740,29 +7742,29 @@ Public Class ChainFinder
                         '#Region "doubleVal"
                         If doR AndAlso doG AndAlso Not doB Then
                             If rangeR > 0 OrElse rangeG > 0 Then
-                                LeftBeforeSmallerTh =
-                                    ((Math.Sqrt(CDbl(p(LeftBefore.Y * stride + LeftBefore.X * 4 + 2)) * CDbl(p(LeftBefore.Y * stride + LeftBefore.X * 4 + 2)) + CDbl(p(LeftBefore.Y * stride + LeftBefore.X * 4 + 1)) * CDbl(p(LeftBefore.Y * stride + LeftBefore.X * 4 + 1))) < Math.Sqrt(_thresholdR * _thresholdR + _thresholdG * _thresholdG) AndAlso
-                                    Math.Sqrt(CDbl(p(LeftBefore.Y * stride + LeftBefore.X * 4 + 2)) * CDbl(p(LeftBefore.Y * stride + LeftBefore.X * 4 + 2)) + CDbl(p(LeftBefore.Y * stride + LeftBefore.X * 4 + 1)) * (p(LeftBefore.Y * stride + LeftBefore.X * 4 + 1))) >= Math.Sqrt((_thresholdR - rangeR) * (_thresholdR - rangeR) + (_thresholdG - rangeG) * (_thresholdG - rangeG))))
+                                LeftInFrontSmallerTh =
+                                    ((Math.Sqrt(CDbl(p(LeftInFront.Y * stride + LeftInFront.X * 4 + 2)) * CDbl(p(LeftInFront.Y * stride + LeftInFront.X * 4 + 2)) + CDbl(p(LeftInFront.Y * stride + LeftInFront.X * 4 + 1)) * CDbl(p(LeftInFront.Y * stride + LeftInFront.X * 4 + 1))) < Math.Sqrt(_thresholdR * _thresholdR + _thresholdG * _thresholdG) AndAlso
+                                    Math.Sqrt(CDbl(p(LeftInFront.Y * stride + LeftInFront.X * 4 + 2)) * CDbl(p(LeftInFront.Y * stride + LeftInFront.X * 4 + 2)) + CDbl(p(LeftInFront.Y * stride + LeftInFront.X * 4 + 1)) * (p(LeftInFront.Y * stride + LeftInFront.X * 4 + 1))) >= Math.Sqrt((_thresholdR - rangeR) * (_thresholdR - rangeR) + (_thresholdG - rangeG) * (_thresholdG - rangeG))))
                             Else
-                                LeftBeforeSmallerTh = (Math.Sqrt(CDbl(p(LeftBefore.Y * stride + LeftBefore.X * 4 + 2)) * CDbl(p(LeftBefore.Y * stride + LeftBefore.X * 4 + 2)) + CDbl(p(LeftBefore.Y * stride + LeftBefore.X * 4 + 1)) * CDbl(p(LeftBefore.Y * stride + LeftBefore.X * 4 + 1))) < Math.Sqrt(_thresholdR * _thresholdR + _thresholdG * _thresholdG))
+                                LeftInFrontSmallerTh = (Math.Sqrt(CDbl(p(LeftInFront.Y * stride + LeftInFront.X * 4 + 2)) * CDbl(p(LeftInFront.Y * stride + LeftInFront.X * 4 + 2)) + CDbl(p(LeftInFront.Y * stride + LeftInFront.X * 4 + 1)) * CDbl(p(LeftInFront.Y * stride + LeftInFront.X * 4 + 1))) < Math.Sqrt(_thresholdR * _thresholdR + _thresholdG * _thresholdG))
                             End If
                         End If
                         If doR AndAlso Not doG AndAlso doB Then
                             If rangeR > 0 OrElse rangeB > 0 Then
-                                LeftBeforeSmallerTh =
-                                    ((Math.Sqrt(CDbl(p(LeftBefore.Y * stride + LeftBefore.X * 4 + 2)) * CDbl(p(LeftBefore.Y * stride + LeftBefore.X * 4 + 2)) + CDbl(p(LeftBefore.Y * stride + LeftBefore.X * 4)) * CDbl(p(LeftBefore.Y * stride + LeftBefore.X * 4))) < Math.Sqrt(_thresholdR * _thresholdR + _thresholdB * _thresholdB) AndAlso
-                                    Math.Sqrt(CDbl(p(LeftBefore.Y * stride + LeftBefore.X * 4 + 2)) * CDbl(p(LeftBefore.Y * stride + LeftBefore.X * 4 + 2)) + CDbl(p(LeftBefore.Y * stride + LeftBefore.X * 4)) * (p(LeftBefore.Y * stride + LeftBefore.X * 4))) >= Math.Sqrt((_thresholdR - rangeR) * (_thresholdR - rangeR) + (_thresholdB - rangeB) * (_thresholdB - rangeB))))
+                                LeftInFrontSmallerTh =
+                                    ((Math.Sqrt(CDbl(p(LeftInFront.Y * stride + LeftInFront.X * 4 + 2)) * CDbl(p(LeftInFront.Y * stride + LeftInFront.X * 4 + 2)) + CDbl(p(LeftInFront.Y * stride + LeftInFront.X * 4)) * CDbl(p(LeftInFront.Y * stride + LeftInFront.X * 4))) < Math.Sqrt(_thresholdR * _thresholdR + _thresholdB * _thresholdB) AndAlso
+                                    Math.Sqrt(CDbl(p(LeftInFront.Y * stride + LeftInFront.X * 4 + 2)) * CDbl(p(LeftInFront.Y * stride + LeftInFront.X * 4 + 2)) + CDbl(p(LeftInFront.Y * stride + LeftInFront.X * 4)) * (p(LeftInFront.Y * stride + LeftInFront.X * 4))) >= Math.Sqrt((_thresholdR - rangeR) * (_thresholdR - rangeR) + (_thresholdB - rangeB) * (_thresholdB - rangeB))))
                             Else
-                                LeftBeforeSmallerTh = (Math.Sqrt(CDbl(p(LeftBefore.Y * stride + LeftBefore.X * 4 + 2)) * CDbl(p(LeftBefore.Y * stride + LeftBefore.X * 4 + 2)) + CDbl(p(LeftBefore.Y * stride + LeftBefore.X * 4)) * CDbl(p(LeftBefore.Y * stride + LeftBefore.X * 4))) < Math.Sqrt(_thresholdR * _thresholdR + _thresholdB * _thresholdB))
+                                LeftInFrontSmallerTh = (Math.Sqrt(CDbl(p(LeftInFront.Y * stride + LeftInFront.X * 4 + 2)) * CDbl(p(LeftInFront.Y * stride + LeftInFront.X * 4 + 2)) + CDbl(p(LeftInFront.Y * stride + LeftInFront.X * 4)) * CDbl(p(LeftInFront.Y * stride + LeftInFront.X * 4))) < Math.Sqrt(_thresholdR * _thresholdR + _thresholdB * _thresholdB))
                             End If
                         End If
                         If Not doR AndAlso doG AndAlso doB Then
                             If rangeB > 0 OrElse rangeG > 0 Then
-                                LeftBeforeSmallerTh =
-                                    ((Math.Sqrt(CDbl(p(LeftBefore.Y * stride + LeftBefore.X * 4)) * CDbl(p(LeftBefore.Y * stride + LeftBefore.X * 4)) + CDbl(p(LeftBefore.Y * stride + LeftBefore.X * 4 + 1)) * CDbl(p(LeftBefore.Y * stride + LeftBefore.X * 4 + 1))) < Math.Sqrt(_thresholdB * _thresholdB + _thresholdG * _thresholdG) AndAlso
-                                    Math.Sqrt(CDbl(p(LeftBefore.Y * stride + LeftBefore.X * 4)) * CDbl(p(LeftBefore.Y * stride + LeftBefore.X * 4)) + CDbl(p(LeftBefore.Y * stride + LeftBefore.X * 4 + 1)) * (p(LeftBefore.Y * stride + LeftBefore.X * 4 + 1))) >= Math.Sqrt((_thresholdB - rangeB) * (_thresholdB - rangeB) + (_thresholdG - rangeG) * (_thresholdG - rangeG))))
+                                LeftInFrontSmallerTh =
+                                    ((Math.Sqrt(CDbl(p(LeftInFront.Y * stride + LeftInFront.X * 4)) * CDbl(p(LeftInFront.Y * stride + LeftInFront.X * 4)) + CDbl(p(LeftInFront.Y * stride + LeftInFront.X * 4 + 1)) * CDbl(p(LeftInFront.Y * stride + LeftInFront.X * 4 + 1))) < Math.Sqrt(_thresholdB * _thresholdB + _thresholdG * _thresholdG) AndAlso
+                                    Math.Sqrt(CDbl(p(LeftInFront.Y * stride + LeftInFront.X * 4)) * CDbl(p(LeftInFront.Y * stride + LeftInFront.X * 4)) + CDbl(p(LeftInFront.Y * stride + LeftInFront.X * 4 + 1)) * (p(LeftInFront.Y * stride + LeftInFront.X * 4 + 1))) >= Math.Sqrt((_thresholdB - rangeB) * (_thresholdB - rangeB) + (_thresholdG - rangeG) * (_thresholdG - rangeG))))
                             Else
-                                LeftBeforeSmallerTh = (Math.Sqrt(CDbl(p(LeftBefore.Y * stride + LeftBefore.X * 4)) * CDbl(p(LeftBefore.Y * stride + LeftBefore.X * 4)) + CDbl(p(LeftBefore.Y * stride + LeftBefore.X * 4 + 1)) * CDbl(p(LeftBefore.Y * stride + LeftBefore.X * 4 + 1))) < Math.Sqrt(_thresholdB * _thresholdB + _thresholdG * _thresholdG))
+                                LeftInFrontSmallerTh = (Math.Sqrt(CDbl(p(LeftInFront.Y * stride + LeftInFront.X * 4)) * CDbl(p(LeftInFront.Y * stride + LeftInFront.X * 4)) + CDbl(p(LeftInFront.Y * stride + LeftInFront.X * 4 + 1)) * CDbl(p(LeftInFront.Y * stride + LeftInFront.X * 4 + 1))) < Math.Sqrt(_thresholdB * _thresholdB + _thresholdG * _thresholdG))
                             End If
                         End If
                         '#End Region
@@ -7770,37 +7772,37 @@ Public Class ChainFinder
                         '#Region "allVals"
                         If doR AndAlso doG AndAlso doB Then
                             If rangeR > 0 OrElse rangeG > 0 OrElse rangeB > 0 Then
-                                LeftBeforeSmallerTh =
-                                    ((Math.Sqrt(CDbl(p(LeftBefore.Y * stride + LeftBefore.X * 4 + 2)) * CDbl(p(LeftBefore.Y * stride + LeftBefore.X * 4 + 2)) + CDbl(p(LeftBefore.Y * stride + LeftBefore.X * 4 + 1)) * CDbl(p(LeftBefore.Y * stride + LeftBefore.X * 4 + 1)) + CDbl(p(LeftBefore.Y * stride + LeftBefore.X * 4)) * CDbl(p(LeftBefore.Y * stride + LeftBefore.X * 4))) < Math.Sqrt(_thresholdR * _thresholdR + _thresholdG * _thresholdG + _thresholdB * _thresholdB) AndAlso
-                                    Math.Sqrt(CDbl(p(LeftBefore.Y * stride + LeftBefore.X * 4 + 2)) * CDbl(p(LeftBefore.Y * stride + LeftBefore.X * 4 + 2)) + CDbl(p(LeftBefore.Y * stride + LeftBefore.X * 4 + 1)) * (p(LeftBefore.Y * stride + LeftBefore.X * 4 + 1)) + CDbl(p(LeftBefore.Y * stride + LeftBefore.X * 4)) * CDbl(p(LeftBefore.Y * stride + LeftBefore.X * 4))) >= Math.Sqrt((_thresholdR - rangeR) * (_thresholdR - rangeR) + (_thresholdG - rangeG) * (_thresholdG - rangeG) + (_thresholdB - rangeB) * (_thresholdB - rangeB))))
+                                LeftInFrontSmallerTh =
+                                    ((Math.Sqrt(CDbl(p(LeftInFront.Y * stride + LeftInFront.X * 4 + 2)) * CDbl(p(LeftInFront.Y * stride + LeftInFront.X * 4 + 2)) + CDbl(p(LeftInFront.Y * stride + LeftInFront.X * 4 + 1)) * CDbl(p(LeftInFront.Y * stride + LeftInFront.X * 4 + 1)) + CDbl(p(LeftInFront.Y * stride + LeftInFront.X * 4)) * CDbl(p(LeftInFront.Y * stride + LeftInFront.X * 4))) < Math.Sqrt(_thresholdR * _thresholdR + _thresholdG * _thresholdG + _thresholdB * _thresholdB) AndAlso
+                                    Math.Sqrt(CDbl(p(LeftInFront.Y * stride + LeftInFront.X * 4 + 2)) * CDbl(p(LeftInFront.Y * stride + LeftInFront.X * 4 + 2)) + CDbl(p(LeftInFront.Y * stride + LeftInFront.X * 4 + 1)) * (p(LeftInFront.Y * stride + LeftInFront.X * 4 + 1)) + CDbl(p(LeftInFront.Y * stride + LeftInFront.X * 4)) * CDbl(p(LeftInFront.Y * stride + LeftInFront.X * 4))) >= Math.Sqrt((_thresholdR - rangeR) * (_thresholdR - rangeR) + (_thresholdG - rangeG) * (_thresholdG - rangeG) + (_thresholdB - rangeB) * (_thresholdB - rangeB))))
                             Else
-                                LeftBeforeSmallerTh = (Math.Sqrt(CDbl(p(LeftBefore.Y * stride + LeftBefore.X * 4 + 2)) * CDbl(p(LeftBefore.Y * stride + LeftBefore.X * 4 + 2)) + CDbl(p(LeftBefore.Y * stride + LeftBefore.X * 4 + 1)) * CDbl(p(LeftBefore.Y * stride + LeftBefore.X * 4 + 1)) + CDbl(p(LeftBefore.Y * stride + LeftBefore.X * 4)) * CDbl(p(LeftBefore.Y * stride + LeftBefore.X * 4))) < Math.Sqrt(_thresholdR * _thresholdR + _thresholdG * _thresholdG + _thresholdB * _thresholdB))
+                                LeftInFrontSmallerTh = (Math.Sqrt(CDbl(p(LeftInFront.Y * stride + LeftInFront.X * 4 + 2)) * CDbl(p(LeftInFront.Y * stride + LeftInFront.X * 4 + 2)) + CDbl(p(LeftInFront.Y * stride + LeftInFront.X * 4 + 1)) * CDbl(p(LeftInFront.Y * stride + LeftInFront.X * 4 + 1)) + CDbl(p(LeftInFront.Y * stride + LeftInFront.X * 4)) * CDbl(p(LeftInFront.Y * stride + LeftInFront.X * 4))) < Math.Sqrt(_thresholdR * _thresholdR + _thresholdG * _thresholdG + _thresholdB * _thresholdB))
                             End If
                             '#End Region
                         End If
                     End If
 
-                    If RightBefore.X >= 0 AndAlso RightBefore.X < b.Width AndAlso RightBefore.Y >= 0 AndAlso RightBefore.Y < b.Height Then
+                    If RightInFront.X >= 0 AndAlso RightInFront.X < b.Width AndAlso RightInFront.Y >= 0 AndAlso RightInFront.Y < b.Height Then
                         '#Region "singleVal"
                         If doR AndAlso Not doG AndAlso Not doB Then
                             If rangeR > 0 Then
-                                RightBeforeSmallerTh = ((p(RightBefore.Y * stride + RightBefore.X * 4 + 2) < _thresholdR) AndAlso (p(RightBefore.Y * stride + RightBefore.X * 4 + 2) >= _thresholdR - rangeR))
+                                RightInFrontSmallerTh = ((p(RightInFront.Y * stride + RightInFront.X * 4 + 2) < _thresholdR) AndAlso (p(RightInFront.Y * stride + RightInFront.X * 4 + 2) >= _thresholdR - rangeR))
                             Else
-                                RightBeforeSmallerTh = p(RightBefore.Y * stride + RightBefore.X * 4 + 2) < _thresholdR
+                                RightInFrontSmallerTh = p(RightInFront.Y * stride + RightInFront.X * 4 + 2) < _thresholdR
                             End If
                         End If
                         If Not doR AndAlso doG AndAlso Not doB Then
                             If rangeG > 0 Then
-                                RightBeforeSmallerTh = ((p(RightBefore.Y * stride + RightBefore.X * 4 + 1) < _thresholdG) AndAlso (p(RightBefore.Y * stride + RightBefore.X * 4 + 1) >= _thresholdG - rangeG))
+                                RightInFrontSmallerTh = ((p(RightInFront.Y * stride + RightInFront.X * 4 + 1) < _thresholdG) AndAlso (p(RightInFront.Y * stride + RightInFront.X * 4 + 1) >= _thresholdG - rangeG))
                             Else
-                                RightBeforeSmallerTh = p(RightBefore.Y * stride + RightBefore.X * 4 + 1) < _thresholdG
+                                RightInFrontSmallerTh = p(RightInFront.Y * stride + RightInFront.X * 4 + 1) < _thresholdG
                             End If
                         End If
                         If Not doR AndAlso Not doG AndAlso doB Then
                             If rangeB > 0 Then
-                                RightBeforeSmallerTh = ((p(RightBefore.Y * stride + RightBefore.X * 4) < _thresholdB) AndAlso (p(RightBefore.Y * stride + RightBefore.X * 4) >= _thresholdB - rangeB))
+                                RightInFrontSmallerTh = ((p(RightInFront.Y * stride + RightInFront.X * 4) < _thresholdB) AndAlso (p(RightInFront.Y * stride + RightInFront.X * 4) >= _thresholdB - rangeB))
                             Else
-                                RightBeforeSmallerTh = p(RightBefore.Y * stride + RightBefore.X * 4) < _thresholdB
+                                RightInFrontSmallerTh = p(RightInFront.Y * stride + RightInFront.X * 4) < _thresholdB
                             End If
                         End If
                         '#End Region
@@ -7808,31 +7810,31 @@ Public Class ChainFinder
                         '#Region "doubleVal"
                         If doR AndAlso doG AndAlso Not doB Then
                             If rangeR > 0 OrElse rangeG > 0 Then
-                                RightBeforeSmallerTh =
-                                    ((Math.Sqrt(CDbl(p(RightBefore.Y * stride + RightBefore.X * 4 + 2)) * CDbl(p(RightBefore.Y * stride + RightBefore.X * 4 + 2)) + CDbl(p(RightBefore.Y * stride + RightBefore.X * 4 + 1)) * CDbl(p(RightBefore.Y * stride + RightBefore.X * 4 + 1))) < Math.Sqrt(_thresholdR * _thresholdR + _thresholdG * _thresholdG) AndAlso
-                                    Math.Sqrt(CDbl(p(RightBefore.Y * stride + RightBefore.X * 4 + 2)) * CDbl(p(RightBefore.Y * stride + RightBefore.X * 4 + 2)) + CDbl(p(RightBefore.Y * stride + RightBefore.X * 4 + 1)) * CDbl(p(RightBefore.Y * stride + RightBefore.X * 4 + 1))) >= Math.Sqrt((_thresholdR - rangeR) * (_thresholdR - rangeR) + (_thresholdG - rangeG) * (_thresholdG - rangeG))))
+                                RightInFrontSmallerTh =
+                                    ((Math.Sqrt(CDbl(p(RightInFront.Y * stride + RightInFront.X * 4 + 2)) * CDbl(p(RightInFront.Y * stride + RightInFront.X * 4 + 2)) + CDbl(p(RightInFront.Y * stride + RightInFront.X * 4 + 1)) * CDbl(p(RightInFront.Y * stride + RightInFront.X * 4 + 1))) < Math.Sqrt(_thresholdR * _thresholdR + _thresholdG * _thresholdG) AndAlso
+                                    Math.Sqrt(CDbl(p(RightInFront.Y * stride + RightInFront.X * 4 + 2)) * CDbl(p(RightInFront.Y * stride + RightInFront.X * 4 + 2)) + CDbl(p(RightInFront.Y * stride + RightInFront.X * 4 + 1)) * CDbl(p(RightInFront.Y * stride + RightInFront.X * 4 + 1))) >= Math.Sqrt((_thresholdR - rangeR) * (_thresholdR - rangeR) + (_thresholdG - rangeG) * (_thresholdG - rangeG))))
                             Else
-                                RightBeforeSmallerTh = (Math.Sqrt(CDbl(p(RightBefore.Y * stride + RightBefore.X * 4 + 2)) * CDbl(p(RightBefore.Y * stride + RightBefore.X * 4 + 2)) + CDbl(p(RightBefore.Y * stride + RightBefore.X * 4 + 1)) * CDbl(p(RightBefore.Y * stride + RightBefore.X * 4 + 1))) < Math.Sqrt(_thresholdR * _thresholdR + _thresholdG * _thresholdG))
+                                RightInFrontSmallerTh = (Math.Sqrt(CDbl(p(RightInFront.Y * stride + RightInFront.X * 4 + 2)) * CDbl(p(RightInFront.Y * stride + RightInFront.X * 4 + 2)) + CDbl(p(RightInFront.Y * stride + RightInFront.X * 4 + 1)) * CDbl(p(RightInFront.Y * stride + RightInFront.X * 4 + 1))) < Math.Sqrt(_thresholdR * _thresholdR + _thresholdG * _thresholdG))
                             End If
                         End If
 
                         If doR AndAlso Not doG AndAlso doB Then
                             If rangeR > 0 OrElse rangeB > 0 Then
-                                RightBeforeSmallerTh =
-                                    ((Math.Sqrt(CDbl(p(RightBefore.Y * stride + RightBefore.X * 4 + 2)) * CDbl(p(RightBefore.Y * stride + RightBefore.X * 4 + 2)) + CDbl(p(RightBefore.Y * stride + RightBefore.X * 4)) * CDbl(p(RightBefore.Y * stride + RightBefore.X * 4))) < Math.Sqrt(_thresholdR * _thresholdR + _thresholdB * _thresholdB) AndAlso
-                                    Math.Sqrt(CDbl(p(RightBefore.Y * stride + RightBefore.X * 4 + 2)) * CDbl(p(RightBefore.Y * stride + RightBefore.X * 4 + 2)) + CDbl(p(RightBefore.Y * stride + RightBefore.X * 4)) * CDbl(p(RightBefore.Y * stride + RightBefore.X * 4))) >= Math.Sqrt((_thresholdR - rangeR) * (_thresholdR - rangeR) + (_thresholdB - rangeB) * (_thresholdB - rangeB))))
+                                RightInFrontSmallerTh =
+                                    ((Math.Sqrt(CDbl(p(RightInFront.Y * stride + RightInFront.X * 4 + 2)) * CDbl(p(RightInFront.Y * stride + RightInFront.X * 4 + 2)) + CDbl(p(RightInFront.Y * stride + RightInFront.X * 4)) * CDbl(p(RightInFront.Y * stride + RightInFront.X * 4))) < Math.Sqrt(_thresholdR * _thresholdR + _thresholdB * _thresholdB) AndAlso
+                                    Math.Sqrt(CDbl(p(RightInFront.Y * stride + RightInFront.X * 4 + 2)) * CDbl(p(RightInFront.Y * stride + RightInFront.X * 4 + 2)) + CDbl(p(RightInFront.Y * stride + RightInFront.X * 4)) * CDbl(p(RightInFront.Y * stride + RightInFront.X * 4))) >= Math.Sqrt((_thresholdR - rangeR) * (_thresholdR - rangeR) + (_thresholdB - rangeB) * (_thresholdB - rangeB))))
                             Else
-                                RightBeforeSmallerTh = (Math.Sqrt(CDbl(p(RightBefore.Y * stride + RightBefore.X * 4 + 2)) * CDbl(p(RightBefore.Y * stride + RightBefore.X * 4 + 2)) + CDbl(p(RightBefore.Y * stride + RightBefore.X * 4)) * CDbl(p(RightBefore.Y * stride + RightBefore.X * 4))) < Math.Sqrt(_thresholdR * _thresholdR + _thresholdB * _thresholdB))
+                                RightInFrontSmallerTh = (Math.Sqrt(CDbl(p(RightInFront.Y * stride + RightInFront.X * 4 + 2)) * CDbl(p(RightInFront.Y * stride + RightInFront.X * 4 + 2)) + CDbl(p(RightInFront.Y * stride + RightInFront.X * 4)) * CDbl(p(RightInFront.Y * stride + RightInFront.X * 4))) < Math.Sqrt(_thresholdR * _thresholdR + _thresholdB * _thresholdB))
                             End If
                         End If
 
                         If Not doR AndAlso doG AndAlso doB Then
                             If rangeB > 0 OrElse rangeG > 0 Then
-                                RightBeforeSmallerTh =
-                                    ((Math.Sqrt(CDbl(p(RightBefore.Y * stride + RightBefore.X * 4)) * CDbl(p(RightBefore.Y * stride + RightBefore.X * 4)) + CDbl(p(RightBefore.Y * stride + RightBefore.X * 4 + 1)) * CDbl(p(RightBefore.Y * stride + RightBefore.X * 4 + 1))) < Math.Sqrt(_thresholdB * _thresholdB + _thresholdG * _thresholdG) AndAlso
-                                    Math.Sqrt(CDbl(p(RightBefore.Y * stride + RightBefore.X * 4)) * CDbl(p(RightBefore.Y * stride + RightBefore.X * 4)) + CDbl(p(RightBefore.Y * stride + RightBefore.X * 4 + 1)) * CDbl(p(RightBefore.Y * stride + RightBefore.X * 4 + 1))) >= Math.Sqrt((_thresholdB - rangeB) * (_thresholdB - rangeB) + (_thresholdG - rangeG) * (_thresholdG - rangeG))))
+                                RightInFrontSmallerTh =
+                                    ((Math.Sqrt(CDbl(p(RightInFront.Y * stride + RightInFront.X * 4)) * CDbl(p(RightInFront.Y * stride + RightInFront.X * 4)) + CDbl(p(RightInFront.Y * stride + RightInFront.X * 4 + 1)) * CDbl(p(RightInFront.Y * stride + RightInFront.X * 4 + 1))) < Math.Sqrt(_thresholdB * _thresholdB + _thresholdG * _thresholdG) AndAlso
+                                    Math.Sqrt(CDbl(p(RightInFront.Y * stride + RightInFront.X * 4)) * CDbl(p(RightInFront.Y * stride + RightInFront.X * 4)) + CDbl(p(RightInFront.Y * stride + RightInFront.X * 4 + 1)) * CDbl(p(RightInFront.Y * stride + RightInFront.X * 4 + 1))) >= Math.Sqrt((_thresholdB - rangeB) * (_thresholdB - rangeB) + (_thresholdG - rangeG) * (_thresholdG - rangeG))))
                             Else
-                                RightBeforeSmallerTh = (Math.Sqrt(CDbl(p(RightBefore.Y * stride + RightBefore.X * 4)) * CDbl(p(RightBefore.Y * stride + RightBefore.X * 4)) + CDbl(p(RightBefore.Y * stride + RightBefore.X * 4 + 1)) * CDbl(p(RightBefore.Y * stride + RightBefore.X * 4 + 1))) < Math.Sqrt(_thresholdB * _thresholdB + _thresholdG * _thresholdG))
+                                RightInFrontSmallerTh = (Math.Sqrt(CDbl(p(RightInFront.Y * stride + RightInFront.X * 4)) * CDbl(p(RightInFront.Y * stride + RightInFront.X * 4)) + CDbl(p(RightInFront.Y * stride + RightInFront.X * 4 + 1)) * CDbl(p(RightInFront.Y * stride + RightInFront.X * 4 + 1))) < Math.Sqrt(_thresholdB * _thresholdB + _thresholdG * _thresholdG))
                             End If
                         End If
                         '#End Region
@@ -7840,19 +7842,19 @@ Public Class ChainFinder
                         '#Region "allVals"
                         If doR AndAlso doG AndAlso doB Then
                             If rangeR > 0 OrElse rangeG > 0 OrElse rangeB > 0 Then
-                                RightBeforeSmallerTh =
-                                    ((Math.Sqrt(CDbl(p(RightBefore.Y * stride + RightBefore.X * 4 + 2)) * CDbl(p(RightBefore.Y * stride + RightBefore.X * 4 + 2)) + CDbl(p(RightBefore.Y * stride + RightBefore.X * 4 + 1)) * CDbl(p(RightBefore.Y * stride + RightBefore.X * 4 + 1)) + CDbl(p(RightBefore.Y * stride + RightBefore.X * 4)) * CDbl(p(RightBefore.Y * stride + RightBefore.X * 4))) < Math.Sqrt(_thresholdR * _thresholdR + _thresholdG * _thresholdG + _thresholdB * _thresholdB) AndAlso
-                                    Math.Sqrt(CDbl(p(RightBefore.Y * stride + RightBefore.X * 4 + 2)) * CDbl(p(RightBefore.Y * stride + RightBefore.X * 4 + 2)) + CDbl(p(RightBefore.Y * stride + RightBefore.X * 4 + 1)) * CDbl(p(RightBefore.Y * stride + RightBefore.X * 4 + 1)) + +CDbl(p(RightBefore.Y * stride + RightBefore.X * 4)) * CDbl(p(RightBefore.Y * stride + RightBefore.X * 4))) >= Math.Sqrt((_thresholdR - rangeR) * (_thresholdR - rangeR) + (_thresholdG - rangeG) * (_thresholdG - rangeG) + (_thresholdB - rangeB) * (_thresholdB - rangeB))))
+                                RightInFrontSmallerTh =
+                                    ((Math.Sqrt(CDbl(p(RightInFront.Y * stride + RightInFront.X * 4 + 2)) * CDbl(p(RightInFront.Y * stride + RightInFront.X * 4 + 2)) + CDbl(p(RightInFront.Y * stride + RightInFront.X * 4 + 1)) * CDbl(p(RightInFront.Y * stride + RightInFront.X * 4 + 1)) + CDbl(p(RightInFront.Y * stride + RightInFront.X * 4)) * CDbl(p(RightInFront.Y * stride + RightInFront.X * 4))) < Math.Sqrt(_thresholdR * _thresholdR + _thresholdG * _thresholdG + _thresholdB * _thresholdB) AndAlso
+                                    Math.Sqrt(CDbl(p(RightInFront.Y * stride + RightInFront.X * 4 + 2)) * CDbl(p(RightInFront.Y * stride + RightInFront.X * 4 + 2)) + CDbl(p(RightInFront.Y * stride + RightInFront.X * 4 + 1)) * CDbl(p(RightInFront.Y * stride + RightInFront.X * 4 + 1)) + +CDbl(p(RightInFront.Y * stride + RightInFront.X * 4)) * CDbl(p(RightInFront.Y * stride + RightInFront.X * 4))) >= Math.Sqrt((_thresholdR - rangeR) * (_thresholdR - rangeR) + (_thresholdG - rangeG) * (_thresholdG - rangeG) + (_thresholdB - rangeB) * (_thresholdB - rangeB))))
                             Else
-                                RightBeforeSmallerTh = (Math.Sqrt(CDbl(p(RightBefore.Y * stride + RightBefore.X * 4 + 2)) * CDbl(p(RightBefore.Y * stride + RightBefore.X * 4 + 2)) + CDbl(p(RightBefore.Y * stride + RightBefore.X * 4 + 1)) * CDbl(p(RightBefore.Y * stride + RightBefore.X * 4 + 1)) + CDbl(p(RightBefore.Y * stride + RightBefore.X * 4)) * CDbl(p(RightBefore.Y * stride + RightBefore.X * 4))) < Math.Sqrt(_thresholdR * _thresholdR + _thresholdG * _thresholdG + _thresholdB * _thresholdB))
+                                RightInFrontSmallerTh = (Math.Sqrt(CDbl(p(RightInFront.Y * stride + RightInFront.X * 4 + 2)) * CDbl(p(RightInFront.Y * stride + RightInFront.X * 4 + 2)) + CDbl(p(RightInFront.Y * stride + RightInFront.X * 4 + 1)) * CDbl(p(RightInFront.Y * stride + RightInFront.X * 4 + 1)) + CDbl(p(RightInFront.Y * stride + RightInFront.X * 4)) * CDbl(p(RightInFront.Y * stride + RightInFront.X * 4))) < Math.Sqrt(_thresholdR * _thresholdR + _thresholdG * _thresholdG + _thresholdB * _thresholdB))
                             End If
                             '#End Region
                         End If
                     End If
 
-                    If RightBeforeSmallerTh AndAlso (LeftBeforeSmallerTh OrElse _nullCells) Then
+                    If RightInFrontSmallerTh AndAlso (LeftInFrontSmallerTh OrElse _nullCells) Then
                         direction = (direction + 1) Mod 4
-                    ElseIf Not LeftBeforeSmallerTh AndAlso (Not RightBeforeSmallerTh OrElse Not _nullCells) Then
+                    ElseIf Not LeftInFrontSmallerTh AndAlso (Not RightInFrontSmallerTh OrElse Not _nullCells) Then
                         direction = (direction + 3) Mod 4
                     End If
 
@@ -8989,4 +8991,16 @@ Public Class ChainFinder
             End Try
         End Try
     End Sub
+
+    Public Shared Function CloneChainCode(c As ChainCode) As ChainCode
+        Dim cc As New ChainCode
+
+        cc.Area = c.Area
+        cc.Chain = New List(Of Integer)
+        cc.Chain.AddRange(c.Chain)
+        cc.Coord = New List(Of Point)
+        cc.Coord.AddRange(c.Coord)
+
+        Return cc
+    End Function
 End Class
