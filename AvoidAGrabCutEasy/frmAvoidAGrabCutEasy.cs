@@ -1682,6 +1682,7 @@ namespace AvoidAGrabCutEasy
         private void cbQuickEst_CheckedChanged(object sender, EventArgs e)
         {
             this.btnMinCut.Enabled = !this.cbQuickEst.Checked;
+            this.cbEightAdj.Enabled = !this.cbQuickEst.Checked;
         }
 
         private void btnRect_Click(object sender, EventArgs e)

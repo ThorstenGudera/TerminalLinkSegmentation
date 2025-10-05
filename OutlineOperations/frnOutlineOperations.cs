@@ -2515,6 +2515,8 @@ namespace OutlineOperations
 
             // Dim Radius2 As Integer = DistanceWeightsF.Length \ 2
             double a2 = -2.0 * Radius2 * Radius2 / Math.Log(steepness2);
+            if (a2 == 0)
+                a2 = 1e-15;
             double Sum2 = 0.0;
 
             if (Radius2 < 444)

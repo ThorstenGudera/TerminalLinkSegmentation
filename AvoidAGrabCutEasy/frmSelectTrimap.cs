@@ -21,7 +21,7 @@ namespace GetAlphaMatte
         private Bitmap _picOverlay;
         private List<DrawInfo> _allPts = new List<DrawInfo>();
         private List<PointF> _pointsDraw = new List<PointF>();
-        private int _drawType = 2;
+        //private int _drawType = 2;
         private int _iX = 0;
         private int _iY = 0;
         private bool _tracking4;
@@ -356,17 +356,17 @@ namespace GetAlphaMatte
 
         private void rbBG_CheckedChanged(object sender, EventArgs e)
         {
-            this._drawType = 0;
+            //this._drawType = 0;
         }
 
         private void rbFG_CheckedChanged(object sender, EventArgs e)
         {
-            this._drawType = 1;
+            //this._drawType = 1;
         }
 
         private void rbUnknown_CheckedChanged(object sender, EventArgs e)
         {
-            this._drawType = 2;
+            //this._drawType = 2;
         }
 
         private void btnRemLastScribbles_Click(object sender, EventArgs e)

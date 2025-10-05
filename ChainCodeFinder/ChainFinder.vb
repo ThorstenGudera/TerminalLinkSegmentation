@@ -2843,6 +2843,48 @@ Public Class ChainFinder
         pOrig = Nothing
     End Sub
 
+    Public Sub DrawOutlineToBmp(b As Bitmap, orig As Bitmap, fList As PointF())
+        If Not AvailMem.AvailMem.checkAvailRam(b.Width * b.Height * 8L) Then
+            MessageBox.Show("Not enough Memory")
+            Return
+        End If
+        Dim bmData As BitmapData = b.LockBits(New Rectangle(0, 0, b.Width, b.Height), ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb)
+        Dim Scan0 As System.IntPtr = bmData.Scan0
+
+        Dim bmDataOrig As BitmapData = orig.LockBits(New Rectangle(0, 0, orig.Width, orig.Height), ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb)
+        Dim Scan0Orig As System.IntPtr = bmDataOrig.Scan0
+
+        Dim p((bmData.Stride * bmData.Height) - 1) As Byte
+        Marshal.Copy(bmData.Scan0, p, 0, p.Length)
+
+        Dim pOrig((bmDataOrig.Stride * bmDataOrig.Height) - 1) As Byte
+        Marshal.Copy(bmDataOrig.Scan0, pOrig, 0, pOrig.Length)
+
+        Dim stride As Integer = bmData.Stride
+
+        If fList IsNot Nothing AndAlso fList.Count > 0 Then
+            For Each pt As PointF In fList
+                Dim x As Integer = CInt(pt.X)
+                Dim y As Integer = CInt(pt.Y)
+                p(y * stride + x * 4) = pOrig(y * stride + x * 4)
+                p(y * stride + x * 4 + 1) = pOrig(y * stride + x * 4 + 1)
+                p(y * stride + x * 4 + 2) = pOrig(y * stride + x * 4 + 2)
+                p(y * stride + x * 4 + 3) = pOrig(y * stride + x * 4 + 3)
+
+                'p(y * stride + x * 4 + 3) = CByte(CDbl(pOrig(y * stride + x * 4 + 3)) * (alpha / 255.0))
+
+            Next
+        End If
+
+        Marshal.Copy(p, 0, bmData.Scan0, p.Length)
+
+        b.UnlockBits(bmData)
+        orig.UnlockBits(bmDataOrig)
+
+        p = Nothing
+        pOrig = Nothing
+    End Sub
+
     Public Function GetOutline(bmp As Bitmap, thresholdR As Integer, thresholdG As Integer, thresholdB As Integer,
                                doR As Boolean, doG As Boolean, doB As Boolean, rangeR As Integer, rangeG As Integer, rangeB As Integer,
                                excludeInnerOutlines As Boolean, initialValueToCheck As Integer, doReverse As Boolean) As List(Of ChainCode)

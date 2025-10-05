@@ -1012,6 +1012,7 @@
             // cbEightAdj
             // 
             cbEightAdj.AutoSize = true;
+            cbEightAdj.Enabled = false;
             cbEightAdj.Location = new Point(459, 93);
             cbEightAdj.Margin = new Padding(4, 3, 4, 3);
             cbEightAdj.Name = "cbEightAdj";
@@ -1540,11 +1541,15 @@
             helplineRulerCtrl1.DontProcDoubleClick = false;
             helplineRulerCtrl1.DrawModeClipped = false;
             helplineRulerCtrl1.DrawPixelated = false;
+            helplineRulerCtrl1.HandleMeasureByContainingForm = false;
             helplineRulerCtrl1.IgnoreZoom = false;
             helplineRulerCtrl1.Location = new Point(0, 0);
             helplineRulerCtrl1.Margin = new Padding(5, 3, 5, 3);
+            helplineRulerCtrl1.Measure = false;
             helplineRulerCtrl1.MoveHelpLinesOnResize = false;
             helplineRulerCtrl1.Name = "helplineRulerCtrl1";
+            helplineRulerCtrl1.PtEnd = new Point(0, 0);
+            helplineRulerCtrl1.PtSt = new Point(0, 0);
             helplineRulerCtrl1.SetZoomOnlyByMethodCall = false;
             helplineRulerCtrl1.Size = new Size(771, 648);
             helplineRulerCtrl1.TabIndex = 0;
@@ -1562,11 +1567,15 @@
             helplineRulerCtrl2.DontProcDoubleClick = false;
             helplineRulerCtrl2.DrawModeClipped = false;
             helplineRulerCtrl2.DrawPixelated = false;
+            helplineRulerCtrl2.HandleMeasureByContainingForm = false;
             helplineRulerCtrl2.IgnoreZoom = false;
             helplineRulerCtrl2.Location = new Point(0, 0);
             helplineRulerCtrl2.Margin = new Padding(5, 3, 5, 3);
+            helplineRulerCtrl2.Measure = false;
             helplineRulerCtrl2.MoveHelpLinesOnResize = false;
             helplineRulerCtrl2.Name = "helplineRulerCtrl2";
+            helplineRulerCtrl2.PtEnd = new Point(0, 0);
+            helplineRulerCtrl2.PtSt = new Point(0, 0);
             helplineRulerCtrl2.SetZoomOnlyByMethodCall = false;
             helplineRulerCtrl2.Size = new Size(733, 648);
             helplineRulerCtrl2.TabIndex = 0;
