@@ -1767,7 +1767,7 @@ namespace GetAlphaMatte
                     }
 
                     ShowInfo?.Invoke(this, "outer pic-amount " + 1.ToString());
-                    this.GetMattingLaplacian(Math.Pow(10, -7));
+                    this.GetMattingLaplacian(Math.Pow(10, -3));
                     Bitmap? b = null;
 
                     if (this.BlendParameters != null && this.BlendParameters.BGW != null && this.BlendParameters.BGW.WorkerSupportsCancellation && this.BlendParameters.BGW.CancellationPending)
@@ -1854,7 +1854,7 @@ namespace GetAlphaMatte
 
                             this.CfopArray[i] = cfop;
 
-                            cfop.GetMattingLaplacian(Math.Pow(10, -7));
+                            cfop.GetMattingLaplacian(Math.Pow(10, -3));
                             Bitmap? b = null;
 
                             if (mode == 0)
@@ -1894,7 +1894,7 @@ namespace GetAlphaMatte
 
                                 this.CfopArray[i] = cfop;
 
-                                cfop.GetMattingLaplacian(Math.Pow(10, -7));
+                                cfop.GetMattingLaplacian(Math.Pow(10, -3));
                                 Bitmap? b = null;
 
                                 if (mode == 0)
@@ -2240,7 +2240,7 @@ namespace GetAlphaMatte
 
                             this.CfopArray[i] = cfop;
 
-                            cfop.GetMattingLaplacian(Math.Pow(10, -7));
+                            cfop.GetMattingLaplacian(Math.Pow(10, -3));
                             Bitmap? b = null;
 
                             if (mode == 0)
@@ -2278,7 +2278,7 @@ namespace GetAlphaMatte
 
                             this.CfopArray[i] = cfop;
 
-                            cfop.GetMattingLaplacian(Math.Pow(10, -7));
+                            cfop.GetMattingLaplacian(Math.Pow(10, -3));
                             Bitmap? b = null;
 
                             if (mode == 0)
@@ -2771,7 +2771,7 @@ namespace GetAlphaMatte
 
                                 this.CfopArray[i] = cfop;
 
-                                cfop.GetMattingLaplacian(Math.Pow(10, -7));
+                                cfop.GetMattingLaplacian(Math.Pow(10, -3));
                                 Bitmap? b = null;
 
                                 if (mode == 0)
@@ -2809,7 +2809,7 @@ namespace GetAlphaMatte
 
                                 this.CfopArray[i] = cfop;
 
-                                cfop.GetMattingLaplacian(Math.Pow(10, -7));
+                                cfop.GetMattingLaplacian(Math.Pow(10, -3));
                                 Bitmap? b = null;
 
                                 if (mode == 0)
