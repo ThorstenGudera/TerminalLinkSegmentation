@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AvoidAGrabCutEasy;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -22,30 +23,14 @@ namespace GetAlphaMatte
     {
         private int _w;
         private int _h;
-
-        public Bitmap Bmp { get; private set; }
-        public Bitmap? Trimap { get; private set; }
-        public Bitmap? MaskBitmap { get; private set; }
-        public double[][]? R { get; private set; } //matrix A
-        public List<List<double>>? RF { get; private set; } //matrix values, first container
-        //public List<List<int>> ColIndices { get; private set; }
-        //public List<int> RowIndices { get; private set; }
-        public double[]? N { get; private set; } //diag values
-        public Dictionary<int, Dictionary<int, int>>? IndexMappings { get; private set; }
-
         private Dictionary<int, Dictionary<int, int>>? _pos;
-        public double[]? B { get; private set; } //B-Vector
-        public double TrimapConfidence { get; private set; } = 100.0;
-
-        // amount of GS_SOR iterations to determine the first guess for CG
+        // amount of GS_SOR iterations to determine the first guess for CG/GMRes
         private const int PRE_OP_GSSOR = 20;
-
-        public event EventHandler<string>? ShowInfo;
-        public event EventHandler<string>? ShowInfoOuter;
-        public event EventHandler<GetAlphaMatte.ProgressEventArgs>? ShowProgess;
-
         private object _lockObject = new object();
+        private bool _cancellationPending = false;
+        private frmInfo? _frmInfo;
 
+        public Dictionary<int, Dictionary<int, int>>? IndexMappings { get; private set; }
         public bool CancellationPending
         {
             get
@@ -57,13 +42,24 @@ namespace GetAlphaMatte
                 _cancellationPending = value;
             }
         }
-        private bool _cancellationPending = false;
-        private frmInfo? _frmInfo;
-
+        public double[]? B { get; private set; } //B-Vector
+        public double TrimapConfidence { get; private set; } = 100.0;
+        public Bitmap Bmp { get; private set; }
+        public Bitmap? Trimap { get; private set; }
+        public Bitmap? MaskBitmap { get; private set; }
+        public double[][]? R { get; private set; } //matrix A
+        public List<List<double>>? RF { get; private set; } //matrix values, first container
+        public double[]? N { get; private set; } //diag values
+        //public List<List<int>> ColIndices { get; private set; }
+        //public List<int> RowIndices { get; private set; }
         public BlendParameters? BlendParameters { get; set; }
         public int LastRunNumber { get; private set; }
         public List<TrimapProblemInfo>? TrimapProblemInfos { get; private set; }
         public ClosedFormMatteOp[]? CfopArray { get; private set; }
+
+        public event EventHandler<string>? ShowInfo;
+        public event EventHandler<string>? ShowInfoOuter;
+        public event EventHandler<GetAlphaMatte.ProgressEventArgs>? ShowProgess;
 
         public ClosedFormMatteOp(Bitmap bmp, Bitmap trimap)
         {
@@ -81,6 +77,18 @@ namespace GetAlphaMatte
 
             int winWH = 3;
             int winWHH = 1;
+
+            //if (this.WinWH != 3)
+            //{
+            //    if ((this.WinWH & 0x01) != 1)
+            //        this.WinWH -= 1;
+
+            //    if (this.WinWH <= 1)
+            //        this.WinWH = 3;
+
+            //    winWH = this.WinWH;
+            //    winWHH = winWH / 2;
+            //}
 
             int winWH2 = winWH * winWH;
             int wh = w * h;
@@ -142,7 +150,7 @@ namespace GetAlphaMatte
                             double[] winCG = new double[winWH2];
                             double[] winCR = new double[winWH2];
 
-                            double[] mu = new double[winWH];
+                            double[] mu = new double[3];
 
                             for (int yW = y - winWHH, cY = 0; yW <= y + winWHH; yW++, cY++)
                             {
@@ -164,26 +172,26 @@ namespace GetAlphaMatte
                                 winI[i] = new double[3] { winCB[i], winCG[i], winCR[i] };
                             }
 
-                            double[][] winIT = new double[winWH][];
+                            double[][] winIT = new double[3][];
                             winIT[0] = winCB;
                             winIT[1] = winCG;
                             winIT[2] = winCR;
 
                             double[][] winIwinI = MatrixInverse.MatrixProduct(winIT, winI, false);
 
-                            for (int i = 0; i < winWH; i++)
+                            for (int i = 0; i < 3; i++)
                             {
-                                for (int j = 0; j < winWH; j++)
+                                for (int j = 0; j < 3; j++)
                                 {
                                     winIwinI[i][j] /= winWH2;
                                 }
                             }
 
-                            double[][] mumu = new double[winWH][];
+                            double[][] mumu = new double[3][];
 
                             for (int i = 0; i < mu.Length; i++)
                             {
-                                mumu[i] = new double[winWH];
+                                mumu[i] = new double[3];
 
                                 for (int j = 0; j < mu.Length; j++)
                                 {
@@ -191,13 +199,13 @@ namespace GetAlphaMatte
                                 }
                             }
 
-                            double[][] winImu = new double[winWH][];
+                            double[][] winImu = new double[3][];
 
-                            for (int i = 0; i < winWH; i++)
+                            for (int i = 0; i < 3; i++)
                             {
-                                winImu[i] = new double[winWH];
+                                winImu[i] = new double[3];
 
-                                for (int j = 0; j < winWH; j++)
+                                for (int j = 0; j < 3; j++)
                                 {
                                     winImu[i][j] = winIwinI[i][j] - mumu[i][j];
 
@@ -434,7 +442,7 @@ namespace GetAlphaMatte
                 List<int> ci = ci0.SelectMany(a => a).ToList();
 
                 //mapping, first: Column in Dense Matrix to Column in Sparse Matrix
-                //in row a of this.R, item b is mapped to column c of colindexes
+                //in a row of this.R, item b is mapped to column c of colindexes
                 Dictionary<int, Dictionary<int, int>> pos = new Dictionary<int, Dictionary<int, int>>();
 
                 //add items for all rows
