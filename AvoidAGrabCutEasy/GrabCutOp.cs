@@ -82,6 +82,7 @@ namespace AvoidAGrabCutEasy
         public float[,]? IGGLuminanceMap { get;  set; }
         internal LumMapApplicationSettings? LumMapSettings { get; set; }
         public bool UseLumMap { get; set; }
+        public int[,]? InitialMaskCopy { get; private set; }
 
         public event EventHandler<string>? ShowInfo;
         public event EventHandler<string>? ShowTHInfo;
@@ -284,6 +285,8 @@ namespace AvoidAGrabCutEasy
 
                 if (this.Mask == null)
                     return -5;
+                else
+                    this.InitialMaskCopy = CopyMask(this.Rc);
 
                 //ShowMaskToBmp();
 
@@ -336,6 +339,21 @@ namespace AvoidAGrabCutEasy
             }
 
             return -3;
+        }
+
+        private int[,] CopyMask(Rectangle r)
+        {
+            int[,] result = new int[this._w, this._h];
+            if (this.Mask != null)
+            {
+                for (int y = 0; y < this.Mask.GetLength(1); y++)
+                    for (int x = 0; x < this.Mask.GetLength(0); x++)
+                        if (this.Mask[x, y] == 0 && r.Contains(new Point(x, y)))
+                            result[x, y] = 4;
+                        else
+                            result[x, y] = 0;
+            }
+            return result;
         }
 
         private void ShowMaskToBmp()

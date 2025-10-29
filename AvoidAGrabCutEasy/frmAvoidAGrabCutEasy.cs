@@ -2283,6 +2283,35 @@ namespace AvoidAGrabCutEasy
                                     }
                             }
                     }
+
+                    p = (byte*)bmData.Scan0;
+                    pWork = (byte*)bmWork.Scan0;
+
+                    if (rectMode && scribbleMode)
+                        for (int y = 0; y < h; y++)
+                        {
+                            if (y + this._numShiftY > 0 && y + this._numShiftY < h)
+                                for (int x = 0; x < w; x++)
+                                {
+                                    if (x + this._numShiftX > 0 && x + this._numShiftX < w)
+                                    {
+                                        if (x < ww && y < hh && (m[x, y] == 1 || m[x, y] == 3))
+                                        {
+                                            p[(x + this._numShiftX) * 4 + (y + this._numShiftY) * stride] = pWork[x * 4 + y * stride];
+                                            p[(x + this._numShiftX) * 4 + (y + this._numShiftY) * stride + 1] = pWork[x * 4 + y * stride + 1];
+                                            p[(x + this._numShiftX) * 4 + (y + this._numShiftY) * stride + 2] = pWork[x * 4 + y * stride + 2];
+                                            p[(x + this._numShiftX) * 4 + (y + this._numShiftY) * stride + 3] = pWork[x * 4 + y * stride + 3];
+                                        }
+                                        else if (x < ww && y < hh && (m[x, y] == 0 || m[x, y] == 2))
+                                        {
+                                            p[(x + this._numShiftX) * 4 + (y + this._numShiftY) * stride] = 0;
+                                            p[(x + this._numShiftX) * 4 + (y + this._numShiftY) * stride + 1] = 0;
+                                            p[(x + this._numShiftX) * 4 + (y + this._numShiftY) * stride + 2] = 0;
+                                            p[(x + this._numShiftX) * 4 + (y + this._numShiftY) * stride + 3] = 0;
+                                        }
+                                    }
+                                }
+                        }
                 }
 
                 //and unlock the bmps
@@ -3711,6 +3740,36 @@ namespace AvoidAGrabCutEasy
                                     }
                             }
                     }
+
+
+                    p = (byte*)bmData.Scan0;
+                    pWork = (byte*)bmWork.Scan0;
+
+                    if (rectMode && scribbleMode)
+                        for (int y = 0; y < h; y++)
+                        {
+                            if (y + this._numShiftY > 0 && y + this._numShiftY < h)
+                                for (int x = 0; x < w; x++)
+                                {
+                                    if (x + this._numShiftX > 0 && x + this._numShiftX < w)
+                                    {
+                                        if (x < ww && y < hh && (m[x, y] == 1 || m[x, y] == 3))
+                                        {
+                                            p[(x + this._numShiftX) * 4 + (y + this._numShiftY) * stride] = pWork[x * 4 + y * stride];
+                                            p[(x + this._numShiftX) * 4 + (y + this._numShiftY) * stride + 1] = pWork[x * 4 + y * stride + 1];
+                                            p[(x + this._numShiftX) * 4 + (y + this._numShiftY) * stride + 2] = pWork[x * 4 + y * stride + 2];
+                                            p[(x + this._numShiftX) * 4 + (y + this._numShiftY) * stride + 3] = pWork[x * 4 + y * stride + 3];
+                                        }
+                                        else if (x < ww && y < hh && (m[x, y] == 0 || m[x, y] == 2))
+                                        {
+                                            p[(x + this._numShiftX) * 4 + (y + this._numShiftY) * stride] = 0;
+                                            p[(x + this._numShiftX) * 4 + (y + this._numShiftY) * stride + 1] = 0;
+                                            p[(x + this._numShiftX) * 4 + (y + this._numShiftY) * stride + 2] = 0;
+                                            p[(x + this._numShiftX) * 4 + (y + this._numShiftY) * stride + 3] = 0;
+                                        }
+                                    }
+                                }
+                        }
                 }
 
                 bTmp.UnlockBits(bmWork);
