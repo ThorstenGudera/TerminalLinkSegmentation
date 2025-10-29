@@ -143,20 +143,19 @@ namespace AvoidAGrabCutEasy
         private bool _dontAskOnClosing;
         private bool _lumMapRunning;
         private LuminanceMapOp? _lop;
+        private int _maxSizeBU;
+        private int _previewSize = 640;
 
         public event EventHandler<string>? ShowInfo;
         //public event EventHandler<string> BoundaryError;
-
-        public frmAvoidAGrabCutEasy()
-        {
-            InitializeComponent();
-        }
 
         public frmAvoidAGrabCutEasy(Bitmap bmp, string basePathAddition)
         {
             InitializeComponent();
 
             CachePathAddition = basePathAddition;
+
+            this._maxSizeBU = Math.Max(bmp.Width, bmp.Height);
 
             //HelperFunctions.HelperFunctions.SetFormSizeBig(this);
             this.CenterToScreen();
@@ -1774,6 +1773,13 @@ namespace AvoidAGrabCutEasy
 
             if (!this.backgroundWorker1.IsBusy && this.helplineRulerCtrl1.Bmp != null)
             {
+                if (this.cbPreviewMode.Checked)
+                {
+                    this._maxSizeBU = (int)this.numMaxSize.Value;
+                    this.numMaxSize.Value = this._previewSize;
+                    this._maxSize = (int)this.numMaxSize.Value;
+                }
+
                 //get the resizeFactor
                 double res = CheckWidthHeight(this.helplineRulerCtrl1.Bmp, true);
                 //this.lblResPic.Text = res.ToString();
@@ -2147,8 +2153,21 @@ namespace AvoidAGrabCutEasy
                             LuminanceMapOp lop = new LuminanceMapOp();
                             lop.ProgressPlus += lop_ProgressPlus;
                             using Bitmap bmp = new Bitmap(this._bmpBU);
-                            float[,]? lMap = lop.ComputeInvLuminanceMapSync(bmp);
-                            this._iggLuminanceMap = lMap;
+
+                            float[,]? lMap = null;
+
+                            if (this.cbPreviewMode.Checked)
+                            {
+                                using Bitmap b = ResampleDown(this._bmpBU, resPic);
+                                using Bitmap bmp2 = new Bitmap(bWork.Width, bWork.Height);
+                                using Graphics gxZ = Graphics.FromImage(bmp2);
+                                gxZ.DrawImage(b, 0, 0, bmp2.Width, bmp2.Height);
+
+                                lMap = lop.ComputeInvLuminanceMapSync(bmp2);
+                            }
+                            else
+                                lMap = lop.ComputeInvLuminanceMapSync(bmp);
+
                             this._gc.IGGLuminanceMap = (this._useLumMapBasePic && this._iggLuminanceMap2 != null) ? this._iggLuminanceMap2 : lMap;
                             this._gc.LumMapSettings = this._lmas;
                             lop.ProgressPlus -= lop_ProgressPlus;
@@ -2590,6 +2609,9 @@ namespace AvoidAGrabCutEasy
             this.toolStripStatusLabel4.Text = "done";
 
             this.cbAutoCropFromOrig.Enabled = this.btnCropFromOrig.Enabled = true;
+
+            this.numMaxSize.Value = (decimal)this._maxSizeBU;
+            this._maxSize = (int)this.numMaxSize.Value;
 
             if (this.timer1.Enabled)
                 this.timer1.Stop();
@@ -4459,8 +4481,42 @@ namespace AvoidAGrabCutEasy
                 this.toolStripProgressBar1.Visible = true;
                 LuminanceMapOp lop = new LuminanceMapOp();
                 lop.ProgressPlus += lop_ProgressPlus;
-                using Bitmap bmp = new Bitmap(this.helplineRulerCtrl1.Bmp);
-                float[,]? lMap = await lop.ComputeInvLuminanceMap(bmp);
+
+                float[,]? lMap = null;
+
+                if (this.cbPreviewMode.Checked)
+                {
+                    int wh = Math.Max(this.helplineRulerCtrl1.Bmp.Width, this.helplineRulerCtrl1.Bmp.Height);
+                    double fc = wh / (double)this._previewSize;
+
+                    int w = 4;
+                    int h = 4;
+
+                    if ((int)(wh / fc) == this._previewSize)
+                    {
+                        if (this.helplineRulerCtrl1.Bmp.Width == wh)
+                        {
+                            w = this._previewSize;
+                            h = (int)(this.helplineRulerCtrl1.Bmp.Height / fc);
+
+                        }
+                        else if (this.helplineRulerCtrl1.Bmp.Height == wh)
+                        {
+                            h = this._previewSize;
+                            w = (int)(this.helplineRulerCtrl1.Bmp.Width / fc);
+                        }
+                    }
+
+                    using Bitmap bmp2 = new Bitmap(w, h);
+                    using Graphics gxZ = Graphics.FromImage(bmp2);
+                    gxZ.DrawImage(this.helplineRulerCtrl1.Bmp, 0, 0, bmp2.Width, bmp2.Height);
+
+                    lMap = await lop.ComputeInvLuminanceMap(bmp2);
+                }
+                else
+                    using (Bitmap bmp = new Bitmap(this.helplineRulerCtrl1.Bmp))
+                        lMap = await lop.ComputeInvLuminanceMap(bmp);
+
                 this._iggLuminanceMap = lMap;
                 lop.ProgressPlus -= lop_ProgressPlus;
                 this.btnGo.Enabled = this.btnGetOutline.Enabled = true;
@@ -5684,8 +5740,42 @@ namespace AvoidAGrabCutEasy
                 LuminanceMapOp lop = new LuminanceMapOp();
                 this._lop = lop;
                 lop.ProgressPlus += lop_ProgressPlus;
-                using Bitmap bmp = new Bitmap(this._bmpBU);
-                float[,]? lMap = await lop.ComputeInvLuminanceMap(bmp);
+
+                float[,]? lMap = null;
+
+                if (this.cbPreviewMode.Checked)
+                {
+                    int wh = Math.Max(this._bmpBU.Width, this._bmpBU.Height);
+                    double fc = wh / (double)this._previewSize;
+
+                    int w = 4;
+                    int h = 4;
+
+                    if ((int)(wh / fc) == this._previewSize)
+                    {
+                        if (this._bmpBU.Width == wh)
+                        {
+                            w = this._previewSize;
+                            h = (int)(this._bmpBU.Height / fc);
+
+                        }
+                        else if (this._bmpBU.Height == wh)
+                        {
+                            h = this._previewSize;
+                            w = (int)(this._bmpBU.Width / fc);
+                        }
+                    }
+
+                    using Bitmap bmp2 = new Bitmap(w, h);
+                    using Graphics gxZ = Graphics.FromImage(bmp2);
+                    gxZ.DrawImage(this._bmpBU, 0, 0, bmp2.Width, bmp2.Height);
+
+                    lMap = await lop.ComputeInvLuminanceMap(bmp2);
+                }
+                else
+                    using (Bitmap bmp = new Bitmap(this._bmpBU))
+                        lMap = await lop.ComputeInvLuminanceMap(bmp);
+
                 this._iggLuminanceMap = lMap;
                 lop.ProgressPlus -= lop_ProgressPlus;
                 this.btnGo.Enabled = this.btnGetOutline.Enabled = true;
@@ -5704,60 +5794,98 @@ namespace AvoidAGrabCutEasy
             {
                 if (this._bmpBU != null && this.CachePathAddition != null)
                 {
-                    using frmLumMapSettings frm = new(this._bmpBU, this.CachePathAddition);
-                    frm.SetupCache();
+                    Bitmap? bmp2 = this._bmpBU;
 
-                    frm.numF1.Value = (decimal)this._lmas.Factor1;
-                    frm.numTh.Value = (decimal)this._lmas.Threshold;
-                    if (this._lmas.ValsLessThanTh)
-                        frm.rbLessThan.Checked = true;
-                    else
-                        frm.rbGreaterThan.Checked = true;
-                    frm.numF2.Value = (decimal)this._lmas.Factor2;
-                    frm.numExp1.Value = (decimal)this._lmas.Exponent1;
-                    frm.numExp2.Value = (decimal)this._lmas.Exponent2;
-                    frm.numThMultiplier.Value = (decimal)-Math.Log10(this._lmas.ThMultiplier);
-                    frm.cbAuto.Checked = this._lmas.MultAuto;
-                    frm.cbAppSettingsOnly.Checked = true;
-                    frm.cbDoSecondMult.Checked = this._lmas.DoSecondMultiplication;
-                    frm.cbDoFirstMult.Checked = this._lmas.DoFirstMultiplication;
-
-                    if (frm.ShowDialog() == DialogResult.OK)
+                    if (this.cbPreviewMode.Checked)
                     {
-                        if (frm.FBitmap != null && !frm.cbAppSettingsOnly.Checked)
-                        {
-                            using Bitmap? bmp = new Bitmap(frm.FBitmap);
-                            this._iggLuminanceMap2 = LuminanceMapOp.ComputeLuminanceMapFromPicSync(bmp);
+                        int wh = Math.Max(this._bmpBU.Width, this._bmpBU.Height);
+                        double fc = wh / (double)this._previewSize;
 
-                            this.cbUseLumMapBasePic.Enabled = true;
+                        int w = 4;
+                        int h = 4;
+
+                        if ((int)(wh / fc) == this._previewSize)
+                        {
+                            if (this._bmpBU.Width == wh)
+                            {
+                                w = this._previewSize;
+                                h = (int)(this._bmpBU.Height / fc);
+
+                            }
+                            else if (this._bmpBU.Height == wh)
+                            {
+                                h = this._previewSize;
+                                w = (int)(this._bmpBU.Width / fc);
+                            }
                         }
 
-                        float f1 = (float)frm.numF1.Value;
-                        double th = (double)frm.numTh.Value;
-                        bool ltth = frm.rbLessThan.Checked;
-                        float f2 = (float)frm.numF2.Value;
-                        double e1 = (double)frm.numExp1.Value;
-                        double e2 = (double)frm.numExp2.Value;
-                        double m = Math.Pow(10, (double)-frm.numThMultiplier.Value);
-                        bool auto = frm.cbAuto.Checked;
-                        bool do2nd = frm.cbDoSecondMult.Checked;
-                        bool do1st = frm.cbDoFirstMult.Checked;
+                        bmp2 = new Bitmap(w, h);
+                        using Graphics gxZ = Graphics.FromImage(bmp2);
+                        gxZ.DrawImage(this._bmpBU, 0, 0, bmp2.Width, bmp2.Height);
+                    }
 
-                        LumMapApplicationSettings lmas = new()
+                    using (frmLumMapSettings frm = new frmLumMapSettings(bmp2, this.CachePathAddition))
+                    {
+                        frm.SetupCache();
+
+                        frm.numF1.Value = (decimal)this._lmas.Factor1;
+                        frm.numTh.Value = (decimal)this._lmas.Threshold;
+                        if (this._lmas.ValsLessThanTh)
+                            frm.rbLessThan.Checked = true;
+                        else
+                            frm.rbGreaterThan.Checked = true;
+                        frm.numF2.Value = (decimal)this._lmas.Factor2;
+                        frm.numExp1.Value = (decimal)this._lmas.Exponent1;
+                        frm.numExp2.Value = (decimal)this._lmas.Exponent2;
+                        frm.numThMultiplier.Value = (decimal)-Math.Log10(this._lmas.ThMultiplier);
+                        frm.cbAuto.Checked = this._lmas.MultAuto;
+                        frm.cbAppSettingsOnly.Checked = true;
+                        frm.cbDoSecondMult.Checked = this._lmas.DoSecondMultiplication;
+                        frm.cbDoFirstMult.Checked = this._lmas.DoFirstMultiplication;
+
+                        if (frm.ShowDialog() == DialogResult.OK)
                         {
-                            Factor1 = f1,
-                            Threshold = th,
-                            ValsLessThanTh = ltth,
-                            Factor2 = f2,
-                            Exponent1 = e1,
-                            Exponent2 = e2,
-                            ThMultiplier = m,
-                            MultAuto = auto,
-                            DoSecondMultiplication = do2nd,
-                            DoFirstMultiplication = do1st
-                        };
+                            if (frm.FBitmap != null && !frm.cbAppSettingsOnly.Checked)
+                            {
+                                using (Bitmap bmp = new Bitmap(frm.FBitmap))
+                                    this._iggLuminanceMap2 = LuminanceMapOp.ComputeLuminanceMapFromPicSync(bmp);
 
-                        this._lmas = lmas;
+                                this.cbUseLumMapBasePic.Enabled = true;
+                            }
+
+                            float f1 = (float)frm.numF1.Value;
+                            double th = (double)frm.numTh.Value;
+                            bool ltth = frm.rbLessThan.Checked;
+                            float f2 = (float)frm.numF2.Value;
+                            double e1 = (double)frm.numExp1.Value;
+                            double e2 = (double)frm.numExp2.Value;
+                            double m = Math.Pow(10, (double)-frm.numThMultiplier.Value);
+                            bool auto = frm.cbAuto.Checked;
+                            bool do2nd = frm.cbDoSecondMult.Checked;
+                            bool do1st = frm.cbDoFirstMult.Checked;
+
+                            LumMapApplicationSettings lmas = new LumMapApplicationSettings()
+                            {
+                                Factor1 = f1,
+                                Threshold = th,
+                                ValsLessThanTh = ltth,
+                                Factor2 = f2,
+                                Exponent1 = e1,
+                                Exponent2 = e2,
+                                ThMultiplier = m,
+                                MultAuto = auto,
+                                DoSecondMultiplication = do2nd,
+                                DoFirstMultiplication = do1st
+                            };
+
+                            this._lmas = lmas;
+                        }
+                    }
+
+                    if (bmp2 != null && !bmp2.Equals(this._bmpBU))
+                    {
+                        bmp2.Dispose();
+                        bmp2 = null;
                     }
                 }
             }
@@ -5844,14 +5972,22 @@ namespace AvoidAGrabCutEasy
             {
                 using frmQuickExtract frm = new(this.helplineRulerCtrl1.Bmp);
 
+                if (this.cbPreResample.Checked)
+                    frm.PreResample = true;
                 frm.CachePathAddition = this.CachePathAddition;
                 frm.SetupCache();
+
+                frm.SetClampVal(0.95);
+
+                Bitmap? bCF = null;
 
                 if (frm.ShowDialog() == DialogResult.OK)
                 {
                     Bitmap? b = null;
                     if (frm.FBitmap != null)
-                        b = new Bitmap(frm.FBitmap);
+                        b = new Bitmap(ResampleBack(frm.FBitmap, frm.PreResampleFactor));
+
+                    bCF = b;
 
                     if (frm.cbLoadTo.Checked && b != null)
                     {
@@ -5880,9 +6016,9 @@ namespace AvoidAGrabCutEasy
                         b = null;
                     }
 
-                    if (frm.cbOutline.Checked && frm.FBitmap != null)
+                    if (frm.cbOutline.Checked && bCF != null)
                     {
-                        using Bitmap bmp = new Bitmap(frm.FBitmap);
+                        using Bitmap bmp = new Bitmap(bCF);
                         List<ChainCode>? c = GetBoundary(bmp, 0, false);
                         c = c?.OrderByDescending(x => x.Coord.Count).ToList();
 
@@ -5895,8 +6031,64 @@ namespace AvoidAGrabCutEasy
 
                         this._pic_changed = true;
                     }
+
+                    //dont dispose bCF, its now HLC2.Bmp
+
+                    this.cbOutline.Enabled = this.numOutlineWH.Enabled = true;
                 }
             }
+        }
+
+        private Bitmap ResampleBack(Bitmap fBitmap, int factor)
+        {
+            Bitmap bmp = fBitmap;
+
+            if (this.helplineRulerCtrl1.Bmp != null && factor != 1)
+            {
+                using Bitmap b = new Bitmap(this.helplineRulerCtrl1.Bmp.Width, this.helplineRulerCtrl1.Bmp.Height);
+                using Graphics gx = Graphics.FromImage(b);
+                gx.InterpolationMode = InterpolationMode.NearestNeighbor;
+                gx.DrawImage(fBitmap, 0, 0, b.Width, b.Height);
+
+                //crop the shape from the original image
+                bmp = CropAlpha(this.helplineRulerCtrl1.Bmp, b);
+            }
+
+            return bmp;
+        }
+
+        private unsafe Bitmap CropAlpha(Bitmap bmp, Bitmap b)
+        {
+            int w = bmp.Width;
+            int h = bmp.Height;
+
+            Bitmap bRes = new Bitmap(bmp);
+            BitmapData bmD = bRes.LockBits(new Rectangle(0, 0, w, h), ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
+            BitmapData bmR = b.LockBits(new Rectangle(0, 0, w, h), ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
+            int stride = bmD.Stride;
+
+            Parallel.For(0, h, y =>
+            {
+                byte* p = (byte*)bmD.Scan0;
+                byte* pR = (byte*)bmR.Scan0;
+
+                p += y * stride;
+                pR += y * stride;
+
+                for (int x = 0; x < w; x++)
+                {
+                    if (pR[3] == 0)
+                        p[0] = p[1] = p[2] = p[3] = 0;
+
+                    p += 4;
+                    pR += 4;
+                }
+            });
+
+            bRes.UnlockBits(bmD);
+            b.UnlockBits(bmR);
+
+            return bRes;
         }
 
         private void AddPointsToScribblePathFromFrmQuickExtract(List<ChainCode>? c, int wh)
@@ -6156,8 +6348,17 @@ namespace AvoidAGrabCutEasy
             if (this._iggLuminanceMap == null)
                 return true;
 
-            if (this._iggLuminanceMap?.GetLength(0) == w && this._iggLuminanceMap?.GetLength(1) == h)
+            if (!this.cbPreviewMode.Checked && this._iggLuminanceMap?.GetLength(0) == w && this._iggLuminanceMap?.GetLength(1) == h)
                 return true;
+
+            if (this.cbPreviewMode.Checked && this._iggLuminanceMap != null)
+            {
+                int wh = Math.Max(this._iggLuminanceMap.GetLength(0), this._iggLuminanceMap.GetLength(1));
+                if (wh != this._previewSize)
+                    this._iggLuminanceMap = null;
+
+                return true;
+            }
 
             return false;
         }
@@ -6306,6 +6507,29 @@ namespace AvoidAGrabCutEasy
                         AddPointsToScribblePathFromFrmQuickExtract(c, wh);
 
                         this._pic_changed = true;
+                    }
+                }
+            }
+        }
+
+        private void btnRScribbles_Click(object sender, EventArgs e)
+        {
+            if (this._scribbles != null)
+            {
+                using frmResizeScribbles frm = new();
+
+                if (frm.ShowDialog() == DialogResult.OK)
+                {
+                    double resPic = 1.0 / (double)frm.numRScribblesFactor.Value;
+
+                    if (resPic != 1.0 && resPic > 0)
+                    {
+                        Dictionary<int, Dictionary<int, List<List<Point>>>> scribbles2 = ResizeAllScribbles(this._scribbles, resPic);
+                        this._scribbles = scribbles2;
+                        List<Tuple<int, int, int, bool, List<List<Point>>>> scribbleSeq2 = ResizeScribbleSeq(this._scribbleSeq, resPic, true);
+                        this._scribbleSeq = scribbleSeq2;
+
+                        this.helplineRulerCtrl1.dbPanel1.Invalidate();
                     }
                 }
             }

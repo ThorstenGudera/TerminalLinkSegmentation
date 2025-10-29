@@ -4314,5 +4314,28 @@ namespace AvoidAGrabCutEasy
                 this.backgroundWorker6.RunWorkerCompleted += backgroundWorker6_RunWorkerCompleted;
             }
         }
+
+        private void btnRScribbles_Click(object sender, EventArgs e)
+        {
+            if (this._scribbles != null)
+            {
+                using frmResizeScribbles frm = new();
+
+                if (frm.ShowDialog() == DialogResult.OK)
+                {
+                    double resPic = 1.0 / (double)frm.numRScribblesFactor.Value;
+
+                    if (resPic != 1.0 && resPic > 0)
+                    {
+                        Dictionary<int, Dictionary<int, List<List<Point>>>> scribbles2 = ResizeAllScribbles(this._scribbles, resPic);
+                        this._scribbles = scribbles2;
+                        List<Tuple<int, int, int, bool, List<List<Point>>>> scribbleSeq2 = ResizeScribbleSeq(this._scribbleSeq, resPic, true);
+                        this._scribbleSeq = scribbleSeq2;
+
+                        this.helplineRulerCtrl1.dbPanel1.Invalidate();
+                    }
+                }
+            }
+        }
     }
 }

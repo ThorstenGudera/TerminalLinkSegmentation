@@ -73,6 +73,8 @@ namespace QuickExtract2
         }
 
         public Bitmap? OrigBmp { get; set; }
+        public bool PreResample { get; set; }
+        public int PreResampleFactor { get; set; } = 1;
 
         private bool _pic_changed = false;
 
@@ -1761,6 +1763,61 @@ namespace QuickExtract2
             this.ComboBox2.SelectedIndex = 4;
 
             this.CheckBox12_CheckedChanged(this.CheckBox12, new EventArgs());
+            this.CheckBox4_CheckedChanged(this.quickExtractingCtrl1.cbRunAlg, new EventArgs());
+
+            if (this.PreResample)
+                PreResamplePic();
+        }
+
+        private void PreResamplePic()
+        {
+            if (this.helplineRulerCtrl1.Bmp != null)
+            {
+                int f = 1;
+                if (Math.Max(this.helplineRulerCtrl1.Bmp.Width, this.helplineRulerCtrl1.Bmp.Height) > 1000)
+                    f = 2;
+                if (Math.Max(this.helplineRulerCtrl1.Bmp.Width, this.helplineRulerCtrl1.Bmp.Height) > 2000)
+                    f = 4;
+
+                this.PreResampleFactor = f;
+
+                Bitmap bmp = new Bitmap(this.helplineRulerCtrl1.Bmp.Width / f, this.helplineRulerCtrl1.Bmp.Height / f);
+                using Graphics gx = Graphics.FromImage(bmp);
+                gx.DrawImage(this.helplineRulerCtrl1.Bmp, 0, 0, bmp.Width, bmp.Height);
+
+                this.SetBitmap(this.helplineRulerCtrl1.Bmp, bmp, this.helplineRulerCtrl1, "Bmp");
+
+                this._bmpWidth = this.helplineRulerCtrl1.Bmp.Width;
+                this._bmpHeight = this.helplineRulerCtrl1.Bmp.Height;
+
+                double faktor = System.Convert.ToDouble(helplineRulerCtrl1.dbPanel1.Width) / System.Convert.ToDouble(helplineRulerCtrl1.dbPanel1.Height);
+                double multiplier = System.Convert.ToDouble(this.helplineRulerCtrl1.Bmp.Width) / System.Convert.ToDouble(this.helplineRulerCtrl1.Bmp.Height);
+                if (multiplier >= faktor)
+                    this.helplineRulerCtrl1.Zoom = System.Convert.ToSingle(System.Convert.ToDouble(helplineRulerCtrl1.dbPanel1.Width) / System.Convert.ToDouble(this.helplineRulerCtrl1.Bmp.Width));
+                else
+                    this.helplineRulerCtrl1.Zoom = System.Convert.ToSingle(System.Convert.ToDouble(helplineRulerCtrl1.dbPanel1.Height) / System.Convert.ToDouble(this.helplineRulerCtrl1.Bmp.Height));
+                //this._zoomWidth = false;
+
+                this.helplineRulerCtrl1.dbPanel1.AutoScrollMinSize = new Size(System.Convert.ToInt32(this.helplineRulerCtrl1.Bmp.Width * this.helplineRulerCtrl1.Zoom), System.Convert.ToInt32(this.helplineRulerCtrl1.Bmp.Height * this.helplineRulerCtrl1.Zoom));
+                this.helplineRulerCtrl1.MakeBitmap(this.helplineRulerCtrl1.Bmp);
+
+                Bitmap? bC = new Bitmap(bmp);
+                this.SetBitmap(ref this._bmpBU, ref bC);
+
+                this.firstClick = true;
+                Bitmap? bC2 = new Bitmap(bmp);
+                this.SetBitmap(ref this.imgDataPic, ref bC2);
+
+                if (this.imgDataPic != null)
+                {
+                    Bitmap? bC4 = new Bitmap(this.imgDataPic.Width, this.imgDataPic.Height);
+                    this.SetBitmap(ref this.bmpForValueComputation, ref bC4);
+                }
+                else
+                    throw new Exception("Error while setting resampled pics");
+
+                this.helplineRulerCtrl1.dbPanel1.Invalidate();
+            }
         }
 
         private void button4_Click(object sender, EventArgs e)
@@ -2624,7 +2681,7 @@ namespace QuickExtract2
                 }
                 else if (qe != null)
                 {
-                    if (qe.CurPath != null && qe.CurPath[qe.CurPath.Count - 1].Count > 1 && qe.SeedPoints != null && qe.SeedPoints.Count > 2)
+                    if (qe.CurPath != null && qe.CurPath.Count > 0 && qe.CurPath[qe.CurPath.Count - 1].Count > 1 && qe.SeedPoints != null && qe.SeedPoints.Count > 2)
                         if (qe.CurPath[qe.CurPath.Count - 1][qe.CurPath[qe.CurPath.Count - 1].Count - 2] == qe.SeedPoints[qe.SeedPoints.Count - 2])
                             qe.CurPath[qe.CurPath.Count - 1].RemoveAt(qe.CurPath[qe.CurPath.Count - 1].Count - 2);
 
@@ -2936,6 +2993,10 @@ namespace QuickExtract2
         private void CheckBox5_CheckedChanged(object? sender, EventArgs e)
         {
             this.quickExtractingCtrl1.cbAutoSeeds.Enabled = this.quickExtractingCtrl1.cbRunOnMouseMove.Checked;
+            if (this.quickExtractingCtrl1.cbRunOnMouseMove.Checked)
+                this.quickExtractingCtrl1.numDisplayEdgeAt.Value = (decimal)2000;
+            else
+                this.quickExtractingCtrl1.numDisplayEdgeAt.Value = (decimal)200;
         }
 
         private void Timer2_Tick(object sender, EventArgs e)
@@ -3753,7 +3814,9 @@ namespace QuickExtract2
         {
             if (this.helplineRulerCtrl1.Bmp != null && this.backgroundWorker1.IsBusy == false)
             {
-                using (frmSavedPaths frm8 = new frmSavedPaths(this.helplineRulerCtrl1.Bmp, this.quickExtractingCtrl1.ClonePath(this.quickExtractingCtrl1.CurPath), CloneList(this.quickExtractingCtrl1.PathList)))
+                using (frmSavedPaths frm8 = new frmSavedPaths(this.helplineRulerCtrl1.Bmp,
+                    this.quickExtractingCtrl1.ClonePath(this.quickExtractingCtrl1.CurPath),
+                    CloneList(this.quickExtractingCtrl1.PathList), this))
                 {
                     if (frm8.ShowDialog() == DialogResult.OK)
                     {
@@ -4071,7 +4134,7 @@ namespace QuickExtract2
                 List<ChainCode>? c = GetBoundary(bmp, 0, false);
                 c = c?.OrderByDescending(x => x.Coord.Count).ToList();
 
-                int wh = (int)this.numWH.Value;
+                int wh = (int)this.numWH.Value / this.PreResampleFactor;
 
                 AddPointsToScribblePathFromFrmQuickExtract(c, wh);
 
@@ -4267,6 +4330,12 @@ namespace QuickExtract2
                     }
                 }
             }
+        }
+
+        public void SetClampVal(double v)
+        {
+            this.quickExtractingCtrl1.numValCl.Value = (decimal)v;
+            this.NumericUpDown2_ValueChanged(this.quickExtractingCtrl1.numValCl, new EventArgs());
         }
     }
 }

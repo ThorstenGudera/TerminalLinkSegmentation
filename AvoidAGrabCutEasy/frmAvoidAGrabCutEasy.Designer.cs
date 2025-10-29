@@ -31,6 +31,8 @@
             components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmAvoidAGrabCutEasy));
             panel1 = new Panel();
+            cbPreResample = new CheckBox();
+            cbPreviewMode = new CheckBox();
             label13 = new Label();
             btnLoadHLC2ToOutline = new Button();
             btnLoadToHLC1 = new Button();
@@ -163,6 +165,7 @@
             timer1 = new System.Windows.Forms.Timer(components);
             backgroundWorker4 = new System.ComponentModel.BackgroundWorker();
             timer2 = new System.Windows.Forms.Timer(components);
+            btnRScribbles = new Button();
             panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numOutlineWH).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numComponents2).BeginInit();
@@ -188,6 +191,9 @@
             // panel1
             // 
             panel1.AutoScroll = true;
+            panel1.Controls.Add(btnRScribbles);
+            panel1.Controls.Add(cbPreResample);
+            panel1.Controls.Add(cbPreviewMode);
             panel1.Controls.Add(label13);
             panel1.Controls.Add(btnLoadHLC2ToOutline);
             panel1.Controls.Add(btnLoadToHLC1);
@@ -304,6 +310,30 @@
             panel1.TabIndex = 0;
             panel1.MouseDoubleClick += panel1_MouseDoubleClick;
             panel1.MouseDown += panel1_MouseDown;
+            // 
+            // cbPreResample
+            // 
+            cbPreResample.AutoSize = true;
+            cbPreResample.Checked = true;
+            cbPreResample.CheckState = CheckState.Checked;
+            cbPreResample.Location = new Point(88, 193);
+            cbPreResample.Name = "cbPreResample";
+            cbPreResample.Size = new Size(97, 19);
+            cbPreResample.TabIndex = 755;
+            cbPreResample.Text = "pre Resample";
+            cbPreResample.UseVisualStyleBackColor = true;
+            // 
+            // cbPreviewMode
+            // 
+            cbPreviewMode.AutoSize = true;
+            cbPreviewMode.Checked = true;
+            cbPreviewMode.CheckState = CheckState.Checked;
+            cbPreviewMode.Location = new Point(632, 167);
+            cbPreviewMode.Name = "cbPreviewMode";
+            cbPreviewMode.Size = new Size(98, 19);
+            cbPreviewMode.TabIndex = 754;
+            cbPreviewMode.Text = "previewMode";
+            cbPreviewMode.UseVisualStyleBackColor = true;
             // 
             // label13
             // 
@@ -440,7 +470,7 @@
             // 
             // btnTScribbles
             // 
-            btnTScribbles.Location = new Point(86, 191);
+            btnTScribbles.Location = new Point(777, 40);
             btnTScribbles.Name = "btnTScribbles";
             btnTScribbles.Size = new Size(113, 23);
             btnTScribbles.TabIndex = 743;
@@ -1724,6 +1754,16 @@
             timer2.Interval = 5000;
             timer2.Tick += timer2_Tick;
             // 
+            // btnRScribbles
+            // 
+            btnRScribbles.Location = new Point(777, 64);
+            btnRScribbles.Name = "btnRScribbles";
+            btnRScribbles.Size = new Size(113, 23);
+            btnRScribbles.TabIndex = 756;
+            btnRScribbles.Text = "resize scribbles";
+            btnRScribbles.UseVisualStyleBackColor = true;
+            btnRScribbles.Click += btnRScribbles_Click;
+            // 
             // frmAvoidAGrabCutEasy
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -1900,5 +1940,8 @@
         private Button btnLoadToHLC1;
         private Label label13;
         private Button btnLoadHLC2ToOutline;
+        private CheckBox cbPreResample;
+        private CheckBox cbPreviewMode;
+        private Button btnRScribbles;
     }
 }

@@ -64,6 +64,8 @@
             cbLSBmp = new CheckBox();
             Label20 = new Label();
             panel1 = new Panel();
+            label22 = new Label();
+            btnAlphaCurve = new Button();
             label21 = new Label();
             btnAlphaMatteDraw = new Button();
             cbExcludeFG = new CheckBox();
@@ -128,8 +130,7 @@
             backgroundWorker3 = new System.ComponentModel.BackgroundWorker();
             backgroundWorker4 = new System.ComponentModel.BackgroundWorker();
             backgroundWorker6 = new System.ComponentModel.BackgroundWorker();
-            label22 = new Label();
-            btnAlphaCurve = new Button();
+            btnRScribbles = new Button();
             statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
@@ -518,6 +519,7 @@
             // panel1
             // 
             panel1.AutoScroll = true;
+            panel1.Controls.Add(btnRScribbles);
             panel1.Controls.Add(label22);
             panel1.Controls.Add(btnAlphaCurve);
             panel1.Controls.Add(label21);
@@ -584,6 +586,26 @@
             panel1.Size = new Size(1479, 267);
             panel1.TabIndex = 226;
             // 
+            // label22
+            // 
+            label22.AutoSize = true;
+            label22.Location = new Point(1244, 209);
+            label22.Name = "label22";
+            label22.Size = new Size(69, 15);
+            label22.TabIndex = 749;
+            label22.Text = "AlphaCurve";
+            // 
+            // btnAlphaCurve
+            // 
+            btnAlphaCurve.Location = new Point(1331, 202);
+            btnAlphaCurve.Margin = new Padding(4, 3, 4, 3);
+            btnAlphaCurve.Name = "btnAlphaCurve";
+            btnAlphaCurve.Size = new Size(88, 27);
+            btnAlphaCurve.TabIndex = 748;
+            btnAlphaCurve.Text = "Go";
+            btnAlphaCurve.UseVisualStyleBackColor = true;
+            btnAlphaCurve.Click += btnAlphaCurve_Click;
+            // 
             // label21
             // 
             label21.AutoSize = true;
@@ -645,7 +667,7 @@
             // 
             // btnTScribbles
             // 
-            btnTScribbles.Location = new Point(355, 185);
+            btnTScribbles.Location = new Point(480, 193);
             btnTScribbles.Name = "btnTScribbles";
             btnTScribbles.Size = new Size(113, 23);
             btnTScribbles.TabIndex = 724;
@@ -1277,25 +1299,16 @@
             backgroundWorker6.ProgressChanged += backgroundWorker6_ProgressChanged;
             backgroundWorker6.RunWorkerCompleted += backgroundWorker6_RunWorkerCompleted;
             // 
-            // label22
+            // btnRScribbles
             // 
-            label22.AutoSize = true;
-            label22.Location = new Point(1244, 209);
-            label22.Name = "label22";
-            label22.Size = new Size(69, 15);
-            label22.TabIndex = 749;
-            label22.Text = "AlphaCurve";
-            // 
-            // btnAlphaCurve
-            // 
-            btnAlphaCurve.Location = new Point(1331, 202);
-            btnAlphaCurve.Margin = new Padding(4, 3, 4, 3);
-            btnAlphaCurve.Name = "btnAlphaCurve";
-            btnAlphaCurve.Size = new Size(88, 27);
-            btnAlphaCurve.TabIndex = 748;
-            btnAlphaCurve.Text = "Go";
-            btnAlphaCurve.UseVisualStyleBackColor = true;
-            btnAlphaCurve.Click += btnAlphaCurve_Click;
+            btnRScribbles.Location = new Point(356, 193);
+            btnRScribbles.Margin = new Padding(4, 3, 4, 3);
+            btnRScribbles.Name = "btnRScribbles";
+            btnRScribbles.Size = new Size(117, 23);
+            btnRScribbles.TabIndex = 750;
+            btnRScribbles.Text = "resize scribbles";
+            btnRScribbles.UseVisualStyleBackColor = true;
+            btnRScribbles.Click += btnRScribbles_Click;
             // 
             // frmAlphaMatte
             // 
@@ -1442,5 +1455,6 @@
         internal System.ComponentModel.BackgroundWorker backgroundWorker6;
         private Label label22;
         private Button btnAlphaCurve;
+        private Button btnRScribbles;
     }
 }

@@ -33,12 +33,14 @@ namespace QuickExtract2
         public List<List<PointF>>? CurPath { get; set; }
 
         private object _lockObject = new object();
+        private frmQuickExtract? _frmQE;
 
         public event EventHandler<string>? BoundaryError;
 
-        public frmSavedPaths(Bitmap bmp, List<List<PointF>> curPath, List<List<List<PointF>>>? pathList)
+        public frmSavedPaths(Bitmap bmp, List<List<PointF>> curPath, List<List<List<PointF>>>? pathList, frmQuickExtract frm)
         {
             InitializeComponent();
+            this._frmQE = frm;
 
             this.helplineRulerCtrl1.Bmp = new Bitmap(bmp);
 
@@ -412,6 +414,12 @@ namespace QuickExtract2
 
                 if (gPath != null && gPath.PointCount > 1)
                 {
+                    if (this._frmQE != null && this._frmQE.PreResampleFactor != 1)
+                    {
+                        using Matrix mx = new Matrix(this._frmQE.PreResampleFactor, 0, 0, this._frmQE.PreResampleFactor, 0, 0);
+                        gPath.Transform(mx);
+                    }
+
                     if (this.SaveFileDialog2.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                     {
                         try
@@ -441,6 +449,10 @@ namespace QuickExtract2
                         }
                     }
                 }
+
+                if (gPath != null)
+                    gPath.Dispose();
+                gPath = null;
             }
         }
 
@@ -471,6 +483,7 @@ namespace QuickExtract2
                 this.Enabled = false;
                 this.Refresh();
                 SavedPath? sp = null;
+                Tuple<PointF[], Byte[]>? tp = null;
                 bool bError = false;
                 Stream? stream = null;
 
@@ -488,6 +501,12 @@ namespace QuickExtract2
 
                     stream = new FileStream(fileName, FileMode.Open, FileAccess.Read, FileShare.Read);
                     sp = JsonSerializer.Deserialize<SavedPath>(stream, options);
+
+                    if (sp?.PathPoints == null)
+                    {
+                        stream.Position = 0;
+                        tp = JsonSerializer.Deserialize<Tuple<PointF[], Byte[]>>(stream, options);
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -504,12 +523,70 @@ namespace QuickExtract2
                 catch
                 { }
 
-                if (sp != null)
+                if (sp?.PathPoints != null)
                 {
                     try
                     {
                         PointF[]? pts2 = sp.PathPoints; //(PointF[])o[0];
                         byte[]? tps = sp.PathTypes; //(byte[])o[1];
+
+                        if (pts2 != null && tps != null)
+                        {
+                            GraphicsPath? gp = new GraphicsPath(pts2, tps);
+
+                            if (this._frmQE != null && this._frmQE.PreResampleFactor != 1)
+                            {
+                                using Matrix mx = new Matrix(1.0f / this._frmQE.PreResampleFactor, 0, 0,
+                                    1.0f / this._frmQE.PreResampleFactor, 0, 0);
+                                gp.Transform(mx);
+                            }
+
+                            if (this.PathList == null)
+                                this.PathList = new List<List<List<PointF>>>();
+
+                            if (gp.PointCount > 1)
+                            {
+                                byte[] types = gp.PathTypes;
+                                for (int i = 0; i <= types.Length - 1; i++)
+                                {
+                                    int j = i;
+                                    List<List<PointF>> l = new List<List<PointF>>();
+                                    List<PointF> p = new List<PointF>();
+
+                                    while ((j < types.Length) && ((types[j] & 0x80) != 0x80))
+                                        // p.Add(gp.PathPoints(j))
+                                        j += 1;
+                                    p.AddRange(gp.PathPoints.Skip(i).Take(j - i));
+
+                                    if (j < gp.PathPoints.Length)
+                                        p.Add(gp.PathPoints[j]);
+                                    l.Add(p);
+                                    i = j;
+
+                                    this.PathList.Add(l);
+                                    this.ListBox1.Items.Add("savedPath_" + (this.PathList.Count - 1).ToString());
+
+                                    this.ListBox1.SelectedIndex = this.ListBox1.Items.Count - 1;
+                                }
+                            }
+                            else
+                            {
+                                gp.Dispose();
+                                gp = null;
+                            }
+                        }
+                    }
+                    catch
+                    {
+                        bError = true;
+                    }
+                }
+                else if (tp?.Item1 != null)
+                {
+                    try
+                    {
+                        PointF[]? pts2 = tp.Item1; //(PointF[])o[0];
+                        byte[]? tps = tp.Item2; //(byte[])o[1];
 
                         if (pts2 != null && tps != null)
                         {
