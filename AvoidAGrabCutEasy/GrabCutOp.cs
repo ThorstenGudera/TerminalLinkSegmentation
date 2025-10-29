@@ -350,6 +350,8 @@ namespace AvoidAGrabCutEasy
                     for (int x = 0; x < this.Mask.GetLength(0); x++)
                         if (this.Mask[x, y] == 0 && r.Contains(new Point(x, y)))
                             result[x, y] = 4;
+                        else if (this.Mask[x, y] == 1 && r.Contains(new Point(x, y)))
+                            result[x, y] = 8;
                         else
                             result[x, y] = 0;
             }

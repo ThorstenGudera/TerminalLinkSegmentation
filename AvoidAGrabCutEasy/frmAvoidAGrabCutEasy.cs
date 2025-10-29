@@ -1,27 +1,28 @@
-﻿using Cache;
+﻿using AvoidAGrabCutEasy.ProcOutline;
+using Cache;
 using ChainCodeFinder;
+using ConvolutionLib;
+using GetAlphaMatte;
+using OutlineOperations;
+using QuickExtract2;
+using SegmentsListLib;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using System.Collections;
-using AvoidAGrabCutEasy.ProcOutline;
-using GetAlphaMatte;
-using System.Runtime.InteropServices;
-using OutlineOperations;
-using ConvolutionLib;
-using SegmentsListLib;
-using QuickExtract2;
+using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace AvoidAGrabCutEasy
 {
@@ -2302,7 +2303,7 @@ namespace AvoidAGrabCutEasy
                                             p[(x + this._numShiftX) * 4 + (y + this._numShiftY) * stride + 2] = pWork[x * 4 + y * stride + 2];
                                             p[(x + this._numShiftX) * 4 + (y + this._numShiftY) * stride + 3] = pWork[x * 4 + y * stride + 3];
                                         }
-                                        else if (x < ww && y < hh && (m[x, y] == 0 || m[x, y] == 2))
+                                        else if (x < ww && y < hh && this._gc.InitialMaskCopy != null && ((m[x, y] == 0 || m[x, y] == 2) || this._gc.InitialMaskCopy[x, y] == 4 && (m[x, y] == 1) || m[x, y] == 3))
                                         {
                                             p[(x + this._numShiftX) * 4 + (y + this._numShiftY) * stride] = 0;
                                             p[(x + this._numShiftX) * 4 + (y + this._numShiftY) * stride + 1] = 0;
@@ -3760,7 +3761,7 @@ namespace AvoidAGrabCutEasy
                                             p[(x + this._numShiftX) * 4 + (y + this._numShiftY) * stride + 2] = pWork[x * 4 + y * stride + 2];
                                             p[(x + this._numShiftX) * 4 + (y + this._numShiftY) * stride + 3] = pWork[x * 4 + y * stride + 3];
                                         }
-                                        else if (x < ww && y < hh && (m[x, y] == 0 || m[x, y] == 2))
+                                        else if (x < ww && y < hh && this._gc.InitialMaskCopy != null && ((m[x, y] == 0 || m[x, y] == 2) || this._gc.InitialMaskCopy[x, y] == 4 && (m[x, y] == 1) || m[x, y] == 3))
                                         {
                                             p[(x + this._numShiftX) * 4 + (y + this._numShiftY) * stride] = 0;
                                             p[(x + this._numShiftX) * 4 + (y + this._numShiftY) * stride + 1] = 0;
@@ -5066,133 +5067,143 @@ namespace AvoidAGrabCutEasy
 
         private async void numComponents2_ValueChanged(object sender, EventArgs e)
         {
-            if (this.helplineRulerCtrl1.Bmp != null && this._allChains != null && !_dontUpdateNumComp)
+            try
             {
-                this.helplineRulerCtrl1.Enabled = false;
-                this.helplineRulerCtrl1.Refresh();
-                this.helplineRulerCtrl2.Enabled = false;
-                this.helplineRulerCtrl2.Refresh();
-                _dontUpdateNumComp = true; //the simple, but effective way of not getting an object_in_use_elsewhere error (I dont know, if this is good practice or not... (you could also create a new bitmap before starting the thread and pass it over))
-
-                this.btnRecut.Enabled = false;
-
-                int w = this.helplineRulerCtrl1.Bmp.Width;
-                int h = this.helplineRulerCtrl1.Bmp.Height;
-
-                Bitmap? bOut = await Task.Run(() =>
+                if (this.helplineRulerCtrl1.Bmp != null && this._allChains != null /*&& !_dontUpdateNumComp*/)
                 {
-                    Bitmap? bOut = new Bitmap(w, h);
+                    this.helplineRulerCtrl1.Enabled = false;
+                    this.helplineRulerCtrl1.Refresh();
+                    this.helplineRulerCtrl2.Enabled = false;
+                    this.helplineRulerCtrl2.Refresh();
+                    //_dontUpdateNumComp = true; //the simple, but effective way of not getting an object_in_use_elsewhere error (I dont know, if this is good practice or not... (you could also create a new bitmap before starting the thread and pass it over))
 
-                    if (bOut != null)
+                    this.btnRecut.Enabled = false;
+
+                    int w = this.helplineRulerCtrl1.Bmp.Width;
+                    int h = this.helplineRulerCtrl1.Bmp.Height;
+
+                    Bitmap? bOut = await Task.Run(() =>
                     {
-                        List<ChainCode>? allChains = this._allChains;
-                        int comp = (int)this.numComponents2.Value;
+                        bOut = new Bitmap(w, h);
 
-                        allChains = allChains?.OrderByDescending(x => x.Coord.Count).ToList();
-
-                        if (allChains != null && allChains.Count > 1000)
-                            allChains = allChains.Take(1000).ToList();
-
-                        if (allChains != null && allChains.Count > 0)
+                        if (bOut != null)
                         {
-                            //begin to redraw each component
-                            using (Graphics gx = Graphics.FromImage(bOut))
+                            List<ChainCode> allChains = this._allChains;
+                            int comp = (int)this.numComponents2.Value;
+
+                            allChains = allChains.OrderByDescending(x => x.Coord.Count).ToList();
+
+                            if (allChains != null && allChains.Count > 1000)
+                                allChains = allChains.Take(1000).ToList();
+
+                            if (allChains != null && allChains.Count > 0)
                             {
-                                gx.Clear(Color.Transparent);
-
-                                int amnt = Math.Min(comp, allChains.Count);
-
-                                for (int i = 0; i < amnt; i++)
+                                //begin to redraw each component
+                                using (Graphics gx = Graphics.FromImage(bOut))
                                 {
-                                    using (GraphicsPath gp = new GraphicsPath())
+                                    gx.Clear(Color.Transparent);
+
+                                    int amnt = Math.Min(comp, allChains.Count);
+
+                                    for (int i = 0; i < amnt; i++)
                                     {
-                                        PointF[] pts = allChains[i].Coord.Select(pt => new PointF(pt.X, pt.Y)).ToArray();
-                                        //make sure, each path is treated as an "outer-outline"
-                                        gp.FillMode = FillMode.Winding;
-                                        gp.AddLines(pts);
-                                        gp.CloseAllFigures();
-
-                                        //tmp try...catch
-                                        try
+                                        using (GraphicsPath gp = new GraphicsPath())
                                         {
-                                            using (TextureBrush tb = new TextureBrush(this.helplineRulerCtrl1.Bmp))
-                                                gx.FillPath(tb, gp);
+                                            PointF[] pts = allChains[i].Coord.Select(pt => new PointF(pt.X, pt.Y)).ToArray();
+                                            //make sure, each path is treated as an "outer-outline"
+                                            gp.FillMode = FillMode.Winding;
+                                            gp.AddLines(pts);
+                                            gp.CloseAllFigures();
 
-                                            //using (Pen pen = new Pen(Color.Red, 2))
-                                            //    gx.DrawPath(pen, gp);
-                                        }
-                                        catch (Exception exc)
-                                        {
-                                            Console.WriteLine(exc.ToString());
+                                            //tmp try...catch
+                                            try
+                                            {
+                                                using (TextureBrush tb = new TextureBrush(this.helplineRulerCtrl1.Bmp))
+                                                    gx.FillPath(tb, gp);
+
+                                                //using (Pen pen = new Pen(Color.Red, 2))
+                                                //    gx.DrawPath(pen, gp);
+                                            }
+                                            catch (Exception exc)
+                                            {
+                                                Console.WriteLine(exc.ToString());
+                                            }
                                         }
                                     }
                                 }
                             }
-                        }
 
-                        //now redraw the inner outlines and "transparent" components
-                        //we can do this in the easy way with setting graphics.CompositionMode to sourceCopy
-                        //because the whole operations are full_pixel_wise (at least for the standard 4-connectivity)
-                        if (allChains != null && allChains.Count > 0)
-                        {
-                            int amnt = Math.Min(comp, allChains.Count);
-
-                            for (int i = 0; i < amnt; i++)
+                            //now redraw the inner outlines and "transparent" components
+                            //we can do this in the easy way with setting graphics.CompositionMode to sourceCopy
+                            //because the whole operations are full_pixel_wise (at least for the standard 4-connectivity)
+                            if (allChains != null && allChains.Count > 0)
                             {
-                                ChainCode cc = allChains[i];
-                                if (ChainFinder.IsInnerOutline(cc))
-                                    using (GraphicsPath gP = new GraphicsPath())
-                                    {
-                                        try
-                                        {
-                                            gP.StartFigure();
-                                            PointF[] pts = cc.Coord.Select(a => new PointF(a.X, a.Y)).ToArray();
-                                            gP.AddLines(pts);
+                                int amnt = Math.Min(comp, allChains.Count);
 
-                                            using (Graphics gx = Graphics.FromImage(bOut))
+                                for (int i = 0; i < amnt; i++)
+                                {
+                                    ChainCode cc = allChains[i];
+                                    if (ChainFinder.IsInnerOutline(cc))
+                                        using (GraphicsPath gP = new GraphicsPath())
+                                        {
+                                            try
                                             {
-                                                gx.CompositingMode = CompositingMode.SourceCopy;
-                                                gx.FillPath(Brushes.Transparent, gP);
+                                                gP.StartFigure();
+                                                PointF[] pts = cc.Coord.Select(a => new PointF(a.X, a.Y)).ToArray();
+                                                gP.AddLines(pts);
+
+                                                using (Graphics gx = Graphics.FromImage(bOut))
+                                                {
+                                                    gx.CompositingMode = CompositingMode.SourceCopy;
+                                                    gx.FillPath(Brushes.Transparent, gP);
+                                                }
+                                            }
+                                            catch (Exception exc)
+                                            {
+                                                Console.WriteLine(exc.ToString());
                                             }
                                         }
-                                        catch (Exception exc)
-                                        {
-                                            Console.WriteLine(exc.ToString());
-                                        }
-                                    }
+                                }
                             }
+
+                            OnShowInfo("done");
+
                         }
 
-                        OnShowInfo("done");
+                        return bOut;
+                    });
 
+                    if (bOut != null)
+                    {
+                        this.SetBitmap(this.helplineRulerCtrl2.Bmp, bOut, this.helplineRulerCtrl2, "Bmp");
+
+                        _undoOPCache?.Add(bOut);
+
+                        this._pic_changed = true;
+
+                        this.helplineRulerCtrl2.SetZoom(this.helplineRulerCtrl1.Zoom.ToString());
+                        this.helplineRulerCtrl2.MakeBitmap(this.helplineRulerCtrl2.Bmp);
+                        this.helplineRulerCtrl2.dbPanel1.AutoScrollMinSize = new Size(
+                            (int)(this.helplineRulerCtrl2.Bmp.Width * this.helplineRulerCtrl2.Zoom),
+                            (int)(this.helplineRulerCtrl2.Bmp.Height * this.helplineRulerCtrl2.Zoom));
+                        this.helplineRulerCtrl2.dbPanel1.Invalidate();
+
+                        //_dontUpdateNumComp = false;
                     }
 
-                    return bOut;
-                });
+                    this.SetControls(true);
+                    this.helplineRulerCtrl1.Enabled = true;
+                    this.helplineRulerCtrl2.Enabled = true;
 
-                if (bOut != null)
-                {
-                    this.SetBitmap(this.helplineRulerCtrl2.Bmp, bOut, this.helplineRulerCtrl2, "Bmp");
-
-                    _undoOPCache?.Add(bOut);
-
-                    this._pic_changed = true;
-
-                    this.helplineRulerCtrl2.SetZoom(this.helplineRulerCtrl1.Zoom.ToString());
-                    this.helplineRulerCtrl2.MakeBitmap(this.helplineRulerCtrl2.Bmp);
-                    this.helplineRulerCtrl2.dbPanel1.AutoScrollMinSize = new Size(
-                        (int)(this.helplineRulerCtrl2.Bmp.Width * this.helplineRulerCtrl2.Zoom),
-                        (int)(this.helplineRulerCtrl2.Bmp.Height * this.helplineRulerCtrl2.Zoom));
-                    this.helplineRulerCtrl2.dbPanel1.Invalidate();
-
-                    _dontUpdateNumComp = false;
+                    this.cbRectMode.Enabled = false;
                 }
-
-                this.SetControls(true);
-                this.helplineRulerCtrl1.Enabled = true;
-                this.helplineRulerCtrl2.Enabled = true;
-
-                this.cbRectMode.Enabled = false;
+            }
+            catch (Exception exc)
+            {
+                if (exc.Message.ToLower().Contains("in use elsewhere"))
+                {
+                    Debug.WriteLine(exc.Message.ToString());
+                }
             }
         }
 
