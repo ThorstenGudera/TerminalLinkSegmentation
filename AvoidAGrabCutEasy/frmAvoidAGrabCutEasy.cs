@@ -5017,9 +5017,12 @@ namespace AvoidAGrabCutEasy
 
                 this.btnRecut.Enabled = false;
 
+                int w = this.helplineRulerCtrl1.Bmp.Width;
+                int h = this.helplineRulerCtrl1.Bmp.Height;
+
                 Bitmap? bOut = await Task.Run(() =>
                 {
-                    Bitmap? bOut = new Bitmap(this.helplineRulerCtrl1.Bmp.Width, this.helplineRulerCtrl1.Bmp.Height);
+                    Bitmap? bOut = new Bitmap(w, h);
 
                     if (bOut != null)
                     {
