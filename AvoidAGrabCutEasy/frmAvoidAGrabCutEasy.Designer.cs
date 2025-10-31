@@ -31,6 +31,7 @@
             components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmAvoidAGrabCutEasy));
             panel1 = new Panel();
+            btnRScribbles = new Button();
             cbPreResample = new CheckBox();
             cbPreviewMode = new CheckBox();
             label13 = new Label();
@@ -165,7 +166,9 @@
             timer1 = new System.Windows.Forms.Timer(components);
             backgroundWorker4 = new System.ComponentModel.BackgroundWorker();
             timer2 = new System.Windows.Forms.Timer(components);
-            btnRScribbles = new Button();
+            panel10 = new Panel();
+            numTolFillMouseUp = new NumericUpDown();
+            cbFillMouseUp = new CheckBox();
             panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numOutlineWH).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numComponents2).BeginInit();
@@ -186,11 +189,14 @@
             splitContainer1.SuspendLayout();
             statusStrip1.SuspendLayout();
             contextMenuStrip1.SuspendLayout();
+            panel10.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)numTolFillMouseUp).BeginInit();
             SuspendLayout();
             // 
             // panel1
             // 
             panel1.AutoScroll = true;
+            panel1.Controls.Add(panel10);
             panel1.Controls.Add(btnRScribbles);
             panel1.Controls.Add(cbPreResample);
             panel1.Controls.Add(cbPreviewMode);
@@ -311,6 +317,16 @@
             panel1.MouseDoubleClick += panel1_MouseDoubleClick;
             panel1.MouseDown += panel1_MouseDown;
             // 
+            // btnRScribbles
+            // 
+            btnRScribbles.Location = new Point(777, 64);
+            btnRScribbles.Name = "btnRScribbles";
+            btnRScribbles.Size = new Size(113, 23);
+            btnRScribbles.TabIndex = 756;
+            btnRScribbles.Text = "resize scribbles";
+            btnRScribbles.UseVisualStyleBackColor = true;
+            btnRScribbles.Click += btnRScribbles_Click;
+            // 
             // cbPreResample
             // 
             cbPreResample.AutoSize = true;
@@ -328,7 +344,7 @@
             cbPreviewMode.AutoSize = true;
             cbPreviewMode.Checked = true;
             cbPreviewMode.CheckState = CheckState.Checked;
-            cbPreviewMode.Location = new Point(632, 167);
+            cbPreviewMode.Location = new Point(614, 167);
             cbPreviewMode.Name = "cbPreviewMode";
             cbPreviewMode.Size = new Size(98, 19);
             cbPreviewMode.TabIndex = 754;
@@ -863,6 +879,7 @@
             cbAllowRS.Text = "allow RS";
             toolTip1.SetToolTip(cbAllowRS, "allow rect_and_scribble mode");
             cbAllowRS.UseVisualStyleBackColor = true;
+            cbAllowRS.CheckedChanged += cbAllowRS_CheckedChanged;
             // 
             // btnInitSettings
             // 
@@ -932,7 +949,7 @@
             // label7
             // 
             label7.AutoSize = true;
-            label7.Location = new Point(413, 167);
+            label7.Location = new Point(409, 167);
             label7.Margin = new Padding(4, 0, 4, 0);
             label7.Name = "label7";
             label7.Size = new Size(109, 15);
@@ -1226,7 +1243,7 @@
             // btnGo
             // 
             btnGo.Font = new Font("Microsoft Sans Serif", 8.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            btnGo.Location = new Point(617, 190);
+            btnGo.Location = new Point(599, 190);
             btnGo.Margin = new Padding(4, 3, 4, 3);
             btnGo.Name = "btnGo";
             btnGo.Size = new Size(88, 27);
@@ -1239,7 +1256,7 @@
             // 
             btnReset2.Enabled = false;
             btnReset2.ForeColor = SystemColors.ControlText;
-            btnReset2.Location = new Point(712, 190);
+            btnReset2.Location = new Point(694, 190);
             btnReset2.Margin = new Padding(4, 3, 4, 3);
             btnReset2.Name = "btnReset2";
             btnReset2.Size = new Size(88, 27);
@@ -1279,7 +1296,7 @@
             // 
             numMultTLCap.DecimalPlaces = 2;
             numMultTLCap.Increment = new decimal(new int[] { 1, 0, 0, 65536 });
-            numMultTLCap.Location = new Point(477, 192);
+            numMultTLCap.Location = new Point(473, 192);
             numMultTLCap.Margin = new Padding(4, 3, 4, 3);
             numMultTLCap.Maximum = new decimal(new int[] { 1410065407, 2, 0, 0 });
             numMultTLCap.Minimum = new decimal(new int[] { 1, 0, 0, 131072 });
@@ -1428,7 +1445,7 @@
             // 
             // numMaxComponents
             // 
-            numMaxComponents.Location = new Point(533, 165);
+            numMaxComponents.Location = new Point(529, 165);
             numMaxComponents.Margin = new Padding(4, 3, 4, 3);
             numMaxComponents.Maximum = new decimal(new int[] { 9999, 0, 0, 0 });
             numMaxComponents.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
@@ -1754,15 +1771,40 @@
             timer2.Interval = 5000;
             timer2.Tick += timer2_Tick;
             // 
-            // btnRScribbles
+            // panel10
             // 
-            btnRScribbles.Location = new Point(777, 64);
-            btnRScribbles.Name = "btnRScribbles";
-            btnRScribbles.Size = new Size(113, 23);
-            btnRScribbles.TabIndex = 756;
-            btnRScribbles.Text = "resize scribbles";
-            btnRScribbles.UseVisualStyleBackColor = true;
-            btnRScribbles.Click += btnRScribbles_Click;
+            panel10.BorderStyle = BorderStyle.FixedSingle;
+            panel10.Controls.Add(numTolFillMouseUp);
+            panel10.Controls.Add(cbFillMouseUp);
+            panel10.Location = new Point(718, 147);
+            panel10.Name = "panel10";
+            panel10.Size = new Size(176, 41);
+            panel10.TabIndex = 757;
+            panel10.Visible = false;
+            // 
+            // numTolFillMouseUp
+            // 
+            numTolFillMouseUp.Location = new Point(118, 9);
+            numTolFillMouseUp.Margin = new Padding(4, 3, 4, 3);
+            numTolFillMouseUp.Maximum = new decimal(new int[] { 255, 0, 0, 0 });
+            numTolFillMouseUp.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
+            numTolFillMouseUp.Name = "numTolFillMouseUp";
+            numTolFillMouseUp.Size = new Size(52, 23);
+            numTolFillMouseUp.TabIndex = 625;
+            toolTip1.SetToolTip(numTolFillMouseUp, "Tolerance");
+            numTolFillMouseUp.Value = new decimal(new int[] { 12, 0, 0, 0 });
+            // 
+            // cbFillMouseUp
+            // 
+            cbFillMouseUp.AutoSize = true;
+            cbFillMouseUp.Checked = true;
+            cbFillMouseUp.CheckState = CheckState.Checked;
+            cbFillMouseUp.Location = new Point(8, 11);
+            cbFillMouseUp.Name = "cbFillMouseUp";
+            cbFillMouseUp.Size = new Size(110, 19);
+            cbFillMouseUp.TabIndex = 0;
+            cbFillMouseUp.Text = "fill on MouseUp";
+            cbFillMouseUp.UseVisualStyleBackColor = true;
             // 
             // frmAvoidAGrabCutEasy
             // 
@@ -1801,6 +1843,9 @@
             statusStrip1.ResumeLayout(false);
             statusStrip1.PerformLayout();
             contextMenuStrip1.ResumeLayout(false);
+            panel10.ResumeLayout(false);
+            panel10.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)numTolFillMouseUp).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -1943,5 +1988,8 @@
         private CheckBox cbPreResample;
         private CheckBox cbPreviewMode;
         private Button btnRScribbles;
+        private Panel panel10;
+        private NumericUpDown numTolFillMouseUp;
+        private CheckBox cbFillMouseUp;
     }
 }

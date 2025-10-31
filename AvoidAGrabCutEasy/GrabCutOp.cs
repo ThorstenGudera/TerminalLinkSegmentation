@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Linq;
@@ -1364,32 +1365,57 @@ namespace AvoidAGrabCutEasy
                 return -1;
             }
 
-            if (this.Bmp != null && this.Mask != null && this._bgGmm != null && this._fgGmm != null)
+            if (this.Bmp != null && this.Mask != null && this._bgGmm != null && this._fgGmm != null && this.InitialMaskCopy != null)
             {
                 BitmapData bmData = this.Bmp.LockBits(new Rectangle(0, 0, w, h), ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
                 int stride = bmData.Stride;
 
                 byte* p = (byte*)bmData.Scan0;
 
+                bool doTest = false;
                 //fill the list for the known and unknown parts of the data
-                for (int y = 0; y < h; y++)
-                    for (int x = 0; x < w; x++)
-                    {
-                        if (this.Mask[x, y] == 0)
-                            bGIndexes.Add(new Point(x, y));
-                        else if (this.Mask[x, y] == 1)
-                            fGIndexes.Add(new Point(x, y));
-                        else if (this.Mask[x, y] == 2)
+                if (doTest)
+                {
+                    for (int y = 0; y < h; y++)
+                        for (int x = 0; x < w; x++)
                         {
-                            pRIndexes.Add(new Point(x, y));
-                            //pRBIndexes.Add(new Point(x, y));
+                            if (this.Mask[x, y] == 0)
+                                bGIndexes.Add(new Point(x, y));
+                            else if (this.Mask[x, y] == 1 && this.InitialMaskCopy[x, y] != 8)
+                                fGIndexes.Add(new Point(x, y));
+                            else if (this.Mask[x, y] == 2)
+                            {
+                                pRIndexes.Add(new Point(x, y));
+                                //pRBIndexes.Add(new Point(x, y));
+                            }
+                            else if (this.Mask[x, y] == 3 || this.InitialMaskCopy[x, y] == 8)
+                            {
+                                pRIndexes.Add(new Point(x, y));
+                                //pRFIndexes.Add(new Point(x, y));
+                            }
                         }
-                        else if (this.Mask[x, y] == 3)
+
+                    //Debug.WriteLine(this.InitialMaskCopy.Cast<int>().Where(a => a == 8).Count().ToString());
+                }
+                else
+                    for (int y = 0; y < h; y++)
+                        for (int x = 0; x < w; x++)
                         {
-                            pRIndexes.Add(new Point(x, y));
-                            //pRFIndexes.Add(new Point(x, y));
+                            if (this.Mask[x, y] == 0)
+                                bGIndexes.Add(new Point(x, y));
+                            else if (this.Mask[x, y] == 1)
+                                fGIndexes.Add(new Point(x, y));
+                            else if (this.Mask[x, y] == 2)
+                            {
+                                pRIndexes.Add(new Point(x, y));
+                                //pRBIndexes.Add(new Point(x, y));
+                            }
+                            else if (this.Mask[x, y] == 3)
+                            {
+                                pRIndexes.Add(new Point(x, y));
+                                //pRFIndexes.Add(new Point(x, y));
+                            }
                         }
-                    }
 
                 if (this.BGW != null && this.BGW.WorkerReportsProgress)
                     this.BGW.ReportProgress(30);

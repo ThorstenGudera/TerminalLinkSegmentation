@@ -86,6 +86,76 @@ namespace AvoidAGrabCutEasy
             }
         }
 
+        public static void floodfill(Bitmap bmp, int x, int y, double tolerance, Color OrgPixelColor, Color ZielColor,
+    int MaxIterations, bool smooth, bool compAlpha, double epsilon, bool useCurves, bool useClosedCurve, BitArray pp)
+        {
+            if (tolerance == 255)
+                drawOneColor(bmp, ZielColor.A, ZielColor.R, ZielColor.G, ZielColor.B);
+            else if (AvailMem.AvailMem.checkAvailRam(bmp.Width * bmp.Height * 4L))
+            {
+                BitmapData bmData = bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height), ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
+                int stride = bmData.Stride;
+
+                byte[] p = new byte[(bmData.Stride * bmData.Height) - 1 + 1];
+                Marshal.Copy(bmData.Scan0, p, 0, p.Length);
+
+                Hashtable Pixellist = new Hashtable();
+                List<int> List = new List<int>();
+                int zaehl = 1;
+
+                zaehl = 1;
+                Pixellist.Clear();
+                List.Clear();
+
+                List.Add(stride * -1);
+                List.Add(-4);
+                List.Add(4);
+                List.Add(stride);
+
+                Pixellist.Add(0, x * 4 + y * stride);
+
+                flood(bmp, x * 4 + y * stride, tolerance, OrgPixelColor, bmData, pp, Pixellist, List, ref zaehl, p);
+
+                pp[x * 4 + y * stride] = true;
+
+                int z = 1;
+
+                while (z < Pixellist.Count && z < MaxIterations)
+                {
+                    if (FloodFillMethods.Cancel)
+                        break;
+
+                    try
+                    {
+                        flood(bmp, System.Convert.ToInt32(Pixellist[z]), tolerance, OrgPixelColor, bmData, pp, Pixellist, List, ref zaehl, p);
+                        z += 1;
+                    }
+                    catch
+                    {
+                    }
+                }
+
+                bmp.UnlockBits(bmData);
+
+                if (AvailMem.AvailMem.checkAvailRam(bmp.Width * bmp.Height * 4L))
+                {
+                    try
+                    {
+                        using (Bitmap bmp2 = (Bitmap)bmp.Clone())
+                        {
+                            writeData(bmp, ZielColor, Pixellist, smooth, smooth ? bmp2 : null, compAlpha, epsilon, useCurves, useClosedCurve);
+                        }
+                    }
+                    catch
+                    {
+                    }
+                }
+
+                Pixellist.Clear();
+                List.Clear();
+            }
+        }
+
         public static void floodfill(Bitmap bmp, int x, int y, double tolerance, Color OrgPixelColor, Color ZielColor, int MaxIterations, double edges, bool smooth, bool compAlpha, double epsilon, bool useCurves, bool useClosedCurve)
         {
             if (tolerance == 255 && edges == 255)

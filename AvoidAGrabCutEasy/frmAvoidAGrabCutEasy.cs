@@ -124,7 +124,7 @@ namespace AvoidAGrabCutEasy
         private List<ChainCode>? _chainsFromFrm;
         private List<Tuple<int, int, int, bool, List<List<Point>>>>? _pointsListSeq;
         private int _currentDrawOperation;
-        private bool _dontUpdateNumComp;
+        //private bool _dontUpdateNumComp;
         private Point? _ptSt;
         private List<Point>? _ptPrev;
         private bool _cbSetPFGToFG;
@@ -535,7 +535,8 @@ namespace AvoidAGrabCutEasy
                     this._eY = eY;
                 }
 
-                if (this.cbScribbleMode.Checked && e.Button == MouseButtons.Left && !this.cbClickMode.Checked)
+                if (this.cbScribbleMode.Checked && e.Button == MouseButtons.Left &&
+                    !this.cbClickMode.Checked && (this.panel5.Visible == false || this.cbFillMouseUp.Checked == false))
                 {
                     this._points2.Add(new Point(ix, iy));
                     this._tracking4 = true;
@@ -580,7 +581,7 @@ namespace AvoidAGrabCutEasy
                     this._eH = Math.Abs(e.Y - this._eY - this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y);
                 }
 
-                if (this._tracking4)
+                if (this._tracking4 && !this.cbClickMode.Checked && (this.panel5.Visible == false || this.cbFillMouseUp.Checked == false))
                     this._points2.Add(new Point(ix, iy));
 
                 Color c = this.helplineRulerCtrl1.Bmp.GetPixel(ix, iy);
@@ -615,10 +616,13 @@ namespace AvoidAGrabCutEasy
                     this._rect = new Rectangle(this._rX, this._rY, this._rW, this._rH);
                 }
 
-                if (this._tracking4 || (this.cbClickMode.Checked && e.Button == MouseButtons.Left))
+                if (this._tracking4 || (this.cbClickMode.Checked && e.Button == MouseButtons.Left) || (this.panel5.Visible && this.cbFillMouseUp.Checked))
                 {
                     AddPointsToScribblePath();
                     this._points2.Clear();
+
+                    if (this.panel5.Visible && this.cbFillMouseUp.Checked)
+                        DoFloodFillScribbles(ix, iy, (int)this.numTolFillMouseUp.Value);
                 }
 
                 this.helplineRulerCtrl1.dbPanel1.Invalidate();
@@ -627,6 +631,121 @@ namespace AvoidAGrabCutEasy
             this._tracking = false;
             this._tracking4 = false;
             this.helplineRulerCtrl1.dbPanel1.Capture = false;
+        }
+
+        private async void DoFloodFillScribbles(int ix, int iy, int tolerance)
+        {
+            if (this.rbUnknown.Checked)
+            {
+                MessageBox.Show("RBUnknown checked. Not supported.");
+                return;
+            }
+
+            this.SetControls(false);
+            this.btnGo.Text = "Cancel";
+            this.btnGo.Enabled = true;
+            AvoidAGrabCutEasy.FloodFillMethods.Cancel = false;
+            bool fgbg = this.rbFG.Checked;
+            this.numWHScribbles.Value = (decimal)1;
+
+            await Task.Run(() =>
+            {
+                Point pt = new Point(ix, iy);
+                FloodScribbles(pt, tolerance, fgbg);
+            });
+
+            this.SetControls(true);
+            this.btnGo.Text = "Go";
+        }
+
+        private unsafe void FloodScribbles(Point pt, int tolerance, bool fg)
+        {
+            if (this.helplineRulerCtrl1.Bmp != null)
+            {
+                using Bitmap b = new Bitmap(this.helplineRulerCtrl1.Bmp);
+                int w = b.Width;
+                int h = b.Height;
+                BitmapData bmD = b.LockBits(new Rectangle(0, 0, w, h), ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
+                int stride = bmD.Stride;
+                b.UnlockBits(bmD);
+                BitArray bitsFG = new BitArray(stride * h, false);
+                bitsFG.SetAll(false);
+                Point ptSt = pt;
+
+                if (ptSt.X != -1 && ptSt.Y != -1)
+                {
+                    Color startColor = b.GetPixel(ptSt.X, ptSt.Y);
+                    Color replaceColor = Color.White;  //doesnt matter, we retrieve the points from bitsFG
+
+                    if (!AvoidAGrabCutEasy.FloodFillMethods.Cancel)
+                        AvoidAGrabCutEasy.FloodFillMethods.floodfill(b, ptSt.X, ptSt.Y, tolerance, startColor, replaceColor,
+                            Int32.MaxValue, false, false, 1.0, false, false, bitsFG);
+
+                    List<Point> ll = new List<Point>();
+
+                    for (int j = 0; j < bitsFG.Count; j += 4)
+                    {
+                        if (bitsFG.Get(j))
+                        {
+                            int x = j % stride / 4;
+                            int y = j / stride;
+                            ll.Add(new Point(x, y));
+                        }
+                    }
+
+                    //cleanup
+                    if (this._scribbles == null)
+                        this._scribbles = new Dictionary<int, Dictionary<int, List<List<Point>>>>();
+
+                    int fgbg = fg == true ? 1 : 0;
+
+                    if (!this._scribbles.ContainsKey(fgbg))
+                        this._scribbles.Add(fgbg, new Dictionary<int, List<List<Point>>>());
+
+                    if (!this._scribbles[fgbg].ContainsKey(1))
+                        this._scribbles[fgbg].Add(1, new List<List<Point>>());
+
+                    if (this._scribbleSeq == null)
+                        this._scribbleSeq = new List<Tuple<int, int, int, bool, List<List<Point>>>>();
+
+                    this._scribbles[fgbg][1].Add(ll.Distinct().ToList());
+                    if (this._scribbles[fgbg][1].Count > 0)
+                        this._scribbleSeq.Add(Tuple.Create(fgbg, 1, this._scribbles[fgbg][1].Count - 1, true,
+                            GetBoundariesForScribbleFlood(this._scribbles[fgbg][1][this._scribbles[fgbg][1].Count - 1], w, h)));
+
+                    this.helplineRulerCtrl1.dbPanel1.Invalidate();
+                }
+            }
+        }
+
+        private unsafe List<List<Point>> GetBoundariesForScribbleFlood(List<Point> points, int w, int h)
+        {
+            List<List<Point>> res = new List<List<Point>>();
+
+            using Bitmap bmp = new Bitmap(w, h);
+            BitmapData bmD = bmp.LockBits(new Rectangle(0, 0, w, h), ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
+            int stride = bmD.Stride;
+
+            byte* p = (byte*)bmD.Scan0;
+            foreach (Point pt in points)
+            {
+                p[pt.X * 4 + pt.Y * stride + 3] = 255;
+            }
+
+            bmp.UnlockBits(bmD);
+
+            List<ChainCode>? c = this.GetBoundary(bmp);
+            if (c != null)
+            {
+                foreach (ChainCode cc in c)
+                {
+                    List<Point> l = new List<Point>();
+                    l.AddRange(cc.Coord.ToArray());
+                    res.Add(l);
+                }
+            }
+
+            return res;
         }
 
         private void AddPointsToScribblePath()
@@ -3130,7 +3249,7 @@ namespace AvoidAGrabCutEasy
                 this.SetControls(false);
                 this.Refresh();
 
-                this._dontUpdateNumComp = true;
+                //this._dontUpdateNumComp = true;
 
                 List<ChainCode>? allChains = this._allChains;
                 allChains = allChains?.OrderByDescending(x => x.Coord.Count).ToList();
@@ -3246,7 +3365,7 @@ namespace AvoidAGrabCutEasy
                     (int)(this.helplineRulerCtrl2.Bmp.Height * this.helplineRulerCtrl2.Zoom));
                 this.helplineRulerCtrl2.dbPanel1.Invalidate();
 
-                this._dontUpdateNumComp = false;
+                //this._dontUpdateNumComp = false;
 
                 this.SetControls(true);
 
@@ -5469,9 +5588,9 @@ namespace AvoidAGrabCutEasy
             this.timer1.Stop();
             try
             {
-                this._dontUpdateNumComp = true;
+                //this._dontUpdateNumComp = true;
                 this.numComponents2.Value = this.numMaxComponents.Value;
-                this._dontUpdateNumComp = false;
+                //this._dontUpdateNumComp = false;
             }
             catch (Exception exc)
             {
@@ -6606,6 +6725,11 @@ namespace AvoidAGrabCutEasy
                     }
                 }
             }
+        }
+
+        private void cbAllowRS_CheckedChanged(object sender, EventArgs e)
+        {
+            this.panel5.Visible = this.cbAllowRS.Checked;
         }
     }
 }
