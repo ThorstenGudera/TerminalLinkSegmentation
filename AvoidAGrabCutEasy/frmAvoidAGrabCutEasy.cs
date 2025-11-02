@@ -2904,6 +2904,7 @@ namespace AvoidAGrabCutEasy
             this.cbScribbleMode.Enabled = false;
             this.label17.Enabled = this.numComponents2.Enabled = true;
             this.cbOutline.Enabled = this.numOutlineWH.Enabled = true;
+            this.cbInset.Enabled = this.btnIOutline.Enabled = this.numIOutline.Enabled = true;
 
             this.numMaxSize.Enabled = this.numGmmComp.Enabled = false;
 
@@ -4315,6 +4316,7 @@ namespace AvoidAGrabCutEasy
             this.cbScribbleMode.Enabled = false;
             this.label17.Enabled = this.numComponents2.Enabled = true;
             this.cbOutline.Enabled = this.numOutlineWH.Enabled = true;
+            this.cbInset.Enabled = this.btnIOutline.Enabled = this.numIOutline.Enabled = true;
 
             this.toolStripStatusLabel4.Text = "done";
 
@@ -6432,6 +6434,7 @@ namespace AvoidAGrabCutEasy
                     //dont dispose bCF, its now HLC2.Bmp
 
                     this.cbOutline.Enabled = this.numOutlineWH.Enabled = true;
+                    this.cbInset.Enabled = this.btnIOutline.Enabled = this.numIOutline.Enabled = true;
 
                     this._checkedPaths = null;
                     this.quickExtractingCtrl1 = null;
@@ -6989,13 +6992,59 @@ namespace AvoidAGrabCutEasy
                     //if(MessageBox.Show("Clear existing scribbles?", "", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                     btnClearScribbles_Click(this.btnClearScribbles, new EventArgs());
 
-                    AddPointsToScribblePathFromFrmQuickExtract(c, wh);
+                    bool inset = this.cbInset.Checked;
 
-                    this._pic_changed = true;
+                    if (inset)
+                    {
+                        for (int i = 0; i < wh / 2; i++)
+                        {
+                            if (c != null)
+                            {
+                                RemoveOutline(bmp, c);
+                                c = GetBoundary(bmp, 0, false);
+                            }
+                        }
+                    }
+
+                    if (c != null)
+                    {
+                        AddPointsToScribblePathFromFrmQuickExtract(c, wh);
+                        this._pic_changed = true;
+                    }
                 }
             }
 
             this.helplineRulerCtrl1.dbPanel1.Invalidate();
+        }
+
+        public void RemoveOutline(Bitmap b, List<ChainCode> fList)
+        {
+            BitmapData bmData = b.LockBits(new Rectangle(0, 0, b.Width, b.Height),
+                               ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
+            int stride = bmData.Stride;
+
+            System.IntPtr Scan0 = bmData.Scan0;
+
+            unsafe
+            {
+                byte* p = (byte*)(void*)Scan0;
+
+                if (fList != null && fList.Count > 0)
+                {
+                    foreach (ChainCode c in fList)
+                    {
+                        for (int i = 0; i < c.Coord.Count; i++)
+                        {
+                            int x = c.Coord[i].X;
+                            int y = c.Coord[i].Y;
+
+                            p[y * stride + x * 4 + 3] = (byte)0;
+                        }
+                    }
+                }
+            }
+
+            b.UnlockBits(bmData);
         }
 
         private void numOutlineWH_ValueChanged(object sender, EventArgs e)
@@ -7168,6 +7217,49 @@ namespace AvoidAGrabCutEasy
                     this.SetBitmap(ref this._b4Copy, ref bC);
                 }
             }
+        }
+
+        private void btnIOutline_Click(object sender, EventArgs e)
+        {
+            if (this.cbOutline.Checked && this.helplineRulerCtrl2.Bmp != null)
+            {
+                using Bitmap bmp = new Bitmap(this.helplineRulerCtrl2.Bmp);
+                List<ChainCode>? c = GetBoundary(bmp, 0, false);
+                c = c?.OrderByDescending(x => x.Coord.Count).ToList();
+
+                if (c != null)
+                {
+                    int wh = (int)this.numOutlineWH.Value;
+                    this.cbScribbleMode.Checked = true;
+                    this.cbClickMode.Checked = false;
+                    int insetCust = (int)this.numIOutline.Value;
+
+                    //if(MessageBox.Show("Clear existing scribbles?", "", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                    btnClearScribbles_Click(this.btnClearScribbles, new EventArgs());
+
+                    bool inset = this.cbInset.Checked;
+
+                    if (inset)
+                    {
+                        for (int i = 0; i < wh / 2 + insetCust; i++)
+                        {
+                            if (c != null)
+                            {
+                                RemoveOutline(bmp, c);
+                                c = GetBoundary(bmp, 0, false);
+                            }
+                        }
+                    }
+
+                    if (c != null)
+                    {
+                        AddPointsToScribblePathFromFrmQuickExtract(c, wh);
+                        this._pic_changed = true;
+                    }
+                }
+            }
+
+            this.helplineRulerCtrl1.dbPanel1.Invalidate();
         }
     }
 }

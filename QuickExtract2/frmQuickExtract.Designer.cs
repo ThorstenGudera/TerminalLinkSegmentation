@@ -50,6 +50,7 @@
             toolTip1 = new ToolTip(components);
             saveFileDialog1 = new SaveFileDialog();
             Panel1 = new Panel();
+            cbInset = new CheckBox();
             panel7 = new Panel();
             panel2 = new Panel();
             panel5 = new Panel();
@@ -137,7 +138,7 @@
             statusStrip1.Location = new Point(0, 831);
             statusStrip1.Name = "statusStrip1";
             statusStrip1.Padding = new Padding(1, 0, 16, 0);
-            statusStrip1.Size = new Size(1516, 34);
+            statusStrip1.Size = new Size(1616, 34);
             statusStrip1.TabIndex = 217;
             statusStrip1.Text = "statusStrip1";
             // 
@@ -214,6 +215,7 @@
             // Panel1
             // 
             Panel1.AutoScroll = true;
+            Panel1.Controls.Add(cbInset);
             Panel1.Controls.Add(panel7);
             Panel1.Controls.Add(panel2);
             Panel1.Controls.Add(panel5);
@@ -245,8 +247,19 @@
             Panel1.Location = new Point(0, 0);
             Panel1.Margin = new Padding(4, 3, 4, 3);
             Panel1.Name = "Panel1";
-            Panel1.Size = new Size(1516, 285);
+            Panel1.Size = new Size(1616, 285);
             Panel1.TabIndex = 218;
+            // 
+            // cbInset
+            // 
+            cbInset.AutoSize = true;
+            cbInset.Location = new Point(1517, 144);
+            cbInset.Name = "cbInset";
+            cbInset.Size = new Size(51, 19);
+            cbInset.TabIndex = 288;
+            cbInset.Text = "Inset";
+            cbInset.UseVisualStyleBackColor = true;
+            cbInset.CheckedChanged += cbOutline_CheckedChanged;
             // 
             // panel7
             // 
@@ -286,6 +299,7 @@
             btnExtractFF.Text = "ExtractByFloodfill";
             btnExtractFF.UseVisualStyleBackColor = true;
             btnExtractFF.Visible = false;
+            btnExtractFF.Click += btnExtractFF_Click;
             // 
             // btnLoadOrig
             // 
@@ -525,7 +539,7 @@
             helplineRulerCtrl1.PtEnd = new Point(0, 0);
             helplineRulerCtrl1.PtSt = new Point(0, 0);
             helplineRulerCtrl1.SetZoomOnlyByMethodCall = false;
-            helplineRulerCtrl1.Size = new Size(1516, 546);
+            helplineRulerCtrl1.Size = new Size(1616, 546);
             helplineRulerCtrl1.TabIndex = 220;
             helplineRulerCtrl1.Zoom = 1F;
             helplineRulerCtrl1.ZoomSetManually = false;
@@ -540,7 +554,7 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1516, 865);
+            ClientSize = new Size(1616, 865);
             Controls.Add(helplineRulerCtrl1);
             Controls.Add(Panel1);
             Controls.Add(panel3);
@@ -607,5 +621,6 @@
         internal Panel panel5;
         private Button btnExtractFF;
         public QuickExtractingCtrl quickExtractingCtrl1;
+        private CheckBox cbInset;
     }
 }

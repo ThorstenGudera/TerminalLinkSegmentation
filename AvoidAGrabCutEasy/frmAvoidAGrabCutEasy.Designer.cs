@@ -31,6 +31,10 @@
             components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmAvoidAGrabCutEasy));
             panel1 = new Panel();
+            btnIOutline = new Button();
+            numIOutline = new NumericUpDown();
+            cbInset = new CheckBox();
+            btnRedrawPaths = new Button();
             panel10 = new Panel();
             numTolFillMouseUp = new NumericUpDown();
             cbFillMouseUp = new CheckBox();
@@ -169,8 +173,8 @@
             timer1 = new System.Windows.Forms.Timer(components);
             backgroundWorker4 = new System.ComponentModel.BackgroundWorker();
             timer2 = new System.Windows.Forms.Timer(components);
-            btnRedrawPaths = new Button();
             panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)numIOutline).BeginInit();
             panel10.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numTolFillMouseUp).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numOutlineWH).BeginInit();
@@ -197,6 +201,9 @@
             // panel1
             // 
             panel1.AutoScroll = true;
+            panel1.Controls.Add(btnIOutline);
+            panel1.Controls.Add(numIOutline);
+            panel1.Controls.Add(cbInset);
             panel1.Controls.Add(btnRedrawPaths);
             panel1.Controls.Add(panel10);
             panel1.Controls.Add(btnRScribbles);
@@ -314,10 +321,59 @@
             panel1.Location = new Point(0, 0);
             panel1.Margin = new Padding(4, 3, 4, 3);
             panel1.Name = "panel1";
-            panel1.Size = new Size(1509, 254);
+            panel1.Size = new Size(1625, 254);
             panel1.TabIndex = 0;
             panel1.MouseDoubleClick += panel1_MouseDoubleClick;
             panel1.MouseDown += panel1_MouseDown;
+            // 
+            // btnIOutline
+            // 
+            btnIOutline.Enabled = false;
+            btnIOutline.Location = new Point(1312, 156);
+            btnIOutline.Margin = new Padding(4, 3, 4, 3);
+            btnIOutline.Name = "btnIOutline";
+            btnIOutline.Size = new Size(95, 23);
+            btnIOutline.TabIndex = 762;
+            btnIOutline.Text = "inset outline";
+            toolTip1.SetToolTip(btnIOutline, "If the Inset checkbox is checked the\r\ncustom value is added, so you get the\r\nwidth value / 2 + the custom value");
+            btnIOutline.UseVisualStyleBackColor = true;
+            btnIOutline.Click += btnIOutline_Click;
+            // 
+            // numIOutline
+            // 
+            numIOutline.Enabled = false;
+            numIOutline.Location = new Point(1415, 157);
+            numIOutline.Margin = new Padding(4, 3, 4, 3);
+            numIOutline.Maximum = new decimal(new int[] { 255, 0, 0, 0 });
+            numIOutline.Minimum = new decimal(new int[] { 255, 0, 0, int.MinValue });
+            numIOutline.Name = "numIOutline";
+            numIOutline.Size = new Size(52, 23);
+            numIOutline.TabIndex = 761;
+            numIOutline.Value = new decimal(new int[] { 4, 0, 0, 0 });
+            // 
+            // cbInset
+            // 
+            cbInset.AutoSize = true;
+            cbInset.Enabled = false;
+            cbInset.Location = new Point(1254, 159);
+            cbInset.Name = "cbInset";
+            cbInset.Size = new Size(51, 19);
+            cbInset.TabIndex = 760;
+            cbInset.Text = "Inset";
+            cbInset.UseVisualStyleBackColor = true;
+            cbInset.CheckedChanged += cbOutline_CheckedChanged;
+            // 
+            // btnRedrawPaths
+            // 
+            btnRedrawPaths.Enabled = false;
+            btnRedrawPaths.Location = new Point(121, 218);
+            btnRedrawPaths.Margin = new Padding(4, 3, 4, 3);
+            btnRedrawPaths.Name = "btnRedrawPaths";
+            btnRedrawPaths.Size = new Size(71, 27);
+            btnRedrawPaths.TabIndex = 758;
+            btnRedrawPaths.Text = "drawPaths";
+            btnRedrawPaths.UseVisualStyleBackColor = true;
+            btnRedrawPaths.Click += btnRedrawPaths_Click;
             // 
             // panel10
             // 
@@ -391,7 +447,7 @@
             // label13
             // 
             label13.AutoSize = true;
-            label13.Location = new Point(1287, 125);
+            label13.Location = new Point(1402, 125);
             label13.Name = "label13";
             label13.Size = new Size(140, 15);
             label13.TabIndex = 753;
@@ -400,7 +456,7 @@
             // btnLoadHLC2ToOutline
             // 
             btnLoadHLC2ToOutline.Enabled = false;
-            btnLoadHLC2ToOutline.Location = new Point(1441, 121);
+            btnLoadHLC2ToOutline.Location = new Point(1556, 121);
             btnLoadHLC2ToOutline.Name = "btnLoadHLC2ToOutline";
             btnLoadHLC2ToOutline.Size = new Size(55, 23);
             btnLoadHLC2ToOutline.TabIndex = 752;
@@ -410,7 +466,7 @@
             // 
             // btnLoadToHLC1
             // 
-            btnLoadToHLC1.Location = new Point(1263, 161);
+            btnLoadToHLC1.Location = new Point(1498, 161);
             btnLoadToHLC1.Name = "btnLoadToHLC1";
             btnLoadToHLC1.Size = new Size(113, 23);
             btnLoadToHLC1.TabIndex = 751;
@@ -533,7 +589,7 @@
             // 
             // btnLoadToHLC2
             // 
-            btnLoadToHLC2.Location = new Point(1263, 190);
+            btnLoadToHLC2.Location = new Point(1498, 190);
             btnLoadToHLC2.Name = "btnLoadToHLC2";
             btnLoadToHLC2.Size = new Size(113, 23);
             btnLoadToHLC2.TabIndex = 742;
@@ -1176,7 +1232,7 @@
             // Label20
             // 
             Label20.AutoSize = true;
-            Label20.Location = new Point(1342, 83);
+            Label20.Location = new Point(1271, 16);
             Label20.Margin = new Padding(4, 0, 4, 0);
             Label20.Name = "Label20";
             Label20.Size = new Size(58, 15);
@@ -1188,7 +1244,7 @@
             cmbZoom.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbZoom.FormattingEnabled = true;
             cmbZoom.Items.AddRange(new object[] { "4", "2", "1", "Fit_Width", "Fit" });
-            cmbZoom.Location = new Point(1411, 80);
+            cmbZoom.Location = new Point(1340, 13);
             cmbZoom.Margin = new Padding(4, 3, 4, 3);
             cmbZoom.Name = "cmbZoom";
             cmbZoom.Size = new Size(87, 23);
@@ -1201,7 +1257,7 @@
             cbBGColor.AutoSize = true;
             cbBGColor.Checked = true;
             cbBGColor.CheckState = CheckState.Checked;
-            cbBGColor.Location = new Point(1322, 15);
+            cbBGColor.Location = new Point(1438, 15);
             cbBGColor.Margin = new Padding(4, 3, 4, 3);
             cbBGColor.Name = "cbBGColor";
             cbBGColor.Size = new Size(67, 19);
@@ -1214,7 +1270,7 @@
             // 
             button10.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             button10.ForeColor = SystemColors.ControlText;
-            button10.Location = new Point(1408, 45);
+            button10.Location = new Point(1524, 45);
             button10.Margin = new Padding(4, 3, 4, 3);
             button10.Name = "button10";
             button10.Size = new Size(88, 27);
@@ -1227,7 +1283,7 @@
             // 
             button8.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             button8.ForeColor = SystemColors.ControlText;
-            button8.Location = new Point(1312, 45);
+            button8.Location = new Point(1428, 45);
             button8.Margin = new Padding(4, 3, 4, 3);
             button8.Name = "button8";
             button8.Size = new Size(88, 27);
@@ -1241,7 +1297,7 @@
             button2.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             button2.FlatStyle = FlatStyle.System;
             button2.ForeColor = SystemColors.ControlText;
-            button2.Location = new Point(1408, 10);
+            button2.Location = new Point(1524, 10);
             button2.Margin = new Padding(4, 3, 4, 3);
             button2.Name = "button2";
             button2.Size = new Size(88, 27);
@@ -1254,7 +1310,7 @@
             btnCancel.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             btnCancel.DialogResult = DialogResult.Cancel;
             btnCancel.ForeColor = SystemColors.ControlText;
-            btnCancel.Location = new Point(1408, 220);
+            btnCancel.Location = new Point(1524, 220);
             btnCancel.Margin = new Padding(4, 3, 4, 3);
             btnCancel.Name = "btnCancel";
             btnCancel.Size = new Size(88, 27);
@@ -1268,7 +1324,7 @@
             btnOK.DialogResult = DialogResult.OK;
             btnOK.Enabled = false;
             btnOK.ForeColor = SystemColors.ControlText;
-            btnOK.Location = new Point(1314, 220);
+            btnOK.Location = new Point(1430, 220);
             btnOK.Margin = new Padding(4, 3, 4, 3);
             btnOK.Name = "btnOK";
             btnOK.Size = new Size(88, 27);
@@ -1610,8 +1666,8 @@
             // splitContainer1.Panel2
             // 
             splitContainer1.Panel2.Controls.Add(helplineRulerCtrl2);
-            splitContainer1.Size = new Size(1509, 648);
-            splitContainer1.SplitterDistance = 771;
+            splitContainer1.Size = new Size(1625, 648);
+            splitContainer1.SplitterDistance = 830;
             splitContainer1.SplitterWidth = 5;
             splitContainer1.TabIndex = 1;
             // 
@@ -1635,7 +1691,7 @@
             helplineRulerCtrl1.PtEnd = new Point(0, 0);
             helplineRulerCtrl1.PtSt = new Point(0, 0);
             helplineRulerCtrl1.SetZoomOnlyByMethodCall = false;
-            helplineRulerCtrl1.Size = new Size(771, 648);
+            helplineRulerCtrl1.Size = new Size(830, 648);
             helplineRulerCtrl1.TabIndex = 0;
             helplineRulerCtrl1.Zoom = 1F;
             helplineRulerCtrl1.ZoomSetManually = false;
@@ -1661,7 +1717,7 @@
             helplineRulerCtrl2.PtEnd = new Point(0, 0);
             helplineRulerCtrl2.PtSt = new Point(0, 0);
             helplineRulerCtrl2.SetZoomOnlyByMethodCall = false;
-            helplineRulerCtrl2.Size = new Size(733, 648);
+            helplineRulerCtrl2.Size = new Size(790, 648);
             helplineRulerCtrl2.TabIndex = 0;
             helplineRulerCtrl2.Zoom = 1F;
             helplineRulerCtrl2.ZoomSetManually = false;
@@ -1680,7 +1736,7 @@
             statusStrip1.Location = new Point(0, 902);
             statusStrip1.Name = "statusStrip1";
             statusStrip1.Padding = new Padding(1, 0, 16, 0);
-            statusStrip1.Size = new Size(1509, 39);
+            statusStrip1.Size = new Size(1625, 39);
             statusStrip1.TabIndex = 222;
             statusStrip1.Text = "statusStrip1";
             // 
@@ -1808,23 +1864,11 @@
             timer2.Interval = 5000;
             timer2.Tick += timer2_Tick;
             // 
-            // btnRedrawPaths
-            // 
-            btnRedrawPaths.Enabled = false;
-            btnRedrawPaths.Location = new Point(121, 218);
-            btnRedrawPaths.Margin = new Padding(4, 3, 4, 3);
-            btnRedrawPaths.Name = "btnRedrawPaths";
-            btnRedrawPaths.Size = new Size(71, 27);
-            btnRedrawPaths.TabIndex = 758;
-            btnRedrawPaths.Text = "drawPaths";
-            btnRedrawPaths.UseVisualStyleBackColor = true;
-            btnRedrawPaths.Click += btnRedrawPaths_Click;
-            // 
             // frmAvoidAGrabCutEasy
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1509, 941);
+            ClientSize = new Size(1625, 941);
             Controls.Add(splitContainer1);
             Controls.Add(panel1);
             Controls.Add(panel3);
@@ -1837,6 +1881,7 @@
             Load += frmGrabCut_Load;
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)numIOutline).EndInit();
             panel10.ResumeLayout(false);
             panel10.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)numTolFillMouseUp).EndInit();
@@ -2006,5 +2051,8 @@
         private NumericUpDown numTolFillMouseUp;
         private CheckBox cbFillMouseUp;
         private Button btnRedrawPaths;
+        private Button btnIOutline;
+        private NumericUpDown numIOutline;
+        private CheckBox cbInset;
     }
 }

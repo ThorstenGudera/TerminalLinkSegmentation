@@ -4240,10 +4240,25 @@ namespace QuickExtract2
             if (this.cbOutline.Checked && this.helplineRulerCtrl1.Bmp != null)
             {
                 using Bitmap bmp = new Bitmap(this.helplineRulerCtrl1.Bmp);
+
                 List<ChainCode>? c = GetBoundary(bmp, 0, false);
                 c = c?.OrderByDescending(x => x.Coord.Count).ToList();
 
                 int wh = (int)this.numWH.Value / this.PreResampleFactor;
+
+                bool inset = this.cbInset.Checked;
+
+                if (inset)
+                {
+                    for (int i = 0; i < wh / 2; i++)
+                    {
+                        if (c != null)
+                        {
+                            RemoveOutline(bmp, c);
+                            c = GetBoundary(bmp, 0, false);
+                        }
+                    }
+                }
 
                 AddPointsToScribblePathFromFrmQuickExtract(c, wh);
 
@@ -4251,6 +4266,36 @@ namespace QuickExtract2
             }
 
             this.helplineRulerCtrl1.dbPanel1.Invalidate();
+        }
+
+        public void RemoveOutline(Bitmap b, List<ChainCode> fList)
+        {
+            BitmapData bmData = b.LockBits(new Rectangle(0, 0, b.Width, b.Height),
+                               ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
+            int stride = bmData.Stride;
+
+            System.IntPtr Scan0 = bmData.Scan0;
+
+            unsafe
+            {
+                byte* p = (byte*)(void*)Scan0;
+
+                if (fList != null && fList.Count > 0)
+                {
+                    foreach (ChainCode c in fList)
+                    {
+                        for (int i = 0; i < c.Coord.Count; i++)
+                        {
+                            int x = c.Coord[i].X;
+                            int y = c.Coord[i].Y;
+
+                            p[y * stride + x * 4 + 3] = (byte)0;
+                        }
+                    }
+                }
+            }
+
+            b.UnlockBits(bmData);
         }
 
         private List<ChainCode>? GetBoundary(Bitmap? upperImg, int minAlpha, bool grayScale)
@@ -4440,34 +4485,34 @@ namespace QuickExtract2
             }
         }
 
-        //private void btnExtractFF_Click(object sender, EventArgs e)
-        //{
-        //    if (this.helplineRulerCtrl1.Bmp != null)
-        //    {
-        //        using ExtractImagePart.Form1 frm = new(this.helplineRulerCtrl1.Bmp);
-        //        frm.CachePathAddition = this.CachePathAddition;
-        //        frm.SetupCache();
+        private void btnExtractFF_Click(object sender, EventArgs e)
+        {
+            //if (this.helplineRulerCtrl1.Bmp != null)
+            //{
+            //    using ExtractImagePart.Form1 frm = new(this.helplineRulerCtrl1.Bmp);
+            //    frm.CachePathAddition = this.CachePathAddition;
+            //    frm.SetupCache();
 
-        //        if (frm.ShowDialog() == DialogResult.OK)
-        //        {
-        //            Bitmap b = frm.FBitmap;
+            //    if (frm.ShowDialog() == DialogResult.OK)
+            //    {
+            //        Bitmap b = frm.FBitmap;
 
-        //            if (b != null)
-        //            {
-        //                Bitmap bmp = new Bitmap(b);
-        //                this.SetBitmap(this.helplineRulerCtrl1.Bmp, bmp, this.helplineRulerCtrl1, "Bmp");
-        //                this._undoOPCache?.Add(this.helplineRulerCtrl1.Bmp);
+            //        if (b != null)
+            //        {
+            //            Bitmap bmp = new Bitmap(b);
+            //            this.SetBitmap(this.helplineRulerCtrl1.Bmp, bmp, this.helplineRulerCtrl1, "Bmp");
+            //            this._undoOPCache?.Add(this.helplineRulerCtrl1.Bmp);
 
-        //                this.helplineRulerCtrl1.MakeBitmap(this.helplineRulerCtrl1.Bmp);
+            //            this.helplineRulerCtrl1.MakeBitmap(this.helplineRulerCtrl1.Bmp);
 
-        //                Bitmap? bC2 = new Bitmap(b);
-        //                this.SetBitmap(ref this._bmpBU, ref bC2);
+            //            Bitmap? bC2 = new Bitmap(b);
+            //            this.SetBitmap(ref this._bmpBU, ref bC2);
 
-        //                this.helplineRulerCtrl1.dbPanel1.Invalidate();
-        //            }
-        //        }
-        //    }
-        //}
+            //            this.helplineRulerCtrl1.dbPanel1.Invalidate();
+            //        }
+            //    }
+            //}
+        }
 
         public void SetClampVal(double v)
         {
