@@ -64,6 +64,7 @@
             cbLSBmp = new CheckBox();
             Label20 = new Label();
             panel1 = new Panel();
+            btnRScribbles = new Button();
             label22 = new Label();
             btnAlphaCurve = new Button();
             label21 = new Label();
@@ -130,7 +131,6 @@
             backgroundWorker3 = new System.ComponentModel.BackgroundWorker();
             backgroundWorker4 = new System.ComponentModel.BackgroundWorker();
             backgroundWorker6 = new System.ComponentModel.BackgroundWorker();
-            btnRScribbles = new Button();
             statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
@@ -585,6 +585,17 @@
             panel1.Name = "panel1";
             panel1.Size = new Size(1479, 267);
             panel1.TabIndex = 226;
+            // 
+            // btnRScribbles
+            // 
+            btnRScribbles.Location = new Point(356, 193);
+            btnRScribbles.Margin = new Padding(4, 3, 4, 3);
+            btnRScribbles.Name = "btnRScribbles";
+            btnRScribbles.Size = new Size(117, 23);
+            btnRScribbles.TabIndex = 750;
+            btnRScribbles.Text = "resize scribbles";
+            btnRScribbles.UseVisualStyleBackColor = true;
+            btnRScribbles.Click += btnRScribbles_Click;
             // 
             // label22
             // 
@@ -1170,6 +1181,7 @@
             btnOK.TabIndex = 644;
             btnOK.Text = "OK";
             btnOK.UseVisualStyleBackColor = true;
+            btnOK.Click += Button28_Click;
             // 
             // btnGo
             // 
@@ -1298,17 +1310,6 @@
             backgroundWorker6.DoWork += backgroundWorker6_DoWork;
             backgroundWorker6.ProgressChanged += backgroundWorker6_ProgressChanged;
             backgroundWorker6.RunWorkerCompleted += backgroundWorker6_RunWorkerCompleted;
-            // 
-            // btnRScribbles
-            // 
-            btnRScribbles.Location = new Point(356, 193);
-            btnRScribbles.Margin = new Padding(4, 3, 4, 3);
-            btnRScribbles.Name = "btnRScribbles";
-            btnRScribbles.Size = new Size(117, 23);
-            btnRScribbles.TabIndex = 750;
-            btnRScribbles.Text = "resize scribbles";
-            btnRScribbles.UseVisualStyleBackColor = true;
-            btnRScribbles.Click += btnRScribbles_Click;
             // 
             // frmAlphaMatte
             // 

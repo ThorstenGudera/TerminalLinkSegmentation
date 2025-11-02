@@ -1,19 +1,10 @@
-﻿using AvailMem;
-using Cache;
+﻿using Cache;
 using ChainCodeFinder;
 using QuickExtractingLib2;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
-using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.Button;
 
 namespace QuickExtract2
 {
@@ -74,7 +65,7 @@ namespace QuickExtract2
 
         public Bitmap? OrigBmp { get; set; }
         public bool PreResample { get; set; }
-        public int PreResampleFactor { get; set; } = 1;
+        public int PreResampleFactor { get; private set; } = 1;
         public bool Draw { get; set; }
 
         private bool _pic_changed = false;
@@ -105,6 +96,7 @@ namespace QuickExtract2
         private List<Tuple<int, int, int, bool, List<List<Point>>>>? _scribbleSeq;
         private List<Point>? _ptPrev;
         private bool _reRunLineRunPrev;
+        private Bitmap? _bOrig;
 
         public frmQuickExtract(Bitmap bmp)
         {
@@ -1786,6 +1778,8 @@ namespace QuickExtract2
                     this._bmpBU.Dispose();
                 if (this.OrigBmp != null)
                     this.OrigBmp.Dispose();
+                if (this._bOrig != null)
+                    this._bOrig.Dispose();
 
                 if (this.quickExtractingCtrl1.Alg != null)
                 {
@@ -1821,6 +1815,9 @@ namespace QuickExtract2
         {
             if (this.helplineRulerCtrl1.Bmp != null)
             {
+                Bitmap? bOrig = new Bitmap(this.helplineRulerCtrl1.Bmp);
+                this.SetBitmap(ref this._bOrig, ref bOrig);
+
                 int f = 1;
                 if (Math.Max(this.helplineRulerCtrl1.Bmp.Width, this.helplineRulerCtrl1.Bmp.Height) > 1000)
                     f = 2;
@@ -1880,7 +1877,16 @@ namespace QuickExtract2
                 this.button4.Enabled = false;
                 this.button4.Refresh();
 
-                Bitmap bOut = _undoOPCache.DoUndo();
+                Bitmap? bOut = _undoOPCache.DoUndo();
+
+                if (this.PreResampleFactor != 1 && (bOut.Width != this.helplineRulerCtrl1.Bmp.Width || bOut.Height != this.helplineRulerCtrl1.Bmp.Height))
+                {
+                    Bitmap? bmp = new Bitmap(bOut.Width / this.PreResampleFactor, bOut.Height / this.PreResampleFactor);
+                    using Graphics gx = Graphics.FromImage(bmp);
+                    gx.DrawImage(bOut, 0, 0, bmp.Width, bmp.Height);
+
+                    this.SetBitmap(ref bOut, ref bmp);
+                }
 
                 if (bOut != null)
                 {
@@ -1992,7 +1998,16 @@ namespace QuickExtract2
                 this.button5.Enabled = false;
                 this.button5.Refresh();
 
-                Bitmap bOut = _undoOPCache.DoRedo();
+                Bitmap? bOut = _undoOPCache.DoRedo();
+
+                if (this.PreResampleFactor != 1 && (bOut.Width != this.helplineRulerCtrl1.Bmp.Width || bOut.Height != this.helplineRulerCtrl1.Bmp.Height))
+                {
+                    Bitmap? bmp = new Bitmap(bOut.Width / this.PreResampleFactor, bOut.Height / this.PreResampleFactor);
+                    using Graphics gx = Graphics.FromImage(bmp);
+                    gx.DrawImage(bOut, 0, 0, bmp.Width, bmp.Height);
+
+                    this.SetBitmap(ref bOut, ref bmp);
+                }
 
                 if (bOut != null)
                 {
@@ -2095,7 +2110,19 @@ namespace QuickExtract2
                 {
                     if (this.saveFileDialog1.ShowDialog() == DialogResult.OK)
                     {
-                        this.helplineRulerCtrl1.Bmp.Save(this.saveFileDialog1.FileName, System.Drawing.Imaging.ImageFormat.Png);
+                        if (this.PreResampleFactor != 1 && (this._bOrig != null && (
+                            this._bOrig.Width != this.helplineRulerCtrl1.Bmp.Width || this._bOrig.Height != this.helplineRulerCtrl1.Bmp.Height)))
+                        {
+                            using Bitmap? bmp = new Bitmap(this._bOrig.Width, this._bOrig.Height);
+                            using Graphics gx = Graphics.FromImage(bmp);
+                            gx.DrawImage(this.helplineRulerCtrl1.Bmp, 0, 0, bmp.Width, bmp.Height);
+
+                            //crop from Orig!
+                            using Bitmap bRes = CropAlpha(this._bOrig, bmp);
+                            bRes.Save(this.saveFileDialog1.FileName, System.Drawing.Imaging.ImageFormat.Png);
+                        }
+                        else
+                            this.helplineRulerCtrl1.Bmp.Save(this.saveFileDialog1.FileName, System.Drawing.Imaging.ImageFormat.Png);
                         _pic_changed = false;
                     }
                 }
@@ -2104,6 +2131,40 @@ namespace QuickExtract2
                     MessageBox.Show(ex.Message);
                 }
             }
+        }
+
+        private unsafe Bitmap CropAlpha(Bitmap bmp, Bitmap b)
+        {
+            int w = bmp.Width;
+            int h = bmp.Height;
+
+            Bitmap bRes = new Bitmap(bmp);
+            BitmapData bmD = bRes.LockBits(new Rectangle(0, 0, w, h), ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
+            BitmapData bmR = b.LockBits(new Rectangle(0, 0, w, h), ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
+            int stride = bmD.Stride;
+
+            Parallel.For(0, h, y =>
+            {
+                byte* p = (byte*)bmD.Scan0;
+                byte* pR = (byte*)bmR.Scan0;
+
+                p += y * stride;
+                pR += y * stride;
+
+                for (int x = 0; x < w; x++)
+                {
+                    if (pR[3] == 0)
+                        p[0] = p[1] = p[2] = p[3] = 0;
+
+                    p += 4;
+                    pR += 4;
+                }
+            });
+
+            bRes.UnlockBits(bmD);
+            b.UnlockBits(bmR);
+
+            return bRes;
         }
 
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
@@ -4337,7 +4398,6 @@ namespace QuickExtract2
 
                         this.helplineRulerCtrl1.dbPanel1.AutoScrollMinSize = new Size(System.Convert.ToInt32(this.helplineRulerCtrl1.Bmp.Width * this.helplineRulerCtrl1.Zoom), System.Convert.ToInt32(this.helplineRulerCtrl1.Bmp.Height * this.helplineRulerCtrl1.Zoom));
                         this.helplineRulerCtrl1.MakeBitmap(this.helplineRulerCtrl1.Bmp);
-                        this.helplineRulerCtrl1.dbPanel1.Invalidate();
 
                         this.quickExtractingCtrl1.PathList = frm.PathListNew;
                         this.quickExtractingCtrl1.CurPath = frm.PathListNew?[frm.PathListNew.Count - 1];
@@ -4379,6 +4439,35 @@ namespace QuickExtract2
                 }
             }
         }
+
+        //private void btnExtractFF_Click(object sender, EventArgs e)
+        //{
+        //    if (this.helplineRulerCtrl1.Bmp != null)
+        //    {
+        //        using ExtractImagePart.Form1 frm = new(this.helplineRulerCtrl1.Bmp);
+        //        frm.CachePathAddition = this.CachePathAddition;
+        //        frm.SetupCache();
+
+        //        if (frm.ShowDialog() == DialogResult.OK)
+        //        {
+        //            Bitmap b = frm.FBitmap;
+
+        //            if (b != null)
+        //            {
+        //                Bitmap bmp = new Bitmap(b);
+        //                this.SetBitmap(this.helplineRulerCtrl1.Bmp, bmp, this.helplineRulerCtrl1, "Bmp");
+        //                this._undoOPCache?.Add(this.helplineRulerCtrl1.Bmp);
+
+        //                this.helplineRulerCtrl1.MakeBitmap(this.helplineRulerCtrl1.Bmp);
+
+        //                Bitmap? bC2 = new Bitmap(b);
+        //                this.SetBitmap(ref this._bmpBU, ref bC2);
+
+        //                this.helplineRulerCtrl1.dbPanel1.Invalidate();
+        //            }
+        //        }
+        //    }
+        //}
 
         public void SetClampVal(double v)
         {

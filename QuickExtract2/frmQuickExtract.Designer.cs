@@ -50,6 +50,10 @@
             toolTip1 = new ToolTip(components);
             saveFileDialog1 = new SaveFileDialog();
             Panel1 = new Panel();
+            panel7 = new Panel();
+            panel2 = new Panel();
+            panel5 = new Panel();
+            btnExtractFF = new Button();
             btnLoadOrig = new Button();
             numWH = new NumericUpDown();
             cbOutline = new CheckBox();
@@ -210,6 +214,10 @@
             // Panel1
             // 
             Panel1.AutoScroll = true;
+            Panel1.Controls.Add(panel7);
+            Panel1.Controls.Add(panel2);
+            Panel1.Controls.Add(panel5);
+            Panel1.Controls.Add(btnExtractFF);
             Panel1.Controls.Add(btnLoadOrig);
             Panel1.Controls.Add(numWH);
             Panel1.Controls.Add(cbOutline);
@@ -240,10 +248,49 @@
             Panel1.Size = new Size(1516, 285);
             Panel1.TabIndex = 218;
             // 
+            // panel7
+            // 
+            panel7.BackColor = SystemColors.ActiveCaptionText;
+            panel7.Location = new Point(1247, 246);
+            panel7.Margin = new Padding(4, 3, 4, 3);
+            panel7.Name = "panel7";
+            panel7.Size = new Size(257, 2);
+            panel7.TabIndex = 261;
+            // 
+            // panel2
+            // 
+            panel2.BackColor = SystemColors.ActiveCaptionText;
+            panel2.Location = new Point(1247, 204);
+            panel2.Margin = new Padding(4, 3, 4, 3);
+            panel2.Name = "panel2";
+            panel2.Size = new Size(257, 2);
+            panel2.TabIndex = 260;
+            // 
+            // panel5
+            // 
+            panel5.BackColor = SystemColors.ActiveCaptionText;
+            panel5.Location = new Point(1247, 171);
+            panel5.Margin = new Padding(4, 3, 4, 3);
+            panel5.Name = "panel5";
+            panel5.Size = new Size(257, 2);
+            panel5.TabIndex = 260;
+            // 
+            // btnExtractFF
+            // 
+            btnExtractFF.ForeColor = SystemColors.ControlText;
+            btnExtractFF.Location = new Point(1287, 213);
+            btnExtractFF.Margin = new Padding(4, 3, 4, 3);
+            btnExtractFF.Name = "btnExtractFF";
+            btnExtractFF.Size = new Size(107, 27);
+            btnExtractFF.TabIndex = 287;
+            btnExtractFF.Text = "ExtractByFloodfill";
+            btnExtractFF.UseVisualStyleBackColor = true;
+            btnExtractFF.Visible = false;
+            // 
             // btnLoadOrig
             // 
             btnLoadOrig.ForeColor = SystemColors.ControlText;
-            btnLoadOrig.Location = new Point(1201, 75);
+            btnLoadOrig.Location = new Point(1179, 213);
             btnLoadOrig.Margin = new Padding(4, 3, 4, 3);
             btnLoadOrig.Name = "btnLoadOrig";
             btnLoadOrig.Size = new Size(88, 27);
@@ -332,7 +379,7 @@
             // Panel11
             // 
             Panel11.BackColor = SystemColors.ActiveCaptionText;
-            Panel11.Location = new Point(1174, 23);
+            Panel11.Location = new Point(1174, 34);
             Panel11.Margin = new Padding(4, 3, 4, 3);
             Panel11.Name = "Panel11";
             Panel11.Size = new Size(2, 35);
@@ -341,7 +388,7 @@
             // Button26
             // 
             Button26.Enabled = false;
-            Button26.Location = new Point(1455, 204);
+            Button26.Location = new Point(1455, 252);
             Button26.Margin = new Padding(4, 3, 4, 3);
             Button26.Name = "Button26";
             Button26.Size = new Size(49, 27);
@@ -352,7 +399,7 @@
             // 
             // Button11
             // 
-            Button11.Location = new Point(1287, 204);
+            Button11.Location = new Point(1287, 252);
             Button11.Margin = new Padding(4, 3, 4, 3);
             Button11.Name = "Button11";
             Button11.Size = new Size(49, 27);
@@ -365,7 +412,7 @@
             // 
             Label40.AutoSize = true;
             Label40.Enabled = false;
-            Label40.Location = new Point(1360, 210);
+            Label40.Location = new Point(1360, 258);
             Label40.Margin = new Padding(4, 0, 4, 0);
             Label40.Name = "Label40";
             Label40.Size = new Size(85, 15);
@@ -375,7 +422,7 @@
             // Label1
             // 
             Label1.AutoSize = true;
-            Label1.Location = new Point(1176, 210);
+            Label1.Location = new Point(1176, 258);
             Label1.Margin = new Padding(4, 0, 4, 0);
             Label1.Name = "Label1";
             Label1.Size = new Size(98, 15);
@@ -555,6 +602,10 @@
         public CheckBox cbOutline;
         private System.Windows.Forms.Timer timer4;
         private Button btnLoadOrig;
+        internal Panel panel7;
+        internal Panel panel2;
+        internal Panel panel5;
+        private Button btnExtractFF;
         public QuickExtractingCtrl quickExtractingCtrl1;
     }
 }
