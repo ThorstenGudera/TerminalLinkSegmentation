@@ -1,28 +1,18 @@
-﻿using AvoidAGrabCutEasy.ProcOutline;
-using Cache;
+﻿using Cache;
 using ChainCodeFinder;
 using ConvolutionLib;
-using GetAlphaMatte;
 using OutlineOperations;
 using QuickExtract2;
 using SegmentsListLib;
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
-using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace AvoidAGrabCutEasy
 {
@@ -54,6 +44,8 @@ namespace AvoidAGrabCutEasy
         }
 
         public Dictionary<int, List<List<Point>>>? UnknownScibblesBU { get; private set; }
+        public List<List<PointF>>? QECurPath { get; private set; }
+        public List<List<List<PointF>>>? QEPathList { get; private set; }
 
         private Bitmap? _bmpBU = null;
         private bool _pic_changed = false;
@@ -146,6 +138,11 @@ namespace AvoidAGrabCutEasy
         private LuminanceMapOp? _lop;
         private int _maxSizeBU;
         private int _previewSize = 640;
+        private List<int>? _checkedPaths;
+        private QuickExtractingCtrl? quickExtractingCtrl1;
+        private int _frmPreResampleFactor;
+        private Color _col;
+        private int _w;
 
         public event EventHandler<string>? ShowInfo;
         //public event EventHandler<string> BoundaryError;
@@ -1159,6 +1156,161 @@ namespace AvoidAGrabCutEasy
                         ((this._ptHLC1FGBG.Y * this.helplineRulerCtrl1.Zoom - 5)) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y,
                         ((this._ptHLC1FGBG.X * this.helplineRulerCtrl1.Zoom - 5)) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X,
                         ((this._ptHLC1FGBG.Y * this.helplineRulerCtrl1.Zoom + 5)) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y);
+                }
+            }
+
+            if (this.quickExtractingCtrl1 != null && this._checkedPaths != null && this._checkedPaths.Count > 0)
+            {
+                int w = (int)this.quickExtractingCtrl1.numDrawWidth.Value;
+                Color col = this.quickExtractingCtrl1.lblColor.BackColor;
+                int cnt = 0;
+
+                for (int j = 0; j < this._checkedPaths.Count; j++)
+                {
+                    if (this._checkedPaths[j] == -1)
+                    {
+                        // curpath
+                        using (GraphicsPath gp = new GraphicsPath())
+                        {
+                            if (this.quickExtractingCtrl1.CurPath != null && this.quickExtractingCtrl1.CurPath.Count > 0)
+                            {
+                                for (int i = 0; i <= this.quickExtractingCtrl1.CurPath.Count - 1; i++)
+                                {
+                                    List<PointF> p = this.quickExtractingCtrl1.CurPath[i];
+                                    if (p != null && p.Count > 1)
+                                        gp.AddLines(p.ToArray());
+                                }
+                            }
+
+                            int x = this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X;
+                            int y = this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y;
+                            using Matrix mx = new Matrix(this._frmPreResampleFactor, 0, 0, this._frmPreResampleFactor, 0, 0);
+                            if (gp != null)
+                            {
+                                gp.Transform(mx);
+                                using (Matrix m = new Matrix(this.helplineRulerCtrl1.Zoom, 0, 0, this.helplineRulerCtrl1.Zoom, x, y))
+                                {
+                                    gp.Transform(m);
+                                    using (Pen pen = new Pen(new SolidBrush(col), w))
+                                    {
+                                        e.Graphics.DrawPath(pen, gp);
+                                        cnt += gp.PointCount;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    else if (this.quickExtractingCtrl1.PathList != null)
+                    {
+                        List<List<PointF>> cPath = this.quickExtractingCtrl1.PathList[this._checkedPaths[j]];
+
+                        using (GraphicsPath gp = new GraphicsPath())
+                        {
+                            if (cPath.Count > 0)
+                            {
+                                for (int i = 0; i <= cPath.Count - 1; i++)
+                                {
+                                    List<PointF> p = cPath[i];
+                                    if (p != null && p.Count > 1)
+                                        gp.AddLines(p.ToArray());
+                                }
+                            }
+
+                            int x = this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X;
+                            int y = this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y;
+                            using Matrix mx = new Matrix(this._frmPreResampleFactor, 0, 0, this._frmPreResampleFactor, 0, 0);
+                            if (gp != null)
+                            {
+                                gp.Transform(mx);
+                                using (Matrix m = new Matrix(this.helplineRulerCtrl1.Zoom, 0, 0, this.helplineRulerCtrl1.Zoom, x, y))
+                                {
+                                    gp.Transform(m);
+                                    using (Pen pen = new Pen(new SolidBrush(col), w))
+                                    {
+                                        e.Graphics.DrawPath(pen, gp);
+                                        cnt += gp.PointCount;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            else if (this.quickExtractingCtrl1 == null && this._checkedPaths != null && this._checkedPaths.Count > 0)
+            {
+                int w = (int)this._w;
+                Color col = this._col;
+                int cnt = 0;
+
+                for (int j = 0; j < this._checkedPaths.Count; j++)
+                {
+                    if (this._checkedPaths[j] == -1)
+                    {
+                        // curpath
+                        using (GraphicsPath gp = new GraphicsPath())
+                        {
+                            if (this.QECurPath != null && this.QECurPath.Count > 0)
+                            {
+                                for (int i = 0; i <= this.QECurPath.Count - 1; i++)
+                                {
+                                    List<PointF> p = this.QECurPath[i];
+                                    if (p != null && p.Count > 1)
+                                        gp.AddLines(p.ToArray());
+                                }
+                            }
+
+                            int x = this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X;
+                            int y = this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y;
+                            using Matrix mx = new Matrix(this._frmPreResampleFactor, 0, 0, this._frmPreResampleFactor, 0, 0);
+                            if (gp != null)
+                            {
+                                gp.Transform(mx);
+                                using (Matrix m = new Matrix(this.helplineRulerCtrl1.Zoom, 0, 0, this.helplineRulerCtrl1.Zoom, x, y))
+                                {
+                                    gp.Transform(m);
+                                    using (Pen pen = new Pen(new SolidBrush(col), w))
+                                    {
+                                        e.Graphics.DrawPath(pen, gp);
+                                        cnt += gp.PointCount;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    else if (this.QEPathList != null)
+                    {
+                        List<List<PointF>> cPath = this.QEPathList[this._checkedPaths[j]];
+
+                        using (GraphicsPath gp = new GraphicsPath())
+                        {
+                            if (cPath.Count > 0)
+                            {
+                                for (int i = 0; i <= cPath.Count - 1; i++)
+                                {
+                                    List<PointF> p = cPath[i];
+                                    if (p != null && p.Count > 1)
+                                        gp.AddLines(p.ToArray());
+                                }
+                            }
+
+                            int x = this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X;
+                            int y = this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y;
+                            using Matrix mx = new Matrix(this._frmPreResampleFactor, 0, 0, this._frmPreResampleFactor, 0, 0);
+                            if (gp != null)
+                            {
+                                gp.Transform(mx);
+                                using (Matrix m = new Matrix(this.helplineRulerCtrl1.Zoom, 0, 0, this.helplineRulerCtrl1.Zoom, x, y))
+                                {
+                                    gp.Transform(m);
+                                    using (Pen pen = new Pen(new SolidBrush(col), w))
+                                    {
+                                        e.Graphics.DrawPath(pen, gp);
+                                        cnt += gp.PointCount;
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -6162,76 +6314,310 @@ namespace AvoidAGrabCutEasy
         {
             if (this.helplineRulerCtrl1.Bmp != null && this.CachePathAddition != null)
             {
-                using frmQuickExtract frm = new(this.helplineRulerCtrl1.Bmp);
-
-                if (this.cbPreResample.Checked)
-                    frm.PreResample = true;
-                frm.CachePathAddition = this.CachePathAddition;
-                frm.SetupCache();
-
-                frm.SetClampVal(0.95);
-
-                Bitmap? bCF = null;
-
-                if (frm.ShowDialog() == DialogResult.OK)
+                using (frmQuickExtract frm = new frmQuickExtract(this.helplineRulerCtrl1.Bmp))
                 {
-                    Bitmap? b = null;
-                    if (frm.FBitmap != null)
-                        b = new Bitmap(ResampleBack(frm.FBitmap, frm.PreResampleFactor));
+                    if (this.cbPreResample.Checked)
+                        frm.PreResample = true;
+                    frm.CachePathAddition = this.CachePathAddition;
+                    frm.SetupCache();
 
-                    bCF = b;
+                    frm.cbLoadTo.Visible = frm.cbOutline.Visible = frm.numWH.Visible = true;
 
-                    if (frm.cbLoadTo.Checked && b != null)
+                    frm.SetClampVal(0.95);
+
+                    Bitmap? bCF = null;
+
+                    if (frm.ShowDialog() == DialogResult.OK)
                     {
-                        this.SetBitmap(this.helplineRulerCtrl2.Bmp, b, this.helplineRulerCtrl2, "Bmp");
+                        Bitmap? b = null;
 
-                        Bitmap bC = new Bitmap(this.helplineRulerCtrl2.Bmp);
-                        this.SetBitmap(ref this._b4Copy, ref bC);
-                        this.toolStripDropDownButton1.Enabled = true;
+                        int w = (int)frm.quickExtractingCtrl1.numDrawWidth.Value * frm.PreResampleFactor;
+                        Color col = frm.quickExtractingCtrl1.lblColor.BackColor;
+                        GraphicsPath? gP = null;
+                        this._frmPreResampleFactor = frm.PreResampleFactor;
+                        this._col = col;
+                        this._w = (int)frm.quickExtractingCtrl1.numDrawWidth.Value;
 
-                        //Bitmap bC2 = new Bitmap(this.helplineRulerCtrl1.Bmp);
-                        //this.SetBitmap(ref this._bmpBU, ref bC2);
+                        if (frm.Draw)
+                        {
+                            this.QECurPath = frm.quickExtractingCtrl1.ClonePath(frm.quickExtractingCtrl1.CurPath);
+                            this.QEPathList = frm.CloneList(frm.quickExtractingCtrl1.PathList);
 
-                        this.helplineRulerCtrl2.SetZoom(this.helplineRulerCtrl1.Zoom.ToString());
-                        this.helplineRulerCtrl2.MakeBitmap(this.helplineRulerCtrl2.Bmp);
-                        this.helplineRulerCtrl2.dbPanel1.AutoScrollMinSize = new Size(
-                            (int)(this.helplineRulerCtrl2.Bmp.Width * this.helplineRulerCtrl2.Zoom),
-                            (int)(this.helplineRulerCtrl2.Bmp.Height * this.helplineRulerCtrl2.Zoom));
+                            this.quickExtractingCtrl1 = frm.quickExtractingCtrl1;
 
-                        _undoOPCache?.Add(b);
+                            if ((this.QECurPath != null && this.QECurPath.Count > 0) || (this.QEPathList != null && this.QEPathList.Count > 0))
+                                if (this.quickExtractingCtrl1 != null)
+                                    this.btnRedrawPaths.Enabled = true;
+                                else
+                                    this.btnRedrawPaths.Enabled = false;
 
-                        this._pic_changed = true;
-                    }
-                    else if (b != null)
-                    {
-                        b.Dispose();
-                        b = null;
-                    }
+                            gP = GetGraphicsPath(frm);
+                            using Matrix mx = new Matrix(frm.PreResampleFactor, 0, 0, frm.PreResampleFactor, 0, 0);
+                            if (gP != null)
+                                gP.Transform(mx);
+                        }
 
-                    if (frm.cbOutline.Checked && bCF != null)
-                    {
-                        using Bitmap bmp = new Bitmap(bCF);
-                        List<ChainCode>? c = GetBoundary(bmp, 0, false);
-                        c = c?.OrderByDescending(x => x.Coord.Count).ToList();
+                        if (frm.FBitmap != null)
+                            b = new Bitmap(ResampleBack(frm.FBitmap, frm.PreResampleFactor, gP, col, w));
 
-                        int wh = (int)frm.numWH.Value;
+                        bCF = b;
 
-                        this.cbScribbleMode.Checked = true;
-                        this.cbClickMode.Checked = false;
+                        if (frm.cbLoadTo.Checked && b != null)
+                        {
+                            this.SetBitmap(this.helplineRulerCtrl2.Bmp, b, this.helplineRulerCtrl2, "Bmp");
 
-                        AddPointsToScribblePathFromFrmQuickExtract(c, wh);
+                            if (gP != null && gP.PointCount > 1)
+                            {
+                                Bitmap bC2 = new Bitmap(b);
+                                this.SetBitmap(this.helplineRulerCtrl1.Bmp, bC2, this.helplineRulerCtrl1, "Bmp");
+                                this.helplineRulerCtrl1.MakeBitmap(this.helplineRulerCtrl1.Bmp);
+                                this.helplineRulerCtrl1.dbPanel1.Invalidate();
 
-                        this._pic_changed = true;
+                                this._undoOPCache?.Add(this.helplineRulerCtrl1.Bmp);
+
+                                int? ja = this._undoOPCache?.CurrentPosition - 1;
+                                if (ja != null && this._undoOPCache != null)
+                                    this._undoOPCache.CurrentResetMarker = ja.Value;
+                            }
+
+                            Bitmap? bC = new Bitmap(this.helplineRulerCtrl2.Bmp);
+                            this.SetBitmap(ref this._b4Copy, ref bC);
+
+                            //Bitmap bC2 = new Bitmap(this.helplineRulerCtrl1.Bmp);
+                            //this.SetBitmap(ref this._bmpBU, ref bC2);
+
+                            this.helplineRulerCtrl2.SetZoom(this.helplineRulerCtrl1.Zoom.ToString());
+                            this.helplineRulerCtrl2.MakeBitmap(this.helplineRulerCtrl2.Bmp);
+                            this.helplineRulerCtrl2.dbPanel1.AutoScrollMinSize = new Size(
+                                (int)(this.helplineRulerCtrl2.Bmp.Width * this.helplineRulerCtrl2.Zoom),
+                                (int)(this.helplineRulerCtrl2.Bmp.Height * this.helplineRulerCtrl2.Zoom));
+
+                            _undoOPCache?.Add(b);
+
+                            this._pic_changed = true;
+                        }
+                        else if (b != null)
+                        {
+                            b.Dispose();
+                            b = null;
+                        }
+
+                        if (gP != null)
+                            gP.Dispose();
+                        gP = null;
+
+                        if (frm.cbOutline.Checked && bCF != null)
+                        {
+                            using (Bitmap bmp = new Bitmap(bCF))
+                            {
+                                List<ChainCode>? c = GetBoundary(bmp, 0, false);
+
+                                if (c != null)
+                                {
+                                    c = c.OrderByDescending(x => x.Coord.Count).ToList();
+
+                                    int wh = (int)frm.numWH.Value;
+
+                                    this.cbScribbleMode.Checked = true;
+                                    this.cbClickMode.Checked = false;
+
+                                    AddPointsToScribblePathFromFrmQuickExtract(c, wh);
+
+                                    this._pic_changed = true;
+                                }
+                            }
+                        }
                     }
 
                     //dont dispose bCF, its now HLC2.Bmp
 
                     this.cbOutline.Enabled = this.numOutlineWH.Enabled = true;
+
+                    this._checkedPaths = null;
+                    this.quickExtractingCtrl1 = null;
                 }
             }
         }
 
-        private Bitmap ResampleBack(Bitmap fBitmap, int factor)
+        private GraphicsPath? GetGraphicsPath(frmQuickExtract frm)
+        {
+            GraphicsPath? gP = null;
+
+            if (this.helplineRulerCtrl1.Bmp != null && this.backgroundWorker1.IsBusy == false)
+            {
+                using (frmSelectCrop frm7 = new frmSelectCrop(frm.quickExtractingCtrl1.PathList))
+                {
+                    frm7.RadioButton1.Enabled = frm7.RadioButton2.Enabled = false;
+                    frm7.PathsChanged += frm7_PathsChanged;
+                    if (frm7.ShowDialog() == DialogResult.OK)
+                    {
+                        CheckedListBox.CheckedIndexCollection fL = frm7.CheckedListBox1.CheckedIndices;
+
+                        if (frm7.CheckBox1.Checked)
+                        {
+                            try
+                            {
+                                gP = new GraphicsPath();
+
+                                //if (frm7.RadioButton2.Checked)
+                                //{
+                                //    gp.AddRectangle(new Rectangle(0, 0, this.helplineRulerCtrl1.Bmp.Width, this.helplineRulerCtrl1.Bmp.Height));
+                                //    gp.CloseFigure();
+                                //    gp.StartFigure();
+                                //}
+                                if (frm.quickExtractingCtrl1.CurPath != null && frm.quickExtractingCtrl1.CurPath.Count > 0)
+                                {
+                                    for (int i = 0; i < frm.quickExtractingCtrl1.CurPath.Count; i++)
+                                    {
+                                        List<PointF> p = frm.quickExtractingCtrl1.CurPath[i];
+                                        if (p != null && p.Count > 1)
+                                            gP.AddLines(p.ToArray());
+                                    }
+                                }
+                            }
+                            catch
+                            {
+
+                            }
+                        }
+
+                        if (fL.Count > 0 && frm.quickExtractingCtrl1.PathList != null)
+                        {
+                            if (gP == null)
+                                gP = new GraphicsPath();
+                            for (int j = 0; j < fL.Count; j++)
+                            {
+                                List<List<PointF>> path = frm.quickExtractingCtrl1.PathList[fL[j]];
+
+                                try
+                                {
+                                    if (path != null && path.Count > 0)
+                                    {
+                                        for (int i = 0; i <= path.Count - 1; i++)
+                                        {
+                                            List<PointF> p = path[i];
+                                            if (p != null && p.Count > 1)
+                                            {
+                                                gP.StartFigure();
+                                                gP.AddLines(p.ToArray());
+                                            }
+                                        }
+                                    }
+                                }
+                                catch
+                                {
+
+                                }
+                            }
+                        }
+                    }
+
+                    frm7.PathsChanged -= frm7_PathsChanged;
+                }
+            }
+
+            return gP;
+        }
+
+        private GraphicsPath? GetGraphicsPath()
+        {
+            GraphicsPath? gP = null;
+
+            if (this.helplineRulerCtrl1.Bmp != null && this.backgroundWorker1.IsBusy == false)
+            {
+                using (frmSelectCrop frm7 = new frmSelectCrop(this.QEPathList))
+                {
+                    frm7.RadioButton1.Enabled = frm7.RadioButton2.Enabled = false;
+                    frm7.PathsChanged += frm7_PathsChanged;
+                    if (frm7.ShowDialog() == DialogResult.OK)
+                    {
+                        CheckedListBox.CheckedIndexCollection fL = frm7.CheckedListBox1.CheckedIndices;
+
+                        if (frm7.CheckBox1.Checked)
+                        {
+                            try
+                            {
+                                gP = new GraphicsPath();
+
+                                //if (frm7.RadioButton2.Checked)
+                                //{
+                                //    gp.AddRectangle(new Rectangle(0, 0, this.helplineRulerCtrl1.Bmp.Width, this.helplineRulerCtrl1.Bmp.Height));
+                                //    gp.CloseFigure();
+                                //    gp.StartFigure();
+                                //}
+                                if (this.QECurPath != null && this.QECurPath.Count > 0)
+                                {
+                                    for (int i = 0; i < this.QECurPath.Count; i++)
+                                    {
+                                        List<PointF> p = this.QECurPath[i];
+                                        if (p != null && p.Count > 1)
+                                            gP.AddLines(p.ToArray());
+                                    }
+                                }
+                            }
+                            catch
+                            {
+
+                            }
+                        }
+
+                        if (fL.Count > 0 && this.QEPathList != null)
+                        {
+                            if (gP == null)
+                                gP = new GraphicsPath();
+                            for (int j = 0; j < fL.Count; j++)
+                            {
+                                List<List<PointF>> path = this.QEPathList[fL[j]];
+
+                                try
+                                {
+                                    if (path != null && path.Count > 0)
+                                    {
+                                        for (int i = 0; i <= path.Count - 1; i++)
+                                        {
+                                            List<PointF> p = path[i];
+                                            if (p != null && p.Count > 1)
+                                            {
+                                                gP.StartFigure();
+                                                gP.AddLines(p.ToArray());
+                                            }
+                                        }
+                                    }
+                                }
+                                catch
+                                {
+
+                                }
+                            }
+                        }
+                    }
+
+                    frm7.PathsChanged -= frm7_PathsChanged;
+                }
+            }
+
+            return gP;
+        }
+
+        private void frm7_PathsChanged(object? sender, EventArgs e)
+        {
+            if (sender != null)
+            {
+                frmSelectCrop f = (frmSelectCrop)sender;
+                this._checkedPaths = new List<int>();
+
+                if (f.CheckBox1.Checked)
+                    this._checkedPaths.Add(-1);
+                if (f.CheckedListBox1.CheckedIndices.Count > 0)
+                {
+                    for (int i = 0; i <= f.CheckedListBox1.CheckedIndices.Count - 1; i++)
+                        this._checkedPaths.Add(f.CheckedListBox1.CheckedIndices[i]);
+                }
+                this.helplineRulerCtrl1.dbPanel1.Invalidate();
+            }
+        }
+
+        private Bitmap ResampleBack(Bitmap fBitmap, int factor, GraphicsPath? gP, Color c, int draWidth)
         {
             Bitmap bmp = fBitmap;
 
@@ -6244,6 +6630,19 @@ namespace AvoidAGrabCutEasy
 
                 //crop the shape from the original image
                 bmp = CropAlpha(this.helplineRulerCtrl1.Bmp, b);
+
+                if (gP != null && gP.PointCount > 1)
+                {
+                    int w = draWidth;
+
+                    using Pen pen = new Pen(c, w);
+                    pen.LineJoin = LineJoin.Round;
+                    pen.StartCap = LineCap.Round;
+                    pen.EndCap = LineCap.Round;
+
+                    using Graphics gx2 = Graphics.FromImage(bmp);
+                    gx2.DrawPath(pen, gP);
+                }
             }
 
             return bmp;
@@ -6730,6 +7129,45 @@ namespace AvoidAGrabCutEasy
         private void cbAllowRS_CheckedChanged(object sender, EventArgs e)
         {
             this.panel5.Visible = this.cbAllowRS.Checked;
+        }
+
+        private void btnRedrawPaths_Click(object sender, EventArgs e)
+        {
+            if (this.helplineRulerCtrl1.Bmp != null)
+            {
+                using GraphicsPath? gP = GetGraphicsPath();
+                using Matrix mx = new Matrix(this._frmPreResampleFactor, 0, 0, this._frmPreResampleFactor, 0, 0);
+                if (gP != null)
+                    gP.Transform(mx);
+
+                Bitmap b = new Bitmap(this.helplineRulerCtrl1.Bmp);
+
+                if (gP != null && gP.PointCount > 1)
+                {
+                    int w = this._w;
+
+                    using Pen pen = new Pen(this._col, w);
+                    pen.LineJoin = LineJoin.Round;
+                    pen.StartCap = LineCap.Round;
+                    pen.EndCap = LineCap.Round;
+
+                    using Graphics gx = Graphics.FromImage(b);
+                    gx.DrawPath(pen, gP);
+
+                    this.SetBitmap(this.helplineRulerCtrl1.Bmp, b, this.helplineRulerCtrl1, "Bmp");
+                    this.helplineRulerCtrl1.MakeBitmap(this.helplineRulerCtrl1.Bmp);
+                    this.helplineRulerCtrl1.dbPanel1.Invalidate();
+
+                    this._undoOPCache?.Add(this.helplineRulerCtrl1.Bmp);
+
+                    int? ja = this._undoOPCache?.CurrentPosition - 1;
+                    if (ja != null && this._undoOPCache != null)
+                        this._undoOPCache.CurrentResetMarker = ja.Value;
+
+                    Bitmap? bC = new Bitmap(this.helplineRulerCtrl2.Bmp);
+                    this.SetBitmap(ref this._b4Copy, ref bC);
+                }
+            }
         }
     }
 }

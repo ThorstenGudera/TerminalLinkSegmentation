@@ -368,7 +368,7 @@ namespace QuickExtract2
 
         private void cbAutoAddLine_CheckedChanged(object sender, EventArgs e)
         {
-            this.cbAddLine.Enabled = !cbAutoAddLine.Checked;
+            //this.cbAddLine.Enabled = !cbAutoAddLine.Checked;
         }
 
         private void Label42_Click(object sender, EventArgs e)

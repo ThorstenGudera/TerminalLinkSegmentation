@@ -468,11 +468,15 @@
             helplineRulerCtrl1.DontProcDoubleClick = false;
             helplineRulerCtrl1.DrawModeClipped = false;
             helplineRulerCtrl1.DrawPixelated = false;
+            helplineRulerCtrl1.HandleMeasureByContainingForm = false;
             helplineRulerCtrl1.IgnoreZoom = false;
             helplineRulerCtrl1.Location = new Point(0, 285);
             helplineRulerCtrl1.Margin = new Padding(5, 3, 5, 3);
+            helplineRulerCtrl1.Measure = false;
             helplineRulerCtrl1.MoveHelpLinesOnResize = false;
             helplineRulerCtrl1.Name = "helplineRulerCtrl1";
+            helplineRulerCtrl1.PtEnd = new Point(0, 0);
+            helplineRulerCtrl1.PtSt = new Point(0, 0);
             helplineRulerCtrl1.SetZoomOnlyByMethodCall = false;
             helplineRulerCtrl1.Size = new Size(1516, 546);
             helplineRulerCtrl1.TabIndex = 220;
@@ -543,7 +547,6 @@
         internal System.Windows.Forms.Button button2;
         internal System.Windows.Forms.Panel Panel11;
         internal System.Windows.Forms.Label Label1;
-        private QuickExtractingCtrl quickExtractingCtrl1;
         internal System.Windows.Forms.CheckBox CheckBox18;
         internal System.Windows.Forms.Label Label20;
         internal System.Windows.Forms.ComboBox ComboBox2;
@@ -552,5 +555,6 @@
         public CheckBox cbOutline;
         private System.Windows.Forms.Timer timer4;
         private Button btnLoadOrig;
+        public QuickExtractingCtrl quickExtractingCtrl1;
     }
 }

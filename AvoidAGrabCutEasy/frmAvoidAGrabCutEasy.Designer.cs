@@ -31,6 +31,9 @@
             components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmAvoidAGrabCutEasy));
             panel1 = new Panel();
+            panel10 = new Panel();
+            numTolFillMouseUp = new NumericUpDown();
+            cbFillMouseUp = new CheckBox();
             btnRScribbles = new Button();
             cbPreResample = new CheckBox();
             cbPreviewMode = new CheckBox();
@@ -166,10 +169,10 @@
             timer1 = new System.Windows.Forms.Timer(components);
             backgroundWorker4 = new System.ComponentModel.BackgroundWorker();
             timer2 = new System.Windows.Forms.Timer(components);
-            panel10 = new Panel();
-            numTolFillMouseUp = new NumericUpDown();
-            cbFillMouseUp = new CheckBox();
+            btnRedrawPaths = new Button();
             panel1.SuspendLayout();
+            panel10.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)numTolFillMouseUp).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numOutlineWH).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numComponents2).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numWH).BeginInit();
@@ -189,13 +192,12 @@
             splitContainer1.SuspendLayout();
             statusStrip1.SuspendLayout();
             contextMenuStrip1.SuspendLayout();
-            panel10.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)numTolFillMouseUp).BeginInit();
             SuspendLayout();
             // 
             // panel1
             // 
             panel1.AutoScroll = true;
+            panel1.Controls.Add(btnRedrawPaths);
             panel1.Controls.Add(panel10);
             panel1.Controls.Add(btnRScribbles);
             panel1.Controls.Add(cbPreResample);
@@ -316,6 +318,41 @@
             panel1.TabIndex = 0;
             panel1.MouseDoubleClick += panel1_MouseDoubleClick;
             panel1.MouseDown += panel1_MouseDown;
+            // 
+            // panel10
+            // 
+            panel10.BorderStyle = BorderStyle.FixedSingle;
+            panel10.Controls.Add(numTolFillMouseUp);
+            panel10.Controls.Add(cbFillMouseUp);
+            panel10.Location = new Point(718, 147);
+            panel10.Name = "panel10";
+            panel10.Size = new Size(176, 41);
+            panel10.TabIndex = 757;
+            panel10.Visible = false;
+            // 
+            // numTolFillMouseUp
+            // 
+            numTolFillMouseUp.Location = new Point(118, 9);
+            numTolFillMouseUp.Margin = new Padding(4, 3, 4, 3);
+            numTolFillMouseUp.Maximum = new decimal(new int[] { 255, 0, 0, 0 });
+            numTolFillMouseUp.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
+            numTolFillMouseUp.Name = "numTolFillMouseUp";
+            numTolFillMouseUp.Size = new Size(52, 23);
+            numTolFillMouseUp.TabIndex = 625;
+            toolTip1.SetToolTip(numTolFillMouseUp, "Tolerance");
+            numTolFillMouseUp.Value = new decimal(new int[] { 12, 0, 0, 0 });
+            // 
+            // cbFillMouseUp
+            // 
+            cbFillMouseUp.AutoSize = true;
+            cbFillMouseUp.Checked = true;
+            cbFillMouseUp.CheckState = CheckState.Checked;
+            cbFillMouseUp.Location = new Point(8, 11);
+            cbFillMouseUp.Name = "cbFillMouseUp";
+            cbFillMouseUp.Size = new Size(110, 19);
+            cbFillMouseUp.TabIndex = 0;
+            cbFillMouseUp.Text = "fill on MouseUp";
+            cbFillMouseUp.UseVisualStyleBackColor = true;
             // 
             // btnRScribbles
             // 
@@ -1771,40 +1808,17 @@
             timer2.Interval = 5000;
             timer2.Tick += timer2_Tick;
             // 
-            // panel10
+            // btnRedrawPaths
             // 
-            panel10.BorderStyle = BorderStyle.FixedSingle;
-            panel10.Controls.Add(numTolFillMouseUp);
-            panel10.Controls.Add(cbFillMouseUp);
-            panel10.Location = new Point(718, 147);
-            panel10.Name = "panel10";
-            panel10.Size = new Size(176, 41);
-            panel10.TabIndex = 757;
-            panel10.Visible = false;
-            // 
-            // numTolFillMouseUp
-            // 
-            numTolFillMouseUp.Location = new Point(118, 9);
-            numTolFillMouseUp.Margin = new Padding(4, 3, 4, 3);
-            numTolFillMouseUp.Maximum = new decimal(new int[] { 255, 0, 0, 0 });
-            numTolFillMouseUp.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
-            numTolFillMouseUp.Name = "numTolFillMouseUp";
-            numTolFillMouseUp.Size = new Size(52, 23);
-            numTolFillMouseUp.TabIndex = 625;
-            toolTip1.SetToolTip(numTolFillMouseUp, "Tolerance");
-            numTolFillMouseUp.Value = new decimal(new int[] { 12, 0, 0, 0 });
-            // 
-            // cbFillMouseUp
-            // 
-            cbFillMouseUp.AutoSize = true;
-            cbFillMouseUp.Checked = true;
-            cbFillMouseUp.CheckState = CheckState.Checked;
-            cbFillMouseUp.Location = new Point(8, 11);
-            cbFillMouseUp.Name = "cbFillMouseUp";
-            cbFillMouseUp.Size = new Size(110, 19);
-            cbFillMouseUp.TabIndex = 0;
-            cbFillMouseUp.Text = "fill on MouseUp";
-            cbFillMouseUp.UseVisualStyleBackColor = true;
+            btnRedrawPaths.Enabled = false;
+            btnRedrawPaths.Location = new Point(121, 218);
+            btnRedrawPaths.Margin = new Padding(4, 3, 4, 3);
+            btnRedrawPaths.Name = "btnRedrawPaths";
+            btnRedrawPaths.Size = new Size(71, 27);
+            btnRedrawPaths.TabIndex = 758;
+            btnRedrawPaths.Text = "drawPaths";
+            btnRedrawPaths.UseVisualStyleBackColor = true;
+            btnRedrawPaths.Click += btnRedrawPaths_Click;
             // 
             // frmAvoidAGrabCutEasy
             // 
@@ -1823,6 +1837,9 @@
             Load += frmGrabCut_Load;
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
+            panel10.ResumeLayout(false);
+            panel10.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)numTolFillMouseUp).EndInit();
             ((System.ComponentModel.ISupportInitialize)numOutlineWH).EndInit();
             ((System.ComponentModel.ISupportInitialize)numComponents2).EndInit();
             ((System.ComponentModel.ISupportInitialize)numWH).EndInit();
@@ -1843,9 +1860,6 @@
             statusStrip1.ResumeLayout(false);
             statusStrip1.PerformLayout();
             contextMenuStrip1.ResumeLayout(false);
-            panel10.ResumeLayout(false);
-            panel10.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)numTolFillMouseUp).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -1991,5 +2005,6 @@
         private Panel panel10;
         private NumericUpDown numTolFillMouseUp;
         private CheckBox cbFillMouseUp;
+        private Button btnRedrawPaths;
     }
 }

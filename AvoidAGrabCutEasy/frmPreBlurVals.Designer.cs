@@ -140,7 +140,6 @@
             // 
             // cbBGColor
             // 
-            cbBGColor.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             cbBGColor.AutoSize = true;
             cbBGColor.Checked = true;
             cbBGColor.CheckState = CheckState.Checked;
@@ -284,7 +283,7 @@
             label7.AutoSize = true;
             label7.Location = new Point(128, 78);
             label7.Name = "label7";
-            label7.Size = new Size(16, 15);
+            label7.Size = new Size(15, 15);
             label7.TabIndex = 760;
             label7.Text = "x:";
             // 

@@ -75,6 +75,7 @@ namespace QuickExtract2
         public Bitmap? OrigBmp { get; set; }
         public bool PreResample { get; set; }
         public int PreResampleFactor { get; set; } = 1;
+        public bool Draw { get; set; }
 
         private bool _pic_changed = false;
 
@@ -197,6 +198,53 @@ namespace QuickExtract2
             this.quickExtractingCtrl1.btnReRunLast.Click += BtnReRunLast_Click;
             this.quickExtractingCtrl1.btnEditPath2.Click += btnEditPath2_Click;
             this.quickExtractingCtrl1.btnCurAsOrig.Click += BtnCurAsOrig_Click;
+
+            this.quickExtractingCtrl1.btnDraw.Click += BtnDraw_Click;
+            this.quickExtractingCtrl1.btnColor.Click += BtnColor_Click;
+        }
+
+        private void BtnColor_Click(object? sender, EventArgs e)
+        {
+            if (this.ColorDialog1.ShowDialog() == DialogResult.OK)
+            {
+                this.quickExtractingCtrl1.lblColor.BackColor = this.ColorDialog1.Color;
+            }
+        }
+
+        private void BtnDraw_Click(object? sender, EventArgs e)
+        {
+            if (this.helplineRulerCtrl1.Bmp != null && this.backgroundWorker1.IsBusy == false)
+            {
+                int w = (int)this.quickExtractingCtrl1.numDrawWidth.Value;
+                Color c = this.quickExtractingCtrl1.lblColor.BackColor;
+
+                using Pen pen = new Pen(c, w);
+                pen.LineJoin = LineJoin.Round;
+                pen.StartCap = LineCap.Round;
+                pen.EndCap = LineCap.Round;
+
+                using GraphicsPath gP = new GraphicsPath();
+
+                if (this.quickExtractingCtrl1.CurPath != null && this.quickExtractingCtrl1.CurPath.Count > 0)
+                {
+                    for (int i = 0; i < this.quickExtractingCtrl1.CurPath.Count; i++)
+                    {
+                        List<PointF> p = this.quickExtractingCtrl1.CurPath[i];
+                        if (p != null && p.Count > 1)
+                            gP.AddLines(p.ToArray());
+                    }
+                }
+
+                using Graphics gx = Graphics.FromImage(this.helplineRulerCtrl1.Bmp);
+                gx.DrawPath(pen, gP);
+
+                this.helplineRulerCtrl1.MakeBitmap(this.helplineRulerCtrl1.Bmp);
+                this.helplineRulerCtrl1.dbPanel1.Invalidate();
+
+                this._undoOPCache?.Add(this.helplineRulerCtrl1.Bmp);
+
+                this.Draw = true;
+            }
         }
 
         private void BtnCurAsOrig_Click(object? sender, EventArgs e)
@@ -3829,7 +3877,7 @@ namespace QuickExtract2
             }
         }
 
-        private List<List<List<PointF>>>? CloneList(List<List<List<PointF>>>? pathList)
+        public List<List<List<PointF>>>? CloneList(List<List<List<PointF>>>? pathList)
         {
             if (pathList != null && pathList.Count > 0)
             {

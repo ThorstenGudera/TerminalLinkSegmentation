@@ -109,6 +109,12 @@
             numDisplayIterations = new NumericUpDown();
             Label34 = new Label();
             toolTip1 = new ToolTip(components);
+            groupBox5 = new GroupBox();
+            lblColor = new Label();
+            label13 = new Label();
+            btnColor = new Button();
+            btnDraw = new Button();
+            numDrawWidth = new NumericUpDown();
             groupBox1.SuspendLayout();
             gbRemOutline.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numRemOutline).BeginInit();
@@ -129,6 +135,8 @@
             groupBox4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numDisplayEdgeAt).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numDisplayIterations).BeginInit();
+            groupBox5.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)numDrawWidth).BeginInit();
             SuspendLayout();
             // 
             // groupBox1
@@ -246,7 +254,6 @@
             // cbAddLine
             // 
             cbAddLine.AutoSize = true;
-            cbAddLine.Enabled = false;
             cbAddLine.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             cbAddLine.Location = new Point(7, 19);
             cbAddLine.Margin = new Padding(4, 3, 4, 3);
@@ -1082,10 +1089,72 @@
             Label34.TabIndex = 301;
             Label34.Text = "notify each";
             // 
+            // groupBox5
+            // 
+            groupBox5.Controls.Add(lblColor);
+            groupBox5.Controls.Add(label13);
+            groupBox5.Controls.Add(btnColor);
+            groupBox5.Controls.Add(btnDraw);
+            groupBox5.Controls.Add(numDrawWidth);
+            groupBox5.Location = new Point(893, 152);
+            groupBox5.Name = "groupBox5";
+            groupBox5.Size = new Size(254, 43);
+            groupBox5.TabIndex = 3;
+            groupBox5.TabStop = false;
+            groupBox5.Text = "Draw path to pic";
+            // 
+            // lblColor
+            // 
+            lblColor.BackColor = Color.Yellow;
+            lblColor.BorderStyle = BorderStyle.FixedSingle;
+            lblColor.Location = new Point(208, 18);
+            lblColor.Name = "lblColor";
+            lblColor.Size = new Size(40, 20);
+            lblColor.TabIndex = 313;
+            // 
+            // label13
+            // 
+            label13.AutoSize = true;
+            label13.Location = new Point(60, 20);
+            label13.Name = "label13";
+            label13.Size = new Size(37, 15);
+            label13.TabIndex = 1;
+            label13.Text = "width";
+            // 
+            // btnColor
+            // 
+            btnColor.Location = new Point(153, 16);
+            btnColor.Name = "btnColor";
+            btnColor.Size = new Size(51, 23);
+            btnColor.TabIndex = 0;
+            btnColor.Text = "Color";
+            btnColor.UseVisualStyleBackColor = true;
+            // 
+            // btnDraw
+            // 
+            btnDraw.Location = new Point(6, 16);
+            btnDraw.Name = "btnDraw";
+            btnDraw.Size = new Size(51, 23);
+            btnDraw.TabIndex = 0;
+            btnDraw.Text = "Draw";
+            btnDraw.UseVisualStyleBackColor = true;
+            // 
+            // numDrawWidth
+            // 
+            numDrawWidth.Location = new Point(104, 17);
+            numDrawWidth.Margin = new Padding(4, 3, 4, 3);
+            numDrawWidth.Maximum = new decimal(new int[] { 255, 0, 0, 0 });
+            numDrawWidth.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
+            numDrawWidth.Name = "numDrawWidth";
+            numDrawWidth.Size = new Size(44, 23);
+            numDrawWidth.TabIndex = 312;
+            numDrawWidth.Value = new decimal(new int[] { 2, 0, 0, 0 });
+            // 
             // QuickExtractingCtrl
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
+            Controls.Add(groupBox5);
             Controls.Add(groupBox4);
             Controls.Add(groupBox3);
             Controls.Add(groupBox2);
@@ -1118,6 +1187,9 @@
             groupBox4.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)numDisplayEdgeAt).EndInit();
             ((System.ComponentModel.ISupportInitialize)numDisplayIterations).EndInit();
+            groupBox5.ResumeLayout(false);
+            groupBox5.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)numDrawWidth).EndInit();
             ResumeLayout(false);
         }
 
@@ -1202,5 +1274,11 @@
         internal Button btnEditPath2;
         internal Button btnCurAsOrig;
         internal CheckBox cbAlwaysToSeedPoint;
+        private GroupBox groupBox5;
+        private Label label13;
+        internal Button btnDraw;
+        internal Button btnColor;
+        public Label lblColor;
+        public NumericUpDown numDrawWidth;
     }
 }
