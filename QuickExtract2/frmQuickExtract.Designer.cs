@@ -621,6 +621,6 @@
         internal Panel panel5;
         private Button btnExtractFF;
         public QuickExtractingCtrl quickExtractingCtrl1;
-        private CheckBox cbInset;
+        public CheckBox cbInset;
     }
 }

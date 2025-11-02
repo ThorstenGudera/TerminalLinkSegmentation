@@ -6420,12 +6420,29 @@ namespace AvoidAGrabCutEasy
 
                                     int wh = (int)frm.numWH.Value;
 
+                                    bool inset = frm.cbInset.Checked;
+
+                                    if (inset)
+                                    {
+                                        this.cbInset.Checked = true;
+                                        for (int i = 0; i < wh / 2; i++)
+                                        {
+                                            if (c != null)
+                                            {
+                                                RemoveOutline(bmp, c);
+                                                c = GetBoundary(bmp, 0, false);
+                                            }
+                                        }
+                                    }
+
                                     this.cbScribbleMode.Checked = true;
                                     this.cbClickMode.Checked = false;
 
-                                    AddPointsToScribblePathFromFrmQuickExtract(c, wh);
-
-                                    this._pic_changed = true;
+                                    if (c != null)
+                                    {
+                                        AddPointsToScribblePathFromFrmQuickExtract(c, wh);
+                                        this._pic_changed = true;
+                                    }
                                 }
                             }
                         }
@@ -7241,13 +7258,35 @@ namespace AvoidAGrabCutEasy
 
                     if (inset)
                     {
-                        for (int i = 0; i < wh / 2 + insetCust; i++)
-                        {
-                            if (c != null)
+                        int l = wh / 2 + insetCust;
+
+                        if (l > 0)
+                            for (int i = 0; i < l; i++)
                             {
-                                RemoveOutline(bmp, c);
-                                c = GetBoundary(bmp, 0, false);
+                                if (c != null)
+                                {
+                                    RemoveOutline(bmp, c);
+                                    c = GetBoundary(bmp, 0, false);
+                                }
                             }
+                        else
+                        {
+                            Bitmap? b = new Bitmap(bmp);
+                            AvoidAGrabCutEasy.ProcOutline.Fipbmp fip = new();
+                            fip.SetWhite(b);
+                            for (int i = 0; i > l; i--)
+                                if (c != null && b != null)
+                                {
+                                    Dilate(b, 3);
+                                    Bitmap? b2 = fip.ExtractWhite(b);
+                                    if (b2 != null)
+                                        this.SetBitmap(ref b, ref b2);
+                                    c = GetBoundary(b, 0, false);
+                                }
+
+                            if (b != null)
+                                b.Dispose();
+                            b = null;
                         }
                     }
 
@@ -7260,6 +7299,96 @@ namespace AvoidAGrabCutEasy
             }
 
             this.helplineRulerCtrl1.dbPanel1.Invalidate();
+        }
+
+        public unsafe void Dilate(Bitmap? bmp, int wh)
+        {
+            if (bmp != null)
+                using (Bitmap bC = new Bitmap(bmp))
+                {
+                    int[,] krnl = GetKernel(wh);
+
+                    BitmapData bmSrc = bC.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height), ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
+                    BitmapData bmData = bmp.LockBits(new Rectangle(0, 0, bC.Width, bC.Height), ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
+
+                    int stride = bmData.Stride;
+
+                    int nWidth = bmp.Width;
+                    int nHeight = bmp.Height;
+
+                    Parallel.For(0, nHeight, (y, loopState) =>
+                    {
+                        //if (this.BGW != null && this.BGW.WorkerSupportsCancellation && this.BGW.CancellationPending)
+                        //    loopState.Break();
+
+                        byte* p = (byte*)bmData.Scan0;
+                        byte* pSrc = (byte*)bmSrc.Scan0;
+
+                        int pos = y * stride;
+
+                        for (int x = 0; x < nWidth; x++)
+                        {
+                            p[pos] = p[pos + 1] = p[pos + 2] = bDilate(bmSrc, new Point(x, y), krnl);
+                            p[pos + 3] = (byte)255; //pSrc[pos + 3];
+
+                            pos += 4;
+                        }
+                    });
+
+                    bmp.UnlockBits(bmData);
+                    bC.UnlockBits(bmSrc);
+                }
+        }
+
+        private int[,] GetKernel(int wh)
+        {
+            int[,] krnl = new int[wh, wh];
+
+            for (int y = 0; y < wh; y++)
+                for (int x = 0; x < wh; x++)
+                    krnl[x, y] = 1;
+
+            return krnl;
+        }
+
+        private unsafe byte bDilate(BitmapData bmSrc, Point pt, int[,] krnl)
+        {
+            int stride = bmSrc.Stride;
+            int nWidth = bmSrc.Width;
+            int nHeight = bmSrc.Height;
+
+            byte* pSrc = (byte*)bmSrc.Scan0;
+            int rH = krnl.GetLength(1) / 2;
+            int cH = krnl.GetLength(0) / 2;
+
+            int rH2 = rH;
+            if ((krnl.GetLength(1) & 0x01) != 1)
+                rH2--;
+            int cH2 = cH;
+            if ((krnl.GetLength(0) & 0x01) != 1)
+                cH2--;
+
+            int x = pt.X;
+            int y = pt.Y;
+
+            byte b = 0;
+
+            for (int r = -rH; r <= rH2; r++)
+            {
+                if (y + r >= 0 && y + r < nHeight)
+                {
+                    for (int c = -cH; c <= cH2; c++)
+                    {
+                        if (x + c >= 0 && x + c < nWidth)
+                        {
+                            if (krnl[c + cH, r + rH] == 1)
+                                b = Math.Max(b, pSrc[(r + y) * stride + (c + x) * 4]);
+                        }
+                    }
+                }
+            }
+
+            return b;
         }
     }
 }

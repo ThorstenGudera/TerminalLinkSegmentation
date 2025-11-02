@@ -235,5 +235,68 @@ namespace AvoidAGrabCutEasy.ProcOutline
                 }
             }
         }
+
+        internal unsafe void SetWhite(Bitmap bmp)
+        {
+            int w = bmp.Width;
+            int h = bmp.Height;
+
+            BitmapData bmD = bmp.LockBits(new Rectangle(0, 0, w, h), ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
+            int stride = bmD.Stride;
+
+            Parallel.For(0, h, y =>
+            {
+                byte* p = (byte*)bmD.Scan0;
+                p += y * stride;
+
+                for (int x = 0; x < w; x++)
+                {
+                    if (p[3] > 0)
+                        p[0] = p[1] = p[2] = 255;
+                    else
+                        p[0] = p[1] = p[2] = 0;
+
+                    p[3] = 255;
+
+                    p += 4;
+                }
+            });
+
+            bmp.UnlockBits(bmD);
+        }
+
+        internal unsafe Bitmap? ExtractWhite(Bitmap bmp)
+        {
+            int w = bmp.Width;
+            int h = bmp.Height;
+
+            Bitmap bRes = new Bitmap(w, h);
+
+            BitmapData bmD = bmp.LockBits(new Rectangle(0, 0, w, h), ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
+            BitmapData bmR = bRes.LockBits(new Rectangle(0, 0, w, h), ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
+            int stride = bmD.Stride;
+
+            Parallel.For(0, h, y =>
+            {
+                byte* pR = (byte*)bmD.Scan0;
+                pR += y * stride;
+                byte* p = (byte*)bmR.Scan0;
+                p += y * stride;
+
+                for (int x = 0; x < w; x++)
+                {
+                    if (pR[0] == 255)
+                        p[0] = p[1] = p[2] = p[3] = 255;
+
+                    p += 4;
+                    pR += 4;
+                }
+            });
+
+            bmp.UnlockBits(bmD);
+            bRes.UnlockBits(bmR);
+
+            return bRes;
+        }
     }
 }
