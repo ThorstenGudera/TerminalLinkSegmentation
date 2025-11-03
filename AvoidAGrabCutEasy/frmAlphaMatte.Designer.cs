@@ -64,6 +64,7 @@
             cbLSBmp = new CheckBox();
             Label20 = new Label();
             panel1 = new Panel();
+            cbRestore = new CheckBox();
             btnRScribbles = new Button();
             label22 = new Label();
             btnAlphaCurve = new Button();
@@ -519,6 +520,7 @@
             // panel1
             // 
             panel1.AutoScroll = true;
+            panel1.Controls.Add(cbRestore);
             panel1.Controls.Add(btnRScribbles);
             panel1.Controls.Add(label22);
             panel1.Controls.Add(btnAlphaCurve);
@@ -585,6 +587,19 @@
             panel1.Name = "panel1";
             panel1.Size = new Size(1479, 267);
             panel1.TabIndex = 226;
+            // 
+            // cbRestore
+            // 
+            cbRestore.AutoSize = true;
+            cbRestore.Checked = true;
+            cbRestore.CheckState = CheckState.Checked;
+            cbRestore.Location = new Point(652, 227);
+            cbRestore.Margin = new Padding(4, 3, 4, 3);
+            cbRestore.Name = "cbRestore";
+            cbRestore.Size = new Size(123, 19);
+            cbRestore.TabIndex = 751;
+            cbRestore.Text = "restoreFG in Matte";
+            cbRestore.UseVisualStyleBackColor = true;
             // 
             // btnRScribbles
             // 
@@ -1323,6 +1338,7 @@
             Name = "frmAlphaMatte";
             StartPosition = FormStartPosition.CenterParent;
             Text = "frmAlphaMatte";
+            FormClosing += Form1_FormClosing;
             Load += frmClosedFormMatte_Load;
             statusStrip1.ResumeLayout(false);
             statusStrip1.PerformLayout();
@@ -1457,5 +1473,6 @@
         private Label label22;
         private Button btnAlphaCurve;
         private Button btnRScribbles;
+        private CheckBox cbRestore;
     }
 }

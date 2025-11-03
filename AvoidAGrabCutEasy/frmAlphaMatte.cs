@@ -106,6 +106,7 @@ namespace AvoidAGrabCutEasy
         private int _divisor = 2;
         private int _newWidth = 10;
         private int _minSize = 84;
+        private Bitmap? _fgMap;
 
         public frmAlphaMatte()
         {
@@ -1220,6 +1221,8 @@ namespace AvoidAGrabCutEasy
                     this.pictureBox1.Image.Dispose();
                 if (this._bmpMatte != null)
                     this._bmpMatte.Dispose();
+                if (this._fgMap != null)
+                    this._fgMap.Dispose();
 
                 if (this._cfop != null)
                 {
@@ -2373,7 +2376,7 @@ namespace AvoidAGrabCutEasy
             return bOut;
         }
 
-        private Bitmap? ResampleBack(Bitmap bmp)
+        private Bitmap? ResampleBack(Bitmap bmp, bool restoreFG)
         {
             if (this.helplineRulerCtrl1 != null && !this.IsDisposed && this.helplineRulerCtrl1.Bmp != null && bmp != null)
             {
@@ -2383,6 +2386,34 @@ namespace AvoidAGrabCutEasy
                 {
                     gx.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
                     gx.DrawImage(bmp, 0, 0, bOut.Width, bOut.Height);
+                }
+
+                if (restoreFG && this._fgMap != null)
+                {
+                    using Bitmap bf = (Bitmap)this._fgMap.Clone();
+                    using Bitmap bD = new Bitmap(bOut.Width, bOut.Height);
+                    using Graphics gx2 = Graphics.FromImage(bD);
+                    gx2.Clear(Color.White);
+                    ChainFinder cf = new ChainFinder();
+                    List<ChainCode> c = cf.GetOutline(bf, 200, true, 0, true, 0, false);
+
+                    if (c.Count > 0)
+                    {
+                        using GraphicsPath gP2 = new GraphicsPath();
+
+                        for (int i = 0; i < c.Count; i++)
+                        {
+                            if (c[i].Area > 0)
+                            {
+                                gP2.AddLines(c[i].Coord.Select(a => new PointF(a.X, a.Y)).ToArray());
+                                gP2.CloseFigure();
+                            }
+                        }
+
+                        using TextureBrush tb = new TextureBrush(bD);
+                        using Graphics gx4 = Graphics.FromImage(bOut);
+                        gx4.FillPath(tb, gP2);
+                    }
                 }
 
                 return bOut;
@@ -2527,7 +2558,7 @@ namespace AvoidAGrabCutEasy
                     bmp = (Bitmap)e.Result;
 
                     Bitmap? b2 = bmp;
-                    bmp = ResampleBack(bmp);
+                    bmp = ResampleBack(bmp, this.cbRestore.Checked);
                     b2.Dispose();
                     b2 = null;
 
@@ -3702,6 +3733,9 @@ namespace AvoidAGrabCutEasy
                         //    this.FillUnknownByBG(bTrimap, this._oldUnknownFT);
                     }
                 }
+
+                Bitmap? bT = (Bitmap)bTrimap.Clone();
+                this.SetBitmap(ref this._fgMap, ref bT);
 
                 e.Result = bTrimap;
             }
