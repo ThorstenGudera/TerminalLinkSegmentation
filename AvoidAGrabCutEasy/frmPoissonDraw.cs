@@ -105,9 +105,9 @@ namespace AvoidAGrabCutEasy
 
             if (AvailMem.AvailMem.checkAvailRam(bmp.Width * bmp.Height * 16L))
             {
-                this.helplineRulerCtrl1.Bmp = new Bitmap(bmp);
+                this.helplineRulerCtrl1.Bmp = (Bitmap)bmp.Clone();
                 this.helplineRulerCtrl2.Bmp = new Bitmap(bmp);
-                _bmpBU = new Bitmap(bmp);
+                _bmpBU = (Bitmap)bmp.Clone();
                 _bmpOrg = new Bitmap(bmp);
                 this._bmpDraw = new Bitmap(this.helplineRulerCtrl1.Bmp.Width, this.helplineRulerCtrl1.Bmp.Height);
                 this._tb = new TextureBrush(this._bmpBU);
@@ -1091,9 +1091,9 @@ namespace AvoidAGrabCutEasy
                             {
                                 if (AvailMem.AvailMem.checkAvailRam(img.Width * img.Height * 16L))
                                 {
-                                    b1 = new Bitmap(img);
+                                    b1 = (Bitmap)img.Clone();
                                     this.SetBitmap(this.helplineRulerCtrl1.Bmp, b1, this.helplineRulerCtrl1, "Bmp");
-                                    b2 = new Bitmap(img);
+                                    b2 = (Bitmap)img.Clone();
                                     this.SetBitmap(ref this._bmpBU, ref b2);
                                     Bitmap? bC2 = new Bitmap(b1);
                                     this.SetBitmap(ref this._bmpOrigHLC1, ref bC2);
@@ -1165,10 +1165,10 @@ namespace AvoidAGrabCutEasy
                             {
                                 if (AvailMem.AvailMem.checkAvailRam(img.Width * img.Height * 16L))
                                 {
-                                    b1 = new Bitmap(img);
+                                    b1 = (Bitmap)img.Clone();
                                     this.SetBitmap(this.helplineRulerCtrl1.Bmp, b1, this.helplineRulerCtrl1, "Bmp");
 
-                                    b2 = new Bitmap(img);
+                                    b2 = (Bitmap)img.Clone();
                                     this.SetBitmap(ref this._bmpBU, ref b2);
                                 }
                                 else

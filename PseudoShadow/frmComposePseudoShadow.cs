@@ -1750,7 +1750,7 @@ namespace PseudoShadow
                 {
                     if (frm.FBitmap != null)
                     {
-                        Bitmap? result = new Bitmap(frm.FBitmap);
+                        Bitmap? result = (Bitmap)frm.FBitmap.Clone();
                         string? strID = frm.cmbDest?.SelectedItem?.ToString();
                         int j = -1;
                         if (Int32.TryParse(strID, out j))

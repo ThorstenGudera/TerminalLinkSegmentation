@@ -75,6 +75,8 @@
             cbLSBmp = new CheckBox();
             Label20 = new Label();
             panel1 = new Panel();
+            label22 = new Label();
+            btnAlphaCurve = new Button();
             cbAskTrimap = new CheckBox();
             btnLoadBmp = new Button();
             pictureBox2 = new PictureBox();
@@ -154,8 +156,7 @@
             backgroundWorker3 = new System.ComponentModel.BackgroundWorker();
             backgroundWorker4 = new System.ComponentModel.BackgroundWorker();
             backgroundWorker6 = new System.ComponentModel.BackgroundWorker();
-            label22 = new Label();
-            btnAlphaCurve = new Button();
+            cbRestore = new CheckBox();
             statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
@@ -547,7 +548,7 @@
             cbDrawPaths.AutoSize = true;
             cbDrawPaths.Checked = true;
             cbDrawPaths.CheckState = CheckState.Checked;
-            cbDrawPaths.Location = new Point(699, 288);
+            cbDrawPaths.Location = new Point(646, 288);
             cbDrawPaths.Margin = new Padding(4, 3, 4, 3);
             cbDrawPaths.Name = "cbDrawPaths";
             cbDrawPaths.Size = new Size(148, 19);
@@ -633,7 +634,7 @@
             cbRoundCaps.AutoSize = true;
             cbRoundCaps.Checked = true;
             cbRoundCaps.CheckState = CheckState.Checked;
-            cbRoundCaps.Location = new Point(849, 289);
+            cbRoundCaps.Location = new Point(796, 289);
             cbRoundCaps.Name = "cbRoundCaps";
             cbRoundCaps.Size = new Size(105, 19);
             cbRoundCaps.TabIndex = 741;
@@ -683,6 +684,7 @@
             // panel1
             // 
             panel1.AutoScroll = true;
+            panel1.Controls.Add(cbRestore);
             panel1.Controls.Add(label22);
             panel1.Controls.Add(btnAlphaCurve);
             panel1.Controls.Add(cbAskTrimap);
@@ -767,6 +769,26 @@
             panel1.Size = new Size(1479, 316);
             panel1.TabIndex = 226;
             // 
+            // label22
+            // 
+            label22.AutoSize = true;
+            label22.Location = new Point(1291, 208);
+            label22.Name = "label22";
+            label22.Size = new Size(69, 15);
+            label22.TabIndex = 750;
+            label22.Text = "AlphaCurve";
+            // 
+            // btnAlphaCurve
+            // 
+            btnAlphaCurve.Location = new Point(1378, 201);
+            btnAlphaCurve.Margin = new Padding(4, 3, 4, 3);
+            btnAlphaCurve.Name = "btnAlphaCurve";
+            btnAlphaCurve.Size = new Size(88, 27);
+            btnAlphaCurve.TabIndex = 749;
+            btnAlphaCurve.Text = "Go";
+            btnAlphaCurve.UseVisualStyleBackColor = true;
+            btnAlphaCurve.Click += btnAlphaCurve_Click;
+            // 
             // cbAskTrimap
             // 
             cbAskTrimap.AutoSize = true;
@@ -812,7 +834,7 @@
             // 
             // numDrawPenWidth
             // 
-            numDrawPenWidth.Location = new Point(1002, 258);
+            numDrawPenWidth.Location = new Point(1075, 258);
             numDrawPenWidth.Margin = new Padding(4, 3, 4, 3);
             numDrawPenWidth.Maximum = new decimal(new int[] { 999, 0, 0, 0 });
             numDrawPenWidth.Minimum = new decimal(new int[] { 3, 0, 0, 0 });
@@ -824,7 +846,7 @@
             // labelGo
             // 
             labelGo.AutoSize = true;
-            labelGo.Location = new Point(811, 261);
+            labelGo.Location = new Point(884, 261);
             labelGo.Name = "labelGo";
             labelGo.Size = new Size(184, 15);
             labelGo.TabIndex = 742;
@@ -846,7 +868,7 @@
             cbDrawRectsAlso.AutoSize = true;
             cbDrawRectsAlso.Checked = true;
             cbDrawRectsAlso.CheckState = CheckState.Checked;
-            cbDrawRectsAlso.Location = new Point(1095, 288);
+            cbDrawRectsAlso.Location = new Point(1042, 288);
             cbDrawRectsAlso.Margin = new Padding(4, 3, 4, 3);
             cbDrawRectsAlso.Name = "cbDrawRectsAlso";
             cbDrawRectsAlso.Size = new Size(107, 19);
@@ -945,7 +967,7 @@
             // label8
             // 
             label8.AutoSize = true;
-            label8.Location = new Point(957, 290);
+            label8.Location = new Point(904, 290);
             label8.Margin = new Padding(4, 0, 4, 0);
             label8.Name = "label8";
             label8.Size = new Size(49, 15);
@@ -956,7 +978,7 @@
             // 
             numScribblesWFactor.DecimalPlaces = 4;
             numScribblesWFactor.Increment = new decimal(new int[] { 1, 0, 0, 65536 });
-            numScribblesWFactor.Location = new Point(1016, 287);
+            numScribblesWFactor.Location = new Point(963, 287);
             numScribblesWFactor.Margin = new Padding(4, 3, 4, 3);
             numScribblesWFactor.Maximum = new decimal(new int[] { 255, 0, 0, 0 });
             numScribblesWFactor.Minimum = new decimal(new int[] { 1, 0, 0, 65536 });
@@ -1105,7 +1127,7 @@
             // btnRedoSameCoords
             // 
             btnRedoSameCoords.Enabled = false;
-            btnRedoSameCoords.Location = new Point(1138, 255);
+            btnRedoSameCoords.Location = new Point(1211, 255);
             btnRedoSameCoords.Margin = new Padding(4, 3, 4, 3);
             btnRedoSameCoords.Name = "btnRedoSameCoords";
             btnRedoSameCoords.Size = new Size(125, 27);
@@ -1116,7 +1138,7 @@
             // 
             // btnCancelBGW
             // 
-            btnCancelBGW.Location = new Point(1062, 255);
+            btnCancelBGW.Location = new Point(1135, 255);
             btnCancelBGW.Margin = new Padding(4, 3, 4, 3);
             btnCancelBGW.Name = "btnCancelBGW";
             btnCancelBGW.Size = new Size(69, 27);
@@ -1387,7 +1409,7 @@
             // 
             // btnGenerateTrimap
             // 
-            btnGenerateTrimap.Location = new Point(679, 254);
+            btnGenerateTrimap.Location = new Point(626, 254);
             btnGenerateTrimap.Margin = new Padding(4, 3, 4, 3);
             btnGenerateTrimap.Name = "btnGenerateTrimap";
             btnGenerateTrimap.Size = new Size(99, 27);
@@ -1644,25 +1666,18 @@
             backgroundWorker6.ProgressChanged += backgroundWorker6_ProgressChanged;
             backgroundWorker6.RunWorkerCompleted += backgroundWorker6_RunWorkerCompleted;
             // 
-            // label22
+            // cbRestore
             // 
-            label22.AutoSize = true;
-            label22.Location = new Point(1291, 208);
-            label22.Name = "label22";
-            label22.Size = new Size(69, 15);
-            label22.TabIndex = 750;
-            label22.Text = "AlphaCurve";
-            // 
-            // btnAlphaCurve
-            // 
-            btnAlphaCurve.Location = new Point(1378, 201);
-            btnAlphaCurve.Margin = new Padding(4, 3, 4, 3);
-            btnAlphaCurve.Name = "btnAlphaCurve";
-            btnAlphaCurve.Size = new Size(88, 27);
-            btnAlphaCurve.TabIndex = 749;
-            btnAlphaCurve.Text = "Go";
-            btnAlphaCurve.UseVisualStyleBackColor = true;
-            btnAlphaCurve.Click += btnAlphaCurve_Click;
+            cbRestore.AutoSize = true;
+            cbRestore.Checked = true;
+            cbRestore.CheckState = CheckState.Checked;
+            cbRestore.Location = new Point(733, 258);
+            cbRestore.Margin = new Padding(4, 3, 4, 3);
+            cbRestore.Name = "cbRestore";
+            cbRestore.Size = new Size(123, 19);
+            cbRestore.TabIndex = 751;
+            cbRestore.Text = "restoreFG in Matte";
+            cbRestore.UseVisualStyleBackColor = true;
             // 
             // frmAlphaMatteDraw
             // 
@@ -1843,5 +1858,6 @@
         internal System.ComponentModel.BackgroundWorker backgroundWorker6;
         private Label label22;
         private Button btnAlphaCurve;
+        private CheckBox cbRestore;
     }
 }

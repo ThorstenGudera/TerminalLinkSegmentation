@@ -93,7 +93,7 @@ namespace TerminalLinkSegmentation
                     {
                         Image iOld = this.pictureBox1.Image;
 
-                        this.pictureBox1.Image = new Bitmap(frm.FBitmap);
+                        this.pictureBox1.Image = (Bitmap)frm.FBitmap.Clone();
                         if (iOld != null)
                             iOld.Dispose();
 
@@ -323,7 +323,7 @@ namespace TerminalLinkSegmentation
                         {
                             Image iOld = this.pictureBox1.Image;
 
-                            this.pictureBox1.Image = new Bitmap(frm.FBitmap);
+                            this.pictureBox1.Image = (Bitmap)frm.FBitmap.Clone();
                             if (iOld != null)
                                 iOld.Dispose();
 

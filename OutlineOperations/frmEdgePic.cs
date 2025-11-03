@@ -16,7 +16,7 @@ namespace OutlineOperations
         {
             InitializeComponent();
 
-            this.helplineRulerCtrl1.Bmp = new Bitmap(image);
+            this.helplineRulerCtrl1.Bmp = (Bitmap)image.Clone();
 
             double faktor = System.Convert.ToDouble(helplineRulerCtrl1.dbPanel1.Width) / System.Convert.ToDouble(helplineRulerCtrl1.dbPanel1.Height);
             double multiplier = System.Convert.ToDouble(this.helplineRulerCtrl1.Bmp.Width) / System.Convert.ToDouble(this.helplineRulerCtrl1.Bmp.Height);

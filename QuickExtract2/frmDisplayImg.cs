@@ -25,7 +25,7 @@ namespace QuickExtract2
         {
             InitializeComponent();
 
-            this.HelplineRulerCtrl1.Bmp = new Bitmap(bmp);
+            this.HelplineRulerCtrl1.Bmp = (Bitmap)bmp.Clone();
 
             // Me.HelplineRulerCtrl1.SetZoomOnlyByMethodCall = True
 

@@ -77,8 +77,8 @@ namespace AvoidAGrabCutEasy
 
             if (AvailMem.AvailMem.checkAvailRam(bmp.Width * bmp.Height * 16L))
             {
-                this.helplineRulerCtrl1.Bmp = new Bitmap(bmp);
-                _bmpBU = new Bitmap(bmp);
+                this.helplineRulerCtrl1.Bmp = (Bitmap)bmp.Clone();
+                _bmpBU = (Bitmap)bmp.Clone();
                 this._bmpOrig = new Bitmap(bmpOrig);
                 this.pictureBox1.Image = this._bmpOrig;
                 this.pictureBox1.Refresh();
@@ -493,9 +493,9 @@ namespace AvoidAGrabCutEasy
                             {
                                 if (AvailMem.AvailMem.checkAvailRam(img.Width * img.Height * 16L))
                                 {
-                                    b1 = new Bitmap(img);
+                                    b1 = (Bitmap)img.Clone();
                                     this.SetBitmap(this.helplineRulerCtrl1.Bmp, b1, this.helplineRulerCtrl1, "Bmp");
-                                    b2 = new Bitmap(img);
+                                    b2 = (Bitmap)img.Clone();
                                     this.SetBitmap(ref this._bmpBU, ref b2);
                                 }
                                 else
@@ -555,7 +555,7 @@ namespace AvoidAGrabCutEasy
                             Bitmap? bmp = null;
 
                             if (frm.FBitmap != null)
-                                bmp = new Bitmap(frm.FBitmap);
+                                bmp = (Bitmap)frm.FBitmap.Clone();
 
                             if (bmp != null)
                             {
@@ -958,7 +958,7 @@ namespace AvoidAGrabCutEasy
 
                                     if (frm.ShowDialog() == DialogResult.OK && frm.FBitmap != null)
                                     {
-                                        bmp = new Bitmap(frm.FBitmap);
+                                        bmp = (Bitmap)frm.FBitmap.Clone();
 
                                         this.numError.Value = frm.numError.Value;
                                         frm.numError.Visible = frm.label54.Visible = false;
@@ -4507,7 +4507,7 @@ namespace AvoidAGrabCutEasy
 
                                 if (frm.ShowDialog() == DialogResult.OK && frm.FBitmap != null)
                                 {
-                                    bmp = new Bitmap(frm.FBitmap);
+                                    bmp = (Bitmap)frm.FBitmap.Clone();
 
                                     Bitmap? bOld2 = bTrimap;
                                     bTrimap = bmp;

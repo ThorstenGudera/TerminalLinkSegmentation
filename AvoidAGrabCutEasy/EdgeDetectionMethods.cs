@@ -541,7 +541,7 @@ namespace AvoidAGrabCutEasy
             conv.ProgressPlus += Conv_ProgressPlus;
 
             //Gradients
-            using (Bitmap bmpH = new Bitmap(bmp), bmpV = new Bitmap(bmp))
+            using (Bitmap bmpH = (Bitmap)bmp.Clone(), bmpV = (Bitmap)bmp.Clone())
             {
                 switch (gradientMode)
                 {
@@ -631,7 +631,7 @@ namespace AvoidAGrabCutEasy
         {
             if (AvailMem.AvailMem.checkAvailRam(bmp.Width * bmp.Height * 10L))
             {
-                using (Bitmap bSrc = new Bitmap(bmp))
+                using (Bitmap bSrc = (Bitmap)bmp.Clone())
                 {
                     BitmapData bmData = bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height), ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
                     BitmapData bmSrc = bSrc.LockBits(new Rectangle(0, 0, bSrc.Width, bSrc.Height), ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
@@ -734,7 +734,7 @@ namespace AvoidAGrabCutEasy
         {
             if (AvailMem.AvailMem.checkAvailRam(bmp.Width * bmp.Height * 10L))
             {
-                using (Bitmap bSrc = new Bitmap(bmp))
+                using (Bitmap bSrc = (Bitmap)bmp.Clone())
                 {
                     BitmapData bmData = bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height), ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
                     BitmapData bmSrc = bSrc.LockBits(new Rectangle(0, 0, bSrc.Width, bSrc.Height), ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);

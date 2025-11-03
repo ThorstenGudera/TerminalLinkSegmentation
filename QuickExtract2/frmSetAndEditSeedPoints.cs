@@ -61,8 +61,8 @@ namespace QuickExtract2
 
             if (bmp != null)
             {
-                this.helplineRulerCtrl1.Bmp = new Bitmap(bmp);
-                this._bmpBU = new Bitmap(bmp);
+                this.helplineRulerCtrl1.Bmp = (Bitmap)bmp.Clone();
+                this._bmpBU = (Bitmap)bmp.Clone();
 
                 double faktor = System.Convert.ToDouble(helplineRulerCtrl1.dbPanel1.Width) / System.Convert.ToDouble(helplineRulerCtrl1.dbPanel1.Height);
                 double multiplier = System.Convert.ToDouble(this.helplineRulerCtrl1.Bmp.Width) / System.Convert.ToDouble(this.helplineRulerCtrl1.Bmp.Height);

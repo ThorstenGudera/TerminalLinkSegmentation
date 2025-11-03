@@ -69,8 +69,8 @@ namespace PseudoShadow
 
             if (AvailMem.AvailMem.checkAvailRam(bmp.Width * bmp.Height * 16L))
             {
-                this.helplineRulerCtrl1.Bmp = new Bitmap(bmp);
-                _bmpBU = new Bitmap(bmp);
+                this.helplineRulerCtrl1.Bmp = (Bitmap)bmp.Clone();
+                _bmpBU = (Bitmap)bmp.Clone();
             }
             else
             {
@@ -285,9 +285,9 @@ namespace PseudoShadow
                                 {
                                     if (AvailMem.AvailMem.checkAvailRam(img.Width * img.Height * 16L))
                                     {
-                                        b1 = new Bitmap(img);
+                                        b1 = (Bitmap)img.Clone();
                                         this.SetBitmap(this.helplineRulerCtrl1.Bmp, b1, this.helplineRulerCtrl1, "Bmp");
-                                        b2 = new Bitmap(img);
+                                        b2 = (Bitmap)img.Clone();
                                         this.SetBitmap(ref this._bmpBU, ref b2);
                                     }
                                     else

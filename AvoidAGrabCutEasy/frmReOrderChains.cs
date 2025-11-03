@@ -53,7 +53,7 @@ namespace AvoidAGrabCutEasy
             {
                 this.helplineRulerCtrl2.Bmp = new Bitmap(bmp);
                 this.helplineRulerCtrl1.Bmp = new Bitmap(bmp.Width, bmp.Height);
-                _bmpBU = new Bitmap(bmp);
+                _bmpBU = (Bitmap)bmp.Clone();
             }
             else
             {

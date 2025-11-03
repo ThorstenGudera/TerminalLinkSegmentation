@@ -31,7 +31,7 @@ namespace OutlineOperations
             InitializeComponent();
 
             if (AvailMem.AvailMem.checkAvailRam(bmp.Width * bmp.Height * 4L))
-                _bmpBU = new Bitmap(bmp);
+                _bmpBU = (Bitmap)bmp.Clone();
             else
             {
                 MessageBox.Show("Not enough Memory");

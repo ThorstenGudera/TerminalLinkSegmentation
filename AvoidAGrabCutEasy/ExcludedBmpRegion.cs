@@ -11,7 +11,7 @@ namespace AvoidAGrabCutEasy
 
         public ExcludedBmpRegion(Bitmap remaining)
         {
-            Remaining = new Bitmap(remaining);
+            Remaining = (Bitmap)remaining.Clone();
         }
 
         public void Dispose()

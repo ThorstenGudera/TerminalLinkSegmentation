@@ -42,7 +42,7 @@ namespace QuickExtract2
             InitializeComponent();
             this._frmQE = frm;
 
-            this.helplineRulerCtrl1.Bmp = new Bitmap(bmp);
+            this.helplineRulerCtrl1.Bmp = (Bitmap)bmp.Clone();
 
             // Me.HelplineRulerCtrl1.SetZoomOnlyByMethodCall = True
 

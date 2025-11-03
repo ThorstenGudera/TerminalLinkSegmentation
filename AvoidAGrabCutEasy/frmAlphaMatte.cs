@@ -125,8 +125,8 @@ namespace AvoidAGrabCutEasy
 
             if (AvailMem.AvailMem.checkAvailRam(bmp.Width * bmp.Height * 16L))
             {
-                this.helplineRulerCtrl1.Bmp = new Bitmap(bmp);
-                _bmpBU = new Bitmap(bmp);
+                this.helplineRulerCtrl1.Bmp = (Bitmap)bmp.Clone();
+                _bmpBU = (Bitmap)bmp.Clone();
             }
             else
             {
@@ -751,9 +751,9 @@ namespace AvoidAGrabCutEasy
                                 {
                                     if (AvailMem.AvailMem.checkAvailRam(img.Width * img.Height * 16L))
                                     {
-                                        b1 = new Bitmap(img);
+                                        b1 = (Bitmap)img.Clone();
                                         this.SetBitmap(this.helplineRulerCtrl1.Bmp, b1, this.helplineRulerCtrl1, "Bmp");
-                                        b2 = new Bitmap(img);
+                                        b2 = (Bitmap)img.Clone();
                                         this.SetBitmap(ref this._bmpBU, ref b2);
                                     }
                                     else
@@ -908,7 +908,7 @@ namespace AvoidAGrabCutEasy
                         else
                             throw new Exception();
 
-                        Bitmap bC = new Bitmap(b1);
+                        Bitmap bC = (Bitmap)b1.Clone();
                         this.SetBitmap(ref this._bmpBU, ref bC);
 
                         this.SetBitmap(this.helplineRulerCtrl1.Bmp, b1, this.helplineRulerCtrl1, "Bmp");
@@ -1546,7 +1546,7 @@ namespace AvoidAGrabCutEasy
             using (MemoryStream ms = new MemoryStream(bytes))
                 img = Image.FromStream(ms);
 
-            bmp = new Bitmap(img);
+            bmp = (Bitmap)img.Clone();
             img.Dispose();
             img = null;
             return bmp;
@@ -2021,7 +2021,7 @@ namespace AvoidAGrabCutEasy
             {
                 //the idea is to get a rich derivative pic of hlc1.Bmp
                 //replace all black by transp and get the chains
-                using (Bitmap? b = new Bitmap(this.helplineRulerCtrl1.Bmp))
+                using (Bitmap? b = (Bitmap)this.helplineRulerCtrl1.Bmp.Clone())
                 {
                     using (frmChainCode frm = new frmChainCode(b, this.CachePathAddition))
                     {
@@ -2113,9 +2113,9 @@ namespace AvoidAGrabCutEasy
                 this.btnOK.Enabled = this.btnCancel.Enabled = false;
                 this._hs = this.cbHalfSize.Checked;
 
-                Bitmap bWork = new Bitmap(this._bWork);
+                Bitmap bWork = (Bitmap)this._bWork.Clone();
                 Image img = this.pictureBox1.Image;
-                Bitmap trWork = new Bitmap(img);
+                Bitmap trWork = (Bitmap)img.Clone();
 
                 ClosedFormMatteOp cfop = new ClosedFormMatteOp(bWork, trWork);
                 BlendParameters bParam = new BlendParameters();
@@ -2249,7 +2249,7 @@ namespace AvoidAGrabCutEasy
                                         FileInfo fi = new FileInfo(Path.Combine(folder, d));
 
                                         using (Image img = Image.FromFile(fi.FullName))
-                                            bmp = new Bitmap(img);
+                                            bmp = (Bitmap)img.Clone();
 
                                         this.SetBitmap(this.helplineRulerCtrl1.Bmp, bmp, this.helplineRulerCtrl1, "Bmp");
 
@@ -2259,7 +2259,7 @@ namespace AvoidAGrabCutEasy
                                             (int)(this.helplineRulerCtrl1.Bmp.Width * this.helplineRulerCtrl1.Zoom),
                                             (int)(this.helplineRulerCtrl1.Bmp.Height * this.helplineRulerCtrl1.Zoom));
 
-                                        Bitmap bC = new Bitmap(bmp);
+                                        Bitmap bC = (Bitmap)bmp.Clone();
                                         this.SetBitmap(ref this._bmpBU, ref bC);
                                     }
                                 }
@@ -2274,7 +2274,7 @@ namespace AvoidAGrabCutEasy
                                     FileInfo fi = new FileInfo(Path.Combine(folder, d));
 
                                     using (Image img = Image.FromFile(fi.FullName))
-                                        bmp = new Bitmap(img);
+                                        bmp = (Bitmap)img.Clone();
 
                                     this.SetBitmap(this.helplineRulerCtrl2.Bmp, bmp, this.helplineRulerCtrl2, "Bmp");
 
@@ -2338,7 +2338,7 @@ namespace AvoidAGrabCutEasy
 
                 this.btnOK.Enabled = this.btnCancel.Enabled = false;
 
-                Bitmap bWork = new Bitmap(this.helplineRulerCtrl1.Bmp);
+                Bitmap bWork = (Bitmap)this.helplineRulerCtrl1.Bmp.Clone();
 
                 if (cbHalfSize.Checked && rbClosedForm.Checked)
                 {
@@ -2538,7 +2538,7 @@ namespace AvoidAGrabCutEasy
                         frm4.Text = "Alpha Matte";
                         frm4.ShowDialog();
 
-                        Bitmap? bC = new Bitmap(bmp);
+                        Bitmap? bC = (Bitmap)bmp.Clone();
                         this.SetBitmap(ref _bmpMatte, ref bC);
 
                         if (this.helplineRulerCtrl1.Bmp != null)
@@ -2811,7 +2811,7 @@ namespace AvoidAGrabCutEasy
 
                 double gamma = (double)this.numGamma.Value;
 
-                Bitmap b = new Bitmap(this.helplineRulerCtrl2.Bmp);
+                Bitmap b = (Bitmap)this.helplineRulerCtrl2.Bmp.Clone();
                 bool redrawExcluded = false;
 
                 string? c = this.CachePathAddition;
@@ -3076,7 +3076,7 @@ namespace AvoidAGrabCutEasy
             if (e.Argument != null)
             {
                 object[] o = (object[])e.Argument;
-                using Bitmap bmp = new Bitmap((Bitmap)o[0]);
+                using Bitmap bmp = (Bitmap)((Bitmap)o[0]).Clone();
                 double alphaTh = (int)o[1];
                 bool redrawExcluded = (bool)o[2];
 
@@ -3255,7 +3255,7 @@ namespace AvoidAGrabCutEasy
 
             int alphaTh = (int)this.numAlphaZAndGain.Value;
 
-            Bitmap b = new Bitmap(this.helplineRulerCtrl2.Bmp);
+            Bitmap b = (Bitmap)this.helplineRulerCtrl2.Bmp.Clone();
             bool redrawExcluded = false;
 
             string? c = this.CachePathAddition;
@@ -3389,7 +3389,7 @@ namespace AvoidAGrabCutEasy
                 Bitmap? excl = excludedRegions[j].Remaining;
                 if (excl != null)
                 {
-                    this._excludedRegions.Add(new Bitmap(excl));
+                    this._excludedRegions.Add((Bitmap)excl.Clone());
                     this._exclLocations.Add(excludedRegions[j].Location);
                 }
             }
@@ -3805,7 +3805,7 @@ namespace AvoidAGrabCutEasy
                     {
                         if (frm.FBitmap != null)
                         {
-                            Bitmap b = new Bitmap(frm.FBitmap);
+                            Bitmap b = (Bitmap)frm.FBitmap.Clone();
 
                             this.SetBitmap(this.helplineRulerCtrl2.Bmp, b, this.helplineRulerCtrl2, "Bmp");
 
@@ -4019,7 +4019,7 @@ namespace AvoidAGrabCutEasy
                 {
                     if (frm.FBitmap != null)
                     {
-                        Bitmap bmp = new Bitmap(frm.FBitmap);
+                        Bitmap bmp = (Bitmap)frm.FBitmap.Clone();
 
                         this.SetBitmap(this.helplineRulerCtrl2.Bmp, bmp, this.helplineRulerCtrl2, "Bmp");
 
@@ -4057,7 +4057,7 @@ namespace AvoidAGrabCutEasy
 
                 int alphaTh = (int)this.numAlphaZAndGain.Value;
 
-                Bitmap b = new Bitmap(this.helplineRulerCtrl2.Bmp);
+                Bitmap b = (Bitmap)this.helplineRulerCtrl2.Bmp.Clone();
                 bool redrawExcluded = false;
 
                 string? c = this.CachePathAddition;

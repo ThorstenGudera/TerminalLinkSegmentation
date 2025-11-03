@@ -162,8 +162,8 @@ namespace AvoidAGrabCutEasy
 
             if (AvailMem.AvailMem.checkAvailRam(bmp.Width * bmp.Height * 16L))
             {
-                this.helplineRulerCtrl1.Bmp = new Bitmap(bmp);
-                _bmpBU = new Bitmap(bmp);
+                this.helplineRulerCtrl1.Bmp = (Bitmap)bmp.Clone();
+                _bmpBU = (Bitmap)bmp.Clone();
             }
             else
             {
@@ -4675,7 +4675,7 @@ namespace AvoidAGrabCutEasy
 
                     if (frm.ShowDialog() == DialogResult.OK)
                     {
-                        Bitmap b = new Bitmap(frm.FBitmap);
+                        Bitmap b = (Bitmap)frm.FBitmap.Clone();
 
                         this.SetBitmap(this.helplineRulerCtrl2.Bmp, b, this.helplineRulerCtrl2, "Bmp");
 
@@ -4880,7 +4880,7 @@ namespace AvoidAGrabCutEasy
                         {
                             if (frm.FBitmap != null)
                             {
-                                Bitmap? bmp = new Bitmap(frm.FBitmap);
+                                Bitmap? bmp = (Bitmap)frm.FBitmap.Clone();
 
                                 this.SetBitmap(this.helplineRulerCtrl2.Bmp, bmp, this.helplineRulerCtrl2, "Bmp");
                                 _undoOPCache?.Add(bmp);
@@ -5506,7 +5506,7 @@ namespace AvoidAGrabCutEasy
 
                         if (frm.FBitmap != null)
                         {
-                            Bitmap b = new Bitmap(frm.FBitmap);
+                            Bitmap b = (Bitmap)frm.FBitmap.Clone();
 
                             this.SetBitmap(this.helplineRulerCtrl2.Bmp, b, this.helplineRulerCtrl2, "Bmp");
 
@@ -5689,7 +5689,7 @@ namespace AvoidAGrabCutEasy
                     {
                         if (frm.FBitmap != null)
                         {
-                            Bitmap b = new Bitmap(frm.FBitmap);
+                            Bitmap b = (Bitmap)frm.FBitmap.Clone();
 
                             this.SetBitmap(this.helplineRulerCtrl2.Bmp, b, this.helplineRulerCtrl2, "Bmp");
 
@@ -6255,7 +6255,7 @@ namespace AvoidAGrabCutEasy
 
                 if (frm.ShowDialog() == DialogResult.OK)
                 {
-                    bOut = new Bitmap(frm.FBitmap);
+                    bOut = (Bitmap)frm.FBitmap.Clone();
                     this._allChains = frm.AllChains;
                     this._removedChains = frm.RemovedChains;
 
@@ -6764,7 +6764,7 @@ namespace AvoidAGrabCutEasy
 
                     if (frm.ShowDialog() == DialogResult.OK)
                     {
-                        Bitmap b = new Bitmap(frm.FBitmap);
+                        Bitmap b = (Bitmap)frm.FBitmap.Clone();
 
                         this.SetBitmap(this.helplineRulerCtrl2.Bmp, b, this.helplineRulerCtrl2, "Bmp");
 
@@ -6909,9 +6909,9 @@ namespace AvoidAGrabCutEasy
                 {
                     if (AvailMem.AvailMem.checkAvailRam(img.Width * img.Height * 16L))
                     {
-                        Bitmap b1 = new Bitmap(img);
+                        Bitmap b1 = (Bitmap)img.Clone();
                         this.SetBitmap(this.helplineRulerCtrl1.Bmp, b1, this.helplineRulerCtrl1, "Bmp");
-                        Bitmap b2 = new Bitmap(img);
+                        Bitmap b2 = (Bitmap)img.Clone();
                         this.SetBitmap(ref this._bmpBU, ref b2);
                     }
                     else
@@ -7121,7 +7121,7 @@ namespace AvoidAGrabCutEasy
                 {
                     Bitmap? b = null;
                     if (frm.FBitmap != null)
-                        b = new Bitmap(frm.FBitmap);
+                        b = (Bitmap)frm.FBitmap.Clone();
 
                     if (frm.cbLoadTo.Checked && b != null)
                     {
@@ -7152,7 +7152,7 @@ namespace AvoidAGrabCutEasy
 
                     if (frm.cbOutline.Checked && frm.FBitmap != null)
                     {
-                        using Bitmap bmp = new Bitmap(frm.FBitmap);
+                        using Bitmap bmp = (Bitmap)frm.FBitmap.Clone();
                         List<ChainCode>? c = GetBoundary(bmp, 0, false);
                         c = c?.OrderByDescending(x => x.Coord.Count).ToList();
 

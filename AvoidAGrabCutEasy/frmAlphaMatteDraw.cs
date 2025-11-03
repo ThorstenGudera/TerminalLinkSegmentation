@@ -118,6 +118,7 @@ namespace AvoidAGrabCutEasy
         private Bitmap? _bWorkPart;
         private bool _lbGo;
         private List<Point>? _ptBU;
+        private Bitmap? _fgMap;
 
         public frmAlphaMatteDraw()
         {
@@ -137,8 +138,8 @@ namespace AvoidAGrabCutEasy
 
             if (AvailMem.AvailMem.checkAvailRam(bmp.Width * bmp.Height * 16L))
             {
-                this.helplineRulerCtrl1.Bmp = new Bitmap(bmp);
-                _bmpBU = new Bitmap(bmp);
+                this.helplineRulerCtrl1.Bmp = (Bitmap)bmp.Clone();
+                _bmpBU = (Bitmap)bmp.Clone();
             }
             else
             {
@@ -326,7 +327,7 @@ namespace AvoidAGrabCutEasy
                         Math.Min((int)Math.Ceiling((rTmp.Width + (float)this.numDrawPenWidth.Value)), this.helplineRulerCtrl2.Bmp.Width - 1),
                         Math.Min((int)Math.Ceiling((rTmp.Height + (float)this.numDrawPenWidth.Value)), this.helplineRulerCtrl2.Bmp.Height - 1));
 
-                    using Bitmap bWorkTmp = new Bitmap(this._bWork);
+                    using Bitmap bWorkTmp = (Bitmap)this._bWork.Clone();
 
                     //evtl für die folgenden Graphics-objekte pixeloffsetMode auf half setzen
                     Bitmap? bC = new Bitmap(rClone2.Width, rClone2.Height);
@@ -336,7 +337,7 @@ namespace AvoidAGrabCutEasy
                     this.SetBitmap(ref this._bWorkPart, ref bC);
 
                     Image img = this.pictureBox1.Image;
-                    using Bitmap trWorkTmp = new Bitmap(img);
+                    using Bitmap trWorkTmp = (Bitmap)img.Clone();
 
                     Bitmap bWork = new Bitmap(rClone.Width, rClone.Height);
                     Bitmap trWork = new Bitmap(rClone.Width, rClone.Height);
@@ -426,7 +427,7 @@ namespace AvoidAGrabCutEasy
                             fgPt = frm.ClickedPoint;
 
                             //extend path with fg and bg parts
-                            Bitmap bTrCopy = new Bitmap(trWork);
+                            Bitmap bTrCopy = (Bitmap)trWork.Clone();
                             ChainFinder cf = new();
                             List<ChainCode> c = cf.GetOutline(bTrCopy, 0, false, 0, false, 0, false);
 
@@ -631,7 +632,7 @@ namespace AvoidAGrabCutEasy
 
                                         FillBlankPixelsUnknown(bTrCopy);
 
-                                        Bitmap bC4 = new Bitmap(bTrCopy);
+                                        Bitmap bC4 = (Bitmap)bTrCopy.Clone();
                                         Image? bPB = this.pictureBox2.Image;
                                         this.pictureBox2.Image = bC4;
                                         if (bPB != null)
@@ -654,8 +655,8 @@ namespace AvoidAGrabCutEasy
 
                                             if (frmST.ShowDialog() == DialogResult.OK && frmST.FBitmap != null)
                                             {
-                                                Bitmap bC44 = new Bitmap(frmST.FBitmap);
-                                                Bitmap? bC45 = new Bitmap(frmST.FBitmap);
+                                                Bitmap bC44 = (Bitmap)frmST.FBitmap.Clone();
+                                                Bitmap? bC45 = (Bitmap)frmST.FBitmap.Clone();
                                                 Image? bPB4 = this.pictureBox2.Image;
                                                 this.pictureBox2.Image = bC44;
                                                 if (bPB4 != null)
@@ -1821,9 +1822,9 @@ namespace AvoidAGrabCutEasy
                                 {
                                     if (AvailMem.AvailMem.checkAvailRam(img.Width * img.Height * 16L))
                                     {
-                                        b1 = new Bitmap(img);
+                                        b1 = (Bitmap)img.Clone();
                                         this.SetBitmap(this.helplineRulerCtrl1.Bmp, b1, this.helplineRulerCtrl1, "Bmp");
-                                        b2 = new Bitmap(img);
+                                        b2 = (Bitmap)img.Clone();
                                         this.SetBitmap(ref this._bmpBU, ref b2);
                                     }
                                     else
@@ -1978,7 +1979,7 @@ namespace AvoidAGrabCutEasy
                         else
                             throw new Exception();
 
-                        Bitmap? bC = new Bitmap(b1);
+                        Bitmap? bC = (Bitmap)b1.Clone();
                         this.SetBitmap(ref this._bmpBU, ref bC);
 
                         this.SetBitmap(this.helplineRulerCtrl1.Bmp, b1, this.helplineRulerCtrl1, "Bmp");
@@ -2304,6 +2305,8 @@ namespace AvoidAGrabCutEasy
                     this._bmpMatteOrigSize.Dispose();
                 if (this._resMatte != null)
                     this._resMatte.Dispose();
+                if (this._fgMap != null)
+                    this._fgMap.Dispose();
 
                 if (this._cfop != null)
                 {
@@ -2630,7 +2633,7 @@ namespace AvoidAGrabCutEasy
             using (MemoryStream ms = new MemoryStream(bytes))
                 img = Image.FromStream(ms);
 
-            bmp = new Bitmap(img);
+            bmp = (Bitmap)img.Clone();
             img.Dispose();
             img = null;
             return bmp;
@@ -3131,7 +3134,7 @@ namespace AvoidAGrabCutEasy
             {
                 //the idea is to get a rich derivative pic of hlc1.Bmp
                 //replace all black by transp and get the chains
-                using (Bitmap b = new Bitmap(this.helplineRulerCtrl1.Bmp))
+                using (Bitmap b = (Bitmap)this.helplineRulerCtrl1.Bmp.Clone())
                 {
                     using (frmChainCode frm = new frmChainCode(b, this.CachePathAddition))
                     {
@@ -3283,7 +3286,7 @@ namespace AvoidAGrabCutEasy
                                         FileInfo fi = new FileInfo(Path.Combine(folder, d));
 
                                         using (Image img = Image.FromFile(fi.FullName))
-                                            bmp = new Bitmap(img);
+                                            bmp = (Bitmap)img.Clone();
 
                                         this.SetBitmap(this.helplineRulerCtrl1.Bmp, bmp, this.helplineRulerCtrl1, "Bmp");
 
@@ -3293,7 +3296,7 @@ namespace AvoidAGrabCutEasy
                                             (int)(this.helplineRulerCtrl1.Bmp.Width * this.helplineRulerCtrl1.Zoom),
                                             (int)(this.helplineRulerCtrl1.Bmp.Height * this.helplineRulerCtrl1.Zoom));
 
-                                        Bitmap? bC = new Bitmap(bmp);
+                                        Bitmap? bC = (Bitmap)bmp.Clone();
                                         this.SetBitmap(ref this._bmpBU, ref bC);
                                     }
                                 }
@@ -3308,7 +3311,7 @@ namespace AvoidAGrabCutEasy
                                     FileInfo fi = new FileInfo(Path.Combine(folder, d));
 
                                     using (Image img = Image.FromFile(fi.FullName))
-                                        bmp = new Bitmap(img);
+                                        bmp = (Bitmap)img.Clone();
 
                                     this.SetBitmap(this.helplineRulerCtrl2.Bmp, bmp, this.helplineRulerCtrl2, "Bmp");
 
@@ -3372,7 +3375,7 @@ namespace AvoidAGrabCutEasy
 
                 this.btnOK.Enabled = this.btnCancel.Enabled = false;
 
-                Bitmap? bWork = new Bitmap(this.helplineRulerCtrl1.Bmp);
+                Bitmap? bWork = (Bitmap)this.helplineRulerCtrl1.Bmp.Clone();
 
                 if (cbHalfSize.Checked && rbClosedForm.Checked)
                 {
@@ -3411,7 +3414,7 @@ namespace AvoidAGrabCutEasy
             return bOut;
         }
 
-        private Bitmap? ResampleBack(Bitmap bmp)
+        private Bitmap? ResampleBack(Bitmap bmp, bool restoreFG)
         {
             if (this.helplineRulerCtrl1 != null && !this.IsDisposed && this.helplineRulerCtrl1.Bmp != null && bmp != null)
             {
@@ -3426,13 +3429,40 @@ namespace AvoidAGrabCutEasy
                         Math.Min((int)Math.Ceiling((rTmp.Width + (float)this.numDrawPenWidth.Value)), this.helplineRulerCtrl2.Bmp.Width - 1),
                         Math.Min((int)Math.Ceiling((rTmp.Height + (float)this.numDrawPenWidth.Value)), this.helplineRulerCtrl2.Bmp.Height - 1));
 
-
                     Bitmap bOut = new Bitmap(rClone.Width, rClone.Height);
 
                     using (Graphics gx = Graphics.FromImage(bOut))
                     {
                         gx.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
                         gx.DrawImage(bmp, 0, 0, bOut.Width, bOut.Height);
+                    }
+
+                    if (restoreFG && this._fgMap != null)
+                    {
+                        using Bitmap bf = this._fgMap.Clone(rClone, bmp.PixelFormat);
+                        using Bitmap bD = new Bitmap(rClone.Width, rClone.Height);
+                        using Graphics gx2 = Graphics.FromImage(bD);
+                        gx2.Clear(Color.White);
+                        ChainFinder cf = new ChainFinder();
+                        List<ChainCode> c = cf.GetOutline(bf, 0, true, 0, true, 0, false);
+
+                        if (c.Count > 0)
+                        {
+                            using GraphicsPath gP2 = new GraphicsPath();
+
+                            for (int i = 0; i < c.Count; i++)
+                            {
+                                if (c[i].Area > 0)
+                                {
+                                    gP2.AddLines(c[i].Coord.Select(a => new PointF(a.X, a.Y)).ToArray());
+                                    gP2.CloseFigure();
+                                }
+                            }
+
+                            using TextureBrush tb = new TextureBrush(bD);
+                            using Graphics gx4 = Graphics.FromImage(bOut);
+                            gx4.FillPath(tb, gP2);
+                        }
                     }
 
                     return bOut;
@@ -3584,22 +3614,18 @@ namespace AvoidAGrabCutEasy
                         c = 100;
                     bmp = bmpTmp.Clone(new Rectangle(this.rbSparseScribble.Checked ? 10 : 0, this.rbSparseScribble.Checked ? 10 : 0, bmpTmp.Width - c, bmpTmp.Height - c), bmpTmp.PixelFormat);
 
-                    Bitmap? bC2 = new Bitmap(bmp);
+                    Bitmap? bC2 = (Bitmap)bmp.Clone();
                     this.SetBitmap(ref this._bmpMatteOrigSize, ref bC2);
 
                     Bitmap? b2 = bmp;
-                    bmp = ResampleBack(bmp);
+                    bmp = ResampleBack(bmp, this.cbRestore.Checked);
+
                     b2.Dispose();
                     b2 = null;
 
                     if (bmp != null)
                     {
-                        //this._undoOPCache?.Add(bmp);
-                        //frmEdgePic frm4 = new frmEdgePic(bmp, this.helplineRulerCtrl1.Bmp.Size);
-                        //frm4.Text = "Alpha Matte";
-                        //frm4.ShowDialog();
-
-                        Bitmap? bC = new Bitmap(bmp);
+                        Bitmap? bC = (Bitmap)bmp.Clone();
                         this.SetBitmap(ref _bmpMatte, ref bC);
 
                         if (this._bWorkPart != null)
@@ -3611,13 +3637,13 @@ namespace AvoidAGrabCutEasy
                                 {
                                     if (resMatte != null)
                                     {
-                                        Bitmap? rMC = new Bitmap(resMatte);
+                                        Bitmap? rMC = (Bitmap)resMatte.Clone();
                                         this.SetBitmap(ref this._resMatte, ref rMC);
 
                                         if (this._bmpMatteOrigSize != null)
                                         {
                                             int th = (int)this.numOTh.Value;
-                                            using (Bitmap bMatteC = new Bitmap(this._bmpMatteOrigSize))
+                                            using (Bitmap bMatteC = (Bitmap)this._bmpMatteOrigSize.Clone())
                                             {
                                                 SetOpaqueGTh(bMatteC, th);
                                                 SetFullLum2Shape(bMatteC, th);
@@ -3686,11 +3712,6 @@ namespace AvoidAGrabCutEasy
                     gx.PixelOffsetMode = PixelOffsetMode.Half;
                     gx.DrawImage(b2, rClone2.X - fl, rClone2.Y - fl);
                     this.helplineRulerCtrl2.MakeBitmap(this.helplineRulerCtrl2.Bmp);
-
-                    //this.SetBitmap(this.helplineRulerCtrl2.Bmp, bmp, this.helplineRulerCtrl2, "Bmp");
-
-                    //Bitmap bC = new Bitmap(bmp);
-                    //this.SetBitmap(ref _bmpRef, ref bC);
 
                     this.helplineRulerCtrl2.Zoom = this.helplineRulerCtrl1.Zoom;
                     this.helplineRulerCtrl2.SetZoom(this.helplineRulerCtrl2.Zoom.ToString());
@@ -3810,7 +3831,7 @@ namespace AvoidAGrabCutEasy
             if (this._bmpMatteOrigSize == null || this.helplineRulerCtrl1.Bmp == null)
                 return null;
 
-            using (Bitmap bMatteC = new Bitmap(this._bmpMatteOrigSize))
+            using (Bitmap bMatteC = (Bitmap)this._bmpMatteOrigSize.Clone())
             using (Bitmap bmpFullLum = GetFullLumParts(bMatteC, threshold))
             {
                 if (bmpFullLum != null)
@@ -4252,7 +4273,7 @@ namespace AvoidAGrabCutEasy
                 int w = bmpFullLum.Width;
                 int h = bmpFullLum.Height;
 
-                Bitmap bWork = new Bitmap(bmpFullLum);
+                Bitmap bWork = (Bitmap)bmpFullLum.Clone();
 
                 BitmapData bmD = bWork.LockBits(new Rectangle(0, 0, w, h), ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
                 int stride = bmD.Stride;
@@ -4286,7 +4307,7 @@ namespace AvoidAGrabCutEasy
             int w = bMatteC.Width;
             int h = bMatteC.Height;
 
-            Bitmap bWork = new Bitmap(bMatteC);
+            Bitmap bWork = (Bitmap)bMatteC.Clone();
 
             BitmapData bmD = bWork.LockBits(new Rectangle(0, 0, w, h), ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
             int stride = bmD.Stride;
@@ -4489,7 +4510,7 @@ namespace AvoidAGrabCutEasy
 
                 double gamma = (double)this.numGamma.Value;
 
-                Bitmap b = new Bitmap(this.helplineRulerCtrl2.Bmp);
+                Bitmap b = (Bitmap)this.helplineRulerCtrl2.Bmp.Clone();
                 bool redrawExcluded = false;
 
                 string? c = this.CachePathAddition;
@@ -4779,6 +4800,7 @@ namespace AvoidAGrabCutEasy
                 float wFactor = (float)o[2];
                 bool drawBoth = (bool)o[3];
                 bool roundCaps = (bool)o[4];
+                Bitmap? bFGMap = (Bitmap)((Bitmap)o[0]).Clone();
 
                 using (Graphics gx = Graphics.FromImage(bTrimap))
                 {
@@ -5098,6 +5120,281 @@ namespace AvoidAGrabCutEasy
                     }
                 }
 
+                using (Graphics gx = Graphics.FromImage(bFGMap))
+                {
+                    gx.SmoothingMode = SmoothingMode.None;
+                    gx.InterpolationMode = InterpolationMode.NearestNeighbor;
+
+                    if (this._scribbles != null)
+                    {
+                        if (this.rbFullScribble.Checked)
+                        {
+                            gx.Clear(Color.Black);
+
+                            if (this._scribbleSeq != null && this._scribbleSeq.Count > 0)
+                            {
+                                foreach (Tuple<int, int, int, bool, List<List<Point>>> f in this._scribbleSeq)
+                                {
+                                    int l = 1;
+                                    int wh = f.Item2;
+                                    int listNo = f.Item3;
+
+                                    if (this._scribbles.ContainsKey(l) && this._scribbles[l].ContainsKey(wh))
+                                    {
+                                        List<List<Point>> ptsList = this._scribbles[l][wh];
+
+                                        if (ptsList != null && ptsList.Count > listNo)
+                                        {
+                                            bool doRect = ptsList[listNo].Count > 1;
+
+                                            Color c = l == 0 ? Color.Black : l == 1 ? Color.White : Color.Gray;
+
+                                            if (doRect)
+                                            {
+                                                if ((!drawPaths || f.Item4) || drawBoth)
+                                                    foreach (Point pt in ptsList[listNo])
+                                                    {
+                                                        using (SolidBrush sb = new SolidBrush(c))
+                                                            gx.FillRectangle(sb, new Rectangle(
+                                                                (int)((int)(pt.X - wh / 2)),
+                                                                (int)((int)(pt.Y - wh / 2)),
+                                                                (int)Math.Max(wh, 1),
+                                                                (int)Math.Max(wh, 1)));
+                                                        if (l == 1)
+                                                            using (Pen pen = new Pen(c, 1))
+                                                                gx.DrawRectangle(pen, new Rectangle(
+                                                                    (int)((int)(pt.X - wh / 2)),
+                                                                    (int)((int)(pt.Y - wh / 2)),
+                                                                    (int)Math.Max(wh, 1),
+                                                                    (int)Math.Max(wh, 1)));
+                                                    }
+
+                                                if (drawPaths && !f.Item4)
+                                                {
+                                                    using (SolidBrush sb = new SolidBrush(c))
+                                                    using (Pen pen = new Pen(c, (wh * wFactor)))
+                                                    {
+                                                        pen.LineJoin = LineJoin.Round;
+                                                        if (roundCaps)
+                                                        {
+                                                            pen.StartCap = LineCap.Round;
+                                                            pen.EndCap = LineCap.Round;
+                                                        }
+                                                        using (GraphicsPath gP = new GraphicsPath())
+                                                        {
+                                                            gP.AddLines(ptsList[listNo].Select(a => new PointF(a.X, a.Y)).ToArray());
+                                                            using (Matrix mx = new Matrix(1.0f, 0, 0, 1.0f, 0, 0))
+                                                                gP.Transform(mx);
+                                                            gx.DrawPath(pen, gP);
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                            else
+                                            {
+                                                if ((!drawPaths || f.Item4) || drawBoth)
+                                                    if (ptsList[listNo].Count > 0)
+                                                    {
+                                                        Point pt = ptsList[listNo][0];
+                                                        using (SolidBrush sb = new SolidBrush(c))
+                                                            gx.FillRectangle(sb, new Rectangle(
+                                                                (int)((int)(pt.X - wh / 2)),
+                                                                (int)((int)(pt.Y - wh / 2)),
+                                                                (int)Math.Max(wh, 1),
+                                                                (int)Math.Max(wh, 1)));
+                                                        if (l == 1)
+                                                            using (Pen pen = new Pen(c, 1))
+                                                                gx.DrawRectangle(pen, new Rectangle(
+                                                                    (int)((int)(pt.X - wh / 2)),
+                                                                    (int)((int)(pt.Y - wh / 2)),
+                                                                    (int)Math.Max(wh, 1),
+                                                                    (int)Math.Max(wh, 1)));
+                                                    }
+
+                                                if (drawPaths && !f.Item4)
+                                                {
+                                                    using (SolidBrush sb = new SolidBrush(c))
+                                                    using (GraphicsPath gP = new GraphicsPath())
+                                                    {
+                                                        gP.AddEllipse(ptsList[listNo][0].X - wh / 2f,
+                                                           ptsList[listNo][0].Y - wh / 2f,
+                                                           wh, wh);
+                                                        gx.FillPath(sb, gP);
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                if (this._scribbles.ContainsKey(1))
+                                {
+                                    Dictionary<int, List<List<Point>>> z = this._scribbles[1];
+
+                                    if (z != null)
+                                    {
+                                        foreach (int i in z.Keys)
+                                        {
+                                            List<List<Point>> list = z[i];
+                                            int wh = (int)Math.Max(i, 3);
+
+                                            for (int j = 0; j < list.Count; j++)
+                                            {
+                                                List<Point> pts = list[j].Select(a => new Point((int)(a.X), (int)(a.Y))).ToList();
+
+                                                foreach (Point pt in pts)
+                                                {
+                                                    gx.FillRectangle(Brushes.White, new Rectangle(pt.X - wh / 2, pt.Y - wh / 2, wh, wh));
+                                                    using (Pen pen = new Pen(Color.White, 1))
+                                                        gx.DrawRectangle(pen, new Rectangle(pt.X - wh / 2, pt.Y - wh / 2, wh, wh));
+                                                }
+                                            }
+
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        else if (this.rbSparseScribble.Checked)
+                        {
+                            gx.Clear(Color.Gray);
+
+                            if (this._scribbleSeq != null && this._scribbleSeq.Count > 0)
+                            {
+                                foreach (Tuple<int, int, int, bool, List<List<Point>>> f in this._scribbleSeq)
+                                {
+                                    int l = 1;
+                                    int wh = f.Item2;
+                                    int listNo = f.Item3;
+
+                                    if (this._scribbles.ContainsKey(l) && this._scribbles[l].ContainsKey(wh))
+                                    {
+                                        List<List<Point>> ptsList = this._scribbles[l][wh];
+
+                                        if (ptsList != null && ptsList.Count > listNo)
+                                        {
+                                            bool doRect = ptsList[listNo].Count > 1;
+
+                                            Color c = l == 0 ? Color.Black : l == 1 ? Color.White : Color.Gray;
+
+                                            if (doRect)
+                                            {
+                                                if ((!drawPaths || f.Item4) || drawBoth)
+                                                    foreach (Point pt in ptsList[listNo])
+                                                    {
+                                                        using (SolidBrush sb = new SolidBrush(c))
+                                                            gx.FillRectangle(sb, new Rectangle(
+                                                                (int)((int)(pt.X - wh / 2)),
+                                                                (int)((int)(pt.Y - wh / 2)),
+                                                            (int)(wh),
+                                                                (int)(wh)));
+                                                        if (l == 1)
+                                                            using (Pen pen = new Pen(c, 1))
+                                                                gx.DrawRectangle(pen, new Rectangle(
+                                                                    (int)((int)(pt.X - wh / 2)),
+                                                                    (int)((int)(pt.Y - wh / 2)),
+                                                                    (int)(wh),
+                                                                    (int)(wh)));
+                                                    }
+
+                                                if (drawPaths && !f.Item4)
+                                                {
+                                                    using (SolidBrush sb = new SolidBrush(c))
+                                                    using (Pen pen = new Pen(c, (wh * wFactor)))
+                                                    {
+                                                        pen.LineJoin = LineJoin.Round;
+                                                        if (roundCaps)
+                                                        {
+                                                            pen.StartCap = LineCap.Round;
+                                                            pen.EndCap = LineCap.Round;
+                                                        }
+                                                        using (GraphicsPath gP = new GraphicsPath())
+                                                        {
+                                                            gP.AddLines(ptsList[listNo].Select(a => new PointF(a.X, a.Y)).ToArray());
+                                                            using (Matrix mx = new Matrix(1.0f, 0, 0, 1.0f, 0, 0))
+                                                                gP.Transform(mx);
+                                                            gx.DrawPath(pen, gP);
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                            else
+                                            {
+                                                if ((!drawPaths || f.Item4) || drawBoth)
+                                                    if (ptsList[listNo].Count > 0)
+                                                    {
+                                                        Point pt = ptsList[listNo][0];
+                                                        using (SolidBrush sb = new SolidBrush(c))
+                                                            gx.FillRectangle(sb, new Rectangle(
+                                                                (int)((int)(pt.X - wh / 2)),
+                                                                (int)((int)(pt.Y - wh / 2)),
+                                                                (int)(wh),
+                                                                (int)(wh)));
+                                                        if (l == 1)
+                                                            using (Pen pen = new Pen(c, 1))
+                                                                gx.DrawRectangle(pen, new Rectangle(
+                                                                    (int)((int)(pt.X - wh / 2)),
+                                                                    (int)((int)(pt.Y - wh / 2)),
+                                                                    (int)(wh),
+                                                                    (int)(wh)));
+                                                    }
+
+                                                if (drawPaths && !f.Item4)
+                                                {
+                                                    using (SolidBrush sb = new SolidBrush(c))
+                                                    using (GraphicsPath gP = new GraphicsPath())
+                                                    {
+                                                        gP.AddEllipse(ptsList[listNo][0].X - wh / 2f,
+                                                            ptsList[listNo][0].Y - wh / 2f,
+                                                            wh, wh);
+                                                        gx.FillPath(sb, gP);
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                if (this._scribbles.ContainsKey(1))
+                                {
+                                    Dictionary<int, List<List<Point>>> z = this._scribbles[1];
+
+                                    if (z != null)
+                                    {
+                                        foreach (int i in z.Keys)
+                                        {
+                                            List<List<Point>> list = z[i];
+                                            int wh = (int)Math.Max(i, 3);
+
+                                            for (int j = 0; j < list.Count; j++)
+                                            {
+                                                List<Point> pts = list[j].Select(a => new Point((int)(a.X), (int)(a.Y))).ToList();
+
+                                                foreach (Point pt in pts)
+                                                {
+                                                    gx.FillRectangle(Brushes.White, new Rectangle(pt.X - wh / 2, pt.Y - wh / 2, wh, wh));
+                                                    using (Pen pen = new Pen(Color.White, 1))
+                                                        gx.DrawRectangle(pen, new Rectangle(pt.X - wh / 2, pt.Y - wh / 2, wh, wh));
+                                                }
+                                            }
+
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        if (this._oldUnknownFT != null)
+                            this.FillUnknownByBG(bTrimap, this._oldUnknownFT);
+                    }
+                }
+
+                this.SetBitmap(ref this._fgMap, ref bFGMap);
+
                 e.Result = bTrimap;
             }
         }
@@ -5131,7 +5428,7 @@ namespace AvoidAGrabCutEasy
 
                     this.labelGo.Enabled = this.numDrawPenWidth.Enabled = this._lbGo = true;
 
-                    Bitmap bC = new Bitmap(this.helplineRulerCtrl1.Bmp);
+                    Bitmap bC = (Bitmap)this.helplineRulerCtrl1.Bmp.Clone();
                     this.SetBitmap(this.helplineRulerCtrl2.Bmp, bC, this.helplineRulerCtrl2, "Bmp");
                     this.helplineRulerCtrl2.SetZoom(this.helplineRulerCtrl1.Zoom.ToString());
                     this.helplineRulerCtrl2.MakeBitmap(this.helplineRulerCtrl2.Bmp);
@@ -5191,7 +5488,7 @@ namespace AvoidAGrabCutEasy
 
                 int alphaTh = (int)this.numAlphaZAndGain.Value;
 
-                Bitmap b = new Bitmap(this.helplineRulerCtrl2.Bmp);
+                Bitmap b = (Bitmap)this.helplineRulerCtrl2.Bmp.Clone();
                 bool redrawExcluded = false;
 
                 string? c = this.CachePathAddition;
@@ -5333,7 +5630,7 @@ namespace AvoidAGrabCutEasy
                 Bitmap? excl = excludedRegions[j].Remaining;
                 if (excl != null)
                 {
-                    this._excludedRegions.Add(new Bitmap(excl));
+                    this._excludedRegions.Add((Bitmap)excl.Clone());
                     this._exclLocations.Add(excludedRegions[j].Location);
                 }
             }
@@ -5344,7 +5641,7 @@ namespace AvoidAGrabCutEasy
             if (e.Argument != null)
             {
                 object[] o = (object[])e.Argument;
-                using Bitmap bmp = new Bitmap((Bitmap)o[0]);
+                using Bitmap bmp = (Bitmap)((Bitmap)o[0]).Clone();
                 double alphaTh = (int)o[1];
                 bool redrawExcluded = (bool)o[2];
 
@@ -5615,7 +5912,7 @@ namespace AvoidAGrabCutEasy
                     {
                         if (frm.FBitmap != null)
                         {
-                            Bitmap b = new Bitmap(frm.FBitmap);
+                            Bitmap b = (Bitmap)frm.FBitmap.Clone();
 
                             this.SetBitmap(this.helplineRulerCtrl2.Bmp, b, this.helplineRulerCtrl2, "Bmp");
 
@@ -5747,7 +6044,7 @@ namespace AvoidAGrabCutEasy
                     int w = b.Width;
                     int h = b.Height;
 
-                    using (Bitmap bCurrentUnknown = new Bitmap(b))
+                    using (Bitmap bCurrentUnknown = (Bitmap)b.Clone())
                     {
                         //redraw a bit thicker when we halfsize the pic
                         if (this.cbHalfSize.Checked)
@@ -5802,12 +6099,12 @@ namespace AvoidAGrabCutEasy
 
                         //remove inner part
                         int n = (int)this.numWHScribbles.Value;
-                        using (Bitmap bForeground = remInner == 0 ? new Bitmap(b) : RemoveInnerOutlineEx(b, remInner, true))
+                        using (Bitmap bForeground = remInner == 0 ? (Bitmap)b.Clone() : RemoveInnerOutlineEx(b, remInner, true))
                         {
                             //this.SubtractToZero(b, bForeground);
 
                             //remove outer part
-                            using (Bitmap bForeground2 = remOuter == 0 ? new Bitmap(bForeground) : RemoveOutlineEx(bForeground, remOuter, true))
+                            using (Bitmap bForeground2 = remOuter == 0 ? (Bitmap)bForeground.Clone() : RemoveOutlineEx(bForeground, remOuter, true))
                             {
                                 this.DrawUnKnown(bForeground2);
 
@@ -5831,7 +6128,7 @@ namespace AvoidAGrabCutEasy
                                 this.ClearForeground(this._oldUnknownFT, bForeground2);
 
                                 Bitmap? bOld2 = b;
-                                b = new Bitmap(bForeground2);
+                                b = (Bitmap)bForeground2.Clone();
                                 this._scribblesBitmap = b;
                                 if (bOld2 != null)
                                     bOld2.Dispose();
@@ -6252,7 +6549,7 @@ namespace AvoidAGrabCutEasy
 
                     if (frm.ShowDialog() == DialogResult.OK && frm.FBitmap != null)
                     {
-                        Bitmap? b = new Bitmap(frm.FBitmap);
+                        Bitmap? b = (Bitmap)frm.FBitmap.Clone();
 
                         List<ChainCode>? l4 = frm.SelectedChains;
 
@@ -6479,11 +6776,11 @@ namespace AvoidAGrabCutEasy
             if (this._bmpMatteOrigSize != null && this._resMatte != null)
             {
                 int th = (int)this.numOTh.Value;
-                using (Bitmap bMatteC = new Bitmap(this._bmpMatteOrigSize))
+                using (Bitmap bMatteC = (Bitmap)this._bmpMatteOrigSize.Clone())
                 {
                     SetOpaqueGTh(bMatteC, th);
                     SetFullLum2Shape(bMatteC, th);
-                    using (Bitmap resMatte = new Bitmap(this._resMatte))
+                    using (Bitmap resMatte = (Bitmap)this._resMatte.Clone())
                     {
                         using (Graphics graphics = Graphics.FromImage(resMatte))
                             graphics.DrawImage(bMatteC, 0, 0, resMatte.Width, resMatte.Height);
@@ -6583,7 +6880,7 @@ namespace AvoidAGrabCutEasy
 
             if (this.helplineRulerCtrl2.Bmp == null)
             {
-                Bitmap? bWork = new Bitmap(this.helplineRulerCtrl1.Bmp);
+                Bitmap? bWork = (Bitmap)this.helplineRulerCtrl1.Bmp.Clone();
 
                 if (cbHalfSize.Checked && rbClosedForm.Checked)
                 {
@@ -6608,7 +6905,7 @@ namespace AvoidAGrabCutEasy
 
                 this.SetBitmap(ref _bWork, ref bWork);
 
-                Bitmap bC = new Bitmap(this.helplineRulerCtrl1.Bmp);
+                Bitmap bC = (Bitmap)this.helplineRulerCtrl1.Bmp.Clone();
 
                 this.SetBitmap(this.helplineRulerCtrl2.Bmp, bC, this.helplineRulerCtrl2, "Bmp");
                 this.helplineRulerCtrl2.SetZoom(this.helplineRulerCtrl1.Zoom.ToString());
@@ -6636,7 +6933,7 @@ namespace AvoidAGrabCutEasy
             {
                 Bitmap? bmp = null;
                 Image img = Image.FromFile(this.openFileDialog1.FileName);
-                bmp = new Bitmap(img);
+                bmp = (Bitmap)img.Clone();
 
                 if (bmp != null)
                 {
@@ -6655,7 +6952,7 @@ namespace AvoidAGrabCutEasy
                         (int)(this.helplineRulerCtrl1.Bmp.Width * this.helplineRulerCtrl1.Zoom),
                         (int)(this.helplineRulerCtrl1.Bmp.Height * this.helplineRulerCtrl1.Zoom));
 
-                    Bitmap? bC = new Bitmap(bmp);
+                    Bitmap? bC = (Bitmap)bmp.Clone();
                     this.SetBitmap(ref this._bmpBU, ref bC);
 
                     this._undoOPCache?.Add(bmp);
@@ -6683,7 +6980,7 @@ namespace AvoidAGrabCutEasy
 
                 int alphaTh = (int)this.numAlphaZAndGain.Value;
 
-                Bitmap b = new Bitmap(this.helplineRulerCtrl2.Bmp);
+                Bitmap b = (Bitmap)this.helplineRulerCtrl2.Bmp.Clone();
                 bool redrawExcluded = false;
 
                 string? c = this.CachePathAddition;

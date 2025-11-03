@@ -266,7 +266,7 @@ Public Class Cache
 
         If Not bmp Is Nothing Then
             If AvailMem.AvailMem.checkAvailRam(bmp.Width * bmp.Height * 4L) Then
-                b.RunWorkerAsync(New Object() {f, New Bitmap(bmp)})
+                b.RunWorkerAsync(New Object() {f, CType(bmp.Clone(), Bitmap)})
             Else
                 MessageBox.Show("Not enough Memory")
 
@@ -411,9 +411,9 @@ Public Class Cache
             If position >= 0 Then
                 Dim f As String = Path.Combine(_cachePath, position.ToString() + ".png")
                 If File.Exists(f) Then
-                    img = Image.FromFile(f)
+                    img = Image.FromFile(f, False)
                     If AvailMem.AvailMem.checkAvailRam(img.Width * img.Height * 4L) Then
-                        bmp = New Bitmap(img)
+                        bmp = CType(img.Clone(), Bitmap)
                     Else
                         MessageBox.Show("Not enough Memory")
                     End If
