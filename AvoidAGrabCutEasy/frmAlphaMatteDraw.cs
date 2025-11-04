@@ -3440,29 +3440,7 @@ namespace AvoidAGrabCutEasy
                     if (restoreFG && this._fgMap != null)
                     {
                         using Bitmap bf = this._fgMap.Clone(rClone, bmp.PixelFormat);
-                        using Bitmap bD = new Bitmap(rClone.Width, rClone.Height);
-                        using Graphics gx2 = Graphics.FromImage(bD);
-                        gx2.Clear(Color.White);
-                        ChainFinder cf = new ChainFinder();
-                        List<ChainCode> c = cf.GetOutline(bf, 200, true, 0, true, 0, false);
-
-                        if (c.Count > 0)
-                        {
-                            using GraphicsPath gP2 = new GraphicsPath();
-
-                            for (int i = 0; i < c.Count; i++)
-                            {
-                                if (c[i].Area > 0)
-                                {
-                                    gP2.AddLines(c[i].Coord.Select(a => new PointF(a.X, a.Y)).ToArray());
-                                    gP2.CloseFigure();
-                                }
-                            }
-
-                            using TextureBrush tb = new TextureBrush(bD);
-                            using Graphics gx4 = Graphics.FromImage(bOut);
-                            gx4.FillPath(tb, gP2);
-                        }
+                        SetForegroundWhite(bOut, bf);
                     }
 
                     return bOut;
@@ -3470,6 +3448,38 @@ namespace AvoidAGrabCutEasy
             }
 
             return null;
+        }
+
+        private unsafe void SetForegroundWhite(Bitmap bOut, Bitmap fgMap)
+        {
+            int w = bOut.Width;
+            int h = bOut.Height;
+
+            BitmapData bmD = bOut.LockBits(new Rectangle(0, 0, w, h), ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
+            BitmapData bmR = fgMap.LockBits(new Rectangle(0, 0, w, h), ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
+
+            int stride = bmD.Stride;
+
+            Parallel.For(0, h, y =>
+            {
+                byte* p = (byte*)bmD.Scan0;
+                byte* pR = (byte*)bmR.Scan0;
+
+                p += y * stride;
+                pR += y * stride;
+
+                for (int x = 0; x < w; x++)
+                {
+                    if (pR[0] > 200)
+                        p[0] = p[1] = p[2] = p[3] = 255;
+
+                    p += 4;
+                    pR += 4;
+                }
+            });
+
+            bOut.UnlockBits(bmD);
+            fgMap.UnlockBits(bmR);
         }
 
         private double CheckWidthHeight(Bitmap bmp, bool fp, double maxSize)
