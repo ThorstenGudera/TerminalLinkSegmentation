@@ -451,7 +451,7 @@ namespace AvoidAGrabCutEasy
                         else
                             throw new Exception();
 
-                        Bitmap bC = new Bitmap(b1);
+                        Bitmap bC = (Bitmap)b1.Clone();
                         this.SetBitmap(ref this._bmpBU, ref bC);
 
                         this.SetBitmap(this.helplineRulerCtrl1.Bmp, b1, this.helplineRulerCtrl1, "Bmp");
@@ -804,7 +804,7 @@ namespace AvoidAGrabCutEasy
                                         FileInfo fi = new FileInfo(Path.Combine(folder, d));
 
                                         using (Image img = Image.FromFile(fi.FullName))
-                                            bmp = new Bitmap(img);
+                                            bmp = (Bitmap)img.Clone();
 
                                         this.SetBitmap(this.helplineRulerCtrl1.Bmp, bmp, this.helplineRulerCtrl1, "Bmp");
 
@@ -814,7 +814,7 @@ namespace AvoidAGrabCutEasy
                                             (int)(this.helplineRulerCtrl1.Bmp.Width * this.helplineRulerCtrl1.Zoom),
                                             (int)(this.helplineRulerCtrl1.Bmp.Height * this.helplineRulerCtrl1.Zoom));
 
-                                        Bitmap bC = new Bitmap(bmp);
+                                        Bitmap bC = (Bitmap)bmp.Clone();
                                         this.SetBitmap(ref this._bmpBU, ref bC);
                                     }
                                 }
@@ -829,7 +829,7 @@ namespace AvoidAGrabCutEasy
                                     FileInfo fi = new FileInfo(Path.Combine(folder, d));
 
                                     using (Image img = Image.FromFile(fi.FullName))
-                                        bmp = new Bitmap(img);
+                                        bmp = (Bitmap)img.Clone();
 
                                     this.SetBitmap(this.helplineRulerCtrl2.Bmp, bmp, this.helplineRulerCtrl2, "Bmp");
 
@@ -972,7 +972,7 @@ namespace AvoidAGrabCutEasy
 
                     this.helplineRulerCtrl2.dbPanel1.Invalidate();
 
-                    Bitmap b = new Bitmap(this.helplineRulerCtrl2.Bmp);
+                    Bitmap b = (Bitmap)this.helplineRulerCtrl2.Bmp.Clone();
                     ExcludedBmpRegion excl = new(b);
                     excl.ChainCode = l;
                     excl.Location = new Point(0, 0);
@@ -1088,7 +1088,7 @@ namespace AvoidAGrabCutEasy
                 l = l?.OrderByDescending(a => Math.Abs(a.Area)).ToList();
                 l?.RemoveRange(1, l.Count - 1);
 
-                Bitmap b = new Bitmap(this.helplineRulerCtrl2.Bmp);
+                Bitmap b = (Bitmap)this.helplineRulerCtrl2.Bmp.Clone();
                 ExcludedBmpRegion excl = new(b);
                 excl.ChainCode = l;
                 excl.Location = new Point(0, 0);

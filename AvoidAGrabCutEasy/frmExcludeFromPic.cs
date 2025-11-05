@@ -1091,7 +1091,7 @@ namespace AvoidAGrabCutEasy
                 this.toolStripProgressBar1.Value = 0;
                 this.toolStripProgressBar1.Visible = true;
 
-                Bitmap bOrig = new Bitmap(this._bmpBU);
+                Bitmap bOrig = (Bitmap)this._bmpBU.Clone();
                 int width = (int)this.numExceptBounds.Value;
 
                 this.backgroundWorker1.RunWorkerAsync(new object[] { bOrig, width });
@@ -1109,7 +1109,7 @@ namespace AvoidAGrabCutEasy
                 using Bitmap b = RemoveOutlineEx(bOrig, width, true);
 
                 Bitmap b2 = GetRemainingRegion(bOrig, b);
-                Bitmap remg = new Bitmap(b2);
+                Bitmap remg = (Bitmap)b2.Clone();
                 this.SetBitmap(ref this._remaining, ref remg);
 
                 e.Result = b2;
@@ -1372,7 +1372,7 @@ namespace AvoidAGrabCutEasy
                 using Bitmap b = RemoveOutlineEx(bOrig, width, true);
 
                 Bitmap b2 = GetRemainingRegion(bOrig, b);
-                Bitmap remg = new Bitmap(b2);
+                Bitmap remg = (Bitmap)b2.Clone();
                 this.SetBitmap(ref this._remaining, ref remg);
 
                 e.Result = b2;
@@ -1514,7 +1514,7 @@ namespace AvoidAGrabCutEasy
             if (this._bmpBU != null)
             {
                 if (AvailMem.AvailMem.checkAvailRam(this._bmpBU.Width * this._bmpBU.Height * 12L))
-                    b1 = new Bitmap(this._bmpBU);
+                    b1 = (Bitmap)this._bmpBU.Clone();
                 else
                     throw new Exception();
 
