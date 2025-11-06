@@ -340,7 +340,7 @@ namespace PseudoShadow
             cbExcludeFG.Name = "cbExcludeFG";
             cbExcludeFG.Size = new Size(83, 19);
             cbExcludeFG.TabIndex = 726;
-            cbExcludeFG.Text = "exclude FG";
+            cbExcludeFG.Text = "exclude R-FG";
             cbExcludeFG.UseVisualStyleBackColor = true;
             // 
             // btnFromCache

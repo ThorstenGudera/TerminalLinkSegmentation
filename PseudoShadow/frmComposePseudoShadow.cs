@@ -590,6 +590,23 @@ namespace PseudoShadow
                                     redrawExcluded = true;
                                 }
                             }
+                            else
+                            {
+                                if (b != null)
+                                    b.Dispose();
+                                b = null;
+
+                                this.btnAlphaZAndGain.Text = "Go";
+
+                                this.SetControls(true);
+                                this.Cursor = Cursors.Default;
+
+                                this.btnOK.Enabled = this.btnCancel.Enabled = true;
+
+                                this._pic_changed = true;
+
+                                return;
+                            }
                         }
                     }
 
@@ -625,6 +642,23 @@ namespace PseudoShadow
                                     CopyRegions(l);
                                     redrawExcluded = true;
                                 }
+                            }
+                            else
+                            {
+                                if (b != null)
+                                    b.Dispose();
+                                b = null;
+
+                                this.btnAlphaZAndGain.Text = "Go";
+
+                                this.SetControls(true);
+                                this.Cursor = Cursors.Default;
+
+                                this.btnOK.Enabled = this.btnCancel.Enabled = true;
+
+                                this._pic_changed = true;
+
+                                return;
                             }
                         }
                     }
@@ -1212,6 +1246,23 @@ namespace PseudoShadow
                                         redrawExcluded = true;
                                     }
                                 }
+                                else
+                                {
+                                    if (b != null)
+                                        b.Dispose();
+                                    b = null;
+
+                                    this.btnSetGamma.Text = "Go";
+
+                                    this.SetControls(true);
+                                    this.Cursor = Cursors.Default;
+
+                                    this.btnOK.Enabled = this.btnCancel.Enabled = true;
+
+                                    this._pic_changed = true;
+
+                                    return;
+                                }
                             }
                         }
 
@@ -1247,6 +1298,23 @@ namespace PseudoShadow
                                         CopyRegions(l);
                                         redrawExcluded = true;
                                     }
+                                }
+                                else
+                                {
+                                    if (b != null)
+                                        b.Dispose();
+                                    b = null;
+
+                                    this.btnSetGamma.Text = "Go";
+
+                                    this.SetControls(true);
+                                    this.Cursor = Cursors.Default;
+
+                                    this.btnOK.Enabled = this.btnCancel.Enabled = true;
+
+                                    this._pic_changed = true;
+
+                                    return;
                                 }
                             }
                         }
@@ -1883,6 +1951,23 @@ namespace PseudoShadow
                                 redrawExcluded = true;
                             }
                         }
+                        else
+                        {
+                            if (b != null)
+                                b.Dispose();
+                            b = null;
+
+                            this.btnAlphaCurve.Text = "Go";
+
+                            this.SetControls(true);
+                            this.Cursor = Cursors.Default;
+
+                            this.btnOK.Enabled = this.btnCancel.Enabled = true;
+
+                            this._pic_changed = true;
+
+                            return;
+                        }
                     }
                 }
 
@@ -1926,6 +2011,23 @@ namespace PseudoShadow
                                 redrawExcluded = true;
                             }
                         }
+                        else
+                        {
+                            if (b != null)
+                                b.Dispose();
+                            b = null;
+
+                            this.btnAlphaCurve.Text = "Go";
+
+                            this.SetControls(true);
+                            this.Cursor = Cursors.Default;
+
+                            this.btnOK.Enabled = this.btnCancel.Enabled = true;
+
+                            this._pic_changed = true;
+
+                            return;
+                        }
                     }
                 }
 
@@ -1940,6 +2042,21 @@ namespace PseudoShadow
 
                     Array.Copy(frmA.MappingsAlpha, aalpha, frmA.MappingsAlpha.Length);
                     this.backgroundWorker6.RunWorkerAsync(new object[] { b, aalpha, frmA.RadioButton1.Checked, frmA.CheckBox1.Checked, frmA.CheckBox4.Checked, redrawExcluded });
+                }
+                else
+                {
+                    if (b != null)
+                        b.Dispose();
+                    b = null;
+
+                    this.btnAlphaCurve.Text = "Go";
+
+                    this.SetControls(true);
+                    this.Cursor = Cursors.Default;
+
+                    this.btnOK.Enabled = this.btnCancel.Enabled = true;
+
+                    this._pic_changed = true;
                 }
             }
         }

@@ -38,6 +38,7 @@
             splitContainer1 = new SplitContainer();
             openFileDialog1 = new OpenFileDialog();
             panel1 = new Panel();
+            cbSetOpaque = new CheckBox();
             label3 = new Label();
             cbDraw = new CheckBox();
             numPenW = new NumericUpDown();
@@ -68,7 +69,8 @@
             saveFileDialog1 = new SaveFileDialog();
             Timer3 = new System.Windows.Forms.Timer(components);
             backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
-            cbSetOpaque = new CheckBox();
+            label5 = new Label();
+            btnSetMatteFGOpaque = new Button();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
             splitContainer1.Panel2.SuspendLayout();
@@ -189,6 +191,8 @@
             // panel1
             // 
             panel1.AutoScroll = true;
+            panel1.Controls.Add(label5);
+            panel1.Controls.Add(btnSetMatteFGOpaque);
             panel1.Controls.Add(cbSetOpaque);
             panel1.Controls.Add(label3);
             panel1.Controls.Add(cbDraw);
@@ -219,6 +223,16 @@
             panel1.TabIndex = 230;
             panel1.MouseDoubleClick += panel1_MouseDoubleClick;
             panel1.MouseDown += panel1_MouseDown;
+            // 
+            // cbSetOpaque
+            // 
+            cbSetOpaque.AutoSize = true;
+            cbSetOpaque.Location = new Point(453, 50);
+            cbSetOpaque.Name = "cbSetOpaque";
+            cbSetOpaque.Size = new Size(133, 19);
+            cbSetOpaque.TabIndex = 721;
+            cbSetOpaque.Text = "set FG alpha opaque";
+            cbSetOpaque.UseVisualStyleBackColor = true;
             // 
             // label3
             // 
@@ -504,15 +518,27 @@
             backgroundWorker1.WorkerReportsProgress = true;
             backgroundWorker1.WorkerSupportsCancellation = true;
             // 
-            // cbSetOpaque
+            // label5
             // 
-            cbSetOpaque.AutoSize = true;
-            cbSetOpaque.Location = new Point(453, 50);
-            cbSetOpaque.Name = "cbSetOpaque";
-            cbSetOpaque.Size = new Size(133, 19);
-            cbSetOpaque.TabIndex = 721;
-            cbSetOpaque.Text = "set FG alpha opaque";
-            cbSetOpaque.UseVisualStyleBackColor = true;
+            label5.AutoSize = true;
+            label5.Location = new Point(748, 50);
+            label5.Name = "label5";
+            label5.Size = new Size(19, 15);
+            label5.TabIndex = 730;
+            label5.Text = "    ";
+            // 
+            // btnSetMatteFGOpaque
+            // 
+            btnSetMatteFGOpaque.ForeColor = SystemColors.ControlText;
+            btnSetMatteFGOpaque.Location = new Point(603, 45);
+            btnSetMatteFGOpaque.Margin = new Padding(4, 3, 4, 3);
+            btnSetMatteFGOpaque.Name = "btnSetMatteFGOpaque";
+            btnSetMatteFGOpaque.Size = new Size(132, 27);
+            btnSetMatteFGOpaque.TabIndex = 729;
+            btnSetMatteFGOpaque.Text = "Set Matte FG Opaque";
+            btnSetMatteFGOpaque.UseVisualStyleBackColor = true;
+            btnSetMatteFGOpaque.Visible = false;
+            btnSetMatteFGOpaque.Click += btnSetMatteFGOpaque_Click;
             // 
             // frmDefineFGPic
             // 
@@ -583,5 +609,7 @@
         private Button btnRedoDraw;
         private Button btnUndoDraw;
         internal CheckBox cbSetOpaque;
+        private Label label5;
+        private Button btnSetMatteFGOpaque;
     }
 }

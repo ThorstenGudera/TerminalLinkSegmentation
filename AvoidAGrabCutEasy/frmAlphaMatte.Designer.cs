@@ -659,7 +659,7 @@
             cbExcludeFG.Name = "cbExcludeFG";
             cbExcludeFG.Size = new Size(83, 19);
             cbExcludeFG.TabIndex = 730;
-            cbExcludeFG.Text = "exclude FG";
+            cbExcludeFG.Text = "exclude R-FG";
             cbExcludeFG.UseVisualStyleBackColor = true;
             cbExcludeFG.CheckedChanged += cbExcludeFG_CheckedChanged;
             // 

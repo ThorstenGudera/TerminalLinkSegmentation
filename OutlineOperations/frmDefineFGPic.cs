@@ -8,6 +8,7 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.Linq;
+using System.Runtime.Intrinsics.X86;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -57,12 +58,19 @@ namespace OutlineOperations
         private List<PointF> _points2 = new List<PointF>();
         private List<PointF> _points = new List<PointF>();
         private List<PointF> _redoList = new List<PointF>();
+        private Bitmap? _fgMap;
 
-        public frmDefineFGPic(Bitmap bmp, string? basePathAddition)
+        public frmDefineFGPic(Bitmap bmp, string? basePathAddition, Bitmap? fgMap)
         {
             InitializeComponent();
 
             CachePathAddition = basePathAddition;
+
+            if (fgMap != null)
+            {
+                this._fgMap = (Bitmap)fgMap.Clone();
+                this.btnSetMatteFGOpaque.Visible = true;
+            }
 
             //HelperFunctions.HelperFunctions.SetFormSizeBig(this);
             this.CenterToScreen();
@@ -966,6 +974,108 @@ namespace OutlineOperations
                     old.Dispose();
                 old = null;
             }
+        }
+
+        private void btnSetMatteFGOpaque_Click(object sender, EventArgs e)
+        {
+            if (this._fgMap != null && this.helplineRulerCtrl1.Bmp != null)
+            {
+                Bitmap? bmp = (Bitmap)this.helplineRulerCtrl1.Bmp.Clone();
+
+                Bitmap? b2 = bmp;
+                bmp = SetMatteFGWhite(bmp, true);
+                b2.Dispose();
+                b2 = null;
+
+                if (bmp != null)
+                {
+                    this.SetBitmap(this.helplineRulerCtrl2.Bmp, bmp, this.helplineRulerCtrl2, "Bmp");
+                    this._undoOPCache?.Add(this.helplineRulerCtrl2.Bmp);
+
+                    object? zoom = this.cmbZoom.SelectedItem;
+                    this.helplineRulerCtrl2.SetZoom(zoom?.ToString());
+                    this.helplineRulerCtrl2.dbPanel1.AutoScrollMinSize = new Size(System.Convert.ToInt32(this.helplineRulerCtrl1.Bmp.Width * this.helplineRulerCtrl1.Zoom), System.Convert.ToInt32(this.helplineRulerCtrl1.Bmp.Height * this.helplineRulerCtrl1.Zoom));
+                    this.helplineRulerCtrl2.MakeBitmap(this.helplineRulerCtrl2.Bmp);
+                    this.helplineRulerCtrl2.dbPanel1.AutoScrollPosition = new Point(-this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X, -this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y);
+
+                    this.helplineRulerCtrl2.dbPanel1.Invalidate();
+
+                    List<ChainCode>? l = this.GetBoundary(this.helplineRulerCtrl2.Bmp, 0);
+                    if (l != null && l.Count > 0)
+                    {
+                        l = l?.OrderByDescending(a => Math.Abs(a.Area)).ToList();
+                        l?.RemoveRange(1, l.Count - 1);
+                    }
+
+                    Bitmap b = (Bitmap)this.helplineRulerCtrl2.Bmp.Clone();
+                    ExcludedBmpRegion excl = new(b);
+                    excl.ChainCode = l;
+                    excl.Location = new Point(0, 0);
+
+                    ExcludedBmpRegion? old = this.Excluded;
+                    this.Excluded = excl;
+                    if (old != null)
+                        old.Dispose();
+                    old = null;
+
+                    this.label5.Text = "done";
+                }
+            }
+        }
+
+        private Bitmap? SetMatteFGWhite(Bitmap bmp, bool restoreFG)
+        {
+            if (this.helplineRulerCtrl1 != null && !this.IsDisposed && this.helplineRulerCtrl1.Bmp != null && bmp != null)
+            {
+                Bitmap bOut = new Bitmap(this.helplineRulerCtrl1.Bmp.Width, this.helplineRulerCtrl1.Bmp.Height);
+
+                using (Graphics gx = Graphics.FromImage(bOut))
+                {
+                    gx.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
+                    gx.DrawImage(bmp, 0, 0, bOut.Width, bOut.Height);
+                }
+
+                if (restoreFG && this._fgMap != null)
+                    SetForegroundWhite(bOut, this._fgMap);
+
+                return bOut;
+            }
+
+            return null;
+        }
+
+        private unsafe void SetForegroundWhite(Bitmap bOut, Bitmap fgMap)
+        {
+            int w = bOut.Width;
+            int h = bOut.Height;
+
+            BitmapData bmD = bOut.LockBits(new Rectangle(0, 0, w, h), ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
+            BitmapData bmR = fgMap.LockBits(new Rectangle(0, 0, w, h), ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
+
+            int stride = bmD.Stride;
+
+            Parallel.For(0, h, y =>
+            {
+                byte* p = (byte*)bmD.Scan0;
+                byte* pR = (byte*)bmR.Scan0;
+
+                p += y * stride;
+                pR += y * stride;
+
+                for (int x = 0; x < w; x++)
+                {
+                    if (pR[0] > 200)
+                        p[0] = p[1] = p[2] = p[3] = 255;
+                    else
+                        p[0] = p[1] = p[2] = p[3] = 0;
+
+                    p += 4;
+                    pR += 4;
+                }
+            });
+
+            bOut.UnlockBits(bmD);
+            fgMap.UnlockBits(bmR);
         }
     }
 }

@@ -2849,7 +2849,7 @@ namespace AvoidAGrabCutEasy
 
                 double gamma = (double)this.numGamma.Value;
 
-                Bitmap b = (Bitmap)this.helplineRulerCtrl2.Bmp.Clone();
+                Bitmap? b = (Bitmap)this.helplineRulerCtrl2.Bmp.Clone();
                 bool redrawExcluded = false;
 
                 string? c = this.CachePathAddition;
@@ -2886,6 +2886,30 @@ namespace AvoidAGrabCutEasy
                                 redrawExcluded = true;
                             }
                         }
+                        else
+                        {
+                            if (b != null)
+                                b.Dispose();
+                            b = null;
+
+                            this.btnSetGamma.Text = "Go";
+
+                            this.SetControls(true);
+                            this.Cursor = Cursors.Default;
+
+                            this.btnOK.Enabled = this.btnCancel.Enabled = true;
+
+                            this._pic_changed = true;
+
+                            this.helplineRulerCtrl1.dbPanel1.Invalidate();
+
+                            if (this.Timer3.Enabled)
+                                this.Timer3.Stop();
+
+                            this.Timer3.Start();
+
+                            return;
+                        }
                     }
                 }
 
@@ -2903,7 +2927,7 @@ namespace AvoidAGrabCutEasy
 
                     if (show)
                     {
-                        using frmDefineFGPic frm = new frmDefineFGPic(b, c);
+                        using frmDefineFGPic frm = new frmDefineFGPic(b, c, this._fgMap);
                         frm.SetupCache();
 
                         if (frm.ShowDialog() == DialogResult.OK)
@@ -2921,6 +2945,30 @@ namespace AvoidAGrabCutEasy
                                 CopyRegions(l);
                                 redrawExcluded = true;
                             }
+                        }
+                        else
+                        {
+                            if (b != null)
+                                b.Dispose();
+                            b = null;
+
+                            this.btnSetGamma.Text = "Go";
+
+                            this.SetControls(true);
+                            this.Cursor = Cursors.Default;
+
+                            this.btnOK.Enabled = this.btnCancel.Enabled = true;
+
+                            this._pic_changed = true;
+
+                            this.helplineRulerCtrl1.dbPanel1.Invalidate();
+
+                            if (this.Timer3.Enabled)
+                                this.Timer3.Stop();
+
+                            this.Timer3.Start();
+
+                            return;
                         }
                     }
                 }
@@ -3293,7 +3341,7 @@ namespace AvoidAGrabCutEasy
 
             int alphaTh = (int)this.numAlphaZAndGain.Value;
 
-            Bitmap b = (Bitmap)this.helplineRulerCtrl2.Bmp.Clone();
+            Bitmap? b = (Bitmap)this.helplineRulerCtrl2.Bmp.Clone();
             bool redrawExcluded = false;
 
             string? c = this.CachePathAddition;
@@ -3330,6 +3378,30 @@ namespace AvoidAGrabCutEasy
                             redrawExcluded = true;
                         }
                     }
+                    else
+                    {
+                        if (b != null)
+                            b.Dispose();
+                        b = null;
+
+                        this.btnAlphaZAndGain.Text = "Go";
+
+                        this.SetControls(true);
+                        this.Cursor = Cursors.Default;
+
+                        this.btnOK.Enabled = this.btnCancel.Enabled = true;
+
+                        this._pic_changed = true;
+
+                        this.helplineRulerCtrl1.dbPanel1.Invalidate();
+
+                        if (this.Timer3.Enabled)
+                            this.Timer3.Stop();
+
+                        this.Timer3.Start();
+
+                        return;
+                    }
                 }
             }
 
@@ -3347,7 +3419,7 @@ namespace AvoidAGrabCutEasy
 
                 if (show)
                 {
-                    using frmDefineFGPic frm = new frmDefineFGPic(b, c);
+                    using frmDefineFGPic frm = new frmDefineFGPic(b, c, this._fgMap);
                     frm.SetupCache();
 
                     if (frm.ShowDialog() == DialogResult.OK)
@@ -3365,6 +3437,30 @@ namespace AvoidAGrabCutEasy
                             CopyRegions(l);
                             redrawExcluded = true;
                         }
+                    }
+                    else
+                    {
+                        if (b != null)
+                            b.Dispose();
+                        b = null;
+
+                        this.btnAlphaZAndGain.Text = "Go";
+
+                        this.SetControls(true);
+                        this.Cursor = Cursors.Default;
+
+                        this.btnOK.Enabled = this.btnCancel.Enabled = true;
+
+                        this._pic_changed = true;
+
+                        this.helplineRulerCtrl1.dbPanel1.Invalidate();
+
+                        if (this.Timer3.Enabled)
+                            this.Timer3.Stop();
+
+                        this.Timer3.Start();
+
+                        return;
                     }
                 }
             }
@@ -4098,7 +4194,7 @@ namespace AvoidAGrabCutEasy
 
                 int alphaTh = (int)this.numAlphaZAndGain.Value;
 
-                Bitmap b = (Bitmap)this.helplineRulerCtrl2.Bmp.Clone();
+                Bitmap? b = (Bitmap)this.helplineRulerCtrl2.Bmp.Clone();
                 bool redrawExcluded = false;
 
                 string? c = this.CachePathAddition;
@@ -4135,6 +4231,30 @@ namespace AvoidAGrabCutEasy
                                 redrawExcluded = true;
                             }
                         }
+                        else
+                        {
+                            if (b != null)
+                                b.Dispose();
+                            b = null;
+
+                            this.btnAlphaCurve.Text = "Go";
+
+                            this.SetControls(true);
+                            this.Cursor = Cursors.Default;
+
+                            this.btnOK.Enabled = this.btnCancel.Enabled = true;
+
+                            this._pic_changed = true;
+
+                            this.helplineRulerCtrl1.dbPanel1.Invalidate();
+
+                            if (this.Timer3.Enabled)
+                                this.Timer3.Stop();
+
+                            this.Timer3.Start();
+
+                            return;
+                        }
                     }
                 }
 
@@ -4152,7 +4272,7 @@ namespace AvoidAGrabCutEasy
 
                     if (show)
                     {
-                        using frmDefineFGPic frm = new frmDefineFGPic(b, c);
+                        using frmDefineFGPic frm = new frmDefineFGPic(b, c, this._fgMap);
                         frm.SetupCache();
 
                         if (frm.ShowDialog() == DialogResult.OK)
@@ -4178,6 +4298,30 @@ namespace AvoidAGrabCutEasy
                                 redrawExcluded = true;
                             }
                         }
+                        else
+                        {
+                            if (b != null)
+                                b.Dispose();
+                            b = null;
+
+                            this.btnAlphaCurve.Text = "Go";
+
+                            this.SetControls(true);
+                            this.Cursor = Cursors.Default;
+
+                            this.btnOK.Enabled = this.btnCancel.Enabled = true;
+
+                            this._pic_changed = true;
+
+                            this.helplineRulerCtrl1.dbPanel1.Invalidate();
+
+                            if (this.Timer3.Enabled)
+                                this.Timer3.Stop();
+
+                            this.Timer3.Start();
+
+                            return;
+                        }
                     }
                 }
 
@@ -4192,6 +4336,28 @@ namespace AvoidAGrabCutEasy
 
                     Array.Copy(frmA.MappingsAlpha, aalpha, frmA.MappingsAlpha.Length);
                     this.backgroundWorker6.RunWorkerAsync(new object[] { b, aalpha, frmA.RadioButton1.Checked, frmA.CheckBox1.Checked, frmA.CheckBox4.Checked, redrawExcluded });
+                }
+                else
+                {
+                    if (b != null)
+                        b.Dispose();
+                    b = null;
+
+                    this.btnAlphaCurve.Text = "Go";
+
+                    this.SetControls(true);
+                    this.Cursor = Cursors.Default;
+
+                    this.btnOK.Enabled = this.btnCancel.Enabled = true;
+
+                    this._pic_changed = true;
+
+                    this.helplineRulerCtrl2.dbPanel1.Invalidate();
+
+                    if (this.Timer3.Enabled)
+                        this.Timer3.Stop();
+
+                    this.Timer3.Start();
                 }
             }
         }
