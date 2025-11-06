@@ -38,6 +38,8 @@
             splitContainer1 = new SplitContainer();
             openFileDialog1 = new OpenFileDialog();
             panel1 = new Panel();
+            label5 = new Label();
+            btnSetMatteFGOpaque = new Button();
             cbSetOpaque = new CheckBox();
             label3 = new Label();
             cbDraw = new CheckBox();
@@ -69,8 +71,7 @@
             saveFileDialog1 = new SaveFileDialog();
             Timer3 = new System.Windows.Forms.Timer(components);
             backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
-            label5 = new Label();
-            btnSetMatteFGOpaque = new Button();
+            cbCounterClockWise = new CheckBox();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
             splitContainer1.Panel2.SuspendLayout();
@@ -191,6 +192,7 @@
             // panel1
             // 
             panel1.AutoScroll = true;
+            panel1.Controls.Add(cbCounterClockWise);
             panel1.Controls.Add(label5);
             panel1.Controls.Add(btnSetMatteFGOpaque);
             panel1.Controls.Add(cbSetOpaque);
@@ -223,6 +225,28 @@
             panel1.TabIndex = 230;
             panel1.MouseDoubleClick += panel1_MouseDoubleClick;
             panel1.MouseDown += panel1_MouseDown;
+            // 
+            // label5
+            // 
+            label5.AutoSize = true;
+            label5.Location = new Point(748, 50);
+            label5.Name = "label5";
+            label5.Size = new Size(19, 15);
+            label5.TabIndex = 730;
+            label5.Text = "    ";
+            // 
+            // btnSetMatteFGOpaque
+            // 
+            btnSetMatteFGOpaque.ForeColor = SystemColors.ControlText;
+            btnSetMatteFGOpaque.Location = new Point(603, 45);
+            btnSetMatteFGOpaque.Margin = new Padding(4, 3, 4, 3);
+            btnSetMatteFGOpaque.Name = "btnSetMatteFGOpaque";
+            btnSetMatteFGOpaque.Size = new Size(132, 27);
+            btnSetMatteFGOpaque.TabIndex = 729;
+            btnSetMatteFGOpaque.Text = "Set Matte FG Opaque";
+            btnSetMatteFGOpaque.UseVisualStyleBackColor = true;
+            btnSetMatteFGOpaque.Visible = false;
+            btnSetMatteFGOpaque.Click += btnSetMatteFGOpaque_Click;
             // 
             // cbSetOpaque
             // 
@@ -518,27 +542,17 @@
             backgroundWorker1.WorkerReportsProgress = true;
             backgroundWorker1.WorkerSupportsCancellation = true;
             // 
-            // label5
+            // cbCounterClockWise
             // 
-            label5.AutoSize = true;
-            label5.Location = new Point(748, 50);
-            label5.Name = "label5";
-            label5.Size = new Size(19, 15);
-            label5.TabIndex = 730;
-            label5.Text = "    ";
-            // 
-            // btnSetMatteFGOpaque
-            // 
-            btnSetMatteFGOpaque.ForeColor = SystemColors.ControlText;
-            btnSetMatteFGOpaque.Location = new Point(603, 45);
-            btnSetMatteFGOpaque.Margin = new Padding(4, 3, 4, 3);
-            btnSetMatteFGOpaque.Name = "btnSetMatteFGOpaque";
-            btnSetMatteFGOpaque.Size = new Size(132, 27);
-            btnSetMatteFGOpaque.TabIndex = 729;
-            btnSetMatteFGOpaque.Text = "Set Matte FG Opaque";
-            btnSetMatteFGOpaque.UseVisualStyleBackColor = true;
-            btnSetMatteFGOpaque.Visible = false;
-            btnSetMatteFGOpaque.Click += btnSetMatteFGOpaque_Click;
+            cbCounterClockWise.AutoSize = true;
+            cbCounterClockWise.Checked = true;
+            cbCounterClockWise.CheckState = CheckState.Checked;
+            cbCounterClockWise.Location = new Point(622, 80);
+            cbCounterClockWise.Name = "cbCounterClockWise";
+            cbCounterClockWise.Size = new Size(122, 19);
+            cbCounterClockWise.TabIndex = 731;
+            cbCounterClockWise.Text = "counterClockWise";
+            cbCounterClockWise.UseVisualStyleBackColor = true;
             // 
             // frmDefineFGPic
             // 
@@ -611,5 +625,6 @@
         internal CheckBox cbSetOpaque;
         private Label label5;
         private Button btnSetMatteFGOpaque;
+        private CheckBox cbCounterClockWise;
     }
 }

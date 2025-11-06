@@ -61,7 +61,7 @@ namespace AvoidAGrabCutEasy
         private List<PointF> _points2 = new List<PointF>();
         private List<PointF> _points = new List<PointF>();
         private List<PointF> _redoList = new List<PointF>();
-        private List<Point>? _tp;
+        //private List<Point>? _tp;
         private Bitmap? _fgMap;
 
         public frmDefineFGPic(Bitmap bmp, string? basePathAddition, Bitmap? fgMap)
@@ -135,28 +135,28 @@ namespace AvoidAGrabCutEasy
 
         private void helplineRulerCtrl2_Paint(object sender, PaintEventArgs e)
         {
-            if (this._tp != null && this._points != null)
-            {
-                using GraphicsPath gP2 = new();
-                gP2.AddLines(this._tp.Select(a => new PointF(a.X, a.Y)).ToArray());
-                gP2.CloseFigure();
+            //if (this._tp != null && this._points != null)
+            //{
+            //    using GraphicsPath gP2 = new();
+            //    gP2.AddLines(this._tp.Select(a => new PointF(a.X, a.Y)).ToArray());
+            //    gP2.CloseFigure();
 
-                using Matrix mx = new(this.helplineRulerCtrl2.Zoom, 0, 0, this.helplineRulerCtrl2.Zoom, this.helplineRulerCtrl2.dbPanel1.AutoScrollPosition.X, this.helplineRulerCtrl2.dbPanel1.AutoScrollPosition.Y);
-                gP2.Transform(mx);
+            //    using Matrix mx = new(this.helplineRulerCtrl2.Zoom, 0, 0, this.helplineRulerCtrl2.Zoom, this.helplineRulerCtrl2.dbPanel1.AutoScrollPosition.X, this.helplineRulerCtrl2.dbPanel1.AutoScrollPosition.Y);
+            //    gP2.Transform(mx);
 
-                e.Graphics.DrawPath(Pens.Lime, gP2);
+            //    e.Graphics.DrawPath(Pens.Lime, gP2);
 
-                using GraphicsPath gP4 = new();
-                gP4.AddLines(this._points.ToArray());
-                gP4.CloseFigure();
+            //    using GraphicsPath gP4 = new();
+            //    gP4.AddLines(this._points.ToArray());
+            //    gP4.CloseFigure();
 
-                using Matrix mx2 = new(this.helplineRulerCtrl2.Zoom, 0, 0, this.helplineRulerCtrl2.Zoom, this.helplineRulerCtrl2.dbPanel1.AutoScrollPosition.X, this.helplineRulerCtrl2.dbPanel1.AutoScrollPosition.Y);
-                gP4.Transform(mx2);
+            //    using Matrix mx2 = new(this.helplineRulerCtrl2.Zoom, 0, 0, this.helplineRulerCtrl2.Zoom, this.helplineRulerCtrl2.dbPanel1.AutoScrollPosition.X, this.helplineRulerCtrl2.dbPanel1.AutoScrollPosition.Y);
+            //    gP4.Transform(mx2);
 
-                e.Graphics.DrawPath(Pens.Red, gP4);
+            //    e.Graphics.DrawPath(Pens.Red, gP4);
 
-                this.Text = gP2.PointCount.ToString() + " - " + this._points.Count.ToString();
-            }
+            //    this.Text = gP2.PointCount.ToString() + " - " + this._points.Count.ToString();
+            //}
         }
 
         private void helplineRulerCtrl1_MouseDown(object? sender, MouseEventArgs e)
@@ -962,8 +962,9 @@ namespace AvoidAGrabCutEasy
 
                 if (l != null && l.Count > 0)
                 {
+                    PointF[] j = l[0].Coord.Select(a => new PointF(a.X, a.Y)).ToArray();
                     using GraphicsPath gP = new();
-                    gP.AddLines(l[0].Coord.Select(a => new PointF(a.X, a.Y)).ToArray());
+                    gP.AddLines(j);
                     gP.CloseFigure();
 
                     Bitmap bmp = new(this.helplineRulerCtrl1.Bmp.Width, this.helplineRulerCtrl1.Bmp.Height);
@@ -978,8 +979,6 @@ namespace AvoidAGrabCutEasy
                     this.helplineRulerCtrl2.dbPanel1.AutoScrollMinSize = new Size(System.Convert.ToInt32(this.helplineRulerCtrl1.Bmp.Width * this.helplineRulerCtrl1.Zoom), System.Convert.ToInt32(this.helplineRulerCtrl1.Bmp.Height * this.helplineRulerCtrl1.Zoom));
                     this.helplineRulerCtrl2.MakeBitmap(this.helplineRulerCtrl2.Bmp);
 
-                    this.helplineRulerCtrl2.dbPanel1.Invalidate();
-
                     Bitmap b = (Bitmap)this.helplineRulerCtrl2.Bmp.Clone();
                     ExcludedBmpRegion excl = new(b);
                     excl.ChainCode = l;
@@ -990,6 +989,14 @@ namespace AvoidAGrabCutEasy
                     if (old != null)
                         old.Dispose();
                     old = null;
+
+                    this._points.Add(new PointF(-999, -999));
+                    this._points.AddRange(j);
+                    this._points.Add(new PointF(-999, -999));
+
+                    this.cbDraw.Checked = true;
+                    this.helplineRulerCtrl1.dbPanel1.Invalidate();
+                    this.helplineRulerCtrl2.dbPanel1.Invalidate();
                 }
             }
         }
@@ -1040,61 +1047,68 @@ namespace AvoidAGrabCutEasy
 
         private void btnCrop_Click(object sender, EventArgs e)
         {
-            if (this.helplineRulerCtrl1.Bmp != null && this._points != null && this._points.Count > 2)
+            if (this.helplineRulerCtrl1.Bmp != null)
             {
                 using GraphicsPath gP = new();
-                gP.AddLines(this._points.ToArray());
-                gP.CloseFigure();
+                //gP.FillMode = FillMode.Winding;
+
+                List<List<PointF>> list = new();
+                int j = 0;
+
+                List<PointF> ll = new List<PointF>();
+                ll.AddRange(this._points);
+
+                if (ll.Contains(new PointF(-999, -999)))
+                    while (ll.Contains(new PointF(-999, -999)))
+                    {
+                        List<PointF> z = ll.Skip(j).ToList();
+                        IEnumerable<PointF> zz = ll.Where(a => a.X == -999 && a.Y == -999);
+                        if (zz != null && zz.Count() > 0)
+                        {
+                            j = ll.IndexOf(zz.First());
+                            List<PointF> list2 = new List<PointF>();
+                            list2.AddRange(ll.Take(j));
+                            list.Add(list2);
+                            ll.RemoveRange(0, j + 1);
+                        }
+                    }
+
+                list.Add(ll);
+
+                for (int i = 0; i < list.Count; i++)
+                {
+                    list[i].RemoveAll(a => a.X == -999 && a.Y == -999);
+                    if (list[i].Count > 1)
+                    {
+                        gP.StartFigure();
+                        gP.AddLines(list[i].ToArray());
+                        gP.CloseFigure();
+                    }
+                }
 
                 Bitmap bmp = new(this.helplineRulerCtrl1.Bmp.Width, this.helplineRulerCtrl1.Bmp.Height);
-                int w = bmp.Width;
-                int h = bmp.Height;
-
                 using Graphics gx = Graphics.FromImage(bmp);
-                gx.SmoothingMode = SmoothingMode.None;
-                gx.InterpolationMode = InterpolationMode.NearestNeighbor;
                 using TextureBrush tb = new(this.helplineRulerCtrl1.Bmp);
-                using Pen p = new(tb, 1);
 
                 gx.FillPath(tb, gP);
-                gx.DrawPath(p, gP);
-
-                //using Bitmap bC = new Bitmap(this.helplineRulerCtrl1.Bmp);
-                //BitmapData bmD = bmp.LockBits(new Rectangle(0, 0, w, h), ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
-                //BitmapData bmC = bC.LockBits(new Rectangle(0, 0, w, h), ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
-                //int stride = bmD.Stride;
-
-                //Parallel.For(0, h, y =>
-                //{
-                //    byte* p = (byte*)bmD.Scan0;
-                //    p += y * stride;
-                //    byte* pC = (byte*)bmC.Scan0;
-                //    pC += y * stride;
-
-                //    for (int x = 0; x < w; x++)
-                //    {
-                //        if (p[3] > 0 && p[3] < pC[3])
-                //            p[3] = pC[3];
-
-                //        p += 4;
-                //        pC += 4;
-                //    }
-                //});
-
-                //bmp.UnlockBits(bmD);
-                //bC.UnlockBits(bmC);
 
                 this.SetBitmap(this.helplineRulerCtrl2.Bmp, bmp, this.helplineRulerCtrl2, "Bmp");
                 this._undoOPCache?.Add(this.helplineRulerCtrl2.Bmp);
 
+                object? zoom = this.cmbZoom.SelectedItem;
+                this.helplineRulerCtrl2.SetZoom(zoom?.ToString());
                 this.helplineRulerCtrl2.dbPanel1.AutoScrollMinSize = new Size(System.Convert.ToInt32(this.helplineRulerCtrl1.Bmp.Width * this.helplineRulerCtrl1.Zoom), System.Convert.ToInt32(this.helplineRulerCtrl1.Bmp.Height * this.helplineRulerCtrl1.Zoom));
                 this.helplineRulerCtrl2.MakeBitmap(this.helplineRulerCtrl2.Bmp);
+                this.helplineRulerCtrl2.dbPanel1.AutoScrollPosition = new Point(-this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X, -this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y);
 
                 this.helplineRulerCtrl2.dbPanel1.Invalidate();
 
                 List<ChainCode>? l = this.GetBoundary(this.helplineRulerCtrl2.Bmp, 0);
-                l = l?.OrderByDescending(a => Math.Abs(a.Area)).ToList();
-                l?.RemoveRange(1, l.Count - 1);
+                if (l != null && l.Count > 0)
+                {
+                    l = l?.OrderByDescending(a => Math.Abs(a.Area)).ToList();
+                    l?.RemoveRange(1, l.Count - 1);
+                }
 
                 Bitmap b = (Bitmap)this.helplineRulerCtrl2.Bmp.Clone();
                 ExcludedBmpRegion excl = new(b);
@@ -1106,8 +1120,6 @@ namespace AvoidAGrabCutEasy
                 if (old != null)
                     old.Dispose();
                 old = null;
-
-                this._tp = l?[0].Coord;
             }
         }
 
@@ -1258,46 +1270,106 @@ namespace AvoidAGrabCutEasy
         {
             if (this._fgMap != null && this.helplineRulerCtrl1.Bmp != null)
             {
-                Bitmap? bmp = (Bitmap)this.helplineRulerCtrl1.Bmp.Clone();
-
-                Bitmap? b2 = bmp;
-                bmp = SetMatteFGWhite(bmp, true);
+                Bitmap? bmpTmp = (Bitmap)this.helplineRulerCtrl1.Bmp.Clone();
+                Bitmap? b2 = bmpTmp;
+                bmpTmp = SetMatteFGWhite(bmpTmp, true);
                 b2.Dispose();
                 b2 = null;
 
-                if (bmp != null)
-                {
-                    this.SetBitmap(this.helplineRulerCtrl2.Bmp, bmp, this.helplineRulerCtrl2, "Bmp");
-                    this._undoOPCache?.Add(this.helplineRulerCtrl2.Bmp);
+                List<ChainCode>? lTmp = this.GetBoundary(bmpTmp, (int)this.numTH.Value);
+                lTmp = lTmp?.OrderByDescending(a => Math.Abs(a.Area)).ToList();
 
-                    object? zoom = this.cmbZoom.SelectedItem;
-                    this.helplineRulerCtrl2.SetZoom(zoom?.ToString());
-                    this.helplineRulerCtrl2.dbPanel1.AutoScrollMinSize = new Size(System.Convert.ToInt32(this.helplineRulerCtrl1.Bmp.Width * this.helplineRulerCtrl1.Zoom), System.Convert.ToInt32(this.helplineRulerCtrl1.Bmp.Height * this.helplineRulerCtrl1.Zoom));
-                    this.helplineRulerCtrl2.MakeBitmap(this.helplineRulerCtrl2.Bmp);
-                    this.helplineRulerCtrl2.dbPanel1.AutoScrollPosition = new Point(-this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X, -this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y);
-
-                    this.helplineRulerCtrl2.dbPanel1.Invalidate();
-
-                    List<ChainCode>? l = this.GetBoundary(this.helplineRulerCtrl2.Bmp, 0);
-                    if (l != null && l.Count > 0)
+                if (lTmp != null)
+                    for (int i = 0; i < lTmp.Count; i++)
                     {
-                        l = l?.OrderByDescending(a => Math.Abs(a.Area)).ToList();
-                        l?.RemoveRange(1, l.Count - 1);
+                        this._points.Add(new PointF(-999, -999));
+                        PointF[] z = lTmp[i].Coord.Select(a => new PointF(a.X, a.Y)).ToArray();
+                        if (cbCounterClockWise.Checked)
+                            z.Reverse();
+                        this._points.AddRange(z);
+                        this._points.Add(new PointF(-999, -999));
                     }
 
-                    Bitmap b = (Bitmap)this.helplineRulerCtrl2.Bmp.Clone();
-                    ExcludedBmpRegion excl = new(b);
-                    excl.ChainCode = l;
-                    excl.Location = new Point(0, 0);
+                if (bmpTmp != null)
+                    bmpTmp.Dispose();
+                bmpTmp = null;
 
-                    ExcludedBmpRegion? old = this.Excluded;
-                    this.Excluded = excl;
-                    if (old != null)
-                        old.Dispose();
-                    old = null;
+                using GraphicsPath gP = new();
+                //gP.FillMode = FillMode.Winding;
 
-                    this.label5.Text = "done";
+                List<List<PointF>> list = new();
+                int j = 0;
+
+                List<PointF> ll = new List<PointF>();
+                ll.AddRange(this._points);
+
+                if (ll.Contains(new PointF(-999, -999)))
+                    while (ll.Contains(new PointF(-999, -999)))
+                    {
+                        List<PointF> z = ll.Skip(j).ToList();
+                        IEnumerable<PointF> zz = ll.Where(a => a.X == -999 && a.Y == -999);
+                        if (zz != null && zz.Count() > 0)
+                        {
+                            j = ll.IndexOf(zz.First());
+                            List<PointF> list2 = new List<PointF>();
+                            list2.AddRange(ll.Take(j));
+                            list.Add(list2);
+                            ll.RemoveRange(0, j + 1);
+                        }
+                    }
+
+                list.Add(ll);
+
+                for (int i = 0; i < list.Count; i++)
+                {
+                    list[i].RemoveAll(a => a.X == -999 && a.Y == -999);
+                    if (list[i].Count > 1)
+                    {
+                        gP.StartFigure();
+                        gP.AddLines(list[i].ToArray());
+                        gP.CloseFigure();
+                    }
                 }
+
+                Bitmap bmp = new(this.helplineRulerCtrl1.Bmp.Width, this.helplineRulerCtrl1.Bmp.Height);
+                using Graphics gx = Graphics.FromImage(bmp);
+                using TextureBrush tb = new(this.helplineRulerCtrl1.Bmp);
+
+                gx.FillPath(tb, gP);
+
+                this.SetBitmap(this.helplineRulerCtrl2.Bmp, bmp, this.helplineRulerCtrl2, "Bmp");
+                this._undoOPCache?.Add(this.helplineRulerCtrl2.Bmp);
+
+                object? zoom = this.cmbZoom.SelectedItem;
+                this.helplineRulerCtrl2.SetZoom(zoom?.ToString());
+                this.helplineRulerCtrl2.dbPanel1.AutoScrollMinSize = new Size(System.Convert.ToInt32(this.helplineRulerCtrl1.Bmp.Width * this.helplineRulerCtrl1.Zoom), System.Convert.ToInt32(this.helplineRulerCtrl1.Bmp.Height * this.helplineRulerCtrl1.Zoom));
+                this.helplineRulerCtrl2.MakeBitmap(this.helplineRulerCtrl2.Bmp);
+                this.helplineRulerCtrl2.dbPanel1.AutoScrollPosition = new Point(-this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X, -this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y);
+
+                this.helplineRulerCtrl2.dbPanel1.Invalidate();
+
+                List<ChainCode>? l = this.GetBoundary(this.helplineRulerCtrl2.Bmp, 0);
+                if (l != null && l.Count > 0)
+                {
+                    l = l?.OrderByDescending(a => Math.Abs(a.Area)).ToList();
+                    l?.RemoveRange(1, l.Count - 1);
+                }
+
+                Bitmap b = (Bitmap)this.helplineRulerCtrl2.Bmp.Clone();
+                ExcludedBmpRegion excl = new(b);
+                excl.ChainCode = l;
+                excl.Location = new Point(0, 0);
+
+                ExcludedBmpRegion? old = this.Excluded;
+                this.Excluded = excl;
+                if (old != null)
+                    old.Dispose();
+                old = null;
+
+                this.label5.Text = "done";
+
+                this.cbDraw.Checked = true;
+                this.helplineRulerCtrl1.dbPanel1.Invalidate();
             }
         }
 

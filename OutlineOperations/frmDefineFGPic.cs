@@ -861,8 +861,9 @@ namespace OutlineOperations
 
                 if (l != null && l.Count > 0)
                 {
+                    PointF[] j = l[0].Coord.Select(a => new PointF(a.X, a.Y)).ToArray();
                     using GraphicsPath gP = new();
-                    gP.AddLines(l[0].Coord.Select(a => new PointF(a.X, a.Y)).ToArray());
+                    gP.AddLines(j);
                     gP.CloseFigure();
 
                     Bitmap bmp = new(this.helplineRulerCtrl1.Bmp.Width, this.helplineRulerCtrl1.Bmp.Height);
@@ -877,9 +878,7 @@ namespace OutlineOperations
                     this.helplineRulerCtrl2.dbPanel1.AutoScrollMinSize = new Size(System.Convert.ToInt32(this.helplineRulerCtrl1.Bmp.Width * this.helplineRulerCtrl1.Zoom), System.Convert.ToInt32(this.helplineRulerCtrl1.Bmp.Height * this.helplineRulerCtrl1.Zoom));
                     this.helplineRulerCtrl2.MakeBitmap(this.helplineRulerCtrl2.Bmp);
 
-                    this.helplineRulerCtrl2.dbPanel1.Invalidate();
-
-                    Bitmap b = new Bitmap(this.helplineRulerCtrl2.Bmp);
+                    Bitmap b = (Bitmap)this.helplineRulerCtrl2.Bmp.Clone();
                     ExcludedBmpRegion excl = new(b);
                     excl.ChainCode = l;
                     excl.Location = new Point(0, 0);
@@ -889,6 +888,14 @@ namespace OutlineOperations
                     if (old != null)
                         old.Dispose();
                     old = null;
+
+                    this._points.Add(new PointF(-999, -999));
+                    this._points.AddRange(j);
+                    this._points.Add(new PointF(-999, -999));
+
+                    this.cbDraw.Checked = true;
+                    this.helplineRulerCtrl1.dbPanel1.Invalidate();
+                    this.helplineRulerCtrl2.dbPanel1.Invalidate();
                 }
             }
         }
@@ -942,8 +949,41 @@ namespace OutlineOperations
             if (this.helplineRulerCtrl1.Bmp != null)
             {
                 using GraphicsPath gP = new();
-                gP.AddLines(this._points.ToArray());
-                gP.CloseFigure();
+                //gP.FillMode = FillMode.Winding;
+
+                List<List<PointF>> list = new();
+                int j = 0;
+
+                List<PointF> ll = new List<PointF>();
+                ll.AddRange(this._points);
+
+                if (ll.Contains(new PointF(-999, -999)))
+                    while (ll.Contains(new PointF(-999, -999)))
+                    {
+                        List<PointF> z = ll.Skip(j).ToList();
+                        IEnumerable<PointF> zz = ll.Where(a => a.X == -999 && a.Y == -999);
+                        if (zz != null && zz.Count() > 0)
+                        {
+                            j = ll.IndexOf(zz.First());
+                            List<PointF> list2 = new List<PointF>();
+                            list2.AddRange(ll.Take(j));
+                            list.Add(list2);
+                            ll.RemoveRange(0, j + 1);
+                        }
+                    }
+
+                list.Add(ll);
+
+                for (int i = 0; i < list.Count; i++)
+                {
+                    list[i].RemoveAll(a => a.X == -999 && a.Y == -999);
+                    if (list[i].Count > 1)
+                    {
+                        gP.StartFigure();
+                        gP.AddLines(list[i].ToArray());
+                        gP.CloseFigure();
+                    }
+                }
 
                 Bitmap bmp = new(this.helplineRulerCtrl1.Bmp.Width, this.helplineRulerCtrl1.Bmp.Height);
                 using Graphics gx = Graphics.FromImage(bmp);
@@ -954,16 +994,22 @@ namespace OutlineOperations
                 this.SetBitmap(this.helplineRulerCtrl2.Bmp, bmp, this.helplineRulerCtrl2, "Bmp");
                 this._undoOPCache?.Add(this.helplineRulerCtrl2.Bmp);
 
+                object? zoom = this.cmbZoom.SelectedItem;
+                this.helplineRulerCtrl2.SetZoom(zoom?.ToString());
                 this.helplineRulerCtrl2.dbPanel1.AutoScrollMinSize = new Size(System.Convert.ToInt32(this.helplineRulerCtrl1.Bmp.Width * this.helplineRulerCtrl1.Zoom), System.Convert.ToInt32(this.helplineRulerCtrl1.Bmp.Height * this.helplineRulerCtrl1.Zoom));
                 this.helplineRulerCtrl2.MakeBitmap(this.helplineRulerCtrl2.Bmp);
+                this.helplineRulerCtrl2.dbPanel1.AutoScrollPosition = new Point(-this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X, -this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y);
 
                 this.helplineRulerCtrl2.dbPanel1.Invalidate();
 
                 List<ChainCode>? l = this.GetBoundary(this.helplineRulerCtrl2.Bmp, 0);
-                l = l?.OrderByDescending(a => Math.Abs(a.Area)).ToList();
-                l?.RemoveRange(1, l.Count - 1);
+                if (l != null && l.Count > 0)
+                {
+                    l = l?.OrderByDescending(a => Math.Abs(a.Area)).ToList();
+                    l?.RemoveRange(1, l.Count - 1);
+                }
 
-                Bitmap b = new Bitmap(this.helplineRulerCtrl2.Bmp);
+                Bitmap b = (Bitmap)this.helplineRulerCtrl2.Bmp.Clone();
                 ExcludedBmpRegion excl = new(b);
                 excl.ChainCode = l;
                 excl.Location = new Point(0, 0);
@@ -980,46 +1026,106 @@ namespace OutlineOperations
         {
             if (this._fgMap != null && this.helplineRulerCtrl1.Bmp != null)
             {
-                Bitmap? bmp = (Bitmap)this.helplineRulerCtrl1.Bmp.Clone();
-
-                Bitmap? b2 = bmp;
-                bmp = SetMatteFGWhite(bmp, true);
+                Bitmap? bmpTmp = (Bitmap)this.helplineRulerCtrl1.Bmp.Clone();
+                Bitmap? b2 = bmpTmp;
+                bmpTmp = SetMatteFGWhite(bmpTmp, true);
                 b2.Dispose();
                 b2 = null;
 
-                if (bmp != null)
-                {
-                    this.SetBitmap(this.helplineRulerCtrl2.Bmp, bmp, this.helplineRulerCtrl2, "Bmp");
-                    this._undoOPCache?.Add(this.helplineRulerCtrl2.Bmp);
+                List<ChainCode>? lTmp = this.GetBoundary(bmpTmp, (int)this.numTH.Value);
+                lTmp = lTmp?.OrderByDescending(a => Math.Abs(a.Area)).ToList();
 
-                    object? zoom = this.cmbZoom.SelectedItem;
-                    this.helplineRulerCtrl2.SetZoom(zoom?.ToString());
-                    this.helplineRulerCtrl2.dbPanel1.AutoScrollMinSize = new Size(System.Convert.ToInt32(this.helplineRulerCtrl1.Bmp.Width * this.helplineRulerCtrl1.Zoom), System.Convert.ToInt32(this.helplineRulerCtrl1.Bmp.Height * this.helplineRulerCtrl1.Zoom));
-                    this.helplineRulerCtrl2.MakeBitmap(this.helplineRulerCtrl2.Bmp);
-                    this.helplineRulerCtrl2.dbPanel1.AutoScrollPosition = new Point(-this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X, -this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y);
-
-                    this.helplineRulerCtrl2.dbPanel1.Invalidate();
-
-                    List<ChainCode>? l = this.GetBoundary(this.helplineRulerCtrl2.Bmp, 0);
-                    if (l != null && l.Count > 0)
+                if (lTmp != null)
+                    for (int i = 0; i < lTmp.Count; i++)
                     {
-                        l = l?.OrderByDescending(a => Math.Abs(a.Area)).ToList();
-                        l?.RemoveRange(1, l.Count - 1);
+                        this._points.Add(new PointF(-999, -999));
+                        PointF[] z = lTmp[i].Coord.Select(a => new PointF(a.X, a.Y)).ToArray();
+                        if (cbCounterClockWise.Checked)
+                            z.Reverse();
+                        this._points.AddRange(z);
+                        this._points.Add(new PointF(-999, -999));
                     }
 
-                    Bitmap b = (Bitmap)this.helplineRulerCtrl2.Bmp.Clone();
-                    ExcludedBmpRegion excl = new(b);
-                    excl.ChainCode = l;
-                    excl.Location = new Point(0, 0);
+                if (bmpTmp != null)
+                    bmpTmp.Dispose();
+                bmpTmp = null;
 
-                    ExcludedBmpRegion? old = this.Excluded;
-                    this.Excluded = excl;
-                    if (old != null)
-                        old.Dispose();
-                    old = null;
+                using GraphicsPath gP = new();
+                //gP.FillMode = FillMode.Winding;
 
-                    this.label5.Text = "done";
+                List<List<PointF>> list = new();
+                int j = 0;
+
+                List<PointF> ll = new List<PointF>();
+                ll.AddRange(this._points);
+
+                if (ll.Contains(new PointF(-999, -999)))
+                    while (ll.Contains(new PointF(-999, -999)))
+                    {
+                        List<PointF> z = ll.Skip(j).ToList();
+                        IEnumerable<PointF> zz = ll.Where(a => a.X == -999 && a.Y == -999);
+                        if (zz != null && zz.Count() > 0)
+                        {
+                            j = ll.IndexOf(zz.First());
+                            List<PointF> list2 = new List<PointF>();
+                            list2.AddRange(ll.Take(j));
+                            list.Add(list2);
+                            ll.RemoveRange(0, j + 1);
+                        }
+                    }
+
+                list.Add(ll);
+
+                for (int i = 0; i < list.Count; i++)
+                {
+                    list[i].RemoveAll(a => a.X == -999 && a.Y == -999);
+                    if (list[i].Count > 1)
+                    {
+                        gP.StartFigure();
+                        gP.AddLines(list[i].ToArray());
+                        gP.CloseFigure();
+                    }
                 }
+
+                Bitmap bmp = new(this.helplineRulerCtrl1.Bmp.Width, this.helplineRulerCtrl1.Bmp.Height);
+                using Graphics gx = Graphics.FromImage(bmp);
+                using TextureBrush tb = new(this.helplineRulerCtrl1.Bmp);
+
+                gx.FillPath(tb, gP);
+
+                this.SetBitmap(this.helplineRulerCtrl2.Bmp, bmp, this.helplineRulerCtrl2, "Bmp");
+                this._undoOPCache?.Add(this.helplineRulerCtrl2.Bmp);
+
+                object? zoom = this.cmbZoom.SelectedItem;
+                this.helplineRulerCtrl2.SetZoom(zoom?.ToString());
+                this.helplineRulerCtrl2.dbPanel1.AutoScrollMinSize = new Size(System.Convert.ToInt32(this.helplineRulerCtrl1.Bmp.Width * this.helplineRulerCtrl1.Zoom), System.Convert.ToInt32(this.helplineRulerCtrl1.Bmp.Height * this.helplineRulerCtrl1.Zoom));
+                this.helplineRulerCtrl2.MakeBitmap(this.helplineRulerCtrl2.Bmp);
+                this.helplineRulerCtrl2.dbPanel1.AutoScrollPosition = new Point(-this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X, -this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y);
+
+                this.helplineRulerCtrl2.dbPanel1.Invalidate();
+
+                List<ChainCode>? l = this.GetBoundary(this.helplineRulerCtrl2.Bmp, 0);
+                if (l != null && l.Count > 0)
+                {
+                    l = l?.OrderByDescending(a => Math.Abs(a.Area)).ToList();
+                    l?.RemoveRange(1, l.Count - 1);
+                }
+
+                Bitmap b = (Bitmap)this.helplineRulerCtrl2.Bmp.Clone();
+                ExcludedBmpRegion excl = new(b);
+                excl.ChainCode = l;
+                excl.Location = new Point(0, 0);
+
+                ExcludedBmpRegion? old = this.Excluded;
+                this.Excluded = excl;
+                if (old != null)
+                    old.Dispose();
+                old = null;
+
+                this.label5.Text = "done";
+
+                this.cbDraw.Checked = true;
+                this.helplineRulerCtrl1.dbPanel1.Invalidate();
             }
         }
 
