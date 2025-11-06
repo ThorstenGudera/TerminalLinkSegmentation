@@ -663,6 +663,11 @@ namespace PseudoShadow
                         }
                     }
 
+                    if ((this.cbExcludeRegions.Checked || this.cbExcludeFG.Checked) &&
+                         this._excludedRegions != null && this._excludedRegions.Count > 0 &&
+                         this._exclLocations != null && this._exclLocations.Count > 0)
+                        SetTransp(b, this._excludedRegions[this._excludedRegions.Count - 1], this._exclLocations[this._exclLocations.Count - 1]);
+
                     this.backgroundWorker1.RunWorkerAsync(new object[] { b, alphaTh, redrawExcluded });
                 }
             }
@@ -1318,6 +1323,11 @@ namespace PseudoShadow
                                 }
                             }
                         }
+
+                        if ((this.cbExcludeRegions.Checked || this.cbExcludeFG.Checked) &&
+                             this._excludedRegions != null && this._excludedRegions.Count > 0 &&
+                             this._exclLocations != null && this._exclLocations.Count > 0)
+                            SetTransp(b, this._excludedRegions[this._excludedRegions.Count - 1], this._exclLocations[this._exclLocations.Count - 1]);
 
                         this.backgroundWorker2.RunWorkerAsync(new object[] { b, gamma, redrawExcluded });
                     }
@@ -2033,6 +2043,11 @@ namespace PseudoShadow
 
                 this.toolStripProgressBar1.Value = 0;
                 this.toolStripProgressBar1.Visible = true;
+
+                if (b != null && (this.cbExcludeRegions.Checked || this.cbExcludeFG.Checked) &&
+                     this._excludedRegions != null && this._excludedRegions.Count > 0 &&
+                     this._exclLocations != null && this._exclLocations.Count > 0)
+                    SetTransp(b, this._excludedRegions[this._excludedRegions.Count - 1], this._exclLocations[this._exclLocations.Count - 1]);
 
                 using frmColorCurves frmA = new frmColorCurves(b, "255;127;127;127", 255);
 
