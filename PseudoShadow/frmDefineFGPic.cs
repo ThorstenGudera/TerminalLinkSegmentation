@@ -229,6 +229,8 @@ namespace PseudoShadow
                 if (this._points.Count > 1)
                 {
                     using GraphicsPath gP = new();
+
+                    gP.FillMode = FillMode.Winding;
                     gP.AddLines(this._points.ToArray());
 
                     using Matrix mx = new Matrix(this.helplineRulerCtrl1.Zoom, 0, 0, this.helplineRulerCtrl1.Zoom,
@@ -934,6 +936,10 @@ namespace PseudoShadow
             if (this.helplineRulerCtrl1.Bmp != null)
             {
                 using GraphicsPath gP = new();
+
+                if (this.cbWinding.Checked)
+                    gP.FillMode = FillMode.Winding;
+
                 gP.AddLines(this._points.ToArray());
                 gP.CloseFigure();
 

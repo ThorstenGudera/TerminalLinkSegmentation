@@ -38,6 +38,7 @@
             splitContainer1 = new SplitContainer();
             openFileDialog1 = new OpenFileDialog();
             panel1 = new Panel();
+            cbCounterClockWise = new CheckBox();
             label5 = new Label();
             btnSetMatteFGOpaque = new Button();
             cbSetOpaque = new CheckBox();
@@ -71,7 +72,7 @@
             saveFileDialog1 = new SaveFileDialog();
             Timer3 = new System.Windows.Forms.Timer(components);
             backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
-            cbCounterClockWise = new CheckBox();
+            cbWinding = new CheckBox();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
             splitContainer1.Panel2.SuspendLayout();
@@ -192,6 +193,7 @@
             // panel1
             // 
             panel1.AutoScroll = true;
+            panel1.Controls.Add(cbWinding);
             panel1.Controls.Add(cbCounterClockWise);
             panel1.Controls.Add(label5);
             panel1.Controls.Add(btnSetMatteFGOpaque);
@@ -225,6 +227,18 @@
             panel1.TabIndex = 230;
             panel1.MouseDoubleClick += panel1_MouseDoubleClick;
             panel1.MouseDown += panel1_MouseDown;
+            // 
+            // cbCounterClockWise
+            // 
+            cbCounterClockWise.AutoSize = true;
+            cbCounterClockWise.Checked = true;
+            cbCounterClockWise.CheckState = CheckState.Checked;
+            cbCounterClockWise.Location = new Point(622, 80);
+            cbCounterClockWise.Name = "cbCounterClockWise";
+            cbCounterClockWise.Size = new Size(122, 19);
+            cbCounterClockWise.TabIndex = 731;
+            cbCounterClockWise.Text = "counterClockWise";
+            cbCounterClockWise.UseVisualStyleBackColor = true;
             // 
             // label5
             // 
@@ -542,17 +556,15 @@
             backgroundWorker1.WorkerReportsProgress = true;
             backgroundWorker1.WorkerSupportsCancellation = true;
             // 
-            // cbCounterClockWise
+            // cbWinding
             // 
-            cbCounterClockWise.AutoSize = true;
-            cbCounterClockWise.Checked = true;
-            cbCounterClockWise.CheckState = CheckState.Checked;
-            cbCounterClockWise.Location = new Point(622, 80);
-            cbCounterClockWise.Name = "cbCounterClockWise";
-            cbCounterClockWise.Size = new Size(122, 19);
-            cbCounterClockWise.TabIndex = 731;
-            cbCounterClockWise.Text = "counterClockWise";
-            cbCounterClockWise.UseVisualStyleBackColor = true;
+            cbWinding.AutoSize = true;
+            cbWinding.Location = new Point(361, 84);
+            cbWinding.Name = "cbWinding";
+            cbWinding.Size = new Size(152, 19);
+            cbWinding.TabIndex = 733;
+            cbWinding.Text = "set FillMode to Winding";
+            cbWinding.UseVisualStyleBackColor = true;
             // 
             // frmDefineFGPic
             // 
@@ -626,5 +638,6 @@
         private Label label5;
         private Button btnSetMatteFGOpaque;
         private CheckBox cbCounterClockWise;
+        private CheckBox cbWinding;
     }
 }

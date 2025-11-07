@@ -38,6 +38,7 @@
             splitContainer1 = new SplitContainer();
             openFileDialog1 = new OpenFileDialog();
             panel1 = new Panel();
+            cbCounterClockWise = new CheckBox();
             label5 = new Label();
             btnSetMatteFGOpaque = new Button();
             cbSetOpaque = new CheckBox();
@@ -76,7 +77,7 @@
             backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             OpenFileDialog2 = new OpenFileDialog();
             SaveFileDialog2 = new SaveFileDialog();
-            cbCounterClockWise = new CheckBox();
+            cbWinding = new CheckBox();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
             splitContainer1.Panel2.SuspendLayout();
@@ -197,6 +198,7 @@
             // panel1
             // 
             panel1.AutoScroll = true;
+            panel1.Controls.Add(cbWinding);
             panel1.Controls.Add(cbCounterClockWise);
             panel1.Controls.Add(label5);
             panel1.Controls.Add(btnSetMatteFGOpaque);
@@ -234,6 +236,18 @@
             panel1.MouseDoubleClick += panel1_MouseDoubleClick;
             panel1.MouseDown += panel1_MouseDown;
             // 
+            // cbCounterClockWise
+            // 
+            cbCounterClockWise.AutoSize = true;
+            cbCounterClockWise.Checked = true;
+            cbCounterClockWise.CheckState = CheckState.Checked;
+            cbCounterClockWise.Location = new Point(635, 81);
+            cbCounterClockWise.Name = "cbCounterClockWise";
+            cbCounterClockWise.Size = new Size(122, 19);
+            cbCounterClockWise.TabIndex = 731;
+            cbCounterClockWise.Text = "counterClockWise";
+            cbCounterClockWise.UseVisualStyleBackColor = true;
+            // 
             // label5
             // 
             label5.AutoSize = true;
@@ -268,7 +282,7 @@
             // 
             // btnLoadPath
             // 
-            btnLoadPath.Location = new Point(409, 79);
+            btnLoadPath.Location = new Point(339, 114);
             btnLoadPath.Margin = new Padding(4, 3, 4, 3);
             btnLoadPath.Name = "btnLoadPath";
             btnLoadPath.Size = new Size(88, 27);
@@ -279,7 +293,7 @@
             // 
             // btnSavePath
             // 
-            btnSavePath.Location = new Point(502, 79);
+            btnSavePath.Location = new Point(432, 114);
             btnSavePath.Margin = new Padding(4, 3, 4, 3);
             btnSavePath.Name = "btnSavePath";
             btnSavePath.Size = new Size(88, 27);
@@ -597,17 +611,15 @@
             SaveFileDialog2.Filter = "GraphicsPath files (*.tggrp)|*.tggrp";
             SaveFileDialog2.RestoreDirectory = true;
             // 
-            // cbCounterClockWise
+            // cbWinding
             // 
-            cbCounterClockWise.AutoSize = true;
-            cbCounterClockWise.Checked = true;
-            cbCounterClockWise.CheckState = CheckState.Checked;
-            cbCounterClockWise.Location = new Point(635, 81);
-            cbCounterClockWise.Name = "cbCounterClockWise";
-            cbCounterClockWise.Size = new Size(122, 19);
-            cbCounterClockWise.TabIndex = 731;
-            cbCounterClockWise.Text = "counterClockWise";
-            cbCounterClockWise.UseVisualStyleBackColor = true;
+            cbWinding.AutoSize = true;
+            cbWinding.Location = new Point(368, 81);
+            cbWinding.Name = "cbWinding";
+            cbWinding.Size = new Size(152, 19);
+            cbWinding.TabIndex = 733;
+            cbWinding.Text = "set FillMode to Winding";
+            cbWinding.UseVisualStyleBackColor = true;
             // 
             // frmDefineFGPic
             // 
@@ -686,5 +698,6 @@
         private Label label5;
         private Button btnSetMatteFGOpaque;
         private CheckBox cbCounterClockWise;
+        private CheckBox cbWinding;
     }
 }

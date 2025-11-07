@@ -38,6 +38,7 @@
             splitContainer1 = new SplitContainer();
             openFileDialog1 = new OpenFileDialog();
             panel1 = new Panel();
+            cbSetOpaque = new CheckBox();
             label3 = new Label();
             cbDraw = new CheckBox();
             numPenW = new NumericUpDown();
@@ -68,7 +69,7 @@
             saveFileDialog1 = new SaveFileDialog();
             Timer3 = new System.Windows.Forms.Timer(components);
             backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
-            cbSetOpaque = new CheckBox();
+            cbWinding = new CheckBox();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
             splitContainer1.Panel2.SuspendLayout();
@@ -189,6 +190,7 @@
             // panel1
             // 
             panel1.AutoScroll = true;
+            panel1.Controls.Add(cbWinding);
             panel1.Controls.Add(cbSetOpaque);
             panel1.Controls.Add(label3);
             panel1.Controls.Add(cbDraw);
@@ -219,6 +221,16 @@
             panel1.TabIndex = 230;
             panel1.MouseDoubleClick += panel1_MouseDoubleClick;
             panel1.MouseDown += panel1_MouseDown;
+            // 
+            // cbSetOpaque
+            // 
+            cbSetOpaque.AutoSize = true;
+            cbSetOpaque.Location = new Point(470, 51);
+            cbSetOpaque.Name = "cbSetOpaque";
+            cbSetOpaque.Size = new Size(133, 19);
+            cbSetOpaque.TabIndex = 721;
+            cbSetOpaque.Text = "set FG alpha opaque";
+            cbSetOpaque.UseVisualStyleBackColor = true;
             // 
             // label3
             // 
@@ -504,15 +516,15 @@
             backgroundWorker1.WorkerReportsProgress = true;
             backgroundWorker1.WorkerSupportsCancellation = true;
             // 
-            // cbSetOpaque
+            // cbWinding
             // 
-            cbSetOpaque.AutoSize = true;
-            cbSetOpaque.Location = new Point(470, 51);
-            cbSetOpaque.Name = "cbSetOpaque";
-            cbSetOpaque.Size = new Size(133, 19);
-            cbSetOpaque.TabIndex = 721;
-            cbSetOpaque.Text = "set FG alpha opaque";
-            cbSetOpaque.UseVisualStyleBackColor = true;
+            cbWinding.AutoSize = true;
+            cbWinding.Location = new Point(356, 84);
+            cbWinding.Name = "cbWinding";
+            cbWinding.Size = new Size(152, 19);
+            cbWinding.TabIndex = 733;
+            cbWinding.Text = "set FillMode to Winding";
+            cbWinding.UseVisualStyleBackColor = true;
             // 
             // frmDefineFGPic
             // 
@@ -583,5 +595,6 @@
         private Button btnRedoDraw;
         private Button btnUndoDraw;
         internal CheckBox cbSetOpaque;
+        private CheckBox cbWinding;
     }
 }

@@ -237,6 +237,8 @@ namespace OutlineOperations
                 if (this._points.Count > 1)
                 {
                     using GraphicsPath gP = new();
+
+                    gP.FillMode = FillMode.Winding;
                     gP.AddLines(this._points.ToArray());
 
                     using Matrix mx = new Matrix(this.helplineRulerCtrl1.Zoom, 0, 0, this.helplineRulerCtrl1.Zoom,
@@ -949,7 +951,9 @@ namespace OutlineOperations
             if (this.helplineRulerCtrl1.Bmp != null)
             {
                 using GraphicsPath gP = new();
-                //gP.FillMode = FillMode.Winding;
+
+                if (this.cbWinding.Checked)
+                    gP.FillMode = FillMode.Winding;
 
                 List<List<PointF>> list = new();
                 int j = 0;
@@ -1051,7 +1055,9 @@ namespace OutlineOperations
                 bmpTmp = null;
 
                 using GraphicsPath gP = new();
-                //gP.FillMode = FillMode.Winding;
+
+                if (this.cbWinding.Checked)
+                    gP.FillMode = FillMode.Winding;
 
                 List<List<PointF>> list = new();
                 int j = 0;
