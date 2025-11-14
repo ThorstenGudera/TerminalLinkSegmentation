@@ -1256,19 +1256,9 @@ Public Class BlendAlgorithmGMRES_restarted
         g *= 255.0
         b *= 255.0
 
-        If r < 0.0 OrElse r > 255.0 Then
-            r = r
-        End If
-        If g < 0.0 OrElse g > 255.0 Then
-            g = g
-        End If
-        If b < 0.0 OrElse b > 255.0 Then
-            b = b
-        End If
-
-        RGB.red = CByte(CInt(r))
-        RGB.green = CByte(CInt(g))
-        RGB.blue = CByte(CInt(b))
+        RGB.red = CByte(CInt(Math.Floor(r)))
+        RGB.green = CByte(CInt(Math.Floor(g)))
+        RGB.blue = CByte(CInt(Math.Floor(b)))
 
         Return RGB
     End Function

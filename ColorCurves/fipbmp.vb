@@ -332,9 +332,9 @@ Public Class fipbmp
         g *= 255.0
         b *= 255.0
 
-        RGB.red = CByte(CInt(r))
-        RGB.green = CByte(CInt(g))
-        RGB.blue = CByte(CInt(b))
+        RGB.red = CByte(CInt(Math.Floor(r)))
+        RGB.green = CByte(CInt(Math.Floor(g)))
+        RGB.blue = CByte(CInt(Math.Floor(b)))
 
         Return RGB
     End Function
