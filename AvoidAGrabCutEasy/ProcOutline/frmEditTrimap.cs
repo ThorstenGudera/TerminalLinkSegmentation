@@ -49,9 +49,9 @@ namespace AvoidAGrabCutEasy.ProcOutline
             InitializeComponent();
             _bOrig = orig;
 
-            this._bmpBU = new Bitmap(trWork);
+            this._bmpBU = (Bitmap)trWork.Clone();
 
-            this.helplineRulerCtrl1.Bmp = new Bitmap(trWork);
+            this.helplineRulerCtrl1.Bmp = (Bitmap)trWork.Clone();
 
             double faktor = System.Convert.ToDouble(helplineRulerCtrl1.dbPanel1.Width) / System.Convert.ToDouble(helplineRulerCtrl1.dbPanel1.Height);
             double multiplier = System.Convert.ToDouble(this.helplineRulerCtrl1.Bmp.Width) / System.Convert.ToDouble(this.helplineRulerCtrl1.Bmp.Height);
@@ -600,7 +600,7 @@ namespace AvoidAGrabCutEasy.ProcOutline
         {
             if (this.helplineRulerCtrl1.Bmp != null && this._allPoints != null && this._allPoints.Count > 0)
             {
-                Bitmap bmp = new Bitmap(this._bmpBU);
+                Bitmap bmp = (Bitmap)this._bmpBU.Clone();
                 using (Graphics gx = Graphics.FromImage(bmp))
                     foreach (int j in this._allPoints.Keys)
                     {
@@ -641,7 +641,7 @@ namespace AvoidAGrabCutEasy.ProcOutline
 
             if (this.helplineRulerCtrl1.Bmp != null && this._scribbles != null && this._scribbleSeq != null && this._scribbleSeq.Count > 0)
             {
-                Bitmap bmp = new Bitmap(this.helplineRulerCtrl1.Bmp);
+                Bitmap bmp = (Bitmap)this.helplineRulerCtrl1.Bmp.Clone();
                 using (Graphics gx = Graphics.FromImage(bmp))
                     foreach (Tuple<int, int, int, bool, List<List<Point>>> f in this._scribbleSeq)
                     {
@@ -924,7 +924,7 @@ namespace AvoidAGrabCutEasy.ProcOutline
                 using Image img = Image.FromFile(this.openFileDialog1.FileName);
                 //if(img.Width >= this.helplineRulerCtrl1.Bmp.Width && img.Height >= this.helplineRulerCtrl1.Bmp.Height)
                 if (img.Width == this.helplineRulerCtrl1.Bmp.Width && img.Height == this.helplineRulerCtrl1.Bmp.Height)
-                    bmp = new Bitmap(img);
+                    bmp = (Bitmap)img.Clone();
                 else
                 {
                     bmp = new Bitmap(this.helplineRulerCtrl1.Bmp.Width, this.helplineRulerCtrl1.Bmp.Height);

@@ -27,8 +27,8 @@ namespace AvoidAGrabCutEasy
 
             if (AvailMem.AvailMem.checkAvailRam(bmpLower.Width * bmpLower.Height * 16L))
             {
-                this.helplineRulerCtrl1.Bmp = new Bitmap(bmpLower);
-                this._bmpUpper = new Bitmap(bmpUpper);
+                this.helplineRulerCtrl1.Bmp = (Bitmap)bmpLower.Clone();
+                this._bmpUpper = (Bitmap)bmpUpper.Clone();
             }
 
             double faktor = System.Convert.ToDouble(helplineRulerCtrl1.dbPanel1.Width) / System.Convert.ToDouble(helplineRulerCtrl1.dbPanel1.Height);

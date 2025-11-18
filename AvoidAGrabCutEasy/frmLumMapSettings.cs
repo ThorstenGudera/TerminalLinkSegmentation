@@ -201,7 +201,7 @@ namespace AvoidAGrabCutEasy
                                         if (this._baseImg != null)
                                         {
                                             Image? iOld = this.pictureBox1.Image;
-                                            this.pictureBox1.Image = new Bitmap(this._baseImg);
+                                            this.pictureBox1.Image = (Bitmap)this._baseImg.Clone();
                                             this.pictureBox1.Refresh();
 
                                             if (iOld != null)
@@ -304,7 +304,7 @@ namespace AvoidAGrabCutEasy
                         Image? iOld = this.pictureBox1.Image;
                         BitmapInfo bi = this._bmpInfos[this._bmpInfos.CurrentPosition - 1];
                         if (bi.Bmp != null)
-                            this.pictureBox1.Image = new Bitmap(bi.Bmp);
+                            this.pictureBox1.Image = (Bitmap)bi.Bmp.Clone();
                         this.pictureBox1.Refresh();
 
                         if (iOld != null)
@@ -316,7 +316,7 @@ namespace AvoidAGrabCutEasy
                     else if (replacePBImage && this._bmpInfos != null && this._bmpInfos.CurrentPosition - 1 < 0 && this._baseImg != null)
                     {
                         Image? iOld = this.pictureBox1.Image;
-                        this.pictureBox1.Image = new Bitmap(this._baseImg);
+                        this.pictureBox1.Image = (Bitmap)this._baseImg.Clone();
                         this.pictureBox1.Refresh();
 
                         if (iOld != null)
@@ -364,7 +364,7 @@ namespace AvoidAGrabCutEasy
 
                         BitmapInfo bi = this._bmpInfos[this._bmpInfos.CurrentPosition - 1];
                         if (bi.Bmp != null)
-                            this.pictureBox1.Image = new Bitmap(bi.Bmp);
+                            this.pictureBox1.Image = (Bitmap)bi.Bmp.Clone();
                         this.pictureBox1.Refresh();
 
                         if (iOld != null)
@@ -445,7 +445,7 @@ namespace AvoidAGrabCutEasy
                             if (this._baseImg != null)
                             {
                                 Image? iOld = this.pictureBox1.Image;
-                                this.pictureBox1.Image = new Bitmap(this._baseImg);
+                                this.pictureBox1.Image = (Bitmap)this._baseImg.Clone();
                                 this.pictureBox1.Refresh();
 
                                 if (iOld != null)
@@ -554,7 +554,7 @@ namespace AvoidAGrabCutEasy
             }
 
             this._baseImg = bmp;
-            this.pictureBox1.Image = new Bitmap(this._baseImg);
+            this.pictureBox1.Image = (Bitmap)this._baseImg.Clone();
             this.pictureBox1.Refresh();
         }
 
@@ -652,7 +652,7 @@ namespace AvoidAGrabCutEasy
 
             if (this._undoOPCache != null)
             {
-                BitmapInfo bInfo = new BitmapInfo(new Bitmap(bmp), this._undoOPCache.CurrentPosition);
+                BitmapInfo bInfo = new BitmapInfo((Bitmap)bmp.Clone(), this._undoOPCache.CurrentPosition);
                 if (this._bmpInfos.CurrentPosition < this._bmpInfos.Count && (this._bmpInfos.Count - this._bmpInfos.CurrentPosition) < this._bmpInfos.Count)
                     this._bmpInfos.RemoveRange(this._bmpInfos.CurrentPosition, this._bmpInfos.Count - this._bmpInfos.CurrentPosition);
 
@@ -680,7 +680,7 @@ namespace AvoidAGrabCutEasy
 
                 if (this.helplineRulerCtrl1.Bmp != null)
                 {
-                    Bitmap bmp = new Bitmap(this.helplineRulerCtrl1.Bmp);
+                    Bitmap bmp = (Bitmap)this.helplineRulerCtrl1.Bmp.Clone();
                     this.backgroundWorker3.RunWorkerAsync(new object[] { bmp, krnl, maxVal });
                 }
             }
@@ -931,7 +931,7 @@ namespace AvoidAGrabCutEasy
         {
             if (e.Argument != null && this.helplineRulerCtrl1.Bmp != null)
             {
-                using (Bitmap bmp = new Bitmap(this.helplineRulerCtrl1.Bmp))
+                using (Bitmap bmp = (Bitmap)this.helplineRulerCtrl1.Bmp.Clone())
                 {
                     object[] o = (object[])e.Argument;
 
@@ -974,8 +974,8 @@ namespace AvoidAGrabCutEasy
                             {
                                 Grayscale(bmp);
 
-                                using (Bitmap bCopy1 = new Bitmap(bmp))
-                                using (Bitmap bCopy2 = new Bitmap(bmp))
+                                using (Bitmap bCopy1 = (Bitmap)bmp.Clone())
+                                using (Bitmap bCopy2 = (Bitmap)bmp.Clone())
                                 {
                                     MorphologicalProcessing2.IMorphologicalOperation alg = new MorphologicalProcessing2.Algorithms.Dilate();
                                     alg.BGW = this.backgroundWorker4;
@@ -996,11 +996,11 @@ namespace AvoidAGrabCutEasy
                                 }
                             }
 
-                            if (useChainCode)
+                            if (useChainCode && iG != null)
                             {
                                 //now get the components and fill the inner parts of the components white,
                                 //so these pixels will not be removed from the result.
-                                using Bitmap iGC = new Bitmap(iG ?? throw new ArgumentNullException("iG is null"));
+                                using Bitmap iGC = (Bitmap)iG.Clone();
                                 Grayscale(iGC);
                                 Fipbmp fip = new Fipbmp();
                                 fip.ReplaceColors(iGC, 0, 0, 0, 0, tolerance, 255, 0, 0, 0);
@@ -1038,7 +1038,7 @@ namespace AvoidAGrabCutEasy
                                                         }
                                                         else
                                                         {
-                                                            using Bitmap bC = new Bitmap(iG);
+                                                            using Bitmap bC = (Bitmap)iG.Clone();
                                                             using TextureBrush tb = new TextureBrush(bC);
                                                             gx.FillPath(tb, gP);
                                                         }
@@ -1210,7 +1210,7 @@ namespace AvoidAGrabCutEasy
                 try
                 {
                     if (AvailMem.AvailMem.checkAvailRam(upperImg.Width * upperImg.Height * 4L))
-                        bmpTmp = new Bitmap(upperImg);
+                        bmpTmp = (Bitmap)upperImg.Clone();
                     else
                         throw new Exception("Not enough memory.");
                     int nWidth = bmpTmp.Width;

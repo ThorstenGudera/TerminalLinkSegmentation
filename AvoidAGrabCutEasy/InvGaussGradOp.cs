@@ -28,7 +28,7 @@ namespace AvoidAGrabCutEasy
                 conv, false, steepness, radius);
 
             //Gradients
-            using (Bitmap bmpH = new Bitmap(bmp), bmpV = new Bitmap(bmp))
+            using (Bitmap bmpH = (Bitmap)bmp.Clone(), bmpV = (Bitmap)bmp.Clone())
             {
                 EdgeDetection_Scharr_Horz(bmpH, divisor, 1, false, 127, conv, this.BGW);
                 EdgeDetection_Scharr_Vert(bmpV, divisor, 1, false, 127, conv, this.BGW);

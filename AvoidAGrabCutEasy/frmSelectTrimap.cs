@@ -38,15 +38,15 @@ namespace GetAlphaMatte
         {
             InitializeComponent();
 
-            Bitmap bmp1 = new Bitmap(b1);
-            Bitmap bmp2 = new Bitmap(b2);
+            Bitmap bmp1 = (Bitmap)b1.Clone();
+            Bitmap bmp2 = (Bitmap)b2.Clone();
             this.helplineRulerCtrl1.Bmp = bmp1;
             this.helplineRulerCtrl2.Bmp = bmp2;
             this.helplineRulerCtrl3.Bmp = new Bitmap(bmp1.Width, bmp1.Height);
             using Graphics gx = Graphics.FromImage(this.helplineRulerCtrl3.Bmp);
             gx.Clear(Color.Gray);
 
-            this._bmpBU = new Bitmap(this.helplineRulerCtrl3.Bmp);
+            this._bmpBU = (Bitmap)this.helplineRulerCtrl3.Bmp.Clone();
 
             this._picOverlay = bWork;
 
@@ -212,7 +212,7 @@ namespace GetAlphaMatte
         {
             if (this._allPts != null && this._pointsDraw != null && ((this._allPts.Count > 0) || (this._pointsDraw.Count > 0)))
             {
-                Bitmap bDraw = new Bitmap(this._bmpBU);
+                Bitmap bDraw = (Bitmap)this._bmpBU.Clone();
 
                 using Graphics gx = Graphics.FromImage(bDraw);
                 gx.PixelOffsetMode = PixelOffsetMode.Half;
@@ -264,7 +264,7 @@ namespace GetAlphaMatte
             }
             else if (this._allPts != null && this._pointsDraw != null && this._allPts.Count == 0 && this._pointsDraw.Count == 0)
             {
-                Bitmap bDraw = new Bitmap(this._bmpBU);
+                Bitmap bDraw = (Bitmap)this._bmpBU.Clone();
                 this.SetBitmap(this.helplineRulerCtrl3.Bmp, bDraw, this.helplineRulerCtrl3, "Bmp");
                 this.helplineRulerCtrl3.MakeBitmap(this.helplineRulerCtrl3.Bmp);
                 this.helplineRulerCtrl3.dbPanel1.Invalidate();

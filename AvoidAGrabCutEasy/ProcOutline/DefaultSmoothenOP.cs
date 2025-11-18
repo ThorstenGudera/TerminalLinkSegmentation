@@ -34,15 +34,15 @@ namespace AvoidAGrabCutEasy.ProcOutline
 
         public DefaultSmoothenOP(Bitmap bmp, Bitmap bmpOrig)
         {
-            this.Bmp = new Bitmap(bmp);
-            this.BmpWork = new Bitmap(bmp);
-            this.BmpOrig = new Bitmap(bmpOrig);
+            this.Bmp = (Bitmap)bmp.Clone();
+            this.BmpWork = (Bitmap)bmp.Clone();
+            this.BmpOrig = (Bitmap)bmpOrig.Clone();
         }
         public DefaultSmoothenOP(Bitmap bmp)
         {
-            this.Bmp = new Bitmap(bmp);
-            this.BmpWork = new Bitmap(bmp);
-            this.BmpOrig = new Bitmap(bmp);
+            this.Bmp = (Bitmap)bmp.Clone();
+            this.BmpWork = (Bitmap)bmp.Clone();
+            this.BmpOrig = (Bitmap)bmp.Clone();
         }
 
         public void Init(double numPPEpsilonValue, double numPPEpsilon2Value, bool cbPPRemoveChecked,
@@ -201,7 +201,7 @@ namespace AvoidAGrabCutEasy.ProcOutline
                 try
                 {
                     if (AvailMem.AvailMem.checkAvailRam(upperImg.Width * upperImg.Height * 4L))
-                        bmpTmp = new Bitmap(upperImg);
+                        bmpTmp = (Bitmap)upperImg.Clone();
                     else
                         throw new Exception("Not enough memory.");
                     int nWidth = bmpTmp.Width;
@@ -236,7 +236,7 @@ namespace AvoidAGrabCutEasy.ProcOutline
                 try
                 {
                     if (AvailMem.AvailMem.checkAvailRam(upperImg.Width * upperImg.Height * 4L))
-                        bmpTmp = new Bitmap(upperImg);
+                        bmpTmp = (Bitmap)upperImg.Clone();
                     else
                         throw new Exception("Not enough memory.");
                     int nWidth = bmpTmp.Width;
@@ -267,7 +267,7 @@ namespace AvoidAGrabCutEasy.ProcOutline
                 ShowInfo?.Invoke(this, "Computing Pic... part1");
 
                 Bitmap bOut = new Bitmap(this.Bmp.Width, this.Bmp.Height);
-                Bitmap bWork = new Bitmap(this.Bmp);
+                Bitmap bWork = (Bitmap)this.Bmp.Clone();
 
                 ChainFinder cf = new ChainFinder();
                 List<ChainCode>? c = GetBoundary(this.Bmp, cf, 0, false);
@@ -541,7 +541,7 @@ namespace AvoidAGrabCutEasy.ProcOutline
 
                 if (innerCount > 0)
                 {
-                    Bitmap bTmp4 = (this.cbPPRemoveChecked) ? ExtendOutline(bTmp2, Math.Max((int)this.numPPRemove2Value, 0), true) : new Bitmap(bTmp2);
+                    Bitmap bTmp4 = (this.cbPPRemoveChecked) ? ExtendOutline(bTmp2, Math.Max((int)this.numPPRemove2Value, 0), true) : (Bitmap)bTmp2.Clone();
 
                     Bitmap? bOld2 = bTmp2;
                     bTmp2 = bTmp4;
@@ -668,7 +668,7 @@ namespace AvoidAGrabCutEasy.ProcOutline
             if (this.Bmp != null && this.BmpWork != null)
             {
                 Bitmap bOut = new Bitmap(this.Bmp.Width, this.Bmp.Height);
-                Bitmap bWork = new Bitmap(this.Bmp);
+                Bitmap bWork = (Bitmap)this.Bmp.Clone();
 
                 ChainFinder cf = new ChainFinder();
                 List<ChainCode>? c = GetBoundary(this.Bmp, cf, 0, false);
@@ -1165,7 +1165,7 @@ namespace AvoidAGrabCutEasy.ProcOutline
         private Bitmap ExtendOutline(Bitmap bmp, int outerW, bool dontFill)
         {
             if (outerW == 0)
-                return new Bitmap(bmp);
+                return (Bitmap)bmp.Clone();
 
             Bitmap bOut = new Bitmap(bmp.Width, bmp.Height);
 

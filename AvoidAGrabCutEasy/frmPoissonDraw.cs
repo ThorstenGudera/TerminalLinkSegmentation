@@ -106,13 +106,13 @@ namespace AvoidAGrabCutEasy
             if (AvailMem.AvailMem.checkAvailRam(bmp.Width * bmp.Height * 16L))
             {
                 this.helplineRulerCtrl1.Bmp = (Bitmap)bmp.Clone();
-                this.helplineRulerCtrl2.Bmp = new Bitmap(bmp);
+                this.helplineRulerCtrl2.Bmp = (Bitmap)bmp.Clone();
                 _bmpBU = (Bitmap)bmp.Clone();
-                _bmpOrg = new Bitmap(bmp);
+                _bmpOrg = (Bitmap)bmp.Clone();
                 this._bmpDraw = new Bitmap(this.helplineRulerCtrl1.Bmp.Width, this.helplineRulerCtrl1.Bmp.Height);
                 this._tb = new TextureBrush(this._bmpBU);
                 this._tb.WrapMode = WrapMode.TileFlipXY;
-                this._bmpOrigHLC1 = new Bitmap(bmp);
+                this._bmpOrigHLC1 = (Bitmap)bmp.Clone();
             }
             else
             {
@@ -580,7 +580,7 @@ namespace AvoidAGrabCutEasy
             {
                 if (this._bmpDraw != null && AvailMem.AvailMem.checkAvailRam(this.helplineRulerCtrl2.Bmp.Width * this.helplineRulerCtrl2.Bmp.Height * 10L))
                 {
-                    Bitmap bmpDrawFrom = new Bitmap(this._bmpDraw); //pen strokes drawn with hlc1_bmp
+                    Bitmap bmpDrawFrom = (Bitmap)this._bmpDraw.Clone(); //pen strokes drawn with hlc1_bmp
 
                     SetupTB();
 
@@ -662,7 +662,7 @@ namespace AvoidAGrabCutEasy
 
                             if (this._bmpBU != null && AvailMem.AvailMem.checkAvailRam(this._bmpBU.Width * this._bmpBU.Height * 10L))
                             {
-                                Bitmap bmpDrawTo = new Bitmap(this.helplineRulerCtrl2.Bmp); //hlc2 current image
+                                Bitmap bmpDrawTo = (Bitmap)this.helplineRulerCtrl2.Bmp.Clone(); //hlc2 current image
                                 ProcessImage(bmpDrawTo, bmpDrawFrom);
                             }
                         }
@@ -750,7 +750,7 @@ namespace AvoidAGrabCutEasy
                                         int maxPixelDist = (int)o[5];
                                         double gamma = (double)o[6];
 
-                                        PoissonBlender pb = new PoissonBlender(new Bitmap(bmpLw), new Bitmap(bmpU));
+                                        PoissonBlender pb = new PoissonBlender((Bitmap)bmpLw.Clone(), (Bitmap)bmpU.Clone());
                                         PoissonBlend.ProgressEventArgs pe = new PoissonBlend.ProgressEventArgs(mI * 3, 0);
                                         pe.PrgInterval = mI / 20;
                                         //pb.BlendParameters.Gamma = ;
@@ -761,7 +761,7 @@ namespace AvoidAGrabCutEasy
                                         if (bAlg.GetType().GetInterfaces().Contains(typeof(IExtendedBVectorComputingAlgorithm)))
                                         {
                                             IExtendedBVectorComputingAlgorithm iExtAlg = (IExtendedBVectorComputingAlgorithm)bAlg;
-                                            using Bitmap bC = new Bitmap(bmpU);
+                                            using Bitmap bC = (Bitmap)bmpU.Clone();
                                             iExtAlg.Setup(bC, maxPixelDist, gamma);
                                         }
 
@@ -1095,7 +1095,7 @@ namespace AvoidAGrabCutEasy
                                     this.SetBitmap(this.helplineRulerCtrl1.Bmp, b1, this.helplineRulerCtrl1, "Bmp");
                                     b2 = (Bitmap)img.Clone();
                                     this.SetBitmap(ref this._bmpBU, ref b2);
-                                    Bitmap? bC2 = new Bitmap(b1);
+                                    Bitmap? bC2 = (Bitmap)b1.Clone();
                                     this.SetBitmap(ref this._bmpOrigHLC1, ref bC2);
                                 }
                                 else
@@ -1177,7 +1177,7 @@ namespace AvoidAGrabCutEasy
 
                             if (_bmpBU != null)
                             {
-                                _bmpOrg = new Bitmap(_bmpBU);
+                                _bmpOrg = (Bitmap)_bmpBU.Clone();
                                 this._bmpDraw = new Bitmap(this.helplineRulerCtrl1.Bmp.Width, this.helplineRulerCtrl1.Bmp.Height);
                                 TextureBrush? tOld = this._tb;
                                 this._tb = new TextureBrush(this._bmpBU);
@@ -1331,7 +1331,7 @@ namespace AvoidAGrabCutEasy
                     try
                     {
                         if (this._bmpOrigHLC1 != null && AvailMem.AvailMem.checkAvailRam(this._bmpOrigHLC1.Width * this._bmpOrigHLC1.Height * 12L))
-                            bmpHLC1 = new Bitmap(this._bmpOrigHLC1);
+                            bmpHLC1 = (Bitmap)this._bmpOrigHLC1.Clone();
                         else
                             throw new Exception();
 
@@ -1768,14 +1768,14 @@ namespace AvoidAGrabCutEasy
 
             if (this._bmpOrg != null)
             {
-                Bitmap b = new Bitmap(this._bmpOrg);
+                Bitmap b = (Bitmap)this._bmpOrg.Clone();
                 this.SetBitmap(this.helplineRulerCtrl2.Bmp, b, this.helplineRulerCtrl2, "Bmp");
             }
 
             if (this.helplineRulerCtrl2.Bmp != null)
             {
                 Bitmap? bOld = this._bmpBU;
-                this._bmpBU = new Bitmap(this.helplineRulerCtrl2.Bmp);
+                this._bmpBU = (Bitmap)this.helplineRulerCtrl2.Bmp.Clone();
                 this._bmpDraw = new Bitmap(this.helplineRulerCtrl2.Bmp.Width, this.helplineRulerCtrl2.Bmp.Height);
                 if (bOld != null)
                 {
@@ -1835,7 +1835,7 @@ namespace AvoidAGrabCutEasy
             {
                 Bitmap? bmp = null;
                 using (Image img = Image.FromFile(this.openFileDialog1.FileName))
-                    bmp = new Bitmap(img);
+                    bmp = (Bitmap)img.Clone();
 
                 Bitmap? bmpHLC1 = new Bitmap(this.helplineRulerCtrl2.Bmp.Width, this.helplineRulerCtrl2.Bmp.Height);
                 using TextureBrush tb = new TextureBrush(bmp);
@@ -1859,13 +1859,13 @@ namespace AvoidAGrabCutEasy
                 this.helplineRulerCtrl1.MakeBitmap(this.helplineRulerCtrl1.Bmp);
                 this.helplineRulerCtrl1.dbPanel1.Invalidate();
 
-                Bitmap? bC = new Bitmap(bmpHLC1);
+                Bitmap? bC = (Bitmap)bmpHLC1.Clone();
                 this.SetBitmap(ref this._bmpBU, ref bC);
 
                 Bitmap? bD = new Bitmap(this.helplineRulerCtrl1.Bmp.Width, this.helplineRulerCtrl1.Bmp.Height);
                 this.SetBitmap(ref this._bmpDraw, ref bD);
 
-                Bitmap? bC2 = new Bitmap(bmpHLC1);
+                Bitmap? bC2 = (Bitmap)bmpHLC1.Clone();
                 this.SetBitmap(ref this._bmpOrigHLC1, ref bC2);
 
                 if (this._bmpBUZoomed != null)
@@ -1905,7 +1905,7 @@ namespace AvoidAGrabCutEasy
 
         internal void LoadOrigPic(Bitmap bmpBU)
         {
-            Bitmap? bmp = new Bitmap(bmpBU);
+            Bitmap? bmp = (Bitmap)bmpBU.Clone();
 
             Bitmap? bmpHLC1 = new Bitmap(this.helplineRulerCtrl2.Bmp.Width, this.helplineRulerCtrl2.Bmp.Height);
             using TextureBrush tb = new TextureBrush(bmp);
@@ -1931,13 +1931,13 @@ namespace AvoidAGrabCutEasy
 
             this.helplineRulerCtrl1.dbPanel1.Invalidate();
 
-            Bitmap? bC = new Bitmap(bmpHLC1);
+            Bitmap? bC = (Bitmap)bmpHLC1.Clone();
             this.SetBitmap(ref this._bmpBU, ref bC);
 
             Bitmap? bD = new Bitmap(this.helplineRulerCtrl1.Bmp.Width, this.helplineRulerCtrl1.Bmp.Height);
             this.SetBitmap(ref this._bmpDraw, ref bD);
 
-            Bitmap? bC2 = new Bitmap(bmpHLC1);
+            Bitmap? bC2 = (Bitmap)bmpHLC1.Clone();
             this.SetBitmap(ref this._bmpOrigHLC1, ref bC2);
 
             if (this._bmpBUZoomed != null)
@@ -1966,7 +1966,7 @@ namespace AvoidAGrabCutEasy
         {
             if (this.helplineRulerCtrl1.Bmp != null)
             {
-                Bitmap b = new Bitmap(this.helplineRulerCtrl1.Bmp);
+                Bitmap b = (Bitmap)this.helplineRulerCtrl1.Bmp.Clone();
                 ScreenBlend(b);
 
                 this.SetBitmap(this.helplineRulerCtrl1.Bmp, b, this.helplineRulerCtrl1, "Bmp");
@@ -1984,7 +1984,7 @@ namespace AvoidAGrabCutEasy
 
                 this.helplineRulerCtrl1.dbPanel1.Invalidate();
 
-                Bitmap? bC = new Bitmap(b);
+                Bitmap? bC = (Bitmap)b.Clone();
                 this.SetBitmap(ref this._bmpBU, ref bC);
 
                 Bitmap? bD = new Bitmap(this.helplineRulerCtrl1.Bmp.Width, this.helplineRulerCtrl1.Bmp.Height);
@@ -2596,11 +2596,11 @@ namespace AvoidAGrabCutEasy
             {
                 if (this._bmpPenStrokes != null)
                 {
-                    Bitmap? bmp = new Bitmap(this._bmpPenStrokes);
+                    Bitmap? bmp = (Bitmap)this._bmpPenStrokes.Clone();
 
                     SetPicToPB(bmp);
 
-                    Bitmap bmpDrawTo = new Bitmap(this.helplineRulerCtrl2.Bmp);
+                    Bitmap bmpDrawTo = (Bitmap)this.helplineRulerCtrl2.Bmp.Clone();
 
                     this.SetControls(false);
 
@@ -2619,8 +2619,8 @@ namespace AvoidAGrabCutEasy
                 {
                     if (this.cbWholeRegionPic.Checked && this._bmpPenStrokes != null)
                     {
-                        Bitmap? bmp = new Bitmap(this._bmpPenStrokes);
-                        using Bitmap bSrc = new Bitmap(this.helplineRulerCtrl1.Bmp);
+                        Bitmap? bmp = (Bitmap)this._bmpPenStrokes.Clone();
+                        using Bitmap bSrc = (Bitmap)this.helplineRulerCtrl1.Bmp.Clone();
 
                         if (bSrc.Width != bmp.Width || bSrc.Height != bmp.Height)
                         {
@@ -2641,7 +2641,7 @@ namespace AvoidAGrabCutEasy
                         {
                             SetPicToPB(bmpBlend);
 
-                            Bitmap bmpDrawTo = new Bitmap(this.helplineRulerCtrl2.Bmp);
+                            Bitmap bmpDrawTo = (Bitmap)this.helplineRulerCtrl2.Bmp.Clone();
 
                             this.SetControls(false);
                             ProcessImage(bmpDrawTo, bmpBlend);
@@ -2697,20 +2697,20 @@ namespace AvoidAGrabCutEasy
                                 }
                         }
 
-                        bmpBlend = new Bitmap(bmp);
+                        bmpBlend = (Bitmap)bmp.Clone();
 
                         SetPicToPB(bmpBlend);
 
-                        Bitmap bmpBlend2 = new Bitmap(bmpBlend);
+                        Bitmap bmpBlend2 = (Bitmap)bmpBlend.Clone();
                         this.SetBitmap(ref this._bmpPenStrokes, ref bmpBlend2);
 
-                        Bitmap bmpDrawTo = new Bitmap(this.helplineRulerCtrl2.Bmp);
+                        Bitmap bmpDrawTo = (Bitmap)this.helplineRulerCtrl2.Bmp.Clone();
 
                         this.SetControls(false);
 
                         if (this.cbWholeRegionPic.Checked)
                         {
-                            using Bitmap bSrc = new Bitmap(this.helplineRulerCtrl1.Bmp);
+                            using Bitmap bSrc = (Bitmap)this.helplineRulerCtrl1.Bmp.Clone();
 
                             if (bSrc.Width != bmpBlend.Width || bSrc.Height != bmpBlend.Height)
                             {
@@ -2785,18 +2785,18 @@ namespace AvoidAGrabCutEasy
                                 }
                         }
 
-                        bmpBlend = new Bitmap(bmp);
+                        bmpBlend = (Bitmap)bmp.Clone();
 
                         SetPicToPB(bmpBlend);
 
-                        Bitmap bmpBlend2 = new Bitmap(bmpBlend);
+                        Bitmap bmpBlend2 = (Bitmap)bmpBlend.Clone();
                         this.SetBitmap(ref this._bmpPenStrokes, ref bmpBlend2);
 
-                        Bitmap bmpDrawTo = new Bitmap(this.helplineRulerCtrl2.Bmp);
+                        Bitmap bmpDrawTo = (Bitmap)this.helplineRulerCtrl2.Bmp.Clone();
 
                         this.SetControls(false);
 
-                        using Bitmap bSrc = new Bitmap(this.helplineRulerCtrl1.Bmp);
+                        using Bitmap bSrc = (Bitmap)this.helplineRulerCtrl1.Bmp.Clone();
 
                         if (bSrc.Width != bmpBlend.Width || bSrc.Height != bmpBlend.Height)
                         {
@@ -2811,7 +2811,7 @@ namespace AvoidAGrabCutEasy
                             bOld = null;
                         }
 
-                        using Bitmap bCopy = new Bitmap(bmp);
+                        using Bitmap bCopy = (Bitmap)bmp.Clone();
                         bmpBlend = GetSurroundingRegion(bmp, bSrc, (int)this.numExtendRegion.Value);
 
                         if (bmpBlend != null)
@@ -2856,7 +2856,7 @@ namespace AvoidAGrabCutEasy
         private void SetPicToPB(Bitmap bmp)
         {
             Image? iOld = this.pictureBox1.Image;
-            this.pictureBox1.Image = new Bitmap(bmp);
+            this.pictureBox1.Image = (Bitmap)bmp.Clone();
             this.pictureBox1.Refresh();
 
             if (iOld != null)
@@ -2909,7 +2909,7 @@ namespace AvoidAGrabCutEasy
                             }
                     }
 
-                    using Bitmap bSrc = new Bitmap(this.helplineRulerCtrl1.Bmp);
+                    using Bitmap bSrc = (Bitmap)this.helplineRulerCtrl1.Bmp.Clone();
 
                     if (bSrc.Width != bmp.Width || bSrc.Height != bmp.Height)
                     {
@@ -2932,7 +2932,7 @@ namespace AvoidAGrabCutEasy
 
                     if (bmpBlend != null)
                     {
-                        Bitmap bmpBlend2 = new Bitmap(bmpBlend);
+                        Bitmap bmpBlend2 = (Bitmap)bmpBlend.Clone();
                         this.SetBitmap(ref this._bmpPenStrokes, ref bmpBlend2);
                         this.toolStripStatusLabel4.Text = "Custom Pic loaded";
 
@@ -2990,7 +2990,7 @@ namespace AvoidAGrabCutEasy
                             }
                     }
 
-                    using Bitmap bSrc = new Bitmap(this.helplineRulerCtrl1.Bmp);
+                    using Bitmap bSrc = (Bitmap)this.helplineRulerCtrl1.Bmp.Clone();
 
                     if (bSrc.Width != bmp.Width || bSrc.Height != bmp.Height)
                     {
@@ -3005,7 +3005,7 @@ namespace AvoidAGrabCutEasy
                         bOld = null;
                     }
 
-                    using Bitmap bCopy = new Bitmap(bmp);
+                    using Bitmap bCopy = (Bitmap)bmp.Clone();
                     bmpBlend = GetSurroundingRegion(bmp, bSrc, (int)this.numExtendRegion.Value);
 
                     if (bmpBlend != null)
@@ -3021,7 +3021,7 @@ namespace AvoidAGrabCutEasy
                         else
                             GetBlackShapeBGBmp(bmpBlend, bCopy);
 
-                        Bitmap bmpBlend2 = new Bitmap(bmpBlend);
+                        Bitmap bmpBlend2 = (Bitmap)bmpBlend.Clone();
                         this.SetBitmap(ref this._bmpPenStrokes, ref bmpBlend2);
                         this.toolStripStatusLabel4.Text = "Custom Pic loaded";
 
@@ -3052,7 +3052,7 @@ namespace AvoidAGrabCutEasy
                     if (this.openFileDialog1.ShowDialog() == DialogResult.OK)
                     {
                         using (Image img = Image.FromFile(this.openFileDialog1.FileName))
-                            bmp = new Bitmap(img);
+                            bmp = (Bitmap)img.Clone();
                     }
                     else
                         cancel = true;
@@ -3067,7 +3067,7 @@ namespace AvoidAGrabCutEasy
                     if (this.openFileDialog1.ShowDialog() == DialogResult.OK)
                     {
                         using (Image img = Image.FromFile(this.openFileDialog1.FileName))
-                            bmp = new Bitmap(img);
+                            bmp = (Bitmap)img.Clone();
                     }
                     else
                         return;
@@ -3116,13 +3116,13 @@ namespace AvoidAGrabCutEasy
                 {
                     SetPicToPB(bmp);
 
-                    Bitmap bmp2 = new Bitmap(bmp);
+                    Bitmap bmp2 = (Bitmap)bmp.Clone();
                     this.SetBitmap(ref this._bmpPenStrokes, ref bmp2);
                     this.toolStripStatusLabel4.Text = "Custom Pic loaded";
 
                     if (this.cbWholeRegionPic.Checked)
                     {
-                        using Bitmap bSrc = new Bitmap(this.helplineRulerCtrl1.Bmp);
+                        using Bitmap bSrc = (Bitmap)this.helplineRulerCtrl1.Bmp.Clone();
 
                         if (bSrc.Width != bmp.Width || bSrc.Height != bmp.Height)
                         {
@@ -3141,7 +3141,7 @@ namespace AvoidAGrabCutEasy
 
                         if (bmpBlend != null)
                         {
-                            Bitmap bmpBlend2 = new Bitmap(bmpBlend);
+                            Bitmap bmpBlend2 = (Bitmap)bmpBlend.Clone();
                             this.SetBitmap(ref this._bmpPenStrokes, ref bmpBlend2);
                             this.toolStripStatusLabel4.Text = "Custom Pic loaded";
 
@@ -3157,7 +3157,7 @@ namespace AvoidAGrabCutEasy
                     }
                     else if (this.cbBlackBG.Checked)
                     {
-                        using Bitmap bSrc = new Bitmap(this.helplineRulerCtrl1.Bmp);
+                        using Bitmap bSrc = (Bitmap)this.helplineRulerCtrl1.Bmp.Clone();
 
                         if (bSrc.Width != bmp.Width || bSrc.Height != bmp.Height)
                         {
@@ -3172,7 +3172,7 @@ namespace AvoidAGrabCutEasy
                             bOld = null;
                         }
 
-                        using Bitmap bCopy = new Bitmap(bmp);
+                        using Bitmap bCopy = (Bitmap)bmp.Clone();
                         Bitmap? bmpBlend = GetSurroundingRegion(bmp, bSrc, (int)this.numExtendRegion.Value);
 
                         if (bmpBlend != null)
@@ -3188,7 +3188,7 @@ namespace AvoidAGrabCutEasy
                             else
                                 GetBlackShapeBGBmp(bmpBlend, bCopy);
 
-                            Bitmap bmpBlend2 = new Bitmap(bmpBlend);
+                            Bitmap bmpBlend2 = (Bitmap)bmpBlend.Clone();
                             this.SetBitmap(ref this._bmpPenStrokes, ref bmpBlend2);
                             this.toolStripStatusLabel4.Text = "Custom Pic loaded";
 
@@ -3615,7 +3615,7 @@ namespace AvoidAGrabCutEasy
         {
             if (this.helplineRulerCtrl1.Bmp != null)
             {
-                Bitmap b = new Bitmap(this.helplineRulerCtrl1.Bmp);
+                Bitmap b = (Bitmap)this.helplineRulerCtrl1.Bmp.Clone();
                 ColorCurves.frmColorCurves frm = new(this.helplineRulerCtrl1.Bmp, "", 0);
                 this.SetControls(false);
 
@@ -3642,7 +3642,7 @@ namespace AvoidAGrabCutEasy
 
                     this.helplineRulerCtrl1.dbPanel1.Invalidate();
 
-                    Bitmap? bC = new Bitmap(b);
+                    Bitmap? bC = (Bitmap)b.Clone();
                     this.SetBitmap(ref this._bmpBU, ref bC);
 
                     Bitmap? bD = new Bitmap(this.helplineRulerCtrl1.Bmp.Width, this.helplineRulerCtrl1.Bmp.Height);
@@ -3676,7 +3676,7 @@ namespace AvoidAGrabCutEasy
         {
             if (this.helplineRulerCtrl1.Bmp != null)
             {
-                Bitmap b = new Bitmap(this.helplineRulerCtrl1.Bmp);
+                Bitmap b = (Bitmap)this.helplineRulerCtrl1.Bmp.Clone();
                 ColorCurves.frmHSLRange frm = new(b);
                 this.SetControls(false);
 
@@ -3704,7 +3704,7 @@ namespace AvoidAGrabCutEasy
 
                     this.helplineRulerCtrl1.dbPanel1.Invalidate();
 
-                    Bitmap? bC = new Bitmap(b);
+                    Bitmap? bC = (Bitmap)b.Clone();
                     this.SetBitmap(ref this._bmpBU, ref bC);
 
                     Bitmap? bD = new Bitmap(this.helplineRulerCtrl1.Bmp.Width, this.helplineRulerCtrl1.Bmp.Height);
@@ -3738,7 +3738,7 @@ namespace AvoidAGrabCutEasy
         {
             if (this.helplineRulerCtrl2.Bmp != null)
             {
-                Bitmap b = new Bitmap(this.helplineRulerCtrl2.Bmp);
+                Bitmap b = (Bitmap)this.helplineRulerCtrl2.Bmp.Clone();
                 ColorCurves.frmHSLRange frm = new(b);
                 this.SetControls(false);
 
@@ -3801,7 +3801,7 @@ namespace AvoidAGrabCutEasy
             {
                 Bitmap? bmp = null;
                 using (Image img = Image.FromFile(this.openFileDialog1.FileName))
-                    bmp = new Bitmap(img);
+                    bmp = (Bitmap)img.Clone();
 
                 Bitmap? b = new Bitmap(this.helplineRulerCtrl2.Bmp.Width, this.helplineRulerCtrl2.Bmp.Height);
                 using TextureBrush tb = new TextureBrush(bmp);
@@ -3818,7 +3818,7 @@ namespace AvoidAGrabCutEasy
                 this.helplineRulerCtrl1.MakeBitmap(this.helplineRulerCtrl1.Bmp);
                 this.helplineRulerCtrl1.dbPanel1.Invalidate();
 
-                Bitmap? bC = new Bitmap(b);
+                Bitmap? bC = (Bitmap)b.Clone();
                 this.SetBitmap(ref this._bmpBU, ref bC);
 
                 Bitmap? bD = new Bitmap(this.helplineRulerCtrl1.Bmp.Width, this.helplineRulerCtrl1.Bmp.Height);

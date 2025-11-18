@@ -97,7 +97,7 @@ namespace AvoidAGrabCutEasy
             {
                 this.helplineRulerCtrl1.Bmp = (Bitmap)bmp.Clone();
                 _bmpBU = (Bitmap)bmp.Clone();
-                this._bmpOrig = new Bitmap(bmp);
+                this._bmpOrig = (Bitmap)bmp.Clone();
             }
             else
             {
@@ -482,7 +482,7 @@ namespace AvoidAGrabCutEasy
                 this.btnUndo.Enabled = true;
                 this.CheckRedoButton();
 
-                Bitmap bC = new Bitmap(this.helplineRulerCtrl1.Bmp);
+                Bitmap bC = (Bitmap)this.helplineRulerCtrl1.Bmp.Clone();
                 if (this._bmpFirstStrokes != null)
                     this.SetBitmap(ref this._bmpFirstStrokes, ref bC);
             }
@@ -1083,7 +1083,7 @@ namespace AvoidAGrabCutEasy
         {
             if (this._bmpBU != null && e.Argument != null)
             {
-                Bitmap bmp = new Bitmap(this.helplineRulerCtrl1.Bmp);
+                Bitmap bmp = (Bitmap)this.helplineRulerCtrl1.Bmp.Clone();
 
                 object[] o = (object[])e.Argument;
 
@@ -1127,7 +1127,7 @@ namespace AvoidAGrabCutEasy
                         if (bmpNew != null)
                         {
                             this.SetBitmap(this.helplineRulerCtrl1.Bmp, bmpNew, this.helplineRulerCtrl1, "Bmp");
-                            Bitmap bC = new Bitmap(bmpNew);
+                            Bitmap bC = (Bitmap)bmpNew.Clone();
                             this.SetBitmap(ref _bmpOutlineRef, ref bC);
                             _undoOPCache?.Add(this.helplineRulerCtrl1.Bmp);
                             this.btnUndo.Enabled = true;
@@ -1228,9 +1228,9 @@ namespace AvoidAGrabCutEasy
                     Bitmap? bmp = null;
 
                     if (this.cbChainFromOrig.Checked && this._bmpFirstStrokes != null)
-                        bmp = new Bitmap(this._bmpFirstStrokes);
+                        bmp = (Bitmap)this._bmpFirstStrokes.Clone();
                     else
-                        bmp = new Bitmap(this.helplineRulerCtrl1.Bmp);
+                        bmp = (Bitmap)this.helplineRulerCtrl1.Bmp.Clone();
 
                     int mOpacity = (int)this.numChainTolerance.Value;
 
@@ -1328,7 +1328,7 @@ namespace AvoidAGrabCutEasy
             try
             {
                 if (AvailMem.AvailMem.checkAvailRam(upperImg.Width * upperImg.Height * 4L))
-                    bmpTmp = new Bitmap(upperImg);
+                    bmpTmp = (Bitmap)upperImg.Clone();
                 else
                     throw new Exception("Not enough memory.");
 
@@ -1652,14 +1652,14 @@ namespace AvoidAGrabCutEasy
                 if (this.cbUseExisting.Checked)
                     if (this._bmpFirstStrokes == null)
                     {
-                        bmp = new Bitmap(this.helplineRulerCtrl1.Bmp);
+                        bmp = (Bitmap)this.helplineRulerCtrl1.Bmp.Clone();
                         this.SetBitmap(ref this._bmpFirstStrokes, ref bmp);
                     }
                     else
-                        bmp = new Bitmap(this._bmpFirstStrokes);
+                        bmp = (Bitmap)this._bmpFirstStrokes.Clone();
                 else
                 {
-                    bmp = new Bitmap(this.helplineRulerCtrl1.Bmp);
+                    bmp = (Bitmap)this.helplineRulerCtrl1.Bmp.Clone();
                     this.SetBitmap(ref this._bmpFirstStrokes, ref bmp);
                 }
 
@@ -1987,7 +1987,7 @@ namespace AvoidAGrabCutEasy
 
                 if (this.helplineRulerCtrl1.Bmp != null)
                 {
-                    Bitmap bmp = new Bitmap(this.helplineRulerCtrl1.Bmp);
+                    Bitmap bmp = (Bitmap)this.helplineRulerCtrl1.Bmp.Clone();
                     this.backgroundWorker3.RunWorkerAsync(new object[] { bmp, krnl, maxVal });
                 }
             }
@@ -2189,7 +2189,7 @@ namespace AvoidAGrabCutEasy
         {
             if (e.Argument != null && this.helplineRulerCtrl1.Bmp != null)
             {
-                Bitmap bmp = new Bitmap(this.helplineRulerCtrl1.Bmp);
+                Bitmap bmp = (Bitmap)this.helplineRulerCtrl1.Bmp.Clone();
 
                 object[] o = (object[])e.Argument;
 
@@ -2279,7 +2279,7 @@ namespace AvoidAGrabCutEasy
                 this.toolStripProgressBar1.Value = 0;
                 this.toolStripProgressBar1.Visible = true;
 
-                Bitmap? bWork = new Bitmap(this.helplineRulerCtrl1.Bmp);
+                Bitmap? bWork = (Bitmap)this.helplineRulerCtrl1.Bmp.Clone();
                 int dir = 0;
                 if (this.rbR.Checked)
                     dir = 1;
@@ -2478,7 +2478,7 @@ namespace AvoidAGrabCutEasy
 
                     if (bmp != null)
                     {
-                        Bitmap b = new Bitmap(bmp);
+                        Bitmap b = (Bitmap)bmp.Clone();
 
                         this.SetBitmap(this.helplineRulerCtrl1.Bmp, b, this.helplineRulerCtrl1, "Bmp");
 

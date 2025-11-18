@@ -65,7 +65,7 @@ namespace AvoidAGrabCutEasy
             if (File.Exists(fi.FullName))
             {
                 using (Image? img = Image.FromFile(fi.FullName))
-                    bmp = new Bitmap(img);
+                    bmp = (Bitmap)img.Clone();
 
                 this.SetBitmap(this.helplineRulerCtrl1.Bmp, bmp, this.helplineRulerCtrl1, "Bmp");
 

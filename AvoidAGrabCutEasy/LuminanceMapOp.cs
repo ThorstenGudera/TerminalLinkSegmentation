@@ -34,7 +34,7 @@ namespace AvoidAGrabCutEasy
                 {
                     this.Running = true;
                     float[,]? result = new float[bmp.Width, bmp.Height];
-                    using Bitmap b = new Bitmap(bmp);
+                    using Bitmap b = (Bitmap)bmp.Clone();
 
                     //1 blur
                     int krnl = 127;
@@ -87,8 +87,8 @@ namespace AvoidAGrabCutEasy
                         {
                             Grayscale(b);
 
-                            using Bitmap bCopy1 = new Bitmap(b);
-                            using Bitmap bCopy2 = new Bitmap(b);
+                            using Bitmap bCopy1 = (Bitmap)b.Clone();
+                            using Bitmap bCopy2 = (Bitmap)b.Clone();
 
                             MorphologicalProcessing2.IMorphologicalOperation alg = new MorphologicalProcessing2.Algorithms.Dilate();
                             alg.BGW = null;
@@ -108,77 +108,80 @@ namespace AvoidAGrabCutEasy
                             iG = bOut;
                         }
 
-                        //now get the components and fill the inner parts of the components white,
-                        //so these pixels will not be removed from the result.
-                        using Bitmap iGC = new Bitmap(iG ?? throw new ArgumentNullException("iG is null"));
-                        Grayscale(iGC);
-                        Fipbmp fip = new Fipbmp();
-                        fip.ReplaceColors(iGC, 0, 0, 0, 0, Tolerance, 255, 0, 0, 0);
-
-                        List<ChainCode>? c = GetBoundary(iGC, 0, false);
-                        if (c != null)
+                        if (iG != null)
                         {
-                            c = c.OrderByDescending(x => x.Coord.Count).ToList();
+                            //now get the components and fill the inner parts of the components white,
+                            //so these pixels will not be removed from the result.
+                            using Bitmap iGC = (Bitmap)iG.Clone();
+                            Grayscale(iGC);
+                            Fipbmp fip = new Fipbmp();
+                            fip.ReplaceColors(iGC, 0, 0, 0, 0, Tolerance, 255, 0, 0, 0);
 
-                            foreach (ChainCode cc in c)
+                            List<ChainCode>? c = GetBoundary(iGC, 0, false);
+                            if (c != null)
                             {
-                                if (!ChainFinder.IsInnerOutline(cc))
+                                c = c.OrderByDescending(x => x.Coord.Count).ToList();
+
+                                foreach (ChainCode cc in c)
                                 {
-                                    using Graphics gx = Graphics.FromImage(iG);
-                                    using GraphicsPath gP = new GraphicsPath();
-                                    gP.AddLines(cc.Coord.Select(a => new PointF(a.X, a.Y)).ToArray());
-                                    gP.FillMode = FillMode.Winding;
-                                    gx.FillPath(Brushes.White, gP);
-                                }
-                                else
-                                {
-                                    if (this.ProcInnerOutlines)
+                                    if (!ChainFinder.IsInnerOutline(cc))
                                     {
                                         using Graphics gx = Graphics.FromImage(iG);
-                                        using (GraphicsPath gP = new GraphicsPath())
+                                        using GraphicsPath gP = new GraphicsPath();
+                                        gP.AddLines(cc.Coord.Select(a => new PointF(a.X, a.Y)).ToArray());
+                                        gP.FillMode = FillMode.Winding;
+                                        gx.FillPath(Brushes.White, gP);
+                                    }
+                                    else
+                                    {
+                                        if (this.ProcInnerOutlines)
                                         {
-                                            try
+                                            using Graphics gx = Graphics.FromImage(iG);
+                                            using (GraphicsPath gP = new GraphicsPath())
                                             {
-                                                gP.AddLines(cc.Coord.Select(a => new PointF(a.X, a.Y)).ToArray());
+                                                try
+                                                {
+                                                    gP.AddLines(cc.Coord.Select(a => new PointF(a.X, a.Y)).ToArray());
 
-                                                if (this.SetInnerTransp)
-                                                {
-                                                    gx.CompositingMode = CompositingMode.SourceCopy;
-                                                    gx.FillPath(Brushes.Transparent, gP);
+                                                    if (this.SetInnerTransp)
+                                                    {
+                                                        gx.CompositingMode = CompositingMode.SourceCopy;
+                                                        gx.FillPath(Brushes.Transparent, gP);
+                                                    }
+                                                    else
+                                                    {
+                                                        using Bitmap bC = (Bitmap)iG.Clone();
+                                                        using TextureBrush tb = new TextureBrush(bC);
+                                                        gx.FillPath(tb, gP);
+                                                    }
                                                 }
-                                                else
+                                                catch (Exception exc)
                                                 {
-                                                    using Bitmap bC = new Bitmap(iG);
-                                                    using TextureBrush tb = new TextureBrush(bC);
-                                                    gx.FillPath(tb, gP);
+                                                    Console.WriteLine(exc.ToString());
                                                 }
-                                            }
-                                            catch (Exception exc)
-                                            {
-                                                Console.WriteLine(exc.ToString());
                                             }
                                         }
                                     }
                                 }
                             }
-                        }
 
-                        if (this.ShowBitmap)
-                        {
-                            Form fff = new Form();
-                            fff.BackgroundImage = iG;
-                            fff.BackgroundImageLayout = ImageLayout.Zoom;
-                            fff.ShowDialog();
-                            fff.BringToFront();
-                        }
+                            if (this.ShowBitmap)
+                            {
+                                Form fff = new Form();
+                                fff.BackgroundImage = iG;
+                                fff.BackgroundImageLayout = ImageLayout.Zoom;
+                                fff.ShowDialog();
+                                fff.BringToFront();
+                            }
 
-                        if (!this.Running)
-                        {
-                            if (b != null)
-                                b.Dispose();
-                            if (iG != null)
-                                iG.Dispose();
-                            return null;
+                            if (!this.Running)
+                            {
+                                if (b != null)
+                                    b.Dispose();
+                                if (iG != null)
+                                    iG.Dispose();
+                                return null;
+                            }
                         }
 
                         if (iG != null && AvailMem.AvailMem.checkAvailRam(bmp.Width * bmp.Height * 12L))
@@ -246,7 +249,7 @@ namespace AvoidAGrabCutEasy
         {
             float[,] result = new float[bmp.Width, bmp.Height];
             {
-                using (Bitmap b = new Bitmap(bmp))
+                using (Bitmap b = (Bitmap)bmp.Clone())
                 {
                     //1 blur
                     int krnl = 127;
@@ -294,8 +297,8 @@ namespace AvoidAGrabCutEasy
                             {
                                 Grayscale(b);
 
-                                using (Bitmap bCopy1 = new Bitmap(b))
-                                using (Bitmap bCopy2 = new Bitmap(b))
+                                using (Bitmap bCopy1 = (Bitmap)b.Clone())
+                                using (Bitmap bCopy2 = (Bitmap)b.Clone())
                                 {
                                     MorphologicalProcessing2.IMorphologicalOperation alg = new MorphologicalProcessing2.Algorithms.Dilate();
                                     alg.BGW = null;
@@ -316,68 +319,71 @@ namespace AvoidAGrabCutEasy
                                 }
                             }
 
-                            //now get the components and fill the inner parts of the components white,
-                            //so these pixels will not be removed from the result.
-                            using Bitmap iGC = new Bitmap(iG ?? throw new ArgumentNullException("iG is null"));
-                            Grayscale(iGC);
-                            Fipbmp fip = new Fipbmp();
-                            fip.ReplaceColors(iGC, 0, 0, 0, 0, Tolerance, 255, 0, 0, 0);
-
-                            List<ChainCode>? c = GetBoundary(iGC, 0, false);
-                            if (c != null)
+                            if (iG != null)
                             {
-                                c = c.OrderByDescending(x => x.Coord.Count).ToList();
+                                //now get the components and fill the inner parts of the components white,
+                                //so these pixels will not be removed from the result.
+                                using Bitmap iGC = (Bitmap)iG.Clone();
+                                Grayscale(iGC);
+                                Fipbmp fip = new Fipbmp();
+                                fip.ReplaceColors(iGC, 0, 0, 0, 0, Tolerance, 255, 0, 0, 0);
 
-                                foreach (ChainCode cc in c)
+                                List<ChainCode>? c = GetBoundary(iGC, 0, false);
+                                if (c != null)
                                 {
-                                    if (!ChainFinder.IsInnerOutline(cc))
+                                    c = c.OrderByDescending(x => x.Coord.Count).ToList();
+
+                                    foreach (ChainCode cc in c)
                                     {
-                                        using Graphics gx = Graphics.FromImage(iG);
-                                        using GraphicsPath gP = new GraphicsPath();
-                                        gP.AddLines(cc.Coord.Select(a => new PointF(a.X, a.Y)).ToArray());
-                                        gP.FillMode = FillMode.Winding;
-                                        gx.FillPath(Brushes.White, gP);
-                                    }
-                                    else
-                                    {
-                                        if (this.ProcInnerOutlines)
+                                        if (!ChainFinder.IsInnerOutline(cc))
                                         {
                                             using Graphics gx = Graphics.FromImage(iG);
-                                            using (GraphicsPath gP = new GraphicsPath())
+                                            using GraphicsPath gP = new GraphicsPath();
+                                            gP.AddLines(cc.Coord.Select(a => new PointF(a.X, a.Y)).ToArray());
+                                            gP.FillMode = FillMode.Winding;
+                                            gx.FillPath(Brushes.White, gP);
+                                        }
+                                        else
+                                        {
+                                            if (this.ProcInnerOutlines)
                                             {
-                                                try
+                                                using Graphics gx = Graphics.FromImage(iG);
+                                                using (GraphicsPath gP = new GraphicsPath())
                                                 {
-                                                    gP.AddLines(cc.Coord.Select(a => new PointF(a.X, a.Y)).ToArray());
+                                                    try
+                                                    {
+                                                        gP.AddLines(cc.Coord.Select(a => new PointF(a.X, a.Y)).ToArray());
 
-                                                    if (this.SetInnerTransp)
-                                                    {
-                                                        gx.CompositingMode = CompositingMode.SourceCopy;
-                                                        gx.FillPath(Brushes.Transparent, gP);
+                                                        if (this.SetInnerTransp)
+                                                        {
+                                                            gx.CompositingMode = CompositingMode.SourceCopy;
+                                                            gx.FillPath(Brushes.Transparent, gP);
+                                                        }
+                                                        else
+                                                        {
+                                                            using Bitmap bC = (Bitmap)iG.Clone();
+                                                            using TextureBrush tb = new TextureBrush(bC);
+                                                            gx.FillPath(tb, gP);
+                                                        }
                                                     }
-                                                    else
+                                                    catch (Exception exc)
                                                     {
-                                                        using Bitmap bC = new Bitmap(iG);
-                                                        using TextureBrush tb = new TextureBrush(bC);
-                                                        gx.FillPath(tb, gP);
+                                                        Console.WriteLine(exc.ToString());
                                                     }
-                                                }
-                                                catch (Exception exc)
-                                                {
-                                                    Console.WriteLine(exc.ToString());
                                                 }
                                             }
                                         }
                                     }
                                 }
-                            }
 
-                            if (this.ShowBitmap)
-                            {
-                                Form fff = new Form();
-                                fff.BackgroundImage = iG;
-                                fff.BackgroundImageLayout = ImageLayout.Zoom;
-                                fff.ShowDialog();
-                                fff.BringToFront();
+                                if (this.ShowBitmap)
+                                {
+                                    Form fff = new Form();
+                                    fff.BackgroundImage = iG;
+                                    fff.BackgroundImageLayout = ImageLayout.Zoom;
+                                    fff.ShowDialog();
+                                    fff.BringToFront();
+                                }
                             }
 
                             if (iG != null && AvailMem.AvailMem.checkAvailRam(bmp.Width * bmp.Height * 12L))
@@ -549,7 +555,7 @@ namespace AvoidAGrabCutEasy
                 try
                 {
                     if (AvailMem.AvailMem.checkAvailRam(upperImg.Width * upperImg.Height * 4L))
-                        bmpTmp = new Bitmap(upperImg);
+                        bmpTmp = (Bitmap)upperImg.Clone();
                     else
                         throw new Exception("Not enough memory.");
                     int nWidth = bmpTmp.Width;

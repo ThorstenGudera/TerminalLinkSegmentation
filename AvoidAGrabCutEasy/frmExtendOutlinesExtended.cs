@@ -514,7 +514,7 @@ namespace AvoidAGrabCutEasy
 
                             SetControls(false);
 
-                            Bitmap bmp = new Bitmap(this.helplineRulerCtrl1.Bmp);
+                            Bitmap bmp = (Bitmap)this.helplineRulerCtrl1.Bmp.Clone();
                             int mOpacity = (int)0; //this.numChainTolerance.Value;
 
                             this.backgroundWorker2.RunWorkerAsync(new object[] { bmp, mOpacity });
@@ -555,7 +555,7 @@ namespace AvoidAGrabCutEasy
 
                             SetControls(false);
 
-                            Bitmap bmp = new Bitmap(this.helplineRulerCtrl1.Bmp);
+                            Bitmap bmp = (Bitmap)this.helplineRulerCtrl1.Bmp.Clone();
                             int mOpacity = (int)0; //this.numChainTolerance.Value;
 
                             this.backgroundWorker2.RunWorkerAsync(new object[] { bmp, mOpacity });
@@ -660,7 +660,7 @@ namespace AvoidAGrabCutEasy
 
                     SetControls(false);
 
-                    Bitmap bmp = new Bitmap(this.helplineRulerCtrl1.Bmp);
+                    Bitmap bmp = (Bitmap)this.helplineRulerCtrl1.Bmp.Clone();
                     int mOpacity = (int)0; //this.numChainTolerance.Value;
 
                     this.backgroundWorker2.RunWorkerAsync(new object[] { bmp, mOpacity });
@@ -805,7 +805,7 @@ namespace AvoidAGrabCutEasy
             try
             {
                 if (AvailMem.AvailMem.checkAvailRam(upperImg.Width * upperImg.Height * 4L))
-                    bmpTmp = new Bitmap(upperImg);
+                    bmpTmp = (Bitmap)upperImg.Clone();
                 else
                     throw new Exception("Not enough memory.");
                 int nWidth = bmpTmp.Width;
@@ -869,7 +869,7 @@ namespace AvoidAGrabCutEasy
                 for (int i = 0; i < this.checkedListBox1.CheckedItems.Count; i++)
                     l.Add(this.checkedListBox1.CheckedIndices[i]);
 
-                Bitmap bWork = new Bitmap(this.helplineRulerCtrl1.Bmp);
+                Bitmap bWork = (Bitmap)this.helplineRulerCtrl1.Bmp.Clone();
 
                 int r = (int)this.numJRem1.Value;
                 int ext = (int)this.numJRem2.Value;
@@ -1162,7 +1162,7 @@ namespace AvoidAGrabCutEasy
 
                     SetControls(false);
 
-                    Bitmap bmp = new Bitmap(this.helplineRulerCtrl1.Bmp);
+                    Bitmap bmp = (Bitmap)this.helplineRulerCtrl1.Bmp.Clone();
                     int mOpacity = (int)0; //this.numChainTolerance.Value;
 
                     this.backgroundWorker2.RunWorkerAsync(new object[] { bmp, mOpacity });

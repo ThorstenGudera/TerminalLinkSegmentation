@@ -659,7 +659,7 @@ namespace AvoidAGrabCutEasy
         {
             if (this.helplineRulerCtrl1.Bmp != null)
             {
-                using Bitmap b = new Bitmap(this.helplineRulerCtrl1.Bmp);
+                using Bitmap b = (Bitmap)this.helplineRulerCtrl1.Bmp.Clone();
                 int w = b.Width;
                 int h = b.Height;
                 BitmapData bmD = b.LockBits(new Rectangle(0, 0, w, h), ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
@@ -2106,7 +2106,7 @@ namespace AvoidAGrabCutEasy
                     bool skipInit = !(rectMode || scribbleMode);
                     bool workOnPaths = !(rectMode || scribbleMode) && this.cbDraw.Checked;
                     int wh = (int)this.numWH.Value;
-                    Bitmap bWork = new Bitmap(this.helplineRulerCtrl1.Bmp);
+                    Bitmap bWork = (Bitmap)this.helplineRulerCtrl1.Bmp.Clone();
                     bool gammaChanged = gamma - this._oldGamma != 0;
                     gammaChanged |= xi - this._oldXi != 0;
                     this._oldGamma = gamma;
@@ -2236,7 +2236,7 @@ namespace AvoidAGrabCutEasy
                 if (resPic > 1)
                 {
                     Bitmap? bOld = bWork;
-                    bU2 = new Bitmap(bWork);
+                    bU2 = (Bitmap)bWork.Clone();
                     bWork = ResampleDown(bWork, ref r, ref clipRect, resPic, scribbleMode, rectMode);
                     if (bOld != null)
                     {
@@ -2246,13 +2246,13 @@ namespace AvoidAGrabCutEasy
                 }
 
                 //do a check to ensure a correct initialisation of the GC_OP
-                Bitmap bTmp = new Bitmap(bWork);
+                Bitmap bTmp = (Bitmap)bWork.Clone();
                 if (r.Width == 0 && r.Height == 0)
                 {
                     this.Invoke(new Action(() => { MessageBox.Show("No Image passed to function. Cancelled operation."); }));
                     if (bU2 != null)
                         bU2.Dispose();
-                    e.Result = new Bitmap(bTmp);
+                    e.Result = (Bitmap)bTmp.Clone();
                     return;
                 }
 
@@ -2317,23 +2317,23 @@ namespace AvoidAGrabCutEasy
                         {
                             case -1:
                                 this.Invoke(new Action(() => { MessageBox.Show("No BGPixels found. Cancelled operation."); }));
-                                e.Result = new Bitmap(bTmp);
+                                e.Result = (Bitmap)bTmp.Clone();
                                 return;
                             case -2:
                                 this.Invoke(new Action(() => { MessageBox.Show("No FGPixels found. Cancelled operation."); }));
-                                e.Result = new Bitmap(bTmp);
+                                e.Result = (Bitmap)bTmp.Clone();
                                 return;
                             case -3:
                                 this.Invoke(new Action(() => { MessageBox.Show("No Image passed to function. Cancelled operation."); }));
-                                e.Result = new Bitmap(bTmp);
+                                e.Result = (Bitmap)bTmp.Clone();
                                 return;
                             case -4:
                                 this.Invoke(new Action(() => { MessageBox.Show("Operation cancelled."); }));
-                                e.Result = new Bitmap(bTmp);
+                                e.Result = (Bitmap)bTmp.Clone();
                                 return;
                             case -5:
                                 this.Invoke(new Action(() => { MessageBox.Show("Mask is null. Cancelled operation."); }));
-                                e.Result = new Bitmap(bTmp);
+                                e.Result = (Bitmap)bTmp.Clone();
                                 return;
                         }
                     }
@@ -2424,7 +2424,7 @@ namespace AvoidAGrabCutEasy
                             }));
                             LuminanceMapOp lop = new LuminanceMapOp();
                             lop.ProgressPlus += lop_ProgressPlus;
-                            using Bitmap bmp = new Bitmap(this._bmpBU);
+                            using Bitmap bmp = (Bitmap)this._bmpBU.Clone();
 
                             float[,]? lMap = null;
 
@@ -2464,37 +2464,37 @@ namespace AvoidAGrabCutEasy
                     {
                         case -1:
                             this.Invoke(new Action(() => { MessageBox.Show("Arrays-Length, or Graph-Length failed test. Cancelled operation."); }));
-                            e.Result = new Bitmap(bTmp);
+                            e.Result = (Bitmap)bTmp.Clone();
                             return;
 
                         case -25:
                             this.Invoke(new Action(() => { MessageBox.Show("Graph-Construction failed. Maybe the threshold is too big. Cancelled operation."); }));
-                            e.Result = new Bitmap(bTmp);
+                            e.Result = (Bitmap)bTmp.Clone();
                             return;
 
                         case 100:
                             this.Invoke(new Action(() => { MessageBox.Show("Bmp_width or Bmp_height = 0. Cancelled operation."); }));
-                            e.Result = new Bitmap(bTmp);
+                            e.Result = (Bitmap)bTmp.Clone();
                             return;
 
                         case 101:
                             this.Invoke(new Action(() => { MessageBox.Show("Operation cancelled."); }));
-                            e.Result = new Bitmap(bTmp);
+                            e.Result = (Bitmap)bTmp.Clone();
                             return;
 
                         case 102:
                             this.Invoke(new Action(() => { MessageBox.Show("At least one GMM is null. Cancelled operation."); }));
-                            e.Result = new Bitmap(bTmp);
+                            e.Result = (Bitmap)bTmp.Clone();
                             return;
 
                         case 103:
                             this.Invoke(new Action(() => { MessageBox.Show("This Mode only makes sense with RectMode."); }));
-                            e.Result = new Bitmap(bTmp);
+                            e.Result = (Bitmap)bTmp.Clone();
                             return;
 
                         case 104:
                             this.Invoke(new Action(() => { MessageBox.Show("This Mode only makes sense with ScribbleMode."); }));
-                            e.Result = new Bitmap(bTmp);
+                            e.Result = (Bitmap)bTmp.Clone();
                             return;
                     }
                 }
@@ -2591,8 +2591,8 @@ namespace AvoidAGrabCutEasy
                 bRes.UnlockBits(bmData);
 
                 //now do some analysis of the result, to be able to redraw the resultpic with a different set of components
-                Bitmap bResCopy = new Bitmap(bRes);
-                Bitmap bCTransp = new Bitmap(bRes);
+                Bitmap bResCopy = (Bitmap)bRes.Clone();
+                Bitmap bCTransp = (Bitmap)bRes.Clone();
 
                 //BU of the original result
                 this.SetBitmap(ref this._bResCopy, ref bResCopy);
@@ -2798,7 +2798,7 @@ namespace AvoidAGrabCutEasy
 
                 this.SetBitmap(this.helplineRulerCtrl2.Bmp, b, this.helplineRulerCtrl2, "Bmp");
 
-                Bitmap bC = new Bitmap(this.helplineRulerCtrl2.Bmp);
+                Bitmap bC = (Bitmap)this.helplineRulerCtrl2.Bmp.Clone();
                 this.SetBitmap(ref this._b4Copy, ref bC);
                 this.toolStripDropDownButton1.Enabled = true;
 
@@ -3165,7 +3165,7 @@ namespace AvoidAGrabCutEasy
             {
                 if (upperImg != null)
                     if (AvailMem.AvailMem.checkAvailRam(upperImg.Width * upperImg.Height * 4L))
-                        bmpTmp = new Bitmap(upperImg);
+                        bmpTmp = (Bitmap)upperImg.Clone();
                     else
                         throw new Exception("Not enough memory.");
                 if (bmpTmp != null)
@@ -3396,8 +3396,8 @@ namespace AvoidAGrabCutEasy
             if (this.helplineRulerCtrl1.Bmp != null && this._allChains != null)
             {
                 Bitmap bOut = new Bitmap(this.helplineRulerCtrl1.Bmp.Width, this.helplineRulerCtrl1.Bmp.Height);
-                Bitmap bC = new Bitmap(bOut);
-                Bitmap bCT = new Bitmap(bOut);
+                Bitmap bC = (Bitmap)bOut.Clone();
+                Bitmap bCT = (Bitmap)bOut.Clone();
 
                 this.SetControls(false);
                 this.Refresh();
@@ -3641,7 +3641,7 @@ namespace AvoidAGrabCutEasy
                     bool skipInit = !(rectMode || scribbleMode);
                     bool workOnPaths = !(rectMode || scribbleMode) && this.cbDraw.Checked;
                     int wh = (int)this.numWH.Value;
-                    Bitmap bWork = new Bitmap(this.helplineRulerCtrl1.Bmp);
+                    Bitmap bWork = (Bitmap)this.helplineRulerCtrl1.Bmp.Clone();
                     bool gammaChanged = gamma - this._oldGamma != 0;
                     gammaChanged |= xi - this._oldXi != 0;
                     this._oldGamma = gamma;
@@ -3766,7 +3766,7 @@ namespace AvoidAGrabCutEasy
                 if (resPic > 1)
                 {
                     Bitmap? bOld = bWork;
-                    bU2 = new Bitmap(bWork);
+                    bU2 = (Bitmap)bWork.Clone();
                     bWork = ResampleDown(bWork, ref r, ref clipRect, resPic, scribbleMode, rectMode);
                     if (bOld != null)
                     {
@@ -3775,13 +3775,13 @@ namespace AvoidAGrabCutEasy
                     }
                 }
 
-                Bitmap bTmp = new Bitmap(bWork);
+                Bitmap bTmp = (Bitmap)bWork.Clone();
                 if (r.Width == 0 && r.Height == 0)
                 {
                     this.Invoke(new Action(() => { MessageBox.Show("No Image passed to function. Cancelled operation."); }));
                     if (bU2 != null)
                         bU2.Dispose();
-                    e.Result = new Bitmap(bTmp);
+                    e.Result = (Bitmap)bTmp.Clone();
                     return;
                 }
 
@@ -3841,23 +3841,23 @@ namespace AvoidAGrabCutEasy
                         {
                             case -1:
                                 this.Invoke(new Action(() => { MessageBox.Show("No BGPixels found. Cancelled operation."); }));
-                                e.Result = new Bitmap(bTmp);
+                                e.Result = (Bitmap)bTmp.Clone();
                                 return;
                             case -2:
                                 this.Invoke(new Action(() => { MessageBox.Show("No FGPixels found. Cancelled operation."); }));
-                                e.Result = new Bitmap(bTmp);
+                                e.Result = (Bitmap)bTmp.Clone();
                                 return;
                             case -3:
                                 this.Invoke(new Action(() => { MessageBox.Show("No Image passed to function. Cancelled operation."); }));
-                                e.Result = new Bitmap(bTmp);
+                                e.Result = (Bitmap)bTmp.Clone();
                                 return;
                             case -4:
                                 this.Invoke(new Action(() => { MessageBox.Show("Operation cancelled."); }));
-                                e.Result = new Bitmap(bTmp);
+                                e.Result = (Bitmap)bTmp.Clone();
                                 return;
                             case -5:
                                 this.Invoke(new Action(() => { MessageBox.Show("Mask is null. Cancelled operation."); }));
-                                e.Result = new Bitmap(bTmp);
+                                e.Result = (Bitmap)bTmp.Clone();
                                 return;
                         }
                     }
@@ -3928,37 +3928,37 @@ namespace AvoidAGrabCutEasy
                     {
                         case -1:
                             this.Invoke(new Action(() => { MessageBox.Show("Arrays-Length, or Graph-Length failed test. Cancelled operation."); }));
-                            e.Result = new Bitmap(bTmp);
+                            e.Result = (Bitmap)bTmp.Clone();
                             return;
 
                         case -25:
                             this.Invoke(new Action(() => { MessageBox.Show("Graph-Construction failed. Maybe the threshold is too big. Cancelled operation."); }));
-                            e.Result = new Bitmap(bTmp);
+                            e.Result = (Bitmap)bTmp.Clone();
                             return;
 
                         case 100:
                             this.Invoke(new Action(() => { MessageBox.Show("Bmp_width or Bmp_height = 0. Cancelled operation."); }));
-                            e.Result = new Bitmap(bTmp);
+                            e.Result = (Bitmap)bTmp.Clone();
                             return;
 
                         case 101:
                             this.Invoke(new Action(() => { MessageBox.Show("Operation cancelled."); }));
-                            e.Result = new Bitmap(bTmp);
+                            e.Result = (Bitmap)bTmp.Clone();
                             return;
 
                         case 102:
                             this.Invoke(new Action(() => { MessageBox.Show("At least one GMM is null. Cancelled operation."); }));
-                            e.Result = new Bitmap(bTmp);
+                            e.Result = (Bitmap)bTmp.Clone();
                             return;
 
                         case 103:
                             this.Invoke(new Action(() => { MessageBox.Show("This Mode only makes sense with RectMode."); }));
-                            e.Result = new Bitmap(bTmp);
+                            e.Result = (Bitmap)bTmp.Clone();
                             return;
 
                         case 104:
                             this.Invoke(new Action(() => { MessageBox.Show("This Mode only makes sense with ScribbleMode."); }));
-                            e.Result = new Bitmap(bTmp);
+                            e.Result = (Bitmap)bTmp.Clone();
                             return;
                     }
                 }
@@ -4048,8 +4048,8 @@ namespace AvoidAGrabCutEasy
                 bTmp.UnlockBits(bmWork);
                 bRes.UnlockBits(bmData);
 
-                Bitmap bResCopy = new Bitmap(bRes);
-                Bitmap bCTransp = new Bitmap(bRes);
+                Bitmap bResCopy = (Bitmap)bRes.Clone();
+                Bitmap bCTransp = (Bitmap)bRes.Clone();
 
                 this.SetBitmap(ref this._bResCopy, ref bResCopy);
 
@@ -4221,7 +4221,7 @@ namespace AvoidAGrabCutEasy
 
                 this.SetBitmap(this.helplineRulerCtrl2.Bmp, b, this.helplineRulerCtrl2, "Bmp");
 
-                Bitmap bC = new Bitmap(this.helplineRulerCtrl2.Bmp);
+                Bitmap bC = (Bitmap)this.helplineRulerCtrl2.Bmp.Clone();
                 this.SetBitmap(ref this._b4Copy, ref bC);
                 this.toolStripDropDownButton1.Enabled = true;
 
@@ -4515,7 +4515,7 @@ namespace AvoidAGrabCutEasy
             using (MemoryStream ms = new MemoryStream(bytes))
                 img = Image.FromStream(ms);
 
-            bmp = new Bitmap(img);
+            bmp = (Bitmap)img.Clone();
             img.Dispose();
             img = null;
             return bmp;
@@ -4735,8 +4735,8 @@ namespace AvoidAGrabCutEasy
                                         FileInfo fi = new FileInfo(Path.Combine(folder, d));
 
                                         using Image img = Image.FromFile(fi.FullName);
-                                        bmp = new Bitmap(img);
-                                        Bitmap bC = new Bitmap(img);
+                                        bmp = (Bitmap)img.Clone();
+                                        Bitmap bC = (Bitmap)img.Clone();
 
                                         this.SetBitmap(ref this._bmpBU, ref bC);
 
@@ -4777,7 +4777,7 @@ namespace AvoidAGrabCutEasy
                                     FileInfo fi = new FileInfo(Path.Combine(folder, d));
 
                                     using (Image img = Image.FromFile(fi.FullName))
-                                        bmp = new Bitmap(img);
+                                        bmp = (Bitmap)img.Clone();
 
                                     this.SetBitmap(this.helplineRulerCtrl2.Bmp, bmp, this.helplineRulerCtrl2, "Bmp");
 
@@ -4847,7 +4847,7 @@ namespace AvoidAGrabCutEasy
                     lMap = await lop.ComputeInvLuminanceMap(bmp2);
                 }
                 else
-                    using (Bitmap bmp = new Bitmap(this.helplineRulerCtrl1.Bmp))
+                    using (Bitmap bmp = (Bitmap)this.helplineRulerCtrl1.Bmp.Clone())
                         lMap = await lop.ComputeInvLuminanceMap(bmp);
 
                 this._iggLuminanceMap = lMap;
@@ -4867,7 +4867,7 @@ namespace AvoidAGrabCutEasy
                 if (this.CachePathAddition != null)
                 {
                     using (PseudoShadow.frmComposePseudoShadow frm =
-                        new PseudoShadow.frmComposePseudoShadow(new Bitmap(this.helplineRulerCtrl2.Bmp), this.cbSCF.Checked, this.CachePathAddition))
+                        new PseudoShadow.frmComposePseudoShadow((Bitmap)this.helplineRulerCtrl2.Bmp.Clone(), this.cbSCF.Checked, this.CachePathAddition))
                     {
                         frm.SetupCache();
                         if (_undoOPCache != null && _undoOPCache.Cache.IsActive)
@@ -5271,7 +5271,7 @@ namespace AvoidAGrabCutEasy
             {
                 //the idea is to get a rich derivative pic of hlc1.Bmp
                 //replace all black by transp and get the chains
-                using (Bitmap? b = new Bitmap(this.helplineRulerCtrl1.Bmp))
+                using (Bitmap? b = (Bitmap)this.helplineRulerCtrl1.Bmp.Clone())
                 {
                     using (frmChainCode frm = new frmChainCode(b, this.CachePathAddition))
                     {
@@ -5510,7 +5510,7 @@ namespace AvoidAGrabCutEasy
 
                             this.SetBitmap(this.helplineRulerCtrl2.Bmp, b, this.helplineRulerCtrl2, "Bmp");
 
-                            Bitmap bC = new Bitmap(this.helplineRulerCtrl2.Bmp);
+                            Bitmap bC = (Bitmap)this.helplineRulerCtrl2.Bmp.Clone();
                             this.SetBitmap(ref this._b4Copy, ref bC);
                             this.toolStripDropDownButton1.Enabled = true;
 
@@ -5693,7 +5693,7 @@ namespace AvoidAGrabCutEasy
 
                             this.SetBitmap(this.helplineRulerCtrl2.Bmp, b, this.helplineRulerCtrl2, "Bmp");
 
-                            Bitmap bC = new Bitmap(this.helplineRulerCtrl2.Bmp);
+                            Bitmap bC = (Bitmap)this.helplineRulerCtrl2.Bmp.Clone();
                             this.SetBitmap(ref this._b4Copy, ref bC);
                             this.toolStripDropDownButton1.Enabled = true;
 
@@ -5759,12 +5759,12 @@ namespace AvoidAGrabCutEasy
         {
             if (this.helplineRulerCtrl2.Bmp != null && this._bmpOrig != null)
             {
-                Bitmap bmp = new Bitmap(this._bmpOrig);
+                Bitmap bmp = (Bitmap)this._bmpOrig.Clone();
                 SetImageAlpha(bmp, this.helplineRulerCtrl2.Bmp);
 
                 this.SetBitmap(this.helplineRulerCtrl2.Bmp, bmp, this.helplineRulerCtrl2, "Bmp");
 
-                Bitmap bC = new Bitmap(this.helplineRulerCtrl2.Bmp);
+                Bitmap bC = (Bitmap)this.helplineRulerCtrl2.Bmp.Clone();
                 this.SetBitmap(ref this._b4Copy, ref bC);
                 this.toolStripDropDownButton1.Enabled = true;
 
@@ -5822,11 +5822,11 @@ namespace AvoidAGrabCutEasy
             if (!this.backgroundWorker4.IsBusy && this.helplineRulerCtrl1.Bmp != null && this._bmpBU != null)
             {
                 if (_frm == null)
-                    _frm = new frmPreBlurVals(new Bitmap(this._bmpBU));
+                    _frm = new frmPreBlurVals((Bitmap)this._bmpBU.Clone());
                 else
                 {
                     Image? iOld = _frm.pictureBox1.Image;
-                    _frm.pictureBox1.Image = new Bitmap(this._bmpBU);
+                    _frm.pictureBox1.Image = (Bitmap)this._bmpBU.Clone();
                     if (iOld != null && !iOld.Equals(this.helplineRulerCtrl1.Bmp))
                     {
                         iOld.Dispose();
@@ -5840,7 +5840,7 @@ namespace AvoidAGrabCutEasy
                 {
                     if (_frm.FBitmap != null && !_frm.ValsChanged)
                     {
-                        Bitmap bOrig = new Bitmap(this.helplineRulerCtrl1.Bmp);
+                        Bitmap bOrig = (Bitmap)this.helplineRulerCtrl1.Bmp.Clone();
                         this.SetBitmap(ref this._bmpOrig, ref bOrig);
 
                         this.SetBitmap(this.helplineRulerCtrl1.Bmp, _frm.FBitmap, this.helplineRulerCtrl1, "Bmp");
@@ -5906,7 +5906,7 @@ namespace AvoidAGrabCutEasy
         {
             if (e.Argument != null && this.helplineRulerCtrl1.Bmp != null && this._bmpBU != null)
             {
-                Bitmap bmp = new Bitmap(this._bmpBU);
+                Bitmap bmp = (Bitmap)this._bmpBU.Clone();
 
                 object[] o = (object[])e.Argument;
 
@@ -6017,10 +6017,10 @@ namespace AvoidAGrabCutEasy
 
                 if (bmp != null && this._bmpBU != null)
                 {
-                    Bitmap bOrig = new Bitmap(this._bmpBU);
+                    Bitmap bOrig = (Bitmap)this._bmpBU.Clone();
                     this.SetBitmap(ref this._bmpOrig, ref bOrig);
 
-                    Bitmap b = new Bitmap(this._bmpBU);
+                    Bitmap b = (Bitmap)this._bmpBU.Clone();
                     using Graphics gx = Graphics.FromImage(b);
 
                     ColorMatrix cm = new ColorMatrix();
@@ -6119,7 +6119,7 @@ namespace AvoidAGrabCutEasy
                     lMap = await lop.ComputeInvLuminanceMap(bmp2);
                 }
                 else
-                    using (Bitmap bmp = new Bitmap(this._bmpBU))
+                    using (Bitmap bmp = (Bitmap)this._bmpBU.Clone())
                         lMap = await lop.ComputeInvLuminanceMap(bmp);
 
                 this._iggLuminanceMap = lMap;
@@ -6193,7 +6193,7 @@ namespace AvoidAGrabCutEasy
                         {
                             if (frm.FBitmap != null && !frm.cbAppSettingsOnly.Checked)
                             {
-                                using (Bitmap bmp = new Bitmap(frm.FBitmap))
+                                using (Bitmap bmp = (Bitmap)frm.FBitmap.Clone())
                                     this._iggLuminanceMap2 = LuminanceMapOp.ComputeLuminanceMapFromPicSync(bmp);
 
                                 this.cbUseLumMapBasePic.Enabled = true;
@@ -6370,7 +6370,7 @@ namespace AvoidAGrabCutEasy
 
                             if (gP != null && gP.PointCount > 1)
                             {
-                                Bitmap bC2 = new Bitmap(b);
+                                Bitmap bC2 = (Bitmap)b.Clone();
                                 this.SetBitmap(this.helplineRulerCtrl1.Bmp, bC2, this.helplineRulerCtrl1, "Bmp");
                                 this.helplineRulerCtrl1.MakeBitmap(this.helplineRulerCtrl1.Bmp);
                                 this.helplineRulerCtrl1.dbPanel1.Invalidate();
@@ -6382,7 +6382,7 @@ namespace AvoidAGrabCutEasy
                                     this._undoOPCache.CurrentResetMarker = ja.Value;
                             }
 
-                            Bitmap? bC = new Bitmap(this.helplineRulerCtrl2.Bmp);
+                            Bitmap? bC = (Bitmap)this.helplineRulerCtrl2.Bmp.Clone();
                             this.SetBitmap(ref this._b4Copy, ref bC);
 
                             //Bitmap bC2 = new Bitmap(this.helplineRulerCtrl1.Bmp);
@@ -6410,7 +6410,7 @@ namespace AvoidAGrabCutEasy
 
                         if (frm.cbOutline.Checked && bCF != null)
                         {
-                            using (Bitmap bmp = new Bitmap(bCF))
+                            using (Bitmap bmp = (Bitmap)bCF.Clone())
                             {
                                 List<ChainCode>? c = GetBoundary(bmp, 0, false);
 
@@ -6673,7 +6673,7 @@ namespace AvoidAGrabCutEasy
             int w = bmp.Width;
             int h = bmp.Height;
 
-            Bitmap bRes = new Bitmap(bmp);
+            Bitmap bRes = (Bitmap)bmp.Clone();
             BitmapData bmD = bRes.LockBits(new Rectangle(0, 0, w, h), ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
             BitmapData bmR = b.LockBits(new Rectangle(0, 0, w, h), ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
             int stride = bmD.Stride;
@@ -6768,7 +6768,7 @@ namespace AvoidAGrabCutEasy
 
                         this.SetBitmap(this.helplineRulerCtrl2.Bmp, b, this.helplineRulerCtrl2, "Bmp");
 
-                        Bitmap bC = new Bitmap(this.helplineRulerCtrl2.Bmp);
+                        Bitmap bC = (Bitmap)this.helplineRulerCtrl2.Bmp.Clone();
                         this.SetBitmap(ref this._b4Copy, ref bC);
                         this.toolStripDropDownButton1.Enabled = true;
 
@@ -6807,7 +6807,7 @@ namespace AvoidAGrabCutEasy
                 Bitmap? bmp = null;
 
                 using (Image img = Image.FromFile(this.openFileDialog1.FileName))
-                    bmp = new Bitmap(img);
+                    bmp = (Bitmap)img.Clone();
 
                 this.SetBitmap(this.helplineRulerCtrl2.Bmp, bmp, this.helplineRulerCtrl2, "Bmp");
 
@@ -6996,7 +6996,7 @@ namespace AvoidAGrabCutEasy
         {
             if (this.cbOutline.Checked && this.helplineRulerCtrl2.Bmp != null)
             {
-                using Bitmap bmp = new Bitmap(this.helplineRulerCtrl2.Bmp);
+                using Bitmap bmp = (Bitmap)this.helplineRulerCtrl2.Bmp.Clone();
                 List<ChainCode>? c = GetBoundary(bmp, 0, false);
                 c = c?.OrderByDescending(x => x.Coord.Count).ToList();
 
@@ -7079,7 +7079,7 @@ namespace AvoidAGrabCutEasy
                 Bitmap? bmp = null;
 
                 using (Image img = Image.FromFile(this.openFileDialog1.FileName))
-                    bmp = new Bitmap(img);
+                    bmp = (Bitmap)img.Clone();
 
                 this.SetBitmap(this.helplineRulerCtrl1.Bmp, bmp, this.helplineRulerCtrl1, "Bmp");
 
@@ -7115,7 +7115,7 @@ namespace AvoidAGrabCutEasy
                 frm.SetupCache();
 
                 if (this.helplineRulerCtrl1.Bmp != null)
-                    frm.OrigBmp = new Bitmap(this.helplineRulerCtrl1.Bmp);
+                    frm.OrigBmp = (Bitmap)this.helplineRulerCtrl1.Bmp.Clone();
 
                 if (frm.ShowDialog() == DialogResult.OK)
                 {
@@ -7127,7 +7127,7 @@ namespace AvoidAGrabCutEasy
                     {
                         this.SetBitmap(this.helplineRulerCtrl2.Bmp, b, this.helplineRulerCtrl2, "Bmp");
 
-                        Bitmap bC = new Bitmap(this.helplineRulerCtrl2.Bmp);
+                        Bitmap bC = (Bitmap)this.helplineRulerCtrl2.Bmp.Clone();
                         this.SetBitmap(ref this._b4Copy, ref bC);
                         this.toolStripDropDownButton1.Enabled = true;
 
@@ -7206,7 +7206,7 @@ namespace AvoidAGrabCutEasy
                 if (gP != null)
                     gP.Transform(mx);
 
-                Bitmap b = new Bitmap(this.helplineRulerCtrl1.Bmp);
+                Bitmap b = (Bitmap)this.helplineRulerCtrl1.Bmp.Clone();
 
                 if (gP != null && gP.PointCount > 1)
                 {
@@ -7230,7 +7230,7 @@ namespace AvoidAGrabCutEasy
                     if (ja != null && this._undoOPCache != null)
                         this._undoOPCache.CurrentResetMarker = ja.Value;
 
-                    Bitmap? bC = new Bitmap(this.helplineRulerCtrl2.Bmp);
+                    Bitmap? bC = (Bitmap)this.helplineRulerCtrl2.Bmp.Clone();
                     this.SetBitmap(ref this._b4Copy, ref bC);
                 }
             }
@@ -7240,7 +7240,7 @@ namespace AvoidAGrabCutEasy
         {
             if (this.cbOutline.Checked && this.helplineRulerCtrl2.Bmp != null)
             {
-                using Bitmap bmp = new Bitmap(this.helplineRulerCtrl2.Bmp);
+                using Bitmap bmp = (Bitmap)this.helplineRulerCtrl2.Bmp.Clone();
                 List<ChainCode>? c = GetBoundary(bmp, 0, false);
                 c = c?.OrderByDescending(x => x.Coord.Count).ToList();
 
@@ -7271,7 +7271,7 @@ namespace AvoidAGrabCutEasy
                             }
                         else
                         {
-                            Bitmap? b = new Bitmap(bmp);
+                            Bitmap? b = (Bitmap)bmp.Clone();
                             AvoidAGrabCutEasy.ProcOutline.Fipbmp fip = new();
                             fip.SetWhite(b);
                             for (int i = 0; i > l; i--)
@@ -7304,7 +7304,7 @@ namespace AvoidAGrabCutEasy
         public unsafe void Dilate(Bitmap? bmp, int wh)
         {
             if (bmp != null)
-                using (Bitmap bC = new Bitmap(bmp))
+                using (Bitmap bC = (Bitmap)bmp.Clone())
                 {
                     int[,] krnl = GetKernel(wh);
 

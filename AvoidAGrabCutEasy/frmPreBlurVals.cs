@@ -44,7 +44,7 @@ namespace AvoidAGrabCutEasy
         {
             if (this.pictureBox1.Image != null)
             {
-                Bitmap b = new Bitmap(this.pictureBox1.Image);
+                Bitmap b = (Bitmap)this.pictureBox1.Image.Clone();
 
                 bool blur = this.cbBlur.Checked;
                 bool colors = this.cbColors.Checked;
@@ -187,7 +187,7 @@ namespace AvoidAGrabCutEasy
 
                 if (bmp != null)
                 {
-                    Bitmap bRef = new Bitmap(bmp);
+                    Bitmap bRef = (Bitmap)bmp.Clone();
                     Image? iOld = this.pictureBox2.Image;
                     this.pictureBox2.Image = bRef;
                     if (iOld != null)
@@ -246,7 +246,7 @@ namespace AvoidAGrabCutEasy
         private void btnOK_Click(object sender, EventArgs e)
         {
             if (this.pictureBox3.Image != null || (this.ValsChanged && this.pictureBox3.Image != null))
-                this._fBitmap = new Bitmap(this.pictureBox3.Image);
+                this._fBitmap = (Bitmap)this.pictureBox3.Image.Clone();
         }
 
         private void numIGGKernel_ValueChanged(object sender, EventArgs e)

@@ -37,8 +37,8 @@ namespace AvoidAGrabCutEasy.ProcOutline
 
         public BoundaryMattingOP(Bitmap b4Copy, Bitmap bmpOrig)
         {
-            BmpWork = new Bitmap(b4Copy);
-            BmpOrig = new Bitmap(bmpOrig);
+            BmpWork = (Bitmap)b4Copy.Clone();
+            BmpOrig = (Bitmap)bmpOrig.Clone();
         }
 
         public BoundaryMattingOP()
@@ -333,14 +333,14 @@ namespace AvoidAGrabCutEasy.ProcOutline
 
             if (this.BmpWork != null && this.BmpOrig != null)
             {
-                bOut = new Bitmap(this.BmpWork);
+                bOut = (Bitmap)this.BmpWork.Clone();
 
                 if (this._blendType == BlendType.Outwards && this._widthOutside > 0) //blend outwards
                 {
                     List<List<ChainCode>> newOutlines = new List<List<ChainCode>>();
 
                     //extend 1 px widthOutside times, get boundaries at each iteration
-                    using (Bitmap orig = new Bitmap(this.BmpOrig))
+                    using (Bitmap orig = (Bitmap)this.BmpOrig.Clone())
                     {
                         for (int o = 0; o < this._widthOutside; o++)
                         {
@@ -362,16 +362,16 @@ namespace AvoidAGrabCutEasy.ProcOutline
                     Bitmap? bDiff = null;
                     if (bOut != null)
                     {
-                        using (Bitmap bTmp = new Bitmap(bOut), bTmp2 = new Bitmap(this.BmpWork))
+                        using (Bitmap bTmp = (Bitmap)bOut.Clone(), bTmp2 = (Bitmap)this.BmpWork.Clone())
                             bDiff = Subtract(bTmp, bTmp2);
 
-                        using (Bitmap bmpBl = new Bitmap(this.BmpOrig))
+                        using (Bitmap bmpBl = (Bitmap)this.BmpOrig.Clone())
                         {
                             using (Graphics gx = Graphics.FromImage(bmpBl))
                                 gx.Clear(Color.Black);
 
                             //Bitmap to search in (all alpha vals not set in the following loops are 255)
-                            using (Bitmap bOutC = new Bitmap(this.BmpWork))
+                            using (Bitmap bOutC = (Bitmap)this.BmpWork.Clone())
                             using (Bitmap? bTmp = ExtOutline(bOutC, bmpBl, Math.Max(this._widthOutside, 0), this.BGW))
                             {
                                 if (bTmp != null)
@@ -960,7 +960,7 @@ namespace AvoidAGrabCutEasy.ProcOutline
                     for (int i = 0; i < alpha.Length; i++)
                         alpha[i] = this._kernelVector[lngth2 + i];
                     alpha = alpha.Reverse().ToArray();
-                    using (Bitmap bOut2 = new Bitmap(bOut))
+                    using (Bitmap bOut2 = (Bitmap)bOut.Clone())
                     {
                         Feather(bOut2, alpha);
 
@@ -987,7 +987,7 @@ namespace AvoidAGrabCutEasy.ProcOutline
                         List<List<ChainCode>> newOutlines = new List<List<ChainCode>>();
 
                         //extend 1 px widthOutside times, get boundaries at each iteration
-                        using (Bitmap orig = new Bitmap(this.BmpOrig))
+                        using (Bitmap orig = (Bitmap)this.BmpOrig.Clone())
                         {
                             for (int o = 0; o < this._widthOutside; o++)
                             {
@@ -1009,16 +1009,16 @@ namespace AvoidAGrabCutEasy.ProcOutline
                         Bitmap? bDiff = null;
                         if (bOut != null)
                         {
-                            using (Bitmap bTmp = new Bitmap(bOut), bTmp2 = new Bitmap(this.BmpWork))
+                            using (Bitmap bTmp = (Bitmap)bOut.Clone(), bTmp2 = (Bitmap)this.BmpWork.Clone())
                                 bDiff = Subtract(bTmp, bTmp2);
 
-                            using (Bitmap bmpBl = new Bitmap(this.BmpOrig))
+                            using (Bitmap bmpBl = (Bitmap)this.BmpOrig.Clone())
                             {
                                 using (Graphics gx = Graphics.FromImage(bmpBl))
                                     gx.Clear(Color.Black);
 
                                 //Bitmap to search in (all alpha vals not set in the following loops are 255)
-                                using (Bitmap bOutC = new Bitmap(this.BmpWork))
+                                using (Bitmap bOutC = (Bitmap)this.BmpWork.Clone())
                                 using (Bitmap? bTmp = ExtOutline(bOutC, bmpBl, Math.Max(this._widthOutside, 0), this.BGW))
                                 {
                                     if (bTmp != null)
@@ -1980,7 +1980,7 @@ namespace AvoidAGrabCutEasy.ProcOutline
             bTmp.UnlockBits(bmData);
             bTmp2.UnlockBits(bmData2);
 
-            return new Bitmap(bTmp);
+            return (Bitmap)bTmp.Clone();
         }
 
         private void Fip_ProgressPlus(object? sender, ConvolutionLib.ProgressEventArgs e)
@@ -2108,7 +2108,7 @@ namespace AvoidAGrabCutEasy.ProcOutline
                 try
                 {
                     if (AvailMem.AvailMem.checkAvailRam(upperImg.Width * upperImg.Height * 4L))
-                        bmpTmp = new Bitmap(upperImg);
+                        bmpTmp = (Bitmap)upperImg.Clone();
                     else
                         throw new Exception("Not enough memory.");
                     int nWidth = bmpTmp.Width;
@@ -2143,7 +2143,7 @@ namespace AvoidAGrabCutEasy.ProcOutline
                 try
                 {
                     if (AvailMem.AvailMem.checkAvailRam(upperImg.Width * upperImg.Height * 4L))
-                        bmpTmp = new Bitmap(upperImg);
+                        bmpTmp = (Bitmap)upperImg.Clone();
                     else
                         throw new Exception("Not enough memory.");
                     int nWidth = bmpTmp.Width;
@@ -2240,7 +2240,7 @@ namespace AvoidAGrabCutEasy.ProcOutline
                 PointF[,] normalField = new PointF[fg.Width, fg.Height];
 
                 //prepare outer parts
-                Bitmap? fgC = new Bitmap(fg);
+                Bitmap? fgC = (Bitmap)fg.Clone();
                 for (int i = 0; i < distO + 1; i++) //get a one pixel wide boundary around all drawn parts, therefore distO + 1
                 {
                     Bitmap? bTmp4 = ExtOutline(fgC, bOrig, 1, bgw);
@@ -2308,7 +2308,7 @@ namespace AvoidAGrabCutEasy.ProcOutline
                 }
 
                 //prepare inner parts
-                fgC = new Bitmap(fg);
+                fgC = (Bitmap)fg.Clone();
                 for (int i = 0; i < distI; i++)
                 {
                     Bitmap? bTmp4 = RemOutline(fgC, 1, bgw);
@@ -2596,7 +2596,7 @@ namespace AvoidAGrabCutEasy.ProcOutline
                 //fff.BackgroundImageLayout = ImageLayout.Zoom;
                 //fff.ShowDialog();
 
-                Bitmap bRes = new Bitmap(fg);
+                Bitmap bRes = (Bitmap)fg.Clone();
 
                 fg.Dispose();
                 bOrig.Dispose();

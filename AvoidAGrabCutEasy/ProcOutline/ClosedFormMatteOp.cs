@@ -612,7 +612,7 @@ namespace GetAlphaMatte
         public unsafe void Dilate(Bitmap? bmp, int wh)
         {
             if (bmp != null)
-                using (Bitmap bC = new Bitmap(bmp))
+                using (Bitmap bC = (Bitmap)bmp.Clone())
                 {
                     int[,] krnl = GetKernel(wh);
 

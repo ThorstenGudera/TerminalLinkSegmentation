@@ -51,7 +51,7 @@ namespace AvoidAGrabCutEasy
 
             if (AvailMem.AvailMem.checkAvailRam(bmp.Width * bmp.Height * 16L))
             {
-                this.helplineRulerCtrl2.Bmp = new Bitmap(bmp);
+                this.helplineRulerCtrl2.Bmp = (Bitmap)bmp.Clone();
                 this.helplineRulerCtrl1.Bmp = new Bitmap(bmp.Width, bmp.Height);
                 _bmpBU = (Bitmap)bmp.Clone();
             }
@@ -442,7 +442,7 @@ namespace AvoidAGrabCutEasy
         {
             if (this.helplineRulerCtrl2.Bmp != null && selectedIndex > -1 && this._bmpBU != null && this._allChains != null)
             {
-                Bitmap bOut = new Bitmap(this._bmpBU);
+                Bitmap bOut = (Bitmap)this._bmpBU.Clone();
                 using (TextureBrush tb = new TextureBrush(this._bmpBU))
                 {
                     ChainCode c = this._allChains[selectedIndex];
@@ -518,7 +518,7 @@ namespace AvoidAGrabCutEasy
         {
             if (this.helplineRulerCtrl1.Bmp != null && selectedIndex > -1 && this._bmpBU != null && this._allChains != null)
             {
-                Bitmap bOut = new Bitmap(this._bmpBU);
+                Bitmap bOut = (Bitmap)this._bmpBU.Clone();
                 using (TextureBrush tb = new TextureBrush(this._bmpBU))
                 {
                     ChainCode c = this._allChains[selectedIndex];
