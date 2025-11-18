@@ -369,7 +369,8 @@ namespace PseudoShadow
                 bOut = new Bitmap(this.luBitmapDesignerCtrl1.helplineRulerCtrl1.Bmp.Width, this.luBitmapDesignerCtrl1.helplineRulerCtrl1.Bmp.Height);
                 using (Graphics gx = Graphics.FromImage(bOut))
                     if (this.luBitmapDesignerCtrl1.ShapeList != null && this.luBitmapDesignerCtrl1.ShapeList.Count > 0)
-                        gx.DrawImage(this.luBitmapDesignerCtrl1.helplineRulerCtrl1.Bmp, 0, 0);
+                        gx.DrawImage(this.luBitmapDesignerCtrl1.helplineRulerCtrl1.Bmp, 0, 0,
+                            this.luBitmapDesignerCtrl1.helplineRulerCtrl1.Bmp.Width, this.luBitmapDesignerCtrl1.helplineRulerCtrl1.Bmp.Height);
 
                 if (this.luBitmapDesignerCtrl1.ShapeList != null && this.luBitmapDesignerCtrl1.ShapeList.Count > 1)
                 {
