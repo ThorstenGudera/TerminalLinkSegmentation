@@ -2803,7 +2803,7 @@ namespace QuickExtract2
                     using (Image img = Image.FromFile(this.openFileDialog1.FileName))
                     {
                         if (AvailMem.AvailMem.checkAvailRam(img.Width * img.Height * 4L))
-                            bmp = new Bitmap(img);
+                            bmp = (Bitmap)img.Clone();
                         else
                             throw new Exception();
                     }

@@ -32,7 +32,7 @@ namespace MorphologicalProcessing2.Algorithms
 
         public unsafe void ApplyGrayscale(Bitmap bmp)
         {
-            using (Bitmap bC = new Bitmap(bmp), bCur = new Bitmap(bmp))
+            using (Bitmap bC = (Bitmap)bmp.Clone(), bCur = (Bitmap)bmp.Clone())
             {
                 Rectangle rc = ScanForPicBW(bmp);
                 int l = rc.X;

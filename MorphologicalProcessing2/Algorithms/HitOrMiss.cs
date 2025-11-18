@@ -29,7 +29,7 @@ namespace MorphologicalProcessing2.Algorithms
 
         public unsafe void ApplyGrayscale(Bitmap bmp)
         {
-            using (Bitmap bC = new Bitmap(bmp))
+            using (Bitmap bC = (Bitmap)bmp.Clone())
             {
                 BitmapData bmSrc = bC.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height), ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
                 BitmapData bmData = bmp.LockBits(new Rectangle(0, 0, bC.Width, bC.Height), ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);

@@ -65,20 +65,20 @@ namespace PseudoShadow
                 {
                     //LoadSrcPic(cmbSrc?.Items[0]?.ToString());
                     this.cmbSrc.SelectedIndex = 0;
-                    this._bmpBU = new Bitmap(this.helplineRulerCtrl1.Bmp);
+                    this._bmpBU = (Bitmap)this.helplineRulerCtrl1.Bmp.Clone();
                 }
 
                 if (this._shapeList?.Count > 1)
                 {
                     //LoadDestPic(cmbDest?.Items[1]?.ToString());
                     this.cmbDest.SelectedIndex = 1;
-                    this._bmpBU2 = new Bitmap(this.helplineRulerCtrl2.Bmp);
+                    this._bmpBU2 = (Bitmap)this.helplineRulerCtrl2.Bmp.Clone();
                 }
                 else if (this._shapeList?.Count > 0)
                 {
                     //LoadDestPic(cmbDest?.Items[0]?.ToString());
                     this.cmbDest.SelectedIndex = 0;
-                    this._bmpBU2 = new Bitmap(this.helplineRulerCtrl2.Bmp);
+                    this._bmpBU2 = (Bitmap)this.helplineRulerCtrl2.Bmp.Clone();
                 }
 
                 if (this.helplineRulerCtrl1.Bmp != null)
@@ -213,7 +213,7 @@ namespace PseudoShadow
                     Bitmap? b = bs.Bmp;
                     if (b != null)
                     {
-                        Bitmap? bmp = new Bitmap(b);
+                        Bitmap? bmp = (Bitmap)b.Clone();
 
                         this.SetBitmap(this.helplineRulerCtrl1.Bmp, bmp, this.helplineRulerCtrl1, "Bmp");
 
@@ -261,7 +261,7 @@ namespace PseudoShadow
                     Bitmap? b = bs.Bmp;
                     if (b != null)
                     {
-                        Bitmap? bmp = new Bitmap(b);
+                        Bitmap? bmp = (Bitmap)b.Clone();
 
                         this.SetBitmap(this.helplineRulerCtrl2.Bmp, bmp, this.helplineRulerCtrl2, "Bmp");
 
@@ -604,7 +604,7 @@ namespace PseudoShadow
                 Color orgCol = this.lblDestCol.BackColor;
                 Color replCol = this.lblSrcCol.BackColor;
 
-                Bitmap b = new Bitmap(this.helplineRulerCtrl2.Bmp);
+                Bitmap b = (Bitmap)this.helplineRulerCtrl2.Bmp.Clone();
 
                 this.backgroundWorker1.RunWorkerAsync(new object[] { b, orgCol, replCol });
             }

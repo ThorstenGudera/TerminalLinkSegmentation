@@ -752,16 +752,20 @@ namespace QuickExtractingLib2
             {
                 var lOut = new List<PointF>();
                 var zz = y * this._bmpData.Width + x;
-                if (this.Edges[zz])
-                    lOut.Add(new PointF(x, y));
 
-                if (this.BackPointers != null)
-                    while (this.BackPointers[zz] > -1)
-                    {
-                        zz = (int)(this.BackPointers[zz] / 4.0);
-                        if (this.Edges[zz])
-                            lOut.Add(new PointF(zz % this._bmpData.Width, (int)(zz / this._bmpData.Width)));
-                    }
+                if (zz < this.Edges.Length)
+                {
+                    if (this.Edges[zz])
+                        lOut.Add(new PointF(x, y));
+
+                    if (this.BackPointers != null)
+                        while (this.BackPointers[zz] > -1)
+                        {
+                            zz = (int)(this.BackPointers[zz] / 4.0);
+                            if (this.Edges[zz])
+                                lOut.Add(new PointF(zz % this._bmpData.Width, (int)(zz / this._bmpData.Width)));
+                        }
+                }
 
                 return lOut;
             }

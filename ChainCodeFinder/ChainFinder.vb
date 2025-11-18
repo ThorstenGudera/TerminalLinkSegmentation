@@ -8726,7 +8726,7 @@ Public Class ChainFinder
 
         Try
             If AvailMem.AvailMem.checkAvailRam(upperImg.Width * upperImg.Height * 4L) Then
-                bmpTmp = New Bitmap(upperImg)
+                bmpTmp = CType(upperImg.Clone(), Bitmap)
             Else
                 Throw New Exception("Not enough memory.")
             End If

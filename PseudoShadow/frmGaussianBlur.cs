@@ -79,7 +79,7 @@ namespace PseudoShadow
             }
 
             if (this._bmp != null && AvailMem.AvailMem.checkAvailRam(_bmp.Width * _bmp.Height * 4L))
-                this.pictureBox1.Image = new Bitmap(this._bmp);
+                this.pictureBox1.Image = (Bitmap)this._bmp.Clone();
         }
 
         private void pictureBox1_DoubleClick(object sender, EventArgs e)
@@ -141,7 +141,7 @@ namespace PseudoShadow
                 }
 
             if (this._bmp != null && AvailMem.AvailMem.checkAvailRam(_bmp.Width * _bmp.Height * 4L))
-                this.pictureBox1.Image = new Bitmap(this._bmp);
+                this.pictureBox1.Image = (Bitmap)this._bmp.Clone();
 
             DoIt();
         }
@@ -192,7 +192,7 @@ namespace PseudoShadow
                 if (blur > 255)
                     blur = 255;
 
-                Bitmap bmp = new Bitmap(this._bmp);
+                Bitmap bmp = (Bitmap)this._bmp.Clone();
 
                 if (this._conv == null)
                     this._conv = new Convolution();
@@ -363,7 +363,7 @@ namespace PseudoShadow
 
                     _tracking = true;
                     if (_bmp != null && AvailMem.AvailMem.checkAvailRam(_bmp.Width * _bmp.Height * 4L))
-                        this.pictureBox1.Image = new Bitmap(_bmp);
+                        this.pictureBox1.Image = (Bitmap)_bmp.Clone();
                 }
             }
         }

@@ -2368,7 +2368,7 @@ namespace QuickExtract2
                         using (Image i = Image.FromFile(this.openFileDialog1.FileName))
                         {
                             if (AvailMem.AvailMem.checkAvailRam(i.Width * i.Height * 4))
-                                bmp = new Bitmap(i);
+                                bmp = (Bitmap)i.Clone();
                         }
 
                         Bitmap? bOld = this._bmp;

@@ -64,7 +64,7 @@ namespace LUBitmapDesigner
                 if (this.helplineRulerCtrl1.BmpTmp != null)
                 {
                     Bitmap? bOld = this._bgImage;
-                    this._bgImage = new Bitmap(this.helplineRulerCtrl1.BmpTmp);
+                    this._bgImage = (Bitmap)this.helplineRulerCtrl1.BmpTmp.Clone();
                     if (bOld != null)
                         bOld.Dispose();
 
@@ -434,7 +434,7 @@ namespace LUBitmapDesigner
 
                 if (this._bgImage != null)
                 {
-                    using Bitmap bmp = new Bitmap(this._bgImage);
+                    using Bitmap bmp = (Bitmap)this._bgImage.Clone();
                     if (this.ShapeList.Count > 1 && this.SelectedShape != null && !this._mouseIsDown)
                     {
                         this.SelectedShape.Draw(bmp);

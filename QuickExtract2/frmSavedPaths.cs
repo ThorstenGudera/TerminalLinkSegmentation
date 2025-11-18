@@ -680,7 +680,7 @@ namespace QuickExtract2
                         this.PathList.Clear();
                     }
 
-                    Bitmap bmp = new Bitmap(this.helplineRulerCtrl1.Bmp);
+                    Bitmap bmp = (Bitmap)this.helplineRulerCtrl1.Bmp.Clone();
                     int mOpacity = (int)this.numChainTolerance.Value;
 
                     this.backgroundWorker2.RunWorkerAsync(new object[] { bmp, mOpacity });
@@ -772,7 +772,7 @@ namespace QuickExtract2
             try
             {
                 if (AvailMem.AvailMem.checkAvailRam(upperImg.Width * upperImg.Height * 4L))
-                    bmpTmp = new Bitmap(upperImg);
+                    bmpTmp = (Bitmap)upperImg.Clone();
                 else
                     throw new Exception("Not enough memory.");
                 int nWidth = bmpTmp.Width;

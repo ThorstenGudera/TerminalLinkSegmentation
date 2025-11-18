@@ -1366,7 +1366,7 @@ Public Class fipbmp
 
             Dim zList As New List(Of AlphaChain)
 
-            Using b As Bitmap = New Bitmap(bmp)
+            Using b As Bitmap = CType(bmp.Clone(), Bitmap)
                 Dim prg As Integer = 0
                 Dim i As Integer = 1
                 Dim isDifferent As Boolean = True

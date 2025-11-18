@@ -1215,7 +1215,7 @@ Public Class frmColorCurves
             If Not IsNothing(_bitmap) AndAlso _bitmap.Equals(_bSrc) = False Then
                 _bitmap.Dispose()
             End If
-            _bitmap = New Bitmap(makeBitmap(_bSrc))
+            _bitmap = CType(makeBitmap(_bSrc).Clone(), Bitmap)
         End If
 
         If Not IsNothing(Me.pictureBox1.Image) Then

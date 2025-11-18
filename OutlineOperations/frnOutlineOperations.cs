@@ -874,7 +874,7 @@ namespace OutlineOperations
 
                 int alphaTh = (int)this.numAlphaZAndGain.Value;
 
-                Bitmap? b = new Bitmap(this.helplineRulerCtrl1.Bmp);
+                Bitmap? b = (Bitmap)this.helplineRulerCtrl1.Bmp.Clone();
                 bool redrawExcluded = false;
 
                 string? c = this.CachePathAddition;
@@ -1062,7 +1062,7 @@ namespace OutlineOperations
                 Bitmap? excl = excludedRegions[j].Remaining;
                 if (excl != null)
                 {
-                    this._excludedRegions.Add(new Bitmap(excl));
+                    this._excludedRegions.Add((Bitmap)excl.Clone());
                     this._exclLocations.Add(excludedRegions[j].Location);
                 }
             }
@@ -1086,7 +1086,7 @@ namespace OutlineOperations
 
                 double gamma = (double)this.numGamma.Value;
 
-                Bitmap? b = new Bitmap(this.helplineRulerCtrl1.Bmp);
+                Bitmap? b = (Bitmap)this.helplineRulerCtrl1.Bmp.Clone();
                 bool redrawExcluded = false;
 
                 string? c = this.CachePathAddition;
@@ -1224,7 +1224,7 @@ namespace OutlineOperations
             if (e.Argument != null)
             {
                 object[] o = (object[])e.Argument;
-                using Bitmap bmp = new Bitmap((Bitmap)o[0]);
+                using Bitmap bmp = (Bitmap)((Bitmap)o[0]).Clone();
                 double alphaTh = (int)o[1];
                 bool redrawExcluded = (bool)o[2];
 
@@ -1524,7 +1524,7 @@ namespace OutlineOperations
                 if (th > 255)
                     th = 255;
 
-                Bitmap bmp = new Bitmap(this.helplineRulerCtrl1.Bmp);
+                Bitmap bmp = (Bitmap)this.helplineRulerCtrl1.Bmp.Clone();
 
                 if (bmp != null)
                 {
@@ -1620,7 +1620,7 @@ namespace OutlineOperations
             {
                 Bitmap? bmp = null;
                 using (Image img = Image.FromFile(this.openFileDialog1.FileName))
-                    bmp = new Bitmap(img);
+                    bmp = (Bitmap)img.Clone();
 
                 if (bmp.Width != this.helplineRulerCtrl1.Bmp.Width || bmp.Height != this.helplineRulerCtrl1.Bmp.Height)
                 {
@@ -1648,7 +1648,7 @@ namespace OutlineOperations
         {
             if (this.helplineRulerCtrl1.Bmp != null && this._bmpMatte != null)
             {
-                using (Bitmap b = new Bitmap(this.pictureBox1.Image))
+                using (Bitmap b = (Bitmap)this.pictureBox1.Image.Clone())
                 {
                     Bitmap? bmp = ApplyAlphaMatte(this.helplineRulerCtrl1.Bmp, b);
 
@@ -1729,7 +1729,7 @@ namespace OutlineOperations
             {
                 Bitmap? bmp = null;
                 using (Image img = Image.FromFile(this.openFileDialog1.FileName))
-                    bmp = new Bitmap(img);
+                    bmp = (Bitmap)img.Clone();
 
                 this.SetBitmap(ref this._bmpOrig, ref bmp);
                 this.pictureBox2.Image = this._bmpOrig;
@@ -1744,7 +1744,7 @@ namespace OutlineOperations
                 if (MessageBox.Show("Also load to HLC1?", "", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) == DialogResult.Yes &&
                     this._bmpOrig != null)
                 {
-                    Bitmap? bC = new Bitmap(this._bmpOrig);
+                    Bitmap? bC = (Bitmap)this._bmpOrig.Clone();
 
                     this.SetBitmap(this.helplineRulerCtrl1.Bmp, bC, this.helplineRulerCtrl1, "Bmp");
                     this._pic_changed = true;
@@ -1789,8 +1789,8 @@ namespace OutlineOperations
                 this.toolStripProgressBar1.Value = 0;
                 this.toolStripProgressBar1.Visible = true;
 
-                Bitmap bWork = new Bitmap(this.helplineRulerCtrl1.Bmp);
-                Bitmap bOrig = new Bitmap(this._bmpOrig);
+                Bitmap bWork = (Bitmap)this.helplineRulerCtrl1.Bmp.Clone();
+                Bitmap bOrig = (Bitmap)this._bmpOrig.Clone();
                 int n = (int)this.numKernel.Value;
                 int mode = this.cmbMorph.SelectedIndex;
 
@@ -2020,7 +2020,7 @@ namespace OutlineOperations
             try
             {
                 if (AvailMem.AvailMem.checkAvailRam(upperImg.Width * upperImg.Height * 4L))
-                    bmpTmp = new Bitmap(upperImg);
+                    bmpTmp = (Bitmap)upperImg.Clone();
                 else
                     throw new Exception("Not enough memory.");
                 int nWidth = bmpTmp.Width;
@@ -2180,7 +2180,7 @@ namespace OutlineOperations
 
                     if (bmp != null)
                     {
-                        Bitmap b = new Bitmap(bmp);
+                        Bitmap b = (Bitmap)bmp.Clone();
 
                         this.SetBitmap(this.helplineRulerCtrl1.Bmp, b, this.helplineRulerCtrl1, "Bmp");
 
@@ -2205,7 +2205,7 @@ namespace OutlineOperations
         {
             if (this.helplineRulerCtrl1.Bmp != null && this._bmpMatte != null)
             {
-                using (Bitmap b = new Bitmap(this.pictureBox1.Image))
+                using (Bitmap b = (Bitmap)this.pictureBox1.Image.Clone())
                 using (Bitmap b2 = new Bitmap(b.Width, b.Height))
                 {
                     using (Graphics gx = Graphics.FromImage(b2))
@@ -2258,7 +2258,7 @@ namespace OutlineOperations
 
         public void SetOrig(Bitmap b)
         {
-            Bitmap? bmp = new Bitmap(b);
+            Bitmap? bmp = (Bitmap)b.Clone();
             this.SetBitmap(ref this._bmpOrig, ref bmp);
             this.pictureBox2.Image = this._bmpOrig;
             this.pictureBox2.Refresh();
@@ -2270,7 +2270,7 @@ namespace OutlineOperations
 
         public void SetMatte(Bitmap b)
         {
-            Bitmap? bmp = new Bitmap(b);
+            Bitmap? bmp = (Bitmap)b.Clone();
             if (bmp.Width != this.helplineRulerCtrl1.Bmp.Width || bmp.Height != this.helplineRulerCtrl1.Bmp.Height)
             {
                 Bitmap? bOld = bmp;
@@ -2306,8 +2306,8 @@ namespace OutlineOperations
                 this.SetControls(false);
                 this.Cursor = Cursors.WaitCursor;
 
-                Bitmap b = new Bitmap(this._bmpOrig);
-                Bitmap bM = new Bitmap(this.helplineRulerCtrl1.Bmp);
+                Bitmap b = (Bitmap)this._bmpOrig.Clone();
+                Bitmap bM = (Bitmap)this.helplineRulerCtrl1.Bmp.Clone();
 
                 this.backgroundWorker2.RunWorkerAsync(new object[] { b, bM });
             }
@@ -2544,7 +2544,7 @@ namespace OutlineOperations
         {
             if (this.helplineRulerCtrl1.Bmp != null)
             {
-                Bitmap? bmp = new Bitmap(this.helplineRulerCtrl1.Bmp);
+                Bitmap? bmp = (Bitmap)this.helplineRulerCtrl1.Bmp.Clone();
 
                 this.SetBitmap(ref this._bmpMatte, ref bmp);
                 this.pictureBox1.Image = this._bmpMatte;
@@ -2749,7 +2749,7 @@ namespace OutlineOperations
                 this.toolStripProgressBar1.Value = 0;
                 this.toolStripProgressBar1.Visible = true;
 
-                Bitmap b = new Bitmap(this.helplineRulerCtrl1.Bmp);
+                Bitmap b = (Bitmap)this.helplineRulerCtrl1.Bmp.Clone();
 
                 int krnl = (int)this.numKernel2.Value;
                 int maxVal = (int)this.numDistWeight2.Value;
@@ -2773,7 +2773,7 @@ namespace OutlineOperations
                 this.toolStripProgressBar1.Value = 0;
                 this.toolStripProgressBar1.Visible = true;
 
-                Bitmap b = new Bitmap(this._bmpMatte);
+                Bitmap b = (Bitmap)this._bmpMatte.Clone();
 
                 int krnl = (int)this.numKernel2.Value;
                 int maxVal = (int)this.numDistWeight2.Value;
@@ -2819,7 +2819,7 @@ namespace OutlineOperations
 
                 int alphaTh = (int)this.numAlphaZAndGain.Value;
 
-                Bitmap? b = new Bitmap(this.helplineRulerCtrl1.Bmp);
+                Bitmap? b = (Bitmap)this.helplineRulerCtrl1.Bmp.Clone();
                 bool redrawExcluded = false;
 
                 string? c = this.CachePathAddition;

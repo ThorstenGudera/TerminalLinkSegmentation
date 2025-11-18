@@ -33,19 +33,19 @@ Public Class PoissonBlender
     Public Function Apply() As Bitmap
         Me.BlendParameters.BlendAlgorithm.Apply(Me.BlendParameters.RC)
 
-        Return New Bitmap(Me.BlendParameters.LowerImg)
+        Return CType(Me.BlendParameters.LowerImg.Clone(), Bitmap)
     End Function
 
     Public Function ApplyG() As Bitmap
         Me.BlendParameters.BlendAlgorithm.ApplyG(Me.BlendParameters.RC)
 
-        Return New Bitmap(Me.BlendParameters.LowerImg)
+        Return CType(Me.BlendParameters.LowerImg.Clone(), Bitmap)
     End Function
 
     Public Function ApplyG2() As Bitmap
         Me.BlendParameters.BlendAlgorithm.ApplyG2(Me.BlendParameters.RC)
 
-        Return New Bitmap(Me.BlendParameters.LowerImg)
+        Return CType(Me.BlendParameters.LowerImg.Clone(), Bitmap)
     End Function
 
     Public Sub ApplyTile(bUXY As Bitmap, rc As Rectangle, rr As Rectangle, glBounds As List(Of ChainCode), xx As Integer, yy As Integer)

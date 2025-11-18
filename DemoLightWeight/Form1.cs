@@ -39,7 +39,7 @@ namespace DemoLightWeight
                 {
                     Bitmap? bmp = null;
                     using (Image img = Image.FromFile(args[0]))
-                        bmp = new Bitmap(img);
+                        bmp = (Bitmap)img.Clone();
 
                     if (bmp != null)
                     {
@@ -57,7 +57,7 @@ namespace DemoLightWeight
                         this.helplineRulerCtrl1.dbPanel1.AutoScrollMinSize = new Size(System.Convert.ToInt32(this.helplineRulerCtrl1.Bmp.Width * this.helplineRulerCtrl1.Zoom), System.Convert.ToInt32(this.helplineRulerCtrl1.Bmp.Height * this.helplineRulerCtrl1.Zoom));
                         this.helplineRulerCtrl1.dbPanel1.Invalidate();
 
-                        Bitmap? bC = new Bitmap(bmp);
+                        Bitmap? bC = (Bitmap)bmp.Clone();
                         this.SetBitmap(ref this._bmpBU, ref bC);
                     }
 
@@ -141,7 +141,7 @@ namespace DemoLightWeight
             if (this.OpenFileDialog1.ShowDialog() == DialogResult.OK)
             {
                 using (Image img = Image.FromFile(this.OpenFileDialog1.FileName))
-                    bmp = new Bitmap(img);
+                    bmp = (Bitmap)img.Clone();
 
                 if (bmp != null)
                 {
@@ -159,7 +159,7 @@ namespace DemoLightWeight
                     this.helplineRulerCtrl1.dbPanel1.AutoScrollMinSize = new Size(System.Convert.ToInt32(this.helplineRulerCtrl1.Bmp.Width * this.helplineRulerCtrl1.Zoom), System.Convert.ToInt32(this.helplineRulerCtrl1.Bmp.Height * this.helplineRulerCtrl1.Zoom));
                     this.helplineRulerCtrl1.dbPanel1.Invalidate();
 
-                    Bitmap? bC = new Bitmap(bmp);
+                    Bitmap? bC = (Bitmap)bmp.Clone();
                     this.SetBitmap(ref this._bmpBU, ref bC);
                 }
 
@@ -352,7 +352,7 @@ namespace DemoLightWeight
         {
             if (this._bmpBU != null)
             {
-                Bitmap bmp = new Bitmap(this._bmpBU);
+                Bitmap bmp = (Bitmap)this._bmpBU.Clone();
 
                 if (bmp != null)
                 {
@@ -404,7 +404,7 @@ namespace DemoLightWeight
                     if (r.Width == 0 || r.Height == 0)
                         r = new Rectangle(10, 10, this.helplineRulerCtrl1.Bmp.Width - 20, this.helplineRulerCtrl1.Bmp.Height - 20);
 
-                    Bitmap bWork = new Bitmap(this.helplineRulerCtrl1.Bmp);
+                    Bitmap bWork = (Bitmap)this.helplineRulerCtrl1.Bmp.Clone();
 
                     int displayAmnt = (int)this.numDispAmnt.Value;
 
@@ -421,7 +421,7 @@ namespace DemoLightWeight
                 object[] o = (object[])e.Argument;
 
                 Bitmap? bWork = (Bitmap)o[0];
-                Bitmap bTmp = new Bitmap(bWork);
+                Bitmap bTmp = (Bitmap)bWork.Clone();
                 Rectangle r = (Rectangle)o[1];
                 int displayAmnt = (int)o[2];
 
@@ -459,7 +459,7 @@ namespace DemoLightWeight
                     ShowErrorMessage(it, 0);
                     if (bWork != null)
                         bWork.Dispose();
-                    e.Result = new Bitmap(bTmp);
+                    e.Result = (Bitmap)bTmp.Clone();
                     return;
                 }
 
@@ -472,7 +472,7 @@ namespace DemoLightWeight
                     if (bWork != null)
                         bWork.Dispose();
                     bWork = null;
-                    e.Result = new Bitmap(bTmp);
+                    e.Result = (Bitmap)bTmp.Clone();
                     return;
                 }
 
@@ -780,7 +780,7 @@ namespace DemoLightWeight
             {
                 if (upperImg != null)
                     if (AvailMem.AvailMem.checkAvailRam(upperImg.Width * upperImg.Height * 4L))
-                        bmpTmp = new Bitmap(upperImg);
+                        bmpTmp = (Bitmap)upperImg.Clone();
                     else
                         throw new Exception("Not enough memory.");
                 if (bmpTmp != null)

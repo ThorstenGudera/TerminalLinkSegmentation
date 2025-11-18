@@ -1013,7 +1013,7 @@ namespace OutlineOperations
                 this.toolStripProgressBar1.Value = 0;
                 this.toolStripProgressBar1.Visible = true;
 
-                Bitmap bOrig = new Bitmap(this._bmpBU);
+                Bitmap bOrig = (Bitmap)this._bmpBU.Clone();
                 int width = (int)this.numExceptBounds.Value;
 
                 this.backgroundWorker1.RunWorkerAsync(new object[] { bOrig, width });
@@ -1031,7 +1031,7 @@ namespace OutlineOperations
                 using Bitmap b = RemoveOutlineEx(bOrig, width, true);
 
                 Bitmap b2 = GetRemainingRegion(bOrig, b);
-                Bitmap remg = new Bitmap(b2);
+                Bitmap remg = (Bitmap)b2.Clone();
                 this.SetBitmap(ref this._remaining, ref remg);
 
                 e.Result = b2;
@@ -1260,7 +1260,7 @@ namespace OutlineOperations
                 using Bitmap b = RemoveOutlineEx(bOrig, width, true);
 
                 Bitmap b2 = GetRemainingRegion(bOrig, b);
-                Bitmap remg = new Bitmap(b2);
+                Bitmap remg = (Bitmap)b2.Clone();
                 this.SetBitmap(ref this._remaining, ref remg);
 
                 e.Result = b2;

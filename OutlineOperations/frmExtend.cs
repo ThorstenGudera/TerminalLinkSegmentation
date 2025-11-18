@@ -62,7 +62,7 @@ namespace OutlineOperations
                 _bmpBU = (Bitmap)bmp.Clone();
                 if (bmpOrig != null)
                 {
-                    this._bmpOrig = new Bitmap(bmpOrig);
+                    this._bmpOrig = (Bitmap)bmpOrig.Clone();
                     this.pictureBox1.Image = this._bmpOrig;
                 }
                 this.pictureBox1.Refresh();
@@ -590,8 +590,8 @@ namespace OutlineOperations
             if (!this.backgroundWorker1.IsBusy && this._bmpOrig != null && this.helplineRulerCtrl1.Bmp != null)
             {
                 int width = (int)this.numExtendOrShrink.Value;
-                Bitmap bmp = new Bitmap(this.helplineRulerCtrl1.Bmp);
-                Bitmap bOrig = new Bitmap(this._bmpOrig);
+                Bitmap bmp = (Bitmap)this.helplineRulerCtrl1.Bmp.Clone();
+                Bitmap bOrig = (Bitmap)this._bmpOrig.Clone();
                 bool opaque = this.cbSetOpaque.Checked;
 
                 bool morph = this.cbMorphological.Checked;
@@ -720,7 +720,7 @@ namespace OutlineOperations
 
         private unsafe Bitmap GetBWMask(Bitmap bmp)
         {
-            Bitmap bResult = new Bitmap(bmp);
+            Bitmap bResult = (Bitmap)bmp.Clone();
 
             int w = bmp.Width;
             int h = bmp.Height;
@@ -1230,7 +1230,7 @@ namespace OutlineOperations
                 using (Image img = Image.FromFile(this.openFileDialog1.FileName))
                     //if(img.Width >= this.helplineRulerCtrl1.Bmp.Width && img.Height >= this.helplineRulerCtrl1.Bmp.Height)
                     if (img.Width == this.helplineRulerCtrl1.Bmp.Width && img.Height == this.helplineRulerCtrl1.Bmp.Height)
-                        bmp = new Bitmap(img);
+                        bmp = (Bitmap)img.Clone();
                     else
                     {
                         bmp = new Bitmap(this.helplineRulerCtrl1.Bmp.Width, this.helplineRulerCtrl1.Bmp.Height);

@@ -39,7 +39,7 @@ Public Class PoissonBlenderD
     Public Sub New(lowerImg As Bitmap)
         Me.BlendParameters = New BlendParameters()
         Me.BlendParameters.LowerImg = lowerImg
-        Me.BlendParameters.UpperImg = New Bitmap(lowerImg)
+        Me.BlendParameters.UpperImg = CType(lowerImg.Clone(), Bitmap)
     End Sub
 
     Private Function GetXDerivative(b As Bitmap) As Bitmap
@@ -156,7 +156,7 @@ Public Class PoissonBlenderD
     Public Function Apply() As Bitmap
         Me.BlendParameters.BlendAlgorithm.ApplyD(Me.BlendParameters.RC)
 
-        Return New Bitmap(Me.BlendParameters.LowerImg)
+        Return CType(Me.BlendParameters.LowerImg.Clone(), Bitmap)
     End Function
 
     Public Sub ApplyTileD(bUX As Bitmap, bUY As Bitmap, rc As Rectangle, rr As Rectangle, glBounds As List(Of ChainCode), xx As Integer, yy As Integer)

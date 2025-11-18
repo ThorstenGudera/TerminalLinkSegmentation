@@ -33,7 +33,7 @@ Public Class BitmapPositionPoisson
         Dim bmpOut As Bitmap = Nothing
         Try
             Using img As Image = Image.FromFile(path, False)
-                bmpOut = New Bitmap(img)
+                bmpOut = CType(img.Clone(), Bitmap)
             End Using
         Catch ex As Exception
 

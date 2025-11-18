@@ -39,7 +39,7 @@ namespace TerminalLinkSegmentation
             if (this.OpenFileDialog1.ShowDialog() == DialogResult.OK)
             {
                 using (Image img = Image.FromFile(this.OpenFileDialog1.FileName))
-                    bmp = new Bitmap(img);
+                    bmp = (Bitmap)img.Clone();
 
                 if (bmp != null)
                 {
@@ -82,7 +82,7 @@ namespace TerminalLinkSegmentation
                 int w = Math.Min(this._endX - this._ix, this.pictureBox1.Image.Width - x);
                 int h = Math.Min(this._endY - this._iy, this.pictureBox1.Image.Height - y);
 
-                using Bitmap bTmp = new Bitmap(this.pictureBox1.Image);
+                using Bitmap bTmp = (Bitmap)this.pictureBox1.Image.Clone();
                 using Bitmap b = bTmp.Clone(new Rectangle(x, y, w, h), PixelFormat.Format32bppArgb);
                 frmAvoidAGrabCutEasy frm = new frmAvoidAGrabCutEasy(b, _basePathAddition);
 
@@ -312,7 +312,7 @@ namespace TerminalLinkSegmentation
         {
             if (this.pictureBox1.Image != null)
             {
-                using Bitmap bmp = new Bitmap(this.pictureBox1.Image);
+                using Bitmap bmp = (Bitmap)this.pictureBox1.Image.Clone();
                 using (frnOutlineOperations frm = new frnOutlineOperations(bmp, this._basePathAddition))
                 {
                     frm.SetupCache();

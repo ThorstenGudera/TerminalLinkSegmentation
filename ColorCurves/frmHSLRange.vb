@@ -32,7 +32,7 @@ Public Class frmHSLRange
         InitializeComponent()
 
         If AvailMem.AvailMem.checkAvailRam(imgIn.Width * imgIn.Height * 8L) Then
-            _bitmap = New Bitmap(makeBitmap(imgIn))
+            _bitmap = CType(makeBitmap(imgIn).Clone(), Bitmap)
             _bSrc = DirectCast(imgIn.Clone(), Bitmap)
         Else
             MessageBox.Show("Not enough Memory")
@@ -314,7 +314,7 @@ Public Class frmHSLRange
                 _bitmap.Dispose()
             End If
             If AvailMem.AvailMem.checkAvailRam(b2.Width * b2.Height * 4L) Then
-                _bitmap = New Bitmap(b2)
+                _bitmap = CType(b2.Clone(), Bitmap)
             Else
                 Return
             End If

@@ -431,7 +431,7 @@ namespace OutlineOperations
                         else
                             throw new Exception();
 
-                        Bitmap bC = new Bitmap(b1);
+                        Bitmap bC = (Bitmap)b1.Clone();
                         this.SetBitmap(ref this._bmpBU, ref bC);
 
                         this.SetBitmap(this.helplineRulerCtrl1.Bmp, b1, this.helplineRulerCtrl1, "Bmp");

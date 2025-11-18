@@ -144,7 +144,7 @@ namespace QuickExtract2
             this.helplineRulerCtrl1.PostPaint += Helplinerulerctrl1_Paint;
 
             this.firstClick = true;
-            this.imgDataPic = new Bitmap(bmp);
+            this.imgDataPic = (Bitmap)bmp.Clone();
             this.bmpForValueComputation = new Bitmap(this.imgDataPic.Width, this.imgDataPic.Height);
 
             this.quickExtractingCtrl1.btnClosePath.Click += Button1_Click;
@@ -243,13 +243,13 @@ namespace QuickExtract2
         {
             if (this.helplineRulerCtrl1.Bmp != null)
             {
-                Bitmap? bC = new Bitmap(this.helplineRulerCtrl1.Bmp);
+                Bitmap? bC = (Bitmap)this.helplineRulerCtrl1.Bmp.Clone();
                 if (this.OrigBmp != null)
                     this.SetBitmap(this.OrigBmp, bC, this, "OrigBmp");
                 else
                     this.OrigBmp = bC;
 
-                Bitmap? bC2 = new Bitmap(this.OrigBmp);
+                Bitmap? bC2 = (Bitmap)this.OrigBmp.Clone();
                 this.SetBitmap(ref _bmpBU, ref bC2);
 
                 this.helplineRulerCtrl1.dbPanel1.AutoScrollMinSize = new Size(System.Convert.ToInt32(this.helplineRulerCtrl1.Bmp.Width * this.helplineRulerCtrl1.Zoom), System.Convert.ToInt32(this.helplineRulerCtrl1.Bmp.Height * this.helplineRulerCtrl1.Zoom));
@@ -323,7 +323,7 @@ namespace QuickExtract2
         {
             this.SetControls(false);
 
-            Bitmap? bWork = new Bitmap(this.helplineRulerCtrl1.Bmp);
+            Bitmap? bWork = (Bitmap)this.helplineRulerCtrl1.Bmp.Clone();
 
             if (this.quickExtractingCtrl1.numRemOutline.Value > 0)
             {
@@ -973,7 +973,7 @@ namespace QuickExtract2
                                 this.quickExtractingCtrl1.Alg.DisposeBmpData();
                             this.SetBitmap(this.helplineRulerCtrl1.Bmp, b1, this.helplineRulerCtrl1, "Bmp");
 
-                            this.imgDataPic = new Bitmap(this.helplineRulerCtrl1.Bmp);
+                            this.imgDataPic = (Bitmap)this.helplineRulerCtrl1.Bmp.Clone();
                             this.bmpForValueComputation = new Bitmap(this.imgDataPic.Width, this.imgDataPic.Height);
 
                             this._pic_changed = false;
@@ -1061,7 +1061,7 @@ namespace QuickExtract2
 
                                 if (this.quickExtractingCtrl1.Alg != null)
                                     this.quickExtractingCtrl1.Alg.DisposeBmpData();
-                                this.imgDataPic = new Bitmap(this.helplineRulerCtrl1.Bmp);
+                                this.imgDataPic = (Bitmap)this.helplineRulerCtrl1.Bmp.Clone();
                                 this.bmpForValueComputation = new Bitmap(this.imgDataPic.Width, this.imgDataPic.Height);
 
                                 _undoOPCache?.Clear(this.helplineRulerCtrl1.Bmp);
@@ -1815,7 +1815,7 @@ namespace QuickExtract2
         {
             if (this.helplineRulerCtrl1.Bmp != null)
             {
-                Bitmap? bOrig = new Bitmap(this.helplineRulerCtrl1.Bmp);
+                Bitmap? bOrig = (Bitmap)this.helplineRulerCtrl1.Bmp.Clone();
                 this.SetBitmap(ref this._bOrig, ref bOrig);
 
                 int f = 1;
@@ -1846,11 +1846,11 @@ namespace QuickExtract2
                 this.helplineRulerCtrl1.dbPanel1.AutoScrollMinSize = new Size(System.Convert.ToInt32(this.helplineRulerCtrl1.Bmp.Width * this.helplineRulerCtrl1.Zoom), System.Convert.ToInt32(this.helplineRulerCtrl1.Bmp.Height * this.helplineRulerCtrl1.Zoom));
                 this.helplineRulerCtrl1.MakeBitmap(this.helplineRulerCtrl1.Bmp);
 
-                Bitmap? bC = new Bitmap(bmp);
+                Bitmap? bC = (Bitmap)bmp.Clone();
                 this.SetBitmap(ref this._bmpBU, ref bC);
 
                 this.firstClick = true;
-                Bitmap? bC2 = new Bitmap(bmp);
+                Bitmap? bC2 = (Bitmap)bmp.Clone();
                 this.SetBitmap(ref this.imgDataPic, ref bC2);
 
                 if (this.imgDataPic != null)
@@ -1935,7 +1935,7 @@ namespace QuickExtract2
                     {
                         if (this.quickExtractingCtrl1.Alg != null)
                             this.quickExtractingCtrl1.Alg.DisposeBmpData();
-                        this.imgDataPic = new Bitmap(this.helplineRulerCtrl1.Bmp);
+                        this.imgDataPic = (Bitmap)this.helplineRulerCtrl1.Bmp.Clone();
                         this.bmpForValueComputation = new Bitmap(this.imgDataPic.Width, this.imgDataPic.Height);
 
                         this.TranslatePathAndSeedPoints(amountX, amountY);
@@ -2051,7 +2051,7 @@ namespace QuickExtract2
                     {
                         if (quickExtractingCtrl1.Alg != null)
                             quickExtractingCtrl1.Alg.DisposeBmpData();
-                        this.imgDataPic = new Bitmap(this.helplineRulerCtrl1.Bmp);
+                        this.imgDataPic = (Bitmap)this.helplineRulerCtrl1.Bmp.Clone();
                         this.bmpForValueComputation = new Bitmap(this.imgDataPic.Width, this.imgDataPic.Height);
 
                         this.TranslatePathAndSeedPoints(amountX, amountY);
@@ -2138,7 +2138,7 @@ namespace QuickExtract2
             int w = bmp.Width;
             int h = bmp.Height;
 
-            Bitmap bRes = new Bitmap(bmp);
+            Bitmap bRes = (Bitmap)bmp.Clone();
             BitmapData bmD = bRes.LockBits(new Rectangle(0, 0, w, h), ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
             BitmapData bmR = b.LockBits(new Rectangle(0, 0, w, h), ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
             int stride = bmD.Stride;
@@ -3166,7 +3166,7 @@ namespace QuickExtract2
                             this.quickExtractingCtrl1.Alg.Dispose();
                             this.quickExtractingCtrl1.Alg = null;
 
-                            this.imgDataPic = new Bitmap(this.helplineRulerCtrl1.Bmp);
+                            this.imgDataPic = (Bitmap)this.helplineRulerCtrl1.Bmp.Clone();
                             this.bmpForValueComputation = new Bitmap(this.imgDataPic.Width, this.imgDataPic.Height);
                         }
                         ResetVars();
@@ -3236,7 +3236,7 @@ namespace QuickExtract2
                             this.quickExtractingCtrl1.Alg.Dispose();
                             this.quickExtractingCtrl1.Alg = null;
 
-                            this.imgDataPic = new Bitmap(this.helplineRulerCtrl1.Bmp);
+                            this.imgDataPic = (Bitmap)this.helplineRulerCtrl1.Bmp.Clone();
                             this.bmpForValueComputation = new Bitmap(this.imgDataPic.Width, this.imgDataPic.Height);
                         }
                         this.quickExtractingCtrl1.CurPath = new List<List<PointF>>();
@@ -3260,7 +3260,7 @@ namespace QuickExtract2
                             this.quickExtractingCtrl1.Alg.Dispose();
                             this.quickExtractingCtrl1.Alg = null;
 
-                            this.imgDataPic = new Bitmap(this.helplineRulerCtrl1.Bmp);
+                            this.imgDataPic = (Bitmap)this.helplineRulerCtrl1.Bmp.Clone();
                             this.bmpForValueComputation = new Bitmap(this.imgDataPic.Width, this.imgDataPic.Height);
                         }
                         this.quickExtractingCtrl1.CurPath = new List<List<PointF>>();
@@ -3570,7 +3570,7 @@ namespace QuickExtract2
                                         else if (!this.quickExtractingCtrl1.cbCropFromOrig.Checked)
                                         {
                                             if (bmp == null)
-                                                bmp = new Bitmap(this.helplineRulerCtrl1.Bmp);
+                                                bmp = (Bitmap)this.helplineRulerCtrl1.Bmp.Clone();
                                             using (Graphics g = Graphics.FromImage(bmp))
                                             {
                                                 if (this.quickExtractingCtrl1.cbSmooth.Checked)
@@ -3591,7 +3591,7 @@ namespace QuickExtract2
                                         else
                                         {
                                             if (bmp == null)
-                                                bmp = new Bitmap(this.helplineRulerCtrl1.Bmp);
+                                                bmp = (Bitmap)this.helplineRulerCtrl1.Bmp.Clone();
                                             using (Graphics g = Graphics.FromImage(bmp))
                                             {
                                                 if (this.quickExtractingCtrl1.cbSmooth.Checked)
@@ -3635,7 +3635,7 @@ namespace QuickExtract2
                     {
                         if (AvailMem.AvailMem.checkAvailRam(bmp.Width * bmp.Height * 4L))
                         {
-                            Bitmap? b = new Bitmap(bmp);
+                            Bitmap? b = (Bitmap)bmp.Clone();
                             this.SetBitmap(ref this._bmpBU, ref b);
                             this.SetNewPath();
                         }
@@ -3694,7 +3694,7 @@ namespace QuickExtract2
                 this.quickExtractingCtrl1.Alg.Dispose();
                 this.quickExtractingCtrl1.Alg = null;
 
-                this.imgDataPic = new Bitmap(this.helplineRulerCtrl1.Bmp);
+                this.imgDataPic = (Bitmap)this.helplineRulerCtrl1.Bmp.Clone();
                 this.bmpForValueComputation = new Bitmap(this.imgDataPic.Width, this.imgDataPic.Height);
             }
             ResetVars();
@@ -3971,7 +3971,7 @@ namespace QuickExtract2
             {
                 if (this._bmpBU != null && AvailMem.AvailMem.checkAvailRam(this.helplineRulerCtrl1.Bmp.Width * this.helplineRulerCtrl1.Bmp.Height * 4L))
                 {
-                    Bitmap? bC = new Bitmap(this.helplineRulerCtrl1.Bmp);
+                    Bitmap? bC = (Bitmap)this.helplineRulerCtrl1.Bmp.Clone();
                     this.SetBitmap(ref this._bmpBU, ref bC);
                     this.CheckBox18.Checked = true;
                     SetNewPath();
@@ -4091,7 +4091,7 @@ namespace QuickExtract2
 
                 if (this.quickExtractingCtrl1.Alg != null)
                     this.quickExtractingCtrl1.Alg.DisposeBmpData();
-                this.imgDataPic = new Bitmap(this.helplineRulerCtrl1.Bmp);
+                this.imgDataPic = (Bitmap)this.helplineRulerCtrl1.Bmp.Clone();
                 this.bmpForValueComputation = new Bitmap(this.imgDataPic.Width, this.imgDataPic.Height);
 
                 TranslatePathAndSeedPoints(100, 100);
@@ -4182,7 +4182,7 @@ namespace QuickExtract2
 
                 if (this.quickExtractingCtrl1.Alg != null)
                     this.quickExtractingCtrl1.Alg.DisposeBmpData();
-                this.imgDataPic = new Bitmap(this.helplineRulerCtrl1.Bmp);
+                this.imgDataPic = (Bitmap)this.helplineRulerCtrl1.Bmp.Clone();
                 this.bmpForValueComputation = new Bitmap(this.imgDataPic.Width, this.imgDataPic.Height);
 
                 TranslatePathAndSeedPoints(-100, -100);
@@ -4239,7 +4239,7 @@ namespace QuickExtract2
         {
             if (this.cbOutline.Checked && this.helplineRulerCtrl1.Bmp != null)
             {
-                using Bitmap bmp = new Bitmap(this.helplineRulerCtrl1.Bmp);
+                using Bitmap bmp = (Bitmap)this.helplineRulerCtrl1.Bmp.Clone();
 
                 List<ChainCode>? c = GetBoundary(bmp, 0, false);
                 c = c?.OrderByDescending(x => x.Coord.Count).ToList();
@@ -4306,7 +4306,7 @@ namespace QuickExtract2
             {
                 if (upperImg != null)
                     if (AvailMem.AvailMem.checkAvailRam(upperImg.Width * upperImg.Height * 4L))
-                        bmpTmp = new Bitmap(upperImg);
+                        bmpTmp = (Bitmap)upperImg.Clone();
                     else
                         throw new Exception("Not enough memory.");
                 if (bmpTmp != null)
@@ -4396,8 +4396,8 @@ namespace QuickExtract2
                 DialogResult dlg = MessageBox.Show("Load chached Orig Bmp?", "", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation);
                 if (dlg == DialogResult.Yes)
                 {
-                    this.helplineRulerCtrl1.Bmp = new Bitmap(this.OrigBmp);
-                    Bitmap? bC = new Bitmap(this.OrigBmp);
+                    this.helplineRulerCtrl1.Bmp = (Bitmap)this.OrigBmp.Clone();
+                    Bitmap? bC = (Bitmap)this.OrigBmp.Clone();
                     this.SetBitmap(ref _bmpBU, ref bC);
 
                     this.helplineRulerCtrl1.dbPanel1.AutoScrollMinSize = new Size(System.Convert.ToInt32(this.helplineRulerCtrl1.Bmp.Width * this.helplineRulerCtrl1.Zoom), System.Convert.ToInt32(this.helplineRulerCtrl1.Bmp.Height * this.helplineRulerCtrl1.Zoom));
@@ -4428,15 +4428,15 @@ namespace QuickExtract2
                     if (this.bmpForValueComputation != null)
                         frm.BmpForValueComputation = new Bitmap(this.OrigBmp.Width, this.OrigBmp.Height);
                     if (this.imgDataPic != null)
-                        frm.ImgDataPic = new Bitmap(this.OrigBmp);
+                        frm.ImgDataPic = (Bitmap)this.OrigBmp.Clone();
 
                     frm.ToolStripDropDownButton1.DropDownItems[1].PerformClick();
 
                     if (frm.ShowDialog() == DialogResult.OK && frm.PathListNew != null && frm.PathListNew.Count > 0)
                     {
-                        Bitmap? bC = new Bitmap(this.OrigBmp);
+                        Bitmap? bC = (Bitmap)this.OrigBmp.Clone();
                         this.SetBitmap(this.helplineRulerCtrl1.Bmp, bC, this.helplineRulerCtrl1, "Bmp");
-                        Bitmap? bC2 = new Bitmap(this.OrigBmp);
+                        Bitmap? bC2 = (Bitmap)this.OrigBmp.Clone();
                         this.SetBitmap(ref this._bmpBU, ref bC2);
 
                         this._undoOPCache?.Add(this.helplineRulerCtrl1.Bmp);
@@ -4459,15 +4459,15 @@ namespace QuickExtract2
                     if (this.bmpForValueComputation != null)
                         frm.BmpForValueComputation = new Bitmap(this.OrigBmp.Width, this.OrigBmp.Height);
                     if (this.imgDataPic != null)
-                        frm.ImgDataPic = new Bitmap(this.OrigBmp);
+                        frm.ImgDataPic = (Bitmap)this.OrigBmp.Clone();
 
                     frm.ToolStripDropDownButton1.DropDownItems[1].PerformClick();
 
                     if (frm.ShowDialog() == DialogResult.OK && frm.PathListNew != null && frm.PathListNew.Count > 0)
                     {
-                        Bitmap? bC = new Bitmap(this.OrigBmp);
+                        Bitmap? bC = (Bitmap)this.OrigBmp.Clone();
                         this.SetBitmap(this.helplineRulerCtrl1.Bmp, bC, this.helplineRulerCtrl1, "Bmp");
-                        Bitmap? bC2 = new Bitmap(this.OrigBmp);
+                        Bitmap? bC2 = (Bitmap)this.OrigBmp.Clone();
                         this.SetBitmap(ref this._bmpBU, ref bC2);
 
                         this._undoOPCache?.Add(this.helplineRulerCtrl1.Bmp);

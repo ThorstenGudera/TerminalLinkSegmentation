@@ -80,7 +80,7 @@ namespace OutlineOperations
             }
 
             if (this._bmp != null && AvailMem.AvailMem.checkAvailRam(_bmp.Width * _bmp.Height * 4L))
-                this.pictureBox1.Image = new Bitmap(this._bmp);
+                this.pictureBox1.Image = (Bitmap)this._bmp.Clone();
         }
 
         private void pictureBox1_DoubleClick(object sender, EventArgs e)
@@ -142,7 +142,7 @@ namespace OutlineOperations
                 }
 
             if (this._bmp != null && AvailMem.AvailMem.checkAvailRam(_bmp.Width * _bmp.Height * 4L))
-                this.pictureBox1.Image = new Bitmap(this._bmp);
+                this.pictureBox1.Image = (Bitmap)this._bmp.Clone();
 
             DoIt();
         }
@@ -191,7 +191,7 @@ namespace OutlineOperations
                 if (th > 255)
                     th = 255;
 
-                Bitmap bmp = new Bitmap(this._bmp);
+                Bitmap bmp = (Bitmap)this._bmp.Clone();
 
                 if (this._thresholdMethods == null)
                     this._thresholdMethods = new ThresholdMethods();
@@ -361,7 +361,7 @@ namespace OutlineOperations
 
                     _tracking = true;
                     if (_bmp != null && AvailMem.AvailMem.checkAvailRam(_bmp.Width * _bmp.Height * 4L))
-                        this.pictureBox1.Image = new Bitmap(_bmp);
+                        this.pictureBox1.Image = (Bitmap)_bmp.Clone();
                 }
             }
         }
@@ -440,7 +440,7 @@ namespace OutlineOperations
             if (th > 255)
                 th = 255;
 
-            Bitmap bmp = new Bitmap(b);
+            Bitmap bmp = (Bitmap)b.Clone();
 
             if (bmp != null)
             {

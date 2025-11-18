@@ -1653,7 +1653,7 @@ namespace QuickExtract2
                             this.QuickExtractingCtrl.Alg.Dispose();
                             this.QuickExtractingCtrl.Alg = null;
 
-                            this.ImgDataPic = new Bitmap(this.helplineRulerCtrl1.Bmp);
+                            this.ImgDataPic = (Bitmap)this.helplineRulerCtrl1.Bmp.Clone();
                             this.BmpForValueComputation = new Bitmap(this.ImgDataPic.Width, this.ImgDataPic.Height);
                         }
                         this.QuickExtractingCtrl.CurPath = new List<List<PointF>>();
@@ -1677,7 +1677,7 @@ namespace QuickExtract2
                             this.QuickExtractingCtrl.Alg.Dispose();
                             this.QuickExtractingCtrl.Alg = null;
 
-                            this.ImgDataPic = new Bitmap(this.helplineRulerCtrl1.Bmp);
+                            this.ImgDataPic = (Bitmap)this.helplineRulerCtrl1.Bmp.Clone();
                             this.BmpForValueComputation = new Bitmap(this.ImgDataPic.Width, this.ImgDataPic.Height);
                         }
                         this.QuickExtractingCtrl.CurPath = new List<List<PointF>>();

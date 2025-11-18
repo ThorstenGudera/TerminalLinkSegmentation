@@ -62,14 +62,14 @@ namespace PseudoShadow
 
             if (bUpperTmp != null)
             {
-                bUpper = scf ? ScanForPic(bUpperTmp, 0) : new Bitmap(bUpperTmp);
+                bUpper = scf ? ScanForPic(bUpperTmp, 0) : (Bitmap)bUpperTmp.Clone();
                 bUpperTmp.Dispose();
                 bUpperTmp = null;
 
                 if (bUpper != null && AvailMem.AvailMem.checkAvailRam(bUpper.Width * bUpper.Height * 16L))
                 {
-                    this._bmpBU = new Bitmap(bUpper);
-                    this.luBitmapDesignerCtrl1.SetUpperImage(new Bitmap(bUpper), 0, 0);
+                    this._bmpBU = (Bitmap)bUpper.Clone();
+                    this.luBitmapDesignerCtrl1.SetUpperImage((Bitmap)bUpper.Clone(), 0, 0);
                     this.luBitmapDesignerCtrl1.SetupBGImage();
                 }
                 else
@@ -93,7 +93,7 @@ namespace PseudoShadow
             if (this.luBitmapDesignerCtrl1.ShapeList != null && this.luBitmapDesignerCtrl1.ShapeList.Count > 0 &&
                 this.luBitmapDesignerCtrl1.helplineRulerCtrl1.Bmp != null && this._bmpBGOrig != null)
             {
-                Bitmap? bOrig = new Bitmap(this._bmpBGOrig);
+                Bitmap? bOrig = (Bitmap)this._bmpBGOrig.Clone();
 
                 frmBGSettings frm = new frmBGSettings(bOrig.Size,
                     new Size((int)this.luBitmapDesignerCtrl1.ShapeList[0].Bounds.Width,
@@ -486,7 +486,7 @@ namespace PseudoShadow
             {
                 Bitmap? bmp = null;
                 using (Image img = Image.FromFile(this.openFileDialog1.FileName))
-                    bmp = new Bitmap(img);
+                    bmp = (Bitmap)img.Clone();
 
                 if (this.luBitmapDesignerCtrl1.ShapeList != null && this.luBitmapDesignerCtrl1.ShapeList.Count > 0)
                 {
@@ -505,7 +505,7 @@ namespace PseudoShadow
 
                     this.btnCloneColors.Enabled = this.luBitmapDesignerCtrl1.ShapeList.Count > 1;
 
-                    Bitmap bC = new Bitmap(bmp);
+                    Bitmap bC = (Bitmap)bmp.Clone();
                     this.SetBitmap(ref this._bmpBGOrig, ref bC);
                 }
             }
@@ -728,7 +728,7 @@ namespace PseudoShadow
                 Bitmap? excl = excludedRegions[j].Remaining;
                 if (excl != null)
                 {
-                    this._excludedRegions.Add(new Bitmap(excl));
+                    this._excludedRegions.Add((Bitmap)excl.Clone());
                     this._exclLocations.Add(excludedRegions[j].Location);
                 }
             }
@@ -739,7 +739,7 @@ namespace PseudoShadow
             if (e.Argument != null)
             {
                 object[] o = (object[])e.Argument;
-                using Bitmap bmp = new Bitmap((Bitmap)o[0]);
+                using Bitmap bmp = (Bitmap)((Bitmap)o[0]).Clone();
                 double alphaTh = (int)o[1];
                 bool redrawExcluded = (bool)o[2];
 
@@ -830,7 +830,7 @@ namespace PseudoShadow
 
                     if (b != null)
                     {
-                        using Bitmap bC = new Bitmap(b);
+                        using Bitmap bC = (Bitmap)b.Clone();
                         SetColorsToOrig(bmp, bC);
                     }
                 }
@@ -1053,7 +1053,7 @@ namespace PseudoShadow
 
                     if (b != null)
                     {
-                        using Bitmap bC = new Bitmap(b);
+                        using Bitmap bC = (Bitmap)b.Clone();
                         SetColorsToOrig(bmp, bC);
                     }
                 }
@@ -1204,7 +1204,7 @@ namespace PseudoShadow
                 Bitmap? b1 = this.luBitmapDesignerCtrl1.GetUpperImage();
                 if (b1 != null)
                 {
-                    Bitmap? b = new Bitmap(b1);
+                    Bitmap? b = (Bitmap)b1.Clone();
                     if (b != null)
                     {
                         this.Cursor = Cursors.WaitCursor;
@@ -1427,7 +1427,7 @@ namespace PseudoShadow
                 Bitmap? b = this.luBitmapDesignerCtrl1.GetUpperImage();
                 if (b != null)
                 {
-                    this.luBitmapDesignerCtrl1.AddUpperImage(new Bitmap(b));
+                    this.luBitmapDesignerCtrl1.AddUpperImage((Bitmap)b.Clone());
                     this.AddCache(b, this.luBitmapDesignerCtrl1.ShapeList[this.luBitmapDesignerCtrl1.ShapeList.Count - 1].ID);
                 }
 
@@ -1754,7 +1754,7 @@ namespace PseudoShadow
             {
                 Bitmap? bTmp = null;
                 using Image img = Image.FromFile(this.openFileDialog1.FileName);
-                bTmp = new Bitmap(img);
+                bTmp = (Bitmap)img.Clone();
 
                 Bitmap? b = ScanForPic(bTmp, 0);
                 bTmp.Dispose();
@@ -1762,7 +1762,7 @@ namespace PseudoShadow
 
                 if (b != null)
                 {
-                    this.luBitmapDesignerCtrl1.AddUpperImage(new Bitmap(b));
+                    this.luBitmapDesignerCtrl1.AddUpperImage((Bitmap)b.Clone());
                     this.AddCache(b, this.luBitmapDesignerCtrl1.ShapeList[this.luBitmapDesignerCtrl1.ShapeList.Count - 1].ID);
                 }
 
@@ -1883,7 +1883,7 @@ namespace PseudoShadow
                 {
                     Bitmap? bmp = null;
                     using (Image img = Image.FromFile(this.openFileDialog2.FileName))
-                        bmp = new Bitmap(img);
+                        bmp = (Bitmap)img.Clone();
 
                     if (this.luBitmapDesignerCtrl1.ShapeList != null && this.luBitmapDesignerCtrl1.ShapeList.Count > 0)
                     {
@@ -1902,7 +1902,7 @@ namespace PseudoShadow
 
                         this.btnCloneColors.Enabled = this.luBitmapDesignerCtrl1.ShapeList.Count > 1;
 
-                        Bitmap bC = new Bitmap(bmp);
+                        Bitmap bC = (Bitmap)bmp.Clone();
                         this.SetBitmap(ref this._bmpBGOrig, ref bC);
                     }
                 }
@@ -2198,7 +2198,7 @@ namespace PseudoShadow
 
                     if (b != null)
                     {
-                        using Bitmap bC = new Bitmap(b);
+                        using Bitmap bC = (Bitmap)b.Clone();
                         SetColorsToOrig(bmp, bC);
                     }
                 }

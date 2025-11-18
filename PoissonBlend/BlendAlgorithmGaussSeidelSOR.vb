@@ -188,7 +188,7 @@ Public Class BlendAlgorithmGaussSeidelSOR
     Public Sub ApplyG(rc As Rectangle) Implements IBlendAlgorithm.ApplyG
         'Jacobi/GaussSeidel
 
-        Using uI As Bitmap = New Bitmap(_blendParameters.UpperImg)
+        Using uI As Bitmap = CType(_blendParameters.UpperImg.Clone(), Bitmap)
             Grayscale(uI)
 
             'mask: Stores the coordinates and the state (inside, boundary or outside of the region).
@@ -309,7 +309,7 @@ Public Class BlendAlgorithmGaussSeidelSOR
 
             ApplyG4(rc)
         Else
-            Using uI As Bitmap = New Bitmap(_blendParameters.UpperImg), lI As Bitmap = New Bitmap(_blendParameters.LowerImg)
+            Using uI As Bitmap = CType(_blendParameters.UpperImg.Clone(), Bitmap), lI As Bitmap = CType(_blendParameters.LowerImg.Clone(), Bitmap)
                 If _blendParameters.GrayscaleIntermediatePic Then
                     Grayscale(uI)
                 End If
@@ -488,7 +488,7 @@ Public Class BlendAlgorithmGaussSeidelSOR
         Dim gamma As Double = _blendParameters.Gamma
         Dim maxPixelDist As Integer = _blendParameters.MaxPixelDist
 
-        Using bC As New Bitmap(upperImg)
+        Using bC As Bitmap = CType(upperImg.Clone(), Bitmap)
             RaiseEvent ShowInfo(Me, "Generating DistanceArray...")
             Grayscale(bC)
             SetRegion(bC)
@@ -607,7 +607,7 @@ Public Class BlendAlgorithmGaussSeidelSOR
         RaiseEvent ShowInfo(Me, "Applying normal mode...")
         Apply(rc)
 
-        Using uI As Bitmap = New Bitmap(bParams.UpperImg)
+        Using uI As Bitmap = CType(bParams.UpperImg.Clone(), Bitmap)
             RaiseEvent ShowInfo(Me, "Grayscale upper Image...")
             Grayscale(uI)
 
@@ -714,7 +714,7 @@ Public Class BlendAlgorithmGaussSeidelSOR
                     InsertPixels(bParams.LowerImg, _blendParameters.LowerImg, bParams.UpperImg,
                                  _blendParameters.MaxPixelDist, _blendParameters.Gamma, _blendParameters.UpperImgMixRel)
                     _blendParameters.LowerImg.Dispose()
-                    _blendParameters.LowerImg = New Bitmap(bParams.LowerImg)
+                    _blendParameters.LowerImg = CType(bParams.LowerImg.Clone(), Bitmap)
 
                     ''test ############################
                     'SetMask(uI, _blendParameters.UpperImg, 200, 0.4F)
@@ -749,7 +749,7 @@ Public Class BlendAlgorithmGaussSeidelSOR
         RaiseEvent ShowInfo(Me, "Generating DistanceArray...")
         Dim distanceArray As Integer(,) = Nothing
 
-        Using bC As New Bitmap(upperImg)
+        Using bC As Bitmap = CType(upperImg.Clone(), Bitmap)
             Grayscale(bC)
             SetRegion(bC)
             Dim fip As New fipbmp()
@@ -821,8 +821,8 @@ Public Class BlendAlgorithmGaussSeidelSOR
     Private Function CloneBlendParameters(blendParameters As BlendParameters) As BlendParameters
         Dim params As New BlendParameters()
 
-        params.UpperImg = New Bitmap(blendParameters.UpperImg)
-        params.LowerImg = New Bitmap(blendParameters.LowerImg)
+        params.UpperImg = CType(blendParameters.UpperImg.Clone(), Bitmap)
+        params.LowerImg = CType(blendParameters.LowerImg.Clone(), Bitmap)
 
         Dim results(2)() As Double
         params.Results = results
@@ -1181,7 +1181,7 @@ Public Class BlendAlgorithmGaussSeidelSOR
         Dim bmpTmp As Bitmap = Nothing
         Try
             If AvailMem.AvailMem.checkAvailRam(upperImg.Width * upperImg.Height * 4L) Then
-                bmpTmp = New Bitmap(upperImg)
+                bmpTmp = CType(upperImg.Clone(), Bitmap)
             Else
                 Throw New Exception("Not enough memory.")
             End If
@@ -2177,7 +2177,7 @@ Public Class BlendAlgorithmGaussSeidelSOR
                 Dim postProc As Boolean = False
                 Dim postProcMultiplier As Double = 1.0
 
-                Dim pb As New PoissonBlender(New Bitmap(tmpUI), New Bitmap(tmpXY))
+                Dim pb As New PoissonBlender(CType(tmpUI.Clone(), Bitmap), CType(tmpXY.Clone(), Bitmap))
                 Dim pe As New PoissonBlend.ProgressEventArgs(mI * 3, 0)
                 pe.PrgInterval = mI \ 20
 
@@ -2301,7 +2301,7 @@ Public Class BlendAlgorithmGaussSeidelSOR
                 Dim postProc As Boolean = False
                 Dim postProcMultiplier As Double = 1.0
 
-                Dim pb As New PoissonBlender(New Bitmap(tmpUI), New Bitmap(tmpXY))
+                Dim pb As New PoissonBlender(CType(tmpUI.Clone(), Bitmap), CType(tmpXY.Clone(), Bitmap))
                 Dim pe As New PoissonBlend.ProgressEventArgs(mI * 3, 0)
                 pe.PrgInterval = mI \ 20
 
@@ -2433,7 +2433,7 @@ Public Class BlendAlgorithmGaussSeidelSOR
                 Dim postProc As Boolean = False
                 Dim postProcMultiplier As Double = 1.0
 
-                Dim pb As New PoissonBlenderD(New Bitmap(tmpUI), New Bitmap(tmpXY))
+                Dim pb As New PoissonBlenderD(CType(tmpUI.Clone(), Bitmap), CType(tmpXY.Clone(), Bitmap))
                 Dim pe As New PoissonBlend.ProgressEventArgs(mI * 3, 0)
                 pe.PrgInterval = mI \ 20
 
@@ -2557,7 +2557,7 @@ Public Class BlendAlgorithmGaussSeidelSOR
                 Dim postProc As Boolean = False
                 Dim postProcMultiplier As Double = 1.0
 
-                Dim pb As New PoissonBlenderD(New Bitmap(tmpUI), New Bitmap(tmpXY))
+                Dim pb As New PoissonBlenderD(CType(tmpUI.Clone(), Bitmap), CType(tmpXY.Clone(), Bitmap))
                 Dim pe As New PoissonBlend.ProgressEventArgs(mI * 3, 0)
                 pe.PrgInterval = mI \ 20
 
