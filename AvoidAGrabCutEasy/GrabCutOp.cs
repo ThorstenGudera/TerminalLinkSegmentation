@@ -1462,21 +1462,24 @@ namespace AvoidAGrabCutEasy
                     {
                         int x = vf[j].Item2 % w;
                         int y = vf[j].Item2 / w;
-                        //first multiply all, factor and/or complete setting will assumably change
-                        if (this.LumMapSettings.DoFirstMultiplication)
-                            d[j] *= Math.Pow(this.IGGLuminanceMap[x, y], this.LumMapSettings.Exponent1) * this.LumMapSettings.Factor1;
-                        //then multiply the low ones, factor and/or complete setting will assumably change
-                        if (this.LumMapSettings.DoSecondMultiplication)
-                            if (this.LumMapSettings.ValsLessThanTh)
-                            {
-                                if (d[j] < lumTh * lumMult)
-                                    d[j] *= Math.Pow(this.IGGLuminanceMap[x, y], this.LumMapSettings.Exponent2) * this.LumMapSettings.Factor2;
-                            }
-                            else
-                            {
-                                if (d[j] > lumTh * lumMult)
-                                    d[j] *= Math.Pow(this.IGGLuminanceMap[x, y], this.LumMapSettings.Exponent2) * this.LumMapSettings.Factor2;
-                            }
+                        if (x < this.IGGLuminanceMap.GetLength(0) && y < this.IGGLuminanceMap.GetLength(1))
+                        {
+                            //first multiply all, factor and/or complete setting will assumably change
+                            if (this.LumMapSettings.DoFirstMultiplication)
+                                d[j] *= Math.Pow(this.IGGLuminanceMap[x, y], this.LumMapSettings.Exponent1) * this.LumMapSettings.Factor1;
+                            //then multiply the low ones, factor and/or complete setting will assumably change
+                            if (this.LumMapSettings.DoSecondMultiplication)
+                                if (this.LumMapSettings.ValsLessThanTh)
+                                {
+                                    if (d[j] < lumTh * lumMult)
+                                        d[j] *= Math.Pow(this.IGGLuminanceMap[x, y], this.LumMapSettings.Exponent2) * this.LumMapSettings.Factor2;
+                                }
+                                else
+                                {
+                                    if (d[j] > lumTh * lumMult)
+                                        d[j] *= Math.Pow(this.IGGLuminanceMap[x, y], this.LumMapSettings.Exponent2) * this.LumMapSettings.Factor2;
+                                }
+                        }
                     }
                 }
 

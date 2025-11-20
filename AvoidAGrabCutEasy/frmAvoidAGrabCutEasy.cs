@@ -2025,6 +2025,7 @@ namespace AvoidAGrabCutEasy
             if (!this.CheckLumMap(this.helplineRulerCtrl1.Bmp.Width, this.helplineRulerCtrl1.Bmp.Height))
             {
                 MessageBox.Show("LumMap is of wrong size.");
+                this._iggLuminanceMap = null;
                 return;
             }
 
