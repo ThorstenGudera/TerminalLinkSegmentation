@@ -716,6 +716,8 @@ namespace AvoidAGrabCutEasy
                         }
                     }
 
+                    VerifyPointsCurve(pts2);
+
                     l[this.listBox2.SelectedIndex] = pts2;
                     j[wh] = l;
                     this._scribbles[3] = j;
@@ -725,6 +727,43 @@ namespace AvoidAGrabCutEasy
                     this.cmbRestore_SelectedIndexChanged(cmbRestore, new EventArgs());
                 }
             }
+        }
+
+        private void VerifyPointsCurve(List<Point> pts2)
+        {
+            for (int j = 1; j < pts2.Count; j++)
+            {
+                if (Math.Abs(pts2[j - 1].X - pts2[j].X) > 1)
+                {
+                    pts2.Insert(j, new Point(pts2[j].X + Math.Sign(pts2[j - 1].X - pts2[j].X), pts2[j].Y));
+                    j--;
+                }
+            }
+
+            for (int j = 1; j < pts2.Count; j++)
+            {
+                if (Math.Abs(pts2[j - 1].Y - pts2[j].Y) > 1)
+                {
+                    pts2.Insert(j, new Point(pts2[j].X, pts2[j].Y + Math.Sign(pts2[j - 1].Y - pts2[j].Y)));
+                    j--;
+                }
+            }
+
+            int cnt = 0;
+
+            while (Math.Abs(pts2[0].X - pts2[pts2.Count - 1].X) > 1 && cnt < 10e7)
+            {
+                pts2.Add(new Point(pts2[pts2.Count - 1].X + Math.Sign(pts2[0].X - pts2[pts2.Count - 1].X), pts2[pts2.Count - 1].Y));
+                cnt++;
+            }
+
+            cnt = 0;
+            while (Math.Abs(pts2[0].Y - pts2[pts2.Count - 1].Y) > 1 && cnt < 10e7)
+            {
+                pts2.Add(new Point(pts2[pts2.Count - 1].X, pts2[pts2.Count - 1].Y + Math.Sign(pts2[0].Y - pts2[pts2.Count - 1].Y)));
+                cnt++;
+            }
+
         }
 
         private void cmbRestore_SelectedIndexChanged(object sender, EventArgs e)

@@ -931,7 +931,7 @@ namespace AvoidAGrabCutEasy
             //    }
             //}
 
-            if (this.helplineRulerCtrl1.Bmp != null && this.checkedListBox1.SelectedItems.Count > 0)
+            if (this.helplineRulerCtrl1.Bmp != null && this.checkedListBox1.CheckedItems.Count > 0)
             {
                 List<ChainCode>? c = GetCC();
                 if (c != null)
@@ -1372,7 +1372,7 @@ namespace AvoidAGrabCutEasy
 
         private void btnSelAll_Click(object sender, EventArgs e)
         {
-            for (int i = 0; i < this.checkedListBox1.Items.Count - 1; i++)
+            for (int i = 0; i < this.checkedListBox1.Items.Count; i++)
                 this.checkedListBox1.SetItemChecked(i, true);
 
             checkedListBox1_SelectedIndexChanged(this.checkedListBox1, new EventArgs());
@@ -1459,11 +1459,10 @@ namespace AvoidAGrabCutEasy
         {
             List<ChainCode>? c = new List<ChainCode>();
 
-            if (this.checkedListBox1.SelectedIndex > -1)
+            if (this.checkedListBox1.Items.Count > 0)
             {
                 for (int i = 0; i < this.checkedListBox1.CheckedItems.Count; i++)
                 {
-                    ChainFinder cf = new ChainFinder();
                     ChainCode? cc = this.checkedListBox1.CheckedItems[i] as ChainCode;
                     if (cc != null)
                         c.Add(cc);
