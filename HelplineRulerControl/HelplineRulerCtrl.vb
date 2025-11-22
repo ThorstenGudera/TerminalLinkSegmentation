@@ -1,10 +1,6 @@
 ﻿Option Strict On
-
-Imports System.Drawing
-Imports System.Windows.Forms
 Imports System.Drawing.Drawing2D
-Imports System.Windows.Forms.VisualStyles.VisualStyleElement
-Imports System.Runtime.Intrinsics.X86
+Imports System.Drawing.Imaging
 
 
 Partial Public Class HelplineRulerCtrl
@@ -1164,5 +1160,25 @@ Partial Public Class HelplineRulerCtrl
 
         Me._tracking = False
         Me.dbPanel1.Capture = False
+    End Sub
+
+    Public Sub Ensure32bpp()
+        If Me.Bmp.PixelFormat <> PixelFormat.Format32bppArgb Then
+            Dim bNew As New Bitmap(Me.Bmp.Width, Me.Bmp.Height, PixelFormat.Format32bppArgb)
+            Using gx As Graphics = Graphics.FromImage(bNew)
+                gx.DrawImage(Me.Bmp, 0, 0, bNew.Width, bNew.Height)
+            End Using
+            SetBitmap(Me.Bmp, bNew)
+        End If
+    End Sub
+
+    Private Sub SetBitmap(ByRef bitmapToSet As Bitmap, ByRef bitmapToBeSet As Bitmap)
+        Dim bOld As Bitmap = bitmapToSet
+
+        bitmapToSet = bitmapToBeSet
+
+        If bOld IsNot Nothing AndAlso bOld.Equals(bitmapToBeSet) = False Then
+            bOld.Dispose()
+        End If
     End Sub
 End Class
